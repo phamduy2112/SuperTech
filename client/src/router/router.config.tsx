@@ -15,6 +15,7 @@ import CustomerCare from "../page/Client/PagesMore/CustomerCare";
 import QuestionAnswer from "../page/Client/PagesMore/QuestionAnswer";
 import Introduce from "../page/Client/Introduce/Introduce";
 import Contact from "../page/Client/Contact/Contact";
+import AuthTemplate from "../page/Client/Auth/Auth";
 
 export const router = createBrowserRouter([
   {
@@ -28,19 +29,7 @@ export const router = createBrowserRouter([
         path: "/sản-phẩm-chi-tiết",
         element: <DetailProduct />,
       },
-      // Auth
-      {
-        path: "/đăng-nhập",
-        element: <Login />,
-      },
-      {
-        path: "/đăng-kí",
-        element: <Resigter />,
-      },
-      {
-        path: "/quên-mật-khẩu",
-        element: <ForgetPassword />,
-      },
+      
       // Blog
       {
         path: "/bài-viết",
@@ -83,6 +72,25 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+
+    element: <AuthTemplate/>,
+    children:[
+       {
+        path: "/đăng-nhập",
+        element: <Login />,
+      },
+      {
+        path: "/đăng-kí",
+        element: <Resigter />,
+      },
+      {
+        path: "/quên-mật-khẩu",
+        element: <ForgetPassword />,
+      }, 
+    ]
+  
+  }
   // {
   //   path: 'admin',
   //   element: <AdminTemplate/>,
