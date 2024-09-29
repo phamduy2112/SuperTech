@@ -3,8 +3,9 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { persistStore } from 'redux-persist'
-import store from './redux/store.ts'
+
 import { PersistGate } from 'redux-persist/integration/react'
+import store from './redux/store.tsx'
 
 let persistor = persistStore(store)
 
