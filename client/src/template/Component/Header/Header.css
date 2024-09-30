@@ -16,5 +16,20 @@ height: 38px;
     background-color: #6308a8;
 }
 .inputSearch .ant-btn .ant-btn-icon {
-font-size: 1.3rem;
+font-size: 2rem;
+}
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed{
+    border-color: #7500CF;
+}
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed{
+    color: #7500CF;
+}
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):active, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):active{
+    color: #6308a8;
+    border-color: #6308a8;
+}
+
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover{
+    color: #6308a8;
+    border-color: #6308a8;
 }
