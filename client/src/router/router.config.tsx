@@ -16,6 +16,7 @@ import QuestionAnswer from "../page/Client/PagesMore/QuestionAnswer";
 import Introduce from "../page/Client/Introduce/Introduce";
 import Contact from "../page/Client/Contact/Contact";
 import AuthTemplate from "../page/Client/Auth/Auth";
+import FavoriteProduct from "../page/Client/FavoriteProduct/FavoriteProduct";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "tìm-kiếm",
+        element: <Search />,
+      },
+      {
+        path: "sản-phẩm-yêu-thích",
+        element: <FavoriteProduct />,
       },
       {
         path: "/sản-phẩm-chi-tiết",
