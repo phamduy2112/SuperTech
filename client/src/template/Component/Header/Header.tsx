@@ -26,9 +26,9 @@ function Header() {
   return (
     <div className="flex flex-col">
     <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
-      <div className='w-[80%] m-auto flex justify-between items-center'>
-            <h3 className='text-[1.5rem] font-medium'>Chào mừng đến với cửa hàng SuperTech</h3>
-            <div className="flex gap-[1.2rem]">
+      <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
+            <h3 className='text-[1.5rem] font-medium sm:text-center'>Chào mừng đến với cửa hàng SuperTech</h3>
+            <div className="gap-[1.2rem] sm:hidden md:flex">
               <div className='flex justify-center items-center gap-[.5rem] text-[1.4rem]'>
               <CiLocationOn  className='text-[1.4rem]'/>
               <span>Địa điểm</span>
