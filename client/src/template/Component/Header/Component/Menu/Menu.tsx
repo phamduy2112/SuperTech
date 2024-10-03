@@ -33,7 +33,7 @@ function Menu() {
             to={item.path}
             className={
               ({ isActive }) =>
-                `text-[1.7rem] mr-[6rem] ` + // Class chung cho mọi NavLink
+                `text-[1.7rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem]` + // Class chung cho mọi NavLink
                 (isActive
                   ? "text-purple-600 font-bold" // Class khi active
                   : "text-black font-bold") // Class khi không active

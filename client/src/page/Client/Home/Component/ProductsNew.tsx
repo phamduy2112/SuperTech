@@ -6,9 +6,9 @@ import Slider from 'react-slick';
 function ProductsNew() {
     
   return (
-    <div className='w-[80%] mx-auto'>
-        <div className='grid grid-cols-6'>
-            <div className='col-span-2 row-span-2'>
+    <div className='xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto'>
+        <div className='grid sm:grid-cols-1 ssm:grid-cols-2 lg:grid-cols-3 mdl:grid-col-3 xl:grid-cols-4 2xl:grid-cols-6'>
+            <div className='col-span-2 row-span-2 sm:hidden 2xl:block'>
             <ProductLimitOne/>
             </div>
           

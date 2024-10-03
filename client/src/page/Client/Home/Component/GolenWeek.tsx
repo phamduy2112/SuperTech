@@ -7,7 +7,7 @@ function GolenWeek() {
       
       <div>
         <div className="flex">
-          <div className="w-[150px]">
+          <div className="w-[140px]">
             <img
               className="w-[100%]"
               src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"

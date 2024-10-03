@@ -41,7 +41,8 @@ function Home() {
       </div>
       <div className='w-[80%] mx-auto'>
       <h4 className="text-[2rem] font-semibold mb-[2.5rem]">Tuần lễ vàng</h4>
-      <div className="grid grid-cols-4 gap-[2rem]">
+      <div className="grid 2xl:grid-cols-4 gap-[2rem] lg:grid-cols-3 md:grid-cols-2">
+         <GolenWeek/>
          <GolenWeek/>
          <GolenWeek/>
          <GolenWeek/>

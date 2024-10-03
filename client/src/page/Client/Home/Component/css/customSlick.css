@@ -61,8 +61,8 @@
     height: 520px;
   }
   .slideProductHome .slick-list{
-    height: 500px;
+    height: 520px;
   }
   .slideProductHome .slick-dots{
-    bottom: -5px;
+    bottom: 0;
   }

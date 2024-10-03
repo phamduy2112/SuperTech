@@ -10,7 +10,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import './product.css'
 function ProductItemHot() {
   return (
-    <div className="relative w-[300px] pb-[1rem] product border bg-white border-black overflow-hidden hover:scale-105 hover:z-[10]  hover:translate-x-[0%]">
+    <div className="relative sm:w-[100%] md:w-[320px] lg:w-[100%] xl:w-[283px] 2xl:w-[300px] pb-[1rem] product border bg-white overflow-hidden hover:scale-105 hover:z-[10]  hover:translate-x-[0%]">
       <div className="product__icon flex flex-col gap-3">
   <div className="bg-black p-[.5rem] rounded-md">
     <div className="text-[2.6rem] cursor-pointer text-white flex items-center justify-center ">
@@ -33,7 +33,7 @@ function ProductItemHot() {
            
             </div>
           <div className="bg-[#7500CF] w-[5.5rem] h-[3rem] text-center mr-[2rem] mt-[1rem]">
-            <span className="text-white text-[1.8rem]  leading-[2.8rem]">-23%</span>
+            <span className="text-white text-[1.8rem] leading-[2.8rem]">-23%</span>
           </div>
         </div>
         <div>
@@ -46,7 +46,7 @@ function ProductItemHot() {
             <div>
                 <div className="bg-gradient-to-r from-[#DD720B] to-[#EC6D11] py-[.5rem] px-[1rem] rounded-[2rem] flex items-center text-center w-[55%] mb-[1.5rem]">
                     <img src={oficie} alt="" />
-                    <span className="text-white text-[1.2rem] font-medium">TẶNG PHỤ KIỆN</span>
+                    <span className="text-white 2xl:text-[1.2rem] sm:text-[1rem]  font-medium">TẶNG PHỤ KIỆN</span>
                 </div>
                 <h3 className="text-[1.7rem] font-semibold">MacBook Air 13 inch M2 10GPU</h3>
                 <div className="flex items-center  gap-1 my-3">

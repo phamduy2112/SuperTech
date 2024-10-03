@@ -10,7 +10,7 @@ import { IoEyeOutline } from "react-icons/io5";
 
 function ProductLimitOne() {
   return (
-    <div className="relative w-[400px] mt-[10.5rem] ml-[5rem] pb-[1rem] product border-[5px] border-[#D9E3F0] bg-white overflow-hidden hover:scale-105  hover:translate-x-[0%]">
+    <div className="relative w-[400px] mt-[10.5rem] xll:ml-[5rem] pb-[1rem] product border-[5px] border-[#D9E3F0] bg-white overflow-hidden hover:scale-105  hover:translate-x-[0%]">
       <div className="product__icon flex flex-col gap-3">
   <div className="bg-black p-[.5rem] rounded-md">
     <div className="text-[2.6rem] cursor-pointer text-white flex items-center justify-center ">
