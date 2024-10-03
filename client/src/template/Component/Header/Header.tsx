@@ -11,6 +11,8 @@ import { CiLocationOn } from 'react-icons/ci'
 import { FaRegUser } from 'react-icons/fa'
 import { IoIosSearch } from "react-icons/io";
 import TaskCart from "./Component/Menu/Modal/TaskCart";
+import TaskEyes from "./Component/Menu/Modal/TaskEyes";
+import TaskCatelogry from "./Component/Menu/Modal/TaskCatelogry";
 function Header() {
   const onSearch = (value: any, _e: any, info: any) =>
     console.log(info?.source, value);
@@ -109,16 +111,26 @@ function Header() {
         </div>
       </div>
       <div className="md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
-        <div className="h-[41px] md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
-          <span className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold"
+     <div className="relative">
+          <div className="h-[41px] md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
+          <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold"
       
-          >Danh mục sản phẩm</span>
+          >Danh mục sản phẩm</div>
+          
         </div>
+        {/* <TaskCatelogry/> */}
+     <div>
+   
+     </div>
+
+     </div>
+    
        <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
         <Menu/>
        </div>
         <div className=" md:hidden xl:flex text-[1.6rem] text-[#FF0000] font-semibold">Miễn phí vận chuyển trên 25 triệu</div>
       </div>
+      
       {/* mobile */}
       <div className="md:hidden sm:shadow-xl flex justify-center items-center ">
             <div className=" w-[95%] m-auto">
@@ -141,6 +153,8 @@ function Header() {
             </div>
       </div>
       {/* <TaskCart/> */}
+      {/* <TaskEyes/> */}
+      
     </div>
 
     </div>
