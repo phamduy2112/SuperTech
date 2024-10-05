@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import ProductItem from "../../../../components/product/ProductItem";
 import sale from "../../../../assets/sansale.png";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductItemHot from "../../../../components/product/ProductItemHot";
@@ -35,6 +34,7 @@ function ProductSale() {
         slidesToScroll: 1,
       }
     },
+    
     {
       breakpoint: 1200, // For screens larger than 1200px
       settings: {

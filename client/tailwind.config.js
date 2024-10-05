@@ -12,7 +12,7 @@ export default {
 
       
       sm: '320px',
-      xsm:"380px",
+      sxm:"370px",
       ssm:"400px",
       ssm2:"428px",
       xmd:"640px",

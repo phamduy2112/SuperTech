@@ -44,9 +44,9 @@ function ProductItem() {
             </div>
           <div className="mx-[2rem] mt-[1.2rem]">
             <div>
-                <div className="bg-gradient-to-r from-[#DD720B] to-[#EC6D11] py-[.5rem] px-[1rem] rounded-[2rem] flex items-center text-center w-[60%] mb-[1.5rem]">
+                <div className="bg-gradient-to-r from-[#DD720B] to-[#EC6D11] py-[.5rem] px-[1rem] rounded-[2rem] flex items-center text-center sm:w-[40%] lg:w-[55%] mb-[1.5rem]">
                     <img src={oficie} alt="" />
-                    <span className="text-white text-[1.1rem] font-medium">TẶNG PHỤ KIỆN</span>
+                    <span className="text-white text-[1.1rem] font-medium">Tặng phụ kiện</span>
                 </div>
                 <h3 className="text-[1.7rem] font-semibold">MacBook Air 13 inch M2 10GPU</h3>
                 <div className="flex items-center  gap-1 my-3">

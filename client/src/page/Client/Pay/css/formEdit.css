@@ -1,0 +1,31 @@
+.formEdit .ant-form-item .ant-form-item-label {
+
+    text-align: start;
+    font-weight: 600;
+}
+.formEdit .ant-row{
+    display: block;
+}
+.formEdit .ant-input-outlined,
+.formEdit .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector,
+.formEdit .ant-input-number-outlined
+{
+    border-color:#7500CF ;
+}
+.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-select .ant-select-arrow{
+    color: #7500CF;
+}
+.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-form-item{
+    margin-bottom: 1rem;
+}
+.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
+    border-color: #7500CF;
+    background: #7500CF;
+}
+:where(.css-dev-only-do-not-override-5wsri9).ant-steps .ant-steps-item-process .ant-steps-item-icon{
+    border-color: #7500CF;
+    background: #7500CF;  
+}
+:where(.css-dev-only-do-not-override-5wsri9).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
+    stroke: #7500CF;
+}

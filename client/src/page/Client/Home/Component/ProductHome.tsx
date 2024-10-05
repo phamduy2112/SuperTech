@@ -22,6 +22,13 @@ function ProductHome() {
         }
       },
       {
+        breakpoint: 1500, // For screens larger than 1200px
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+        }
+      },
+      {
         breakpoint: 1200, // For screens larger than 1200px
         settings: {
           slidesToShow: 3,
