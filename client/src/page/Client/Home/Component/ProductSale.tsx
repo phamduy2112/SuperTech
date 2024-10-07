@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import ProductItem from "../../../../components/product/ProductItem";
 import sale from "../../../../assets/sansale.png";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductItemHot from "../../../../components/product/ProductItemHot";
@@ -27,12 +26,50 @@ function ProductSale() {
       </div>
     </div> 
     ),
+    responsive: [
+    {
+      breakpoint: 1600, // For screens larger than 1200px
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 1,
+      }
+    },
+    
+    {
+      breakpoint: 1200, // For screens larger than 1200px
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 992, // For screens larger than 992px
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 768, // For screens larger than 768px
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      }
+    },
+    {
+      breakpoint: 576, // For screens larger than 576px
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      }
+    }
+  ]
     
 
   };
 
   return (
-    <div className="w-[80%] m-auto">
+    <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto">
       <div className="w-[100%]">
         <img src={sale} alt="" className="w-[100%]" />
       </div>

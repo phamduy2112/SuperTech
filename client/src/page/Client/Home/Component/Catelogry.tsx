@@ -12,8 +12,8 @@ function Catelogry() {
         { title: 'Tai nghe có dây', imgSrc: '/path/to/wired-headphones-image.png' },
       ];
   return (
-    <div className='w-[80%] m-auto'>
-          <div className="grid grid-cols-4">
+    <div className='xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto'>
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2">
       {products.map((product, index) => (
         <div key={index} className="border h-[120px] p-4  gap-[.7rem] transform hover:scale-105 hover:b flex items-center justify-center">
        <div className="w-[80px] h-[80px] rounded-[50%] border border-solid border-black flex items-center justify-center overflow-hidden">

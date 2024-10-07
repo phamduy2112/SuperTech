@@ -14,6 +14,8 @@ function Dis() {
             <div className='flex flex-col items-center justify-center'>
             <FaGift  className='text-[5rem] text-[#7500CF]'/>
             <h3 className='text-[2rem] font-semibold mt-[1rem]'>Tiết kiệm lớn</h3>
+            <p className='text-[1.6rem] mt-[.5rem]'>24 giờ một ngày, 7 ngày một tuần</p>
+
         </div>
             <div className='flex flex-col items-center justify-center'>
             <FaHeadphonesSimple  className='text-[5rem] text-[#7500CF]'/>
