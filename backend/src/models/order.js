@@ -7,24 +7,24 @@ export default class order extends Model {
     order_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     order_date: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     order_total: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     order_status: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     pay_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'pay',
         key: 'pay_id'
@@ -32,7 +32,7 @@ export default class order extends Model {
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'user',
         key: 'user_id'
@@ -40,7 +40,7 @@ export default class order extends Model {
     },
     discount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'discount',
         key: 'discount_id'

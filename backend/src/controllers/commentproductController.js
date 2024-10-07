@@ -39,7 +39,7 @@ const createcommentproduct = async (req, res) => {
 const updatecommentproduct = async (req, res) => {
     try {
         let updated = await commentProductModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { comment_id: req.params.id }
         });
         if (updated[0] > 0) {
             let updatedItem = await commentProductModel.findByPk(req.params.id);
@@ -56,7 +56,7 @@ const updatecommentproduct = async (req, res) => {
 const deletecommentproduct = async (req, res) => {
     try {
         let deleted = await commentProductModel.destroy({
-            where: { id: req.params.id }
+            where: { comment_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

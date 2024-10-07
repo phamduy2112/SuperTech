@@ -7,24 +7,24 @@ export default class comment_product extends Model {
     comment_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     comment_date: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     comment_content: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     comment_star: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'products',
         key: 'product_id'
@@ -32,7 +32,7 @@ export default class comment_product extends Model {
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'user',
         key: 'user_id'

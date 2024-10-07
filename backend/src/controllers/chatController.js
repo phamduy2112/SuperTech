@@ -39,7 +39,7 @@ const createchat = async (req, res) => {
 const updatechat = async (req, res) => {
     try {
         let updated = await chatModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { chat_id: req.params.id }
         });
         if (updated[0] > 0) {
             let updatedItem = await chatModel.findByPk(req.params.id);
@@ -56,7 +56,7 @@ const updatechat = async (req, res) => {
 const deletechat = async (req, res) => {
     try {
         let deleted = await chatModel.destroy({
-            where: { id: req.params.id }
+            where: { chat_id: req.params.id } 
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
@@ -64,6 +64,7 @@ const deletechat = async (req, res) => {
             responseSend(res, "", "không tìm thấy !", 404);
         }
     } catch (error) {
+        console.log(error.message);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
