@@ -3,16 +3,17 @@ import { FaTrash } from 'react-icons/fa'
 import { FiMinus } from 'react-icons/fi'
 import { GoPlus } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
-
-function TaskCart() {
+interface TaskCart {
+  onClose: () => void;
+}
+function TaskCart({ onClose }: TaskCart) {
   return (
-    <div className='w-[100%] h-[100vh] fixed bg-[rgb(0,0,0,0.5)] z-30 top-0 left-0'>
  <div className='w-[350px] h-[100vh] bg-[#E5E5E5] absolute top-0 right-0'>
     <div className='w-[100%] py-[2rem] px-[1rem] flex justify-between items-center'>
          <div className='text-[1.8rem] font-semibold'>
          GIỎ HÀNG
         </div> 
-        <div className='text-[2rem] cursor-pointer'>
+        <div className='text-[2rem] cursor-pointer'  onClick={onClose}>
             <IoMdClose />
         </div>
     </div>
@@ -50,7 +51,6 @@ function TaskCart() {
     </div>
       
         </div>
-    </div>
    
   )
 }
