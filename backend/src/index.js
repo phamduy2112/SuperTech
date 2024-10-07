@@ -15,6 +15,7 @@ import commentpostRouter from './routers/commentpostRouter.js';
 import chatRouter from './routers/chatRouter.js';
 import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
+import payRouter from './routers/payRouter.js';
 
 const app = express();
 app.use(express.json());
@@ -42,4 +43,5 @@ app.use(commentpostRouter);
 app.use(chatRouter);
 app.use(categoriesRouter);
 app.use(bannerRouter);
+app.use(payRouter);
 app.listen(8080);
