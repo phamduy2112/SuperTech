@@ -5,25 +5,26 @@ export default class image_product extends Model {
   static init(sequelize) {
   return super.init({
     image_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     image_one: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_two: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_three: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_four: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

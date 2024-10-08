@@ -4,25 +4,26 @@ export default class product_colors extends Model {
   static init(sequelize) {
     return super.init({
       color_id: {
+        autoIncrement: true,
         type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true
+        allowNull: true,
+        primaryKey: true,
       },
       color: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
       },
       quanlity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       image_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       },
       product_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
       }
     }, {
       sequelize,

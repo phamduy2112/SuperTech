@@ -1,43 +1,45 @@
-import sequelize from "../models/connect.js"
-import User from "../models/User.js"
-import bcrypt from "bcryptjs"
+import sequelize from "../models/connect.js";
+import { responseSend } from "../config/response.js";
+import initModels from "../models/init-models.js";
 
-User.init(sequelize);
+let models = initModels(sequelize); 
+let User = models.user; 
+
 
 const getUser = async (req, res) => {
     let data = await User.findAll();
     responseSend(res, data, "Thành công!", 200);
-}
-// Đăng kí
-const register=async(req,res)=>{
-    try{
-    const {fullname,user_email,password}=req.body
-    const user = await User.findOne({ where: { user_email } });
-    if(user){
-        return responseSend(res,{success:false},"Email đã tồn tại",401)
-    }
-    const hashedPassword=await bcrypt.hash(password,10)
-    await User.create({
-        user_id:2,
-        user_name:fullname,
-        user_email,
-        user_password:hashedPassword,
-        user_address:'',
-        user_phone:'',
-        user_image:'',
-        user_role:'user',
-    })
-    responseSend(res,{
-        success: true
-    },"Đăng nhập thành công!",201)
-    
-    }catch(e){
-        console.log(e);
-        
-    }
+};
 
-    
-}
+const createUser = async (req, res) => {
+    try {
+        let newuser = await User.create(req.body);
+        responseSend(res, newuser, "Thêm Thành công!", 201);
+    } catch (error) {
+        console.error("Error creating user:", error);
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+
+const updateUser = async (req, res) => {
+    try {
+        let updated = await User.update(req.body, {
+            where: { user_id: req.params.id }
+        });
+        if (updated[0] > 0) {
+            let updatedItem = await User.findByPk(req.params.id);
+            responseSend(res, updatedItem, "Đã Cập Nhật Thành Công!", 200);
+        } else {
+            responseSend(res, "", "không tồn tại !", 404);
+        }
+    } catch (error) {
+        console.error("Error updating user:", error);
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+
 export {
-    getUser,register
-}
+    getUser,
+    createUser,
+    updateUser
+};

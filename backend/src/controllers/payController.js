@@ -3,20 +3,20 @@ import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 
 let models = initModels(sequelize); 
-let bannerModel = models.banner; 
+let payModel = models.pay; 
 
-const getbanner = async (req, res) => {
+const getpay = async (req, res) => {
     try {
-        let data = await bannerModel.findAll();
+        let data = await payModel.findAll();
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
 
-const getbannerById = async (req, res) => {
+const getpayById = async (req, res) => {
     try {
-        let data = await bannerModel.findByPk(req.params.id);
+        let data = await payModel.findByPk(req.params.id);
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -27,22 +27,22 @@ const getbannerById = async (req, res) => {
     }
 };
 
-const createbanner = async (req, res) => {
+const createpay = async (req, res) => {
     try {
-        let newmediapost = await bannerModel.create(req.body);
+        let newmediapost = await payModel.create(req.body);
         responseSend(res, newmediapost, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
 
-const updatebanner = async (req, res) => {
+const updatepay = async (req, res) => {
     try {
-        let updated = await bannerModel.update(req.body, {
-            where: { banner_id: req.params.id }
+        let updated = await payModel.update(req.body, {
+            where: { pay_id: req.params.id }
         });
         if (updated[0] > 0) {
-            let updatedItem = await bannerModel.findByPk(req.params.id);
+            let updatedItem = await payModel.findByPk(req.params.id);
             responseSend(res, updatedItem, "Đã Cập Nhật Thành Công!", 200);
         } else {
             responseSend(res, "", "không tồn tại !", 404);
@@ -53,10 +53,10 @@ const updatebanner = async (req, res) => {
     }
 };
 
-const deletebanner = async (req, res) => {
+const deletepay = async (req, res) => {
     try {
-        let deleted = await bannerModel.destroy({
-            where: { banner_id: req.params.id }
+        let deleted = await payModel.destroy({
+            where: { pay_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
@@ -69,9 +69,9 @@ const deletebanner = async (req, res) => {
 };
 
 export {
-    getbanner,
-    getbannerById,
-    createbanner,
-    updatebanner,
-    deletebanner
+    getpay,
+    getpayById,
+    createpay,
+    updatepay,
+    deletepay
 };

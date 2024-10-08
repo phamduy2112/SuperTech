@@ -6,16 +6,16 @@ export default class detail_order extends Model {
     detail_order_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     detail_order_quality: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     order_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'order',
         key: 'order_id'
@@ -23,7 +23,7 @@ export default class detail_order extends Model {
     },
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'products',
         key: 'product_id'
