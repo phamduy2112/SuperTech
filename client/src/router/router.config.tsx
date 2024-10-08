@@ -16,6 +16,15 @@ import QuestionAnswer from "../page/Client/PagesMore/QuestionAnswer";
 import Introduce from "../page/Client/Introduce/Introduce";
 import Contact from "../page/Client/Contact/Contact";
 import AuthTemplate from "../page/Client/Auth/Auth";
+import FavoriteProduct from "../page/Client/FavoriteProduct/FavoriteProduct";
+import AdminTemplate from "../template/admin/AdminTemplate";
+import AdminHome from "../page/Admin/Home/AdminHome";
+import AdminProduct from "../page/Admin/Product/AdminProduct";
+import AdminCatelogry from "../page/Admin/Catelogory/AdminCatelogry";
+import AdminUser from "../page/Admin/User/AdminUser";
+import AdminCommentProduct from "../page/Admin/Product/Comment/AdminCommentProduct";
+import AdminOrderDetail from "../page/Admin/Order/OrderDetail/AdminOrderDetail";
+import AdminOrder from "../page/Admin/Order/AdminOrder";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +33,14 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "tìm-kiếm",
+        element: <Search />,
+      },
+      {
+        path: "sản-phẩm-yêu-thích",
+        element: <FavoriteProduct />,
       },
       {
         path: "/sản-phẩm-chi-tiết",
@@ -90,16 +107,51 @@ export const router = createBrowserRouter([
       }, 
     ]
   
+  },
+  {
+    path: '/admin',
+    element: <AdminTemplate/>,
+    children:[
+      {
+        path: 'trang-chủ',
+        element: <AdminHome/>
+      },
+      // Loại sản phẩm
+      {
+        path: 'quản-lí-loại',
+        element: <AdminCatelogry/>
+      },
+      // sản phẩm
+      {
+        path: 'quản-lí-sản-phẩm',
+        element: <AdminProduct/>
+      },
+      {
+        path:"quản-lí-bình-luận",
+        element:<AdminCommentProduct/>
+      },
+      // Blog
+      {
+        path: 'quản-lí-sản-phẩm',
+        element: <AdminProduct/>
+      },
+      // Khách hàng
+      {
+        path: 'quản-lí-khách-hàng',
+        element: <AdminUser/>
+      },
+      // đơn hàng
+      {
+        path: 'quản-lí-đơn-hàng',
+        element: <AdminOrder />
+      },
+      // Đơn hàng chi tiết
+      {
+        path: 'quản-lí-đơn-hàng-chi-tiết',
+        element: <AdminOrderDetail/>
+      },
+      // Thống kê
+      
+    ]
   }
-  // {
-  //   path: 'admin',
-  //   element: <AdminTemplate/>,
-  //   children:[
-  //     // {
-  //     //   path: 'films',
-  //     //   element: <Films/>
-  //     // },
-
-  //   ]
-  // }
 ]);
