@@ -8,6 +8,7 @@ function AdminTemplate() {
  
 
     <div className=''>
+
    <AdminHeader/>
  <Outlet />
 
