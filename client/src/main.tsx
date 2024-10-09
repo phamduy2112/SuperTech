@@ -7,7 +7,7 @@ import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
 import store from './redux/store.tsx'
 
-let persistor = persistStore(store)
+const persistor = persistStore(store)
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

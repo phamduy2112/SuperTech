@@ -6,7 +6,7 @@ export const createToken=(data)=>{
  // 2 tham số =>string.object,buffer
  // 3 tham so: (data)=>object
 
- return jwt.sign({data},"BI_MAT",{expiresIn:'1m'})
+ return jwt.sign({data},"BI_MAT",{expiresIn:'1d'})
 }
 // verifi token: kiem tra token  
  // check lỗi
