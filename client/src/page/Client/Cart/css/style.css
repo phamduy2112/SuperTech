@@ -129,19 +129,30 @@ img {
     background-color: #7500CF;
     border-radius: 5rem;
 }
-h5{
-    font-weight: 500;
-    font-size: medium;
-    text-align: left;
+.saleText{
     display: flex; 
+    font-weight: 400;
+    font-size: large;
+    text-align: left;
     align-items: baseline;
     justify-content: space-between;
+    padding: 1.8rem 0rem;
+    line-height: 2.5rem;
+}
+.payText{
+    display: flex; 
+    font-weight: 500;
+    font-size: large;
+    text-align: left;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 2.5rem 0rem;
 }
 .cartConfirm > input{
     color: #FFFFFF;
     border-radius: 5rem;
     border: 0.1rem solid rgba(128, 128, 128, 0.432);
-    padding: 1,5rem;
+    padding: 1rem 2rem;
     font-weight: 550;
     width: 100%;
     margin: 0.5rem auto;
@@ -154,7 +165,7 @@ h5{
     color: rgba(128, 128, 128, 0.664);
 
 }
-button{
+.buttonThanhtoan{
     background-color: #7500CF;
     color: #FFFFFF;
     border-radius: 5rem;
@@ -164,6 +175,84 @@ button{
     width: 100%;
     margin: 1rem auto;
 }
+.cartConfirm-quanity{
+    color: #7500CF;
+    font-weight: 700;
+}
+.cartConfirm-total{
+    color: #7500CF;
+    font-weight: 700;
+}
+.VAT{
+    padding-top: 2rem;
+    font-size: 1.8rem;
+    color: grey;
+    line-height: 2.3rem;
+}
 .emptyCart-container{
     text-align: center;
+}
+.icon{
+    color: #7500CF;
+}
+
+
+@media (max-width: 1200px) {
+    .cart-container {
+        grid-template-columns: 1fr; 
+    }
+    
+    .giohang {
+        font-size: 5rem;
+        margin: 5rem 0; 
+    }
+
+    .continueButton, .deleteButton {
+        width: 100%; 
+    }
+}
+
+@media (max-width: 768px) {
+    .giohang {
+        font-size: 4rem; 
+    }
+
+    th, td {
+        font-size: medium;
+        padding: 1rem; 
+    }
+
+    img {
+        width: 4rem; 
+        height: 4rem;
+    }
+
+    .continueButton, .deleteButton {
+        width: 100%; 
+        margin: 1rem 0;
+    }
+
+    .product-image > img {
+        height: 6rem; 
+        width: auto; 
+    }
+}
+
+@media (max-width: 480px) {
+    .giohang {
+        font-size: 3rem; 
+    }
+
+    .cart-container {
+        margin: 2rem; 
+        align-content: center;
+    }
+
+    .cartConfirm > input {
+        font-size: medium; 
+    }
+
+    .button-voucher {
+        width: 100%; 
+    }
 }

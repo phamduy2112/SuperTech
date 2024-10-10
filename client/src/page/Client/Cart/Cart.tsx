@@ -1,4 +1,4 @@
-import { IconName } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 import React from 'react'
 import './css/style.css'
 function Cart() {
@@ -37,7 +37,7 @@ function Cart() {
                     </td>
                     <td className="total-price">100,000 VND</td>
                     <td>
-                      <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" style={{fill: 'rgba(117, 0, 207, 1)'}}><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z" /><path d="M9 10h2v8H9zm4 0h2v8h-2z" /></svg>
+                      <FaRegTrashAlt className="icon"/>
                     </td>
                   </tr>
                   <tr>
@@ -59,7 +59,7 @@ function Cart() {
                     </td>
                     <td className="total-price">100,000 VND</td>
                     <td>
-                      <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" style={{fill: 'rgba(117, 0, 207, 1)'}}><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z" /><path d="M9 10h2v8H9zm4 0h2v8h-2z" /></svg>
+                      <FaRegTrashAlt className="icon"/>
                     </td>
                   </tr>
                   <tr>
@@ -81,7 +81,7 @@ function Cart() {
                     </td>
                     <td className="total-price">100,000 VND</td>
                     <td>
-                      <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" style={{fill: 'rgba(117, 0, 207, 1)'}}><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z" /><path d="M9 10h2v8H9zm4 0h2v8h-2z" /></svg>
+                      <FaRegTrashAlt className="icon"/>
                     </td>
                   </tr>
                   <tr>
@@ -103,7 +103,7 @@ function Cart() {
                     </td>
                     <td className="total-price">100,000 VND</td>
                     <td>
-                      <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" style={{fill: 'rgba(117, 0, 207, 1)'}}><path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z" /><path d="M9 10h2v8H9zm4 0h2v8h-2z" /></svg>
+                      <FaRegTrashAlt className="icon"/>
                     </td>
                   </tr>
                   <tr style={{border: '1px solid #7500CF'}}>
@@ -123,18 +123,39 @@ function Cart() {
           </div>
           <div className="cartConfirm">
             <div className="voucherBar" />
-            <h5> Tiêu 1.500.000đ để nhận được MIỄN PHÍ VẬN CHUYỂN</h5>
-            <h5>Mã giảm giá <p style={{fontWeight: 400, color: 'grey'}}>&nbsp;(Tùy chọn)</p></h5>
-            <p>Mã mua hàng sẽ được áp dụng ở trang thanh toán</p>
+            <div className="saleText">
+              Tiêu 1.500.000đ để nhận được MIỄN PHÍ VẬN CHUYỂN !
+            </div>
+            <div className="saleText" style={{fontWeight:500}}>
+              Mã giảm giá
+            </div>
+            <div className="saleText">
+              Mã mua hàng sẽ được áp dụng tại trang thanh toán
+            </div>
             <input type="text" placeholder="Mã giảm giá" />
-            <button>Lưu</button>
+            <button className="buttonThanhtoan">Lưu</button>
+            <div className="payText">
+              Voucher đã áp dụng 
+            </div>
             <hr />
-            <h5>Voucher đã áp dụng</h5>
+            <div className="payText">
+              Tổng số lượng 
+              <div className="cartConfirm-quanity">
+                5
+              </div>
+            </div>
             <hr />
-            <h5>Tổng số lượng <p style={{fontWeight: 700, color: '#7500CF'}}>&nbsp;5</p></h5>
-            <h5>Tổng cộng <p style={{fontWeight: 700, color: '#7500CF'}}>&nbsp;1.500.000đ</p></h5>
-            <p>Đã bao gồm khuyến mãi, phí vận chuyển và VAT</p>
-            <button>Thanh toán</button>
+            <div className="payText">
+              Tổng đơn hàng
+              <div className="cartConfirm-total">
+                1.500.000đ
+              </div>
+            </div>
+            <hr />
+            <div className="VAT">
+              Đã bao gồm khuyến mãi, phí vận chuyển và VAT
+            </div>
+            <button className="buttonThanhtoan">Thanh toán</button>
           </div>
         </div>
 
