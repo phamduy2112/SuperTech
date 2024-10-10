@@ -1,0 +1,169 @@
+
+.cart-container{
+    margin: 5rem;
+    display: grid;
+    grid-template-columns: 67% 20%;
+    gap: 3%;
+    align-items: center;
+    justify-content: center;
+}
+.giohang{
+    text-align: center;
+    font-size: 7rem;
+    margin: 7rem;
+    font-weight: 500;
+    color: #7500CF;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+tbody{
+    border: 0.1rem solid #7500CF;
+}
+tr{
+    border: #7500CF 0.1rem solid;
+}
+th{
+    background-color: #7500CF;
+    color: #FFFFFF;
+    font-weight: 450;
+    padding: 1rem;
+    text-align: center;
+    height: 8rem;
+    font-size: large;
+}
+td{
+    font-size: large;
+    padding: 3rem;
+    text-align: center;
+}
+img {
+    width: 5rem;
+    height: 5rem;
+}
+.delete-btn {
+    background-color: red;  
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+.quantity-buttons{
+    display: flex;
+    justify-content: center;
+}
+.continueButton{
+    background-color: #7500CF;
+    color: #FFFFFF;
+    border-radius: 5rem;
+    border: none;
+    padding: 1.5rem;
+    font-weight: 550;
+    width: 30%;
+    margin: 2rem;
+    font-size: large;
+}
+.deleteButton{
+    background-color: #7500CF;
+    color: #FFFFFF;
+    border-radius: 5rem;
+    border: none;
+    padding: 1.5rem;
+    font-weight: 550;
+    width: 30%;
+    margin: 2rem;
+    font-size: large;
+}
+.button-voucher{
+    border: #7500CF solid 0.05rem; 
+    color: #7500CF; 
+    font-weight: 500; 
+    font-size: 1.2rem; 
+    padding: 1rem; 
+    width: 12rem;
+    text-align: center;
+}
+.quantity-number{
+    text-align: center;
+    padding-left: 1.5rem;
+    width: 6rem;
+    border: 0.1rem solid rgba(128, 128, 128, 0.493);
+}
+.changeQuantity{
+    border: 0.1rem solid rgba(128, 128, 128, 0.493);
+    padding: 1rem;
+    width: 3rem;
+    text-align: center;
+    align-items: center;
+}
+.product-image > img{
+    height: 8rem;
+    width: 12rem;
+    object-fit: cover; 
+}
+.product-info{
+    text-align: left;
+    margin-left: 3rem;
+}
+.product{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.total-price{
+    color: #7500CF;
+    font-weight: 500;
+}
+.cartConfirm{
+    background-color: whitesmoke;
+    width: 100%; 
+    height: 100%;
+    box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.281);
+    padding: 1rem 2rem;
+    font-size: large;
+}
+.voucherBar{
+    width: 100%;
+    height: 1.5rem;
+    background-color: #7500CF;
+    border-radius: 5rem;
+}
+h5{
+    font-weight: 500;
+    font-size: medium;
+    text-align: left;
+    display: flex; 
+    align-items: baseline;
+    justify-content: space-between;
+}
+.cartConfirm > input{
+    color: #FFFFFF;
+    border-radius: 5rem;
+    border: 0.1rem solid rgba(128, 128, 128, 0.432);
+    padding: 1,5rem;
+    font-weight: 550;
+    width: 100%;
+    margin: 0.5rem auto;
+    height: auto;
+    font-size: large;
+}
+.cartConfirm > input::placeholder{
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: rgba(128, 128, 128, 0.664);
+
+}
+button{
+    background-color: #7500CF;
+    color: #FFFFFF;
+    border-radius: 5rem;
+    border: none;
+    padding: 1.5rem;
+    font-weight: 550;
+    width: 100%;
+    margin: 1rem auto;
+}
+.emptyCart-container{
+    text-align: center;
+}
