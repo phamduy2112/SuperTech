@@ -28,6 +28,7 @@ import AdminOrder from "../page/Admin/Order/AdminOrder";
 import UserDetail from "../page/Client/User/UserDetail/UserDetail";
 import Order from "../page/Client/User/Order/Order";
 import User from "../page/Client/User/User";
+import OrderDetail from "../page/Client/User/OrderDetail/OrderDetail";
 
 export const router = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ children:[
   },
   {
     path: "/đơn-hàng-chi-tiết-của-bạn",
-    element: <Order />,
+    element: <OrderDetail />,
   },
 
 ]

@@ -23,16 +23,17 @@
     border-color: #7500CF;
     background: #7500CF;
 }
-:where(.css-dev-only-do-not-override-5wsri9).ant-steps .ant-steps-item-process .ant-steps-item-icon{
+.formEdit .ant-steps .ant-steps-item-process .ant-steps-item-icon{
     border-color: #7500CF;
     background: #7500CF;  
 }
-:where(.css-dev-only-do-not-override-5wsri9).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
+.formEdit .ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
     stroke: #7500CF;
 }
-.formEdit .gender .ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
+.formEdit .ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary){
+    height: 37px;
     border-color: #7500CF;
-    background: #7500CF;
-    width:1.5rem;
-    height: 1.5rem;
+    color: #7500CF;
+    
+
 }
