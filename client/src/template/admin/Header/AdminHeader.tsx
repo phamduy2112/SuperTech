@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { FaExpand, FaRegBell } from 'react-icons/fa'
 import { FaCloudMoon } from "react-icons/fa6";
 
@@ -21,7 +21,7 @@ function AdminHeader() {
   
   return (
     <>
-      <div className='text-[#000000]  text-[20px] grid grid-cols-2 bg-white auto-rows-[75px]'>
+      <div className='text-[#000000] text-[20px] grid grid-cols-2 auto-rows-[75px]'>
           <div className='px-[30px]  text-[25px] flex items-center opacity-[25%] '>
             <div onClick={() => toggleSideBar(true)}>
             <HiMenuAlt1 />

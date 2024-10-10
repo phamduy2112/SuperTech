@@ -20,7 +20,7 @@ import {
 
   })
   const persistedReducer = persistReducer(persistConfig, rootReducer)
-const store=configureStore({
+  const store=configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

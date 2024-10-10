@@ -7,10 +7,9 @@ function AdminTemplate() {
   return (
     <div className='roboto'><div className='flex'>
     <AdminSideBar/>
-
-    <div className='  lg:ml-[310px]  sm:ml-0 flex-1 bg-slate-400'>
-      <AdminHeader/>
-      <Outlet />
+    <div className='flex-1'>
+    <AdminHeader/>
+    <Outlet />
     </div>
   
 

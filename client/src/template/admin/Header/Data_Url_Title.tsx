@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { BiBookAlt } from "react-icons/bi";
 import { BsBoxes } from "react-icons/bs";
+import { CiLogout } from "react-icons/ci";
 import { FaChevronRight, FaRegEye, FaRegUserCircle } from "react-icons/fa";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import { IoCellularOutline, IoHome, IoSettingsOutline } from "react-icons/io5";
@@ -163,10 +164,23 @@ export const DataSideBar: SidebarItem[] = [
         url: '',
         child: [],
       },
+    ]
+  },{
+    id: 7,
+    title: 'Tác Vụ',
+    box: [
       {
-        box_id: 5,
+        box_id: 1,
         box_title: 'Cài Đặt Website',
         icon:<IoSettingsOutline />,
+        iconChevronRight: null,
+        url: '',
+        child: [],
+      },
+      {
+        box_id: 2,
+        box_title: 'Đăng Xuất',
+        icon:<CiLogout />,
         iconChevronRight: null,
         url: '',
         child: [],
