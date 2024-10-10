@@ -30,3 +30,9 @@
 :where(.css-dev-only-do-not-override-5wsri9).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
     stroke: #7500CF;
 }
+.formEdit .gender .ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
+    border-color: #7500CF;
+    background: #7500CF;
+    width:1.5rem;
+    height: 1.5rem;
+}
