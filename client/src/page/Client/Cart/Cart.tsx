@@ -4,6 +4,9 @@ import './css/style.css'
 function Cart() {
   return (
     <div>
+        <div className="buttonUpper-voucher">
+          Thêm voucher
+        </div>
        <div className="giohang">Giỏ hàng</div>
         <div className="cart-container">
           <div className="cartInfo">
@@ -24,8 +27,8 @@ function Cart() {
                         <img src="https://th.bing.com/th/id/R.2b8690c98214493b43fd40aedbf5109e?rik=M46%2fJWuDku0bQw&pid=ImgRaw&r=0" alt="Sản phẩm A" />
                       </div>
                       <div className="product-info">
-                        <div>Tên: Sản phẩm A</div>
-                        <div className="total-price" style={{paddingTop: 10}}>100,000 VND</div>
+                        <div className="cart-productName">Tên: Sản phẩm A</div>
+                        <div className="total-price" style={{paddingTop: "0.3rem"}}>100,000 VND</div>
                       </div>
                     </td>
                     <td>
@@ -46,8 +49,8 @@ function Cart() {
                         <img src="https://th.bing.com/th/id/R.2b8690c98214493b43fd40aedbf5109e?rik=M46%2fJWuDku0bQw&pid=ImgRaw&r=0" alt="Sản phẩm A" />
                       </div>
                       <div className="product-info">
-                        <div>Tên: Sản phẩm A</div>
-                        <div className="total-price" style={{paddingTop: 10}}>100,000 VND</div>
+                        <div className="cart-productName">Tên: Sản phẩm A</div>
+                        <div className="total-price" style={{paddingTop: "0.3rem"}}>100,000 VND</div>
                       </div>
                     </td>
                     <td>
@@ -68,8 +71,8 @@ function Cart() {
                         <img src="https://th.bing.com/th/id/R.2b8690c98214493b43fd40aedbf5109e?rik=M46%2fJWuDku0bQw&pid=ImgRaw&r=0" alt="Sản phẩm A" />
                       </div>
                       <div className="product-info">
-                        <div>Tên: Sản phẩm A</div>
-                        <div className="total-price" style={{paddingTop: 10}}>100,000 VND</div>
+                        <div className="cart-productName">Tên: Sản phẩm A</div>
+                        <div className="total-price" style={{paddingTop: "0.3rem"}}>100,000 VND</div>
                       </div>
                     </td>
                     <td>
@@ -90,8 +93,8 @@ function Cart() {
                         <img src="https://th.bing.com/th/id/R.2b8690c98214493b43fd40aedbf5109e?rik=M46%2fJWuDku0bQw&pid=ImgRaw&r=0" alt="Sản phẩm A" />
                       </div>
                       <div className="product-info">
-                        <div>Tên: Sản phẩm A</div>
-                        <div className="total-price">100,000 VND</div>
+                        <div className="cart-productName">Tên: Sản phẩm A</div>
+                        <div className="total-price" style={{paddingTop: "0.3rem"}}>100,000 VND</div>
                       </div>
                     </td>
                     <td>
@@ -106,9 +109,9 @@ function Cart() {
                       <FaRegTrashAlt className="icon"/>
                     </td>
                   </tr>
-                  <tr style={{border: '1px solid #7500CF'}}>
+                  <tr className="cart-button-feld" style={{border: '1px solid #7500CF'}}>
                     <td style={{textAlign: 'left'}}>
-                      <div className="button-voucher">
+                      <div className="buttonUnder-voucher">
                         Thêm voucher
                       </div>
                     </td>

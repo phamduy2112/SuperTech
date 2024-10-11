@@ -1,11 +1,23 @@
-
 .cart-container{
-    margin: 5rem;
+    margin: auto;
+}
+.cart-container{
     display: grid;
     grid-template-columns: 67% 20%;
     gap: 3%;
     align-items: center;
     justify-content: center;
+}
+.buttonUpper-voucher{
+    border: #7500CF solid 0.05rem; 
+    color: #7500CF; 
+    font-weight: 500; 
+    font-size: 1.2rem; 
+    padding: 1rem; 
+    width: 12rem;
+    text-align: center;
+    margin: 2rem 2rem -3rem 65%;
+    visibility: hidden;
 }
 .giohang{
     text-align: center;
@@ -37,6 +49,9 @@ td{
     font-size: large;
     padding: 3rem;
     text-align: center;
+}
+.cart-productName{
+    font-weight: 500;
 }
 img {
     width: 5rem;
@@ -75,7 +90,7 @@ img {
     margin: 2rem;
     font-size: large;
 }
-.button-voucher{
+.buttonUnder-voucher{
     border: #7500CF solid 0.05rem; 
     color: #7500CF; 
     font-weight: 500; 
@@ -86,16 +101,14 @@ img {
 }
 .quantity-number{
     text-align: center;
-    padding-left: 1.5rem;
     width: 6rem;
-    border: 0.1rem solid rgba(128, 128, 128, 0.493);
+    border: 0.1rem solid rgba(128, 128, 128, 0.281);
 }
 .changeQuantity{
-    border: 0.1rem solid rgba(128, 128, 128, 0.493);
-    padding: 1rem;
+    border: 0.1rem solid rgba(128, 128, 128, 0.281);
     width: 3rem;
-    text-align: center;
-    align-items: center;
+    padding-top: 2%;
+    height: 3rem;
 }
 .product-image > img{
     height: 8rem;
@@ -201,58 +214,122 @@ img {
     .cart-container {
         grid-template-columns: 1fr; 
     }
-    
     .giohang {
         font-size: 5rem;
         margin: 5rem 0; 
     }
-
     .continueButton, .deleteButton {
         width: 100%; 
     }
 }
 
 @media (max-width: 768px) {
+    .cartInfo {
+        order: 2; 
+    }
+    
+    .cartTable {
+        order: 1;
+    }
     .giohang {
         font-size: 4rem; 
     }
-
     th, td {
         font-size: medium;
         padding: 1rem; 
     }
-
     img {
         width: 4rem; 
         height: 4rem;
     }
-
     .continueButton, .deleteButton {
         width: 100%; 
         margin: 1rem 0;
     }
-
     .product-image > img {
         height: 6rem; 
         width: auto; 
     }
+    .buttonUnder-voucher {
+        width: 100%; 
+        display: none;
+    }
+    .cart-button-feld{
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
+    .cartInfo {
+        order: 2; 
+    }
+    .cartTable {
+        order: 1;
+    }
     .giohang {
         font-size: 3rem; 
     }
-
     .cart-container {
-        margin: 2rem; 
+        margin: 2rem 2rem 5rem 2rem; 
         align-content: center;
     }
-
     .cartConfirm > input {
         font-size: medium; 
     }
-
-    .button-voucher {
+    .buttonUpper-voucher{
+        visibility: visible;
+    }
+    .buttonUnder-voucher {
         width: 100%; 
+        display: none;
+    }
+    .cart-button-feld{
+        display: none;
+    }
+    th{
+        height: 5rem;
+        font-size: 1.1rem;
+    }
+    td{
+        height: fit-content;
+        font-size: 1rem;
+        border-collapse: collapse;
+    }
+    .product{
+        gap: 0.005rem;
+    }
+    .product-image > img{
+        width: 3.5rem;
+        height: inherit;
+        object-fit: cover;
+    }
+    .quantity-buttons{
+        text-align: center;
+    }
+    .changeQuantity{
+        padding-top: 5%;
+        width: 2rem;
+        height: 2rem;
+    }
+    .quantity-number{
+        text-align: center;
+        width: 3rem;
+        border: 0.001rem solid rgba(128, 128, 128, 0.281);
+    }
+    .cartButton{
+        display: flex;
+        justify-content: space-between;
+    }
+    .continueButton{
+        margin: 3rem 0;
+        width: 30%;
+        height: 5%;
+        font-size: small;
+    }
+    .deleteButton{
+        margin: 3rem 0;
+        width: 30%;
+        height: 5%;
+        font-size: small;
     }
 }
