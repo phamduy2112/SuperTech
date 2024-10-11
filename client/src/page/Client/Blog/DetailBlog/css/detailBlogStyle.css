@@ -6,23 +6,25 @@
     font-size: large;
 }
 .detailBlog-text{
-    display: grid;
-    grid-template-columns: auto;
+    display: block;
+
     gap: 3rem;
     text-align: left;
 }
 .detailBlog-link{
     color: grey;
+    margin-bottom: 2.5rem;
 }
 .detaillBlog-title{
     font-size: 4rem;
     font-weight: 700;
     color: #7500CF;
+    margin-bottom: 1rem;
 }
 .detailBlog-date{
     display: flex;
     font-weight: 500;
-
+    margin-bottom: 2.5rem;
 }
 .deltailBlog-comma{
     padding: 0 1rem;
@@ -31,7 +33,29 @@
     font-weight: 300;
     color: grey;
 }
-
+.detailBlog-item{
+    font-weight: 600;
+    font-size: 3rem;
+    margin-bottom: 2.5rem;
+}
+.detailBlog-item-text{
+    font-size: large;
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+    line-height: 1.5;
+}
+.detailBlog-sonItem{
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+.detailBlog-img > img{
+    width: 70%;
+    object-fit: cover;
+}
+.comment-title{
+    font-weight: 500;   
+}
 
 
 

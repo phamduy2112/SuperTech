@@ -13,6 +13,13 @@ function DetailBlog() {
       imageUrl: 'https://cdn.tgdd.vn/Products/Images/42/228737/Kit/iphone-12-note-new.jpg',
       title: 'TOP 9+ iPhone 2 mắt camera chụp ảnh đẹp ĐÁNG MUA nhất 2024',
     },
+    {
+      id: 3,
+      imageUrl: 'https://cdn.tgdd.vn/Products/Images/42/228737/Kit/iphone-12-note-new.jpg',
+      title: 'TOP 9+ iPhone 2 mắt camera chụp ảnh đẹp ĐÁNG MUA nhất 2024',
+    },
+
+
   ];
   return (
     <div>
@@ -48,12 +55,15 @@ function DetailBlog() {
               </div>
               <div className="detailBlog-commemtBar">
                     <div className="comment-section">
-                      <h3 className="comment-title">Bình Luận</h3>
+                      <h3 className="comment-title">
+                              <span className="dot"></span>
+                              Bình Luận
+                      </h3>
                       <div className="comment">
                         <div className="comment-user">
-                          <img src="user-avatar.jpg" alt="User Avatar" className="user-avatar" />
+                          <img src="https://i.pinimg.com/originals/ea/1b/b8/ea1bb8dbc5b7eadf836b3a617377b7ff.png" alt="User Avatar" className="user-avatar" />
                           <div className="user-info">
-                            <strong>phạm ngọc duy</strong>
+                            <strong>Phạm Ngọc Duy</strong>
                             <p className="comment-date">4/5/2025</p>
                             <p className="comment-text">cmt đầu</p>
                             <a href="#" className="reply-link"><span>↻</span> 6 trả lời</a>
@@ -71,11 +81,12 @@ function DetailBlog() {
                       </div>
                       <div className="comment reply">
                         <div className="comment-user">
-                          <img src="user-avatar.jpg" alt="User Avatar" className="user-avatar" />
+                          <img src="https://i.pinimg.com/originals/ea/1b/b8/ea1bb8dbc5b7eadf836b3a617377b7ff.png" alt="User Avatar" className="user-avatar" />
                           <div className="user-info">
-                            <strong>việt quang</strong>
+                            <strong>Việt Quang</strong>
                             <p className="comment-date">4/5/2025</p>
                             <p className="comment-text">cmt thứ hai</p>
+                            <a href="#" className="reply-link"><span>↻</span> 1 trả lời</a>
                           </div>
                         </div>
                         <div className="comment-actions">
@@ -105,10 +116,10 @@ function DetailBlog() {
               <span className="dot"></span> Ý Kiến
             </h3>
             <div className="comment-input-container">
-              <img src="user-avatar.jpg" alt="User Avatar" className="user-avatar" />
+              <img src="https://i.pinimg.com/originals/ea/1b/b8/ea1bb8dbc5b7eadf836b3a617377b7ff.png" alt="User Avatar" className="user-avatar" />
               <textarea
                 className="comment-input"
-                placeholder="chia sẻ ý kiến của bạn"
+                placeholder="Chia sẻ ý kiến của bạn"
               ></textarea>
             </div>
             <button className="submit-button">Hoàn tất</button>
