@@ -184,9 +184,7 @@
 
 
 /* rps */
-/* CSS Responsive */
 
-/* Đối với màn hình lớn hơn 1200px */
 @media (max-width: 768px){
     .order-container {
         display: flex;
@@ -259,7 +257,6 @@
     }
 }
 
-/* Đối với màn hình nhỏ hơn 768px */
 @media (max-width: 768px) {
     .order-container {
         flex-direction: column;
@@ -297,7 +294,6 @@
     }
 }
 
-/* Đối với màn hình nhỏ hơn 480px */
 @media (max-width: 480px) {
     .order-container {
         margin: 3rem auto;
