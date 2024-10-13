@@ -182,4 +182,220 @@
     background-color: #f7f7f7;
 }
 
-  
+
+/* rps */
+/* CSS Responsive */
+
+/* Đối với màn hình lớn hơn 1200px */
+@media (max-width: 768px){
+    .order-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 8px;
+        max-width: 80%;
+        margin: 10rem auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .icon-container {
+        margin: 5rem;
+    }
+    .circle {
+        width: 10rem;
+        height: 10rem;
+        background-color: #d1e7dd;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+    .circle::before,
+    .circle::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        border: 2px solid #d1e7dd;
+    }
+    .circle::before {
+        width: 12rem;
+        height: 12rem;
+    }
+    .circle::after {
+        width: 14rem;
+        height: 14rem;
+    }
+    .checkmark {
+        font-size: 4rem;
+        color: #4caf50;
+        z-index: 1;
+    }
+    .order-text > .order-textConfirm {
+        font-size: 4rem;
+        color: #00DC00;
+        font-weight: bold;
+        padding: 2rem 0;
+    }
+    .order-textConfirmText {
+        color: #555;
+        font-size: 1.6rem;
+        font-weight: 500;
+        line-height: 2rem;
+        margin-top: 1rem;
+    }
+    .continue-shopping-button {
+        background-color: #7500CF;
+        color: #fff;
+        padding: 1.5rem 3rem;
+        border: none;
+        border-radius: 5rem;
+        cursor: pointer;
+        font-size: 1.8rem;
+        font-weight: 400;
+        margin-top: 2rem;
+    }
+    .continue-shopping-button:hover {
+        background-color: #6600cc;
+    }
+}
+
+/* Đối với màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
+    .order-container {
+        flex-direction: column;
+        text-align: center;
+        max-width: 90%;
+    }
+    .icon-container {
+        margin: 2rem 0;
+    }
+    .circle {
+        width: 8rem;
+        height: 8rem;
+    }
+    .circle::before {
+        width: 10rem;
+        height: 10rem;
+    }
+    .circle::after {
+        width: 12rem;
+        height: 12rem;
+    }
+    .checkmark {
+        font-size: 3rem;
+    }
+    .order-text > .order-textConfirm {
+        font-size: 3rem;
+    }
+    .order-textConfirmText {
+        font-size: 1.4rem;
+    }
+    .continue-shopping-button {
+        width: 60%;
+        font-size: 1.5rem;
+        padding: 1rem 2rem;
+    }
+}
+
+/* Đối với màn hình nhỏ hơn 480px */
+@media (max-width: 480px) {
+    .order-container {
+        margin: 3rem auto;
+    }
+    .icon-container {
+        margin: 1rem 0;
+    }
+    .circle {
+        width: 6rem;
+        height: 6rem;
+    }
+    .circle::before {
+        width: 8rem;
+        height: 8rem;
+    }
+    .circle::after {
+        width: 10rem;
+        height: 10rem;
+    }
+    .checkmark {
+        font-size: 2.5rem;
+    }
+    .order-text > .order-textConfirm {
+        font-size: 2rem;
+        padding: 0rem 0rem 1rem 2.55rem;
+        text-align: left;
+    }
+    .invoice-title{
+        font-size: large;
+    }
+    .order-content{
+        margin: 0 2rem;
+    }
+    .order-textConfirmText {
+        font-size: 1rem;
+        line-height: 1.8rem;
+    }
+    .continue-shopping-button {
+        width: 80%;
+        font-size: 1.4rem;
+        padding: 1rem;
+    }
+    .order-info{
+        line-height: 2.5rem;
+    }
+    .row-title{
+        font-size: 0.7rem;
+        font-weight: 400;
+    }
+    .row-title{
+        text-align: left;
+        font-size: 1rem;
+        line-height: 1.3rem;
+        margin: 0.5rem;
+    }
+    .row-itemName {
+        text-align: left;
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        color: #333333;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+    .row-itemId {
+        text-align: center;
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        color: #333333;
+        font-size: 1rem;
+    }
+    .row-itemDate {
+        text-align: center;
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        color: #333333;
+        font-size: 1rem;
+    }
+    .row-itemPrice {
+        text-align: center;
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        color: #333333;
+        font-size: 1rem;
+    }
+    .row-itemPayment {
+        text-align: center;
+        padding: 0 0.5rem;
+        font-size: 1.5rem;
+        color: #333333;
+        font-size: 1rem;
+    }
+    .row-itemProgrs {
+        text-align: right;
+        padding: 0 0.5xrem;
+        font-size: 1.5rem;
+        color: #ff0000;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+    
+}
