@@ -1,105 +1,82 @@
 import * as React from "react";
+import dienThoai from '../asset/dienthoaisign.png'
+import bgdienThoai from '../asset/dienthoai.png'
+import './css/custom.css'
 
 function Resigter() {
   return (
-    <div className="overflow-hidden pl-16 bg-white max-md:pl-5">
-      <div className="flex gap-5 max-md:flex-col">
-        <div className="flex flex-col w-[30%] max-md:ml-0 max-md:w-full">
-          <div className="flex flex-col mt-24 max-md:mt-10">
-            <div className="self-center text-4xl font-extrabold text-black">
-              Đăng Kí
-            </div>
-            <div className="self-center mt-1.5 text-xs text-neutral-500">
-              Bạn có thể đăng kí
-            </div>
-            <div className="flex flex-col px-3.5 mt-4 w-full max-md:pr-5">
-              <div className="flex z-10 gap-6 text-lg font-medium text-neutral-700">
-                <div className="flex flex-1 gap-2.5 px-4 py-2.5 bg-white rounded-md border border-solid border-neutral-300">
-                  <img
-                    loading="lazy"
-                    src="../facebook.svg"
-                    className="object-contain shrink-0 w-6 aspect-square"
-                  />
-                  <div className="my-auto"> Facebook</div>
-                </div>
-                <div className="flex flex-1 gap-5 px-4 py-2.5 whitespace-nowrap bg-white rounded-md border border-solid border-neutral-300">
-                  <img
-                    loading="lazy"
-                    src="../google.svg"
-                    className="object-contain shrink-0 w-6 aspect-[0.96]"
-                  />
-                  <div>Google</div>
-                </div>
-              </div>
-              <div className="self-start mt-0 ml-16 text-xs text-white max-md:ml-2.5">
-                Facebook
-              </div>
-            </div>
-            <div className="self-start mt-5 text-xs font-medium text-black">
-              Họ và tên
-            </div>
-            <div className="px-3 py-3 mt-2 max-w-full text-sm bg-white rounded-md border border-solid border-purple-700 border-opacity-50 text-stone-300 w-[360px] max-md:pr-5 max-md:mr-0.5 max-sm:w-[337px]">
-              Nguyễn Thị Văn A
-            </div>
-            <div className="self-start mt-5 text-xs font-medium text-black max-md:ml-0.5">
-              Email
-            </div>
-            <div className="px-3 py-3 max-w-full text-sm whitespace-nowrap bg-white rounded-md border border-solid border-purple-700 border-opacity-50 text-stone-300 w-[360px] max-md:pr-5 max-sm:w-[335px]">
-              username@gmail.com
-            </div>
-            <div className="self-start mt-5 text-xs font-medium text-black max-md:ml-0.5">
-              Mật khẩu
-            </div>
-            <div className="px-3.5 py-3.5 max-w-full text-sm whitespace-nowrap bg-white rounded-md border border-solid border-purple-700 border-opacity-50 text-stone-300 w-[360px] max-md:pr-5 max-sm:w-[338px]">
-              Password
-            </div>
-            <div className="self-start mt-5 text-xs font-medium text-black max-md:ml-0.5">
-              Xác nhận mật khẩu
-            </div>
-            <div className="px-3.5 py-2.5 max-w-full text-sm whitespace-nowrap bg-white rounded-md border border-purple-700 border-solid text-stone-300 w-[360px] max-md:pr-5 max-md:ml-0.5 max-sm:w-[339px]">
-              Password
-            </div>
-            <div className="px-16 py-3 mt-5 max-w-full text-base font-semibold text-white bg-purple-700 rounded w-[360px] max-md:px-5 max-md:mr-0.5 max-sm:w-[345px]">
-              Đăng ký
-            </div>
-            <div className="self-center mt-1.5 text-xs text-black">
-              Bạn đã có tài khoản ?
-              <span className="text-purple-700"> Đăng Nhập ngay</span>
-            </div>
-          </div>
+<div className="">
+  <div className="flex overflow-hidden relative h-[100vh]">
+    {/* Left Section: Registration Form */}
+    <div className="w-[40%] m-auto">
+    <div className="w-[80%] m-auto p-8 flex flex-col justify-center z-10">
+      <h2 className="text-3xl font-bold mb-6 text-center">Đăng Kí</h2>
+      <p className="mb-4 text-gray-600 text-center">Bạn có thể đăng kí</p>
+      {/* Social Buttons */}
+      <div className="flex gap-4 mb-6">
+        <button className="w-1/2 py-2 px-4 border border-[#7500CF] flex items-center justify-center rounded-lg text-gray-700">
+          <img src="https://www.svgrepo.com/show/355037/facebook-icon.svg" alt="Facebook" className="w-6 h-6 mr-2" />
+          Facebook
+        </button>
+        <button className="w-1/2 py-2 px-4 border border-[#7500CF] flex items-center justify-center rounded-lg text-gray-700">
+          <img src="https://www.svgrepo.com/show/355037/google-icon.svg" alt="Google" className="w-6 h-6 mr-2" />
+          Google
+        </button>
+      </div>
+      {/* Form */}
+      <form className="space-y-4">
+        <div>
+          <label className="block text-gray-700">Họ và tên</label>
+          <input type="text" placeholder="Nguyen Thi Van A" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
         </div>
-        <div className="flex flex-col ml-5 w-[70%] max-md:ml-0 max-md:w-full">
-          <div className="grow px-px pt-20 pb-44 max-md:pb-24 max-md:mt-10 max-md:max-w-full">
-            <div className="flex gap-5 max-md:flex-col">
-              <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-                <img
-                  loading="lazy"
-                  srcSet=""
-                  className="object-contain grow w-full aspect-[0.67] max-md:mt-10 max-sm:hidden"
-                />
-              </div>
-              <div className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-                <div className="flex flex-col mt-64 text-base leading-7 text-neutral-100 max-md:mt-10 max-md:max-w-full">
-                  <div className="self-start text-8xl leading-none text-pink-50 max-md:text-4xl">
-                    SuperTech
-                  </div>
-                  <div className="mt-9 ml-4 max-md:max-w-full">
-                    Supertech là trang website mua sắm trực tuyến với nhiều ưu
-                    đãi và khuyến mãi hãy đăng nhập để có trải nghiệm tốt nhất
-                    và đồng hành cùng chúng tôi.
-                  </div>
-                  <div className="max-md:mr-2.5 max-md:max-w-full">
-                    Supertech là trang website mua sắm trực tuyến với nhiều ưu
-                    đãi và khuyến mãi hãy đăng nhập để có trải nghiệm tốt nhất
-                    và đồng hành cùng chúng tôi.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div>
+          <label className="block text-gray-700">Email</label>
+          <input type="email" placeholder="username@gmail.com" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
         </div>
+        <div>
+          <label className="block text-gray-700">Mật khẩu</label>
+          <input type="password" placeholder="Password" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
+        </div>
+        <div>
+          <label className="block text-gray-700">Xác nhận mật khẩu</label>
+          <input type="password" placeholder="Password" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
+        </div>
+        {/* Submit Button */}
+        <button className="w-full py-3 bg-[#7500CF] text-white rounded-lg font-bold hover:bg-purple-700 transition duration-300">
+          Đăng ký
+        </button>
+      </form>
+      {/* Link to Sign In */}
+      <p className="mt-4 text-gray-600 text-center">
+        Bạn đã có tài khoản? <a href="#" className="text-purple-600">Đăng nhập ngay</a>
+      </p>
+    </div>
+
+    </div>
+
+    {/* Right Section: Advertisement */}
+    <div className="w-[60%] relative  overflow-hidden">
+      {/* Diagonal Purple Background */}
+   
+      <div className="absolute inset-0 bg-purple-700 clip-diagonal" />
+   <div className="absolute bottom-[-40%] right-0 opacity-30">
+        <img src={bgdienThoai} className="w-[1000px]" alt="" />
+      </div>
+      <div className="relative top-[40%] left-[55%] translate-x-[-50%] translate-y-[-50%] z-10 text-white text-center p-8 flex flex-col justify-center items-center">
+        <h1 className="text-[5rem] font-bold mb-2">SuperTech</h1>
+        <p className="max-w-sm mx-auto">
+          SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi. Hãy đăng nhập để có trải nghiệm tốt nhất và đồng hành cùng chúng tôi.
+        </p>
+      </div>
+      {/* Image of iPhone */}
+      <div className="absolute left-[0%] top-[20%] z-10">
+        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain" />
       </div>
     </div>
+  </div>
+</div>
+
+
   );
 }
 export default Resigter;

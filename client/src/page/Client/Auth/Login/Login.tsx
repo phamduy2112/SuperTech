@@ -1,100 +1,73 @@
 import React from "react";
+import dienThoai from '../asset/dienthoaisign.png'
+import bgdienThoai from '../asset/dienthoai.png'
 function Login() {
   return (
-    <div className="flex flex-col">
-      <div className="flex gap-5 max-md:flex-col">
-        {/* Left Section */}
-        <div className="flex flex-col w-[67%] max-md:w-full">
-          <div className="flex relative flex-col grow justify-center items-start px-20 py-80 mr-auto w-full max-w-[929px] min-h-[822px] max-md:px-5 max-md:py-24 max-md:mt-10 max-md:max-w-full max-sm:hidden">
-            <img
-              loading="lazy"
-              src=""
-              className="object-contain object-top absolute inset-0 size-full"
-            />
-            <div className="flex flex-col max-w-full w-[441px]">
-              <div className="text-8xl leading-none text-pink-50 max-md:text-4xl">
-                SuperTech
-              </div>
-              <div className="mt-12 text-base leading-7 text-neutral-100 max-md:mt-10">
-                Supertech là trang mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi, hãy đăng nhập để có trải nghiệm tốt nhất.
-              </div>
-            </div>
-          </div>
-        </div>
+<div className="">
+  <div className="flex overflow-hidden relative h-[100vh]">
+    {/* Left Section: Registration Form */}
 
-        {/* Right Section (Login Form) */}
-        <div className="flex flex-col w-[33%] max-md:w-full">
-          <div className="flex flex-col self-stretch my-auto max-md:mt-10">
-            <div className="mx-auto text-4xl font-extrabold text-black">
-              <p>SuperTech Xin Chào</p>
-            </div>
-            <div className="self-center mt-3 text-xs text-neutral-500">
-              Vui lòng đăng nhập
-            </div>
-
-            {/* Social Login */}
-            <div className="flex gap-7 self-center mt-3.5 w-[325px] max-w-full">
-              <div className="flex flex-1 gap-2.5 px-4 py-2.5 bg-white rounded-md border border-neutral-300">
-                <img
-                  loading="lazy"
-                  src="../facebook.svg"
-                  className="object-contain w-6 aspect-square"
-                />
-                <div>Facebook</div>
-              </div>
-              <div className="flex flex-1 gap-2.5 px-4 py-2.5 bg-white rounded-md border border-neutral-300">
-                <img
-                  loading="lazy"
-                  src="../google.svg"
-                  className="object-contain w-6 aspect-square"
-                />
-                <div>Google</div>
-              </div>
-            </div>
-
-            <div className="self-center mt-2.5 text-xs text-neutral-500">
-              Hoặc đăng nhập với
-            </div>
-
-            {/* Login Fields */}
-            <div className="self-start mt-1.5 text-xs font-medium text-black max-md:ml-1.5">
-              Email
-            </div>
-            <input
-              type="email"
-              placeholder="username@gmail.com"
-              className="py-2.5 px-3 w-full text-sm bg-white rounded-md border border-purple-700"
-            />
-
-            <div className="self-start mt-5 text-xs font-medium text-black max-md:ml-1.5">
-              Mật khẩu
-            </div>
-            <input
-              type="password"
-              placeholder="Password"
-              className="py-2.5 px-3 w-full text-sm bg-white rounded-md border border-purple-700"
-            />
-
-            <div className="flex justify-between mt-4 w-full">
-              <label className="flex gap-0.5 text-xs text-black">
-                <input type="checkbox" className="h-3 w-3" />
-                Lưu thông tin đăng nhập
-              </label>
-              <a href="#" className="text-xs text-purple-700">Quên mật khẩu?</a>
-            </div>
-
-            {/* Submit Button */}
-            <button className="px-16 py-2.5 mt-1.5 w-full text-base font-semibold text-white bg-purple-700 rounded max-md:px-5">
-              Đăng nhập
-            </button>
-
-            <div className="self-center mt-3.5 text-xs text-black">
-              Bạn không có tài khoản? <a href="#" className="text-purple-700">Đăng ký ngay</a>
-            </div>
-          </div>
-        </div>
+ <div className="w-[60%] relative  overflow-hidden">
+      {/* Diagonal Purple Background */}
+   
+      <div className="absolute inset-0 bg-purple-700 clip-diagonal-left" />
+   <div className="absolute bottom-[-40%] left-0 opacity-30">
+        <img src={bgdienThoai} className="w-[1000px]" alt="" />
+      </div>
+      <div className="relative top-[40%] left-[55%] translate-x-[-50%] translate-y-[-50%] z-10 text-white text-center p-8 flex flex-col justify-center items-center">
+        <h1 className="text-[5rem] font-bold mb-2">SuperTech</h1>
+        <p className="max-w-sm mx-auto">
+          SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi. Hãy đăng nhập để có trải nghiệm tốt nhất và đồng hành cùng chúng tôi.
+        </p>
+      </div>
+      {/* Image of iPhone */}
+      <div className="absolute right-[-10%] top-[20%] z-10">
+        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain" />
       </div>
     </div>
+    {/* Right Section: Advertisement */}
+   
+    <div className="w-[40%] m-auto">
+    <div className="w-[80%] m-auto p-8 flex flex-col justify-center z-10">
+      <h2 className="text-3xl font-bold mb-6 text-center">Đăng nhập</h2>
+      <p className="mb-4 text-gray-600 text-center">Bạn có thể đăng nhập</p>
+      {/* Social Buttons */}
+      <div className="flex gap-4 mb-6">
+        <button className="w-1/2 py-2 px-4 border border-[#7500CF] flex items-center justify-center rounded-lg text-gray-700">
+          <img src="https://www.svgrepo.com/show/355037/facebook-icon.svg" alt="Facebook" className="w-6 h-6 mr-2" />
+          Facebook
+        </button>
+        <button className="w-1/2 py-2 px-4 border border-[#7500CF] flex items-center justify-center rounded-lg text-gray-700">
+          <img src="https://www.svgrepo.com/show/355037/google-icon.svg" alt="Google" className="w-6 h-6 mr-2" />
+          Google
+        </button>
+      </div>
+      {/* Form */}
+      <form className="space-y-4">
+      
+        <div>
+          <label className="block text-gray-700">Email</label>
+          <input type="email" placeholder="username@gmail.com" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
+        </div>
+        <div>
+          <label className="block text-gray-700">Mật khẩu</label>
+          <input type="password" placeholder="Password" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
+        </div>
+      
+        {/* Submit Button */}
+        <button className="w-full py-3 bg-[#7500CF] text-white rounded-lg font-bold hover:bg-purple-700 transition duration-300">
+          Đăng nhập
+        </button>
+      </form>
+      {/* Link to Sign In */}
+      <p className="mt-4 text-gray-600 text-center">
+        Bạn chưa có tài khoản? <a href="#" className="text-purple-600">Đăng kí ngay</a>
+      </p>
+    </div>
+
+    </div>
+  </div>
+</div>
   );
 }
 
