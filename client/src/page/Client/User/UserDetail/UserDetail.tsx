@@ -7,6 +7,7 @@ import { CiHeart, CiUser } from "react-icons/ci";
 import { IoMdExit } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
 import { Breadcrumb, Form, Input, InputNumber, Radio, Select, Steps } from 'antd'
+import ModalChangePassword from "./Component/ModalChangePassword";
 
 
 function UserDetail() {
@@ -118,11 +119,9 @@ function UserDetail() {
        </div>
       </Form>
       <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
-        <button
-        className="p-[1rem] border text-[1.5rem] border-[#7500CF] text-[#7500CF]"
-        >Đổi mật khẩu</button>
-        <button
-                className="p-[1rem] border text-[1.5rem] border-[#7500CF] text-[#7500CF]"
+      <ModalChangePassword/>
+
+            <button className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]"
 
         >Cập nhận</button>
       </div>

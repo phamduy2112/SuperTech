@@ -23,10 +23,21 @@
     border-color: #7500CF;
     background: #7500CF;
 }
-:where(.css-dev-only-do-not-override-5wsri9).ant-steps .ant-steps-item-process .ant-steps-item-icon{
+.ant-steps .ant-steps-item-process .ant-steps-item-icon{
     border-color: #7500CF;
     background: #7500CF;  
 }
-:where(.css-dev-only-do-not-override-5wsri9).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
+.ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
     stroke: #7500CF;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon{
+    border: 1px solid #7500CF;
+
+    background: #7500CF;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon >.ant-steps-icon{
+    color: white;
+}
+.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
+    background: #7500CF;
 }
