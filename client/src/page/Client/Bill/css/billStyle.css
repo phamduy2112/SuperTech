@@ -1,0 +1,185 @@
+  .order-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    max-width: 80%;
+    margin: 10rem auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .order-content {
+    display: flex;
+    align-items: center;
+  }
+  .icon-container {
+    margin: 7rem;
+  }
+  .circle {
+    width: 10rem;
+    height: 10rem;
+    background-color: #d1e7dd;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  } 
+  .circle::before {
+    content: "";
+    width: 150px;
+    height: 150px;
+    border: 2px solid #d1e7dd;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .circle::after {
+    content: "";
+    width: 200px;
+    height: 200px;
+    border: 2px solid #d1e7dd;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .checkmark {
+    font-size: 4rem;
+    color: #4caf50;
+    z-index: 1;
+  }
+  .order-text > .order-textConfirm {
+    font-size: 4rem;
+    color: #00DC00;
+    font-weight: bold;
+    padding: 2rem 0;
+  }
+  .order-text > .order-textConfirm > .order-textConfirmText {
+    color: #555;
+    font-size: 1.6rem;
+    font-weight: 500;
+    padding: 2rem 0;
+    line-height: 2rem;
+  }
+  .continue-shopping-button {
+    background-color: #7500CF;
+    color: #fff;
+    padding: 20px 20px;
+    border: none;
+    border-radius: 5rem;
+    cursor: pointer;
+    font-size: 1.8rem;
+    font-weight: 400;
+    width: 20%;
+  }
+  .continue-shopping-button:hover {
+    background-color: #6600cc;
+  }
+  .invoice-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+
+  .invoice-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    line-height: 2rem;
+}
+.company-logo {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    margin: 0 2rem ;
+}
+.company-info {
+    display: flex;
+    flex-direction: column;
+}
+.company-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+    margin: 0;
+}
+.company-address {
+    font-size: 14px;
+    color: #555555;
+}
+.order-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.invoice-title {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333333;
+    text-align: center;
+}
+.invoice-table {
+    display: flex;
+    flex-direction: column;
+}
+.invoice-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 2.5rem 0;
+}
+
+.header {
+    color: #d1e7dd;
+    font-weight: bold;
+    background-color: #7500CF;
+}
+
+.row-title{
+    text-align: center;
+    font-size: medium;
+}
+.row-itemName {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333333;
+    font-weight: 500;
+}
+.row-itemId {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333333;
+}
+.row-itemDate {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333333;
+}
+.row-itemPrice {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333333;
+}
+.row-itemPayment {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333333;
+}
+.row-itemProgrs {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #ff0000;
+    font-weight: 500;
+}
+
+.invoice-row:not(.header):hover {
+    background-color: #f7f7f7;
+}
+
+  
