@@ -5,37 +5,38 @@ export default class infor_product extends Model {
   static init(sequelize) {
   return super.init({
     infor_product: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     infor_screen: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     infor_system: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     infor_cpu: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     infor_ram: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     infor_storage: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     infor_more: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_product: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

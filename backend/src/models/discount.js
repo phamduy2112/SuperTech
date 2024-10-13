@@ -7,28 +7,28 @@ export default class discount extends Model {
     discount_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     discount_name: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     discount_percent: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     condition: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     discount_date_start: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     discount_date_end: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
