@@ -2,69 +2,90 @@ import * as React from "react";
 import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import './css/custom.css'
+import { NavLink } from "react-router-dom";
+import { FaArrowLeft, FaFacebookF, FaGoogle } from "react-icons/fa";
+import { Button, Form, Input } from "antd";
 
 function Resigter() {
   return (
-<div className="">
+<div className="relative">
+
   <div className="flex overflow-hidden relative h-[100vh]">
+  <div className="bg-white w-[4rem] shadow-md h-[4rem] rounded-[50%] absolute left-[12rem] top-[5%]">
+        <NavLink to={"/"}>
+          <FaArrowLeft  className="text-[2rem] text-[#7500CF] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"/>
+        </NavLink>
+        
+      </div>
     {/* Left Section: Registration Form */}
-    <div className="w-[40%] m-auto">
-    <div className="w-[80%] m-auto p-8 flex flex-col justify-center z-10">
-      <h2 className="text-3xl font-bold mb-6 text-center">Đăng Kí</h2>
-      <p className="mb-4 text-gray-600 text-center">Bạn có thể đăng kí</p>
+    <div className="w-[40%] m-auto relative">
+ 
+    <div className="w-[70%] m-auto p-8 flex flex-col justify-center z-10">
+      
+      <h2 className="text-[3rem] font-bold mb-4 text-center">Đăng kí</h2>
+      <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng nhập</p>
       {/* Social Buttons */}
-      <div className="flex gap-4 mb-6">
-        <button className="w-1/2 py-2 px-4 border border-[#7500CF] flex items-center justify-center rounded-lg text-gray-700">
-          <img src="https://www.svgrepo.com/show/355037/facebook-icon.svg" alt="Facebook" className="w-6 h-6 mr-2" />
+      <div className="flex gap-4 mb-6 w-[70%] m-auto">
+        <button className="w-1/2 py-5  border text-[1.6rem] border-[#7500CF] text-[#7500CF] flex items-center justify-center rounded-lg ">
+    <FaFacebookF className="mr-[.5rem]"/>
           Facebook
         </button>
-        <button className="w-1/2 py-2 px-4 border border-[#7500CF] flex items-center justify-center rounded-lg text-gray-700">
-          <img src="https://www.svgrepo.com/show/355037/google-icon.svg" alt="Google" className="w-6 h-6 mr-2" />
+        <button className="w-1/2 py-5 border text-[1.6rem] border-[#7500CF] flex items-center justify-center rounded-lg text-[#7500CF]">
+<FaGoogle className="mr-[.5rem]" />
           Google
         </button>
       </div>
       {/* Form */}
-      <form className="space-y-4">
-        <div>
-          <label className="block text-gray-700">Họ và tên</label>
-          <input type="text" placeholder="Nguyen Thi Van A" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
-        </div>
-        <div>
-          <label className="block text-gray-700">Email</label>
-          <input type="email" placeholder="username@gmail.com" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
-        </div>
-        <div>
-          <label className="block text-gray-700">Mật khẩu</label>
-          <input type="password" placeholder="Password" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
-        </div>
-        <div>
-          <label className="block text-gray-700">Xác nhận mật khẩu</label>
-          <input type="password" placeholder="Password" className="w-full border border-[#7500CF] rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none" />
-        </div>
-        {/* Submit Button */}
-        <button className="w-full py-3 bg-[#7500CF] text-white rounded-lg font-bold hover:bg-purple-700 transition duration-300">
-          Đăng ký
-        </button>
-      </form>
+      <Form
+      layout="vertical"
+    className="sign-edit"
+      // initialValues={{
+      //   // layout: formLayout,
+      // }}
+      // onValuesChange={onFormLayoutChange}
+      // style={{
+      //   maxWidth: formLayout === 'inline' ? 'none' : 600,
+      // }}
+    >
+     
+      <Form.Item label="Họ và tên" className="mb-[1rem]">
+        <Input placeholder="input placeholder" />
+      </Form.Item>
+      <Form.Item label="Email" className="mb-[1rem]">
+        <Input placeholder="input placeholder" />
+      </Form.Item>
+      <Form.Item label="Mật khẩu" className="mb-[.5rem]">
+        <Input placeholder="input placeholder"  />
+      </Form.Item>
+      <Form.Item label="Xác nhận mật khẩu" className="mb-[.5rem]">
+        <Input placeholder="input placeholder"  />
+      </Form.Item>
+      <div className="flex justify-end">
+      <NavLink to="" className="text-[1.5rem] mb-[.5rem] text-[#7500CF] font-semibold hover:text-purple-800">Quên mật khẩu</NavLink>
+    </div>
+      <div className="button-edit">
+        <Button type="primary" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng kí</Button>
+      </div>
+    </Form>
+ 
       {/* Link to Sign In */}
-      <p className="mt-4 text-gray-600 text-center">
-        Bạn đã có tài khoản? <a href="#" className="text-purple-600">Đăng nhập ngay</a>
+      <p className="mt-4 text-gray-600 text-center text-[1.4rem]">
+        Bạn đã có tài khoản? <NavLink to="/đăng-nhập" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
       </p>
     </div>
 
     </div>
-
-    {/* Right Section: Advertisement */}
-    <div className="w-[60%] relative  overflow-hidden">
+ <div className="w-[60%] relative  overflow-hidden">
       {/* Diagonal Purple Background */}
    
       <div className="absolute inset-0 bg-purple-700 clip-diagonal" />
-   <div className="absolute bottom-[-40%] right-0 opacity-30">
-        <img src={bgdienThoai} className="w-[1000px]" alt="" />
+     
+   <div className="absolute bottom-[-20%] right-0 opacity-30">
+        <img src={bgdienThoai} className="w-[800px]" alt="" />
       </div>
-      <div className="relative top-[40%] left-[55%] translate-x-[-50%] translate-y-[-50%] z-10 text-white text-center p-8 flex flex-col justify-center items-center">
-        <h1 className="text-[5rem] font-bold mb-2">SuperTech</h1>
-        <p className="max-w-sm mx-auto">
+      <div className="relative top-[40%] left-[65%] translate-x-[-50%] translate-y-[-50%] z-10 text-white text-center p-8 flex flex-col items-center">
+        <h1 className="text-[6rem] font-bold mb-3">SuperTech</h1>
+        <p className="text-[1.8rem] w-[600px]">
           SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi. Hãy đăng nhập để có trải nghiệm tốt nhất và đồng hành cùng chúng tôi.
         </p>
       </div>
@@ -73,6 +94,9 @@ function Resigter() {
         <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain" />
       </div>
     </div>
+    {/* Right Section: Advertisement */}
+   
+    
   </div>
 </div>
 
