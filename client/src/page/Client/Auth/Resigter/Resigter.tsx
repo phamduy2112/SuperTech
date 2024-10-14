@@ -2,11 +2,69 @@ import * as React from "react";
 import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import './css/custom.css'
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaFacebookF, FaGoogle } from "react-icons/fa";
 import { Button, Form, Input } from "antd";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { signup } from "../../../../service/auth/auth.service";
+import Swal from 'sweetalert2'
 
 function Resigter() {
+  // Sử dụng hook useFormik để quản lý form
+  const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      fullName: Yup.string().required("Họ và tên là bắt buộc"),
+      email: Yup.string().email("Email không hợp lệ").required("Email là bắt buộc"),
+      password: Yup.string()
+        .min(6, "Mật khẩu phải có ít nhất 6 kí tự")
+        .required("Mật khẩu là bắt buộc"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Mật khẩu xác nhận không khớp")
+        .required("Xác nhận mật khẩu là bắt buộc"),
+    }),
+    onSubmit:async (values) => {
+      console.log("Form data", values);
+      const payload={
+        user_name:values.fullName,
+        user_email:values.email,
+        user_password:values.password,
+
+      }
+      const res = await signup(payload);
+
+      if (res.data.message === "Đăng kí thành công!") {
+        Swal.fire({
+          position: "top-end",
+          title: res.data.message,
+          showConfirmButton: false,
+          timer: 1500, // Thời gian hiển thị
+          timerProgressBar: true, // Kích hoạt thanh tiến trình
+        });
+        navigate("/đăng-nhập")
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error", // Thay đổi icon thành "error" khi thất bại
+          title: res.data.message || "Đăng kí thất bại", // Đảm bảo có thông điệp fallback
+          showConfirmButton: false,
+          timer: 1500, // Thời gian hiển thị
+          timerProgressBar: true, // Kích hoạt thanh tiến trình
+        });
+      }
+console.log(res);
+
+    },
+  });
+
   return (
 <div className="relative">
 
@@ -36,37 +94,91 @@ function Resigter() {
         </button>
       </div>
       {/* Form */}
-      <Form
-      layout="vertical"
-    className="sign-edit"
-      // initialValues={{
-      //   // layout: formLayout,
-      // }}
-      // onValuesChange={onFormLayoutChange}
-      // style={{
-      //   maxWidth: formLayout === 'inline' ? 'none' : 600,
-      // }}
-    >
-     
-      <Form.Item label="Họ và tên" className="mb-[1rem]">
-        <Input placeholder="input placeholder" />
-      </Form.Item>
-      <Form.Item label="Email" className="mb-[1rem]">
-        <Input placeholder="input placeholder" />
-      </Form.Item>
-      <Form.Item label="Mật khẩu" className="mb-[.5rem]">
-        <Input placeholder="input placeholder"  />
-      </Form.Item>
-      <Form.Item label="Xác nhận mật khẩu" className="mb-[.5rem]">
-        <Input placeholder="input placeholder"  />
-      </Form.Item>
-      <div className="flex justify-end">
-      <NavLink to="" className="text-[1.5rem] mb-[.5rem] text-[#7500CF] font-semibold hover:text-purple-800">Quên mật khẩu</NavLink>
-    </div>
-      <div className="button-edit">
-        <Button type="primary" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng kí</Button>
-      </div>
-    </Form>
+  {/* Formik Form */}
+  <Form
+              layout="vertical"
+              onFinish={formik.handleSubmit}
+              className="sign-edit"
+            >
+              {/* Họ và tên */}
+              <Form.Item
+                label="Họ và tên"
+                validateStatus={formik.touched.fullName && formik.errors.fullName ? "error" : ""}
+                help={formik.touched.fullName && formik.errors.fullName ? formik.errors.fullName : null}
+              >
+                <Input
+                  id="fullName"
+                  name="fullName"
+                  placeholder="Nhập họ và tên"
+                  value={formik.values.fullName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Form.Item>
+
+              {/* Email */}
+              <Form.Item
+                label="Email"
+                validateStatus={formik.touched.email && formik.errors.email ? "error" : ""}
+                help={formik.touched.email && formik.errors.email ? formik.errors.email : null}
+              >
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Nhập email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Form.Item>
+
+              {/* Mật khẩu */}
+              <Form.Item
+                label="Mật khẩu"
+                validateStatus={formik.touched.password && formik.errors.password ? "error" : ""}
+                help={formik.touched.password && formik.errors.password ? formik.errors.password : null}
+              >
+                <Input.Password
+                  id="password"
+                  name="password"
+                  placeholder="Nhập mật khẩu"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Form.Item>
+
+              {/* Xác nhận Mật khẩu */}
+              <Form.Item
+                label="Xác nhận mật khẩu"
+                validateStatus={formik.touched.confirmPassword && formik.errors.confirmPassword ? "error" : ""}
+                help={formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : null}
+              >
+                <Input.Password
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Xác nhận mật khẩu"
+                  value={formik.values.confirmPassword}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Form.Item>
+
+              {/* Quên mật khẩu */}
+              <div className="flex justify-end mb-4">
+                <NavLink to="#" className="text-[1.5rem] text-[#7500CF] font-semibold hover:text-purple-800">
+                  Quên mật khẩu
+                </NavLink>
+              </div>
+
+              {/* Nút Đăng kí */}
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="w-full h-16 text-[1.7rem]">
+                  Đăng kí
+                </Button>
+              </Form.Item>
+            </Form>
  
       {/* Link to Sign In */}
       <p className="mt-4 text-gray-600 text-center text-[1.4rem]">
@@ -90,8 +202,8 @@ function Resigter() {
         </p>
       </div>
       {/* Image of iPhone */}
-      <div className="absolute left-[0%] top-[20%] z-10">
-        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain" />
+      <div className="absolute left-[0%] top-[20%] z-10 ">
+        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain opacity-90" />
       </div>
     </div>
     {/* Right Section: Advertisement */}

@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import { Button, Form, Input } from "antd";
 import { FaArrowLeft, FaFacebookF, FaGoogle } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import '../css/formSign.css'
+
 function Login() {
+
   return (
 <div className="">
   <div className="flex overflow-hidden relative h-[100vh]">
@@ -32,7 +34,7 @@ function Login() {
       </div>
       {/* Image of iPhone */}
       <div className="absolute right-[0%] top-[20%] z-10">
-        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain" />
+        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain opacity-90" />
       </div>
     </div>
     {/* Right Section: Advertisement */}
@@ -66,10 +68,10 @@ function Login() {
     >
      
       <Form.Item label="Tài khoản" className="mb-[1rem]">
-        <Input placeholder="input placeholder" />
+        <Input placeholder="input placeholder" className="py-[2.1rem] text-[1.5rem]"/>
       </Form.Item>
       <Form.Item label="Mật khẩu" className="mb-[.5rem]">
-        <Input placeholder="input placeholder"  />
+        <Input placeholder="input placeholder"  className="py-[2.1rem] text-[1.5rem]"/>
       </Form.Item>
       <div className="flex justify-end">
       <NavLink to="" className="text-[1.5rem] mb-[.5rem] text-[#7500CF] font-semibold hover:text-purple-800">Quên mật khẩu</NavLink>

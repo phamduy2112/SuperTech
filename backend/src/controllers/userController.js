@@ -19,14 +19,14 @@ const getUser = async (req, res) => {
 
 const register = async (req, res) => {
     try{
-        const {fullname,user_email,password}=req.body
+        const {user_name,user_email,user_password}=req.body
         const user = await User.findOne({ where: { user_email } });
         if(user){
-            return responseSend(res,{success:false},"Email đã tồn tại",401)
+            return responseSend(res,{success:false},"Email đã tồn tại",200)
         }
-        const hashedPassword=await bcrypt.hash(password,10)
+        const hashedPassword=await bcrypt.hash(user_password,10)
         await User.create({
-            user_name:fullname,
+            user_name,
             user_email,
             user_password:hashedPassword
         })
