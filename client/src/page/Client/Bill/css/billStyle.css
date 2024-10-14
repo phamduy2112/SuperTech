@@ -3,7 +3,6 @@
     align-items: center;
     justify-content: space-between;
     border-radius: 0.8rem;
-    max-width: 80%;
     margin: 10rem auto;
     box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   }
@@ -15,8 +14,8 @@
     margin: 7rem;
   }
   .circle {
-    width: 10rem;
-    height: 10rem;
+    width: 8rem;
+    height: 8rem;
     background-color: #d1e7dd;
     border-radius: 50%;
     display: flex;
@@ -26,34 +25,34 @@
   } 
   .circle::before {
     content: "";
-    width: 15rem;
-    height: 15rem;
+    width: 12rem;
+    height: 12rem;
     border: 0.2rem solid #d1e7dd;
     border-radius: 50%;
     position: absolute;
   }
   .circle::after {
     content: "";
-    width: 20rem;
-    height: 20rem;
+    width: 16rem;
+    height: 16rem;
     border: 0.2rem solid #d1e7dd;
     border-radius: 50%;
     position: absolute;
   }
   .checkmark {
-    font-size: 4rem;
+    font-size: 3rem;
     color: #4caf50;
     z-index: 1;
   }
   .order-text > .order-textConfirm {
-    font-size: 4rem;
+    font-size: 3rem;
     color: #00DC00;
     font-weight: bold;
     padding: 2rem 0;
   }
   .order-text > .order-textConfirm > .order-textConfirmText {
     color: #555;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 500;
     padding: 2rem 0;
     line-height: 2rem;
@@ -67,14 +66,11 @@
     cursor: pointer;
     font-size: 1.8rem;
     font-weight: 400;
-    width: 20%;
   }
   .continue-shopping-button:hover {
     background-color: #6600cc;
   }
   .invoice-container {
-    width: 80%;
-    margin: 0 auto;
     padding: 2rem;
     border: 0.1rem solid #e0e0e0;
     border-radius: 0.8rem;
@@ -122,10 +118,6 @@
     margin-bottom: 1.5rem;
     color: #333333;
     text-align: center;
-}
-.invoice-table {
-    display: flex;
-    flex-direction: column;
 }
 .invoice-row {
     display: grid;

@@ -1,10 +1,11 @@
 import React from 'react'
 import "./css/billStyle.css";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { Container } from '../../../components/Style/Container';
 
 function Bill() {
   return (
-    <div>
+    <Container>
           <div className="order-container">
             <div className="order-content">
               <div className="icon-container">
@@ -74,7 +75,7 @@ function Bill() {
                   </div>
               </div>
           </div>
-    </div>
+    </Container>
   )
 }
 
