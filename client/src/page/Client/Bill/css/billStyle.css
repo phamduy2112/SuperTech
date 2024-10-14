@@ -2,10 +2,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 8px;
+    border-radius: 0.8rem;
     max-width: 80%;
     margin: 10rem auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   }
   .order-content {
     display: flex;
@@ -26,17 +26,17 @@
   } 
   .circle::before {
     content: "";
-    width: 150px;
-    height: 150px;
-    border: 2px solid #d1e7dd;
+    width: 15rem;
+    height: 15rem;
+    border: 0.2rem solid #d1e7dd;
     border-radius: 50%;
     position: absolute;
   }
   .circle::after {
     content: "";
-    width: 200px;
-    height: 200px;
-    border: 2px solid #d1e7dd;
+    width: 20rem;
+    height: 20rem;
+    border: 0.2rem solid #d1e7dd;
     border-radius: 50%;
     position: absolute;
   }
@@ -61,7 +61,7 @@
   .continue-shopping-button {
     background-color: #7500CF;
     color: #fff;
-    padding: 20px 20px;
+    padding: 2rem 2rem;
     border: none;
     border-radius: 5rem;
     cursor: pointer;
@@ -75,16 +75,16 @@
   .invoice-container {
     width: 80%;
     margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    padding: 2rem;
+    border: 0.1rem solid #e0e0e0;
+    border-radius: 0.8rem;
     background-color: #ffffff;
   }
 
   .invoice-header {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     line-height: 2rem;
 }
 .company-logo {
@@ -98,28 +98,28 @@
     flex-direction: column;
 }
 .company-name {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: bold;
     color: #333333;
     margin: 0;
 }
 .company-address {
-    font-size: 14px;
+    font-size: 1.4rem;
     color: #555555;
 }
 .order-info {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0;
-    padding: 10px;
+    margin: 1rem 0;
+    padding: 1rem;
     background-color: #f9f9f9;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
 }
 .invoice-title {
     font-size: 4rem;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
     color: #333333;
     text-align: center;
 }
@@ -130,8 +130,8 @@
 .invoice-row {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem 0;
+    border-bottom: 0.1rem solid #e0e0e0;
     padding: 2.5rem 0;
 }
 
@@ -190,10 +190,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius: 8px;
+        border-radius: 0.8rem;
         max-width: 80%;
         margin: 10rem auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
     }
     .icon-container {
         margin: 5rem;
@@ -213,7 +213,7 @@
         content: "";
         position: absolute;
         border-radius: 50%;
-        border: 2px solid #d1e7dd;
+        border: 0.2rem solid #d1e7dd;
     }
     .circle::before {
         width: 12rem;
