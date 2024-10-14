@@ -65,191 +65,220 @@ function Header() {
   });
 
   return (
-    <div className='font-bold'>
-        Header
-        <div className="">
-            <div className="flex flex-col relative">
-                <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
-                    <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
-                        <h3 className='text-[1.5rem] font-medium sm:text-center'>Chào mừng đến với cửa hàng SuperTech</h3>
-                        <div className="gap-[1.2rem] sm:hidden md:flex">
-                            <div className='flex justify-center items-center gap-[.5rem] text-[1.4rem]'>
-                                <CiLocationOn className='text-[1.4rem]' />
-                                <span>Địa điểm</span>
-                            </div>
-                            <div className='flex justify-center items-center gap-1 text-[1.4rem]'>
-                                <CiLocationOn className='text-[1.4rem]' />
-                                <span>Tra cứu hóa đơn</span>
-                            </div>
-                            <div className='flex justify-center items-center gap-1 text-[1.4rem]'>
-                                <CiLocationOn className='text-[1.4rem]' />
-                                <span>Cửa hàng</span>
-                            </div>
-                            <div className='flex justify-center items-center gap-1 text-[1.4rem]'>
-                                <FaRegUser className='text-[1.4rem]' />
-                                <span>Tài khoản</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto sm:hidden md:block">
-                    <div className="flex justify-between items-center w-[100%] md:h-[5rem] lg:h-[75px]">
-                        <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">SuperTech</div>
-                        <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
-                            <form action="" className="w-[100%] h-[38px]">
-                                <Search
-                                    placeholder="Tìm kiếm sản phẩm"
-                                    onSearch={onSearch}
-                                    enterButton
-                                    className="inputSearch"
-                                />
-                            </form>
-                        </div>
-                        <div className="flex gap-[1rem]">
-                            <div>
-                                <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" />
-                            </div>
-                            <div>
-                                <Badge count={0} showZero>
-                                    <FaRegHeart className="xl:text-[2.4rem] md:text-[2rem] text-[#7500CF]" />
-                                </Badge>
-                            </div>
-                            <div>
-                                <Badge count={0} showZero>
-                                    <MdOutlineShoppingBag className="xl:text-[2.6rem] md:text-[2rem] text-[#7500CF]" />
-                                </Badge>
-                            </div>
-                            <div>
-                                <MdLanguage className="xl:text-[2.5rem] md:text-[2rem] text-[#7500CF]" />
-                            </div>
-                        </div>
-                        <div>
-                            <Dropdown
-                                menu={{
-                                    items,
-                                }}
-                                placement="bottomLeft"
-                                arrow
-                                trigger={["click"]}
-                            >
-                                <Button
-                                    className="flex xl:h-[40px] md:h-[3rem] items-center xl:gap-3 md:gap-2 md:rounded-[1.5rem] xl:rounded-[3rem] DropDown"
-                                >
-                                    <FaBars />
-                                    <div className="xl:text-[25px] md:text-[2rem]">
-                                        <FaUserCircle />
-                                    </div>
-                                </Button>
-                            </Dropdown>
-                        </div>
-                    </div>
-                </div>
-                {
-                    scrollY ? (
-                        <div className="w-[100%] py-2 border border-t-purple-200 ">
-                            <div className="md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
-                                <div className="relative">
-                                    <div className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
-                                        <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold">
-                                            Danh mục sản phẩm
-                                        </div>
-                                    </div>
-                                    {/* <TaskCatelogry/> */}
-                                    <div></div>
-                                </div>
-                                <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
-                                    <Menu />
-                                </div>
-                                <div className="md:hidden xl:flex text-[1.6rem] text-[#FF0000] font-semibold">Miễn phí vận chuyển trên 25 triệu</div>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="">
-                            {/* Overlay */}
-                            {/* Menu di động với hiệu ứng trượt */}
-                            <animated.div
-                                style={{
-                                    ...slideDownAnimation,
-                                    position: "fixed",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    zIndex: 20,
-                                    backgroundColor: "#fff", // Thêm màu nền cho thanh điều hướng
-                                }}
-                            >
-                                <div className="w-[100%] py-2 border border-t-purple-200 ">
-                                    <div className="md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
-                                        <div className="relative">
-                                            <div className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
-                                                <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold">
-                                                    Danh mục sản phẩm
-                                                </div>
-                                            </div>
-                                            {/* <TaskCatelogry/> */}
-                                            <div></div>
-                                        </div>
-                                        <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
-                                            <Menu />
-                                        </div>
-                                        <div className="md:hidden xl:flex text-[1.6rem] text-[#FF0000] font-semibold">Miễn phí vận chuyển trên 25 triệu</div>
-                                    </div>
-                                </div>
-                            </animated.div>
-                        </div>
-                    )
-                }
-                {/* fixed bg-white z-[1000] */}
-                {/* mobile */}
-                <div className="md:hidden sm:shadow-xl flex justify-center items-center ">
-                    <div className="w-[95%] m-auto">
-                        <div className="flex items-center justify-between bg-white py-[1rem]">
-                            <div className="text-[2rem]" onClick={() => setisvisibleHeaderMB(!isvisibleHeaderMB)}>
-                                <FaBars />
-                            </div>
-                            <h3 className="text-[2.5rem]">SuperTech</h3>
-                            <div className="text-[2.5rem] flex">
-                                <IoIosSearch />
-                                <Badge count={0} showZero onClick={() => setisvisibleCart(!isvisibleCart)}>
-                                    <MdOutlineShoppingBag className="text-[2.5rem] text-[#7500CF]" />
-                                </Badge>
-                            </div>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
-                {isvisibleCart && (
-                    <div className="fixed inset-0 z-30">
-                        <div
-                            className="w-full h-full bg-[rgba(0,0,0,0.5)]"
-                            onClick={() => setisvisibleCart(false)}
-                        >
-                            <animated.div style={slideInAnimationCart}>
-                                <TaskCart onClose={() => setisvisibleCart(false)} />
-                            </animated.div>
-                        </div>
-                    </div>
-                )}
-                {isvisibleHeaderMB && (
-                    <div className="fixed inset-0 z-30">
-                        <div
-                            className="w-full h-full bg-[rgba(0,0,0,0.5)]"
-                            onClick={() => setisvisibleHeaderMB(false)}
-                        >
-                            <animated.div style={slideInAnimation}>
-                                <TaskMobile onClose={() => setisvisibleHeaderMB(false)} />
-                            </animated.div>
-                        </div>
-                    </div>
-                )}
+    <div className="">
+<div className="flex flex-col relative">
+    <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
+      <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
+            <h3 className='text-[1.5rem] font-medium sm:text-center'>Chào mừng đến với cửa hàng SuperTech</h3>
+            <div className="gap-[1.2rem] sm:hidden md:flex">
+              <div className='flex justify-center items-center gap-[.5rem] text-[1.4rem]'>
+              <CiLocationOn  className='text-[1.4rem]'/>
+              <span>Địa điểm</span>
+              </div>
+              <div className='flex justify-center items-center gap-1 text-[1.4rem]'>
+              <CiLocationOn  className='text-[1.4rem]'/>
+              <span>Tra cứu hóa đơn</span>
+              </div>
+              <div className='flex justify-center items-center gap-1 text-[1.4rem]'>
+              <CiLocationOn  className='text-[1.4rem]'/>
+              <span>Cửa hàng</span>
+              </div>
+              <div className='flex justify-center items-center gap-1 text-[1.4rem]'>
+              <FaRegUser   className='text-[1.4rem]'/>
+              <span>Tài khoản</span>
+              </div>
             </div>
-        </div>
-    </div>
-);
+      </div>
+      </div>
+      <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto sm:hidden md:block" >
+  
+        <div className="flex justify-between items-center w-[100%] md:h-[5rem] lg:h-[75px]">
+          <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">SuperTech</div>
+          <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
+            <form action="" className="w-[100%] h-[38px]">
+              <Search
+                placeholder="Tìm kiếm sản phẩm"
+                onSearch={onSearch}
+                enterButton
+                className="inputSearch"
+              />
+            </form>
+          </div>
+          <div className="flex gap-[1rem]">
+            <div>
 
+                <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" />
    
-    
+            </div>
+            <div>
+              <Badge count={0} showZero>
+                <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
+              </Badge>
+            </div>
+            <div>
+              <Badge count={0} showZero>
+                <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
+              </Badge>
+            </div>
+            <div>
+              <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
+            </div>
+          </div>
+          <div>
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomLeft"
+              arrow
+              trigger={["click"]}
+          
+            >
+              <Button
+                className="flex xl:h-[40px] md:h-[3rem] items-center xl:gap-3 md:gap-2 md:rounded-[1.5rem] xl:rounded-[3rem] DropDown"
 
+              >
+                <FaBars />
+                <div className="xl:text-[25px] md:text-[2rem]">
+                  <FaUserCircle />
+                </div>
+              </Button>
+            </Dropdown>
+          </div>
+        </div>
+      </div>
+      {
+        scrollY?     <div className="w-[100%] py-2  border border-t-purple-200 ">
+        <div className="
+      
+      md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
+     <div className="relative">
+          <div className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
+          <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold"
+
+      
+          >Danh mục sản phẩm</div>
+          
+        </div>
+
+        {/* <TaskCatelogry/> */}
+     <div>
+   
+     </div>
+
+     </div>
+    
+       <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
+        <Menu/>
+       </div>
+        <div className=" md:hidden xl:flex text-[1.6rem] text-[#FF0000] font-semibold">Miễn phí vận chuyển trên 25 triệu</div>
+      </div>
+      </div>
+       :( 
+        
+            
+            <div className="">
+              {/* Overlay */}
+              
+
+              {/* Menu di động với hiệu ứng trượt */}
+              <animated.div
+                style={{...slideDownAnimation,
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 20,
+                  backgroundColor: "#fff", // Thêm màu nền cho thanh điều hướng
+                }}
+             
+              >
+                 <div className="w-[100%] py-2  border border-t-purple-200 ">
+        <div className="
+      
+      md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
+     <div className="relative">
+          <div className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
+          <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold"
+
+      
+          >Danh mục sản phẩm</div>
+          
+        </div>
+        {/* <TaskCatelogry/> */}
+     <div>
+   
+     </div>
+
+     </div>
+    
+       <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
+        <Menu/>
+       </div>
+        <div className=" md:hidden xl:flex text-[1.6rem] text-[#FF0000] font-semibold">Miễn phí vận chuyển trên 25 triệu</div>
+      </div>
+      </div>
+              </animated.div>
+            </div>
+      
+        
+      
+      )
+      }
+      {/* fixed bg-white z-[1000] */}
+   
+      
+      
+      {/* mobile */}
+      <div className="md:hidden sm:shadow-xl flex justify-center items-center ">
+            <div className=" w-[95%] m-auto">
+              <div className="flex items-center justify-between bg-white py-[1rem]">
+                  <div className="text-[2rem]" onClick={()=>setisvisibleHeaderMB(!isvisibleHeaderMB)}>
+                 <FaBars />
+              </div>
+              <h3 className="text-[2.5rem]">SuperTech</h3>
+              <div className="text-[2.5rem] flex">
+                <IoIosSearch />
+                <Badge count={0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
+                <MdOutlineShoppingBag className="text-[2.5rem] text-[#7500CF]" />
+              </Badge>
+              </div>
+              </div>
+            
+              <div>
+
+              </div>
+            </div>
+      </div>
+      {isvisibleCart &&   <div className="fixed inset-0 z-30">
+          <div 
+            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
+            onClick={() => setisvisibleCart(false)}
+          > <animated.div style={slideInAnimationCart}>
+          <TaskCart onClose={() => setisvisibleCart(false)}/>
+        </animated.div></div>
+         
+        </div>}
+      {/* <TaskCart/> */}
+ 
+    
+      {isvisibleHeaderMB && (
+        <div className="fixed inset-0 z-30">
+          <div 
+            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
+            onClick={() => setisvisibleHeaderMB(false)}
+          > <animated.div style={slideInAnimation}>
+          <TaskHeaderMb onClose={() => setisvisibleHeaderMB(false)} />
+        </animated.div></div>
+         
+        </div>
+      )}
+      
+    </div>
+
+    </div>
+    
+  );
 }
 
 export default Header;

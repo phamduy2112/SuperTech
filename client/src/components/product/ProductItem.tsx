@@ -18,7 +18,7 @@ function ProductItem() {
     opacity: isvisibleProduct ? 1 : 0,
   });
   return (
-    <div>
+    <div className="relative">
         <div className="relative w-[100%] pb-[1rem] product bg-white overflow-hidden hover:scale-105  hover:translate-x-[0%]">
       <div className="product__icon flex flex-col gap-3">
   <div className="bg-black p-[.5rem] rounded-md">

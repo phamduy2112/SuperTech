@@ -66,11 +66,11 @@ function Pay() {
     <div className='lg:w-[50%] md:w-[53%] md:hidden'>
       <h3 className='sm:text-[1.8rem] sm:font-semibold lg:text-[2.5rem] md:text-[2.2rem] py-[1rem]'>Đơn đặt hàng</h3>
       <div>
-          <div className='flex justify-between text-[1.5rem] py-[1rem] font-semibold border border-b-gray-500'>
+          <div className='flex justify-between text-[1.5rem] py-[1rem] font-semibold border border-b-gray-500 border-transparent'>
             <p className='sm:w-[70%] xsm:w-[80%]'>Sản phẩm</p>
             <p className='xsm:w-[20%]'>Tạm tính</p>
           </div>
-          <div className='flex  sm:text-[1.3rem] sxm:text-[1.4rem] py-[1rem] border border-b-gray-500'>
+          <div className='flex  sm:text-[1.3rem] sxm:text-[1.4rem] py-[1rem] border border-b-gray-500 border-transparent'>
             <div className='w-[80%] flex'>
               <div className='xsm:w-[70px] sm:w-[60px]'>
               <img
@@ -202,11 +202,11 @@ function Pay() {
       <div className='lg:w-[50%] md:w-[53%] sm:hidden md:block sm:font-semibold'>
       <h3 className='lg:text-[2.5rem] md:text-[2.2rem] py-[1rem]'>Đơn đặt hàng</h3>
       <div>
-          <div className='flex text-[1.8rem] py-[1rem] font-semibold border border-b-gray-500'>
+          <div className='flex text-[1.8rem] py-[1rem] font-semibold border border-transparent border-b-gray-500'>
             <p className='w-[80%]'>Sản phẩm</p>
             <p className='w-[20%]'>Tạm tính</p>
           </div>
-          <div className='flex md:text-[1.5rem] lg:text-[1.6rem] py-[1rem] border border-b-gray-500'>
+          <div className='flex md:text-[1.5rem] lg:text-[1.6rem] py-[1rem] border border-transparent border-b-gray-500'>
             <div className='w-[80%] flex'>
               <div className='w-[70px]'>
               <img
@@ -232,7 +232,7 @@ function Pay() {
             </div>
             <div className='w-[20%] text-[#7500CF] font-semibold'>30.000.000đ</div>
           </div>
-          <div className=' text-[1.8rem] py-[1rem] border border-b-gray-500'>
+          <div className=' text-[1.8rem] py-[1rem] border border-b-gray-500 border-transparent'>
             <div className='flex w-[100%] mb-[.5rem]'>
             <p className='w-[80%]'>Tạm tính</p>
             <p className='w-[20%] font-semibold md:text-[1.5rem] lg:text-[1.6rem]'>52.000.000đ</p>
@@ -243,7 +243,7 @@ function Pay() {
             </div>
             
           </div>
-          <div className=' text-[1.8rem] py-[1rem] font-semibold border border-b-gray-500'>
+          <div className=' text-[1.8rem] py-[1rem] font-semibold border border-b-gray-500 border-transparent'>
             <div className='flex w-[100%]'>
             <p className='w-[80%]'>Tổng tiền</p>
             <p className='w-[20%] text-red-600 md:text-[1.5rem] lg:text-[1.6rem]'>52.000.000đ</p>
@@ -262,7 +262,7 @@ function Pay() {
                 className="absolute top-5"
               />
               <div className='ml-[2rem]'>
-                 <h4 className='text-[1.8rem] font-semibold'>Chuyển hướng qua ngân hàng</h4>
+                 <h4 className='text-[1.8rem] font-semibold'>Thanh toán ngân hàng</h4>
               <p className='text-[1.7rem] text-gray-500 font-medium mt-[.5rem]'>
                 Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần phương thức thanh toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.
               </p>
