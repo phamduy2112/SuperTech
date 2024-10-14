@@ -189,7 +189,7 @@ img {
 .cartConfirm-quanity{
     color: #7500CF;
     font-weight: 700;
-    
+
 }
 .cartConfirm-total{
     color: #7500CF;
@@ -236,6 +236,7 @@ img {
     th, td {
         font-size: medium;
         padding: 1rem; 
+        line-height: 1.3rem;
     }
     img {
         width: 4rem; 
