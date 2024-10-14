@@ -13,7 +13,7 @@ export default class product_colors extends Model {
         type: DataTypes.STRING(255),
         allowNull: true
       },
-      quanlity: {
+      quality: {
         type: DataTypes.INTEGER,
         allowNull: true
       },

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 09, 2024 lúc 06:48 PM
+-- Thời gian đã tạo: Th10 14, 2024 lúc 03:53 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -315,21 +315,19 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_
 --
 
 CREATE TABLE `product_colors` (
-  `color_id` int(11) DEFAULT NULL,
+  `color_id` int(10) NOT NULL,
   `color` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `quanlity` int(11) DEFAULT NULL,
-  `image_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL
+  `quality` int(2) DEFAULT NULL,
+  `image_id` int(10) DEFAULT NULL,
+  `product_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `product_colors`
 --
 
-INSERT INTO `product_colors` (`color_id`, `color`, `quanlity`, `image_id`, `product_id`) VALUES
-(2, 'Red', 100, 10, 5),
-(3, 'Red', 100, 10, 5),
-(4, 'Blue', 100, 10, 5);
+INSERT INTO `product_colors` (`color_id`, `color`, `quality`, `image_id`, `product_id`) VALUES
+(5, 'Red', 3, 123, 2);
 
 -- --------------------------------------------------------
 
@@ -489,6 +487,14 @@ ALTER TABLE `products`
   ADD KEY `fk_category_id` (`category_id`);
 
 --
+-- Chỉ mục cho bảng `product_colors`
+--
+ALTER TABLE `product_colors`
+  ADD PRIMARY KEY (`color_id`),
+  ADD KEY `fk_color_image` (`image_id`),
+  ADD KEY `fk_color_product` (`product_id`);
+
+--
 -- Chỉ mục cho bảng `user`
 --
 ALTER TABLE `user`
@@ -571,6 +577,12 @@ ALTER TABLE `posts`
   MODIFY `post_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT cho bảng `product_colors`
+--
+ALTER TABLE `product_colors`
+  MODIFY `color_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
@@ -646,6 +658,13 @@ ALTER TABLE `products`
   ADD CONSTRAINT `fk_image_imageproduct` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
   ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`),
   ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
+
+--
+-- Các ràng buộc cho bảng `product_colors`
+--
+ALTER TABLE `product_colors`
+  ADD CONSTRAINT `fk_color_image` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
+  ADD CONSTRAINT `fk_color_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
