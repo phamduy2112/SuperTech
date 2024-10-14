@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 02, 2024 lúc 07:37 PM
+-- Thời gian đã tạo: Th10 07, 2024 lúc 06:46 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -30,8 +30,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `banner` (
   `banner_id` int(10) NOT NULL,
-  `banner_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL
+  `banner_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -42,11 +42,11 @@ CREATE TABLE `banner` (
 
 CREATE TABLE `categories` (
   `category_id` int(10) NOT NULL,
-  `category_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `category_image` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `category_dad` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `category_date_task` datetime NOT NULL,
-  `category_task` tinyint(1) NOT NULL
+  `category_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_dad` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_date_task` datetime DEFAULT NULL,
+  `category_task` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -64,9 +64,25 @@ INSERT INTO `categories` (`category_id`, `category_name`, `category_image`, `cat
 
 CREATE TABLE `chat` (
   `chat_id` int(11) NOT NULL,
-  `chat_text` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `chat_text` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `chat`
+--
+
+INSERT INTO `chat` (`chat_id`, `chat_text`, `user_id`) VALUES
+(2, 'ho anh em', 2),
+(13, 'ho anh em', 2),
+(14, 'ho anh em', 2),
+(16, 'ho anh em', 2),
+(17, 'ho anh em', 2),
+(18, 'ho anh em', 2),
+(19, 'ho anh em', 2),
+(20, 'ho anh em', 2),
+(21, 'ho anh em', 2),
+(22, 'ho anh em', 2);
 
 -- --------------------------------------------------------
 
@@ -90,20 +106,12 @@ CREATE TABLE `comment_posts` (
 
 CREATE TABLE `comment_product` (
   `comment_id` int(10) NOT NULL,
-  `comment_date` datetime NOT NULL,
-  `comment_content` text COLLATE utf8_unicode_ci NOT NULL,
-  `comment_star` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `comment_date` datetime DEFAULT NULL,
+  `comment_content` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment_star` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `comment_product`
---
-
-INSERT INTO `comment_product` (`comment_id`, `comment_date`, `comment_content`, `comment_star`, `product_id`, `user_id`) VALUES
-(1, '2024-10-02 00:00:00', 'ádasdasdasdsadas', 2, 1, 1),
-(2, '2024-10-01 17:00:00', 'ho anh em', 5, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -113,19 +121,10 @@ INSERT INTO `comment_product` (`comment_id`, `comment_date`, `comment_content`, 
 
 CREATE TABLE `detail_order` (
   `detail_order_id` int(10) NOT NULL,
-  `detail_order_quality` int(3) NOT NULL,
-  `order_id` int(10) NOT NULL,
-  `product_id` int(10) NOT NULL
+  `detail_order_quality` int(3) DEFAULT NULL,
+  `order_id` int(10) DEFAULT NULL,
+  `product_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `detail_order`
---
-
-INSERT INTO `detail_order` (`detail_order_id`, `detail_order_quality`, `order_id`, `product_id`) VALUES
-(1, 2, 1, 1),
-(3, 2, 1, 1),
-(12, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -135,11 +134,11 @@ INSERT INTO `detail_order` (`detail_order_id`, `detail_order_quality`, `order_id
 
 CREATE TABLE `discount` (
   `discount_id` int(10) NOT NULL,
-  `discount_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `discount_percent` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `condition` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `discount_date_start` datetime NOT NULL,
-  `discount_date_end` datetime NOT NULL
+  `discount_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `discount_percent` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `condition` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `discount_date_start` datetime DEFAULT NULL,
+  `discount_date_end` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -157,16 +156,9 @@ INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percent`, `con
 
 CREATE TABLE `favorite_product` (
   `favorite_product_id` int(10) NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `product_id` int(10) NOT NULL
+  `user_id` int(10) DEFAULT NULL,
+  `product_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `favorite_product`
---
-
-INSERT INTO `favorite_product` (`favorite_product_id`, `user_id`, `product_id`) VALUES
-(1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -176,10 +168,10 @@ INSERT INTO `favorite_product` (`favorite_product_id`, `user_id`, `product_id`) 
 
 CREATE TABLE `image_product` (
   `image_id` int(10) NOT NULL,
-  `image_one` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `image_two` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `image_three` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `image_four` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+  `image_one` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image_two` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image_three` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image_four` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -198,13 +190,13 @@ INSERT INTO `image_product` (`image_id`, `image_one`, `image_two`, `image_three`
 
 CREATE TABLE `infor_product` (
   `infor_product` int(10) NOT NULL,
-  `infor_screen` int(5) NOT NULL,
-  `infor_system` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `infor_cpu` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `infor_ram` int(5) NOT NULL,
-  `infor_storage` int(50) NOT NULL,
-  `infor_more` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `image_product` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+  `infor_screen` int(5) DEFAULT NULL,
+  `infor_system` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `infor_cpu` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `infor_ram` int(5) DEFAULT NULL,
+  `infor_storage` int(50) DEFAULT NULL,
+  `infor_more` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image_product` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -223,17 +215,9 @@ INSERT INTO `infor_product` (`infor_product`, `infor_screen`, `infor_system`, `i
 
 CREATE TABLE `media_post` (
   `media_id` int(10) NOT NULL,
-  `media_url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `post_id` int(10) NOT NULL
+  `media_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `post_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `media_post`
---
-
-INSERT INTO `media_post` (`media_id`, `media_url`, `post_id`) VALUES
-(1, 'ádasd', 1),
-(3, 'http://example.com/image.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -243,21 +227,14 @@ INSERT INTO `media_post` (`media_id`, `media_url`, `post_id`) VALUES
 
 CREATE TABLE `order` (
   `order_id` int(10) NOT NULL,
-  `order_date` datetime NOT NULL,
-  `order_total` int(10) NOT NULL,
-  `order_total_quatity` int(5) NOT NULL,
-  `order_status` int(1) NOT NULL,
-  `pay_id` int(10) NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `discount` int(10) NOT NULL
+  `order_date` datetime DEFAULT NULL,
+  `order_total` int(10) DEFAULT NULL,
+  `order_total_quatity` int(5) DEFAULT NULL,
+  `order_status` int(1) DEFAULT NULL,
+  `pay_id` int(10) DEFAULT NULL,
+  `user_id` int(10) DEFAULT NULL,
+  `discount` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `order`
---
-
-INSERT INTO `order` (`order_id`, `order_date`, `order_total`, `order_total_quatity`, `order_status`, `pay_id`, `user_id`, `discount`) VALUES
-(1, '2024-10-22 00:00:00', 123, 23, 2, 101, 1, 123);
 
 -- --------------------------------------------------------
 
@@ -267,16 +244,9 @@ INSERT INTO `order` (`order_id`, `order_date`, `order_total`, `order_total_quati
 
 CREATE TABLE `pay` (
   `pay_id` int(10) NOT NULL,
-  `payment_method` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` int(10) NOT NULL
+  `payment_method` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `pay`
---
-
-INSERT INTO `pay` (`pay_id`, `payment_method`, `user_id`) VALUES
-(101, '12', 1);
 
 -- --------------------------------------------------------
 
@@ -286,9 +256,9 @@ INSERT INTO `pay` (`pay_id`, `payment_method`, `user_id`) VALUES
 
 CREATE TABLE `posts` (
   `post_id` int(10) NOT NULL,
-  `post_title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `post_content` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `post_date` datetime NOT NULL
+  `post_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `post_content` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -306,16 +276,16 @@ INSERT INTO `posts` (`post_id`, `post_title`, `post_content`, `post_date`) VALUE
 
 CREATE TABLE `products` (
   `product_id` int(10) NOT NULL,
-  `product_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `product_price` float NOT NULL,
-  `product_star` int(1) NOT NULL,
-  `product_discount` int(2) NOT NULL,
-  `product_hot` int(10) NOT NULL,
+  `product_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `product_price` float DEFAULT NULL,
+  `product_star` int(1) DEFAULT NULL,
+  `product_discount` int(2) DEFAULT NULL,
+  `product_hot` int(10) DEFAULT NULL,
   `product_date` date DEFAULT NULL,
-  `product_quantity` int(2) NOT NULL,
-  `image_id` int(10) NOT NULL,
-  `infor_product` int(10) NOT NULL,
-  `category_id` int(10) NOT NULL
+  `product_quantity` int(2) DEFAULT NULL,
+  `image_id` int(10) DEFAULT NULL,
+  `infor_product` int(10) DEFAULT NULL,
+  `category_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -333,11 +303,11 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_
 --
 
 CREATE TABLE `product_colors` (
-  `color_id` int(11) NOT NULL,
-  `color` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `quanlity` int(11) NOT NULL,
-  `image_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL
+  `color_id` int(11) DEFAULT NULL,
+  `color` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `quanlity` int(11) DEFAULT NULL,
+  `image_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -356,14 +326,14 @@ INSERT INTO `product_colors` (`color_id`, `color`, `quanlity`, `image_id`, `prod
 --
 
 CREATE TABLE `user` (
-  `user_id` int(10) NOT NULL,
-  `user_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_password` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_address` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_phone` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_image` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `user_role` tinyint(1) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_password` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_address` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_phone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_role` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -371,7 +341,19 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_address`, `user_phone`, `user_image`, `user_role`) VALUES
-(1, 'Test', 'test@gmail.com', '1234', '123213', '0399375104', 'image1.png', 1);
+(2, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(3, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(4, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(5, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(6, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(7, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(8, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(9, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(10, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(11, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(12, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(13, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
+(14, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -504,7 +486,7 @@ ALTER TABLE `banner`
 -- AUTO_INCREMENT cho bảng `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT cho bảng `comment_posts`
@@ -561,6 +543,12 @@ ALTER TABLE `posts`
   MODIFY `post_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT cho bảng `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- Các ràng buộc cho các bảng đã đổ
 --
 
@@ -568,21 +556,20 @@ ALTER TABLE `posts`
 -- Các ràng buộc cho bảng `chat`
 --
 ALTER TABLE `chat`
-  ADD CONSTRAINT `fk_chat_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_chat_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `comment_posts`
 --
 ALTER TABLE `comment_posts`
-  ADD CONSTRAINT `fk_postid_post` FOREIGN KEY (`post_id`) REFERENCES `posts` (`post_id`),
-  ADD CONSTRAINT `fk_userid_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_commentpost_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `comment_product`
 --
 ALTER TABLE `comment_product`
-  ADD CONSTRAINT `fk_productid_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
-  ADD CONSTRAINT `fk_userid_usersdasd` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_commentpptro_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `fk_productid_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 --
 -- Các ràng buộc cho bảng `detail_order`
@@ -595,8 +582,8 @@ ALTER TABLE `detail_order`
 -- Các ràng buộc cho bảng `favorite_product`
 --
 ALTER TABLE `favorite_product`
-  ADD CONSTRAINT `fk_proiductddd_prodyuctt` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
-  ADD CONSTRAINT `fk_useriddd_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_favotireproduct_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `fk_proiductddd_prodyuctt` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 --
 -- Các ràng buộc cho bảng `media_post`
@@ -609,14 +596,14 @@ ALTER TABLE `media_post`
 --
 ALTER TABLE `order`
   ADD CONSTRAINT `fk_discountid_discount` FOREIGN KEY (`discount`) REFERENCES `discount` (`discount_id`),
-  ADD CONSTRAINT `fk_payid_pay` FOREIGN KEY (`pay_id`) REFERENCES `pay` (`pay_id`),
-  ADD CONSTRAINT `fk_userid_userrr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_order_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `fk_payid_pay` FOREIGN KEY (`pay_id`) REFERENCES `pay` (`pay_id`);
 
 --
 -- Các ràng buộc cho bảng `pay`
 --
 ALTER TABLE `pay`
-  ADD CONSTRAINT `fk_useridd_uerrr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+  ADD CONSTRAINT `fk_pay_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `products`

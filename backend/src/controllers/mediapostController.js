@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import mediapost from "../models/media_post.js";
 import { responseSend } from "../config/response.js";
-mediapost.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let mediapost = models.media_post; 
 
 const getmediapost = async (req, res) => {
     try {
@@ -27,7 +29,6 @@ const getmediapostById = async (req, res) => {
 
 const createmediapost = async (req, res) => {
     try {
-        // Removed discount existence check
         let newmediapost = await mediapost.create(req.body);
         responseSend(res, newmediapost, "Thêm Thành công!", 201);
     } catch (error) {
@@ -37,9 +38,8 @@ const createmediapost = async (req, res) => {
 
 const updatemediapost = async (req, res) => {
     try {
-        // Removed discount existence check
         let updated = await mediapost.update(req.body, {
-            where: { id: req.params.id }
+            where: { media_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -54,7 +54,7 @@ const updatemediapost = async (req, res) => {
 const deletemediapost = async (req, res) => {
     try {
         let deleted = await mediapost.destroy({
-            where: { id: req.params.id }
+            where: { media_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

@@ -6,36 +6,37 @@ export default class user extends Model {
   return super.init({
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
     },
     user_name: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_email: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_password: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_address: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_phone: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_image: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_role: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

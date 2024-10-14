@@ -39,7 +39,7 @@ const createcategories = async (req, res) => {
 const updatecategories = async (req, res) => {
     try {
         let updated = await categoriesModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { category_id: req.params.id }
         });
         if (updated[0] > 0) {
             let updatedItem = await categoriesModel.findByPk(req.params.id);
@@ -56,7 +56,7 @@ const updatecategories = async (req, res) => {
 const deletecategories = async (req, res) => {
     try {
         let deleted = await categoriesModel.destroy({
-            where: { id: req.params.id }
+            where: { category_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

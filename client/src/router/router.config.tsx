@@ -25,6 +25,10 @@ import AdminUser from "../page/Admin/User/AdminUser";
 import AdminCommentProduct from "../page/Admin/Product/Comment/AdminCommentProduct";
 import AdminOrderDetail from "../page/Admin/Order/OrderDetail/AdminOrderDetail";
 import AdminOrder from "../page/Admin/Order/AdminOrder";
+import UserDetail from "../page/Client/User/UserDetail/UserDetail";
+import Order from "../page/Client/User/Order/Order";
+import User from "../page/Client/User/User";
+import OrderDetail from "../page/Client/User/OrderDetail/OrderDetail";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +60,27 @@ export const router = createBrowserRouter([
         path: "/bài-viết-chi-tiết",
         element: <DetailBlog />,
       },
+      // user
+{
+
+element:<User/>,
+children:[
+  {
+    path: "/người-dùng",
+    element: <UserDetail />,
+  },
+  {
+    path: "/đơn-hàng-của-bạn",
+    element: <Order />,
+  },
+  {
+    path: "/đơn-hàng-chi-tiết-của-bạn",
+    element: <OrderDetail />,
+  },
+
+]
+},
+      
       // Mua hàng
       {
         path: "/giỏ-hàng",

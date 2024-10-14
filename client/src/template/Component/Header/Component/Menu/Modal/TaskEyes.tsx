@@ -6,10 +6,12 @@ import { FiMinus } from "react-icons/fi";
 import { GoPlus } from "react-icons/go";
 import { IoMdClose } from "react-icons/io";
 import { IoStar } from "react-icons/io5";
-
-function TaskEyes() {
+interface TaskCart {
+  onClose: () => void;
+}
+function TaskEyes({ onClose }: TaskCart) {
   return (
-    <div className="w-[100%] h-[100vh] fixed bg-[rgb(0,0,0,0.5)] z-30 top-0 left-0">
+    <div className="w-[100%] h-[100vh] bg-[rgb(0,0,0,0.5)] z-30 top-0 left-0">
       <div className="w-[320px] h-[100vh] bg-[white] absolute top-0 right-0 px-[1.5rem] py-[3rem]">
         <div className="relative">
           <div>
@@ -104,7 +106,7 @@ function TaskEyes() {
               </div>
             </div>
           </div>
-          <div className="text-[2rem] absolute top-[-2rem] left-[-1rem] cursor-pointer">
+          <div  onClick={onClose} className="text-[2rem] absolute top-[-2rem] left-[-1rem] cursor-pointer">
         <IoMdClose />
       </div>
         </div>

@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import Products from "../models/products.js";
 import { responseSend } from "../config/response.js";
-Products.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let Products = models.products; 
 
 const getProducts = async (req, res) => {
     try {
@@ -37,7 +39,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         let updated = await Products.update(req.body, {
-            where: { id: req.params.id }
+            where: { product_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -52,7 +54,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
     try {
         let deleted = await Products.destroy({
-            where: { id: req.params.id }
+            where: { product_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

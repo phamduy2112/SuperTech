@@ -5,20 +5,20 @@ export default class Posts extends Model {
       post_id: {
         autoIncrement: true,
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true
       },
       post_title: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
       },
       post_content: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       post_date: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: true
       }
     }, {
       sequelize,

@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import inforproduct from "../models/infor_product.js";
 import { responseSend } from "../config/response.js";
-inforproduct.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let inforproduct = models.infor_product; 
 
 const getinforproduct = async (req, res) => {
     try {
@@ -37,7 +39,7 @@ const createinforproduct = async (req, res) => {
 const updateinforproduct = async (req, res) => {
     try {
         let updated = await inforproduct.update(req.body, {
-            where: { id: req.params.id }
+            where: { infor_product: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -52,7 +54,7 @@ const updateinforproduct = async (req, res) => {
 const deleteinforproduct = async (req, res) => {
     try {
         let deleted = await inforproduct.destroy({
-            where: { id: req.params.id }
+            where: { infor_product: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
