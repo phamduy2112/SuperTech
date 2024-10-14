@@ -1,9 +1,6 @@
 .cart-container{
-    margin: auto;
-}
-.cart-container{
     display: grid;
-    grid-template-columns: 67% 20%;
+    grid-template-columns: 70% 27%;
     gap: 3%;
     align-items: center;
     justify-content: center;
@@ -46,8 +43,9 @@ th{
     font-size: large;
 }
 td{
-    font-size: large;
-    padding: 3rem;
+    font-size: 1.5rem;
+    padding: 2rem; 
+    line-height: 2rem;
     text-align: center;
 }
 .cart-productName{
@@ -129,7 +127,7 @@ img {
     font-weight: 500;
 }
 .cartConfirm{
-    background-color: whitesmoke;
+    background-color: #FFFFFF;
     width: 100%; 
     height: 100%;
     box-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.281);
@@ -191,6 +189,7 @@ img {
 .cartConfirm-quanity{
     color: #7500CF;
     font-weight: 700;
+    
 }
 .cartConfirm-total{
     color: #7500CF;

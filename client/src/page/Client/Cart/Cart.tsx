@@ -1,9 +1,10 @@
 import { FaRegTrashAlt } from "react-icons/fa";
 import React from 'react'
 import './css/style.css'
+import { Container } from "../../../components/Style/Container";
 function Cart() {
   return (
-    <div>
+    <Container>
         <div className="buttonUpper-voucher">
           Thêm voucher
         </div>
@@ -162,7 +163,7 @@ function Cart() {
           </div>
         </div>
 
-    </div>
+    </Container>
   )
 }
 
