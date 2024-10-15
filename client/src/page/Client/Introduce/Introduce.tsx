@@ -288,7 +288,7 @@ function Introduce() {
                 2h trước{" "}
               </span>
               <div>
-                <span className="flex">
+                <span className="flex text-[#FC6E2E] text-[15px]">
                   {" "}
                   <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStar />
                 </span>
@@ -312,7 +312,7 @@ function Introduce() {
                 2h trước{" "}
               </span>
               <div>
-                <span className="flex">
+                <span className="flex text-[#FC6E2E] text-[15px]">
                   {" "}
                   <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStar />
                 </span>
@@ -336,7 +336,7 @@ function Introduce() {
                 2h trước{" "}
               </span>
               <div>
-                <span className="flex">
+                <span className="flex text-[#FC6E2E] text-[15px]">
                   {" "}
                   <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStar />
                 </span>
@@ -360,7 +360,7 @@ function Introduce() {
                 2h trước{" "}
               </span>
               <div>
-                <span className="flex">
+                <span className="flex text-[#FC6E2E] text-[15px]">
                   {" "}
                   <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStar />
                 </span>
@@ -384,7 +384,7 @@ function Introduce() {
                 2h trước{" "}
               </span>
               <div>
-                <span className="flex">
+                <span className="flex text-[#FC6E2E] ">
                   {" "}
                   <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStar />
                 </span>
