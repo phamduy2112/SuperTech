@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 07, 2024 lúc 06:46 PM
+-- Thời gian đã tạo: Th10 14, 2024 lúc 03:53 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -83,6 +83,18 @@ INSERT INTO `chat` (`chat_id`, `chat_text`, `user_id`) VALUES
 (20, 'ho anh em', 2),
 (21, 'ho anh em', 2),
 (22, 'ho anh em', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `code`
+--
+
+CREATE TABLE `code` (
+  `code_id` int(10) NOT NULL,
+  `code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_id` int(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -303,21 +315,19 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_
 --
 
 CREATE TABLE `product_colors` (
-  `color_id` int(11) DEFAULT NULL,
+  `color_id` int(10) NOT NULL,
   `color` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `quanlity` int(11) DEFAULT NULL,
-  `image_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL
+  `quality` int(2) DEFAULT NULL,
+  `image_id` int(10) DEFAULT NULL,
+  `product_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `product_colors`
 --
 
-INSERT INTO `product_colors` (`color_id`, `color`, `quanlity`, `image_id`, `product_id`) VALUES
-(2, 'Red', 100, 10, 5),
-(3, 'Red', 100, 10, 5),
-(4, 'Blue', 100, 10, 5);
+INSERT INTO `product_colors` (`color_id`, `color`, `quality`, `image_id`, `product_id`) VALUES
+(5, 'Red', 3, 123, 2);
 
 -- --------------------------------------------------------
 
@@ -333,27 +343,30 @@ CREATE TABLE `user` (
   `user_address` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_phone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_role` tinyint(1) DEFAULT NULL
+  `user_role` tinyint(1) DEFAULT NULL,
+  `user_gender` tinyint(1) DEFAULT NULL,
+  `user_birth` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `user`
 --
 
-INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_address`, `user_phone`, `user_image`, `user_role`) VALUES
-(2, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(3, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(4, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(5, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(6, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(7, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(8, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(9, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(10, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(11, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(12, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(13, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1),
-(14, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1);
+INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_address`, `user_phone`, `user_image`, `user_role`, `user_gender`, `user_birth`, `user_time`) VALUES
+(2, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(3, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(4, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(5, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(6, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(7, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(8, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(9, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(10, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(11, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(12, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(13, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL),
+(14, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -377,6 +390,13 @@ ALTER TABLE `categories`
 ALTER TABLE `chat`
   ADD PRIMARY KEY (`chat_id`),
   ADD KEY `fk_chat_product` (`user_id`);
+
+--
+-- Chỉ mục cho bảng `code`
+--
+ALTER TABLE `code`
+  ADD PRIMARY KEY (`code_id`),
+  ADD KEY `fk_code_userid` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `comment_posts`
@@ -467,6 +487,14 @@ ALTER TABLE `products`
   ADD KEY `fk_category_id` (`category_id`);
 
 --
+-- Chỉ mục cho bảng `product_colors`
+--
+ALTER TABLE `product_colors`
+  ADD PRIMARY KEY (`color_id`),
+  ADD KEY `fk_color_image` (`image_id`),
+  ADD KEY `fk_color_product` (`product_id`);
+
+--
 -- Chỉ mục cho bảng `user`
 --
 ALTER TABLE `user`
@@ -487,6 +515,12 @@ ALTER TABLE `banner`
 --
 ALTER TABLE `chat`
   MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT cho bảng `code`
+--
+ALTER TABLE `code`
+  MODIFY `code_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `comment_posts`
@@ -543,6 +577,12 @@ ALTER TABLE `posts`
   MODIFY `post_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT cho bảng `product_colors`
+--
+ALTER TABLE `product_colors`
+  MODIFY `color_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
@@ -557,6 +597,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `chat`
   ADD CONSTRAINT `fk_chat_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Các ràng buộc cho bảng `code`
+--
+ALTER TABLE `code`
+  ADD CONSTRAINT `fk_code_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `comment_posts`
@@ -612,6 +658,13 @@ ALTER TABLE `products`
   ADD CONSTRAINT `fk_image_imageproduct` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
   ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`),
   ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
+
+--
+-- Các ràng buộc cho bảng `product_colors`
+--
+ALTER TABLE `product_colors`
+  ADD CONSTRAINT `fk_color_image` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
+  ADD CONSTRAINT `fk_color_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

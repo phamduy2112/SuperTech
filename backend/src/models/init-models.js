@@ -18,6 +18,7 @@ import _product_colors from  "./product_colors.js";
 import _products from  "./products.js";
 import _user from  "./user.js";
 
+
 export default function initModels(sequelize) {
   const banner = _banner.init(sequelize, DataTypes);
   const categories = _categories.init(sequelize, DataTypes);
@@ -36,7 +37,8 @@ export default function initModels(sequelize) {
   const product_colors = _product_colors.init(sequelize, DataTypes);
   const products = _products.init(sequelize, DataTypes);
   const user = _user.init(sequelize, DataTypes);
-
+  _products.hasMany(_product_colors, { foreignKey: 'product_id', as: 'colors' });
+  _product_colors.belongsTo(_products, { foreignKey: 'product_id' });
   products.belongsTo(categories, { as: "category", foreignKey: "category_id"});
   categories.hasMany(products, { as: "products", foreignKey: "category_id"});
   order.belongsTo(discount, { as: "discount_discount", foreignKey: "discount"});

@@ -7,7 +7,14 @@ let Products = models.products;
 
 const getProducts = async (req, res) => {
     try {
-        let data = await Products.findAll();
+        let data = await Products.findAll( 
+            {
+                include: [{
+                    model: models.product_colors,
+                    as: 'colors'
+                }]
+            }
+        );
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -16,13 +23,19 @@ const getProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
     try {
-        let data = await Products.findByPk(req.params.id);
+        let data = await Products.findByPk(req.params.id, {
+            include: [{
+                model: models.product_colors,
+                as: 'colors'
+            }]
+        });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
             responseSend(res, "", "không tồn tại !", 404);
         }
     } catch (error) {
+        console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
