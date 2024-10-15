@@ -166,7 +166,7 @@ function Introduce() {
         <div className=" w-[1200px] grid grid-cols-2 overflow-hidden rounded-2x1 bg-[#e0d6e71f] ">
           <div className="w-full">
             <img
-              className=" w-[641px] h-[525px] object-cover"
+              className=" w-[641px] h-[440px] object-cover"
               src={thanhtuu}
               alt=""
             />
@@ -281,7 +281,8 @@ function Introduce() {
               <img
                 className=" w-[100px] h-[100px] rounded-[50px] "
                 src="https://duan24h.net/wp-content/uploads/2023/05/baby-red-3.webp"
-                alt=""/>
+                alt=""
+              />
               <span className="text-[20px] font-medium ">BaBy Black</span>
               <span className="text-[12px] font-medium text-[#8F8F8F]">
                 2h trước{" "}
@@ -304,7 +305,8 @@ function Introduce() {
               <img
                 className=" w-[100px] h-[100px] rounded-[50px] "
                 src="https://duan24h.net/wp-content/uploads/2023/05/baby-red-3.webp"
-                alt=""/>
+                alt=""
+              />
               <span className="text-[20px] font-medium ">BaBy Black</span>
               <span className="text-[12px] font-medium text-[#8F8F8F]">
                 2h trước{" "}
@@ -327,7 +329,8 @@ function Introduce() {
               <img
                 className=" w-[100px] h-[100px] rounded-[50px] "
                 src="https://duan24h.net/wp-content/uploads/2023/05/baby-red-3.webp"
-                alt=""/>
+                alt=""
+              />
               <span className="text-[20px] font-medium ">BaBy Black</span>
               <span className="text-[12px] font-medium text-[#8F8F8F]">
                 2h trước{" "}
@@ -350,7 +353,8 @@ function Introduce() {
               <img
                 className=" w-[100px] h-[100px] rounded-[50px] "
                 src="https://duan24h.net/wp-content/uploads/2023/05/baby-red-3.webp"
-                alt=""/>
+                alt=""
+              />
               <span className="text-[20px] font-medium ">BaBy Black</span>
               <span className="text-[12px] font-medium text-[#8F8F8F]">
                 2h trước{" "}
@@ -373,7 +377,8 @@ function Introduce() {
               <img
                 className=" w-[100px] h-[100px] rounded-[50px] "
                 src="https://duan24h.net/wp-content/uploads/2023/05/baby-red-3.webp"
-                alt=""/>
+                alt=""
+              />
               <span className="text-[20px] font-medium ">BaBy Black</span>
               <span className="text-[12px] font-medium text-[#8F8F8F]">
                 2h trước{" "}
@@ -396,22 +401,19 @@ function Introduce() {
 
       <div className="py-[41px] px-[32px]">
         <div className="flex flex-col gap-6">
-          <div className=" ">
+          <div>
             <span className=" text-[50px] flex justify-center items-center font-medium">
-              {" "}
               Đối Tác SuperTech
             </span>
           </div>
           <div>
             <div className="text-[#727171] ">
               <span className=" text-[17px] flex justify-center items-center font-medium">
-                {" "}
                 Hơn gần 100 đối tác hợp tác cùng chúng tôi
               </span>
             </div>
             <div className="text-[#727171] ">
               <span className=" text-[17px] flex justify-center items-center font-medium">
-                {" "}
                 Mở ra cánh cửa tương lai thời đại công nghệ số và hỗ trợ{" "}
                 <span className="text-[#FF0000]">24/24</span>{" "}
               </span>
