@@ -14,7 +14,14 @@
     height: 3.7rem;
 }
 .formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-select .ant-select-arrow{
+
     color: #7500CF;
+    width: 15px;
+    height: 15px;
+    /* margin-top: 1px; */
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
 }
 .formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-form-item{
     margin-bottom: 1rem;
@@ -40,4 +47,5 @@
 }
 .ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
     background: #7500CF;
+    
 }
