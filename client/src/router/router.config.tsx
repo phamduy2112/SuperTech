@@ -24,7 +24,15 @@ import AdminCatelogry from "../page/Admin/Catelogory/AdminCatelogry";
 import AdminUser from "../page/Admin/User/AdminUser";
 import AdminCommentProduct from "../page/Admin/Product/Comment/AdminCommentProduct";
 import AdminOrderDetail from "../page/Admin/Order/OrderDetail/AdminOrderDetail";
-import AdminOrder from "../page/Admin/Order/AdminOrder";
+import AdminOrder from "../page/Admin/Order/AdminOrder"; // nếu AdminOrder.tsx tồn tại
+
+import ChatAdmin from "../page/Admin/Chat/ChatAdmin";
+import AdminStaff from "../page/Admin/User/AdminStaff";
+import AdminSetting from "../page/Admin/Setting/AdminSetting";
+import AdminAddProduct from "../page/Admin/Product/Component/AdminAddProduct";
+import AdminEditProduct from "../page/Admin/Product/Component/AdminEditProduct";
+import AdminCreateAccount from "../page/Admin/User/Component/AdminCreateAccount";
+import AdminCustomerEdit from "../page/Admin/User/Component/AdminCustomerEdit";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +54,7 @@ export const router = createBrowserRouter([
         path: "/sản-phẩm-chi-tiết",
         element: <DetailProduct />,
       },
-      
+
       // Blog
       {
         path: "/bài-viết",
@@ -91,9 +99,9 @@ export const router = createBrowserRouter([
   },
   {
 
-    element: <AuthTemplate/>,
-    children:[
-       {
+    element: <AuthTemplate />,
+    children: [
+      {
         path: "/đăng-nhập",
         element: <Login />,
       },
@@ -104,42 +112,68 @@ export const router = createBrowserRouter([
       {
         path: "/quên-mật-khẩu",
         element: <ForgetPassword />,
-      }, 
+      },
     ]
-  
+
   },
   {
     path: '/admin',
-    element: <AdminTemplate/>,
-    children:[
+    element: <AdminTemplate />,
+    children: [
       {
         path: 'trang-chủ',
-        element: <AdminHome/>
+        element: <AdminHome />
       },
       // Loại sản phẩm
       {
         path: 'quản-lí-loại',
-        element: <AdminCatelogry/>
+        element: <AdminCatelogry />
       },
       // sản phẩm
       {
         path: 'quản-lí-sản-phẩm',
-        element: <AdminProduct/>
+        element: <AdminProduct />
       },
       {
-        path:"quản-lí-bình-luận",
-        element:<AdminCommentProduct/>
+        path: 'quản-lí-sản-phẩm/tạo-sản-phẩm-mới',
+        element: <AdminAddProduct />
+      }, {
+        path: 'quản-lí-sản-phẩm/sửa-sản-phẩm/:id',
+        element: <AdminEditProduct />
+      },
+
+
+      {
+        path: "quản-lí-bình-luận",
+        element: <AdminCommentProduct />
       },
       // Blog
-      {
-        path: 'quản-lí-sản-phẩm',
-        element: <AdminProduct/>
-      },
       // Khách hàng
       {
         path: 'quản-lí-khách-hàng',
-        element: <AdminUser/>
+        element: <AdminUser />
       },
+      {
+        path: 'quản-lí-nhân-viên',
+        element: <AdminStaff />
+      }, {
+        path: 'quản-lí-nhân-viên/tạo-nhân-viên-mới',
+        element: <AdminCreateAccount />
+      },
+      {
+        path: 'quản-lí-khách-hàng/tạo-khách-hàng-mới',
+        element: <AdminCreateAccount />
+      },
+
+      {
+        path: 'quản-lí-nhân-viên/sửa-nhân-viên/:id',
+        element: <AdminCustomerEdit/>
+      },
+      {
+        path: 'quản-lí-khách-hàng/sửa-khách-hàng/:id',
+        element: <AdminCustomerEdit/>
+      },
+
       // đơn hàng
       {
         path: 'quản-lí-đơn-hàng',
@@ -147,11 +181,16 @@ export const router = createBrowserRouter([
       },
       // Đơn hàng chi tiết
       {
-        path: 'quản-lí-đơn-hàng-chi-tiết',
-        element: <AdminOrderDetail/>
+        path: 'quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/:id',
+        element: <AdminOrderDetail />
+      }, {
+        path: 'quản-lí-tin-nhắn',
+        element: <ChatAdmin />
       },
-      // Thống kê
-      
+      {
+        path: 'quản-lí-trang-web',
+        element: <AdminSetting />
+      }
     ]
   }
 ]);

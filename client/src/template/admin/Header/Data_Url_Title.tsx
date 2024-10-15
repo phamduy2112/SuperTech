@@ -5,9 +5,9 @@ import { CiLogout } from "react-icons/ci";
 import { FaChevronRight, FaRegEye, FaRegUserCircle } from "react-icons/fa";
 import { HiMiniPencilSquare } from "react-icons/hi2";
 import { IoCellularOutline, IoHome, IoSettingsOutline } from "react-icons/io5";
+import { LiaUsersCogSolid } from "react-icons/lia";
 import { MdBarChart, MdOutlineCategory } from "react-icons/md";
-import { PiMessengerLogo } from "react-icons/pi";
-import { TiDocumentText } from "react-icons/ti";
+import { PiMessengerLogo, PiUsersThreeThin } from "react-icons/pi";
 
 export interface Child {
   id_child: number;
@@ -20,7 +20,7 @@ export interface Box {
   box_id: number;
   box_title: string;
   icon: ReactNode;
-  iconChevronRight?: ReactNode; 
+  iconChevronRight?: ReactNode;
   url: string;
   child?: Child[];
 }
@@ -107,7 +107,7 @@ export const DataSideBar: SidebarItem[] = [
       {
         box_id: 1,
         box_title: 'Quản Lí Đơn Hàng',
-        icon: <TiDocumentText />,
+        icon: <BsBoxes />,
         iconChevronRight: null,
         url: '',
         child: [],
@@ -120,11 +120,25 @@ export const DataSideBar: SidebarItem[] = [
     box: [
       {
         box_id: 1,
-        box_title: 'Danh Sách Khách Hàng',
+        box_title: 'Quản Lí Tài Khoản',
         icon: <FaRegUserCircle />,
-        iconChevronRight: null,
+        iconChevronRight: <FaChevronRight />,
         url: '',
-        child: [],
+        child: [
+          {
+            id_child: 1,
+            title_child: 'Khách Hàng',
+            url_child: '',
+            icon_child: <PiUsersThreeThin />
+,
+          },
+          {
+            id_child: 2,
+            title_child: 'Nhân Viên',
+            url_child: '',
+            icon_child: <LiaUsersCogSolid />            ,
+          }
+        ],
       }
     ]
   },
@@ -135,7 +149,7 @@ export const DataSideBar: SidebarItem[] = [
       {
         box_id: 1,
         box_title: 'Tin Nhắn hỗ Trợ',
-        icon: <PiMessengerLogo /> ,
+        icon: <PiMessengerLogo />,
         iconChevronRight: null,
         url: '',
         child: [],
@@ -143,7 +157,7 @@ export const DataSideBar: SidebarItem[] = [
       {
         box_id: 2,
         box_title: 'Bài Viết',
-        icon:<BiBookAlt />,
+        icon: <BiBookAlt />,
         iconChevronRight: null,
         url: '',
         child: [],
@@ -156,23 +170,15 @@ export const DataSideBar: SidebarItem[] = [
         url: '',
         child: [],
       },
-      {
-        box_id: 4,
-        box_title: 'Đơn hàng',
-        icon: <BsBoxes />,
-        iconChevronRight: null,
-        url: '',
-        child: [],
-      },
     ]
-  },{
+  }, {
     id: 7,
     title: 'Tác Vụ',
     box: [
       {
         box_id: 1,
         box_title: 'Cài Đặt Website',
-        icon:<IoSettingsOutline />,
+        icon: <IoSettingsOutline />,
         iconChevronRight: null,
         url: '',
         child: [],
@@ -180,7 +186,7 @@ export const DataSideBar: SidebarItem[] = [
       {
         box_id: 2,
         box_title: 'Đăng Xuất',
-        icon:<CiLogout />,
+        icon: <CiLogout />,
         iconChevronRight: null,
         url: '',
         child: [],
