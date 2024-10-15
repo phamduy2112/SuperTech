@@ -8,7 +8,7 @@ function AuthTemplate() {
 
 
   return (
-    <div className='w-[80%] m-auto'>
+    <div className=''>
      
       <Outlet />
    

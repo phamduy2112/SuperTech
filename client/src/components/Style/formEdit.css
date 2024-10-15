@@ -23,21 +23,17 @@
     border-color: #7500CF;
     background: #7500CF;
 }
-.ant-steps .ant-steps-item-process .ant-steps-item-icon{
+.formEdit .ant-steps .ant-steps-item-process .ant-steps-item-icon{
     border-color: #7500CF;
     background: #7500CF;  
 }
-.ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
+.formEdit .ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
     stroke: #7500CF;
 }
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon{
-    border: 1px solid #7500CF;
+.formEdit .ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary){
+    height: 37px;
+    border-color: #7500CF;
+    color: #7500CF;
+    
 
-    background: #7500CF;
-}
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon >.ant-steps-icon{
-    color: white;
-}
-.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
-    background: #7500CF;
 }

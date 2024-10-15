@@ -66,3 +66,10 @@
   .slideProductHome .slick-dots{
     bottom: 0;
   }
+  .slick-slider .slick-track, .slick-slider .slick-list {
+    transform: none !important;
+}
+
+.slideShow .slick-track {
+  transform: none !important;
+}

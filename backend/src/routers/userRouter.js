@@ -4,11 +4,11 @@ import {  changePassword, getUser,login,logout,register, updateImage, updateUser
 import isAuthenticated from '../config/auth.js';
 const userRouter = express.Router();
 
-userRouter.get('/users', getUser );
+
 userRouter.post('/register', register);
 userRouter.post('/login', login);
 userRouter.get("/logout",logout)
-
+userRouter.get('/users', getUser );
 userRouter.put('/user-upload-image',isAuthenticated,updateImage)
 userRouter.get('/usersDetail',isAuthenticated, userDetail);
 userRouter.put("/user-update",isAuthenticated,updateUser)
