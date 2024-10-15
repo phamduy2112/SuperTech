@@ -173,7 +173,7 @@ function Contact() {
               placement="bottomLeft"
             >
               <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
+              Tôi có thể đổi trả sản phẩm trong bao lâu?
               </div>
             </Dropdown>
             <Dropdown
@@ -182,7 +182,7 @@ function Contact() {
               placement="bottomLeft"
             >
               <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
+              Tai nghe này có tương thích với điện thoại của tôi không?
               </div>
             </Dropdown>
             <Dropdown
@@ -191,7 +191,7 @@ function Contact() {
               placement="bottomLeft"
             >
               <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
+              Tôi có thể mua hàng trực tuyến và nhận tại cửa hàng không?
               </div>
             </Dropdown>
             <Dropdown
@@ -200,7 +200,7 @@ function Contact() {
               placement="bottomLeft"
             >
               <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
+              Chính sách bảo hành cho các sản phẩm điện tử là gì?
               </div>
             </Dropdown>
           </div>
@@ -211,7 +211,25 @@ function Contact() {
               placement="bottomLeft"
             >
               <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
+              Làm thế nào để kiểm tra tình trạng đơn hàng của tôi?
+              </div>
+            </Dropdown>
+            <Dropdown
+              menu={{ items: items1 }}
+              trigger={["click"]}
+              placement="bottomLeft"
+            >
+              <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
+              Sản phẩm có hỗ trợ trả góp không?
+              </div>
+            </Dropdown>
+            <Dropdown
+              menu={{ items: items1 }}
+              trigger={["click"]}
+              placement="bottomLeft"
+            >
+              <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
+              Làm thế nào để chọn dung lượng sạc dự phòng phù hợp?
               </div>
             </Dropdown>
             <Dropdown
@@ -229,25 +247,7 @@ function Contact() {
               placement="bottomLeft"
             >
               <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
-              </div>
-            </Dropdown>
-            <Dropdown
-              menu={{ items: items1 }}
-              trigger={["click"]}
-              placement="bottomLeft"
-            >
-              <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
-              </div>
-            </Dropdown>
-            <Dropdown
-              menu={{ items: items1 }}
-              trigger={["click"]}
-              placement="bottomLeft"
-            >
-              <div className="bg-[#7500CF] text-white rounded-[3px] w-full h-full text-[20px] p-8">
-                Cách bảo quản pin cho laptop và điện thoại tốt nhất là gì?
+              Cửa hàng có bán những loại điện thoại nào?
               </div>
             </Dropdown>
           </div>
