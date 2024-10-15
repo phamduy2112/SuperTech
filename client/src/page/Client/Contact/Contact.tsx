@@ -51,8 +51,8 @@ function Contact() {
                 height="100%"
                 loading="lazy"
               ></iframe>
-              <div className="text-[40px] bg-[#5766ee67] w-full h-full flex items-center justify-end absolute">
-                <span>Kết nối với SuperTech</span>
+              <div className="text-[40px] bg-[#8187be67] w-full h-full flex items-center justify-end absolute ">
+                <span className="text-white text-[50px] font-light">Kết nối với <span className="font-medium text-[65px] text-[#9103FF] flex "> SuperTech</span> </span>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@ function Contact() {
                     Nội dung
                   </label>
                   <textarea className="w-full h-[400px]" />
-                  <div className="bg-[#9854CC] w-[689px] h-[51px] flex justify-center items-center ">
+                  <div className="bg-[#9854CC] w-full] h-[51px] flex justify-center items-center ">
                     <span className="text-white flex justify-center items-center text-[16px] ">
                       {" "}
                       Gửi Mẫu
@@ -106,44 +106,41 @@ function Contact() {
                 </div>
               </form>
             </div>
-            <div className="bg-red-500 flex justify-end items-end text-[26px]   ">
-              <div className=" flex-col item start b h-[full] ">
-                <span>
-                  {" "}
+            <div className=" flex justify-end items-end text-[26px]   ">
+              <div className="h-full flex flex-col justify-end gap-10 p-20">
+                <div className=" flex  item start b h-[full] ">
                   <span className="text-[#7500CF]">
                     <IoMail />
-                  </span>{" "}
+                  </span>
                   baochi@supertech.com
+                </div>
+                <div className="flex">
+                  <span className="text-[#00A3FF]">
+                    <FaPhone />
+                  </span>
+
+                  <span className="text-[#FC6E2E]">
+                    1900 321 123 - 180 012 334
+                  </span>
+                </div>
+                <span className="flex">
+                  <span className="text-[#FF0000]">
+                    <FaLocationCrosshairs />
+                  </span>
+                  Tan Chanh Hiep, District 12, Ho Chi Minh City, Vietnam
                 </span>
-              </div>
-              <div>
-                <span className="text-[#00A3FF]">
-                  <FaPhone />
-                </span>{" "}
-                <span className="text-[#FC6E2E]">
-                  {" "}
-                  1900 321 123 - 180 012 334
-                </span>
-              </div>
-              <span>
-                {" "}
-                <span className="text-[#FF0000]">
-                  <FaLocationCrosshairs />
-                </span>{" "}
-                Tan Chanh Hiep, District 12, Ho Chi Minh City, Vietnam
-              </span>
-              <span>
-                Siêu thị SuperTech chất lượng đứng đầu về công nghệ hân hạnh
-                được phục vụ quý khách
-              </span>
-              <div className="text-[#FF0000]">
                 <span>
-                  {" "}
-                  <span>
-                    <MdPhoneInTalk />
-                  </span>{" "}
-                  HỖ TRỢ NGAY
+                  Siêu thị SuperTech chất lượng đứng đầu về công nghệ hân hạnh
+                  được phục vụ quý khách
                 </span>
+                <div className="text-[#FF0000]">
+                  <span className="flex justify-end items-end">
+                    <span>
+                      <MdPhoneInTalk />
+                    </span>{" "}
+                    HỖ TRỢ NGAY
+                  </span>
+                </div>
               </div>
             </div>
           </div>
