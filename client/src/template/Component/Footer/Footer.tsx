@@ -2,6 +2,7 @@ import React from 'react'
 import { FaFacebook, FaRegPaperPlane } from 'react-icons/fa'
 import { RiHeadphoneFill } from 'react-icons/ri'
 import nganHang from "../../../assets/nganhang.png"
+import { Container } from '../../../components/Style/Container'
 function Footer() {
   const listFooter=[
     {
@@ -21,7 +22,7 @@ function Footer() {
   return (
     <div className='w-[100%] m-auto mt-[1.5rem]'>
       <div className=' bg-[#7500CF] sm:rounded-t-[2rem] md:rounded-none w-[100%] md:h-[6rem] sm:pt-[2rem] md:pt-[0] flex justify-center items-center'>
-        <div className='xl:w-[80%]  xmd:w-[90%] relative sm:w-[100%] m-auto md:flex items-center justify-between'>
+        <Container className='relative md:flex items-center justify-between'>
         <h1 className='md:hidden text-[3rem] text-white text-center'>SuperTeach</h1>
           <div className="flex sm:text-[1.8rem] md:text-[2rem] text-white sm:gap-[1rem] md:gap-[2rem] items-center sm:justify-center sm:my-[1.5rem] md:my-[0rem]">
         
@@ -33,7 +34,7 @@ function Footer() {
           <input type="text" className='xl:w-[45rem] md:h-[4rem] sm:h-[4.5rem] sm:w-[100%] focus:border-none focus:outline-none p-[1rem] pl-[2rem] text-[1.8rem] rounded-s-[.5rem]' placeholder='Nhập email của bạn'/>
           <button className='md:w-[10rem] sm:w-[15rem] bg-[#444444] text-white md:h-[4rem] sm:h-[4.5rem] text-[1.8rem] rounded-e-[.5rem]'>Đăng kí</button>
         </div>
-        </div>
+        </Container>
         
       </div>
         <div className='xl:w-[80%]  xmd:w-[90%] sm:w-[95%] m-auto py-[3rem] flex flex-wrap justify-between
