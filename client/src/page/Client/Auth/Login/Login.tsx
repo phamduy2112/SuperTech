@@ -3,11 +3,60 @@ import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import { Button, Form, Input } from "antd";
 import { FaArrowLeft, FaFacebookF, FaGoogle } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import '../css/formSign.css'
-
+import Swal from 'sweetalert2'
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { login } from "../../../../service/auth/auth.service";
+import { saveLocalStorage } from "../../../../utils";
 function Login() {
+  const navigate = useNavigate();
 
+  const formik = useFormik({
+    initialValues: {
+  
+      email: "",
+      password: "",
+  
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Email không hợp lệ").required("Email là bắt buộc"),
+      password: Yup.string()
+        .min(6, "Mật khẩu phải có ít nhất 6 kí tự")
+        .required("Mật khẩu là bắt buộc"),
+   
+    }),
+    onSubmit:async (values) => {
+      console.log("Form data", values);
+     
+    
+      const res = await login(values);
+
+      if (res.data.message === "Thành công!") {
+        Swal.fire({
+          position: "top-end",
+          title: res.data.message,
+          showConfirmButton: false,
+          timer: 1500, // Thời gian hiển thị
+          timerProgressBar: true, // Kích hoạt thanh tiến trình
+        });
+        navigate("/")
+        saveLocalStorage('token',res.data.content)
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "error", // Thay đổi icon thành "error" khi thất bại
+          title: res.data.message || "Đăng kí thất bại", // Đảm bảo có thông điệp fallback
+          showConfirmButton: false,
+          timer: 1500, // Thời gian hiển thị
+          timerProgressBar: true, // Kích hoạt thanh tiến trình
+        });
+      }
+
+
+    },
+  });
   return (
 <div className="">
   <div className="flex overflow-hidden relative h-[100vh]">
@@ -58,6 +107,8 @@ function Login() {
       <Form
       layout="vertical"
     className="sign-edit"
+    onFinish={formik.handleSubmit}
+
       // initialValues={{
       //   // layout: formLayout,
       // }}
@@ -67,17 +118,40 @@ function Login() {
       // }}
     >
      
-      <Form.Item label="Tài khoản" className="mb-[1rem]">
-        <Input placeholder="input placeholder" className="py-[2.1rem] text-[1.5rem]"/>
+      <Form.Item 
+label="Email"
+validateStatus={formik.touched.email && formik.errors.email ? "error" : ""}
+help={formik.touched.email && formik.errors.email ? formik.errors.email : null}
+      
+      className="mb-[1rem]">
+        <Input 
+        id="email"
+        name="email"
+        type="email"
+        placeholder="Nhập email"
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        className="py-[2.1rem] text-[1.5rem]"/>
       </Form.Item>
-      <Form.Item label="Mật khẩu" className="mb-[.5rem]">
-        <Input placeholder="input placeholder"  className="py-[2.1rem] text-[1.5rem]"/>
-      </Form.Item>
+      <Form.Item 
+       label="Mật khẩu"
+       validateStatus={formik.touched.password && formik.errors.password ? "error" : ""}
+       help={formik.touched.password && formik.errors.password ? formik.errors.password : null}
+      className="mb-[.5rem]">
+                <Input.Password
+                  id="password"
+                  name="password"
+                  placeholder="Nhập mật khẩu"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />      </Form.Item>
       <div className="flex justify-end">
       <NavLink to="" className="text-[1.5rem] mb-[.5rem] text-[#7500CF] font-semibold hover:text-purple-800">Quên mật khẩu</NavLink>
     </div>
       <div className="button-edit">
-        <Button type="primary" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng nhập</Button>
+        <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng nhập</Button>
       </div>
     </Form>
  

@@ -3,3 +3,7 @@ export type TPayloadRegister={
     "user_email":string,
     "user_password":string
 }
+export type TPayloadLogin={
+    email:string,
+    password:string,
+}

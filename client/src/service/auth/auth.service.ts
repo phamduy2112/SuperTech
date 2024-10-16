@@ -1,5 +1,5 @@
 import { axiosWithAuth } from "../axios.config";
-import { TPayloadRegister } from "./auth.type";
+import { TPayloadLogin, TPayloadRegister } from "./auth.type";
 
 export const signup = (payload: TPayloadRegister) => {
     return axiosWithAuth("/register", {
@@ -7,4 +7,12 @@ export const signup = (payload: TPayloadRegister) => {
       data: payload,
     });
   };
+  
+export const login = (payload: TPayloadLogin) => {
+    return axiosWithAuth("/login", {
+      method: "post",
+      data: payload,
+    });
+  };
+  
   

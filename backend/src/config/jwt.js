@@ -2,24 +2,10 @@ import jwt from 'jsonwebtoken'
 
 // create token
 export const createToken=(data)=>{
- // payload,signature,header
- // 2 tham số =>string.object,buffer
- // 3 tham so: (data)=>object
+
 
  return jwt.sign({data},"BI_MAT",{expiresIn:'1d'})
 }
-// verifi token: kiem tra token  
- // check lỗi
-    // 1/token k hợp lệ;
-    // 2/token hết hạn
-    // 3/token sai khóa bí mật
-  
-        // k lỗi là null
-
-        // có lỗi là khác null
-        
-        
-// tao createTokenRef
 
 export const createTokenRef=(data)=>{
 

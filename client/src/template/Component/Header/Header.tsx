@@ -15,6 +15,7 @@ import TaskEyes from "./Component/Menu/Modal/TaskEyes";
 import TaskCatelogry from "./Component/Menu/Modal/TaskCatelogry";
 import TaskHeaderMb from "./Component/Menu/Modal/TasKHeaderMb";
 import { useSpring,animated, useTransition } from "react-spring";
+import { getLocalStorage } from "../../../utils";
 function Header() {
   const onSearch = (value: any, _e: any, info: any) =>
     console.log(info?.source, value);
@@ -76,6 +77,9 @@ const handleMouseLeave = (itemName: string) => {
     setIsProductHovered(false);
   }
 };
+const token=getLocalStorage('token')
+console.log(token);
+
   return (
     <div className="">
 <div className="flex flex-col relative">
