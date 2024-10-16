@@ -449,7 +449,7 @@ function AdminEditProduct() {
         </form>
       </div>
       <div className='bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col '>
-            <button type='submit' className='col-span-3 text-[16px] mt-4 h-[48px] linear-gradient text-white .box-shadow  rounded-lg'>Sửa Sản Phẩm</button>
+        <button type='submit' className='col-span-3 text-[16px] mt-4 h-[48px] linear-gradient text-white .box-shadow  rounded-lg'>Sửa Sản Phẩm</button>
 
       </div>
 
@@ -458,3 +458,4 @@ function AdminEditProduct() {
 }
 
 export default AdminEditProduct;
+

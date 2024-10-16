@@ -33,6 +33,12 @@ import AdminAddProduct from "../page/Admin/Product/Component/AdminAddProduct";
 import AdminEditProduct from "../page/Admin/Product/Component/AdminEditProduct";
 import AdminCreateAccount from "../page/Admin/User/Component/AdminCreateAccount";
 import AdminCustomerEdit from "../page/Admin/User/Component/AdminCustomerEdit";
+import AdminOrderCreate from "../page/Admin/Order/Component/AdminOrderCreate";
+import AdminOrderEdit from "../page/Admin/Order/Component/AdminOrderEdit";
+import AdminCommentPost from "../page/Admin/Blog/Comment/AdminComment";
+import AdminBlog from "../page/Admin/Blog/AdminBlog";
+import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
+import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
 
 export const router = createBrowserRouter([
   {
@@ -144,10 +150,28 @@ export const router = createBrowserRouter([
 
 
       {
-        path: "quản-lí-bình-luận",
+        path: "quản-lí-sản-phẩm/quản-lí-bình-luận",
         element: <AdminCommentProduct />
       },
       // Blog
+      {
+        path: "quản-lí-bài-viết",
+        element: <AdminBlog />
+      },
+      {
+        path: "quản-lí-bài-viết/thêm-bài-viết-mới",
+        element: <AdminAddBlog />
+      },
+      {
+
+        path: 'quản-lí-bài-viết/sửa-bài-viết/:id',
+        element: <AdminEditBlog />
+      },
+      {
+        path: 'quản-lí-bài-viết/quản-lí-bình-luận-bài-viết',
+        element: <AdminCommentPost />
+      },
+
       // Khách hàng
       {
         path: 'quản-lí-khách-hàng',
@@ -167,11 +191,11 @@ export const router = createBrowserRouter([
 
       {
         path: 'quản-lí-nhân-viên/sửa-nhân-viên/:id',
-        element: <AdminCustomerEdit/>
+        element: <AdminCustomerEdit />
       },
       {
         path: 'quản-lí-khách-hàng/sửa-khách-hàng/:id',
-        element: <AdminCustomerEdit/>
+        element: <AdminCustomerEdit />
       },
 
       // đơn hàng
@@ -183,7 +207,17 @@ export const router = createBrowserRouter([
       {
         path: 'quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/:id',
         element: <AdminOrderDetail />
-      }, {
+      },
+      {
+        path: 'quản-lí-đơn-hàng/tạo-đơn-hàng',
+        element: <AdminOrderCreate />
+      },
+      {
+        path: 'quản-lí-đơn-hàng/sửa-đơn-hàng/:id',
+        element: <AdminOrderEdit />
+      },
+
+      {
         path: 'quản-lí-tin-nhắn',
         element: <ChatAdmin />
       },
