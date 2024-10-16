@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 14, 2024 lúc 03:53 PM
+-- Thời gian đã tạo: Th10 16, 2024 lúc 11:41 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -41,7 +41,7 @@ CREATE TABLE `banner` (
 --
 
 CREATE TABLE `categories` (
-  `category_id` int(10) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `category_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category_dad` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -511,6 +511,12 @@ ALTER TABLE `banner`
   MODIFY `banner_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT cho bảng `chat`
 --
 ALTER TABLE `chat`
@@ -655,9 +661,9 @@ ALTER TABLE `pay`
 -- Các ràng buộc cho bảng `products`
 --
 ALTER TABLE `products`
+  ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
   ADD CONSTRAINT `fk_image_imageproduct` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
-  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`),
-  ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
+  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`);
 
 --
 -- Các ràng buộc cho bảng `product_colors`
