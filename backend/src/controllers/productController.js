@@ -20,6 +20,24 @@ const getProducts = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const getProductsByCategoryId = async (req, res) => {
+    try {
+        const categoryId = req.params.categoryId;
+        const products = await Products.findAll({
+            where: {
+                category_id: categoryId
+            }
+        });
+        if (products.length > 0) {
+            responseSend(res, products, "Thành công!", 200);
+        }else{
+            responseSend(res, "", "không tồn tại !", 404);
+        }
+       
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra khi truy vấn sản phẩm", 500);
+    }
+};
 
 const getProductById = async (req, res) => {
     try {
@@ -84,5 +102,6 @@ export {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductsByCategoryId
 };

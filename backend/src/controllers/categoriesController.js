@@ -13,7 +13,33 @@ const getcategories = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-
+const getcategory_dad = async (req, res) => {
+try {
+    let data = await categoriesModel.findAll({
+        attributes: ['category_dad'],
+        group: ['category_dad']
+    });
+    responseSend(res, data, "Thành công!", 200);
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+const getcategory_dadId = async (req, res) => {
+    try {
+        const categoryDadId = req.params.id; 
+        let data = await categoriesModel.findAll({
+            where: { category_dad: categoryDadId }, 
+            attributes: ['category_name'] 
+        });
+        if (data.length === 0) {
+            responseSend(res, "", "Không tìm thấy !", 404);
+        } else {
+            responseSend(res, data, "Thành công!", 200);
+        }
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
 const getcategoriesById = async (req, res) => {
     try {
         let data = await categoriesModel.findByPk(req.params.id);
@@ -73,5 +99,7 @@ export {
     getcategoriesById,
     createcategories,
     updatecategories,
-    deletecategories
+    deletecategories,
+    getcategory_dadId,
+    getcategory_dad
 };

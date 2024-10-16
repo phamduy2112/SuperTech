@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 16, 2024 lúc 01:55 PM
+-- Thời gian đã tạo: Th10 16, 2024 lúc 06:33 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -44,7 +44,7 @@ CREATE TABLE `categories` (
   `category_id` int(11) NOT NULL,
   `category_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `category_dad` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_dad` int(10) DEFAULT NULL,
   `category_date_task` datetime DEFAULT NULL,
   `category_task` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -54,15 +54,15 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`category_id`, `category_name`, `category_image`, `category_dad`, `category_date_task`, `category_task`) VALUES
-(1, 'Iphone', 'img.png', 'Điện thoại', '2024-09-12 00:00:00', 123),
-(2, 'iPhone 14', 'iphone14.jpg', 'Điện thoại', '2024-10-16 16:48:47', 1),
-(3, 'Samsung Galaxy S21', 'samsung21.jpg', 'Điện thoại', '2024-10-16 16:48:47', 1),
-(4, 'MacBook Pro', 'macbook_pro.jpg', 'Laptop', '2024-10-16 16:48:47', 1),
-(5, 'Dell XPS 13', 'dell_xps13.jpg', 'Laptop', '2024-10-16 16:48:47', 1),
-(6, 'Bàn phím cơ', 'ban_phim_co.jpg', 'Bàn phím', '2024-10-16 16:48:47', 1),
-(7, 'Bàn phím không dây', 'ban_phim_khong_day.jpg', 'Bàn phím', '2024-10-16 16:48:47', 1),
-(8, 'Sạc dự phòng 10000mAh', 'sac_du_phong_10000.jpg', 'Sạc dự phòng', '2024-10-16 16:48:47', 1),
-(9, 'Sạc dự phòng 20000mAh', 'sac_du_phong_20000.jpg', 'Sạc dự phòng', '2024-10-16 16:48:47', 1);
+(1, 'Iphone', 'img.png', 1, '2024-09-12 00:00:00', 123),
+(2, 'iPhone 14', 'iphone14.jpg', 1, '2024-10-16 16:48:47', 1),
+(3, 'Samsung Galaxy S21', 'samsung21.jpg', 1, '2024-10-16 16:48:47', 1),
+(4, 'MacBook Pro', 'macbook_pro.jpg', 2, '2024-10-16 16:48:47', 1),
+(5, 'Dell XPS 13', 'dell_xps13.jpg', 2, '2024-10-16 16:48:47', 1),
+(6, 'Bàn phím cơ', 'ban_phim_co.jpg', 3, '2024-10-16 16:48:47', 1),
+(7, 'Bàn phím không dây', 'ban_phim_khong_day.jpg', 3, '2024-10-16 16:48:47', 1),
+(8, 'Sạc dự phòng 10000mAh', 'sac_du_phong_10000.jpg', 4, '2024-10-16 16:48:47', 1),
+(9, 'Sạc dự phòng 20000mAh', 'sac_du_phong_20000.jpg', 4, '2024-10-16 16:48:47', 1);
 
 -- --------------------------------------------------------
 
