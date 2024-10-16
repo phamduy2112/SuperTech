@@ -18,7 +18,7 @@ function ProductItem() {
     opacity: isvisibleProduct ? 1 : 0,
   });
   return (
-    <div>
+    <div className="relative">
         <div className="relative w-[100%] pb-[1rem] product bg-white overflow-hidden hover:scale-105  hover:translate-x-[0%]">
       <div className="product__icon flex flex-col gap-3">
   <div className="bg-black p-[.5rem] rounded-md">
@@ -57,7 +57,7 @@ function ProductItem() {
                     <img src={oficie} alt="" />
                     <span className="text-white text-[1.1rem] font-medium">Tặng phụ kiện</span>
                 </div>
-                <h3 className="text-[1.7rem] font-semibold">MacBook Air 13 inch M2 10GPU</h3>
+                <h3 className="text-[1.8rem] font-semibold">MacBook Air</h3>
                 <div className="flex items-center  gap-1 my-3">
                     <PiCurrencyDollarSimpleFill className="text-[1.7rem]"/>
                 <span className="text-gray-500 text-[1.5rem]">Online giá rẻ quá</span></div>

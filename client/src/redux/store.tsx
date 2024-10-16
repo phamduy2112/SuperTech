@@ -1,6 +1,6 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import toggleSidebarReducer from './ToggleSliceBar';
 
+import toggleSidebarReducer from './ToggleSliceBar';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   persistReducer,
   FLUSH,
@@ -9,27 +9,35 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // Sử dụng localStorage cho web
+import { categoryReducer } from "./catelogry/catelogry.slice";
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-}
+};
+
 const rootReducer = combineReducers({
+  category: categoryReducer,
   toggleSidebar: toggleSidebarReducer,
 
+});
 
-})
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
+        // Bỏ qua các hành động Redux Persist để tránh cảnh báo không cần thiết
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-})
+});
+
+export type RootState = ReturnType<typeof store.getState>; // Định nghĩa RootState
+export type AppDispatch = typeof store.dispatch; // Định nghĩa AppDispatch
 export default store;

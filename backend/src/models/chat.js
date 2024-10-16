@@ -7,16 +7,16 @@ export default class chat extends Model {
     chat_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     chat_text: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'user',
         key: 'user_id'

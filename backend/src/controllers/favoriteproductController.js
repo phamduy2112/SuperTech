@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import favoriteproduct from "../models/favorite_product.js";
 import { responseSend } from "../config/response.js";
-favoriteproduct.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let favoriteproduct = models.favorite_product; 
 
 const getfavoriteproduct = async (req, res) => {
     try {
@@ -37,7 +39,7 @@ const createfavoriteproduct = async (req, res) => {
 const updatefavoriteproduct = async (req, res) => {
     try {
         let updated = await favoriteproduct.update(req.body, {
-            where: { id: req.params.id }
+            where: { favorite_product_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -52,7 +54,7 @@ const updatefavoriteproduct = async (req, res) => {
 const deletefavoriteproduct = async (req, res) => {
     try {
         let deleted = await favoriteproduct.destroy({
-            where: { id: req.params.id }
+            where: { favorite_product_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

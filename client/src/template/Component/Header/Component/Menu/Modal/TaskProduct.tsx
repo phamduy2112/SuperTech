@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 
 function TaskProduct() {
   return (
-    <div className="bg-white xl:w-[500px] border border-white shadow-md z-[100] absolute mt-[1rem]">
-      <div className="w-[100%] py-[2rem]  px-[1.6rem]">
+    <div className="absolute z-50 di left-0 top-full mt-2 bg-white p-4 ">
+      <div className="w-[500px] py-[2rem]  px-[1.6rem]">
         <ul className="flex justify-between">
           <div className="">
             <h3 className="text-[1.6rem] text-[#7500CF] mb-[.5rem] font-semibold">

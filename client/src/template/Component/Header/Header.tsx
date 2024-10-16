@@ -15,6 +15,7 @@ import TaskEyes from "./Component/Menu/Modal/TaskEyes";
 import TaskCatelogry from "./Component/Menu/Modal/TaskCatelogry";
 import TaskHeaderMb from "./Component/Menu/Modal/TasKHeaderMb";
 import { useSpring,animated, useTransition } from "react-spring";
+import { getLocalStorage } from "../../../utils";
 function Header() {
   const onSearch = (value: any, _e: any, info: any) =>
     console.log(info?.source, value);
@@ -44,6 +45,7 @@ function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const [isProductHovered, setIsProductHovered] = useState(false);
 
   // hieu ung 
   const [isvisibleHeaderMB, setisvisibleHeaderMB] = useState(false);
@@ -63,9 +65,22 @@ function Header() {
     transform: isvisibleCart ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isvisibleCart ? 1 : 0,
   });
+// 
+const handleMouseEnter = (itemName: string) => {
+  if (itemName === "Sản phẩm") {
+    setIsProductHovered(true);
+  }
+};
+
+const handleMouseLeave = (itemName: string) => {
+  if (itemName === "Sản phẩm") {
+    setIsProductHovered(false);
+  }
+};
+const token=getLocalStorage('token')
+console.log(token);
 
   return (
-
     <div className="">
 <div className="flex flex-col relative">
     <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
@@ -153,21 +168,7 @@ function Header() {
         <div className="
       
       md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
-     <div className="relative">
-          <div className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
-          <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold"
-
-      
-          >Danh mục sản phẩm</div>
-          
-        </div>
-
-        {/* <TaskCatelogry/> */}
-     <div>
-   
-     </div>
-
-     </div>
+   <TaskCatelogry/>
     
        <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
         <Menu/>
@@ -198,25 +199,54 @@ function Header() {
         <div className="
       
       md:flex items-center lg:justify-start xl:justify-between md:justify-center w-[80%] m-auto sm:hidden">
-     <div className="relative">
-          <div className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center">
-          <div className="md:text-[1.3rem] px-[1.5rem] xl:text-[1.5rem] xl:font-semibold"
-
-      
-          >Danh mục sản phẩm</div>
-          
-        </div>
-        {/* <TaskCatelogry/> */}
-     <div>
-   
-     </div>
-
-     </div>
+<TaskCatelogry/>
     
        <div className="flex justify-center items-center lg:ml-[5rem] xl:ml-0 md:py-5 xl:py-0">
         <Menu/>
        </div>
-        <div className=" md:hidden xl:flex text-[1.6rem] text-[#FF0000] font-semibold">Miễn phí vận chuyển trên 25 triệu</div>
+                <div className="flex gap-[1rem] items-center">
+                <div className="flex gap-[1rem]">
+            <div>
+
+                <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" />
+   
+            </div>
+            <div>
+              <Badge count={0} showZero>
+                <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
+              </Badge>
+            </div>
+            <div>
+              <Badge count={0} showZero>
+                <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
+              </Badge>
+            </div>
+            <div>
+              <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
+            </div>
+          </div>
+          <div>
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomLeft"
+              arrow
+              trigger={["click"]}
+          
+            >
+              <Button
+                className="flex xl:h-[40px] md:h-[3rem] items-center xl:gap-3 md:gap-2 md:rounded-[1.5rem] xl:rounded-[3rem] DropDown"
+
+              >
+                <FaBars />
+                <div className="xl:text-[25px] md:text-[2rem]">
+                  <FaUserCircle />
+                </div>
+              </Button>
+            </Dropdown>
+          </div>
+                </div>
       </div>
       </div>
               </animated.div>
@@ -280,7 +310,6 @@ function Header() {
     </div>
     
   );
-
 }
 
 export default Header;

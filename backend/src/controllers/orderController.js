@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import order from "../models/order.js";
 import { responseSend } from "../config/response.js";
-order.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let order = models.order; 
 
 const getorder = async (req, res) => {
     try {
@@ -27,7 +29,6 @@ const getorderById = async (req, res) => {
 
 const createorder = async (req, res) => {
     try {
-        // Removed discount existence check
         let neworder = await order.create(req.body);
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {
@@ -37,9 +38,8 @@ const createorder = async (req, res) => {
 
 const updateorder = async (req, res) => {
     try {
-        // Removed discount existence check
         let updated = await order.update(req.body, {
-            where: { id: req.params.id }
+            where: { order_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -54,7 +54,7 @@ const updateorder = async (req, res) => {
 const deleteorder = async (req, res) => {
     try {
         let deleted = await order.destroy({
-            where: { id: req.params.id }
+            where: { order_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

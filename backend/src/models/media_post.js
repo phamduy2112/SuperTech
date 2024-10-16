@@ -7,16 +7,16 @@ export default class media_post extends Model {
     media_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true
     },
     media_url: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
     },
     post_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'posts',
         key: 'post_id'

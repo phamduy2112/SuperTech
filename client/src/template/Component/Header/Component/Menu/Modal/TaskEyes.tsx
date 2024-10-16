@@ -11,7 +11,7 @@ interface TaskCart {
 }
 function TaskEyes({ onClose }: TaskCart) {
   return (
-    <div className="w-[100%] h-[100vh] fixed bg-[rgb(0,0,0,0.5)] z-30 top-0 left-0">
+    <div className="w-[100%] h-[100vh] bg-[rgb(0,0,0,0.5)] z-30 top-0 left-0">
       <div className="w-[320px] h-[100vh] bg-[white] absolute top-0 right-0 px-[1.5rem] py-[3rem]">
         <div className="relative">
           <div>
