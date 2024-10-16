@@ -1,3 +1,4 @@
+import toggleSidebarReducer from './admin/component/ToggleSliceBar';
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   persistReducer,
@@ -19,6 +20,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   category: categoryReducer,
+  toggleSidebar: toggleSidebarReducer,
+
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
