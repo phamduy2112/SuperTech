@@ -3,14 +3,14 @@ import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
-import { createToken } from "../config/jwt.js";
+import { createToken, createTokenRef, decodeToken, verifyToken } from "../config/jwt.js";
 import { sendMail } from "../config/mail.js";
 import { deleteFile, upload } from "../config/upload.js";
 import path from"path"
 
 let models = initModels(sequelize); 
 let User = models.user; 
-
+const refreshTokens = [];
 
 const getUser = async (req, res) => {
     let data = await User.findAll();
@@ -24,7 +24,7 @@ const register = async (req, res) => {
         if(user){
             return responseSend(res,{success:false},"Email đã tồn tại",200)
         }
-        const hashedPassword=await bcrypt.hash(user_password,10)
+        const hashedPassword=await bcrypt.hash(user_password,8)
         await User.create({
             user_name,
             user_email,
@@ -40,46 +40,133 @@ const register = async (req, res) => {
         }
     
 }
-const login=async(req,res)=>{
-    try{
+const login = async (req, res) => {
+    try {
         const { email, password } = req.body;
-        let user=await User.findOne({where:{user_email:email}});
-        if(!user){
+
+        // Tìm người dùng theo email
+        const user = await User.findOne({ where: { user_email: email } });
+        if (!user) {
             return res.status(401).json({
-                message:"Incorrect email or password",
-                success:false
+                message: "Incorrect email or password",
+                success: false,
             });
-        
         }
-        const isPasswordMatch=await bcrypt.compare(password,user.user_password);
-        if(!isPasswordMatch){
+
+        // Kiểm tra mật khẩu
+        const isPasswordMatch = await bcrypt.compare(password, user.user_password);
+        if (!isPasswordMatch) {
             return res.status(401).json({
-                message:"Incorrect email or password",
-                success:false
-            })
+                message: "Incorrect email or password",
+                success: false,
+            });
         }
-        const userDetail={
-            user_id:user.user_id
-        }
-        const token=createToken(userDetail)
-       
+
+        // Tạo token
+        const userDetail = {
+            user_id: user.user_id,
       
+        };
+        const token = createToken(userDetail);
+        const tokenRef = createTokenRef(userDetail); // Giả định bạn có hàm createTokenRef
 
- 
-        // return res.cookie('token',token,{httpOnly:true,sameSite:'strict',maxAge:1*24*60*60*1000}).json({
-        //     message:`Welcome back ${user.username}`,
-        //     success:true,
-        //     user
-        // })
-
-       return responseSend(res.cookie('token',token,{httpOnly:true,sameSite:'strict',maxAge:1*24*60*60*1000}),{success:true},"Thành công!",200)
- 
+        // Gửi phản hồi thành công
+        return responseSend(res, {
+            token: token,
+            refreshToken: tokenRef,
+            success: true,
+        }, "Thành công!", 200);
+    } catch (e) {
+        console.error("Error in login:", e);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+        });
+    }
+};
+const resetToken = async (req, res) => {
+    try {
+        let {token}=req.body;
+        console.log("token",token);
+        let errorToken=verifyToken(token);
+        // console.log(token);
+        if(errorToken!=null && errorToken.name!="TokenExpiredError"){
+            responseSend(res,"","Not Authorize !",401);
+            return
+    
+        }
+        // check refesh token con2 hang k
+        //UserId: lay tu token
+        let {data}=decodeToken(token);
+        // console.log(data);
+        let getUser=await User.findByPk(data.user_id)
+        console.log(data);
         
-    }catch(e){
+        // console.log(getUser.dataValues.refresh_token);
+        // if(checkTokenRef(getUser.dataValues.refresh_token)!=null){
+        //     responseSend(res,"","Not Authorize !",401);
+        //     return
+        // }else{
+        //     console.log("thanh cong");
+        // }
+         //create token
+          let tokenNew=createToken({
+            user_id:getUser.dataValues.user_id,
+        });
+        // // login thành công
+        console.log(tokenNew);
+        responseSend(res,tokenNew,"Thành công !",200);
+    } catch (e) {
+
         console.log(e);
         
+        console.error("Error in resetToken:", e);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false,
+        });
     }
-}
+    
+};
+
+
+
+const loginFacebook = async (req, res) => {
+    try {
+        const { face_app_id, name, email, id } = req.body; // Lấy id từ req.body
+
+        // Kiểm tra xem người dùng đã tồn tại chưa
+        let checkUser = await User.findOne({
+            where: {
+                email // Kiểm tra dựa trên email thay vì id
+            }
+        });
+
+        // Nếu người dùng chưa tồn tại, tạo một người dùng mới
+        if (!checkUser) {
+            const newUser = {
+                email,
+                pass_word: "", // Mật khẩu có thể để trống cho người dùng đăng nhập bằng Facebook
+                user_name: name,
+                avatar: "", // Có thể cập nhật thêm sau này nếu có URL của avatar
+                user_role: 1, // Có thể điều chỉnh dựa trên quyền hạn của người dùng
+            };
+            checkUser = await User.create(newUser); // Tạo người dùng mới
+        }
+
+        // Tạo token cho người dùng
+        const token = createToken({
+            userId: checkUser.user_id, // Sử dụng user_id từ checkUser
+            role: checkUser.user_role // Sử dụng user_role từ checkUser
+        });
+
+        // Đăng nhập thành công
+        return responseSend(res, token, "Thành công!", 200);
+    } catch (error) {
+        console.error("Login Facebook error:", error);
+        return res.status(500).json({ message: "Internal server error", success: false });
+    }
+};
 const userDetail=async(req,res)=>{
     try{
 
@@ -276,7 +363,9 @@ export {
     updateImage,
     changePassword,
     verifyOldPassword,
-    logout
+    logout,
+    resetToken,
+    loginFacebook
     // forgetCheckMail,
     // forgetCheckCode
 };

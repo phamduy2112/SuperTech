@@ -1,6 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import { col, fn, Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let categoriesModel = models.categories; 
@@ -13,7 +14,27 @@ const getcategories = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-
+// const getCategorySummary = async (req, res) => {
+//     try {
+//         const data = await categoriesModel.findAll({
+//             attributes: [
+//               'category_dad',
+//               [fn('COUNT', col('products.product_id')), 'total_products'] // Đếm số sản phẩm
+//             ],
+//             include: [{
+//               model: Products, // Liên kết với bảng sản phẩm
+//               attributes: [] // Không lấy dữ liệu sản phẩm, chỉ cần đếm
+//             }],
+//             group: ['category_dad'], // Nhóm theo danh mục cha
+//           });
+      
+//           responseSend(res, data, "Thành công!", 200);
+  
+//     } catch (e) {
+//       console.log(e);
+//       responseSend(res, null, "Lỗi!", 500);
+//     }
+//   };
 const getcategoriesById = async (req, res) => {
     try {
         let data = await categoriesModel.findByPk(req.params.id);
@@ -73,5 +94,6 @@ export {
     getcategoriesById,
     createcategories,
     updatecategories,
-    deletecategories
+    deletecategories,
+    // getCategorySummary
 };

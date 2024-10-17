@@ -10,6 +10,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { login } from "../../../../service/auth/auth.service";
 import { saveLocalStorage } from "../../../../utils";
+import FacebookLogin from 'react-facebook-login';
+
 function Login() {
   const navigate = useNavigate();
 
@@ -41,8 +43,12 @@ function Login() {
           timer: 1500, // Thời gian hiển thị
           timerProgressBar: true, // Kích hoạt thanh tiến trình
         });
-        navigate("/")
-        saveLocalStorage('token',res.data.content)
+        // navigate("/")
+        const token = res.data.content.token; 
+        saveLocalStorage("token",token)
+        
+        console.log(res);
+        
       } else {
         Swal.fire({
           position: "top-end",
@@ -94,10 +100,23 @@ function Login() {
       <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng nhập</p>
       {/* Social Buttons */}
       <div className="flex gap-4 mb-6 w-[70%] m-auto">
-        <button className="w-1/2 py-5  border text-[1.6rem] border-[#7500CF] text-[#7500CF] flex items-center justify-center rounded-lg ">
+        {/* <button className="w-1/2 py-5  border text-[1.6rem] border-[#7500CF] text-[#7500CF] flex items-center justify-center rounded-lg ">
     <FaFacebookF className="mr-[.5rem]"/>
-          Facebook
-        </button>
+    asd
+        </button> */}
+        {/* <FacebookLogin /> */}
+           {/* <FacebookLogin
+    appId="476126624973243"
+   
+    callback={(resp:any)=>{
+      let newUser={
+        ...resp,
+        face_app_id:resp.id
+      }
+      console.log(newUser);
+      
+    
+    }} /> */}
         <button className="w-1/2 py-5 border text-[1.6rem] border-[#7500CF] flex items-center justify-center rounded-lg text-[#7500CF]">
 <FaGoogle className="mr-[.5rem]" />
           Google

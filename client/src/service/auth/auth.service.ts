@@ -15,4 +15,9 @@ export const login = (payload: TPayloadLogin) => {
     });
   };
   
-  
+
+  export const resetToken = async (payload:string) => {
+    return axiosWithAuth.post("/reset-token", {
+        token: payload // Gửi token làm payload trong yêu cầu
+    });
+};

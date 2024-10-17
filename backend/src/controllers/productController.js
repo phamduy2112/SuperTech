@@ -1,6 +1,8 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import categories from "../models/categories.js";
+import { Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let Products = models.products; 
@@ -39,7 +41,30 @@ const getProductById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+// const getProductByIdCate
+const getProductByIdCatelogryDad=async(req,res)=>{
+    const categoriesDad = ['Điện thoại', 'Laptop', 'Tablet']; // Các danh mục cha cần lấy
 
+ 
+    const products = await Products.findAll({
+        include: [
+            {
+                model: categories,
+                as: 'category', // Thêm alias vào đây
+                attributes: ['category_id'],
+                where: {
+                    category_dad: {
+                        [Op.in]: categoriesDad // Lọc theo danh mục cha đã chỉ định
+                    }
+                }
+            }
+        ]
+    });
+
+    responseSend(res, products, "Thêm Thành công!", 201);
+
+}
+    
 const createProduct = async (req, res) => {
     try {
         let newProduct = await Products.create(req.body);
@@ -84,5 +109,6 @@ export {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductByIdCatelogryDad
 };

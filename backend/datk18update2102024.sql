@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 14, 2024 lúc 03:53 PM
+-- Thời gian đã tạo: Th10 16, 2024 lúc 11:41 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -41,7 +41,7 @@ CREATE TABLE `banner` (
 --
 
 CREATE TABLE `categories` (
-  `category_id` int(10) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `category_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category_dad` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -304,9 +304,57 @@ CREATE TABLE `products` (
 -- Đang đổ dữ liệu cho bảng `products`
 --
 
-INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_star`, `product_discount`, `product_hot`, `product_date`, `product_quantity`, `image_id`, `infor_product`, `category_id`) VALUES
-(1, 'Iphone 11', 123213, 5, 2, 1, '2024-09-13', 2, 131, 12, 1),
-(2, 'Iphone 12', 123213, 5, 2, 1, '2024-09-04', 2, 131, 12, 1);
+INSERT INTO `products` (`product_name`, `product_price`, `product_star`, `product_discount`, `product_hot`, `product_date`, `product_quantity`, `image_id`, `infor_product`, `category_id`) VALUES
+('Sản phẩm 1', 150.00, 5, 0, 1, '2024-10-16', 50, 131, 12, 1),
+('Sản phẩm 2', 200.00, 4, 10, 0, '2024-10-16', 30, 131, 12, 2),
+('Sản phẩm 3', 250.00, 3, 5, 1, '2024-10-16', 20, 131, 12, 1),
+('Sản phẩm 4', 300.00, 5, 15, 0, '2024-10-16', 10, 131, 12, 2),
+('Sản phẩm 5', 350.00, 2, 0, 1, '2024-10-16', 25, 131, 12, 3),
+('Sản phẩm 6', 400.00, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
+('Sản phẩm 7', 450.00, 3, 5, 1, '2024-10-16', 5, 131, 12, 2),
+('Sản phẩm 8', 500.00, 5, 10, 0, '2024-10-16', 12, 131, 12, 3),
+('Sản phẩm 9', 550.00, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
+('Sản phẩm 10', 600.00, 4, 20, 0, '2024-10-16', 20, 131, 12, 1),
+('Sản phẩm 11', 650.00, 3, 0, 1, '2024-10-16', 22, 131, 12, 3),
+('Sản phẩm 12', 700.00, 4, 10, 0, '2024-10-16', 10, 131, 12, 2),
+('Sản phẩm 13', 750.00, 5, 5, 1, '2024-10-16', 30, 131, 12, 1),
+('Sản phẩm 14', 800.00, 2, 15, 0, '2024-10-16', 8, 131, 12, 2),
+('Sản phẩm 15', 850.00, 3, 0, 1, '2024-10-16', 20, 131, 12, 3),
+('Sản phẩm 16', 900.00, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
+('Sản phẩm 17', 950.00, 3, 5, 1, '2024-10-16', 25, 131, 12, 2),
+('Sản phẩm 18', 1000.00, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
+('Sản phẩm 19', 1050.00, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
+('Sản phẩm 20', 1100.00, 4, 20, 0, '2024-10-16', 22, 131, 12, 1),
+('Sản phẩm 21', 1150.00, 3, 0, 1, '2024-10-16', 18, 131, 12, 3),
+('Sản phẩm 22', 1200.00, 4, 10, 0, '2024-10-16', 25, 131, 12, 2),
+('Sản phẩm 23', 1250.00, 5, 5, 1, '2024-10-16', 35, 131, 12, 1),
+('Sản phẩm 24', 1300.00, 2, 15, 0, '2024-10-16', 10, 131, 12, 2),
+('Sản phẩm 25', 1350.00, 3, 0, 1, '2024-10-16', 50, 131, 12, 3),
+('Sản phẩm 26', 1400.00, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
+('Sản phẩm 27', 1450.00, 3, 5, 1, '2024-10-16', 22, 131, 12, 2),
+('Sản phẩm 28', 1500.00, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
+('Sản phẩm 29', 1550.00, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
+('Sản phẩm 30', 1600.00, 4, 20, 0, '2024-10-16', 12, 131, 12, 1),
+('Sản phẩm 31', 1650.00, 3, 0, 1, '2024-10-16', 8, 131, 12, 3),
+('Sản phẩm 32', 1700.00, 4, 10, 0, '2024-10-16', 25, 131, 12, 2),
+('Sản phẩm 33', 1750.00, 5, 5, 1, '2024-10-16', 30, 131, 12, 1),
+('Sản phẩm 34', 1800.00, 2, 15, 0, '2024-10-16', 10, 131, 12, 2),
+('Sản phẩm 35', 1850.00, 3, 0, 1, '2024-10-16', 50, 131, 12, 3),
+('Sản phẩm 36', 1900.00, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
+('Sản phẩm 37', 1950.00, 3, 5, 1, '2024-10-16', 22, 131, 12, 2),
+('Sản phẩm 38', 2000.00, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
+('Sản phẩm 39', 2050.00, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
+('Sản phẩm 40', 2100.00, 4, 20, 0, '2024-10-16', 22, 131, 12, 1),
+('Sản phẩm 41', 2150.00, 3, 0, 1, '2024-10-16', 18, 131, 12, 3),
+('Sản phẩm 42', 2200.00, 4, 10, 0, '2024-10-16', 25, 131, 12, 2),
+('Sản phẩm 43', 2250.00, 5, 5, 1, '2024-10-16', 30, 131, 12, 1),
+('Sản phẩm 44', 2300.00, 2, 15, 0, '2024-10-16', 10, 131, 12, 2),
+('Sản phẩm 45', 2350.00, 3, 0, 1, '2024-10-16', 50, 131, 12, 3),
+('Sản phẩm 46', 2400.00, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
+('Sản phẩm 47', 2450.00, 3, 5, 1, '2024-10-16', 22, 131, 12, 2),
+('Sản phẩm 48', 2500.00, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
+('Sản phẩm 49', 2550.00, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
+('Sản phẩm 50', 2600.00, 4, 20, 0, '2024-10-16', 22, 131, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -511,6 +559,12 @@ ALTER TABLE `banner`
   MODIFY `banner_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT cho bảng `chat`
 --
 ALTER TABLE `chat`
@@ -655,9 +709,9 @@ ALTER TABLE `pay`
 -- Các ràng buộc cho bảng `products`
 --
 ALTER TABLE `products`
+  ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
   ADD CONSTRAINT `fk_image_imageproduct` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
-  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`),
-  ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`);
+  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`);
 
 --
 -- Các ràng buộc cho bảng `product_colors`
