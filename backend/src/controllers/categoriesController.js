@@ -14,27 +14,33 @@ const getcategories = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-// const getCategorySummary = async (req, res) => {
-//     try {
-//         const data = await categoriesModel.findAll({
-//             attributes: [
-//               'category_dad',
-//               [fn('COUNT', col('products.product_id')), 'total_products'] // Đếm số sản phẩm
-//             ],
-//             include: [{
-//               model: Products, // Liên kết với bảng sản phẩm
-//               attributes: [] // Không lấy dữ liệu sản phẩm, chỉ cần đếm
-//             }],
-//             group: ['category_dad'], // Nhóm theo danh mục cha
-//           });
-      
-//           responseSend(res, data, "Thành công!", 200);
-  
-//     } catch (e) {
-//       console.log(e);
-//       responseSend(res, null, "Lỗi!", 500);
-//     }
-//   };
+const getcategory_dad = async (req, res) => {
+try {
+    let data = await categoriesModel.findAll({
+        attributes: ['category_dad'],
+        group: ['category_dad']
+    });
+    responseSend(res, data, "Thành công!", 200);
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+const getcategory_dadId = async (req, res) => {
+    try {
+        const categoryDadId = req.params.id; 
+        let data = await categoriesModel.findAll({
+            where: { category_dad: categoryDadId }, 
+            attributes: ['category_name'] 
+        });
+        if (data.length === 0) {
+            responseSend(res, "", "Không tìm thấy !", 404);
+        } else {
+            responseSend(res, data, "Thành công!", 200);
+        }
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
 const getcategoriesById = async (req, res) => {
     try {
         let data = await categoriesModel.findByPk(req.params.id);
@@ -95,5 +101,6 @@ export {
     createcategories,
     updatecategories,
     deletecategories,
-    // getCategorySummary
+    getcategory_dadId,
+    getcategory_dad
 };

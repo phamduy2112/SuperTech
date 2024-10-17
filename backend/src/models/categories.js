@@ -19,7 +19,7 @@ export default class categories extends Model {
       allowNull: true
     },
     category_dad: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     category_date_task: {
