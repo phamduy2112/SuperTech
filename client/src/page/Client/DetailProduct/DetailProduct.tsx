@@ -8,8 +8,12 @@ import { Rate } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { data } from "./data";
 import Comment from "./Component/Comment";
+import { useParams } from "react-router-dom";
 
 function DetailProduct() {
+  const { id } = useParams(); // Lấy id từ URL
+console.log(id);
+
   const [listProduct, setProduct] = useState({
     productName: "Tên sản phẩm",
     price: 5000000,

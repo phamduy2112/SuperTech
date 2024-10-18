@@ -43,6 +43,7 @@ import AdminCommentPost from "../page/Admin/Blog/Comment/AdminComment";
 import AdminBlog from "../page/Admin/Blog/AdminBlog";
 import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
 import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
+import ListProduct from "../page/Client/ListProduct/ListProduct";
 
 export const router = createBrowserRouter([
   {
@@ -61,8 +62,12 @@ export const router = createBrowserRouter([
         element: <FavoriteProduct />,
       },
       {
-        path: "/sản-phẩm-chi-tiết",
+        path: "/sản-phẩm-chi-tiết/:id",
         element: <DetailProduct />,
+      },
+      {
+        path: "/list-sản-phẩm",
+        element: <ListProduct />,
       },
 
       // Blog

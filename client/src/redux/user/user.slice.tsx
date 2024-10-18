@@ -52,7 +52,8 @@ export const changePasswordDetail = createAsyncThunk(
 
 const initialState = {
   user:{},
-  token:null
+  token:null,
+  thongBao:""
 };
 
 const UserSlice = createSlice({
@@ -77,11 +78,11 @@ const UserSlice = createSlice({
       })
     builder
       .addCase(verifyPasswordDetail.fulfilled, (state, { payload }) => {
-        state.user = payload;
+        state.thongBao = payload;
       })
     builder
       .addCase(changePasswordDetail.fulfilled, (state, { payload }) => {
-        state.user = payload;
+        state.thongBao = payload;
       })
 
   },

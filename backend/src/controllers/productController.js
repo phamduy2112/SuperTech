@@ -44,10 +44,29 @@ const getProductsByCategoryId = async (req, res) => {
 const getProductById = async (req, res) => {
     try {
         let data = await Products.findByPk(req.params.id, {
-            include: [{
+            include: [
+                {
                 model: models.product_colors,
                 as: 'colors'
-            }]
+            },
+                {
+                model: models.comment_product,
+                    as:'comment_products'
+            },
+            
+                {
+                model: models.image_product,
+                    as:'image'
+            },
+            
+            
+                {
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+            
+        
+        ]
         });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
@@ -59,30 +78,36 @@ const getProductById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-// const getProductByIdCate
-const getProductByIdCatelogryDad=async(req,res)=>{
-    const categoriesDad = ['Điện thoại', 'Laptop', 'Tablet']; // Các danh mục cha cần lấy
+const getProductByIdCatelogryDad = async (req, res) => {
+    const { category_dad, category } = req.query;  // Get the category_dad and category from the URL
 
- 
-    const products = await Products.findAll({
-        include: [
-            {
-                model: categories,
-                as: 'category', // Thêm alias vào đây
-                attributes: ['category_id'],
-                where: {
-                    category_dad: {
-                        [Op.in]: categoriesDad // Lọc theo danh mục cha đã chỉ định
-                    }
-                }
-            }
-        ]
-    });
+    try {
+        const whereClause = {};
 
-    responseSend(res, products, "Thêm Thành công!", 201);
+        // Add `category_dad` to the where clause if it exists
+        if (category_dad) {
+            whereClause.category_dad = category_dad;
+        }
 
-}
-    
+        // Add `category` to the where clause if it exists
+        if (category) {
+            whereClause.category_name = category;  // Assuming category is the category name
+        }
+
+        const products = await Products.findAll({
+            include: [{
+                model: models.categories,
+                as: "category",
+                where: whereClause,  // Dynamic where clause based on query parameters
+                attributes: []  // Only return product data
+            }]
+        });
+
+        responseSend(res, products, "Products retrieved successfully!", 200);
+    } catch (error) {
+        responseSend(res, null, "Error retrieving products", 500);
+    }
+};
 const createProduct = async (req, res) => {
     try {
         let newProduct = await Products.create(req.body);
@@ -128,5 +153,6 @@ export {
     createProduct,
     updateProduct,
     deleteProduct,
-    getProductsByCategoryId
+    getProductsByCategoryId,
+    getProductByIdCatelogryDad
 };

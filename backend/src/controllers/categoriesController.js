@@ -30,7 +30,7 @@ const getcategory_dadId = async (req, res) => {
         const categoryDadId = req.params.id; 
         let data = await categoriesModel.findAll({
             where: { category_dad: categoryDadId }, 
-            attributes: ['category_name'] 
+            // attributes: ['category_name'] 
         });
         if (data.length === 0) {
             responseSend(res, "", "Không tìm thấy !", 404);

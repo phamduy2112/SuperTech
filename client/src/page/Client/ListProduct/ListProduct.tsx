@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ProductItem from '../../../components/product/ProductItem'
 import { Breadcrumb, Checkbox, Form, Select } from 'antd'
 import { MdFilterAlt } from 'react-icons/md'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { getCatelogryDadThunk } from '../../../redux/catelogry/catelogry.slice';
+import { getProductByCateloriesDad } from '../../../redux/product/product.slice';
 
 
 function ListProduct() {
+  const searchParams = new URLSearchParams(location.search);
+      const category_dad = searchParams.get('category_dad');  // Get 'category_dad' directly
+      const category = searchParams.get('category');          // Get 'category' directly
+  
+  const { listProduct } = useAppSelector((state) => state.product);
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    dispatch(getProductByCateloriesDad(category_dad));
+
+  },[category_dad,dispatch])
+  console.log(listProduct);
+  
   return (
 <div className='w-[80%] m-auto'>
        <Breadcrumb
@@ -19,7 +35,7 @@ function ListProduct() {
     ]}
   />
   <div>
-    <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm Yêu Thích <span className='text-[#7500CF]'>7</span></h3>
+    <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm:{category_dad} <span className='text-[#7500CF]'></span></h3>
     <div className='flex gap-4'>
       <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[9rem]'>
         <MdFilterAlt/>

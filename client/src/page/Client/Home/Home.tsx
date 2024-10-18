@@ -11,6 +11,7 @@ import banner4 from "../../../assets/banner4.png";
 import Dis from './Component/Dis'
 import ProductsNew from './Component/ProductsNew'
 import GolenWeek from './Component/GolenWeek'
+import ListProductSmall from './Component/ListProductSmall'
 import LaptopComponent from './Component/Laptop'
 
 function Home() {
@@ -48,40 +49,7 @@ function Home() {
       <div className='w-[80%] mx-auto'>
         <img src={banner1} className='w-[100%]'/>
       </div>
-      <div className='w-[80%] mx-auto'>
-      <div className="grid 2xl:grid-cols-4 gap-[2rem] lg:grid-cols-3 md:grid-cols-2">
-       <div>
-        <h3 className='text-[2.2rem] font-semibold mt-[2rem]'>Dành riêng cho bạn</h3>
-        <GolenWeek/>
-         <GolenWeek/>
-         <GolenWeek/>
-      
-       </div>
-       <div>
-        <h3 className='text-[2.2rem] font-semibold mt-[2rem]'>Khuyến mãi</h3>
-        <GolenWeek/>
-         <GolenWeek/>
-         <GolenWeek/>
-      
-       </div>
-       <div>
-        <h3 className='text-[2.2rem] font-semibold mt-[2rem]'>Top bán chạy</h3>
-        <GolenWeek/>
-         <GolenWeek/>
-         <GolenWeek/>
-      
-       </div>
-       <div>
-        <h3 className='text-[2.2rem] font-semibold mt-[2rem]'>Sản phẩm mới</h3>
-        <GolenWeek/>
-         <GolenWeek/>
-         <GolenWeek/>
-      
-       </div>
-
-      </div>
-        
-      </div>
+     <ListProductSmall/>
      
       <Dis/>
     </div>

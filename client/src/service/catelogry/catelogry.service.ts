@@ -9,3 +9,19 @@ export const getCatelogry = () => {
  
   );
   };
+export const getCatelogryDad = () => {
+    return axiosWithAuth("/categories_dad", {
+      method: "get",
+      
+    }
+ 
+  );
+  };
+  export const getCatelogryDadById=(name:string)=>{
+    return axiosWithAuth(`/categories_dad/${name}`, {
+      method: "get",
+      
+    }
+ 
+  );
+  }

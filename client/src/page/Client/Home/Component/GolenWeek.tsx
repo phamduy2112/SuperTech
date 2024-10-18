@@ -1,9 +1,13 @@
 import React from "react";
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
 
-function GolenWeek() {
+function GolenWeek(props) {
+  console.log(props.product);
+  
   return (
-    <div className="w-[100%] mx-auto mt-[1rem] border border-[#E4E7E9] p-[1rem]">
+    <div className="w-[100%]
+    
+    mx-auto mt-[1rem] border border-[#E4E7E9] p-[1rem]">
       
       <div>
         <div className="flex">
@@ -16,10 +20,12 @@ function GolenWeek() {
           </div>
           <div>
         
-                <h3 className="xxl:text-[1.8rem] sm:text-[1.5rem] lg:text-[1.6rem] font-semibold my-[.7rem]">MacBook Air 13 inch M2 10GPU</h3>
+                <h3 className="xxl:text-[1.8rem] sm:text-[1.5rem] lg:text-[1.6rem] font-semibold my-[.7rem]">{props.product.product_name}</h3>
                
                 <p className="xll:text-[1.7rem] sm:text-[1.6rem] text-[#DB363B] font-semibold my-[.7rem]">
-                30.000.000đ
+                {props.product.product_price}
+                <span className="text-[1.5rem] text-gray-500 ml-[.5rem]" style={{textDecoration:"line-through"}}>31.990.000đ</span>
+
             </p>
             <div>
                 <button className="px-[2rem] sm:py-[.8rem]  border border-[#7500CF] text-[#7500CF] text-[1.6rem] font-semibold rounded-[0.5rem] transition-all

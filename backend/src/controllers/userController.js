@@ -307,7 +307,7 @@ const changePassword = async (req, res) => {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         
-        user.password = hashedPassword;
+        user.user_password = hashedPassword;
         await user.save();
 
         return res.status(200).json({ message: "Đổi mật khẩu thành công" });

@@ -16,6 +16,7 @@ import TaskCatelogry from "./Component/Menu/Modal/TaskCatelogry";
 import TaskHeaderMb from "./Component/Menu/Modal/TasKHeaderMb";
 import { useSpring,animated, useTransition } from "react-spring";
 import { getLocalStorage } from "../../../utils";
+import DropdownUser from "./Component/DropdownUser";
 function Header() {
   const onSearch = (value: any, _e: any, info: any) =>
     console.log(info?.source, value);
@@ -109,7 +110,11 @@ console.log(token);
       <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto sm:hidden md:block" >
   
         <div className="flex justify-between items-center w-[100%] md:h-[5rem] lg:h-[75px]">
-          <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">SuperTech</div>
+          <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">SuperTech
+
+
+            
+          </div>
           <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
             <form action="" className="w-[100%] h-[38px]">
               <Search
@@ -140,27 +145,7 @@ console.log(token);
               <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
             </div>
           </div>
-          <div>
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottomLeft"
-              arrow
-              trigger={["click"]}
-          
-            >
-              <Button
-                className="flex xl:h-[40px] md:h-[3rem] items-center xl:gap-3 md:gap-2 md:rounded-[1.5rem] xl:rounded-[3rem] DropDown"
-
-              >
-                <FaBars />
-                <div className="xl:text-[25px] md:text-[2rem]">
-                  <FaUserCircle />
-                </div>
-              </Button>
-            </Dropdown>
-          </div>
+        <DropdownUser/>
         </div>
       </div>
       {

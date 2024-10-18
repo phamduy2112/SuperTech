@@ -10,7 +10,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import './product.css'
 import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
 import { useSpring,animated } from "react-spring";
-function ProductItem() {
+function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
 
   const slideInAnimationTaskProduct = useSpring({
@@ -57,7 +57,7 @@ function ProductItem() {
                     <img src={oficie} alt="" />
                     <span className="text-white text-[1.1rem] font-medium">Tặng phụ kiện</span>
                 </div>
-                <h3 className="text-[1.8rem] font-semibold">MacBook Air</h3>
+                <h3 className="text-[1.8rem] font-semibold">{props.product.product_name}</h3>
                 <div className="flex items-center  gap-1 my-3">
                     <PiCurrencyDollarSimpleFill className="text-[1.7rem]"/>
                 <span className="text-gray-500 text-[1.5rem]">Online giá rẻ quá</span></div>

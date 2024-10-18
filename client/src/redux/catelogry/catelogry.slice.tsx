@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCatelogry } from "../../service/catelogry/catelogry.service";
+import { getCatelogry, getCatelogryDad } from "../../service/catelogry/catelogry.service";
 
 export const getCatelogryThunk = createAsyncThunk(
   "getCatelogryThunk",
@@ -12,11 +12,22 @@ export const getCatelogryThunk = createAsyncThunk(
     }
   },
 );
+export const getCatelogryDadThunk = createAsyncThunk(
+  "getCatelogryDadThunk",
+  async () => {
+    try {
+      const resp = await getCatelogryDad();
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 
 
 
 const initialState = {
-  catelogry: [],
+  catelogryDad: [],
 };
 
 const CatelogrySlice = createSlice({
@@ -24,13 +35,17 @@ const CatelogrySlice = createSlice({
   initialState,
   reducers: {
     setCatelogry: (state, { payload }) => {
-      state.catelogry = payload;
+      state.catelogryDad = payload;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getCatelogryThunk.fulfilled, (state, { payload }) => {
-        state.catelogry = payload;
+        state.catelogryDad = payload;
+      })
+    builder
+      .addCase(getCatelogryDadThunk.fulfilled, (state, { payload }) => {
+        state.catelogryDad = payload;
       })
 
   },
