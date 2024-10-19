@@ -7,28 +7,24 @@ export default class comment_posts extends Model {
     comment_post_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     comment_content: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: false
     },
     comment_date: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: false
     },
     post_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'posts',
-        key: 'post_id'
-      }
+      allowNull: false
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'user',
         key: 'user_id'

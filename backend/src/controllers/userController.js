@@ -352,6 +352,8 @@ function generateRandomString(length) {
         code,
         expired:dnow.setMinutes(dnow.getMinutes()+10)
     }
+
+    let createCode=await models.code.create(newCode)
     //send mail code
     sendMail(email,"Lấy lại mật khẩu",code)
     responseSend(res,true,"a",200)

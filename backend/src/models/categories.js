@@ -7,7 +7,7 @@ export default class categories extends Model {
     category_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     category_name: {

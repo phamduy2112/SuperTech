@@ -7,7 +7,7 @@ export default class pay extends Model {
     pay_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     payment_method: {

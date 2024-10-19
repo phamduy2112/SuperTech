@@ -1,13 +1,13 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class discount extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     discount_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     discount_name: {
@@ -15,7 +15,7 @@ export default class discount extends Model {
       allowNull: true
     },
     discount_percent: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(50),
       allowNull: true
     },
     condition: {

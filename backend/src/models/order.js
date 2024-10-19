@@ -1,13 +1,13 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class order extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     order_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     order_date: {
@@ -15,6 +15,10 @@ export default class order extends Model {
       allowNull: true
     },
     order_total: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    order_total_quatity: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
@@ -67,7 +71,7 @@ export default class order extends Model {
         ]
       },
       {
-        name: "fk_userid_user",
+        name: "fk_userid_userrr",
         using: "BTREE",
         fields: [
           { name: "user_id" },
@@ -77,7 +81,7 @@ export default class order extends Model {
         name: "fk_discountid_discount",
         using: "BTREE",
         fields: [
-          { name: "discount_id" },
+          { name: "discount" },
         ]
       },
     ]

@@ -7,11 +7,11 @@ export default class chat extends Model {
     chat_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     chat_text: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.TEXT,
       allowNull: true
     },
     user_id: {

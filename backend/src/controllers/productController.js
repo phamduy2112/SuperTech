@@ -13,13 +13,14 @@ const getProducts = async (req, res) => {
             {
                 include: [{
                     model: models.product_colors,
-                    as: 'colors'
+                    as: 'product_colors'
                 }]
             }
         );
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.log(error);
     }
 };
 const getProductsByCategoryId = async (req, res) => {

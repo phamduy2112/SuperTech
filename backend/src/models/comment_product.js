@@ -7,7 +7,7 @@ export default class comment_product extends Model {
     comment_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     comment_date: {

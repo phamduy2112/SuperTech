@@ -1,13 +1,13 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
-export default class Products extends Model {
-  static init(sequelize) {
+export default class products extends Model {
+  static init(sequelize, DataTypes) {
   return super.init({
     product_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     product_name: {
@@ -31,7 +31,7 @@ export default class Products extends Model {
       allowNull: true
     },
     product_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: true
     },
     product_quantity: {
