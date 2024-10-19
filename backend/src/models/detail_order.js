@@ -1,12 +1,13 @@
-import { Model, DataTypes } from 'sequelize';
+import _sequelize from 'sequelize';
+const { Model, Sequelize } = _sequelize;
 
 export default class detail_order extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     detail_order_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     detail_order_quality: {

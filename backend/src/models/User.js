@@ -1,14 +1,14 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class user extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     user_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
       autoIncrement: true,
-      allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
     },
     user_name: {
       type: DataTypes.STRING(50),
@@ -36,6 +36,22 @@ export default class user extends Model {
     },
     user_role: {
       type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    level: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    user_gender: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    user_birth: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    user_time: {
+      type: DataTypes.DATE,
       allowNull: true
     }
   }, {

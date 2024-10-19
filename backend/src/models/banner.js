@@ -7,7 +7,7 @@ export default class banner extends Model {
     banner_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     banner_name: {

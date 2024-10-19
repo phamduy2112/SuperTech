@@ -1,13 +1,13 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class infor_product extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     infor_product: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     infor_screen: {

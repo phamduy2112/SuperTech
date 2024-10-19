@@ -1,12 +1,13 @@
-import { Model, DataTypes } from 'sequelize';
+import _sequelize from 'sequelize';
+const { Model, Sequelize } = _sequelize;
 
 export default class favorite_product extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     favorite_product_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       primaryKey: true
     },
     user_id: {
@@ -30,6 +31,14 @@ export default class favorite_product extends Model {
     tableName: 'favorite_product',
     timestamps: false,
     indexes: [
+      {
+        name: "favorite_product_id",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "favorite_product_id" },
+        ]
+      },
       {
         name: "fk_useriddd_user",
         using: "BTREE",
