@@ -1,7 +1,7 @@
 import { axiosWithAuth } from "../axios.config";
 
 export const getProductCateloriesByDad = (name:string) => {
-    return axiosWithAuth(`/list-product-catelories?category=${name}`, {
+    return axiosWithAuth(`/list-product-catelories?category_dad=${name}`, {
       method: "get",
       
     }

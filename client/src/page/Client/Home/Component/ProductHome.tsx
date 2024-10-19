@@ -25,7 +25,7 @@ function ProductHome() {
       setRandomProducts(shuffledProducts);
     }
   }, [listProducts]);
-  console.log(randomProducts);
+  
   
   return (
     <div className='w-[80%] m-auto pt-[2rem] pb-[1rem]'>

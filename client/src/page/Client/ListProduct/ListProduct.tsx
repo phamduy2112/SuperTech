@@ -12,7 +12,7 @@ function ListProduct() {
       const category_dad = searchParams.get('category_dad');  // Get 'category_dad' directly
       const category = searchParams.get('category');          // Get 'category' directly
   
-  const { listProduct } = useAppSelector((state) => state.product);
+  const  listProduct  = useAppSelector((state) => state.product.listProduct);
   const dispatch = useAppDispatch();
 
   useEffect(()=>{
@@ -73,17 +73,9 @@ function ListProduct() {
     </div>
   </div>
       <div className='grid grid-cols-6 gap-y-3'>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
-        <ProductItem/>
+        {listProduct.map((item)=>{
+          return <ProductItem product={item}/>
+        })}
       </div>
     </div>
   )

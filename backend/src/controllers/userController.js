@@ -1,12 +1,15 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
+import { sendMail } from "../config/mail.js";
 import initModels from "../models/init-models.js";
 import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
 import { createToken, createTokenRef, decodeToken, verifyToken } from "../config/jwt.js";
-import { sendMail } from "../config/mail.js";
 import { deleteFile, upload } from "../config/upload.js";
 import path from"path"
+import nodemailer from 'nodemailer';
+
+
 
 let models = initModels(sequelize); 
 let User = models.user; 
@@ -328,31 +331,39 @@ function generateRandomString(length) {
     return result;
   }
 
-// const forgetCheckMail=async(req,res)=>{
-//     // check mail 
-//     let {email}=req.body;
-//     let checkEmail=await User.findOne({
-//         where:{
-//           email:email
-//         }
+  const forgetCheckMail = async (req, res) => {
+    try {
+         // check mail 
+    let {email}=req.body;
+    let checkEmail=await User.findOne({
+        where:{
+          user_email:email
+        }
        
-//     })
-//     console.log(checkEmail);
-//     if(!checkEmail){
-//         responseSend(res,"","Email không tồn tại",404)
-//     }
-//     let dnow=new Date()
-//     let code=generateRandomString(6)
-//     // tạo code
-//     let newCode={
-//         code,
-//         expired:dnow.setMinutes(dnow.getMinutes()+10)
-//     }
+    })
+    console.log(checkEmail);
+    if(!checkEmail){
+        responseSend(res,"","Email không tồn tại",404)
+    }
+    let dnow=new Date()
+    let code=generateRandomString(6)
+    // tạo code
+    let newCode={
+        code,
+        expired:dnow.setMinutes(dnow.getMinutes()+10)
+    }
+    //send mail code
+    sendMail(email,"Lấy lại mật khẩu",code)
+    responseSend(res,true,"a",200)
 
-//     //send mail code
-//     sendMail(email,"Lấy lại mật khẩu",code)
-//     responseSend(res,true,"a",200)
-// }
+  
+    } catch (error) {
+      // Log the error and return a 500 error response
+      console.error("Error in forgetCheckMail:", error);
+      return responseSend(res, "", "Internal server error", 500);
+    }
+  };
+  
 
 export {
     getUser,
@@ -365,7 +376,7 @@ export {
     verifyOldPassword,
     logout,
     resetToken,
-    loginFacebook
-    // forgetCheckMail,
+    loginFacebook,
+    forgetCheckMail,
     // forgetCheckCode
 };

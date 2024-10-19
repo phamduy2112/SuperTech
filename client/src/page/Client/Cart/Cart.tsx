@@ -1,9 +1,10 @@
-import React from 'react'
+import { Container } from "../../../components/Style/Container";
 
-function Cart() {
+export default function Cart() {
   return (
-    <div>Cart</div>
-  )
+    <Container>
+
+    </Container>
+  );
 }
 
-export default Cart

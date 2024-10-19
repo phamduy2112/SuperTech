@@ -2,7 +2,7 @@ import React from "react";
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
 
 function GolenWeek(props) {
-  console.log(props.product);
+
   
   return (
     <div className="w-[100%]

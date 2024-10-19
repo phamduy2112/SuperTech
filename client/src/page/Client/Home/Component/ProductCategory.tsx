@@ -38,7 +38,7 @@ function ProductCategory() {
   const getTabClass = (tabName) =>
     `sm:px-[1rem] md:px-[2rem] py-[1rem] cursor-pointer ${
       activeTab === tabName ? 'text-[#7500CF] border-b-2 border-[#7500CF]' : ''
-    }`;console.log(productPhone);
+    }`;
     
 
   return (
