@@ -25,13 +25,13 @@ export default function Cart() {
                   <div
                   key={item}
                   className="bg-white py-5 rounded-lg shadow space-y-1">
-                    <div className="flex space-x-[10rem] items-center px-10 py-5">
+                    <div className="flex space-x-[6rem] items-center px-5 py-5">
                       <img
                         src="https://th.bing.com/th/id/OIP.hZOYBxk1erwCHpTFUkIHygHaEa?rs=1&pid=ImgDetMain"                                                                                                                 
                         alt="Product"
                         className="w-[7rem h-[7rem] object-cover rounded-lg"
                       />
-                      <div className="flex-1 leading-[3rem] ">
+                      <div className="flex-1 leading-[3rem] justify">
                         <h2 className="text-[1.7rem] font-semibold">
                           Macbook Air 14 inch
                         </h2>
@@ -39,13 +39,13 @@ export default function Cart() {
                         <div className="flex flex-col leading-normal text-lg ">
                           <span className="text-customPurple text-[1.6rem] font-">
                             20.190.000 ₫
-                          </span>
-                          <span className="text-gray-400 line-through text-[1.4rem]">
-                            25.390.000 ₫
+                            <span className="text-gray-400 line-through text-[1.4rem] px-[1rem]">
+                              25.390.000 ₫
+                            </span>
                           </span>
                         </div>
                       </div>
-                    <div className="flex space-x-4 items-center">
+                    <div className="flex space-x-6 items-center">
                         <button className="px-4 py-2 border border-gray-300 rounded-lg">
                           -
                         </button>
