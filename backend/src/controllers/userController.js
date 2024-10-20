@@ -333,39 +333,97 @@ function generateRandomString(length) {
 
   const forgetCheckMail = async (req, res) => {
     try {
-         // check mail 
-    let {email}=req.body;
-    let checkEmail=await User.findOne({
-        where:{
-          user_email:email
-        }
-       
-    })
-    console.log(checkEmail);
-    if(!checkEmail){
-        responseSend(res,"","Email không tồn tại",404)
-    }
-    let dnow=new Date()
-    let code=generateRandomString(6)
-    // tạo code
-    let newCode={
-        code,
-        expired:dnow.setMinutes(dnow.getMinutes()+10)
-    }
-
-    let createCode=await models.code.create(newCode)
-    //send mail code
-    sendMail(email,"Lấy lại mật khẩu",code)
-    responseSend(res,true,"a",200)
-
+      let { email } = req.body;
   
+      // Check if email exists
+      let checkEmail = await User.findOne({
+        where: {
+          user_email: email
+        }
+      });
+  
+      if (!checkEmail) {
+        return responseSend(res, "", "Email không tồn tại", 404);
+      }
+  
+      let dnow = new Date();
+      let code = generateRandomString(6);
+  
+      // Create new code object with expiration
+      let newCode = {
+        code,
+        expired: dnow.setMinutes(dnow.getMinutes() + 10) // Set expiration 10 minutes from now
+      };
+  
+      // Save code to database (create or update)
+      await models.code.create({
+        user_id: checkEmail.user_id,  // Assuming user_id is in User model
+        code: newCode.code,
+        create_at: newCode.expired    // Save expiration time
+      });
+      console.log(checkEmail.user_id );
+      
+      // Send the reset code to the user's email
+      await sendMail(email, "Lấy lại mật khẩu", code);
+  
+      // Set a timeout to delete the code after 3 minutes (180000 milliseconds)
+      setTimeout(async () => {
+        try {
+          await models.code.destroy({
+            where: { user_id: checkEmail.user_id }
+          });
+          console.log("Reset code deleted after 3 minutes");
+        } catch (err) {
+          console.error("Error deleting reset code:", err);
+        }
+      }, 180000); // 3 minutes
+  
+      // Send success response
+      return responseSend(res, true, "Code sent successfully", 200);
+      
     } catch (error) {
-      // Log the error and return a 500 error response
+      // Log error and send response
       console.error("Error in forgetCheckMail:", error);
       return responseSend(res, "", "Internal server error", 500);
     }
   };
+  const forgetCheckCode = async (req, res) => {
+    try {
+      // Lấy mã từ yêu cầu
+      let { code } = req.body;
   
+      // Kiểm tra mã trong cơ sở dữ liệu
+      let checkCode = await models.code.findOne({
+        where: { code: code }
+      });
+  
+      if (!checkCode) {
+        return responseSend(res, false, "Code không đúng", 403);
+      }
+  
+      // Kiểm tra xem mã có hết hạn hay không
+      const currentTime = new Date();
+      if (currentTime > checkCode.dataValues.create_at) {
+        // Nếu mã đã hết hạn, xóa nó và trả về thông báo
+        await models.code.destroy({
+          where: { code_id: checkCode.dataValues.code_id }
+        });
+        return responseSend(res, false, "Code đã hết hạn", 403);
+      }
+  
+      // Nếu mã hợp lệ, xóa mã khỏi cơ sở dữ liệu
+      await models.code.destroy({
+        where: { code_id: checkCode.dataValues.code_id }
+      });
+  
+      // Trả về phản hồi thành công
+      return responseSend(res, true, "Code hợp lệ", 200);
+    } catch (error) {
+      // Bắt lỗi và gửi phản hồi lỗi
+      console.error("Error in forgetCheckCode:", error);
+      return responseSend(res, false, "Internal server error", 500);
+    }
+  };
 
 export {
     getUser,
@@ -380,5 +438,5 @@ export {
     resetToken,
     loginFacebook,
     forgetCheckMail,
-    // forgetCheckCode
+    forgetCheckCode
 };

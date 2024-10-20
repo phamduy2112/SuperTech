@@ -146,7 +146,7 @@ children:[
         element: <Resigter />,
       },
       {
-        path: "/quên-mật-khẩu",
+        path: "/quen-mat-khau",
         element: <ForgetPassword />,
       },
     ]

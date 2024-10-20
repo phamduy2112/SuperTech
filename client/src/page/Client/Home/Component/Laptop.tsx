@@ -46,6 +46,7 @@ function LaptopComponent() {
           <div className="pb-5">
             <div className="flex justify-between items-center">
               <h4 className='text-[2.5rem] font-semibold'>Laptop</h4>
+          
               <div className='flex gap-[.5rem]'>
                 {catelogryLaptop.map((tab) => (
                   <div
@@ -53,13 +54,14 @@ function LaptopComponent() {
                     className={getTabClass(tab.category_name)}
                     onClick={() => handleTabClick(tab.category_name, tab.category_id)} // Bấm vào để cập nhật tab và id
                   >
-                    <span className='sm:text-[1.3rem] md:text-[1.4rem] md:font-medium sm:font-semibold'>
+                    <span className='sm:text-[1.3rem] md:text-[1.8rem]'>
                       {tab.category_name}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
+            
           </div>
 
           <div className="grid grid-cols-5 gap-4">

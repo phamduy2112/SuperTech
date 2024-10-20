@@ -7,7 +7,7 @@ function GolenWeek(props) {
   return (
     <div className="w-[100%]
     
-    mx-auto mt-[1rem] border border-[#E4E7E9] p-[1rem]">
+    mx-auto mt-[1rem] shadow-lg px-[1rem] py-[1.5rem] rounded-[2rem]">
       
       <div>
         <div className="flex">

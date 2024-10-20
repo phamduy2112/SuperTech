@@ -167,7 +167,7 @@ help={formik.touched.email && formik.errors.email ? formik.errors.email : null}
                   onBlur={formik.handleBlur}
                 />      </Form.Item>
       <div className="flex justify-end">
-      <NavLink to="" className="text-[1.5rem] mb-[.5rem] text-[#7500CF] font-semibold hover:text-purple-800">Quên mật khẩu</NavLink>
+      <NavLink to="/quen-mat-khau" className="text-[1.5rem] mb-[.5rem] text-[#7500CF] font-semibold hover:text-purple-800">Quên mật khẩu</NavLink>
     </div>
       <div className="button-edit">
         <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng nhập</Button>
