@@ -4,9 +4,13 @@ import banner8 from "../../../../assets/banner8.png";
 import { IIFE } from '../../../../utils';
 import { getCatelogryDadById } from '../../../../service/catelogry/catelogry.service';
 import { getProductsByIdCatelogry } from '../../../../service/product/product.service';
+import { useAppDispatch } from '../../../../redux/hooks';
+import { addItemToCart } from '../../../../redux/cart/cart.slice';
 
 function LaptopComponent() {
-  
+
+  // Lấy state giỏ hàng từ Redux store
+
   const [catelogryLaptop, setCatelogryLaptop] = useState([]);
   const [productLaptop, setProductLaptop] = useState<any>([]);
   const [idCatelogry, setIdCatelogry] = useState(4); // Mặc định ID ban đầu là 4
