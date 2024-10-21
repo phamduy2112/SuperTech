@@ -6,7 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      
+      colors:{
+        customPurple: '#7500CF',
+      }
     },
     screens: {
 
