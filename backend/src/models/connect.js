@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-
+import { Op } from 'sequelize';
 const sequelize = new Sequelize('datk18', 'root', '', {
   host: 'localhost',
   dialect: "mysql"

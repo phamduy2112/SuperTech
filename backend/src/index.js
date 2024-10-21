@@ -16,6 +16,7 @@ import chatRouter from './routers/chatRouter.js';
 import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
+import searchRouter from './routers/searchproductRouter.js';
 
 const app = express();
 app.use(express.json());
@@ -44,4 +45,5 @@ app.use(chatRouter);
 app.use(categoriesRouter);
 app.use(bannerRouter);
 app.use(payRouter);
+app.use(searchRouter);
 app.listen(8080);
