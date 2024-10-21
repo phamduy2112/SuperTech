@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "../../../../components/Style/Container";
 import "../../../../components/Style/formEdit.css";
 import { FaEdit } from "react-icons/fa";
@@ -20,6 +20,22 @@ const validationSchema = Yup.object().shape({
 });
 
 function UserDetail() {
+  const [imageSrc, setImageSrc] = useState(
+    "https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/370806166_3341899006026926_5652140347426452061_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=4i6dDZbqfbYQ7kNvgGZHvZ5&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AmExBHwWxLWKVX32vfdTf1X&oh=00_AYCVaez-jcz7zKirXcISZeZZZS4kx8ScIcQqvQrq8pCpPg&oe=671B818F"
+  );
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImageSrc(imageUrl);
+    }
+  };
+
+  const handleClick = () => {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) fileInput.click();
+  };
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
 
@@ -53,20 +69,30 @@ function UserDetail() {
         <div className="border-t-[#7500CF] border border-transparent mt-[1.5rem] ">
           <div className="flex">
             <div className="border-r-[#7500CF] flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
-              <div className="flex flex-col items-center">
-                <div className="w-[15rem] h-[15rem] rounded-[50%] overflow-hidden">
-                  <img
-                    className="w-[100%] h-[auto] max-w-full max-h-full"
-                    src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/370806166_3341899006026926_5652140347426452061_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=dZ_Nu8wRLDYQ7kNvgGdvkku&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AuQykorbPs584QhB_6DcMSM&oh=00_AYCUqAiN4zPLkGc5FdX33QjAy-gLr5BAvgZ-GxbVAgQVhg&oe=671673CF"
-                    alt=""
-                  />
-                </div>
-                <div className="mt-[.5rem] cursor-pointer">
-                  <div className="flex text-[1.8rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]">
-                    Chỉnh sửa
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-col items-center">
+      <div className="w-[15rem] h-[15rem] rounded-[50%] overflow-hidden">
+        <img
+          className="w-[100%] h-[auto] max-w-full max-h-full"
+          src={imageSrc}
+          alt="Profile"
+        />
+      </div>
+      <div className="mt-[.5rem] cursor-pointer">
+        <div
+          className="flex text-[1.8rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]"
+          onClick={handleClick}
+        >
+          Chỉnh sửa
+        </div>
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageChange}
+        />
+      </div>
+    </div>
               <div className="text-[1.7rem]">
                 Tham gia vào ngày:
                 <p className="mt-[.3rem] font-semibold">10:43 10/03/2024</p>
