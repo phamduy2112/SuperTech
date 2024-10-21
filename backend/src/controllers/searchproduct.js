@@ -1,7 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-
+// tìm kiếm theo link https://localhost:8080/timkiem?tukhoa="nhập từ khóa"
 let models = initModels(sequelize); 
 let Products = models.products; 
 const searchProducts = async (req, res) => {
