@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './css/Carousel.css'
+import { DataSlideShow } from './DataSlideShow';
 
 function Carousel() {
   const handleNextClick = () => {
@@ -22,107 +23,48 @@ function Carousel() {
     }, 7000);
     return () => clearInterval(intervalId);
   }, []);
-  
+
+
+
   return (
     <div className='w-full flex items-center py-[60px] justify-center'>
       <div className="carousel">
         <div className="frameSlide">
-          <div className="item bg-[url('/img/1.jpg')]">
-            <div className="content">
-              <div className="author">SUPERTECH</div>
-              <div className="title">IPHONE 16</div>
-              <div className="category">ĐIỆN THOẠI</div>
-              <div className="info">
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-              </div>
-              <div className="button">
-                <button>XEM THÊM</button>
-                <button>MUA NGAY</button>
-              </div>
-            </div>
-          </div>
+          {
+            DataSlideShow.map((item, index) => (
+              <div key={index} className="item" style={{ backgroundImage: `url(${item.image})` }}>
 
-          <div className="item bg-[url('/img/2.jpg')]">
-            <div className="content">
-              <div className="author">SUPERTECH</div>
-              <div className="title">IPHONE 16</div>
-              <div className="category">ĐIỆN THOẠI</div>
-              <div className="info">
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
+                <div className="content">
+                  <div className="author">{item.author}</div>
+                  <div className="title">{item.title}</div>
+                  <div className="category">{item.category}</div>
+                  <div className="info">
+                    {item.info}
+                  </div>
+                  <div className="button">
+                    <button>XEM THÊM</button>
+                    <button>MUA NGAY</button>
+                  </div>
+                </div>
               </div>
-              <div className="button">
-                <button>XEM THÊM</button>
-                <button>MUA NGAY</button>
-              </div>
-            </div>
-          </div>
+            ))
+          }
 
-          <div className="item bg-[url('/img/3.jpg')]">
-            <div className="content">
-              <div className="author">SUPERTECH</div>
-              <div className="title">IPHONE 16</div>
-              <div className="category">ĐIỆN THOẠI</div>
-              <div className="info">
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-              </div>
-              <div className="button">
-                <button>XEM THÊM</button>
-                <button>MUA NGAY</button>
-              </div>
-            </div>
-          </div>
 
-          <div className="item bg-[url('/img/4.jpg')]">
-            <div className="content">
-              <div className="author">SUPERTECH</div>
-              <div className="title">IPHONE 16</div>
-              <div className="category">ĐIỆN THOẠI</div>
-              <div className="info">
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-              </div>
-              <div className="button">
-                <button>XEM THÊM</button>
-                <button>MUA NGAY</button>
-              </div>
-            </div>
-          </div>
 
-          <div className="item bg-[url('/img/5.jpg')]">
-            <div className="content">
-              <div className="author">SUPERTECH</div>
-              <div className="title">IPHONE 16</div>
-              <div className="category">ĐIỆN THOẠI</div>
-              <div className="info">
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-                It is a long established fact that a reader will be distracted by the readable content of
-              </div>
-              <div className="button">
-                <button>XEM THÊM</button>
-                <button>MUA NGAY</button>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="arrows">
-          <button id="next" onClick={handleNextClick}>TIẾP TỤC</button>
+          <button className='hover:bg-[blueviolet] transition-all duration-700' id="next" onClick={handleNextClick}>TIẾP TỤC</button>
           <div className="lines"></div>
           <div className="numberSilder">
             <div className="listnumber">
-              <div className="number">01</div>
-              <div className="number">02</div>
-              <div className="number">03</div>
-              <div className="number">04</div>
-              <div className="number">05</div>
+              {
+                DataSlideShow.map((item, index) => (
+                  <div key={index} className="number">{item.id}</div>
+                ))
+
+              }
             </div>
           </div>
         </div>
