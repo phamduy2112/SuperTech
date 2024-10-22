@@ -2,21 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Container } from "../../../../components/Style/Container";
 import "../../../../components/Style/formEdit.css";
 import { FaEdit } from "react-icons/fa";
-import { Breadcrumb, Form as AntForm, Input, Radio } from 'antd';
+import { Breadcrumb, Form as AntForm, Input, Radio } from "antd";
 import ModalChangePassword from "./Component/ModalChangePassword";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { getUserThunk, updateUserDetailThunk } from "../../../../redux/user/user.slice";
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
+import {
+  getUserThunk,
+  updateUserDetailThunk,
+} from "../../../../redux/user/user.slice";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import ImageUploader from "./Component/ChangeImage";
 
 // Yup schema validation
 const validationSchema = Yup.object().shape({
-  user_name: Yup.string().required('Vui lòng nhập họ và tên'),
-  user_phone: Yup.string().required('Vui lòng nhập số điện thoại'),
-  email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
-  user_address: Yup.string().required('Vui lòng nhập địa chỉ'),
-  gender: Yup.string().required('Vui lòng chọn giới tính'),
-  date: Yup.string().required('Vui lòng nhập ngày sinh'),
+  user_name: Yup.string().required("Vui lòng nhập họ và tên"),
+  user_phone: Yup.string().required("Vui lòng nhập số điện thoại"),
+  email: Yup.string()
+    .email("Email không hợp lệ")
+    .required("Vui lòng nhập email"),
+  user_address: Yup.string().required("Vui lòng nhập địa chỉ"),
+  gender: Yup.string().required("Vui lòng chọn giới tính"),
+  date: Yup.string().required("Vui lòng nhập ngày sinh"),
 });
 
 function UserDetail() {
@@ -29,11 +35,18 @@ function UserDetail() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
+
+      // Log the file object details
+      console.log("File details:", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      });
     }
   };
 
   const handleClick = () => {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const fileInput = document.getElementById("fileInput") as HTMLInputElement;
     if (fileInput) fileInput.click();
   };
   const dispatch = useAppDispatch();
@@ -41,13 +54,13 @@ function UserDetail() {
 
   useEffect(() => {
     dispatch(getUserThunk());
-   
   }, [dispatch]);
+  console.log(imageSrc);
 
-  const handleSubmit = (values:object) => {
-    console.log('Form values:', values);
-    dispatch(updateUserDetailThunk(values))
-    dispatch(getUserThunk())
+  const handleSubmit = (values: object) => {
+    console.log("Form values:", values);
+    // dispatch(updateUserDetailThunk(values))
+    dispatch(getUserThunk());
   };
 
   return (
@@ -69,30 +82,9 @@ function UserDetail() {
         <div className="border-t-[#7500CF] border border-transparent mt-[1.5rem] ">
           <div className="flex">
             <div className="border-r-[#7500CF] flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
-            <div className="flex flex-col items-center">
-      <div className="w-[15rem] h-[15rem] rounded-[50%] overflow-hidden">
-        <img
-          className="w-[100%] h-[auto] max-w-full max-h-full"
-          src={imageSrc}
-          alt="Profile"
-        />
-      </div>
-      <div className="mt-[.5rem] cursor-pointer">
-        <div
-          className="flex text-[1.8rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]"
-          onClick={handleClick}
-        >
-          Chỉnh sửa
-        </div>
-        <input
-          id="fileInput"
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleImageChange}
-        />
-      </div>
-    </div>
+              <div className="flex flex-col items-center">
+              <ImageUploader/>
+              </div>
               <div className="text-[1.7rem]">
                 Tham gia vào ngày:
                 <p className="mt-[.3rem] font-semibold">10:43 10/03/2024</p>
@@ -102,12 +94,12 @@ function UserDetail() {
             <div className="p-[2rem] w-[100%] ">
               <Formik
                 initialValues={{
-                  user_name: user?.user_name || '',
-                  user_phone: user?.user_phone || 'Chưa cập nhận',
-                  email: user?.user_email || '',
-                  user_address: user?.user_user_address || 'Chưa cập nhận',
-                  gender: user?.gender || '',
-                  date: user?.date || 'Chưa cập nhận',
+                  user_name: user?.user_name || "",
+                  user_phone: user?.user_phone || "Chưa cập nhận",
+                  email: user?.user_email || "",
+                  user_address: user?.user_user_address || "Chưa cập nhận",
+                  gender: user?.gender || "",
+                  date: user?.date || "Chưa cập nhận",
                 }}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
@@ -165,7 +157,10 @@ function UserDetail() {
 
                     <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
                       <ModalChangePassword />
-                      <button type="submit" className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]">
+                      <button
+                        type="submit"
+                        className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]"
+                      >
                         Cập nhật
                       </button>
                     </div>

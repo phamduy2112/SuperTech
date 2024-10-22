@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import CountdownTimer from './components/CountDown';
 import CodeInput from './components/CodeInput';
 import ChangePassword from './components/ChangePassword';
+import { checkEmail } from '../../../../service/user/user.service';
 
 function ForgetPassword() {
   const navigate = useNavigate();
@@ -28,6 +29,12 @@ function ForgetPassword() {
     }),
     onSubmit:async (values) => {
       console.log("Form data", values);
+     const response=await checkEmail(values)
+     console.log(response);
+     if(response.data.message=="Code sent successfully"){
+      setNumber(2)
+
+     }
      
     
      
@@ -73,7 +80,7 @@ function ForgetPassword() {
       <h2 className="text-[3rem] font-bold mb-4 text-center">Quên mật khẩu</h2>
       <p className="mb-4 text-gray-600 text-center text-[1.5rem]">
 
-      Quên mật khẩu? Vui lòng nhập tên người dùng hoặc địa chỉ email của bạn. Bạn sẽ nhận được liên kết để tạo mật khẩu mới qua email.
+      Quên mật khẩu? aVui lòng nhập tên người dùng hoặc địa chỉ email của bạn. Bạn sẽ nhận được liên kết để tạo mật khẩu mới qua email.
       </p>
       {/* Social Buttons */}
    
