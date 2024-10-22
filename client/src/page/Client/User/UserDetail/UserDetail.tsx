@@ -79,11 +79,22 @@ function UserDetail() {
           </button>
         </div>
 
-        <div className="border-t-[#7500CF] border-t mt-[1.5rem]">
-        <div className="flex flex-col md:flex-row">
-          <div className="md:border-r-[#7500CF] md:border-r md:pr-[3rem] p-[1rem] md:p-0 flex flex-col justify-between items-center md:items-start">
-            <div className="flex flex-col items-center md:items-start">
-              <ImageUploader/>
+        <div className="border-t-[#7500CF] border border-transparent mt-[1.5rem] ">
+          <div className="flex">
+            <div className="border-r-[#7500CF] flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
+              <div className="flex flex-col items-center">
+                <div className="w-[15rem] h-[15rem] rounded-[50%] overflow-hidden">
+                  <img
+                    className="w-[100%] h-[auto] max-w-full max-h-full"
+                    src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/370806166_3341899006026926_5652140347426452061_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=dZ_Nu8wRLDYQ7kNvgGdvkku&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AuQykorbPs584QhB_6DcMSM&oh=00_AYCUqAiN4zPLkGc5FdX33QjAy-gLr5BAvgZ-GxbVAgQVhg&oe=671673CF"
+                    alt=""
+                  />
+                </div>
+                <div className="mt-[.5rem] cursor-pointer">
+                  <div className="flex text-[1.8rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]">
+                    Chỉnh sửa
+                  </div>
+                </div>
               </div>
               <div className="text-[1.5rem] md:text-[1.7rem] text-center md:text-left">
               Tham gia vào ngày:
@@ -156,11 +167,8 @@ function UserDetail() {
                     </AntForm.Item>
 
                     <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
-                    <ModalChangePassword />
-                      <button
-                        type="submit"
-                        className="p-[1rem] border text-[1.5rem] md:text-[1.6rem] border-[#7500CF] text-[#7500CF]"
-                        >
+                      <ModalChangePassword />
+                      <button type="submit" className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]">
                         Cập nhật
                       </button>
                     </div>

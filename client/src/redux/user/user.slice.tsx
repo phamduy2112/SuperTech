@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCatelogry } from "../../service/catelogry/catelogry.service";
-import { changePassword, getUserDetail, updateUserDetail, verifyPassword } from "../../service/user/user.service";
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword } from "../../service/user/user.service";
 
 export const getUserThunk = createAsyncThunk(
   "getUserThunk",
@@ -47,13 +47,25 @@ export const changePasswordDetail = createAsyncThunk(
     }
   },
 );
+export const changeUploadImage = createAsyncThunk(
+  "changeUploadImage",
+  async (payload) => {
+    try {
+      const resp = await uploadImage(payload);
+      return resp.data.content.user_image;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 
 
 
 const initialState = {
   user:{},
   token:null,
-  thongBao:""
+  thongBao:"",
+  imgUser:""
 };
 
 const UserSlice = createSlice({
@@ -83,6 +95,10 @@ const UserSlice = createSlice({
     builder
       .addCase(changePasswordDetail.fulfilled, (state, { payload }) => {
         state.thongBao = payload;
+      })
+    builder
+      .addCase(changeUploadImage.fulfilled, (state, { payload }) => {
+        state.user.user_image = payload;
       })
 
   },

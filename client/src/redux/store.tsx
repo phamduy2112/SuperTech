@@ -13,6 +13,7 @@ import storage from 'redux-persist/lib/storage'; // Sử dụng localStorage cho
 import { categoryReducer } from "./catelogry/catelogry.slice";
 import { userReducer } from './user/user.slice';
 import { productReducer } from './product/product.slice';
+import { cartReducer } from './cart/cart.slice';
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   toggleSidebar: toggleSidebarReducer,
   user: userReducer,
   product: productReducer,
+  cart:cartReducer,
 
 });
 

@@ -28,3 +28,26 @@ export const updateUserDetail = (payload:any) => {
         data:password
     })
   }
+  export const uploadImage = (file) => {
+    return axiosWithAuth("/user-upload-image", {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Đảm bảo gửi đúng loại dữ liệu
+      },
+      method: "put",
+      data: file,
+    });
+  };
+
+  export const checkEmail=(payload)=>{
+    return axiosWithAuth("/forget-check-mail",{
+      method:"post",
+      data:payload
+    })
+  };
+
+  export const checkCode=(code)=>{
+    return axiosWithAuth("/forget-check-code",{
+      method:"post",
+      data:code
+    })
+  }

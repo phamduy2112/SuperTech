@@ -12,7 +12,7 @@ userRouter.post('/reset-token', resetToken);
 userRouter.post('/login-facebook', loginFacebook);
 userRouter.get("/logout",logout)
 userRouter.get('/users',middleToken, getUser );
-userRouter.put('/user-upload-image',isAuthenticated,updateImage)
+userRouter.put('/user-upload-image',middleToken,updateImage)
 userRouter.get('/user-detail',middleToken, userDetail);
 userRouter.put("/user-update",middleToken,updateUser)
 userRouter.post ("/verify-password",middleToken,verifyOldPassword)

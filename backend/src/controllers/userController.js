@@ -219,6 +219,8 @@ const updateUser = async (req, res) => {
 const updateImage=async(req,res)=>{
     try{
         const user_id=req.id;
+        console.log("user_id",user_id);
+        
         const user = await User.findByPk(user_id);
 
         upload.single('image')(req, res, async (err) => {
@@ -391,7 +393,8 @@ function generateRandomString(length) {
     try {
       // Lấy mã từ yêu cầu
       let { code } = req.body;
-  
+        console.log(code);
+        
       // Kiểm tra mã trong cơ sở dữ liệu
       let checkCode = await models.code.findOne({
         where: { code: code }
