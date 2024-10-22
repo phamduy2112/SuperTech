@@ -174,7 +174,7 @@ function AdminOrderEdit() {
                                 modules={{
                                     toolbar: toolbarOptions,
                                 }}
-                                className=' transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
+                                className=' w-full transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
                             />
                         </div>
                     </div>

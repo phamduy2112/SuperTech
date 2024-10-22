@@ -28,7 +28,9 @@ export interface Box {
 export interface SidebarItem {
   id: number;
   title: string;
-  box: Box[];
+  box: Box[
+
+  ];
 }
 
 export const DataSideBar: SidebarItem[] = [
@@ -41,7 +43,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Bảng Điều Khiển',
         icon: <IoHome />,
         iconChevronRight: null,
-        url: '',
+        url: '/admin/trang-chủ',
         child: [],
       }
     ]
@@ -55,18 +57,19 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Danh Mục',
         icon: <MdOutlineCategory />,
         iconChevronRight: <FaChevronRight />,
-        url: '',
+        url: '/admin/quản-lí-loại/danh-mục-sản-phẩm',
         child: [
           {
             id_child: 1,
             title_child: 'Danh Mục Sản Phẩm',
-            url_child: '',
+            url_child: '/admin/quản-lí-loại/danh-mục-sản-phẩm',
             icon_child: <FaRegEye />,
+
           },
           {
             id_child: 2,
             title_child: 'Danh Mục Bài Viết',
-            url_child: '',
+            url_child: 'null',
             icon_child: <HiMiniPencilSquare />,
           }
         ]
@@ -82,18 +85,18 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Sản Phẩm',
         icon: <MdBarChart />,
         iconChevronRight: <FaChevronRight />,
-        url: '',
+        url: '/admin/quản-lí-sản-phẩm',
         child: [
           {
             id_child: 1,
             title_child: 'Xem Sản Phẩm',
-            url_child: '',
+            url_child: '/admin/quản-lí-sản-phẩm',
             icon_child: <FaRegEye />,
           },
           {
             id_child: 2,
             title_child: 'Quản Lí Bình Luận',
-            url_child: '',
+            url_child: '/admin/quản-lí-sản-phẩm/quản-lí-bình-luận',
             icon_child: <HiMiniPencilSquare />,
           }
         ]
@@ -109,7 +112,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Đơn Hàng',
         icon: <BsBoxes />,
         iconChevronRight: null,
-        url: '',
+        url: '/admin/quản-lí-đơn-hàng',
         child: [],
       }
     ]
@@ -123,20 +126,20 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Tài Khoản',
         icon: <FaRegUserCircle />,
         iconChevronRight: <FaChevronRight />,
-        url: '',
+        url: '/admin/quản-lí-khách-hàng',
         child: [
           {
             id_child: 1,
             title_child: 'Khách Hàng',
-            url_child: '',
+            url_child: '/admin/quản-lí-khách-hàng',
             icon_child: <PiUsersThreeThin />
-,
+            ,
           },
           {
             id_child: 2,
             title_child: 'Nhân Viên',
-            url_child: '',
-            icon_child: <LiaUsersCogSolid />            ,
+            url_child: '/admin/quản-lí-nhân-viên',
+            icon_child: <LiaUsersCogSolid />,
           }
         ],
       }
@@ -151,7 +154,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Tin Nhắn hỗ Trợ',
         icon: <PiMessengerLogo />,
         iconChevronRight: null,
-        url: '',
+        url: '/admin/quản-lí-tin-nhắn',
         child: [],
       },
       {
@@ -159,7 +162,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Bài Viết',
         icon: <BiBookAlt />,
         iconChevronRight: null,
-        url: '',
+        url: '/admin/quản-lí-bài-viết',
         child: [],
       },
       {
@@ -167,7 +170,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Mã Giảm Giá',
         icon: <IoCellularOutline />,
         iconChevronRight: null,
-        url: '',
+        url: 'null',
         child: [],
       },
     ]
@@ -180,7 +183,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Cài Đặt Website',
         icon: <IoSettingsOutline />,
         iconChevronRight: null,
-        url: '',
+        url: '/admin/quản-lí-trang-web',
         child: [],
       },
       {

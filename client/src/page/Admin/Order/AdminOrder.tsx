@@ -9,6 +9,7 @@ import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { TbPlaylistAdd } from 'react-icons/tb';
+import { Link } from 'react-router-dom';
 
 function AdminOrder() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -321,10 +322,14 @@ function AdminOrder() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Đơn Hàng Mới
-            </Button>
+            <Link to={'/admin/quản-lí-đơn-hàng/tạo-đơn-hàng'}>
+              <Button className='p-10' type="primary">
+                <TbPlaylistAdd className='text-[18px]' />
+                Đơn Hàng Mới
+
+              </Button>
+            </Link>
+
           </div>
         </div>
 
