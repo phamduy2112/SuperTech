@@ -47,7 +47,7 @@ function ModalChangePassword() {
 
   return (
     <div className="">
-      <button onClick={showModal} className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]">
+      <button onClick={showModal} className="p-[1rem] border text-[1.4rem] md:text-[1.6rem] border-[#7500CF] text-[#7500CF]">
         Đổi mật khẩu
       </button>
 
@@ -72,9 +72,9 @@ function ModalChangePassword() {
               }}
             >
               {({ errors, touched }) => (
-                <Form>
+                <Form className="w-full">
                   <div className="form-group">
-                    <label>Mật khẩu cũ</label>
+                    <label className="text-[1.4rem] md:text-[1.6rem]">Mật khẩu cũ</label>
                     <Field name="oldPassword" type="password" className="ant-input" />
                     {errors.oldPassword && touched.oldPassword ? (
                       <div className="error">{errors.oldPassword}</div>
@@ -95,7 +95,7 @@ function ModalChangePassword() {
         ) : (
           <div>
             <Steps current={1} percent={60} labelPlacement="vertical" items={[{ title: 'Mật khẩu' }, { title: 'Đổi mật khẩu' }]} />
-            <p className="text-[1.3rem]">
+            <p className="text-[1.2rem] md:text-[1.4rem]">
               Cập nhật mật khẩu của bạn thành mật khẩu an toàn hơn. Mật khẩu mới của bạn phải dài ít nhất 8 ký tự, chứa ít nhất một chữ hoa, một chữ thường và một số.
             </p>
             <Formik
@@ -116,16 +116,16 @@ function ModalChangePassword() {
               }}
             >
               {({ errors, touched }) => (
-                <Form>
+                <Form className="w-full">
                   <div className="form-group">
-                    <label>Mật khẩu mới</label>
+                    <label className="text-[1.4rem] md:text-[1.6rem]">Mật khẩu mới</label>
                     <Field name="newPassword" type="password" className="ant-input" />
                     {errors.newPassword && touched.newPassword ? (
                       <div className="error">{errors.newPassword}</div>
                     ) : null}
                   </div>
                   <div className="form-group">
-                    <label>Nhập lại mật khẩu</label>
+                    <label className="text-[1.4rem] md:text-[1.6rem]">Nhập lại mật khẩu</label>
                     <Field name="confirmNewPassword" type="password" className="ant-input" />
                     {errors.confirmNewPassword && touched.confirmNewPassword ? (
                       <div className="error">{errors.confirmNewPassword}</div>

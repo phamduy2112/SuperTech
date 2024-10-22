@@ -112,54 +112,48 @@ function Order() {
     },
   ];
   return (
-    <div>
-      <h3 className='text-[2.5rem] text-[#7500CF] font-semibold'>
+    <div className="w-full px-[1rem] md:px-[3rem] py-[2rem]">
+      <h3 className="text-[2rem] md:text-[2.5rem] text-[#7500CF] font-semibold text-center md:text-left">
       Quản lý Đơn hàng của bạn
       </h3>
-      <div className='py-[1rem] flex gap-[1rem]'>
-  
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#DB363B] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
+      <div className="py-[1rem] flex flex-wrap gap-[1rem] justify-center md:justify-start">  
+      <div className="flex items-center gap-[.5rem]">            <div className={`bg-[#DB363B] w-[1.5rem] h-[1.5rem] rounded-full`}></div>
             <div className={`text-[#DB363B] text-[1.5rem] font-semibold`}>Đang chờ duyệt</div>
           </div>
        
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#FFCC00] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
+          <div className="flex items-center gap-[.5rem]">            <div className={`bg-[#FFCC00] w-[1.5rem] h-[1.5rem] rounded-full]`}></div>
             <div className={`text-[#FFCC00] text-[1.5rem] font-semibold`}>Đang chuẩn bị hàng</div>
           </div>
        
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#2277C6] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
+          <div className="flex items-center gap-[.5rem]">            <div className={`bg-[#2277C6] w-[1.5rem] h-[1.5rem] rounded-full`}></div>
             <div className={`text-[#2277C6] text-[1.5rem] font-semibold`}>Đang giao hàng</div>
           </div>
        
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#2101B0] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
+          <div className="flex items-center gap-[.5rem]">            <div className={`bg-[#2101B0] w-[1.5rem] h-[1.5rem] rounded-full`}></div>
             <div className={`text-[#2101B0] text-[1.5rem] font-semibold`}>Đã huỷ hàng</div>
           </div>
        
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#04C621] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
+          <div className="flex items-center gap-[.5rem]">            <div className={`bg-[#04C621] w-[1.5rem] h-[1.5rem] rounded-full`}></div>
             <div className={`text-[#04C621] text-[1.5rem] font-semibold`}>Thành công</div>
           </div>
        
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#000000] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
+        <div className="flex items-center gap-[.5rem]">
+            <div className={`bg-[#000000] w-[1.5rem] h-[1.5rem] rounded-full`}></div>
             <div className={`text-[#000000] text-[1.5rem] font-semibold`}>Không nhận hàng</div>
           </div>
        
         
       </div>
-      <h4 className='text-[1.7rem] font-semibold'>
+      <h4 className="text-[1.5rem] md:text-[1.7rem] font-semibold text-center md:text-left">
       Nếu không nhận hàng hoặc huỷ hàng quá 5 lần sẽ vô hiệu quá tài khoản !
       </h4>
-      <form action="" className="w-[100%] h-[38px] py-[1rem] formEdit">
+      <form action="" className="w-full py-[1rem]">
       <Search
       placeholder="Tìm kiếm theo mã đơn hàng"
       allowClear
       // onSearch={onSearch}
-      className='w-[100%] inputSearch'
-    />
+      className="w-full md:w-[50%] mx-auto md:mx-0 inputSearch"
+      />
             </form>
             
       <div className='tableEdit'>

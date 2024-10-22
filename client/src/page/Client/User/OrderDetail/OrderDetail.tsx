@@ -84,29 +84,32 @@ function OrderDetail() {
     console.log('params', pagination, filters, sorter, extra);
   };
   return (
-    <div className='w-[100%] shadow-lg py-[4rem] px-[3rem]'>
+    <div className="w-full shadow-lg py-[2rem] md:py-[4rem] px-[1rem] md:px-[3rem]">
       <div>
-        <div className='flex justify-between items-center'>
-          <h3 className='text-[2.2rem] font-semibold'>Chi tiết đơn hàng <span className='text-[#0084FF]'>#1306</span></h3>
-          <p className='text-[1.7rem] font-semibold'>Trạng thái vận chuyển: <span className='text-red-500'>Chưa chuyển</span></p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+      <h3 className="text-[1.8rem] md:text-[2.2rem] font-semibold">Chi tiết đơn hàng <span className='text-[#0084FF]'>#1306</span></h3>
+          <p className="text-[1.4rem] md:text-[1.7rem] font-semibold mt-[.5rem] md:mt-0">Trạng thái vận chuyển: <span className='text-red-500'>Chưa chuyển</span></p>
         </div>
-        <div className='flex gap-[1rem] py-[1rem]'>
-          <p className='text-[1.4rem] font-semibold'>Khuyến mãi: <span>0</span></p>
-          <p className='text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
-          <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>0</span></p>
+        <div className="flex flex-col md:flex-row gap-[1rem] py-[1rem]">
+          <p className="text-[1.2rem] md:text-[1.4rem] font-semibold">
+            Khuyến mãi: <span>0</span></p>
+          <p className="text-[1.2rem] md:text-[1.4rem] font-semibold">
+            Phí vận chuyển: <span>0</span></p>
+          <p className="text-[1.2rem] md:text-[1.4rem] font-semibold">
+            Tổng tiền: <span className='text-[red]'>0</span></p>
         </div>
-        <div className='flex justify-between'>
-          <div className='w-[49%]'>
-            <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
-            <div className='h-[8rem] shadow-md p-[2rem]'>
-            <p className='text-[1.5rem] font-semibold'>Địa chỉ: <span>123, Huyện Đất Đỏ, Bà Rịa-Vũng Tàu</span></p>
-            <p className='text-[1.5rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0798961321</span></p>
+        <div className="flex flex-col md:flex-row justify-between gap-[1rem]">
+        <div className="w-full md:w-[49%]">
+        <h4 className="font-semibold text-[1.5rem] md:text-[1.7rem] mb-[1rem]">Địa chỉ giao hàng</h4>
+            <div className="h-auto shadow-md p-[1.5rem] md:p-[2rem]">
+            <p className="text-[1.3rem] md:text-[1.5rem] font-semibold">Địa chỉ: <span>123, Huyện Đất Đỏ, Bà Rịa-Vũng Tàu</span></p>
+            <p className="text-[1.3rem] md:text-[1.5rem] mt-[1rem] font-semibold">Số điện thoại: <span>0798961321</span></p>
             </div>
           </div>
-          <div className='w-[49%]'>
-            <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
-            <div className='h-[8rem] shadow-md p-[2rem]'>
-            <p className='text-[1.5rem] font-semibold'>Thanh toán: <span>Thanh toán qua MoMo</span></p>
+          <div className='w-full md:w-[49%]'>
+            <h4  className="font-semibold text-[1.5rem] md:text-[1.7rem] mb-[1rem]">Phương thức thanh toán</h4>
+            <div className="h-auto shadow-md p-[1.5rem] md:p-[2rem]">
+            <p className="text-[1.3rem] md:text-[1.5rem] font-semibold">Thanh toán: <span>Thanh toán qua MoMo</span></p>
             </div>
           </div>
         </div>
@@ -115,7 +118,8 @@ function OrderDetail() {
         
         </div>
         <div className='rounded-lg mt-[1rem]'>
-          <button className='bg-yellow-400 text-[1.5rem] p-[1rem] rounded-lg'>Huỷ đơn hàng</button>
+        <button className="bg-yellow-400 text-[1.3rem] md:text-[1.5rem] p-[1rem] rounded-lg">
+        Huỷ đơn hàng</button>
         </div>
       </div>
     </div>
