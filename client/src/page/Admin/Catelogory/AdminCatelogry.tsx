@@ -1,5 +1,5 @@
 
-import { Button, Checkbox, Popover, Table } from 'antd';
+import { Popover, Button, Checkbox, Table, } from 'antd';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FiFilter } from 'react-icons/fi';
@@ -7,18 +7,19 @@ import { GoSearch } from 'react-icons/go';
 import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
-import { TbPlaylistAdd } from 'react-icons/tb';
+import AdminAddCatelogry from './Component/AdminAddCatelogry';
+import AdminEditCatelogry from './Component/AdminEditCatelogry';
+
 
 function AdminCatelogry() {
+
   const [selectedCheckbox, setSelectedCheckbox] = useState('');
+  const [key, setKey] = useState(0);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
-    Swal.fire({
-      icon: 'info',
-      text: `Đã mở trang sửa cho danh mục sản phẩm có ID: ${key}`,
-      confirmButtonText: 'OK',
-    });
-  };
+    setKey(key)
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {
@@ -61,7 +62,7 @@ function AdminCatelogry() {
       ),
     },
     {
-      title: 'Tên Sản Phẩm',
+      title: 'Tên Danh Mục',
       dataIndex: 'name',
       render: (text: string) => <a>{text}</a>,
     },
@@ -70,11 +71,15 @@ function AdminCatelogry() {
       dataIndex: 'date',
     },
     {
+      title: 'Catelogory_dad',
+      dataIndex: 'catelogory_dad',
+    },
+    {
       title: 'Vai Trò',
       dataIndex: 'role',
       render: (text: string) => (
         <div className="flex-1 flex items-center gap-3">
-          <div className={`w-[10px] rounded-full h-[10px] ${text === 'Sản Phẩm Mới' ? 'bg-[#2af52a]' : ''} ${text === 'Khuyến Mãi' ? 'bg-[#ffd000]' : ''} ${text === 'Nổi Bật' ? 'bg-[red]' : ''}`}></div>
+          <div className={`w-[10px] rounded-full h-[10px] ${text === 'Danh Mục Thường' ? 'bg-[#2af52a]' : ''} ${text === 'Danh Mục Khuyến Mãi' ? 'bg-[#ffd000]' : ''} ${text === 'Danh Mục Nổi Bật' ? 'bg-[red]' : ''}`}></div>
           {text}
         </div>
       ),
@@ -103,70 +108,80 @@ function AdminCatelogry() {
       key: '1',
       name: 'Sản Phẩm A',
       date: '2023-01-01',
-      role: 'Sản Phẩm Mới',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Thường',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '2',
       name: 'Sản Phẩm B',
       date: '2023-02-01',
-      role: 'Khuyến Mãi',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Khuyến Mãi',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '3',
       name: 'Sản Phẩm C',
       date: '2023-03-01',
-      role: 'Nổi Bật',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Nổi Bật',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '4',
       name: 'Sản Phẩm D',
       date: '2023-04-01',
-      role: 'Sản Phẩm Mới',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Thường',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '5',
       name: 'Sản Phẩm E',
       date: '2023-05-01',
-      role: 'Khuyến Mãi',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Khuyến Mãi',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '6',
       name: 'Sản Phẩm F',
       date: '2023-06-01',
-      role: 'Nổi Bật',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Nổi Bật',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '7',
       name: 'Sản Phẩm G',
       date: '2023-07-01',
-      role: 'Sản Phẩm Mới',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Thường',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '8',
       name: 'Sản Phẩm H',
       date: '2023-08-01',
-      role: 'Khuyến Mãi',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Khuyến Mãi',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '9',
       name: 'Sản Phẩm I',
       date: '2023-09-01',
-      role: 'Nổi Bật',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Nổi Bật',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
     {
       key: '10',
       name: 'Sản Phẩm J',
       date: '2023-10-01',
-      role: 'Sản Phẩm Mới',
+      catelogory_dad: 'Chưa nhập',
+      role: 'Danh Mục Thường',
       image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
     },
   ];
@@ -230,6 +245,7 @@ function AdminCatelogry() {
 
 
 
+
   const rowSelection = {
     onChange: onSelectChange,
   };
@@ -244,10 +260,8 @@ function AdminCatelogry() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Danh Mục Sản Phẩm Mới
-            </Button>
+            <AdminAddCatelogry />
+
           </div>
         </div>
 
@@ -260,7 +274,6 @@ function AdminCatelogry() {
           <Popover
             content={<div className='flex flex-col'>
 
-
               <div className='flex justify-between p-[12px] w-[200px] gap-2'>
                 <label className='text-[14px]'>Mới nhất</label>
                 <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
@@ -269,15 +282,6 @@ function AdminCatelogry() {
                 <label className='text-[14px]'>Cũ nhất</label>
                 <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
               </div>
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Yêu Thích</label>
-                <Checkbox checked={selectedCheckbox === 'love'} onChange={() => setSelectedCheckbox('love')}></Checkbox>
-              </div>
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Khuyến Mãi</label>
-                <Checkbox checked={selectedCheckbox === 'sale'} onChange={() => setSelectedCheckbox('sale')}></Checkbox>
-              </div>
-
             </div>}
             title="Lọc"
             trigger="click"
@@ -302,6 +306,9 @@ function AdminCatelogry() {
             size='large'
             pagination={{ pageSize: 10 }}
           />
+          {
+            key != 0 ? <AdminEditCatelogry props={key} /> : ''
+          }
         </div>
       </div>
     </div>

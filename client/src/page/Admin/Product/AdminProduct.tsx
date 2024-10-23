@@ -288,8 +288,7 @@ function AdminProduct() {
               Tải về PDF
             </Button>
             <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Sản Phẩm Mới
+             <Link>
             </Button>
           </div>
         </div>

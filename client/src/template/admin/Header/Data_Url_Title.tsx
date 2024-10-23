@@ -66,12 +66,6 @@ export const DataSideBar: SidebarItem[] = [
             icon_child: <FaRegEye />,
 
           },
-          {
-            id_child: 2,
-            title_child: 'Danh Mục Bài Viết',
-            url_child: 'null',
-            icon_child: <HiMiniPencilSquare />,
-          }
         ]
       }
     ]
