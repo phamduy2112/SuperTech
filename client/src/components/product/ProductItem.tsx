@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import image from '../../assets/new.png';
 import oficie from '../../assets/oficie.png';
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
@@ -8,9 +8,18 @@ import { CiHeart } from "react-icons/ci";
 import { Tooltip } from "antd";
 import { IoEyeOutline } from "react-icons/io5";
 import './product.css'
+import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
+import { useSpring,animated } from "react-spring";
 function ProductItem() {
+  const [isvisibleProduct, setisvisibleProduct] = useState(false);
+
+  const slideInAnimationTaskProduct = useSpring({
+    transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
+    opacity: isvisibleProduct ? 1 : 0,
+  });
   return (
-    <div className="relative w-[100%] pb-[1rem] product bg-white overflow-hidden hover:scale-105  hover:translate-x-[0%]">
+    <div>
+        <div className="relative w-[100%] pb-[1rem] product bg-white overflow-hidden hover:scale-105  hover:translate-x-[0%]">
       <div className="product__icon flex flex-col gap-3">
   <div className="bg-black p-[.5rem] rounded-md">
     <div className="text-[2.6rem] cursor-pointer text-white flex items-center justify-center ">
@@ -20,8 +29,8 @@ function ProductItem() {
     </div>
   </div>
   <div className="bg-black p-[.5rem] rounded-md">
-    <div className="text-[2.6rem] cursor-pointer text-white flex items-center justify-center">
-      <Tooltip title="Xem tóm tắt sản phẩm">
+    <div onClick={()=>setisvisibleProduct(!isvisibleProduct)} className="text-[2.6rem] cursor-pointer text-white flex items-center justify-center">
+      <Tooltip title="Xem tóm tắt sản phẩm" >
         <IoEyeOutline />
       </Tooltip>
     </div>
@@ -82,6 +91,22 @@ function ProductItem() {
           </div>
         </div>
       </div>
+      {
+        isvisibleProduct && (
+          // slideInAnimationTaskProduct
+          <div className="fixed inset-0 z-30">
+          <div 
+            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
+            onClick={() => setisvisibleProduct(false)}
+          > <animated.div style={slideInAnimationTaskProduct}>
+          <TaskEyes onClose={() => setisvisibleProduct(false)} />
+        </animated.div></div>
+         
+        </div>
+        )
+      }
+    </div>
+  
 
   );
 }
