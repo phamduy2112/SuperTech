@@ -13,8 +13,12 @@ import { checkEmail } from '../../../../service/user/user.service';
 
 function ForgetPassword() {
   const navigate = useNavigate();
-  const [number,setNumber]=useState(2);
-
+  const [number,setNumber]=useState(1);
+  const [emailUser,setEmailUser]=useState<any>(null);
+  
+  const updateNumber = (newNumber: number) => {
+    setNumber(newNumber);
+  };
   const formik = useFormik({
     initialValues: {
   
@@ -29,6 +33,7 @@ function ForgetPassword() {
     }),
     onSubmit:async (values) => {
       console.log("Form data", values);
+      setEmailUser(values.email)
      const response=await checkEmail(values)
      console.log(response);
      if(response.data.message=="Code sent successfully"){
@@ -116,9 +121,9 @@ function ForgetPassword() {
         </div>
       </Form>) :
       number ==2 ? (
-           <CodeInput/>
+           <CodeInput updateNumber={updateNumber}/>
       ) :(
-        <ChangePassword/>
+        <ChangePassword email={emailUser}/>
       )
  
    

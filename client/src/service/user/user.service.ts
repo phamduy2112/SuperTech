@@ -51,3 +51,9 @@ export const updateUserDetail = (payload:any) => {
       data:code
     })
   }
+export const fogetCheckPassword=(payload)=>{
+  return axiosWithAuth("/forget-reset-password",{
+    method:"put",
+    data:payload
+  })
+}

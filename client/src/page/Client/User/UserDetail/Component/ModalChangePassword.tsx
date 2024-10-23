@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { changePasswordDetail, verifyPasswordDetail } from '../../../../../redux/user/user.slice';
+import useSweetAlert from '../../../../../hooks/Notification.hook';
 
 // Schema validation bằng Yup
 const validationSchemaStep1 = Yup.object().shape({
@@ -24,6 +25,7 @@ const validationSchemaStep2 = Yup.object().shape({
 });
 
 function ModalChangePassword() {
+  const {showAlert}= useSweetAlert();
   const [page, setPage] = useState(1);
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
@@ -66,6 +68,9 @@ function ModalChangePassword() {
                
                 if(response.message=="Thành công!"){
                   setPage(2)
+                }else{
+                  showAlert("error",response.data.message);
+
                 }
                 
                 // setPage(2);
@@ -111,6 +116,8 @@ function ModalChangePassword() {
                
                if(response.message=="Thành công!"){
                 handleOk();
+                showAlert("success","Cập nhận mật khẩu thành công");
+
                }
                
               }}

@@ -401,7 +401,7 @@ function generateRandomString(length) {
       });
   
       if (!checkCode) {
-        return responseSend(res, false, "Code không đúng", 403);
+        return responseSend(res, false, "Code không đúng", 200);
       }
   
       // Kiểm tra xem mã có hết hạn hay không
@@ -411,7 +411,7 @@ function generateRandomString(length) {
         await models.code.destroy({
           where: { code_id: checkCode.dataValues.code_id }
         });
-        return responseSend(res, false, "Code đã hết hạn", 403);
+        return responseSend(res, false, "Code đã hết hạn", 200);
       }
   
       // Nếu mã hợp lệ, xóa mã khỏi cơ sở dữ liệu
@@ -427,7 +427,34 @@ function generateRandomString(length) {
       return responseSend(res, false, "Internal server error", 500);
     }
   };
-
+  const resetPasswordNoToken = async (req, res) => {
+    try {
+      let { email, newPassword,confirmNewPassword } = req.body;
+  
+      // Check if the email exists
+      let checkEmail = await User.findOne({
+        where: { user_email: email }
+      });
+  
+      if (!checkEmail) {
+        return responseSend(res, "", "Email không tồn tại", 404);
+      }
+  
+      // Hash the new password using bcrypt
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+      // Update the user's password in the database
+      checkEmail.user_password = hashedPassword;
+      await checkEmail.save();
+  
+      // Return success response
+      return responseSend(res, true, "Mật khẩu đã được cập nhật", 200);
+  
+    } catch (error) {
+      console.error("Error in resetPasswordNoToken:", error);
+      return responseSend(res, "", "Internal server error", 500);
+    }
+  };
 export {
     getUser,
     register,
@@ -441,5 +468,6 @@ export {
     resetToken,
     loginFacebook,
     forgetCheckMail,
-    forgetCheckCode
+    forgetCheckCode,
+    resetPasswordNoToken
 };

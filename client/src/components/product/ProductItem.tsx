@@ -51,9 +51,10 @@ function ProductItem(props) {
           <div>
             <img src={image} alt="" className="w-[5.5rem]" />
           </div>
-          <div className="bg-[#7500CF] w-[5rem] h-[3rem] text-center mr-[2rem] mt-[1rem]">
-            <span className="text-white text-[1.6rem] leading-[2.8rem]">-23%</span>
-          </div>
+          {props.product.product_discount>0 ?(   <div className="bg-[#7500CF] w-[5rem] h-[3rem] text-center mr-[2rem] mt-[1rem]">
+            <span className="text-white text-[1.6rem] leading-[2.8rem]">-{props.product.product_discount}%</span>
+          </div>) :''}
+       
         </div>
 
         <div>

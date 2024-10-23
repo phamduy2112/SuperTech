@@ -2,8 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import { changeUploadImage } from "../../../../../redux/user/user.slice";
 import { IMG_BACKEND } from "../../../../../constants";
+import useSweetAlert from "../../../../../hooks/Notification.hook";
 
 function ImageUploader() {
+  const {showAlert}= useSweetAlert();
+
   const imageRef = useRef<HTMLInputElement | null>(null); // Ref for file input
   const imgUser=useAppSelector((state)=>state.user.imgUser)
   const dispatch = useAppDispatch(); // To dispatch the upload action
@@ -29,6 +32,8 @@ function ImageUploader() {
     try {
       // Dispatch the thunk action to upload the image
       await dispatch(changeUploadImage(formData));
+      showAlert("success","Chỉnh hình thành công");
+
       console.log("Image uploaded successfully");
     } catch (error) {
       console.error("Failed to upload image", error);
@@ -45,7 +50,7 @@ function ImageUploader() {
       <div className="w-[15rem] h-[15rem] rounded-[50%] overflow-hidden">
       <div className="xl:text-[25px] md:text-[2rem]">
                         {  <div
-                className={`flex h-[30rem] w-full items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
+                className={`flex text-[3rem] h-[15rem] w-full items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
                 style={{
                   backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
                 }}
@@ -56,9 +61,9 @@ function ImageUploader() {
                     </div>
        
       </div>
-      <div className="mt-[.5rem] cursor-pointer">
+      <div className="mt-[.5rem] cursor-pointer flex justify-center items-center">
         <div
-          className="flex text-[1.8rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]"
+          className="flex text-[1.8rem] mt-[1rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]"
           onClick={editProfileHandler}
         >
           Chỉnh sửa

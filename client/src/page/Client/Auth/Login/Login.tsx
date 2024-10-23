@@ -11,10 +11,11 @@ import * as Yup from "yup";
 import { login } from "../../../../service/auth/auth.service";
 import { saveLocalStorage } from "../../../../utils";
 import FacebookLogin from 'react-facebook-login';
+import useSweetAlert from "../../../../hooks/Notification.hook";
 
 function Login() {
   const navigate = useNavigate();
-
+  const {showAlert}= useSweetAlert();
   const formik = useFormik({
     initialValues: {
   
@@ -43,21 +44,13 @@ function Login() {
           timer: 1500, // Thời gian hiển thị
           timerProgressBar: true, // Kích hoạt thanh tiến trình
         });
-        // navigate("/")
+       
         const token = res.data.content.token; 
         saveLocalStorage("token",token)
-        
-        console.log(res);
-        
+        navigate("/")
+       
       } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "error", // Thay đổi icon thành "error" khi thất bại
-          title: res.data.message || "Đăng kí thất bại", // Đảm bảo có thông điệp fallback
-          showConfirmButton: false,
-          timer: 1500, // Thời gian hiển thị
-          timerProgressBar: true, // Kích hoạt thanh tiến trình
-        });
+        showAlert("error","Enail hoặc mật khẩu không đúng")
       }
 
 

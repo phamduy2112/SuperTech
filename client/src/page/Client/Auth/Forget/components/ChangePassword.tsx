@@ -4,8 +4,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import CountdownTimer from './CountDown';
+import { fogetCheckPassword } from '../../../../../service/user/user.service';
+import useSweetAlert from '../../../../../hooks/Notification.hook';
 
-const ChangePassword: React.FC = () => {
+const ChangePassword: React.FC <any> = ({email}) => {
+  const navigate=useNavigate();
+  const {showAlert}= useSweetAlert();
     const formik = useFormik({
         initialValues: {
       
@@ -28,7 +32,17 @@ const ChangePassword: React.FC = () => {
         onSubmit:async (values) => {
           console.log("Form data", values);
          
-        
+        const data={
+          email,
+          ...values
+        }
+        const response=await fogetCheckPassword(data)
+        console.log(response);
+        if(response.data.message=="Mật khẩu đã được cập nhật"){
+          navigate("/đăng-nhập")
+          showAlert("success",response.data.message);
+
+        }
  
   
         

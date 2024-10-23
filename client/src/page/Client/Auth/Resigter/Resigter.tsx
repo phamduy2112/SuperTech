@@ -9,10 +9,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { signup } from "../../../../service/auth/auth.service";
 import Swal from 'sweetalert2'
+import useSweetAlert from "../../../../hooks/Notification.hook";
 
 function Resigter() {
   // Sử dụng hook useFormik để quản lý form
   const navigate = useNavigate();
+  const {showAlert}= useSweetAlert();
 
   const formik = useFormik({
     initialValues: {
@@ -42,23 +44,10 @@ function Resigter() {
       const res = await signup(payload);
 
       if (res.data.message === "Đăng kí thành công!") {
-        Swal.fire({
-          position: "top-end",
-          title: res.data.message,
-          showConfirmButton: false,
-          timer: 1500, // Thời gian hiển thị
-          timerProgressBar: true, // Kích hoạt thanh tiến trình
-        });
+        showAlert("success","Đăng kí thành công");
         navigate("/đăng-nhập")
       } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "error", // Thay đổi icon thành "error" khi thất bại
-          title: res.data.message || "Đăng kí thất bại", // Đảm bảo có thông điệp fallback
-          showConfirmButton: false,
-          timer: 1500, // Thời gian hiển thị
-          timerProgressBar: true, // Kích hoạt thanh tiến trình
-        });
+        showAlert("success","Email đã tồn tại");
       }
 console.log(res);
 

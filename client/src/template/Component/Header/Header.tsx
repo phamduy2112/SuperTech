@@ -210,27 +210,7 @@ console.log(token);
               <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
             </div>
           </div>
-          <div>
-            <Dropdown
-              menu={{
-                items,
-              }}
-              placement="bottomLeft"
-              arrow
-              trigger={["click"]}
-          
-            >
-              <Button
-                className="flex xl:h-[40px] md:h-[3rem] items-center xl:gap-3 md:gap-2 md:rounded-[1.5rem] xl:rounded-[3rem] DropDown"
-
-              >
-                <FaBars />
-                <div className="xl:text-[25px] md:text-[2rem]">
-                  <FaUserCircle />
-                </div>
-              </Button>
-            </Dropdown>
-          </div>
+       <DropdownUser/>
                 </div>
       </div>
       </div>

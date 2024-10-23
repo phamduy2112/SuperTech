@@ -6,19 +6,28 @@ import {  NavLink } from "react-router-dom";
 import { CiHeart, CiUser } from "react-icons/ci";
 import { IoMdExit } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
+import { useAppSelector } from '../../../redux/hooks';
+import { IMG_BACKEND } from '../../../constants';
 function User() {
-  
+  const user: any = useAppSelector((state) => state.user.user);
+
   return (
     <Container className="pt-[1rem]">
    <div className="flex justify-between">
         <div className="w-[25%] p-[2rem]">
           <div className="flex gap-[1rem]">
             <div className="w-[7rem] h-[7rem] rounded-[50%] overflow-hidden">
-              <img
-                className="w-[100%] h-[auto] max-w-full max-h-full"
-                src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/370806166_3341899006026926_5652140347426452061_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=dZ_Nu8wRLDYQ7kNvgGdvkku&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AuQykorbPs584QhB_6DcMSM&oh=00_AYCUqAiN4zPLkGc5FdX33QjAy-gLr5BAvgZ-GxbVAgQVhg&oe=671673CF"
-                alt=""
-              />
+            <div className="xl:text-[25px] md:text-[2rem]">
+                        {  <div
+                className={`flex text-[2.5rem] h-[7rem] w-full items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
+                style={{
+                  backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
+                }}
+              >
+                              {(user?.user_image==null && user?.user_name) ? user.user_name[0].toUpperCase() : null}
+
+              </div>}
+                    </div>
             </div>
             <div className="mt-[.5rem]">
               <h3 className="text-[2rem]">Phạm Ngọc Duy</h3>

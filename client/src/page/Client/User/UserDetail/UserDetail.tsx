@@ -12,6 +12,7 @@ import {
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ImageUploader from "./Component/ChangeImage";
+import useSweetAlert from "../../../../hooks/Notification.hook";
 
 // Yup schema validation
 const validationSchema = Yup.object().shape({
@@ -26,6 +27,8 @@ const validationSchema = Yup.object().shape({
 });
 
 function UserDetail() {
+  const {showAlert}= useSweetAlert();
+
   const [imageSrc, setImageSrc] = useState(
     "https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/370806166_3341899006026926_5652140347426452061_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=4i6dDZbqfbYQ7kNvgGZHvZ5&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AmExBHwWxLWKVX32vfdTf1X&oh=00_AYCVaez-jcz7zKirXcISZeZZZS4kx8ScIcQqvQrq8pCpPg&oe=671B818F"
   );
@@ -59,7 +62,9 @@ function UserDetail() {
 
   const handleSubmit = (values: object) => {
     console.log("Form values:", values);
-    // dispatch(updateUserDetailThunk(values))
+    dispatch(updateUserDetailThunk(values))
+    showAlert("success","Cập nhận thành công");
+
     dispatch(getUserThunk());
   };
 
@@ -97,8 +102,8 @@ function UserDetail() {
                   user_name: user?.user_name || "",
                   user_phone: user?.user_phone || "Chưa cập nhận",
                   email: user?.user_email || "",
-                  user_address: user?.user_user_address || "Chưa cập nhận",
-                  gender: user?.gender || "",
+                  user_address: user?.user_address || "Chưa cập nhận",
+                  gender: user?.gender || "1",
                   date: user?.date || "Chưa cập nhận",
                 }}
                 validationSchema={validationSchema}
@@ -139,7 +144,7 @@ function UserDetail() {
 
                     <AntForm.Item label="Giới tính">
                       <Field name="gender" as={Radio.Group}>
-                        <Radio value="1">Nam</Radio>
+                        <Radio value="1" defaultChecked>Nam</Radio>
                         <Radio value="2">Nữ</Radio>
                         <Radio value="3">Khác</Radio>
                       </Field>

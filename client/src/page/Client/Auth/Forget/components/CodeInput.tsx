@@ -5,9 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import CountdownTimer from './CountDown';
 import { checkCode } from '../../../../../service/user/user.service';
-
-const CodeInput: React.FC = () => {
+import useSweetAlert from '../../../../../hooks/Notification.hook';
+interface ChildComponentProps {
+    updateNumber: (newNumber: number) => void;
+  }
+const CodeInput: React.FC<ChildComponentProps>= (
+    {updateNumber}
+) => {
     const navigate = useNavigate();
+    const {showAlert}= useSweetAlert();
+
     const [isCodeSent, setIsCodeSent] = useState(false); // Trạng thái để hiển thị mã xác thực
     const [code, setcode] = useState<string[]>(Array(6).fill("")); // Mảng để lưu mã xác thực
 
@@ -20,10 +27,15 @@ const CodeInput: React.FC = () => {
         }),
         onSubmit: async (values) => {
             console.log(values); // Đảm bảo rằng mã xác thực sẽ được in ra
-            const response=await checkCode(code)
+            const response=await checkCode(values)
             if(response.data.message=="Code hợp lệ"){
-              setNumber(3)
+                    updateNumber(3)
+            }else{
+                showAlert("success",response.data.message);
+
             }
+         console.log(response);
+         
         }
     });
 
