@@ -11,7 +11,7 @@ import './product.css';
 import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
 import { useSpring, animated } from "react-spring";
 import { useAppDispatch } from "../../redux/hooks";
-import { addItemToCart } from "../../redux/cart/cart.slice";
+import { addItemToCart } from "../../redux/cart/cart.slide";
 
 function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);

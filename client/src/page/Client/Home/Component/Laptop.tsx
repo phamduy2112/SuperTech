@@ -5,7 +5,7 @@ import { IIFE } from '../../../../utils';
 import { getCatelogryDadById } from '../../../../service/catelogry/catelogry.service';
 import { getProductsByIdCatelogry } from '../../../../service/product/product.service';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { addItemToCart } from '../../../../redux/cart/cart.slice';
+import { addItemToCart } from '../../../../redux/cart/cart.slide';
 
 function LaptopComponent() {
 

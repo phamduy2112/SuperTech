@@ -13,7 +13,7 @@ import storage from 'redux-persist/lib/storage'; // Sử dụng localStorage cho
 import { categoryReducer } from "./catelogry/catelogry.slice";
 import { userReducer } from './user/user.slice';
 import { productReducer } from './product/product.slice';
-import { cartReducer } from './cart/cart.slice';
+import { cartReducer } from '../redux/cart/cart.slide';
 
 const persistConfig = {
   key: 'root',

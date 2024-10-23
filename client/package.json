@@ -12,7 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@reduxjs/toolkit": "^2.2.7",
+    "@reduxjs/toolkit": "^2.3.0",
     "@tiptap/core": "^2.8.0",
     "@tiptap/extension-bullet-list": "^2.8.0",
     "@tiptap/extension-ordered-list": "^2.8.0",
@@ -67,7 +67,7 @@
     "tailwindcss": "^3.4.13",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.9"
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "eslint.config.js",
