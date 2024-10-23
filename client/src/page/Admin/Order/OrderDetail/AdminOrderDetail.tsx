@@ -5,8 +5,10 @@ import { IoCloudDownloadOutline } from 'react-icons/io5'
 import { MdOutlineMail } from 'react-icons/md'
 import { TbPlaylistAdd } from 'react-icons/tb'
 import './OrderDetail.css';
+import { Link, useParams } from 'react-router-dom'
 
 function AdminOrderDetail() {
+  const { id } = useParams();
   const timeline = [
     {
       children: 'Đang chuẩn bị hàng',
@@ -55,10 +57,12 @@ function AdminOrderDetail() {
                 <IoCloudDownloadOutline className='text-[18px]' />
                 Tải về PDF
               </Button>
-              <Button className='p-10' type="primary">
-                <TbPlaylistAdd className='text-[18px]' />
-                Sửa đơn hàng
-              </Button>
+              <Link to={`/admin/quản-lí-đơn-hàng/sửa-đơn-hàng/${id}`}>
+                <Button className='p-10' type="primary">
+                  <TbPlaylistAdd className='text-[18px]' />
+                  Sửa đơn hàng
+                </Button>
+              </Link>
             </div>
           </div>
           <div className='h-[570px] overflow-y-scroll flex flex-col gap-3 scrollbar'>
@@ -299,7 +303,7 @@ function AdminOrderDetail() {
                   Chuyển khoản
                 </span>
               </div>
-             
+
 
 
 

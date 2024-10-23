@@ -234,7 +234,6 @@ function AdminAddProduct() {
               optionFilterProp="label"
               options={Datagiamgia}
               className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
             />
           </div>
           <div className='flex h-auto flex-col gap-4'>
