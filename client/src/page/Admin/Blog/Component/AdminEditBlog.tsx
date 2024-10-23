@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
+import { useParams } from 'react-router-dom';
 
 function AdminEditBlog() {
   const [value, setValue] = useState('')
+  const { id } = useParams();
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -28,7 +30,7 @@ function AdminEditBlog() {
     <div className=' flex-1 grid grid-cols-1 p-[24px] bg-[#f2edf3]'>
 
       <div className='bg-white min-h-[1500px] shadow-lg rounded-xl row-span-2 leading-[2] box-border p-[24px] gap-6 flex flex-col'>
-        <span className='text-[30px] font-medium text-[#ffd700]'>Sửa Bài Viết</span>
+        <span className='text-[30px] font-medium text-[#ffd700]'>Sửa Bài Viết {id}</span>
 
         <div className='flex h-auto flex-col gap-4'>
           <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Tiêu đề bài viết</label>
