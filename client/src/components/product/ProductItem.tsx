@@ -10,7 +10,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import './product.css';
 import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
 import { useSpring, animated } from "react-spring";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addItemToCart } from "../../redux/cart/cart.slice";
 
 function ProductItem(props) {
@@ -18,10 +18,11 @@ function ProductItem(props) {
   const dispatch = useAppDispatch();
   
   // Thêm sản phẩm vào giỏ hàng
-  const handleAddToCart = (product) => {
-    dispatch(addItemToCart({ ...product, quantity: 1 }));
+  const handleAddItem = (product: any) => {
+    dispatch(addItemToCart(product));
   };
 
+  
   const slideInAnimationTaskProduct = useSpring({
     transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isvisibleProduct ? 1 : 0,
@@ -103,7 +104,7 @@ function ProductItem(props) {
 
             <div>
               <button 
-                onClick={() => handleAddToCart(props.product)}  // Sửa đúng chỗ này
+                onClick={() => handleAddItem(props.product)}  // Sửa đúng chỗ này
                 className="w-[100%] h-[35px] border border-[#7500CF] text-[#7500CF] text-[1.6rem] font-semibold rounded-[0.5rem] mt-[1rem] transition-all
                 hover:bg-[#7500CF] hover:text-white hover:font-medium"
               >

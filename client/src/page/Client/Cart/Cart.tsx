@@ -1,9 +1,25 @@
 import { Container } from "../../../components/Style/Container";
 import { FaTrash } from "react-icons/fa";
 import { RiCoupon3Fill } from "react-icons/ri";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { removeItemFromCart,removeAllCart,decreaseItemQuantity, inCreaseItemQuantity } from "../../../redux/cart/cart.slice";
 
 export default function Cart() {
-  return (
+  const dispatch=useAppDispatch()
+  const listCart=useAppSelector((state)=>state.cart.listCart)
+  const handleRemoveItem = (product_id: any) => {
+    dispatch(removeItemFromCart({ product_id }));
+  };
+const decreaseItem=(product_id:any)=>{
+  dispatch(decreaseItemQuantity({product_id}))
+}  
+const inCreaseItem=(product_id:any)=>{
+  dispatch(inCreaseItemQuantity({product_id}))
+}  
+const removeAllItem=()=>{
+  dispatch(removeAllCart())
+}
+return (
     <Container>
       <div className=" py-6 text-[1.5rem]">
         <div className="mx-auto">
@@ -42,9 +58,9 @@ export default function Cart() {
                 </div>
               </div>
 
-              {[1, 2, 3].map((item) => (
+              {listCart.map((item) => (
                 <div
-                  key={item}
+                  key={item.product_id}
                   className="bg-white py-5 rounded-lg shadow space-y-1 "
                 >
                   <div className="flex space-x-[6rem] items-center px-5 py-5">
@@ -56,7 +72,7 @@ export default function Cart() {
                     />
                     <div className="flex-1 leading-[3rem]">
                       <h2 className="text-[1.7rem] font-semibold">
-                        Macbook Air 14 inch
+                       {item.product_name}
                       </h2>
                       <p className="text-gray-500 text-[1.3rem]">Màu: Đen</p>
                       <div className="flex flex-col leading-normal text-lg ">
@@ -70,20 +86,26 @@ export default function Cart() {
                     </div>
                 </div>
                     <div className="flex space-x-6 items-center w-[20%]">
-                      <button className="px-4 py-2 border border-gray-300 rounded-lg">
+                      <button
+                      onClick={()=>{decreaseItem(item.product_id)}}
+                      className="px-4 py-2 border border-gray-300 rounded-lg">
                         -
                       </button>
-                      <span className="font-semibold">1</span>
-                      <button className="px-4 py-2 border border-gray-300 rounded-lg">
+                      <span className="font-semibold">{item.quantity}</span>
+                      <button 
+                      onClick={()=>{inCreaseItem(item.product_id)}}
+                      className="px-4 py-2 border border-gray-300 rounded-lg">
                         +
                       </button>
                     </div>
                     <div className="flex flex-col leading-normal text-lg w-[20%]">
                       <span className="text-customPurple text-[1.7rem] font-semibold">
-                        20.190.000 ₫
+                       {item.product_price} ₫
                       </span>
                     </div>
-                    <button className="text-gray-500 hover:text-red-600 mx-[10rem] w-[5%]">
+                    <button 
+                    onClick={()=>{handleRemoveItem(item.product_id)}}
+                    className="text-gray-500 hover:text-red-600 mx-[10rem] w-[5%]">
                       <i className="fas fa-trash-alt text-customPurple">
                         <FaTrash />
                       </i>
@@ -95,7 +117,9 @@ export default function Cart() {
                   <button className="px-10 py-5 rounded-2xl text-white bg-customPurple font-medium hover:bg-yellow-500 hover:shadow-md hover:text-black transition duration-300">
                     Tiếp tục mua sắm
                   </button>
-                  <button className="px-10 py-5 rounded-2xl text-white bg-customPurple font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300">
+                  <button 
+                  onClick={()=>{removeAllCart()}}
+                  className="px-10 py-5 rounded-2xl text-white bg-customPurple font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300">
                     Xóa tất cả
                   </button>
               </div>
