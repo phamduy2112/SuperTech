@@ -7,15 +7,22 @@ import { GoSearch } from 'react-icons/go';
 import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AdminUser() {
   const [selectedCheckbox, setSelectedCheckbox] = useState('');
+  const navigate = useNavigate();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
     Swal.fire({
       icon: 'info',
       text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
       confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/admin/quản-lí-khách-hàng/sửa-khách-hàng/${key}`);
+      }
     });
   };
 
@@ -288,10 +295,13 @@ function AdminUser() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <AiOutlineUserAdd className='text-[18px]' />
-              Thêm Người Mới
-            </Button>
+            <Link to={'/admin/quản-lí-khách-hàng/tạo-khách-hàng-mới'}>
+              <Button className='p-10' type="primary">
+                <AiOutlineUserAdd className='text-[18px]' />
+                Thêm Người Mới
+              </Button>
+            </Link>
+
           </div>
         </div>
 

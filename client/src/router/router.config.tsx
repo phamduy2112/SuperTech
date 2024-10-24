@@ -162,7 +162,7 @@ children:[
       },
       // Loại sản phẩm
       {
-        path: 'quản-lí-loại',
+        path: 'quản-lí-loại/danh-mục-sản-phẩm',
         element: <AdminCatelogry />
       },
       // sản phẩm

@@ -9,15 +9,22 @@ import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { TbPlaylistAdd } from 'react-icons/tb';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AdminBlog() {
+  const navigate = useNavigate();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
     Swal.fire({
       icon: 'info',
       text: `Đã mở trang sửa cho bài viết có ID: ${key}`,
       confirmButtonText: 'OK',
-    });
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/admin/quản-lí-bài-viết/sửa-bài-viết/${key}`);
+      }
+    });;
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -255,10 +262,17 @@ function AdminBlog() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Bài Viết Mới
-            </Button>
+            <Link to={'/admin/quản-lí-bài-viết/quản-lí-bình-luận-bài-viết'}>
+              <Button className='p-10' color="danger" variant="solid">
+                Xem Bình Luận Bài Viết
+              </Button>
+            </Link>
+            <Link to={'/admin/quản-lí-bài-viết/thêm-bài-viết-mới'}>
+              <Button className='p-10' type="primary">
+                <TbPlaylistAdd className='text-[18px]' />
+                Bài Viết Mới
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -309,7 +323,7 @@ function AdminBlog() {
           />
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

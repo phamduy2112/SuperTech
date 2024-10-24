@@ -174,7 +174,7 @@ function AdminOrderCreate() {
                                 modules={{
                                     toolbar: toolbarOptions,
                                 }}
-                                className=' transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
+                                className=' w-full transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
                             />
                         </div>
                     </div>
@@ -232,7 +232,7 @@ function AdminOrderCreate() {
 
 
                 </div>
-              
+
                 <div className='w-full h-auto gap-5'>
 
                     <button className='w-full h-[48px] rounded-lg text-[14px] shadow-lg flex justify-center items-center linear-gradient text-[white] font-medium'>Thêm tài khoản</button>

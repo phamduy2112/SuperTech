@@ -8,17 +8,18 @@ import { GoSearch } from 'react-icons/go';
 import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
-import { TbPlaylistAdd } from 'react-icons/tb';
+import AdminCommentProductEdit from './AdminCommentProductEdit';
+import AdminCommentProductAdd from './AdminCommentProductAdd';
 
 function AdminCommentProduct() {
   const [selectedCheckbox, setSelectedCheckbox] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [key, setKey] = useState(0);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
-    Swal.fire({
-      icon: 'info',
-      text: `Đã mở trang sửa cho bình luận có ID: ${key}`,
-      confirmButtonText: 'OK',
-    });
+    setKey(key)
+
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -308,10 +309,8 @@ function AdminCommentProduct() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Bình Luận Sản Phẩm Mới
-            </Button>
+            <AdminCommentProductAdd/>
+           
           </div>
         </div>
 
@@ -362,6 +361,9 @@ function AdminCommentProduct() {
             size='large'
             pagination={{ pageSize: 10 }}
           />
+            {
+            key != 0 ? <AdminCommentProductEdit props={key} /> : ''
+          }
         </div>
       </div>
     </div>
