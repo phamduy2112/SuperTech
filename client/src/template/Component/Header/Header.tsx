@@ -17,6 +17,7 @@ import TaskHeaderMb from "./Component/Menu/Modal/TasKHeaderMb";
 import { useSpring,animated, useTransition } from "react-spring";
 import { getLocalStorage } from "../../../utils";
 import DropdownUser from "./Component/DropdownUser";
+import { useAppSelector } from "../../../redux/hooks";
 function Header() {
   const onSearch = (value: any, _e: any, info: any) =>
     console.log(info?.source, value);
@@ -78,6 +79,8 @@ const handleMouseLeave = (itemName: string) => {
     setIsProductHovered(false);
   }
 };
+const listCart=useAppSelector((state)=>state.cart.listCart)
+
 const token=getLocalStorage('token')
 console.log(token);
 
@@ -137,9 +140,18 @@ console.log(token);
               </Badge>
             </div>
             <div>
-              <Badge count={0} showZero>
+              <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
+              {isvisibleCart &&   <div className="fixed inset-0 z-30">
+          <div 
+            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
+            onClick={() => setisvisibleCart(false)}
+          > <animated.div style={slideInAnimationCart}>
+          <TaskCart onClose={() => setisvisibleCart(false)}/>
+        </animated.div></div>
+         
+        </div>}
             </div>
             <div>
               <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
@@ -202,9 +214,18 @@ console.log(token);
               </Badge>
             </div>
             <div>
-              <Badge count={0} showZero>
+              <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
+              {isvisibleCart &&   <div className="fixed inset-0 z-30">
+          <div 
+            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
+            onClick={() => setisvisibleCart(false)}
+          > <animated.div style={slideInAnimationCart}>
+          <TaskCart onClose={() => setisvisibleCart(false)}/>
+        </animated.div></div>
+         
+        </div>}
             </div>
             <div>
               <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
@@ -246,16 +267,23 @@ console.log(token);
               </div>
             </div>
       </div>
-      {isvisibleCart &&   <div className="fixed inset-0 z-30">
-          <div 
-            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
-            onClick={() => setisvisibleCart(false)}
-          > <animated.div style={slideInAnimationCart}>
-          <TaskCart onClose={() => setisvisibleCart(false)}/>
-        </animated.div></div>
-         
-        </div>}
-      {/* <TaskCart/> */}
+      {isvisibleCart && (
+  <div className="fixed inset-0 z-30">
+    <div 
+      className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
+      onClick={() => setisvisibleCart(false)} // Đóng khi nhấp vào nền
+    >
+      <animated.div 
+        style={slideInAnimationCart}
+        onClick={(e) => e.stopPropagation()} // Ngăn chặn sự kiện click từ TaskCart
+      >
+        <TaskCart onClose={() => setisvisibleCart(false)} />
+      </animated.div>
+    </div>
+  </div>
+)}
+
+
  
     
       {isvisibleHeaderMB && (

@@ -7,6 +7,7 @@ import { removeItemFromCart,removeAllCart,decreaseItemQuantity, inCreaseItemQuan
 export default function Cart() {
   const dispatch=useAppDispatch()
   const listCart=useAppSelector((state)=>state.cart.listCart)
+  const totalItem=useAppSelector((state)=>state.cart.totalItems)
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
   };
@@ -19,6 +20,13 @@ const inCreaseItem=(product_id:any)=>{
 const removeAllItem=()=>{
   dispatch(removeAllCart())
 }
+const totalPrice = listCart.reduce((total:number, item) => {
+  const discountAmount = (item.product_price * item.product_discount) / 100; // Tính giảm giá
+  const priceAfterDiscount = item.product_price - discountAmount; // Tính giá sau giảm
+  const itemTotalPrice = item.quantity * priceAfterDiscount; // Tính tổng giá của item
+  return total + itemTotalPrice; // Cộng dồn vào total
+}, 0);
+// 10000 - (10000 * 10 / 100); mã khuyết mãi
 return (
     <Container>
       <div className=" py-6 text-[1.5rem]">
@@ -100,7 +108,7 @@ return (
                     </div>
                     <div className="flex flex-col leading-normal text-lg w-[20%]">
                       <span className="text-customPurple text-[1.7rem] font-semibold">
-                       {item.product_price} ₫
+                       {item.quantity*item.product_price} ₫
                       </span>
                     </div>
                     <button 
@@ -124,7 +132,7 @@ return (
                   </button>
               </div>
             </div>
-            <div className="w-1/3 bg-white rounded-lg shadow-xl">
+            <div className="w-1/3 h-[550px] sticky top-[10%] bg-white rounded-lg shadow-xl">
               <div className="space-y-4 mb-10 px-7 leading-[3.7rem]">
                 <div className="flex justify-between items-center ">
                   <button className="justify-between flex items-center shadow-sm rounded-lg my-[1.2rem] px-5 py-2 w-1/2 hover:shadow-md transition-shadow">
@@ -141,11 +149,11 @@ return (
                 <div className="space-y-2">
                   <div className="flex justify-between mb-5 font-semibold text-[1.8rem]">
                     <span>Tổng tiền</span>
-                    <span className="font-bold text-[2rem]">93.360.000 ₫</span>
+                    <span className="font-bold text-[2rem]">{totalPrice} ₫</span>
                   </div>
                   <div className="border-t pt-5 flex justify-between">
                     <span>Tổng số lượng</span>
-                    <span className="font-bold text-[1.8rem]">3</span>
+                    <span className="font-bold text-[1.8rem]">{totalItem}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Voucher đã áp dụng</span>
