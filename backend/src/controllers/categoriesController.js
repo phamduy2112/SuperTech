@@ -1,6 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import { col, fn, Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let categoriesModel = models.categories; 
@@ -29,7 +30,7 @@ const getcategory_dadId = async (req, res) => {
         const categoryDadId = req.params.id; 
         let data = await categoriesModel.findAll({
             where: { category_dad: categoryDadId }, 
-            attributes: ['category_name'] 
+            // attributes: ['category_name'] 
         });
         if (data.length === 0) {
             responseSend(res, "", "Không tìm thấy !", 404);

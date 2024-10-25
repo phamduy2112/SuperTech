@@ -8,15 +8,21 @@ import Footer from '../Component/Footer/Footer'
 
 
 
+
 function UserTemplate() {
 
 
   return (
-    <div>
+    <div className='roboto'>
+ 
+
+         <div className=''>
         <Header/>
       <Outlet />
       <Footer />
     </div>
+    </div>
+ 
   )
 }
 

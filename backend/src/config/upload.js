@@ -1,7 +1,7 @@
 
 import multer from 'multer';
 import { diskStorage } from 'multer'
-
+import fs from "fs"
 export const upload=multer({
     storage:diskStorage({
         destination:process.cwd() + "/public/img",

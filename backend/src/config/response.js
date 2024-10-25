@@ -6,3 +6,4 @@ export const responseSend=(res,data,message,code)=>{
         date:new Date()
     })
 }
+
