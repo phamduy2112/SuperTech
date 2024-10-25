@@ -1,6 +1,7 @@
 import { Breadcrumb, Form, Input, InputNumber, Radio, Select, Steps } from 'antd'
 import React, { useState } from 'react'
 import './css/formEdit.css'
+import { Container } from '../../../components/Style/Container';
 function Pay() {
   const description = 'This is a description.';
   const [formData, setFormData] = useState({
@@ -27,21 +28,17 @@ function Pay() {
     // Thực hiện các bước cần thiết sau khi lấy được dữ liệu
   };
   return (
-    <div className='xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto mx-auto'>
-    <Breadcrumb
-    className='py-[1rem]'
-    items={[
-      {
-        title: <a href=''>Trang chủ</a>,
-      },
-      {
-        title: "Thanh toán",
-      },
- 
-    ]}
-  />
+    <Container>
+    <div className=' py-6 text-[1.5rem]'>
+          <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
+            <a href="/" className="text-customColor hover:underline">
+              Trang chủ
+            </a>
+            <span className="mx-2">/</span>
+            <span>Giỏ hàng</span>
+          </div>
 
-    <div className='xll:w-[40%] lg:w-[60%] m-auto pb-[1rem]'>
+    <div className='xll:w-[40%] lg:w-[60%] mx-auto my-[2rem] p-[2rem]'>
     <Steps
     current={0}
     percent={60}
@@ -62,8 +59,8 @@ function Pay() {
     ]}
   />
     </div>
-    <div className='xll:w-[80%] md:w-[100%] justify-between md:flex m-auto flex-wrap'>
-    <div className='lg:w-[50%] md:w-[53%] md:hidden'>
+    <div className='xll:w-[100%] md:w-[100%] justify-between md:flex flex-wrap m-auto leading-10'>
+    <div className='lg:w-[50%] md:w-[53%] md:hidden '>
       <h3 className='sm:text-[1.8rem] sm:font-semibold lg:text-[2.5rem] md:text-[2.2rem] py-[1rem]'>Đơn đặt hàng</h3>
       <div>
           <div className='flex justify-between text-[1.5rem] py-[1rem] font-semibold border border-b-[#969696] border-transparent'>
@@ -80,7 +77,7 @@ function Pay() {
               <div>
             
               <h5 className='font-semibold sm:text-[1.3rem] sxm:text-[1.4rem] lg:hidden'>
-                 IPhone 13 Pro max...  <span className='text-[#7500CF]'>(x1)</span>
+                 IPhone 13 Pro max...  <span className='text-customColor'>(x1)</span>
               </h5>
               <p className='my-[.2rem]'>Màu sắc: Xanh</p>
               <p>Số lượng: <span className='text-[#7500CF] font-semibold '>1</span></p>
@@ -92,7 +89,7 @@ function Pay() {
               </div>
            
             </div>
-            <div className='w-[20%] text-[#7500CF] font-semibold sm:text-[1.2rem] sxm:text-[1.4rem] ssm:text-[1.5rem]'>30.000.000đ</div>
+            <div className='w-[20%] text-customColor font-semibold sm:text-[1.2rem] sxm:text-[1.4rem] ssm:text-[1.5rem]'>30.000.000đ</div>
           </div>
           <div className=' sm:text-[1.4rem] sxm:text-[1.5rem] py-[1rem] border border-b-[#969696]'>
             <div className='flex w-[100%] mb-[.5rem]'>
@@ -115,7 +112,7 @@ function Pay() {
           </div>
           <div>
             <h3 className='lg:text-[2rem] text-[1.7rem] py-[1rem] font-semibold'>Phương thức thanh toán</h3>
-            <div className='border-[#7500CF] border py-[1rem] px-[1.5rem] relative'>
+            <div className='border-customColor border py-[1rem] px-[1.5rem] relative'>
               <input
                 type="radio"
                 name="paymentMethod"
@@ -141,25 +138,25 @@ function Pay() {
 
               />
               <div className='ml-[2rem]'>
- <h4  className='text-[1.7rem] font-semibold'>Trả tiền mặt</h4>
-              <p className='text-[1.6rem] text-[#969696] mt-[.5rem]'>
-                Trả tiền mặt sau khi giao hàng
-              </p>
+                <h4  className='text-[1.7rem] font-semibold'>Trả tiền mặt</h4>
+                <p className='text-[1.6rem] text-[#969696] mt-[.5rem]'>
+                  Trả tiền mặt sau khi giao hàng
+                </p>
               </div>
              
             </div>
           </div>
-          <div className='mt-[1.5rem] fixed bottom-0 left-0 w-[100%]  text-white bg-[#7500CF] z-20'>
+          <div className='mt-[1.5rem] fixed bottom-0 left-0 w-[100%]  text-white bg-customColor z-20'>
           <button onClick={handleFormSubmit} className=' text-[1.8rem] w-[100%] py-[1rem]'>Đặt hàng</button>
           </div>
       </div>
       </div>
-      <div className=' md:w-[45%]'>
+      <div className=' md:w-[45%] px-10 py-5 bg-white rounded-lg shadow-xl space-y-1'>
         <h3 className='lg:text-[2.5rem] md:text-[2.2rem] py-[1rem] sm:text-[1.8rem] sm:font-semibold'>Thông tin thanh toán</h3>
         <div>
         <Form autoComplete='off' className='formEdit' onValuesChange={handleFormChange}>
         <Form.Item name="name" label="Họ và tên" >
-          <Input />
+          <Input /> 
         </Form.Item>
         <Form.Item name="sdt" label="Số điện thoại">
         <InputNumber 
@@ -199,101 +196,100 @@ function Pay() {
       </Form>
         </div>
       </div>
-      <div className='lg:w-[45%] md:w-[53%] sm:hidden md:block sm:font-semibold'>
-      <h3 className='lg:text-[2.5rem] md:text-[2.2rem] py-[1rem]'>Đơn đặt hàng</h3>
-      <div>
-          <div className='flex text-[1.8rem] py-[1rem] font-semibold border border-transparent border-b-[#969696]'>
-            <p className='w-[80%]'>Sản phẩm</p>
-            <p className='w-[20%]'>Tạm tính</p>
-          </div>
-          <div className='flex md:text-[1.5rem] lg:text-[1.6rem] py-[1rem] border border-transparent border-b-[#969696]'>
-            <div className='w-[80%] flex'>
-              <div className='w-[70px]'>
-              <img
-                className="w-[100%]"
-                src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
-              </div>
-              <div>
-              <h5 className='font-semibold text-[1.7rem] md:hidden lg:block'>
-                 IPhone 13 Pro max chính hãng ,256GB  <span className='text-[#7500CF]'>(x1)</span>
-              </h5>
-              <h5 className='font-semibold text-[1.6rem] lg:hidden'>
-                 IPhone 13 Pro max...  <span className='text-[#7500CF]'>(x1)</span>
-              </h5>
-              <p className='my-[.2rem]'>Màu sắc: Xanh</p>
-              <p>Số lượng: <span className='text-[#7500CF] font-semibold '>1</span></p>
-              <p className='text-red-600 font-semibold mt-[.2rem]'>
-              30.000.000đ
-              <span className="text-[1.6rem] text-[#969696] ml-[.5rem] font-medium" style={{textDecoration:"line-through"}}>31.990.000đ</span>
-              </p>
-              
-              </div>
-           
-            </div>
-            <div className='w-[20%] text-[#7500CF] font-semibold text-[1.8rem]'>30.000.000đ</div>
-          </div>
-          <div className=' text-[1.8rem] py-[1.5rem] border border-b-[#969696] border-transparent'>
-            <div className='flex w-[100%] mb-[1rem]'>
-            <p className='w-[80%] font-medium'>Tạm tính</p>
-            <p className='w-[20%] font-semibold md:text-[1.5rem] lg:text-[1.8rem]'>52.000.000đ</p>
-            </div>
-            <div className='flex w-[100%] justify-between'>
-            <p className='w-[80%] font-medium'>Giao hàng</p>
-            <p className='w-[20%] font-semibold md:text-[1.5rem] lg:text-[1.8rem]'>0</p>
-            </div>
-            
-          </div>
-          <div className='  text-[1.8rem] py-[1.5rem] font-semibold border border-b-[#969696] border-transparent'>
-            <div className='flex w-[100%]'>
-            <p className='w-[80%] font-medium'>Tổng tiền</p>
-            <p className='w-[20%] text-red-600 md:text-[1.5rem] lg:text-[1.8rem]'>52.000.000đ</p>
-            </div>
-           
-            
-          </div>
-          <div>
-            <h3 className='lg:text-[2.1rem] md:text-[1.8rem] py-[2rem]'>Phương thức thanh toán</h3>
-            <div className='border-[#7500CF] border py-[1rem] px-[1.5rem] relative'>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="bank"
-                onChange={handlePaymentChange}
-                className="absolute top-5"
-              />
-              <div className='ml-[2rem]'>
-                 <h4 className='text-[1.8rem] font-semibold'>Thanh toán ngân hàng</h4>
-              <p className='text-[1.7rem] text-[#969696] font-medium mt-[.5rem]'>
-                Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần phương thức thanh toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.
-              </p>
-              </div>
-             
-            </div>
-            <div className='border-[#7500CF] border py-[1rem] px-[1.5rem] mt-[1rem] relative'>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="cash"
-                onChange={handlePaymentChange}
-                className="absolute top-5"
 
-              />
-              <div className='ml-[2rem]'>
- <h4  className='text-[1.8rem] font-semibold'>Trả tiền mặt</h4>
-              <p className='text-[1.7rem] font-medium text-[#969696] mt-[.5rem]'>
-                Trả tiền mặt sau khi giao hàng
-              </p>
+            <div className="lg:w-[53%] bg-white rounded-lg shadow-xl">
+              <div className="space-y-4 mb-10 px-7 leading-[3.7rem]">
+                <h3 className="text-[2rem] font-semibold">Đơn đặt hàng</h3>
+
+              {/* Product Information */}
+              <div className="flex justify-between items-center border-b pb-5">
+                <div className="flex items-center space-x-4">
+                  <img
+                    className="w-[10rem] h-[10rem] object-cover"
+                    src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
+                    alt="Iphone"
+                  />
+                  <div>
+                    <h5 className="font-semibold text-[1.7rem]">IPhone 13 Pro max chính hãng, 256GB (x1)</h5>
+                    <p className="text-[1.6rem]">Màu sắc: Xanh</p>
+                    <p className="text-red-600 font-semibold">30.000.000đ <span className="text-[#969696] line-through ml-2">31.990.000đ</span></p>
+                  </div>
+                </div>
+                <div className="text-[1.8rem] font-semibold text-customColor">30.000.000đ</div>
               </div>
-             
+
+              {/* Order Summary */}
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="font-medium">Tạm tính</span>
+                  <span className="font-semibold text-[1.8rem]">52.000.000đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Giao hàng</span>
+                  <span className="font-semibold text-[1.8rem]">0</span>
+                </div>
+                <div className="flex justify-between border-t pt-5 font-semibold">
+                  <span>Tổng tiền</span>
+                  <span className="text-red-600 text-[2.2rem]">52.000.000đ</span>
+                </div>
+              </div>
+
+              <h3 className="text-[1.8rem] py-4">Phương thức thanh toán</h3>
+              <div className="space-y-10">
+                {/* Payment method 1 */}
+                <div className="p-4 rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
+                  <div className="flex-shrink-0">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="bank"
+                      onChange={handlePaymentChange}
+                      className="w-10 h-6 text-customColor]" // Adjust size if needed
+                    />
+                  </div>
+                  <div className="ml-5">
+                    <h4 className="text-[1.8rem] font-semibold">Thanh toán ngân hàng</h4>
+                    <p className="text-[1.7rem] text-[#969696] font-medium mt-2">
+                      Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi...
+                    </p>
+                  </div>
+                </div>
+
+                {/* Payment method 2 */}
+                <div className="p-4 rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
+                  <div className="flex-shrink-0">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cash"
+                      onChange={handlePaymentChange}
+                      className="w-10 h-6 text-customColor]" // Adjust size if needed
+                    />
+                  </div>
+                  <div className="ml-5">
+                    <h4 className="text-[1.8rem] font-semibold">Trả tiền mặt</h4>
+                    <p className="text-[1.7rem] text-[#969696] font-medium mt-2">
+                      Trả tiền mặt sau khi giao hàng
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+
+              {/* Submit Button */}
+              <div className="mt-5">
+                <button
+                  onClick={handleFormSubmit}
+                  className="w-full my-[1rem] bg-customColor text-white py-4 text-[2rem] rounded-lg font-medium">
+                    Đặt hàng
+                </button>
+              </div>
             </div>
           </div>
-          <div className='mt-[1.5rem]'>
-          <button onClick={handleFormSubmit} className='lg:text-[2rem] md:text-[1.8rem] text-white bg-[#7500CF] w-[100%] py-[1rem]'>Đặt hàng</button>
-          </div>
-      </div>
-      </div>
+
     </div>
     </div>
+  </Container>
   )
 }
 
