@@ -14,11 +14,13 @@ import { categoryReducer } from "./catelogry/catelogry.slice";
 import { userReducer } from './user/user.slice';
 import { productReducer } from './product/product.slice';
 import { cartReducer } from './cart/cart.slice';
+import { commentReducer } from './comment/comment.slice';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
+  whitelist: ['user', 'cart'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
@@ -26,8 +28,8 @@ const rootReducer = combineReducers({
   toggleSidebar: toggleSidebarReducer,
   user: userReducer,
   product: productReducer,
-  cart:cartReducer,
-
+  cart: cartReducer,
+  listComment: commentReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -37,12 +39,11 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Bỏ qua các hành động Redux Persist để tránh cảnh báo không cần thiết
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
 });
 
-export type RootState = ReturnType<typeof store.getState>; // Định nghĩa RootState
-export type AppDispatch = typeof store.dispatch; // Định nghĩa AppDispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export default store;

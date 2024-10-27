@@ -46,13 +46,16 @@ const getProductById = async (req, res) => {
     try {
         let data = await Products.findByPk(req.params.id, {
             include: [
-                {
-                model: models.product_colors,
-                as: 'colors'
-            },
+       
                 {
                 model: models.comment_product,
-                    as:'comment_products'
+                    as:'comment_products',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user' // Bao gồm replies cho mỗi comment
+                        }
+                    ]
             },
             
                 {

@@ -9,11 +9,29 @@ import TextArea from "antd/es/input/TextArea";
 import { data } from "./data";
 import Comment from "./Component/Comment";
 import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { getProductByIdThunk } from "../../../redux/product/product.slice";
+import { getCommentByIdProductThunk } from "../../../redux/comment/comment.slice";
+import CommentForm from "./Component/CommentForm";
+
 
 function DetailProduct() {
   const { id } = useParams(); // Lấy id từ URL
-console.log(id);
+  const dispatch=useAppDispatch();
+  const userDetail=useAppSelector((state)=>state.product.productDetail)
+  const getCommentById=useAppSelector((state)=>state.listComment.listComment)
 
+  console.log(userDetail);
+  
+  useEffect(()=>{
+    const numericId = Number(id); // Ép chuỗi id thành số
+    if (!isNaN(numericId)) {
+      dispatch(getProductByIdThunk(numericId));
+      dispatch(getCommentByIdProductThunk(numericId))
+    }
+  },[id,dispatch])
+  console.log(getCommentById);
+  
   const [listProduct, setProduct] = useState({
     productName: "Tên sản phẩm",
     price: 5000000,
@@ -124,7 +142,7 @@ console.log(id);
         <div>
           <div className="border border-b-red-600 border-transparent py-[2rem]">
             <h3 className="font-semibold text-[2rem]">
-              iPhone 15 Pro Max 256GB Chính Hãng VN/A
+              {userDetail.product_name}
             </h3>
           </div>
           <div className="flex">
@@ -132,7 +150,7 @@ console.log(id);
               <div className="w-[80%] mx-auto">
                 <img
                   className="w-[100%]"
-                  src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_9_13_638302298834482205_apw-s9-gps-41-dayvai-vang-1.jpg"
+                  src={laptop}
                   alt=""
                 />
               </div>
@@ -496,28 +514,9 @@ console.log(id);
             </div>
           </div>
           {/* Bình luận */}
-         <Comment reviews={listProduct.reviews}/>
+         <Comment reviews={getCommentById}/>
           {/* Ý kiến */}
-          <div>
-            <h3 className="text-[2rem]">Ý kiến của bạn</h3>
-            <div className="mt-[2rem] flex">
-              <div className="w-[10%]">
-              <img
-                      src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                      alt="news image"
-                      className="w-[12rem] h-[12rem] rounded-[50%] object-cover"
-                    />
-                 <Rate className="mt-4"/>
-              </div>
-                        <div className="w-[90%]">
-                        <TextArea rows={6} placeholder="maxLength is 6"  />
-                        <div className="flex justify-end">
-                        <button className="bg-[#7500CF] text-white py-[1rem] px-[2rem] text-[1.9rem] mt-4 rounded-md">Hoàn tất</button>
-
-                        </div>
-                        </div>
-            </div>
-          </div>
+         <CommentForm id={id}/>
         </div>
       </div>
     </Container>
