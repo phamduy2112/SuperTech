@@ -3,7 +3,6 @@ import { responseSend } from "../config/response.js";
 import { sendMail } from "../config/mail.js";
 import initModels from "../models/init-models.js";
 import bcrypt from "bcryptjs"
-import jwt from 'jsonwebtoken'
 import { createToken, createTokenRef, decodeToken, verifyToken } from "../config/jwt.js";
 import { deleteFile, upload } from "../config/upload.js";
 import path from"path"
@@ -16,8 +15,16 @@ let User = models.user;
 const refreshTokens = [];
 
 const getUser = async (req, res) => {
-    let data = await User.findAll();
-    responseSend(res, data, "Thành công!", 200);
+  try {
+      let data = await User.findAll();
+      responseSend(res, data, "Thành công!", 200);
+  } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+      res.status(500).json({
+          message: "Lỗi",
+          success: false,
+      });
+  }
 };
 
 const register = async (req, res) => {
@@ -29,9 +36,7 @@ const register = async (req, res) => {
         if(user){
             return responseSend(res,{success:false},"Email đã tồn tại",200)
         }
-        const hashedPassword=await bcrypt.hash(user_password,8)
-        console.log(hashedPassword);
-        
+        const hashedPassword=await bcrypt.hash(user_password,10)
         await User.create({
             user_name,
             user_email,
@@ -48,49 +53,52 @@ const register = async (req, res) => {
     
 }
 const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+      const { email, password } = req.body;
 
-        // Tìm người dùng theo email
-        const user = await User.findOne({ where: { user_email: email } });
-        if (!user) {
-            return res.status(401).json({
-                message: "Incorrect email or password",
-                success: false,
-            });
-        }
+      console.log("Email Input:", email); // Log email nhập vào
+      console.log("Password Input:", password); // Log mật khẩu nhập vào
 
-        // Kiểm tra mật khẩu
-        const isPasswordMatch = await bcrypt.compare(password, user.user_password);
-        if (!isPasswordMatch) {
-            return res.status(401).json({
-                message: "Incorrect email or password",
-                success: false,
-            });
-        }
+      const user = await User.findOne({ where: { user_email: email.trim() } }); // Sử dụng trim() để loại bỏ khoảng trắng
+      if (!user) {
+          console.log("No user found with that email");
+          return res.status(401).json({
+              message: "Incorrect email or password",
+              success: false,
+          });
+      }
 
-        // Tạo token
-        const userDetail = {
-            user_id: user.user_id,
-      
-        };
-        const token = createToken(userDetail);
-        const tokenRef = createTokenRef(userDetail); // Giả định bạn có hàm createTokenRef
+      console.log("Hashed password from database:", user.user_password); // Log mật khẩu đã mã hóa từ DB
 
-        // Gửi phản hồi thành công
-        return responseSend(res, {
-            token: token,
-            refreshToken: tokenRef,
-            success: true,
-        }, "Thành công!", 200);
-    } catch (e) {
-        console.error("Error in login:", e);
-        return res.status(500).json({
-            message: "Internal Server Error",
-            success: false,
-        });
-    }
-};
+      const isPasswordMatch = await bcrypt.compare(password, user.user_password);
+      console.log("Password match result:", isPasswordMatch); // Log kết quả so sánh mật khẩu
+
+      if (!isPasswordMatch) {
+          return res.status(401).json({
+              message: "Incorrect email or password",
+              success: false,
+          });
+      }
+
+      const userDetail = {
+          user_id: user.user_id,
+      };
+      const token = createToken(userDetail);
+      const tokenRef = createTokenRef(userDetail);
+
+      return responseSend(res, {
+          token: token,
+          refreshToken: tokenRef,
+          success: true,
+      }, "Thành công!", 200);
+  } catch (e) {
+      console.error("Error in login:", e);
+      return res.status(500).json({
+          message: "Internal Server Error",
+          success: false,
+      });
+  }
+}
 const resetToken = async (req, res) => {
     try {
         let {token}=req.body;
@@ -475,3 +483,4 @@ export {
     forgetCheckCode,
     resetPasswordNoToken
 };
+

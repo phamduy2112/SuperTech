@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 18, 2024 lúc 06:08 PM
+-- Thời gian đã tạo: Th10 26, 2024 lúc 07:08 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -300,56 +300,6 @@ CREATE TABLE `products` (
   `category_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Đang đổ dữ liệu cho bảng `products`
---
-
-INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_star`, `product_discount`, `product_hot`, `product_date`, `product_quantity`, `image_id`, `infor_product`, `category_id`) VALUES
-(2, 'Iphone 12', 123213, 5, 2, 1, '2024-09-04', 2, 131, 12, 1),
-(3, 'Sản phẩm 1', 150, 5, 0, 1, '2024-10-16', 50, 131, 12, 1),
-(4, 'Sản phẩm 2', 200, 4, 10, 0, '2024-10-16', 30, 131, 12, 2),
-(5, 'Sản phẩm 3', 250, 3, 5, 1, '2024-10-16', 20, 131, 12, 1),
-(6, 'Sản phẩm 4', 300, 5, 15, 0, '2024-10-16', 10, 131, 12, 2),
-(7, 'Sản phẩm 5', 350, 2, 0, 1, '2024-10-16', 25, 131, 12, 3),
-(8, 'Sản phẩm 6', 400, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
-(9, 'Sản phẩm 7', 450, 3, 5, 1, '2024-10-16', 5, 131, 12, 2),
-(10, 'Sản phẩm 8', 500, 5, 10, 0, '2024-10-16', 12, 131, 12, 3),
-(11, 'Sản phẩm 9', 550, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
-(12, 'Sản phẩm 10', 600, 4, 20, 0, '2024-10-16', 20, 131, 12, 1),
-(13, 'Sản phẩm 11', 650, 3, 0, 1, '2024-10-16', 22, 131, 12, 3),
-(14, 'Sản phẩm 12', 700, 4, 10, 0, '2024-10-16', 10, 131, 12, 2),
-(15, 'Sản phẩm 13', 750, 5, 5, 1, '2024-10-16', 30, 131, 12, 1),
-(16, 'Sản phẩm 14', 800, 2, 15, 0, '2024-10-16', 8, 131, 12, 2),
-(17, 'Sản phẩm 15', 850, 3, 0, 1, '2024-10-16', 20, 131, 12, 3),
-(18, 'Sản phẩm 16', 900, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
-(19, 'Sản phẩm 17', 950, 3, 5, 1, '2024-10-16', 25, 131, 12, 2),
-(20, 'Sản phẩm 18', 1000, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
-(21, 'Sản phẩm 19', 1050, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
-(22, 'Sản phẩm 20', 1100, 4, 20, 0, '2024-10-16', 22, 131, 12, 1),
-(23, 'Sản phẩm 21', 1150, 3, 0, 1, '2024-10-16', 18, 131, 12, 3),
-(24, 'Sản phẩm 22', 1200, 4, 10, 0, '2024-10-16', 25, 131, 12, 2),
-(25, 'Sản phẩm 23', 1250, 5, 5, 1, '2024-10-16', 30, 131, 12, 1),
-(26, 'Sản phẩm 24', 1300, 2, 15, 0, '2024-10-16', 10, 131, 12, 2),
-(27, 'Sản phẩm 25', 1350, 3, 0, 1, '2024-10-16', 50, 131, 12, 3),
-(28, 'Sản phẩm 26', 1400, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
-(29, 'Sản phẩm 27', 1450, 3, 5, 1, '2024-10-16', 22, 131, 12, 2),
-(30, 'Sản phẩm 28', 1500, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
-(31, 'Sản phẩm 29', 1550, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
-(32, 'Sản phẩm 30', 1600, 4, 20, 0, '2024-10-16', 12, 131, 12, 1),
-(33, 'Sản phẩm 31', 1650, 3, 0, 1, '2024-10-16', 8, 131, 12, 3),
-(34, 'Sản phẩm 32', 1700, 4, 10, 0, '2024-10-16', 25, 131, 12, 2),
-(35, 'Sản phẩm 33', 1750, 5, 5, 1, '2024-10-16', 30, 131, 12, 1),
-(36, 'Sản phẩm 34', 1800, 2, 15, 0, '2024-10-16', 10, 131, 12, 2),
-(37, 'Sản phẩm 35', 1850, 3, 0, 1, '2024-10-16', 50, 131, 12, 3),
-(38, 'Sản phẩm 36', 1900, 4, 20, 0, '2024-10-16', 15, 131, 12, 1),
-(39, 'Sản phẩm 37', 1950, 3, 5, 1, '2024-10-16', 22, 131, 12, 2),
-(40, 'Sản phẩm 38', 2000, 5, 10, 0, '2024-10-16', 30, 131, 12, 3),
-(41, 'Sản phẩm 39', 2050, 2, 15, 1, '2024-10-16', 18, 131, 12, 2),
-(42, 'Sản phẩm 40', 2100, 4, 20, 0, '2024-10-16', 22, 131, 12, 1),
-(43, 'Sản phẩm 41', 2150, 3, 0, 1, '2024-10-16', 18, 131, 12, 3),
-(44, 'Sản phẩm 42', 2200, 4, 10, 0, '2024-10-16', 25, 131, 12, 2),
-(45, 'Sản phẩm 43', 2250, 5, 5, 1, '2024-10-16', 30, 131, 12, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -387,7 +337,7 @@ CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `user_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_password` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_password` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_address` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_phone` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_image` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -415,7 +365,10 @@ INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user
 (11, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
 (12, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
 (13, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(14, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL);
+(14, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
+(15, 'Lê Nguyễn Hoàng Thiện', 'thienlegaming1994@gmail.com', '$2a$08$ba2fws5.CMuxo02xwEUnK.RHBRerAoo/ZlbgRBPprvK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(16, 'testapi', 'thienlegaming@gmail.com', '$2a$08$EOcTHUkMRj4UmEnI/uV9AOFqIo8MUVVWd48t9U0epqX', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(17, 'duyp', 'duyp7454@gmail.com', '$2a$10$t8u0HIria4.ee..XMpOx3.YBxo.WbrgFjux4dUGP4ZU', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -531,9 +484,9 @@ ALTER TABLE `posts`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`product_id`),
-  ADD KEY `fk_image_imageproduct` (`image_id`),
   ADD KEY `fk_infor_inforproduct` (`infor_product`),
-  ADD KEY `fk_category_id` (`category_id`);
+  ADD KEY `fk_category_id` (`category_id`),
+  ADD KEY `fkimage` (`image_id`);
 
 --
 -- Chỉ mục cho bảng `product_colors`
@@ -655,7 +608,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 
 --
 -- AUTO_INCREMENT cho bảng `product_colors`
@@ -673,7 +626,7 @@ ALTER TABLE `replies_comment_product`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
@@ -743,8 +696,8 @@ ALTER TABLE `pay`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
-  ADD CONSTRAINT `fk_image_produ` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`),
-  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`);
+  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`),
+  ADD CONSTRAINT `fkimage` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`);
 
 --
 -- Các ràng buộc cho bảng `product_colors`
@@ -752,13 +705,6 @@ ALTER TABLE `products`
 ALTER TABLE `product_colors`
   ADD CONSTRAINT `fk_color_dasdasdasd` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
   ADD CONSTRAINT `fk_color_product123` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`);
-
---
--- Các ràng buộc cho bảng `replies_comment_product`
---
-ALTER TABLE `replies_comment_product`
-  ADD CONSTRAINT `fk_commentttt_repilse` FOREIGN KEY (`comment_id`) REFERENCES `comment_product` (`comment_id`),
-  ADD CONSTRAINT `fk_uuuserrrr_repilse` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
