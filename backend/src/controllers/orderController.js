@@ -29,7 +29,19 @@ const getorderById = async (req, res) => {
 
 const createorder = async (req, res) => {
     try {
-        let neworder = await order.create(req.body);
+        let neworder = await order.create(req.body, {
+            attributes:
+            [
+                'order_id',
+                'order_date',
+                'order_total',
+                'order_total_quantity',
+                'order_status',
+                'pay_id',
+                'user_id',
+                'discount'
+            ]
+        });
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -39,12 +51,14 @@ const createorder = async (req, res) => {
 const updateorder = async (req, res) => {
     try {
         let updated = await order.update(req.body, {
-            where: { order_id: req.params.id }
+            where: { order_id: req.params.id },
+            returning: true,
+            plain: true
         });
-        if (updated[0] > 0) {
-            responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
+        if (updated && updated[1]) {
+            responseSend(res, updated[1], "Đã Cập Nhật Thành Công!", 200);
         } else {
-            responseSend(res, "", "không tồn tại !", 404);
+            responseSend(res, "", "Không tồn tại!", 404);
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -56,10 +70,10 @@ const deleteorder = async (req, res) => {
         let deleted = await order.destroy({
             where: { order_id: req.params.id }
         });
-        if (deleted) {
-            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+        if (deleted > 0) {
+            responseSend(res, { message: "Đã Xóa Thành Công!" }, 200);
         } else {
-            responseSend(res, "", "không tìm thấy !", 404);
+            responseSend(res, "", "Không tìm thấy!", 404);
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);

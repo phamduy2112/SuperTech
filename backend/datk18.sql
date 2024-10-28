@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 26, 2024 lúc 07:08 PM
+-- Thời gian đã tạo: Th10 28, 2024 lúc 02:02 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -49,21 +49,6 @@ CREATE TABLE `categories` (
   `category_task` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Đang đổ dữ liệu cho bảng `categories`
---
-
-INSERT INTO `categories` (`category_id`, `category_name`, `category_image`, `category_dad`, `category_date_task`, `category_task`) VALUES
-(1, 'Iphone', 'img.png', 1, '2024-09-12 00:00:00', 123),
-(2, 'iPhone 14', 'iphone14.jpg', 1, '2024-10-16 16:48:47', 1),
-(3, 'Samsung Galaxy S21', 'samsung21.jpg', 1, '2024-10-16 16:48:47', 1),
-(4, 'MacBook Pro', 'macbook_pro.jpg', 2, '2024-10-16 16:48:47', 1),
-(5, 'Dell XPS 13', 'dell_xps13.jpg', 2, '2024-10-16 16:48:47', 1),
-(6, 'Bàn phím cơ', 'ban_phim_co.jpg', 3, '2024-10-16 16:48:47', 1),
-(7, 'Bàn phím không dây', 'ban_phim_khong_day.jpg', 3, '2024-10-16 16:48:47', 1),
-(8, 'Sạc dự phòng 10000mAh', 'sac_du_phong_10000.jpg', 4, '2024-10-16 16:48:47', 1),
-(9, 'Sạc dự phòng 20000mAh', 'sac_du_phong_20000.jpg', 4, '2024-10-16 16:48:47', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -75,22 +60,6 @@ CREATE TABLE `chat` (
   `chat_text` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `chat`
---
-
-INSERT INTO `chat` (`chat_id`, `chat_text`, `user_id`) VALUES
-(2, 'ho anh em', 2),
-(13, 'ho anh em', 2),
-(14, 'ho anh em', 2),
-(16, 'ho anh em', 2),
-(17, 'ho anh em', 2),
-(18, 'ho anh em', 2),
-(19, 'ho anh em', 2),
-(20, 'ho anh em', 2),
-(21, 'ho anh em', 2),
-(22, 'ho anh em', 2);
 
 -- --------------------------------------------------------
 
@@ -161,13 +130,6 @@ CREATE TABLE `discount` (
   `discount_date_end` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Đang đổ dữ liệu cho bảng `discount`
---
-
-INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percent`, `condition`, `discount_date_start`, `discount_date_end`) VALUES
-(123, '23dasd', '12312', '123123', '2024-10-10 00:00:00', '2024-10-17 00:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -210,14 +172,6 @@ CREATE TABLE `infor_product` (
   `infor_more` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `image_product` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `infor_product`
---
-
-INSERT INTO `infor_product` (`infor_product`, `infor_screen`, `infor_system`, `infor_cpu`, `infor_ram`, `infor_storage`, `infor_more`, `image_product`) VALUES
-(1, 0, 'Hệ điều hành', 'Thông tin CPU', 0, 0, 'Thông tin khác', 'URL hình ảnh sản phẩm'),
-(12, 2, '32', '321', 23, 123, '234', '123');
 
 -- --------------------------------------------------------
 
@@ -272,13 +226,6 @@ CREATE TABLE `posts` (
   `post_content` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Đang đổ dữ liệu cho bảng `posts`
---
-
-INSERT INTO `posts` (`post_id`, `post_title`, `post_content`, `post_date`) VALUES
-(1, 'Tiêu đề bài viết', 'Nội dung của bài viết ở đây.', '2023-10-04 14:53:00');
 
 -- --------------------------------------------------------
 
@@ -353,22 +300,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_address`, `user_phone`, `user_image`, `user_role`, `level`, `user_gender`, `user_birth`, `user_time`) VALUES
-(2, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(3, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(4, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(5, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(6, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(7, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(8, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(9, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(10, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(11, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(12, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(13, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(14, '123213', 'ho anh em', '234324324', '123123123', '0399375104', '1', 1, NULL, NULL, NULL, NULL),
-(15, 'Lê Nguyễn Hoàng Thiện', 'thienlegaming1994@gmail.com', '$2a$08$ba2fws5.CMuxo02xwEUnK.RHBRerAoo/ZlbgRBPprvK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(16, 'testapi', 'thienlegaming@gmail.com', '$2a$08$EOcTHUkMRj4UmEnI/uV9AOFqIo8MUVVWd48t9U0epqX', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(17, 'duyp', 'duyp7454@gmail.com', '$2a$10$t8u0HIria4.ee..XMpOx3.YBxo.WbrgFjux4dUGP4ZU', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 'testapi', 'thienlegaming19942@gmail.com', '$2a$10$ktpdCBVC.wyaEz2hRdNzuudSSzoeeocVT61.7nD.9RpqK3tqvb8mu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -524,13 +456,13 @@ ALTER TABLE `banner`
 -- AUTO_INCREMENT cho bảng `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `chat_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `code`
@@ -548,73 +480,73 @@ ALTER TABLE `comment_posts`
 -- AUTO_INCREMENT cho bảng `comment_product`
 --
 ALTER TABLE `comment_product`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `detail_order`
 --
 ALTER TABLE `detail_order`
-  MODIFY `detail_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `detail_order_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `discount`
 --
 ALTER TABLE `discount`
-  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `favorite_product`
 --
 ALTER TABLE `favorite_product`
-  MODIFY `favorite_product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `favorite_product_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `image_product`
 --
 ALTER TABLE `image_product`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `infor_product`
 --
 ALTER TABLE `infor_product`
-  MODIFY `infor_product` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `infor_product` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `media_post`
 --
 ALTER TABLE `media_post`
-  MODIFY `media_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `media_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `pay`
 --
 ALTER TABLE `pay`
-  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `product_colors`
 --
 ALTER TABLE `product_colors`
-  MODIFY `color_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `color_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `replies_comment_product`
@@ -626,7 +558,7 @@ ALTER TABLE `replies_comment_product`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
