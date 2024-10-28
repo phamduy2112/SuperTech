@@ -120,8 +120,15 @@ console.log(id);
 
   return (
     <Container>
-      <div>
-        <div>
+      <div className=" py-6 leading-10 ">
+          <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
+              <a href="/" className="text-customColor hover:underline">
+                Trang chủ
+              </a>
+              <span className="mx-2">/</span>
+              <span>Chi tiết sản phẩm</span>
+            </div>
+          <div>
           <div className="border border-b-red-600 border-transparent py-[2rem]">
             <h3 className="font-semibold text-[2rem]">
               iPhone 15 Pro Max 256GB Chính Hãng VN/A
@@ -495,8 +502,6 @@ console.log(id);
        
             </div>
           </div>
-          {/* Bình luận */}
-         <Comment reviews={listProduct.reviews}/>
           {/* Ý kiến */}
           <div>
             <h3 className="text-[2rem]">Ý kiến của bạn</h3>
@@ -513,7 +518,6 @@ console.log(id);
                         <TextArea rows={6} placeholder="maxLength is 6"  />
                         <div className="flex justify-end">
                         <button className="bg-[#7500CF] text-white py-[1rem] px-[2rem] text-[1.9rem] mt-4 rounded-md">Hoàn tất</button>
-
                         </div>
                         </div>
             </div>
