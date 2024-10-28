@@ -67,29 +67,32 @@ console.log(res);
 
   return (
 <div className="relative">
-<div className="flex flex-col lg:flex-row overflow-hidden relative h-[100vh]">
+
+  <div className="flex overflow-hidden relative h-[100vh]">
   <div className="bg-white w-[4rem] shadow-md h-[4rem] rounded-[50%] absolute left-[12rem] top-[5%]">
         <NavLink to={"/"}>
-        <FaArrowLeft className="text-[2rem] text-[#7500CF] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          <FaArrowLeft  className="text-[2rem] text-[#7500CF] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"/>
         </NavLink>
         
       </div>
     {/* Left Section: Registration Form */}
     <div className="w-[40%] m-auto relative">
-    <div className="w-full sm:w-[90%] lg:w-[70%] m-auto p-8 flex flex-col justify-center z-10">
-            <h2 className="text-[2.5rem] sm:text-[3rem] font-bold mb-4 text-center">Đăng kí</h2>
-            <p className="mb-4 text-gray-600 text-center text-[1.2rem] sm:text-[1.5rem]">Bạn có thể đăng nhập</p>
+ 
+    <div className="w-[70%] m-auto p-8 flex flex-col justify-center z-10">
+      
+      <h2 className="text-[3rem] font-bold mb-4 text-center">Đăng kí</h2>
+      <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng nhập</p>
       {/* Social Buttons */}
-      <div className="flex gap-4 mb-6 w-full sm:w-[80%] m-auto">
-              <button className="w-1/2 py-5 border text-[1.4rem] sm:text-[1.6rem] border-[#7500CF] text-[#7500CF] flex items-center justify-center rounded-lg">
-                <FaFacebookF className="mr-[.5rem]" />
-                Facebook
-              </button>
-              <button className="w-1/2 py-5 border text-[1.4rem] sm:text-[1.6rem] border-[#7500CF] flex items-center justify-center rounded-lg text-[#7500CF]">
-                <FaGoogle className="mr-[.5rem]" />
-                Google
-              </button>
-            </div>
+      <div className="flex gap-4 mb-6 w-[70%] m-auto">
+        <button className="w-1/2 py-5  border text-[1.6rem] border-[#7500CF] text-[#7500CF] flex items-center justify-center rounded-lg ">
+    <FaFacebookF className="mr-[.5rem]"/>
+          Facebook
+        </button>
+        <button className="w-1/2 py-5 border text-[1.6rem] border-[#7500CF] flex items-center justify-center rounded-lg text-[#7500CF]">
+<FaGoogle className="mr-[.5rem]" />
+          Google
+        </button>
+      </div>
       {/* Form */}
   {/* Formik Form */}
   <Form
@@ -161,45 +164,46 @@ console.log(res);
                   onBlur={formik.handleBlur}
                 />
               </Form.Item>
+
               {/* Quên mật khẩu */}
               <div className="flex justify-end mb-4">
-                <NavLink to="#" className="text-[1.2rem] sm:text-[1.5rem] text-[#7500CF] font-semibold hover:text-purple-800">
+                <NavLink to="#" className="text-[1.5rem] text-[#7500CF] font-semibold hover:text-purple-800">
                   Quên mật khẩu
                 </NavLink>
               </div>
+
               {/* Nút Đăng kí */}
               <Form.Item>
-                <Button type="primary" htmlType="submit" className="w-full h-16 text-[1.5rem] sm:text-[1.7rem]">
+                <Button type="primary" htmlType="submit" className="w-full h-16 text-[1.7rem]">
                   Đăng kí
                 </Button>
               </Form.Item>
             </Form>
+ 
       {/* Link to Sign In */}
-      <p className="mt-4 text-gray-600 text-center text-[1.2rem] sm:text-[1.4rem]">
-              Bạn đã có tài khoản?{" "}
-              <NavLink to="/đăng-nhập" className="text-purple-600 hover:text-purple-800">
-                Đăng nhập ngay
-              </NavLink>
-            </p>
-          </div>
-        </div>
-    <div className="w-full lg:w-[60%] relative overflow-hidden bg-purple-700">
-            {/* Diagonal Purple Background */}
+      <p className="mt-4 text-gray-600 text-center text-[1.4rem]">
+        Bạn đã có tài khoản? <NavLink to="/đăng-nhập" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
+      </p>
+    </div>
 
-          <div className="absolute inset-0 bg-purple-700 clip-diagonal" />
-          <div className="absolute bottom-[-20%] right-0 opacity-30">
-            <img src={bgdienThoai} className="w-[300px] sm:w-[500px] lg:w-[600px] xl:w-[800px]" alt="bg-dien-thoai" />
-          </div>
-
-      <div className="relative top-[30%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 z-10 text-white text-center p-8 flex flex-col items-center">
-            <h1 className="text-[3rem] sm:text-[4rem] lg:text-[5rem] xl:text-[6rem] font-bold mb-3">SuperTech</h1>
-            <p className="text-[1.2rem] sm:text-[1.6rem] lg:text-[1.8rem] xl:text-[2rem] w-full sm:w-[400px] lg:w-[500px] xl:w-[600px]">
-              SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi. Hãy đăng nhập để có trải nghiệm tốt nhất và đồng hành cùng chúng tôi.
-            </p>
+    </div>
+ <div className="w-[60%] relative  overflow-hidden">
+      {/* Diagonal Purple Background */}
+   
+      <div className="absolute inset-0 bg-purple-700 clip-diagonal" />
+     
+   <div className="absolute bottom-[-20%] right-0 opacity-30">
+        <img src={bgdienThoai} className="w-[800px]" alt="" />
+      </div>
+      <div className="relative top-[40%] left-[65%] translate-x-[-50%] translate-y-[-50%] z-10 text-white text-center p-8 flex flex-col items-center">
+        <h1 className="text-[6rem] font-bold mb-3">SuperTech</h1>
+        <p className="text-[1.8rem] w-[600px]">
+          SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi. Hãy đăng nhập để có trải nghiệm tốt nhất và đồng hành cùng chúng tôi.
+        </p>
       </div>
       {/* Image of iPhone */}
-      <div className="absolute left-[0%] top-[20%] z-10">
-            <img src={dienThoai} alt="dien-thoai" className="w-[250px] sm:w-[350px] lg:w-[450px] xl:w-[500px] object-contain opacity-90" />
+      <div className="absolute left-[0%] top-[20%] z-10 ">
+        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain opacity-90" />
       </div>
     </div>
     {/* Right Section: Advertisement */}

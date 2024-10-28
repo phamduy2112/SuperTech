@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "../../../../components/Style/Container";
-import "../../../../components/Style/formEdit.css";
 import { FaEdit } from "react-icons/fa";
 import { Breadcrumb, Form as AntForm, Input, Radio } from "antd";
 import ModalChangePassword from "./Component/ModalChangePassword";
@@ -35,8 +33,6 @@ function UserDetail() {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
-
-      // Log the file object details
       console.log("File details:", {
         name: file.name,
         size: file.size,
@@ -59,56 +55,60 @@ function UserDetail() {
 
   const handleSubmit = (values: object) => {
     console.log("Form values:", values);
-    // dispatch(updateUserDetailThunk(values))
     dispatch(getUserThunk());
   };
 
   return (
-    <div className="pt-[1rem] px-[1rem] md:px-[2rem]">
-      <div className="">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+    <div className="pt-4 px-4 md:px-8">
+      <div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-          <h4 className="text-[2rem] md:text-[2.2rem] font-semibold">Hồ sơ của tôi</h4>
-          <p className="text-[1.6rem] md:text-[1.8rem] pt-[.5rem]">
-              Quản lí hồ sơ để bảo mật tài khoản
-            </p>
+            <h4 className="text-2xl md:text-3xl font-semibold">Hồ sơ của tôi</h4>
+            <p className="text-lg md:text-xl pt-2">Quản lí hồ sơ để bảo mật tài khoản</p>
           </div>
-          <button className="text-[1.5rem] md:text-[1.7rem] flex gap-[.5rem] bg-[#7500CF] h-[3.5rem] justify-center items-center px-[1.3rem] text-white mt-[1rem] md:mt-0">
-          <FaEdit />
+          <button className="text-lg md:text-xl flex gap-2 bg-[#7500CF] h-14 justify-center items-center px-6 text-white mt-4 md:mt-0">
+            <FaEdit />
             Sửa
           </button>
         </div>
 
-        <div className="border-t-[#7500CF] border border-transparent mt-[1.5rem] ">
-          <div className="flex">
-            <div className="border-r-[#7500CF] flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
+        <div className="border-t-[#7500CF] border-t mt-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="md:border-r-[#7500CF] md:border-r flex flex-col justify-between p-4 md:pr-12">
               <div className="flex flex-col items-center">
-                <div className="w-[15rem] h-[15rem] rounded-[50%] overflow-hidden">
+                <div className="w-40 h-40 rounded-full overflow-hidden">
                   <img
-                    className="w-[100%] h-[auto] max-w-full max-h-full"
-                    src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/370806166_3341899006026926_5652140347426452061_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=dZ_Nu8wRLDYQ7kNvgGdvkku&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AuQykorbPs584QhB_6DcMSM&oh=00_AYCUqAiN4zPLkGc5FdX33QjAy-gLr5BAvgZ-GxbVAgQVhg&oe=671673CF"
-                    alt=""
+                    className="w-full h-auto"
+                    src={imageSrc}
+                    alt="User Avatar"
                   />
                 </div>
-                <div className="mt-[.5rem] cursor-pointer">
-                  <div className="flex text-[1.8rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]">
-                    Chỉnh sửa
-                  </div>
+                <div
+                  className="mt-2 cursor-pointer text-[#7500CF] text-lg flex justify-center items-center py-2 px-4 border border-[#7500CF] rounded-full"
+                  onClick={handleClick}
+                >
+                  Chỉnh sửa
                 </div>
+                <input
+                  type="file"
+                  id="fileInput"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
               </div>
-              <div className="text-[1.5rem] md:text-[1.7rem] text-center md:text-left">
-              Tham gia vào ngày:
-                <p className="mt-[.3rem] font-semibold">10:43 10/03/2024</p>
-                </div>
+              <div className="text-lg text-center md:text-left mt-4">
+                Tham gia vào ngày:
+                <p className="mt-1 font-semibold">10:43 10/03/2024</p>
+              </div>
             </div>
 
-            <div className="p-[1rem] md:p-[2rem] w-full">
-            <Formik
+            <div className="p-4 md:p-8 w-full">
+              <Formik
                 initialValues={{
                   user_name: user?.user_name || "",
                   user_phone: user?.user_phone || "Chưa cập nhận",
                   email: user?.user_email || "",
-                  user_address: user?.user_user_address || "Chưa cập nhận",
+                  user_address: user?.user_address || "Chưa cập nhận",
                   gender: user?.gender || "",
                   date: user?.date || "Chưa cập nhận",
                 }}
@@ -116,59 +116,54 @@ function UserDetail() {
                 onSubmit={handleSubmit}
               >
                 {({ errors, touched }) => (
-                  <Form className="formEdit w-[100%]">
-                    <div className="w-[100%]">
+                  <Form className="formEdit">
+                    <div className="w-full">
                       <AntForm.Item label="Họ và tên">
                         <Field name="user_name" as={Input} />
-                        {errors.user_name && touched.user_name ? (
-                          <div className="error">{errors.user_name}</div>
-                        ) : null}
+                        {errors.user_name && touched.user_name && (
+                          <div className="text-red-600 text-sm">{errors.user_name}</div>
+                        )}
                       </AntForm.Item>
                     </div>
-                    <div className="flex flex-col md:flex-row justify-between gap-[1rem]">
-                    <AntForm.Item className="w-full md:w-[49%]" label="Số điện thoại">
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <AntForm.Item className="w-full md:w-1/2" label="Số điện thoại">
                         <Field name="user_phone" as={Input} />
-                        {errors.user_phone && touched.user_phone ? (
-                          <div className="error">{errors.user_phone}</div>
-                        ) : null}
+                        {errors.user_phone && touched.user_phone && (
+                          <div className="text-red-600 text-sm">{errors.user_phone}</div>
+                        )}
                       </AntForm.Item>
-
-                      <AntForm.Item className="w-full md:w-[49%]" label="Email">
+                      <AntForm.Item className="w-full md:w-1/2" label="Email">
                         <Field name="email" as={Input} />
-                        {errors.email && touched.email ? (
-                          <div className="error">{errors.email}</div>
-                        ) : null}
+                        {errors.email && touched.email && (
+                          <div className="text-red-600 text-sm">{errors.email}</div>
+                        )}
                       </AntForm.Item>
                     </div>
-
                     <AntForm.Item label="Địa chỉ">
                       <Field name="user_address" as={Input} />
-                      {errors.user_address && touched.user_address ? (
-                        <div className="error">{errors.user_address}</div>
-                      ) : null}
+                      {errors.user_address && touched.user_address && (
+                        <div className="text-red-600 text-sm">{errors.user_address}</div>
+                      )}
                     </AntForm.Item>
-
                     <AntForm.Item label="Giới tính">
                       <Field name="gender" as={Radio.Group}>
                         <Radio value="1">Nam</Radio>
                         <Radio value="2">Nữ</Radio>
                         <Radio value="3">Khác</Radio>
                       </Field>
-                      {errors.gender && touched.gender ? (
-                        <div className="error">{errors.gender}</div>
-                      ) : null}
+                      {errors.gender && touched.gender && (
+                        <div className="text-red-600 text-sm">{errors.gender}</div>
+                      )}
                     </AntForm.Item>
-
                     <AntForm.Item label="Ngày sinh">
                       <Field name="date" as={Input} />
-                      {errors.date && touched.date ? (
-                        <div className="error">{errors.date}</div>
-                      ) : null}
+                      {errors.date && touched.date && (
+                        <div className="text-red-600 text-sm">{errors.date}</div>
+                      )}
                     </AntForm.Item>
-
-                    <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
+                    <div className="flex justify-end gap-4 mt-6">
                       <ModalChangePassword />
-                      <button type="submit" className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]">
+                      <button type="submit" className="px-4 py-2 border border-[#7500CF] text-[#7500CF] text-lg rounded">
                         Cập nhật
                       </button>
                     </div>
