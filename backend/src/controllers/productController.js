@@ -111,8 +111,32 @@ const getProductByIdCatelogryDad = async (req, res) => {
 };
 const createProduct = async (req, res) => {
     try {
-        
-        let newProduct = await Products.create(req.body);
+        const {
+            product_id,
+            product_name,
+            product_price,
+            product_star, 
+            product_discount,
+            product_hot,
+            product_quantity,
+        } = req.body;
+        const image_id = req.id;
+        const infor_product = req.id;
+        const category_id = req.id;
+        const product_date = new Date();
+        const newProduct = await Products.create({
+            product_id,
+            product_name,
+            product_price,
+            product_star,
+            product_discount,
+            product_hot,
+            product_date,
+            product_quantity,
+            image_id,
+            infor_product,
+            category_id,
+        })
         responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
         console.log(error);
@@ -122,15 +146,42 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        let updated = await Products.update(req.body, {
-            where: { product_id: req.params.id }
-        });
-        if (updated[0] > 0) {
-            responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
-        } else {
-            responseSend(res, "", "không tồn tại !", 404);
+        const product_id = req.params.id;
+        const {
+            product_name,
+            product_price,
+            product_star,
+            product_discount,
+            product_hot,
+            product_quantity,
+        } = req.body;
+        const image_id = req.id;
+        const infor_product = req.id;
+        const category_id = req.id;
+        const product_date = new Date();
+        const product = await Products.findByPk(product_id);
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found",
+                success: false
+            });
         }
+        product.product_name = product_name;
+        product.product_price = product_price;
+        product.product_star = product_star;
+        product.product_discount = product_discount;
+        product.product_hot = product_hot;
+        product.product_date = product_date;
+        product.product_quantity = product_quantity;
+        product.image_id = image_id;
+        product.infor_product = infor_product;
+        product.category_id = category_id;
+
+        await product.save();
+
+        responseSend(res, product, "Đã Cập Nhật Thành Công!", 200);
     } catch (error) {
+        console.error("Error updating product:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };

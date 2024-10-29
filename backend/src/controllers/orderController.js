@@ -1,9 +1,10 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import order from "../models/order.js";
 
 let models = initModels(sequelize); 
-let order = models.order; 
+let orders = models.order; 
 
 const getorder = async (req, res) => {
     try {
@@ -29,17 +30,17 @@ const getorderById = async (req, res) => {
 
 const createorder = async (req, res) => {
     try {
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 0;');
         const {
             order_id,
             order_total,
             order_total_quantity,
             order_status,
-            pay_id,
-            discount,
         } = req.body;
 
         const user_id = req.id;
+        const pay_id = req.id;
+        const discount = req.id;
+
         let date = new Date();
 
         const neworder = await order.create({
@@ -52,31 +53,43 @@ const createorder = async (req, res) => {
             user_id,
             discount
         });
-        // cái set SET FOREIGN_KEY_CHECKS là vì mình đang sử dụng data trực tiếp bằng code nên nó sẽ check FK
-        // vì vậy để lách đc check FK mình sẽ thêm đoạn code tắt check khi up.
-        // sau này khi có data chạy đủ rồi thì mình tắt 2 đoạn code đó đi là được !
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1;');
-
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {
         console.log(error);
-        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1;');
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
 const updateorder = async (req, res) => {
     try {
-        let updated = await order.update(req.body, {
-            where: { order_id: req.params.id },
-            returning: true,
-            plain: true
-        });
-        if (updated && updated[1]) {
-            responseSend(res, updated[1], "Đã Cập Nhật Thành Công!", 200);
-        } else {
-            responseSend(res, "", "Không tồn tại!", 404);
+        const order_id = req.params.id;
+        const {
+            order_date,
+            order_total,
+            order_total_quantity,
+            order_status,
+        } = req.body;
+        const pay_id =  req.id;
+        const user_id = req.id;
+        const discount = req.id;
+        const order = await orders.findByPk(order_id);
+        if (!order) {
+            responseSend(res, "", "Đơn hàng không tồn tại!", 404);
+            return;
         }
+
+        order.order_date = order_date;
+        order.order_total = order_total;
+        order.order_total_quantity = order_total_quantity;
+        order.order_status = order_status;
+        order.pay_id = pay_id;
+        order.user_id = user_id;
+        order.discount = discount;
+
+        await order.save();
+
+        responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
     } catch (error) {
+        console.error("Error updating order:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
