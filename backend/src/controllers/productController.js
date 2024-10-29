@@ -188,7 +188,7 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        let deleted = await Products.destroy({
+        const deleted = await Products.destroy({
             where: { product_id: req.params.id }
         });
         if (deleted) {

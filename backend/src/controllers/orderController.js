@@ -96,16 +96,16 @@ const updateorder = async (req, res) => {
 
 const deleteorder = async (req, res) => {
     try {
-        let deleted = await order.destroy({
+        const deleted = await order.destroy({
             where: { order_id: req.params.id }
         });
-        if (deleted > 0) {
-            responseSend(res, { message: "Đã Xóa Thành Công!" }, 200);
+        if (deleted) {
+            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {
-            responseSend(res, "", "Không tìm thấy!", 404);
+            responseSend(res, "", "Không tìm thấy đơn hàng!", 404);
         }
     } catch (error) {
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+        responseSend(res, "", "Có lỗi xảy ra khi xóa đơn hàng!", 500);
     }
 };
 
