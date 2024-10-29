@@ -78,8 +78,8 @@ const handleMouseLeave = (itemName: string) => {
     setIsProductHovered(false);
   }
 };
-const token=getLocalStorage('token')
-console.log(token);
+// const token=getLocalStorage('token')
+// console.log(token);
 
   return (
     <div className="">
@@ -145,7 +145,7 @@ console.log(token);
               <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
             </div>
           </div>
-        <DropdownUser/>
+        {/* <DropdownUser/> */}
         </div>
       </div>
       {

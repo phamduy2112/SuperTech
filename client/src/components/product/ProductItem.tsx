@@ -17,10 +17,10 @@ function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   
-  // Thêm sản phẩm vào giỏ hàng
-  const handleAddToCart = (product) => {
-    dispatch(addItemToCart({ ...product, quantity: 1 }));
-  };
+  // // Thêm sản phẩm vào giỏ hàng
+  // const handleAddToCart = (product) => {
+  //   dispatch(addItemToCart({ ...product, quantity: 1 }));
+  // };
 
   const slideInAnimationTaskProduct = useSpring({
     transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
@@ -49,7 +49,7 @@ function ProductItem(props) {
 
         <div className="flex justify-between">
           <div>
-            <img src={image} alt="" className="w-[5.5rem]" />
+            {/* <img src="https://cdn.tgdd.vn/Products/Images/42/322995/realme-c65-thumb-600x600.jpg" alt="" className="w-[5.5rem]" /> */}
           </div>
           <div className="bg-[#7500CF] w-[5rem] h-[3rem] text-center mr-[2rem] mt-[1rem]">
             <span className="text-white text-[1.6rem] leading-[2.8rem]">-23%</span>
@@ -71,7 +71,7 @@ function ProductItem(props) {
                 <img src={oficie} alt="" />
                 <span className="text-white text-[1.1rem] font-medium">Tặng phụ kiện</span>
               </div>
-              <h3 className="text-[1.8rem] font-semibold">{props.product.product_name}</h3>
+              <h3 className="text-[1.8rem] font-semibold">Sản phẩm 1</h3>
               <div className="flex items-center gap-1 my-3">
                 <PiCurrencyDollarSimpleFill className="text-[1.7rem]" />
                 <span className="text-gray-500 text-[1.5rem]">Online giá rẻ quá</span>
@@ -102,7 +102,7 @@ function ProductItem(props) {
 
             <div>
               <button 
-                onClick={() => handleAddToCart(props.product)}  // Sửa đúng chỗ này
+                // onClick={() => handleAddToCart(props.product)}  // Sửa đúng chỗ này
                 className="w-[100%] h-[35px] border border-[#7500CF] text-[#7500CF] text-[1.6rem] font-semibold rounded-[0.5rem] mt-[1rem] transition-all
                 hover:bg-[#7500CF] hover:text-white hover:font-medium"
               >

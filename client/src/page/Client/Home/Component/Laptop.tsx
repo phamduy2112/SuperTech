@@ -69,9 +69,12 @@ function LaptopComponent() {
           </div>
 
           <div className="grid grid-cols-5 gap-4">
-            {productLaptop.slice(0, 5).map((product) => (
-              <ProductItem key={product.id} product={product} /> // Hiển thị sản phẩm
-            ))}
+            {/* {productLaptop.slice(0, 5).map((product) => (
+              <ProductItem /> // Hiển thị sản phẩm
+            ))} */}
+            <ProductItem/>
+            <ProductItem/>
+            <ProductItem/>
           </div>
         </div>
 
