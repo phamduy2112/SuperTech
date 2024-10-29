@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "../../../components/Style/Container";
+import { FaStar } from "react-icons/fa";
+import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
+import { BsThreeDots } from "react-icons/bs";
+import { IoIosReturnRight } from "react-icons/io";
+import { Rate } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { data } from "./data";
+import Comment from "./Component/Comment";
 import { useParams } from "react-router-dom";
+
 
 function DetailProduct() {
   const { id } = useParams(); // Lấy id từ URL
@@ -304,9 +313,29 @@ console.log(id);
                   <button className="w-1/2 py-6 text-[1.7rem] font-medium bg-customColor text-white rounded-2xl hover:bg-purple-700">
                     Mua ngay
                   </button>
-                </div>
+                </div>                    
               </div>
             </div>
+                {/* Ý kiến */}
+                <div>
+                    <h3 className="text-[2rem]">Ý kiến của bạn</h3>
+                    <div className="mt-[2rem] flex">
+                      <div className="w-[10%] mx-[1rem]">
+                      <img
+                              src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
+                              alt="news image"
+                              className="w-[12rem] h-[12rem] rounded-[50%] object-cover"
+                            />
+                        <Rate className="mt-4"/>
+                      </div>
+                                <div className="w-[90%]">
+                                <TextArea rows={6} placeholder="Đánh giá của bạn"  />
+                                <div className="flex justify-end">
+                                <button className="bg-customColor text-white py-[1rem] px-[2rem] font-medium text-[1.5rem] mt-4 rounded-md">Hoàn tất</button>
+                                </div>
+                                </div>
+                    </div>
+                </div>                
           </div>
         </Container>
 
