@@ -19,7 +19,7 @@ export default class user extends Model {
       allowNull: true
     },
     user_password: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(100),
       allowNull: true
     },
     user_address: {
@@ -38,10 +38,10 @@ export default class user extends Model {
       type: DataTypes.BOOLEAN,
       allowNull: true
     },
-    // level: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true
-    // },
+    level: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     user_gender: {
       type: DataTypes.BOOLEAN,
       allowNull: true

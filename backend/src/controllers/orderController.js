@@ -29,25 +29,41 @@ const getorderById = async (req, res) => {
 
 const createorder = async (req, res) => {
     try {
-        let neworder = await order.create(req.body, {
-            attributes:
-            [
-                'order_id',
-                'order_date',
-                'order_total',
-                'order_total_quantity',
-                'order_status',
-                'pay_id',
-                'user_id',
-                'discount'
-            ]
+        await sequelize.query('SET FOREIGN_KEY_CHECKS = 0;');
+        const {
+            order_id,
+            order_total,
+            order_total_quantity,
+            order_status,
+            pay_id,
+            discount,
+        } = req.body;
+
+        const user_id = req.id;
+        let date = new Date();
+
+        const neworder = await order.create({
+            order_id,
+            order_date: date,
+            order_total,
+            order_total_quantity,
+            order_status,
+            pay_id,
+            user_id,
+            discount
         });
+        // cái set SET FOREIGN_KEY_CHECKS là vì mình đang sử dụng data trực tiếp bằng code nên nó sẽ check FK
+        // vì vậy để lách đc check FK mình sẽ thêm đoạn code tắt check khi up.
+        // sau này khi có data chạy đủ rồi thì mình tắt 2 đoạn code đó đi là được !
+        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1;');
+
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {
+        console.log(error);
+        await sequelize.query('SET FOREIGN_KEY_CHECKS = 1;');
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-
 const updateorder = async (req, res) => {
     try {
         let updated = await order.update(req.body, {

@@ -76,13 +76,6 @@ export default class products extends Model {
         ]
       },
       {
-        name: "fk_image_imageproduct",
-        using: "BTREE",
-        fields: [
-          { name: "image_id" },
-        ]
-      },
-      {
         name: "fk_infor_inforproduct",
         using: "BTREE",
         fields: [
@@ -94,6 +87,13 @@ export default class products extends Model {
         using: "BTREE",
         fields: [
           { name: "category_id" },
+        ]
+      },
+      {
+        name: "fkimage",
+        using: "BTREE",
+        fields: [
+          { name: "image_id" },
         ]
       },
     ]

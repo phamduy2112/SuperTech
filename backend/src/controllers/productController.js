@@ -92,15 +92,15 @@ const getProductByIdCatelogryDad = async (req, res) => {
 
         // Add `category` to the where clause if it exists
         if (category) {
-            whereClause.category_name = category;  // Assuming category is the category name
+            whereClause.category_name = category;
         }
 
         const products = await Products.findAll({
             include: [{
                 model: models.categories,
                 as: "category",
-                where: whereClause,  // Dynamic where clause based on query parameters
-                attributes: []  // Only return product data
+                where: whereClause,
+                attributes: []
             }]
         });
 
@@ -111,9 +111,11 @@ const getProductByIdCatelogryDad = async (req, res) => {
 };
 const createProduct = async (req, res) => {
     try {
+        
         let newProduct = await Products.create(req.body);
         responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
+        console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
