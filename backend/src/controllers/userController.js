@@ -40,7 +40,8 @@ const register = async (req, res) => {
         await User.create({
             user_name,
             user_email,
-            user_password:hashedPassword
+            user_password:hashedPassword,
+            user_role:"user"
         })
         responseSend(res,{
             success: true
@@ -82,6 +83,7 @@ const login = async (req, res) => {
 
       const userDetail = {
           user_id: user.user_id,
+          user_role:user.user_role
       };
       const token = createToken(userDetail);
       const tokenRef = createTokenRef(userDetail);

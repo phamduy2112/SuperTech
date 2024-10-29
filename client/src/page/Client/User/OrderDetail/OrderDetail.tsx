@@ -27,7 +27,7 @@ function OrderDetail() {
       dataIndex: 'donGia',
       render:(text:string)=>{
         return (
-          <div className='text-[#7500CF] font-semibold'>{text}</div>
+          <div className='text-customColor font-semibold'>{text}</div>
         )
       }
     },

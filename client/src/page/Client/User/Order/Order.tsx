@@ -113,7 +113,7 @@ function Order() {
   ];
   return (
     <div>
-      <h3 className='text-[2.5rem] text-[#7500CF] font-semibold'>
+      <h3 className='text-[2.5rem] text-customColor font-semibold'>
       Quản lý Đơn hàng của bạn
       </h3>
       <div className='py-[1rem] flex gap-[1rem]'>

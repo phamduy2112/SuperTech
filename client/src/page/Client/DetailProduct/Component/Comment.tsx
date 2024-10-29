@@ -10,10 +10,16 @@ import { Formik, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
 
 function Comment(props: any) {
-  const [expandedComments, setExpandedComments] = useState<boolean[]>(new Array(props.reviews.length).fill(false));
+  const [expandedComments, setExpandedComments] = useState<boolean[]>(new Array(props.reviews?.length).fill(false));
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
-  const [activeForms, setActiveForms] = useState<boolean[]>(new Array(props.reviews.length).fill(false)); // State to manage reply forms
-  const [editForms, setEditForms] = useState<boolean[]>(new Array(props.reviews.length).fill(false));
+  const [activeAction, setActiveAction] = useState<{ action: 'edit' | 'reply' | null, index: number | null }>({ action: null, index: null });
+  
+  const handleActionToggle = (index: number, action: 'edit' | 'reply') => {
+    // Nếu nhấn cùng một hành động thì tắt nó đi, còn không thì bật hành động mới
+    setActiveAction((prevState) => prevState.index === index && prevState.action === action
+      ? { action: null, index: null }
+      : { action, index });
+  };
   const dispatch=useDispatch();
   const handleDelete=(data:any)=>{
       dispatch(deleteCommentByIdThunk(data));
@@ -28,36 +34,13 @@ function Comment(props: any) {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
-  const handleEditToggle = (index: number) => {
-    const updatedEditForms = [...editForms];
-    updatedEditForms[index] = !updatedEditForms[index];
-    setEditForms(updatedEditForms);
-  };
 
-  const handleEditSubmit = (index: number,comment_id:number,product_id:number, commentText: string) => {
-    const newComment={
-      comment_id,
-      product_id,
-      comment_content:commentText
-    }
-    dispatch(editCommentByIdThunk(newComment));
-
-    // // Đóng form sau khi submit
-    const updatedEditForms = [...editForms];
-    updatedEditForms[index] = false;
-    setEditForms(updatedEditForms);
-    console.log(newComment);
-    
-  };
 
   const CommentSchema = Yup.object().shape({
     commentText: Yup.string().required('Nội dung bình luận không được để trống').min(5, 'Nội dung phải có ít nhất 5 ký tự'),
   });
-  const handleFormToggle = (index: number) => {
-    const updatedForms = [...activeForms];
-    updatedForms[index] = !updatedForms[index]; // Toggle the specific reply form
-    setActiveForms(updatedForms);
-  };
+  
+// Rely comment
 
   return (
     <div>
@@ -96,7 +79,7 @@ function Comment(props: any) {
         </div>
 
         <div className="flex justify-between flex-wrap">
-          {props.reviews.map((review, index) => {
+          {props.reviews?.map((review, index) => {
             return (
               <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
                 <img
@@ -136,8 +119,7 @@ function Comment(props: any) {
                               <div className="w-[120px] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
                                 <div className="flex flex-col space-y-2">
                                   <button
-                                  onClick={() => handleEditToggle(index)}
-                                    className="text-sm text-blue-500 hover:text-blue-700 transition-colors"
+onClick={() => handleActionToggle(index, 'edit')}                                    className="text-sm text-blue-500 hover:text-blue-700 transition-colors"
                                   >
                                     Chỉnh sửa
                                   </button>
@@ -165,7 +147,7 @@ function Comment(props: any) {
                           </button>
                           {/* Dislike button */}
                           <button
-                            onClick={() => handleFormToggle(index)}
+                           onClick={() => handleActionToggle(index, 'reply')}
                             className="flex items-center text-purple-600 ml-4"
                           >
                             Phản hồi
@@ -182,11 +164,24 @@ function Comment(props: any) {
                     </button>
 
                     <div className="flex items-center justify-between">
-            {editForms[index] ? (
+                    {activeAction.index === index && activeAction.action === 'edit' && (
               <Formik
                 initialValues={{ commentText: review.comment_content }}
                 validationSchema={CommentSchema}
-                onSubmit={(values) => handleEditSubmit(index,review.comment_id,review.product_id, values.commentText)}
+                onSubmit={(values, { resetForm }) =>
+           {
+            const newComment={
+              comment_id:review.comment_id,
+              product_id:review.product_id,
+              comment_content:values.commentText
+            }
+            console.log(newComment);
+            
+            dispatch(editCommentByIdThunk(newComment));
+            setActiveAction({ action: null, index: null });
+                      resetForm();
+           }
+                }
               >
                 {({ errors, touched }) => (
                   <FormikForm className="flex items-center gap-2 w-full text-[1.8rem]">
@@ -198,90 +193,42 @@ function Comment(props: any) {
                     <button
                       type="submit"
                       className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    >
+                    
+                   >
                       Lưu
                     </button>
-                    {/* {errors.commentText && touched.commentText && (
-                      <div className="text-red-500 text-sm mt-1">{errors.commentText}</div>
-                    )} */}
+                   
                   </FormikForm>
                 )}
               </Formik>
-            ) : (
-              <div className="flex items-center justify-between w-full">
-                <p className="text-gray-800 flex-1">{review.comment_content}</p>
-                <button
-                  onClick={() => handleEditToggle(index)}
-                  className="text-blue-500 hover:underline"
-                >
-                  Chỉnh sửa
-                </button>
-              </div>
-            )}
+            )
+            }
+    {activeAction.index === index && activeAction.action === 'reply' && (
+  <Formik
+    initialValues={{ repliesText: '' }}  // Set initial value to an empty string
+    validationSchema={CommentSchema}
+    onSubmit={(values) => console.log(values)}
+  >
+    {({ errors, touched }) => (
+      <FormikForm className="flex items-center gap-2 w-full text-[1.8rem]">
+        <Field
+          name="repliesText"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Nhập phản hồi..."
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+        >
+          Phản hồi
+        </button>
+      </FormikForm>
+    )}
+  </Formik>
+)}
           </div>
 
-                    {expandedComments[index] && (
-                      <div className="ml-12 mt-4 border-l-2 border-purple-300 pl-4">
-                        {review.replies.length > 0 ? (
-                          review.replies.map((reply, replyIndex) => (
-                            <div className="flex space-x-4" key={replyIndex}>
-                              <img
-                                src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                                alt="Avatar"
-                                className="w-[4rem] h-[4rem] rounded-full"
-                              />
-                              <div className="flex w-[100%]">
-                                <div className="flex justify-between w-[100%]">
-                                  <div>
-                                    <h3 className="font-bold text-[2rem]">phạm ngọc duy</h3>
-                                    <div className="flex items-center text-[1.5rem] py-[.5rem]">
-                                      <div className="ml-2 text-[1.5rem] text-gray-500">4/5/2025</div>
-                                    </div>   <p className="mt-1 text-gray-800 text-[1.8rem]">{reply.comment_content}</p>
-                                  </div>
-
-                                  <div className="flex justify-between items-center flex-col text-[1.8rem] text-gray-500 mt-2 space-x-3">
-                                    <div className="flex gap-[.5rem]">
-                                      <span>2h trước</span>
-                                      <div className='relative'>
-                                        <BsThreeDots
-                                          className="cursor-pointer"
-                                          onClick={() => handleDropdownToggle(index)}
-                                        />
-                                        {activeDropdown === index && (
-                                          <div className="w-[120px] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
-                                            <div className="flex flex-col space-y-2">
-                                              <button
-                                                onClick={() => {
-                                                  // Handle edit reply
-                                                }}
-                                                className="text-sm text-blue-500 hover:text-blue-700 transition-colors"
-                                              >
-                                                Chỉnh sửa
-                                              </button>
-                                              <button
-                                                onClick={() => {
-                                                  // Handle delete reply
-                                                  
-                                                }}
-                                                className="text-sm text-red-500 hover:text-red-700 transition-colors"
-                                              >
-                                                Xoá
-                                              </button>
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-gray-500 text-[1.5rem]">Chưa có phản hồi nào.</p>
-                        )}
-                      </div>
-                    )}
+                 
                   </div>
                 </div>
               </div>

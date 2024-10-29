@@ -31,7 +31,7 @@ function User() {
             </div>
             <div className="mt-[.5rem]">
               <h3 className="text-[2rem]">Phạm Ngọc Duy</h3>
-              <div className="flex text-[1.8rem] py-[.6rem] text-[#7500CF]">
+              <div className="flex text-[1.8rem] py-[.6rem] text-customColor">
                 <FaEdit />
                 <p>Chỉnh sửa</p>
               </div>
@@ -41,7 +41,7 @@ function User() {
             <NavLink
               to=""
               className="
-                    flex gap-[.5rem] text-[1.9rem] border border-[#7500CF] bg-[#7500CF] text-white px-[1rem] py-[.9rem]"
+                    flex gap-[.5rem] text-[1.9rem] border border-customColor bg-customColor text-white px-[1rem] py-[.9rem]"
             >
               <CiUser className="font-medium" />
               <div>Tài khoản</div>
@@ -49,7 +49,7 @@ function User() {
             <NavLink
               to=""
               className="
-                    flex gap-[.5rem] text-[1.9rem] border border-[#7500CF] px-[1rem] py-[.9rem] border-b-transparent"
+                    flex gap-[.5rem] text-[1.9rem] border border-customColor px-[1rem] py-[.9rem] border-b-transparent"
             >
               <FaEdit />
               <NavLink to="">Đơn mua</NavLink>
@@ -57,7 +57,7 @@ function User() {
             <NavLink
               to=""
               className="
-                    flex gap-[.5rem] text-[1.9rem] border border-[#7500CF] px-[1rem] py-[.9rem] border-b-transparent"
+                    flex gap-[.5rem] text-[1.9rem] border border-customColor px-[1rem] py-[.9rem] border-b-transparent"
             >
               {" "}
               <FiMessageSquare />
@@ -66,7 +66,7 @@ function User() {
             <NavLink
               to=""
               className="
-                    flex gap-[.5rem] text-[1.9rem] border border-[#7500CF] px-[1rem] py-[.9rem] border-b-transparent"
+                    flex gap-[.5rem] text-[1.9rem] border border-customColor px-[1rem] py-[.9rem] border-b-transparent"
             >
               {" "}
               <CiHeart />
@@ -75,7 +75,7 @@ function User() {
             <NavLink
               to=""
               className="
-                    flex gap-[.5rem] text-[1.9rem] border border-[#7500CF] px-[1rem] py-[.9rem] "
+                    flex gap-[.5rem] text-[1.9rem] border border-customColor px-[1rem] py-[.9rem] "
             >
               {" "}
               <IoMdExit />

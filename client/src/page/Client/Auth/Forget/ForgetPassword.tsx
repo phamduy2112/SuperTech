@@ -57,10 +57,10 @@ function ForgetPassword() {
  <div className="w-[60%] relative  overflow-hidden">
       {/* Diagonal Purple Background */}
    
-      <div className="absolute inset-0 bg-purple-700 clip-diagonal-left" />
+      <div className="absolute inset-0 bg-customColor clip-diagonal-left" />
       <div className="bg-white shadow-lg w-[4rem] h-[4rem] rounded-[50%] absolute top-[2rem] left-[2rem] ">
         <NavLink to={"/"}>
-          <FaArrowLeft  className="text-[2rem] text-[#7500CF] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"/>
+          <FaArrowLeft  className="text-[2rem] text-customColor absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"/>
         </NavLink>
         
       </div>

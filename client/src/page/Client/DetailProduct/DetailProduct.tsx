@@ -150,7 +150,7 @@ function DetailProduct() {
               <div className="w-[80%] mx-auto">
                 <img
                   className="w-[100%]"
-                  src={laptop}
+                  // src={laptop}
                   alt=""
                 />
               </div>

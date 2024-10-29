@@ -43,10 +43,16 @@ const getCommentProductByIdProduct = async (req, res) => {
             model: models.user, // Kết hợp bảng user
             as: 'user', // Alias cho kết hợp bảng
           },
-        //   {
-        //     model: models.replies_comment_product, // Kết hợp bảng user
-        //     as: 'commentDetail', // Alias cho kết hợp bảng
-        //   },
+          {
+            model: models.replies_comment_product, // Kết hợp bảng user
+            as: 'replies_comment_products', // Alias cho kết hợp bảng
+            include:[
+              {
+                model: models.user, // Kết hợp bảng user
+                as: 'user', // Alias cho kết hợp bảng
+              },
+            ]
+          },
           
         ],
       });
@@ -67,15 +73,6 @@ const createcommentproduct = async (req, res) => {
       
   
       let date = new Date(); // Ngày tạo hiện tại
-  
-      // Log để kiểm tra dữ liệu đầu vào
-      console.log({
-        user_id,
-        product_id,
-        comment_content,
-        comment_star,
-        comment_date: date, // Đặt ngày tạo
-      });
   
       // Tạo comment mới
       const newComment = await commentProductModel.create({

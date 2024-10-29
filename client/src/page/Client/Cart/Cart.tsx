@@ -32,7 +32,7 @@ return (
       <div className=" py-6 text-[1.5rem]">
         <div className="mx-auto">
           <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
-            <a href="/" className="text-customPurple hover:underline">
+            <a href="/" className="text-customColor hover:underline">
               Trang chủ
             </a>
             <span className="mx-2">/</span>
@@ -84,7 +84,7 @@ return (
                       </h2>
                       <p className="text-gray-500 text-[1.3rem]">Màu: Đen</p>
                       <div className="flex flex-col leading-normal text-lg ">
-                        <span className="text-customPurple text-[1.6rem] font-medium">
+                        <span className="text-customColor text-[1.6rem] font-medium">
                           20.190.000 ₫
                           <span className="text-gray-400 line-through text-[1.5rem] px-[1rem] font-normal">
                             25.390.000 ₫
@@ -107,14 +107,14 @@ return (
                       </button>
                     </div>
                     <div className="flex flex-col leading-normal text-lg w-[20%]">
-                      <span className="text-customPurple text-[1.7rem] font-semibold">
+                      <span className="text-customColor text-[1.7rem] font-semibold">
                        {item.quantity*item.product_price} ₫
                       </span>
                     </div>
                     <button 
                     onClick={()=>{handleRemoveItem(item.product_id)}}
                     className="text-gray-500 hover:text-red-600 mx-[10rem] w-[5%]">
-                      <i className="fas fa-trash-alt text-customPurple">
+                      <i className="fas fa-trash-alt text-customColor">
                         <FaTrash />
                       </i>
                     </button>
@@ -122,12 +122,12 @@ return (
                 </div>
               ))}
               <div className="flex justify-between">
-                  <button className="px-10 py-5 rounded-2xl text-white bg-customPurple font-medium hover:bg-yellow-500 hover:shadow-md hover:text-black transition duration-300">
+                  <button className="px-10 py-5 rounded-2xl text-white bg-customColor font-medium hover:bg-yellow-500 hover:shadow-md hover:text-black transition duration-300">
                     Tiếp tục mua sắm
                   </button>
                   <button 
                   onClick={()=>{removeAllCart()}}
-                  className="px-10 py-5 rounded-2xl text-white bg-customPurple font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300">
+                  className="px-10 py-5 rounded-2xl text-white bg-customColor font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300">
                     Xóa tất cả
                   </button>
               </div>
@@ -137,11 +137,11 @@ return (
                 <div className="flex justify-between items-center ">
                   <button className="justify-between flex items-center shadow-sm rounded-lg my-[1.2rem] px-5 py-2 w-1/2 hover:shadow-md transition-shadow">
                     Chọn mã giảm giá
-                    <span className="text-customPurple">
+                    <span className="text-customColor">
                       <RiCoupon3Fill />
                     </span>
                   </button>
-                  <span className="font-bold text-customPurple">
+                  <span className="font-bold text-customColor">
                     UY8F8SD7F89SD7F
                   </span>
                 </div>
@@ -181,7 +181,7 @@ return (
                   </div>
                 </div>
                 <div>
-                  <button className="w-full bg-customPurple text-white py-[0.4rem] text-[1.7rem] rounded-[1.7rem] font-medium">
+                  <button className="w-full bg-customColor text-white py-[0.4rem] text-[1.7rem] rounded-[1.7rem] font-medium">
                     Thanh toán
                   </button>
                 </div>
