@@ -11,6 +11,7 @@ import _discount from  "./discount.js";
 import _favorite_product from  "./favorite_product.js";
 import _image_product from  "./image_product.js";
 import _infor_product from  "./infor_product.js";
+import _likes from  "./likes.js";
 import _media_post from  "./media_post.js";
 import _order from  "./order.js";
 import _pay from  "./pay.js";
@@ -32,6 +33,7 @@ export default function initModels(sequelize) {
   const favorite_product = _favorite_product.init(sequelize, DataTypes);
   const image_product = _image_product.init(sequelize, DataTypes);
   const infor_product = _infor_product.init(sequelize, DataTypes);
+  const likes = _likes.init(sequelize, DataTypes);
   const media_post = _media_post.init(sequelize, DataTypes);
   const order = _order.init(sequelize, DataTypes);
   const pay = _pay.init(sequelize, DataTypes);
@@ -43,12 +45,10 @@ export default function initModels(sequelize) {
 
   products.belongsTo(categories, { as: "category", foreignKey: "category_id"});
   categories.hasMany(products, { as: "products", foreignKey: "category_id"});
-  replies_comment_product.belongsTo(comment_product, { as: "commentDetail", foreignKey: "comment_id"});
-  comment_product.hasMany(replies_comment_product, { as: "replies_comment_products", foreignKey: "comment_id"});
   order.belongsTo(discount, { as: "discount_discount", foreignKey: "discount"});
   discount.hasMany(order, { as: "orders", foreignKey: "discount"});
   product_colors.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
-  image_product.hasMany(product_colors, { as: "imageProductColors", foreignKey: "image_id"});
+  image_product.hasMany(product_colors, { as: "product_colors", foreignKey: "image_id"});
   products.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
   image_product.hasMany(products, { as: "products", foreignKey: "image_id"});
   products.belongsTo(infor_product, { as: "infor_product_infor_product", foreignKey: "infor_product"});
@@ -57,6 +57,8 @@ export default function initModels(sequelize) {
   order.hasMany(detail_order, { as: "detail_orders", foreignKey: "order_id"});
   order.belongsTo(pay, { as: "pay", foreignKey: "pay_id"});
   pay.hasMany(order, { as: "orders", foreignKey: "pay_id"});
+  likes.belongsTo(posts, { as: "post", foreignKey: "post_id"});
+  posts.hasMany(likes, { as: "likes", foreignKey: "post_id"});
   media_post.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(media_post, { as: "media_posts", foreignKey: "post_id"});
   comment_product.belongsTo(products, { as: "product", foreignKey: "product_id"});
@@ -65,7 +67,6 @@ export default function initModels(sequelize) {
   products.hasMany(detail_order, { as: "detail_orders", foreignKey: "product_id"});
   favorite_product.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(favorite_product, { as: "favorite_products", foreignKey: "product_id"});
-  
   product_colors.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_colors, { as: "product_colors", foreignKey: "product_id"});
   chat.belongsTo(user, { as: "user", foreignKey: "user_id"});
@@ -78,12 +79,12 @@ export default function initModels(sequelize) {
   user.hasMany(comment_product, { as: "comment_products", foreignKey: "user_id"});
   favorite_product.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(favorite_product, { as: "favorite_products", foreignKey: "user_id"});
+  likes.belongsTo(user, { as: "user", foreignKey: "user_id"});
+  user.hasMany(likes, { as: "likes", foreignKey: "user_id"});
   order.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(order, { as: "orders", foreignKey: "user_id"});
   pay.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(pay, { as: "pays", foreignKey: "user_id"});
-  replies_comment_product.belongsTo(user, { as: "user", foreignKey: "user_id"});
-  user.hasMany(replies_comment_product, { as: "replies_comment_products", foreignKey: "user_id"});
 
   return {
     banner,
@@ -97,6 +98,7 @@ export default function initModels(sequelize) {
     favorite_product,
     image_product,
     infor_product,
+    likes,
     media_post,
     order,
     pay,

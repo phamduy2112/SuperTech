@@ -191,7 +191,7 @@ const userDetail=async(req,res)=>{
         
     
        const user=await User.findByPk(user_id, {
-        attributes: { exclude: ['user_password'] } // Loại trừ cột password
+        attributes: { exclude: ['user_password'] }
     });
 
        responseSend(res, user, "Thành công!", 200);

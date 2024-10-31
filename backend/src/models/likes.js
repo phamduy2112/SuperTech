@@ -1,34 +1,34 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class replies_comment_product extends Model {
+export default class likes extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    id: {
+    like_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    comment: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'user',
+        key: 'user_id'
+      }
     },
-    comment_id: {
+    post_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    repiles_date: {
-      type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'posts',
+        key: 'post_id'
+      }
     }
   }, {
     sequelize,
-    tableName: 'replies_comment_product',
+    tableName: 'likes',
     timestamps: false,
     indexes: [
       {
@@ -36,21 +36,21 @@ export default class replies_comment_product extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "like_id" },
         ]
       },
       {
-        name: "fk_commentttt_repilse",
-        using: "BTREE",
-        fields: [
-          { name: "comment_id" },
-        ]
-      },
-      {
-        name: "fk_uuuserrrr_repilse",
+        name: "fk_like_user",
         using: "BTREE",
         fields: [
           { name: "user_id" },
+        ]
+      },
+      {
+        name: "fk_like_post",
+        using: "BTREE",
+        fields: [
+          { name: "post_id" },
         ]
       },
     ]
