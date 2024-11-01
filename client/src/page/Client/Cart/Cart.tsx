@@ -3,6 +3,7 @@ import { FaTrash } from "react-icons/fa";
 import { RiCoupon3Fill } from "react-icons/ri";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { removeItemFromCart,removeAllCart,decreaseItemQuantity, inCreaseItemQuantity } from "../../../redux/cart/cart.slice";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const dispatch=useAppDispatch()
@@ -11,6 +12,7 @@ export default function Cart() {
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
   };
+  const navigate=useNavigate();
 const decreaseItem=(product_id:any)=>{
   dispatch(decreaseItemQuantity({product_id}))
 }  
@@ -181,7 +183,11 @@ return (
                   </div>
                 </div>
                 <div>
-                  <button className="w-full bg-customColor text-white py-[0.4rem] text-[1.7rem] rounded-[1.7rem] font-medium">
+                  <button 
+                  onClick={()=>{
+                    navigate("/thanh-toán")
+                  }}
+                  className="w-full bg-customColor text-white py-[0.4rem] text-[1.7rem] rounded-[1.7rem] font-medium">
                     Thanh toán
                   </button>
                 </div>

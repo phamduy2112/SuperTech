@@ -1,19 +1,86 @@
 import { Breadcrumb, Form, Input, InputNumber, Radio, Select, Steps } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './css/formEdit.css'
 import { Container } from '../../../components/Style/Container';
+import axios from 'axios';
+import { getUserThunk } from '../../../redux/user/user.slice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { createDetailOrder, createOrder } from '../../../service/order/order.service';
 function Pay() {
-  const description = 'This is a description.';
+  const dispatch = useAppDispatch();
+  const user: any = useAppSelector((state) => state.user.user);
+  const listCart:any=useAppSelector((state)=>state.cart.listCart)
+  const totalItem=useAppSelector((state)=>state.cart.totalItems)
+  console.log(totalItem);
+  
+  useEffect(() => {
+    dispatch(getUserThunk());
+  }, [dispatch]);
+console.log(user);
+
   const [formData, setFormData] = useState({
-    name: '',
-    sdt: '',
-    email: '',
-    diaChi: '',
+    name: user?.user_name || '', // Gán giá trị ban đầu cho name
+    sdt:user?.user_phone||'',
+    email: user?.user_email||'',
+    diaChi: user?.user_address||'',
     xuathoadon: '',
+    district:'',
+    huyen:"",
     tinhThanhPho: '', // Thêm state để lưu giá trị của Select
     paymentMethod: '', // State cho phương thức thanh toán
+    totalItem
 
   });
+  const [city,setCity]=useState([])
+  const [districts,setDistricts]=useState([]);
+  const [districtsCity,setDistrictsCity]=useState([])
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        // Gọi API bằng async/await
+        const response = await axios.get('https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1');
+        
+        // Kiểm tra và cập nhật dữ liệu vào state
+        if (response.data && response.data.data) {
+          setCity(response.data.data.data);
+        }
+      } catch (err) {
+        // setError(err.message);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
+  const fetchDistricts = async (cityCode) => {
+    try {
+      const response = await axios.get(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${cityCode}&limit=-1`);
+      if (response.data && response.data.data) {
+        setDistricts(response.data.data.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const fetchDistrictsCity = async (cityCode) => {
+    try {
+      const response = await axios.get(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${cityCode}&limit=-1`);
+      if (response.data && response.data.data) {
+        setDistrictsCity(response.data.data.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const handleCityChange = (value, option) => {
+    setFormData({ ...formData, tinhThanhPho: value });
+    setCity(option.key); // Lưu mã tỉnh đã chọn
+    fetchDistricts(option.key); // Gọi API để lấy quận
+  };
+  const handleDistrictsChange = (value, option) => {
+    setFormData({ ...formData, district: value });
+    setDistricts(option.key); // Lưu mã tỉnh đã chọn
+    fetchDistrictsCity(option.key); // Gọi API để lấy quận
+  };
 
   const handleFormChange = (changedValues, allValues) => {
     setFormData({ ...formData, ...changedValues });
@@ -22,10 +89,31 @@ function Pay() {
     setFormData({ ...formData, paymentMethod: e.target.value }); // Cập nhật phương thức thanh toán
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async() => {
     // Xử lý logic khi ấn nút Đặt hàng
     console.log('Form data:', formData);
+    // const dataOrder={
+    //   order_total:100000,
+    //   order_total_quatity:+totalItem,
+    //   order_status:0,
+      
+    //   user_id:user.user_id
+      
+    // }
+    // const resp=await createOrder(dataOrder)
+    // console.log(resp);
+    
     // Thực hiện các bước cần thiết sau khi lấy được dữ liệu
+    // create detail order
+
+    const detailOrders = listCart.map(item => ({
+      product_id: item.product_id,
+      order_id:17,
+      detail_order_quality:1,
+   
+    }));
+
+    const responve=await createDetailOrder(detailOrders)
   };
   return (
     <Container>
@@ -151,38 +239,82 @@ function Pay() {
           </div>
       </div>
       </div>
-      <div className=' md:w-[45%] px-10 py-5 bg-white rounded-lg shadow-xl space-y-1'>
+      <div className=' md:w-[50%] px-10 py-5 bg-white rounded-lg shadow-xl space-y-1'>
         <h3 className='lg:text-[2.5rem] md:text-[2.2rem] py-[1rem] sm:text-[1.8rem] sm:font-semibold'>Thông tin thanh toán</h3>
         <div>
         <Form autoComplete='off' className='formEdit' onValuesChange={handleFormChange}>
-        <Form.Item name="name" label="Họ và tên" >
-          <Input /> 
-        </Form.Item>
-        <Form.Item name="sdt" label="Số điện thoại">
-        <InputNumber 
-         className='w-[100%]'
+        <Form.Item name="name" label="Họ và tên" initialValue={user?.user_name}>
+  <Input
+             className='w-[100%] '
+
+  />
+</Form.Item>
+        <Form.Item name="sdt" label="Số điện thoại"   initialValue={user?.user_phone||''}>
+        <Input
+         className='w-[100%] '
+         placeholder="Nhập số điện thoại của bạn" // Placeholder hiển thị trong ô input
+
         />
 
         </Form.Item>
-        <Form.Item name="email" label="Email">
-          <Input />
+        <Form.Item name="email" label="Email" initialValue={user?.user_email||''}>
+          <Input 
+                   className='w-[100%] '
+
+           placeholder="Nhập email của bạn" // Placeholder hiển thị trong ô input
+          />
         </Form.Item>
         <Form.Item label='Tỉnh thành phố'>
-                <Select onChange={(value) => setFormData({ ...formData, tinhThanhPho: value })}>
-                  <Select.Option value='tp1'>Tỉnh/Thành phố 1</Select.Option>
-                  <Select.Option value='tp2'>Tỉnh/Thành phố 2</Select.Option>
-                  <Select.Option value='tp3'>Tỉnh/Thành phố 3</Select.Option>
+                <Select 
+                defaultValue="Mời bạn chọn thành phố"
+                onChange={handleCityChange}
+                
+               >
+         {Array.isArray(city) && city.length > 0 && (
+      city.map((item) => (
+        <Select.Option key={item.code} value={item.name}
+        
+        >
+          {item.name}
+        </Select.Option>
+      ))
+    ) }
+               
+             
                 </Select>
               </Form.Item>
-              <Form.Item label='Quận/huyện'>
-                <Select>
-                  <Select.Option value='qh1'>Quận/Huyện 1</Select.Option>
-                  <Select.Option value='qh2'>Quận/Huyện 2</Select.Option>
-                  <Select.Option value='qh3'>Quận/Huyện 3</Select.Option>
+              <Form.Item label='Quận'>
+              <Select 
+                  defaultValue="Mời bạn chọn thành phố"
+              onChange={handleDistrictsChange}>
+              {Array.isArray(districts) && districts.length > 0 ? (
+      districts.map((item) => (
+        <Select.Option key={item.code} value={item.name}>
+          {item.name}
+        </Select.Option>
+      ))
+    ) : (
+      <Select.Option disabled>Không có dữ liệu</Select.Option>
+    )}
                 </Select>
               </Form.Item>
-        <Form.Item name="diaChi" label="Địa chỉ">
-          <Input />
+              <Form.Item label='Huyện'>
+              <Select
+                  defaultValue="Mời bạn chọn thành phố"
+              onChange={(e) => setFormData({ ...formData, huyen: e})}>
+              {Array.isArray(districtsCity) && districtsCity.length > 0 ? (
+      districtsCity.map((item) => (
+        <Select.Option key={item.code} value={item.name}>
+          {item.name}
+        </Select.Option>
+      ))
+    ) : (
+      <Select.Option disabled>Không có dữ liệu</Select.Option>
+    )}
+                </Select>
+              </Form.Item>
+        <Form.Item name="diaChi" label="Địa chỉ" initialValue={user?.user_address||''}>
+          <Input placeholder='Mời bạn nhập địa chỉ'/>
         </Form.Item>
         <div>
         
@@ -197,15 +329,17 @@ function Pay() {
         </div>
       </div>
 
-            <div className="lg:w-[53%] bg-white rounded-lg shadow-xl">
+            <div className="lg:w-[45%] bg-white rounded-lg shadow-xl">
               <div className="space-y-4 mb-10 px-7 leading-[3.7rem]">
                 <h3 className="text-[2rem] font-semibold">Đơn đặt hàng</h3>
-
-              {/* Product Information */}
+        <div className={`${listCart.length >2 ? "h-[25rem] custom-scrollbar" :""} overflow-y-auto custom-scrollbar`}>
+        {
+          listCart.map((item)=>{
+            return (
               <div className="flex justify-between items-center border-b pb-5">
                 <div className="flex items-center space-x-4">
                   <img
-                    className="w-[10rem] h-[10rem] object-cover"
+                    className="w-[8rem] h-[8rem] object-cover"
                     src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
                     alt="Iphone"
                   />
@@ -217,6 +351,12 @@ function Pay() {
                 </div>
                 <div className="text-[1.8rem] font-semibold text-customColor">30.000.000đ</div>
               </div>
+            )
+          })
+        }
+        </div>
+              {/* Product Information */}
+           
 
               {/* Order Summary */}
               <div className="space-y-2">
@@ -280,7 +420,7 @@ function Pay() {
               <div className="mt-5">
                 <button
                   onClick={handleFormSubmit}
-                  className="w-full my-[1rem] bg-customColor text-white py-4 text-[2rem] rounded-lg font-medium">
+                  className="w-full my-[1rem] bg-customColor text-white py-1 text-[2rem] rounded-lg font-medium">
                     Đặt hàng
                 </button>
               </div>

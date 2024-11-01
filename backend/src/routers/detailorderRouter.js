@@ -5,7 +5,7 @@ const detailorderRouter = express.Router();
 
 detailorderRouter.get('/detailorder', getdetailorder);
 detailorderRouter.get('/detailorder/:id', getdetailorderById);
-detailorderRouter.post('/detailorder', createdetailorder);
+detailorderRouter.post('/create-detail-order', createdetailorder);
 detailorderRouter.put('/detailorder/:id', updatedetailorder);
 detailorderRouter.delete('/detailorder/:id', deletedetailorder);
 

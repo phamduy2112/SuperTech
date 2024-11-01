@@ -31,27 +31,27 @@ const getorderById = async (req, res) => {
 const createorder = async (req, res) => {
     try {
         const {
-            order_id,
+          
             order_total,
-            order_total_quantity,
+            order_total_quatity,
             order_status,
         } = req.body;
 
         const user_id = req.id;
-        const pay_id = req.id;
+        // const pay_id = req.id;
         const discount = req.id;
 
         let date = new Date();
-
+              
         const neworder = await order.create({
-            order_id,
+       
             order_date: date,
             order_total,
-            order_total_quantity,
+            order_total_quatity,
             order_status,
-            pay_id,
+            pay_id:1,
             user_id,
-            discount
+            // discount
         });
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {

@@ -29,10 +29,17 @@ const getdetailorderById = async (req, res) => {
 
 const createdetailorder = async (req, res) => {
     try {
-        let newmediapost = await detailorder.create(req.body);
-        responseSend(res, newmediapost, "Thêm Thành công!", 201);
+        const detailOrders = req.body; // Giả định body chứa một mảng đối tượng
+        console.log(detailOrders);
+        
+        const newOrders = await Promise.all(detailOrders.map(order => detailorder.create(order)));
+        console.log(newOrders);
+        
+        responseSend(res, newOrders, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.log(error);
+        
     }
 };
 
