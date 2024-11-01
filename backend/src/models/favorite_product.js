@@ -5,9 +5,9 @@ export default class favorite_product extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
     favorite_product_id: {
-      autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: false
+      primaryKey: true,
+      autoIncrement: true
     },
     user_id: {
       type: DataTypes.INTEGER,
