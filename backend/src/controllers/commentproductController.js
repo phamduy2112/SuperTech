@@ -140,6 +140,32 @@ const deletecommentproduct = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const likeComment = async (req, res) => {
+
+
+  try {
+    const user_id = req.id;
+    const commentId = req.params.id;
+    // Check if the like already exists
+    const existingLike = await Like.findOne({
+      where: { user_id, commentId },
+    });
+
+    if (existingLike) {
+      // If like exists, remove it (unlike)
+      await existingLike.destroy();
+      return res.status(200).json({ message: "Comment unliked" });
+    }
+
+    // If not liked yet, create a new like
+    await Like.create({ userId, commentId });
+    res.status(201).json({ message: "Comment liked" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred" });
+  }
+};
 
 export {
     getcommentproduct,
