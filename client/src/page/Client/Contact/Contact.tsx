@@ -9,6 +9,7 @@ import { FaLocationCrosshairs } from "react-icons/fa6";
 
 function Contact() {
   const [width, setwidth] = useState(null);
+  
   function checkWidth() {
     const width: number = window.innerWidth;
     setwidth(width);
@@ -33,7 +34,7 @@ function Contact() {
     },
   ];
   return (
-    <div className="w-[80%] m-auto">
+      <div className="w-[80%] m-auto">
       <div className="flex flex-col h-full justify-center items-center p-10 gap-7">
         <span className="text-[32px] font-medium text-center p-5">
           Liên hệ cho chúng tôi
@@ -41,7 +42,6 @@ function Contact() {
         <span className="text-[16px] font-light text-[#727171]">
           đội ngũ chuyên nghiệp giàu kinh nghiệm phục vụ quý khách hàng{" "}
         </span>
-
         <div className="w-full h-[800px] relative flex items-start">
           <div className=" w-full h-[289px]">
             <div className="h-full relative flex items-center justify-center ">

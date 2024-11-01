@@ -52,6 +52,7 @@ const CodeInput: React.FC = () => {
                     help={formik.touched.code && formik.errors.code ? formik.errors.code : null}
                     className="mb-[1rem]"
                 >
+                        <div className="flex space-x-2 justify-center">
                     {code.map((digit, index) => (
                         <Input
                             key={index}
@@ -60,10 +61,11 @@ const CodeInput: React.FC = () => {
                             placeholder=""
                             value={digit}
                             onChange={(e) => handleChange(index, e.target.value)}
-                            className="py-[1rem] text-[1.5rem] text-center w-[60px] h-[60px]"
+                            className="py-[1rem] text-[3rem] text-center w-[77px] h-[65px]"
                             maxLength={1}
                         />
                     ))}
+                    </div>
                 </Form.Item>
             </>
             <div className="button-edit">

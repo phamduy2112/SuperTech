@@ -11,7 +11,7 @@ function ListProduct() {
   const searchParams = new URLSearchParams(location.search);
       const category_dad = searchParams.get('category_dad');  // Get 'category_dad' directly
       const category = searchParams.get('category');          // Get 'category' directly
-  
+    
   const  listProduct  = useAppSelector((state) => state.product.listProduct);
   const dispatch = useAppDispatch();
 
