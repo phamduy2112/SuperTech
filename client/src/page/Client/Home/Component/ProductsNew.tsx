@@ -84,10 +84,10 @@ function ProductsNew() {
 
         {/* Render danh sách sản phẩm theo tab */}
         {getCurrentProducts().map((product) => (
-          <NavLink to={`/sản-phẩm-chi-tiết/${product.product_id}`} key={product.id}>
+          <div  key={product.id}>
                       <ProductItem product={product} />
 
-          </NavLink>
+          </div>
         ))}
       </div>
     </div>

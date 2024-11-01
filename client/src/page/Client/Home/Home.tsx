@@ -21,7 +21,7 @@ function Home() {
       <Catelogry/>
       <ProductSale/>
 
-      <ProductsNew/>
+      {/* <ProductsNew/> */}
       <div className='w-[80%] mx-auto'>
         <img src={banner2} alt="" className='w-[100%]'/>
         <div className="flex gap-[1%]">
@@ -37,7 +37,7 @@ function Home() {
           <img src={banner4} alt="" className='w-[49%]'/>
         </div>
       </div>
-      <ProductCategory/>
+      {/* <ProductCategory/> */}
       <div className='w-[80%] mx-auto'>
    
    <div className="flex gap-[1%]">
@@ -45,7 +45,7 @@ function Home() {
      <img src={banner4} alt="" className='w-[49%]'/>
    </div>
  </div>
-      <ProductHome/>
+      {/* <ProductHome/> */}
       <div className='w-[80%] mx-auto'>
         <img src={banner1} className='w-[100%]'/>
       </div>

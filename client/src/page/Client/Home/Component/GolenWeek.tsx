@@ -20,10 +20,10 @@ function GolenWeek(props) {
           </div>
           <div>
         
-                <h3 className="xxl:text-[1.8rem] sm:text-[1.5rem] lg:text-[1.6rem] font-semibold my-[.7rem]">{props.product.product_name}</h3>
+                <h3 className="xxl:text-[1.8rem] sm:text-[1.5rem] lg:text-[1.6rem] font-semibold my-[.7rem]">Sản phẩm 1</h3>
                
                 <p className="xll:text-[1.7rem] sm:text-[1.6rem] text-[#DB363B] font-semibold my-[.7rem]">
-                {props.product.product_price}
+                30.000.000đ
                 <span className="text-[1.5rem] text-gray-500 ml-[.5rem]" style={{textDecoration:"line-through"}}>31.990.000đ</span>
 
             </p>
