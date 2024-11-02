@@ -23,3 +23,15 @@ export const getOrderByIdUser=()=>{
     method:"get"
   })
 }
+export const changeStatusOrder=(id:number,data:any)=>{
+  return axiosWithAuth(`/change-status-order/${id}`,{
+    method:"put",
+    data
+  })
+}
+export const getDetailOrder=(id:number)=>{
+  return axiosWithAuth(`/detail-order/${id}`,{
+    method:"get",
+
+  })
+}

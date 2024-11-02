@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getOrderByIdUser } from "../../service/order/order.service";
+import { changeStatusOrder, getDetailOrder, getOrderByIdUser } from "../../service/order/order.service";
 
 
 export const getOrderByIdProductThunk = createAsyncThunk(
@@ -13,10 +13,34 @@ export const getOrderByIdProductThunk = createAsyncThunk(
     }
   },
 );
+export const changeStatusOrderThunk = createAsyncThunk(
+  "ChangeStatusOrderThunk",
+  async (data:any) => {      
+    try {
+        const updateData=await changeStatusOrder(data.id,data)
+      const resp = await getOrderByIdUser();
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const getOrderDetail = createAsyncThunk(
+  "getOrderDetail",
+  async (id:number) => {      
+    try {
+      const resp = await getDetailOrder(id);
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 
 
 const initialState = {
   listOrder: [] ,
+  detailOrder:[],
 };
 
 const orderSlice = createSlice({
@@ -31,6 +55,14 @@ const orderSlice = createSlice({
     builder
       .addCase(getOrderByIdProductThunk.fulfilled, (state, { payload }) => {
         state.listOrder = payload;
+      });
+    builder
+      .addCase(changeStatusOrderThunk.fulfilled, (state, { payload }) => {
+        state.listOrder = payload;
+      });
+    builder
+      .addCase(getOrderDetail.fulfilled, (state, { payload }) => {
+        state.detailOrder = payload;
       });
   
   },

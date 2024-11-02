@@ -52,7 +52,7 @@ function User() {
                     flex gap-[.5rem] text-[1.9rem] border border-customColor px-[1rem] py-[.9rem] border-b-transparent"
             >
               <FaEdit />
-              <NavLink to="">Đơn mua</NavLink>
+              <NavLink to="/don-hang-cua-ban">Đơn mua</NavLink>
             </NavLink>
             <NavLink
               to=""

@@ -10,6 +10,7 @@ import { Formik, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
 
 function Comment(props: any) {
+  
   const [expandedComments, setExpandedComments] = useState<boolean[]>(new Array(props.reviews?.length).fill(false));
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [activeAction, setActiveAction] = useState<{ action: 'edit' | 'reply' | null, index: number | null }>({ action: null, index: null });
@@ -22,6 +23,8 @@ function Comment(props: any) {
   };
   const dispatch=useDispatch();
   const handleDelete=(data:any)=>{
+    setActiveDropdown(null);
+
       dispatch(deleteCommentByIdThunk(data));
   }
   const handleCommentClick = (index: number) => {
@@ -178,6 +181,7 @@ onClick={() => handleActionToggle(index, 'edit')}                               
             console.log(newComment);
             
             dispatch(editCommentByIdThunk(newComment));
+            setActiveDropdown(null);
             setActiveAction({ action: null, index: null });
                       resetForm();
            }

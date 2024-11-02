@@ -89,11 +89,11 @@ children:[
     element: <UserDetail />,
   },
   {
-    path: "/đơn-hàng-của-bạn",
+    path: "/don-hang-cua-ban",
     element: <Order />,
   },
   {
-    path: "/đơn-hàng-chi-tiết-của-bạn",
+    path: "/don-hang-chi-tiet-cua-ban/:id",
     element: <OrderDetail />,
   },
 

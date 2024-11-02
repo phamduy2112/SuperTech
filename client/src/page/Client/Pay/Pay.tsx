@@ -34,6 +34,7 @@ console.log(user);
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
+  
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
@@ -91,16 +92,14 @@ console.log(user);
 
   const handleFormSubmit = async() => {
     // Xử lý logic khi ấn nút Đặt hàng
-    console.log('Form data:', formData);
-    // const dataOrder={
-    //   order_total:100000,
-    //   order_total_quatity:+totalItem,
-    //   order_status:0,
-      
-    //   user_id:user.user_id
-      
-    // }
-    // const resp=await createOrder(dataOrder)
+
+    const dataOrder={
+      order_total:100000,
+      order_total_quatity:+totalItem,
+      order_status:0,
+      user_id:user.user_id
+    }
+    const resp=await createOrder(dataOrder)
     // console.log(resp);
     
     // Thực hiện các bước cần thiết sau khi lấy được dữ liệu
@@ -108,8 +107,8 @@ console.log(user);
 
     const detailOrders = listCart.map(item => ({
       product_id: item.product_id,
-      order_id:17,
-      detail_order_quality:1,
+      order_id:resp.data.content.order_id,
+      detail_order_quality:item.quantity,
    
     }));
 

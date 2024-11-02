@@ -4,34 +4,31 @@ import React, { useEffect, useState } from 'react'
 import './css/TableEdit.css'
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import { getOrderByIdProductThunk } from '../../../../redux/order/Order.slice';
+import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../redux/order/Order.slice';
 function Order() {
-  const colorText=[
-    {
-      color:'#DB363B',
-      text:"Đang chờ duyệt"
-    },
-    {
-      color:'#FFCC00',
-      text:"Đang chuẩn bị hàng"
-    },
-    {
-      color:'#2277C6',
-      text:"Đang giao hàng"
-    },
-    {
-      color:'#2101B0',
-      text:"Đã huỷ hàng"
-    },
-    {
-      color:'#04C621',
-      text:"Thành công"
-    },
-    {
-      color:'#000000',
-      text:"Không nhận hàng"
-    },
-  ]
+  const colorText = [
+    { color: '#DB363B', text: 'Đang chờ duyệt' },     // 0
+    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, // 1
+    { color: '#2277C6', text: 'Đang giao hàng' },     // 2
+    { color: '#2101B0', text: 'Đã huỷ hàng' },        // 3
+    { color: '#04C621', text: 'Thành công' },         // 4
+    { color: '#000000', text: 'Không nhận hàng' },    // 5
+    { color: '#8A2BE2', text: 'Trạng thái khác' },    // 6
+  ];
+
+  const [data,setData]=useState([]);
+  const dispatch=useAppDispatch()
+  const listOrder=useAppSelector((state)=>state.listOrder.listOrder)
+  
+  const handleChangeStatus=(id:number,data:number)=>{
+    const dataOrder={
+      id,
+      order_status:data
+    }
+    // console.log(dataOrder);
+    dispatch(changeStatusOrderThunk(dataOrder))
+    
+  }
   const columns = [
     {
       title: 'Đơn hàng',
@@ -48,53 +45,54 @@ function Order() {
       title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
+      render: (text) => <NavLink to={""} className="text-[red] font-semibold">lorem</NavLink>,
+
     },
     {
       title: 'Tổng tiền',
-      key: 'tags',
-      dataIndex: 'tags',
+      key: 'order_total',
+      dataIndex: 'order_total',
       render: (text) => <NavLink to={""} className="text-[red] font-semibold">{text}</NavLink>,
 
    
     },
+  
     {
       title: 'Trạng thái',
-      key: 'trangThai',
-      dataIndex: 'trangThai',
-      render:(text)=>{
+      key: 'order_status',
+      dataIndex: 'order_status',
+      render: (statusIndex) => {
+        const statusItem = colorText[statusIndex] || {};
         return (
           <div className='flex justify-center cursor-pointer'>
-              <Tooltip title="Đang chờ duyệt">
-              <div className={`bg-[#DB363B] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-              </Tooltip>
-          
-                 </div>
-        )
-
-       
+            <Tooltip title={statusItem.text}>
+              <div style={{ backgroundColor: statusItem.color }} className='w-[1.5rem] h-[1.5rem] rounded-[50%]'></div>
+            </Tooltip>
+          </div>
+        );
 
       }
     },
     {
       title: '',
       key: 'edit',
-      render:()=>{
+      render: (text, record) => {
         return (
           <div className='flex gap-[.5rem]'>
-          <NavLink to="" className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
-          <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]'>Huỷ hàng</button>
+          <NavLink to={`/don-hang-chi-tiet-cua-ban/${record.order_id}`} className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
+          {record.order_status<=2 ?
+          (  <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]' 
+            onClick={()=>{
+              handleChangeStatus(record.order_id, 3);
+            }}
+            >Huỷ hàng</button>) : null}
+        
         </div>
         )
      
       }
     },
   ];
-  const [data,setData]=useState([]);
-  const dispatch=useAppDispatch()
-  const listOrder=useAppSelector((state)=>state.listOrder.listOrder)
-  
-
-  
  useEffect(()=>{
   dispatch(getOrderByIdProductThunk())
  },[dispatch])

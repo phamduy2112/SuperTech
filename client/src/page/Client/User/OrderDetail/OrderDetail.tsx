@@ -1,7 +1,13 @@
 import { Table } from 'antd';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { getOrderDetail } from '../../../../redux/order/Order.slice';
+import { getDetailOrder } from '../../../../service/order/order.service';
 
 function OrderDetail() {
+  const { id } = useParams(); // Lấy id từ URL
+  const idOrder=Number(id)
   const columns = [
     {
       title: 'Sản phẩm',
@@ -24,26 +30,30 @@ function OrderDetail() {
     },
     {
       title: 'Đơn giá',
-      dataIndex: 'donGia',
+      dataIndex: 'product_price',
       render:(text:string)=>{
         return (
-          <div className='text-customColor font-semibold'>{text}</div>
+          <div className='text-customColor font-semibold text-center'>{text}</div>
         )
       }
     },
     {
       title: 'Số lượng',
-      dataIndex: 'soLuong',
-      
+      dataIndex: 'quanlity',
+      render:(text:string)=>{
+        return (
+          <div className=' font-semibold text-center'>{text}</div>
+        )
+      }
 
  
     
     },
     {
       title: 'Giảm giá',
-      dataIndex: 'giamGia',
+      dataIndex: 'product_discount',
       render:(text:string)=>{
-        return( <div className='text-red-600 font-semibold'>
+        return( <div className='text-red-600 font-semibold text-center'>
           {text}%
 
         </div>)
@@ -56,10 +66,16 @@ function OrderDetail() {
       title: 'Tổng',
       dataIndex: 'total',
       render: (text:string, record) => {
-       return ( <div className='text-[#FF0000] font-semibold'>
-        {record.donGia * record.soLuong * (1 - record.giamGia / 100)}
-      đ
-       </div>) 
+        const donGia =+record.product_price;
+        const soLuong = +record.quanlity;
+        const giamGia = +record.product_discount;
+        const tongTien =donGia-soLuong * (1 - +giamGia / 100);
+       
+        return (
+          <div className='text-[#FF0000] font-semibold text-center'>
+            {tongTien.toFixed(2)} đ
+          </div>
+        );
       }
 
       
@@ -68,22 +84,46 @@ function OrderDetail() {
     
     },
   ];
-  const data = [
-    {
-      key: '1',
-      name: 'MacBook Air 13 inch M2 10GPU',
-      img:"https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg",
-      color:'Trắng',
-      donGia: 320000,
-      soLuong: 1,
-      giamGia: 20,
-    },
-   
-  ];
+
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };
-  return (
+  const dispatch=useAppDispatch()
+const [detailOrder,setDetailOrder]=useState([]); 
+const [user,setUser]=useState({});
+
+const [order,setOrder]=useState({})
+const [listProduct,setListProduct]=useState([]);
+  useEffect(()=>{
+    const fetchApi=async ()=>{
+      try {
+        const resp = await getDetailOrder(idOrder);
+        setDetailOrder(resp.data.content);
+        setOrder(detailOrder[0]?.order)
+        const products = resp.data.content.map(detail => ({
+        quanlity:detail.detail_order_quality,
+          name: detail.product.product_name,
+          product_price: detail.product.product_price,
+          product_star: detail.product.product_star,
+          product_discount: detail.product.product_discount,
+          product_hot: detail.product.product_hot,
+          image_id: detail.product.image_id,
+          category_id: 2
+        }));
+  
+        setListProduct(products);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchApi()
+  },[idOrder])
+console.log(listProduct);
+
+ 
+
+  
+return (
     <div className='w-[100%] shadow-lg py-[4rem] px-[3rem]'>
       <div>
         <div className='flex justify-between items-center'>
@@ -93,7 +133,7 @@ function OrderDetail() {
         <div className='flex gap-[1rem] py-[1rem]'>
           <p className='text-[1.4rem] font-semibold'>Khuyến mãi: <span>0</span></p>
           <p className='text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
-          <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>0</span></p>
+          <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>{order?.order_total}</span></p>
         </div>
         <div className='flex justify-between'>
           <div className='w-[49%]'>
@@ -111,7 +151,7 @@ function OrderDetail() {
           </div>
         </div>
         <div className='mt-[3rem] table-detail-order'>
-        <Table columns={columns} dataSource={data} onChange={onChange} className='' />;
+        <Table columns={columns} dataSource={listProduct} onChange={onChange} className='' />;
         
         </div>
         <div className='rounded-lg mt-[1rem]'>

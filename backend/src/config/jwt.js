@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 export const createToken=(data)=>{
 
 
- return jwt.sign({data},"BI_MAT",{expiresIn:'60s'})
+ return jwt.sign({data},"BI_MAT",{expiresIn:'1d'})
 }
 
 export const createTokenRef=(data)=>{

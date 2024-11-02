@@ -1,6 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import { Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let commentProductModel = models.comment_product; 
@@ -43,16 +44,16 @@ const getCommentProductByIdProduct = async (req, res) => {
             model: models.user, // Kết hợp bảng user
             as: 'user', // Alias cho kết hợp bảng
           },
-          {
-            model: models.replies_comment_product, // Kết hợp bảng user
-            as: 'replies_comment_products', // Alias cho kết hợp bảng
-            include:[
-              {
-                model: models.user, // Kết hợp bảng user
-                as: 'user', // Alias cho kết hợp bảng
-              },
-            ]
-          },
+          // {
+          //   model: models.replies_comment_product, // Kết hợp bảng user
+          //   as: 'replies_comment_products', // Alias cho kết hợp bảng
+          //   include:[
+          //     {
+          //       model: models.user, // Kết hợp bảng user
+          //       as: 'user', // Alias cho kết hợp bảng
+          //     },
+          //   ]
+          // },
           
         ],
       });
@@ -147,8 +148,8 @@ const likeComment = async (req, res) => {
     const user_id = req.id;
     const commentId = req.params.id;
     // Check if the like already exists
-    const existingLike = await Like.findOne({
-      where: { user_id, commentId },
+    const existingLike = await models.likes.findOne({
+      where: { user_id, comment_id	:commentId },
     });
 
     if (existingLike) {
@@ -158,7 +159,7 @@ const likeComment = async (req, res) => {
     }
 
     // If not liked yet, create a new like
-    await Like.create({ userId, commentId });
+    await models.likes.create({ user_id, comment_id	:commentId });
     res.status(201).json({ message: "Comment liked" });
 
   } catch (error) {
@@ -166,12 +167,39 @@ const likeComment = async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 };
+const getLikeUser = async (req, res) => {
+  try {
+    let id=req.params.id;
 
+    
+    // Giả sử bạn có model `Like`
+    const likes = await models.likes.findAll({
+      attributes: ['like_id',"user_id",'comment_id'], // Chỉ lấy cột comment_id
+
+      where: {
+        comment_id: {
+          [Op.ne]: null, // Điều kiện user_id không phải null
+  
+        },
+        comment_id: id, // Điều kiện comment_id bằng 7
+
+      },
+    });
+
+    responseSend(res, likes, "Thành công!", 200);
+
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy dữ liệu.' });
+  }
+};
 export {
     getcommentproduct,
     getcommentproductById,
     createcommentproduct,
     updatecommentproduct,
     getCommentProductByIdProduct,
-    deletecommentproduct
+    deletecommentproduct,
+    likeComment,
+    getLikeUser
 };

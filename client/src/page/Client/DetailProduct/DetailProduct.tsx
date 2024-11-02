@@ -18,6 +18,8 @@ import CommentForm from "./Component/CommentForm";
 
 function DetailProduct() {
   const { id } = useParams(); // Lấy id từ URL
+  const numericId = Number(id); // Ép chuỗi id thành số
+
   const dispatch=useAppDispatch();
   const userDetail=useAppSelector((state)=>state.product.productDetail)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
@@ -25,12 +27,11 @@ function DetailProduct() {
   console.log(userDetail);
   
   useEffect(()=>{
-    const numericId = Number(id); // Ép chuỗi id thành số
     if (!isNaN(numericId)) {
       dispatch(getProductByIdThunk(numericId));
       dispatch(getCommentByIdProductThunk(numericId))
     }
-  },[id,dispatch])
+  },[numericId,dispatch])
   console.log(getCommentById);
   
   const [listProduct, setProduct] = useState({
@@ -335,7 +336,7 @@ function DetailProduct() {
               </div>
             </div>
                 {/* Ý kiến */}
-                <div>
+                {/* <div>
                     <h3 className="text-[2rem]">Ý kiến của bạn</h3>
                     <div className="mt-[2rem] flex">
                       <div className="w-[10%] mx-[1rem]">
@@ -353,7 +354,9 @@ function DetailProduct() {
                                 </div>
                                 </div>
                     </div>
-                </div>                
+                </div>                 */}
+                <Comment reviews={getCommentById}/>
+                <CommentForm id={numericId}/>
           </div>
         </Container>
 

@@ -33,7 +33,20 @@ const getOrderById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const  changeStatusOrder=async(req,res)=>{
+    try{
+        const order_id=req.params.id
+        const {order_status}=req.body
+        const order = await orders.findByPk(order_id);
 
+        order.order_status = order_status;
+        await order.save();
+
+        responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
+    }catch(error){
+
+    }
+}
 const createorder = async (req, res) => {
     try {
         const {
@@ -55,7 +68,7 @@ const createorder = async (req, res) => {
             order_total,
             order_total_quatity,
             order_status,
-            pay_id:1,
+            pay_id:null,
             user_id,
             // discount
         });
@@ -120,5 +133,6 @@ export {
     getOrderById,
     createorder,
     updateorder,
-    deleteorder
+    deleteorder,
+    changeStatusOrder
 };
