@@ -25,6 +25,22 @@ export default class likes extends Model {
         model: 'posts',
         key: 'post_id'
       }
+    },
+    comment_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'comment_product',
+        key: 'comment_id'
+      }
+    },
+    replies_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'replies_comment_product',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
@@ -51,6 +67,20 @@ export default class likes extends Model {
         using: "BTREE",
         fields: [
           { name: "post_id" },
+        ]
+      },
+      {
+        name: "fk_like_commentoprod",
+        using: "BTREE",
+        fields: [
+          { name: "comment_id" },
+        ]
+      },
+      {
+        name: "fk_like_replies",
+        using: "BTREE",
+        fields: [
+          { name: "replies_id" },
         ]
       },
     ]

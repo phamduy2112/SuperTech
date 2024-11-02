@@ -45,6 +45,8 @@ export default function initModels(sequelize) {
 
   products.belongsTo(categories, { as: "category", foreignKey: "category_id"});
   categories.hasMany(products, { as: "products", foreignKey: "category_id"});
+  likes.belongsTo(comment_product, { as: "comment", foreignKey: "comment_id"});
+  comment_product.hasMany(likes, { as: "likes", foreignKey: "comment_id"});
   order.belongsTo(discount, { as: "discount_discount", foreignKey: "discount"});
   discount.hasMany(order, { as: "orders", foreignKey: "discount"});
   product_colors.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
@@ -69,6 +71,8 @@ export default function initModels(sequelize) {
   products.hasMany(favorite_product, { as: "favorite_products", foreignKey: "product_id"});
   product_colors.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_colors, { as: "product_colors", foreignKey: "product_id"});
+  likes.belongsTo(replies_comment_product, { as: "reply", foreignKey: "replies_id"});
+  replies_comment_product.hasMany(likes, { as: "likes", foreignKey: "replies_id"});
   chat.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(chat, { as: "chats", foreignKey: "user_id"});
   code.belongsTo(user, { as: "user", foreignKey: "user_id"});
