@@ -12,6 +12,7 @@
 html, body {
     height: 100%;
     font-size: 62.5%; /* 1rem = 10px */
+    background-color: rgb(236, 236, 236);
 }
 body {
     line-height: 1;

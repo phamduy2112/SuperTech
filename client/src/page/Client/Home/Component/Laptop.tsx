@@ -43,15 +43,13 @@ function LaptopComponent() {
     
 
   return (
-    <div className='xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto pt-[2rem] pb-[1rem]'>
+    <div className='xl:w-[100%] xmd:w-[100%] sm:w-[105%] m-auto py-[5rem]'>
       <div className="flex gap-[1rem]">
-
-        <div className='w-[81.5%]'>
+        <div className='w-full'>
           <div className="pb-5">
             <div className="flex justify-between items-center">
-              <h4 className='text-[2.5rem] font-semibold'>Laptop</h4>
-          
-              <div className='flex gap-[.5rem]'>
+              <h4 className='text-[2.5rem] font-semibold'>Sản phẩm nổi bật</h4>
+              <div className='flex gap-[1.5rem]'>
                 {catelogryLaptop.map((tab) => (
                   <div
                     key={tab.category_id} // Giả sử `tab.id` là ID danh mục
@@ -64,10 +62,8 @@ function LaptopComponent() {
                   </div>
                 ))}
               </div>
-            </div>
-            
+            </div>   
           </div>
-
           <div className="grid grid-cols-5 gap-4">
             {/* {productLaptop.slice(0, 5).map((product) => (
               <ProductItem /> // Hiển thị sản phẩm
@@ -75,10 +71,10 @@ function LaptopComponent() {
             <ProductItem/>
             <ProductItem/>
             <ProductItem/>
+            <ProductItem/>
+            <ProductItem/>
           </div>
         </div>
-
-        <img src={banner8} className='w-[250px]' alt="" />
       </div>
     </div>
   );
