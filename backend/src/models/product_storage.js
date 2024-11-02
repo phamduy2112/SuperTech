@@ -1,42 +1,30 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infor_product extends Model {
+export default class product_storage extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    infor_product: {
+    id_storage: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    infor_screen: {
+    storage: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    infor_system: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    infor_cpu: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    infor_ram: {
+    storage_price: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    infor_more: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    image_product: {
-      type: DataTypes.STRING(50),
+    product_id: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infor_product',
+    tableName: 'product_storage',
     timestamps: false,
     indexes: [
       {
@@ -44,7 +32,7 @@ export default class infor_product extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "infor_product" },
+          { name: "id_storage" },
         ]
       },
     ]

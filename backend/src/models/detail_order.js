@@ -14,6 +14,14 @@ export default class detail_order extends Model {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    detail_order_price: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    discount_product: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
     order_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
