@@ -135,7 +135,7 @@ children:[
   },
   {
 
-    element: <AuthTemplate />,
+    element: <AuthTemplate />, 
     children: [
       {
         path: "/đăng-nhập",

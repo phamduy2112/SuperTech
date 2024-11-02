@@ -1,29 +1,34 @@
-import React from "react";
-import { MdHome } from "react-icons/md";
+import React, { useState } from "react";
+import { MdHome, MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
+
 function QuestionAnswer() {
+  const [open, setOpen] = useState(null);
+
+  const toggleOpen = (index) => {
+    setOpen(open === index ? null : index);
+  };
+
   return (
-    <div className="w-[80%] m-auto">
-      <div className="text-[19px] flex">
-        <span className="text-[#A0A0A0] flex">
-          {" "}
+    <div>
+      {/* Breadcrumb (Dùng cho tất cả các kích thước màn hình) */}
+      <div className="w-[80%] m-auto flex py">
+        <span className="text-[10px] lg:text-[19px] text-[#A0A0A0] flex items-center gap-2">
           <MdHome /> Trang chủ/
-        </span>{" "}
-        <span className="text-[#7500CF]">Hỏi đáp</span>
+        </span>
+        <span className="text-[10px] lg:text-[19px] text-[#7500CF]">Chăm sóc khách hàng</span>
       </div>
 
-      <div className=" grid grid-cols-[30%_1fr] p-10">
-      <div>
-          <div className="grid text-[16px] font-medium gap-5 ">
-            <span className="text-[#FFFF] bg-[#7500CF] w-[296px] h-[50px] p-6 rounded-[5px]">
-              {" "}
+      {/* Layout cho Desktop */}
+      <div className="w-[80%] m-auto grid grid-cols-[30%_1fr] p-10 hidden lg:grid">
+        <div>
+          <div className="grid text-[16px] font-medium gap-5">
+            <span className="text-[#FFFF] bg-[#7500CF] w-[296px] h-[50px] p-6 rounded-[md]">
               Hướng dẫn mua hàng Online
             </span>
-            <span className="border p-4 rounded-[5px] w-[296px] h-[50px] p-6">
-              {" "}
+            <span className="border p-4 rounded-[md] w-[296px] h-[50px]">
               Chính sách thanh toán
             </span>
-            <span className="border p-4 rounded-[5px] w-[296px] h-[50px] p-6">
-              {" "}
+            <span className="border p-4 rounded-[md] w-[296px] h-[50px]">
               Chính sách giao hàng
             </span>
           </div>
@@ -85,6 +90,69 @@ function QuestionAnswer() {
               <span className=" font-medium">HOÀN TẤT ĐƠN HÀNG</span>{" "}
             </span>
           </div>
+        </div>
+      </div>
+
+      {/* Layout cho Mobile */}
+      <div className="lg:hidden w-[80%] m-auto space-y-6">
+        {/* FAQ Item 1 */}
+        <div
+          className={`p-6 bg-white shadow-lg rounded-lg border cursor-pointer flex justify-between items-center ${open !== 1 ? "overflow-hidden" : ""}`}
+          onClick={() => toggleOpen(1)}
+        >
+          <div>
+            <p className="text-lg font-semibold text-[#7500CF] text-[24px]">Hướng dẫn mua hàng Online</p>
+            {open === 1 && (
+              <p className="mt-3 text-base text-gray-600 leading-relaxed">
+                Gọi điện đến Hotline <span className="text-[#7500CF]">0313728397</span> từ 8h đến 20h tất cả các ngày trong tuần. Nhân viên bán hàng sẽ ghi nhận thông tin đặt hàng của bạn.
+              </p>
+            )}
+          </div>
+          <span className="text-[#7500CF] text-2xl">
+            {open === 1 ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
+          </span>
+        </div>
+
+        {/* FAQ Item 2 */}
+        <div
+          className={`p-6 bg-white shadow-lg rounded-lg border cursor-pointer flex justify-between items-center ${open !== 2 ? "overflow-hidden" : ""}`}
+          onClick={() => toggleOpen(2)}
+        >
+          <div>
+            <p className="text-lg font-semibold text-[24px]">Chính sách mua hàng</p>
+            {open === 2 && (
+              <p className="mt-3 text-base text-gray-600 leading-relaxed">
+                Truy cập vào trang Facebook hoặc Instagram chính thức của Shop và nhắn tin để được hỗ trợ đặt hàng.
+              </p>
+            )}
+          </div>
+          <span className="text-[#7500CF] text-2xl">
+            {open === 2 ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
+          </span>
+        </div>
+
+        {/* FAQ Item 3 */}
+        <div
+          className={`p-6 bg-white shadow-lg rounded-lg border cursor-pointer flex justify-between items-center ${open !== 3 ? "overflow-hidden" : ""}`}
+          onClick={() => toggleOpen(3)}
+        >
+          <div>
+            <p className="text-lg font-semibold">Hướng dẫn sử dụng</p>
+            {open === 3 && (
+              <div className="mt-3 text-base text-gray-600 leading-relaxed space-y-2">
+                <p>Truy cập vào website, tìm kiếm sản phẩm, thêm vào giỏ hàng và thanh toán.</p>
+                <p>Các hình thức thanh toán:</p>
+                <ul className="list-disc ml-6">
+                  <li>Thanh toán khi nhận hàng</li>
+                  <li>Thanh toán qua Napas</li>
+                  <li>Thanh toán qua Momo</li>
+                </ul>
+              </div>
+            )}
+          </div>
+          <span className="text-[#7500CF] text-2xl">
+            {open === 3 ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
+          </span>
         </div>
       </div>
     </div>
