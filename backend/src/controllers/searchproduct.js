@@ -2,15 +2,15 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 // tìm kiếm theo link https://localhost:8080/timkiem?tukhoa="nhập từ khóa"
-let models = initModels(sequelize); 
-let Products = models.products; 
+let models = initModels(sequelize);
+let Products = models.products;
 const searchProducts = async (req, res) => {
     try {
         const { tukhoa } = req.query;
         let products = await Products.findAll({
             where: sequelize.where(
-                sequelize.fn('LOWER', sequelize.col('product_name')), 
-                'LIKE', 
+                sequelize.fn('LOWER', sequelize.col('product_name')),
+                'LIKE',
                 '%' + tukhoa.toLowerCase() + '%'
             )
         });

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 02, 2024 lúc 06:48 PM
+-- Thời gian đã tạo: Th10 02, 2024 lúc 07:00 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -139,6 +139,13 @@ CREATE TABLE `discount` (
   `discount_date_end` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `discount`
+--
+
+INSERT INTO `discount` (`discount_id`, `discount_name`, `discount_percent`, `condition`, `discount_date_start`, `discount_date_end`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -164,6 +171,13 @@ CREATE TABLE `image_product` (
   `image_three` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `image_four` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `image_product`
+--
+
+INSERT INTO `image_product` (`image_id`, `image_one`, `image_two`, `image_three`, `image_four`) VALUES
+(1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -240,9 +254,10 @@ INSERT INTO `order` (`order_id`, `order_date`, `order_total`, `order_total_quati
 (1, '2024-11-01 19:21:40', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
 (2, '2024-11-01 19:21:50', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
 (3, '2024-11-01 19:23:01', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
-(4, '2024-11-01 19:23:23', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(4, '2024-11-01 19:23:23', 1356555, 6, 0, 1, 1, 1, 'Tô Kí'),
 (5, '2024-11-01 19:23:26', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
-(6, '2024-11-01 19:54:45', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí');
+(6, '2024-11-01 19:54:45', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(11, '2024-11-02 17:59:03', 150, 6, 1, 1, 1, 1, 'Tô Kí');
 
 -- --------------------------------------------------------
 
@@ -255,6 +270,13 @@ CREATE TABLE `pay` (
   `payment_method` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `pay`
+--
+
+INSERT INTO `pay` (`pay_id`, `payment_method`, `user_id`) VALUES
+(1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -294,7 +316,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_star`, `product_discount`, `product_hot`, `product_date`, `product_quantity`, `image_id`, `infor_product`, `category_id`) VALUES
-(17, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
+(17, 'Product Name 2 update', 100, 5, 10, 1, '2024-11-03', 50, 1, 1, 1),
 (18, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
 (19, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
 (20, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
@@ -304,8 +326,7 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_
 (24, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
 (25, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
 (27, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
-(28, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
-(33, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, 1, 1, 1);
+(28, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -582,7 +603,7 @@ ALTER TABLE `detail_order`
 -- AUTO_INCREMENT cho bảng `discount`
 --
 ALTER TABLE `discount`
-  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `favorite_product`
@@ -594,7 +615,7 @@ ALTER TABLE `favorite_product`
 -- AUTO_INCREMENT cho bảng `image_product`
 --
 ALTER TABLE `image_product`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `infor_product`
@@ -618,13 +639,13 @@ ALTER TABLE `media_post`
 -- AUTO_INCREMENT cho bảng `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT cho bảng `pay`
 --
 ALTER TABLE `pay`
-  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `posts`
@@ -636,7 +657,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT cho bảng `product_colors`
