@@ -112,31 +112,30 @@ const getProductByIdCatelogryDad = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         const {
-            product_id,
-            product_name,
-            product_price,
-            product_star, 
-            product_discount,
-            product_hot,
-            product_quantity,
-        } = req.body;
-        const image_id = req.id;
-        const infor_product = req.id;
-        const category_id = req.id;
-        const product_date = new Date();
-        const newProduct = await Products.create({
-            product_id,
             product_name,
             product_price,
             product_star,
             product_discount,
             product_hot,
-            product_date,
+            product_quantity,
+            image_id,
+            infor_product,
+            category_id
+        } = req.body;
+
+        let date = new Date();
+        const newProduct = await Products.create({
+            product_name,
+            product_price,
+            product_star,
+            product_discount,
+            product_hot,
+            product_date: date,
             product_quantity,
             image_id,
             infor_product,
             category_id,
-        })
+        });
         responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
         console.log(error);

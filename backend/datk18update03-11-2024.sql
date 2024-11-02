@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 01, 2024 lúc 02:33 AM
+-- Thời gian đã tạo: Th10 02, 2024 lúc 06:48 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -48,6 +48,13 @@ CREATE TABLE `categories` (
   `category_date_task` datetime DEFAULT NULL,
   `category_task` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `categories`
+--
+
+INSERT INTO `categories` (`category_id`, `category_name`, `category_image`, `category_dad`, `category_date_task`, `category_task`) VALUES
+(1, 'Test', 'img.png', 213, '2024-09-12 00:00:00', 123);
 
 -- --------------------------------------------------------
 
@@ -111,6 +118,8 @@ CREATE TABLE `comment_product` (
 CREATE TABLE `detail_order` (
   `detail_order_id` int(11) NOT NULL,
   `detail_order_quality` int(11) DEFAULT NULL,
+  `detail_order_price` float DEFAULT NULL,
+  `discount_product` float DEFAULT NULL,
   `order_id` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -168,7 +177,6 @@ CREATE TABLE `infor_product` (
   `infor_system` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `infor_cpu` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `infor_ram` int(11) DEFAULT NULL,
-  `infor_storage` int(11) DEFAULT NULL,
   `infor_more` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `image_product` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -177,8 +185,8 @@ CREATE TABLE `infor_product` (
 -- Đang đổ dữ liệu cho bảng `infor_product`
 --
 
-INSERT INTO `infor_product` (`infor_product`, `infor_screen`, `infor_system`, `infor_cpu`, `infor_ram`, `infor_storage`, `infor_more`, `image_product`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `infor_product` (`infor_product`, `infor_screen`, `infor_system`, `infor_cpu`, `infor_ram`, `infor_more`, `image_product`) VALUES
+(1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -220,8 +228,21 @@ CREATE TABLE `order` (
   `order_status` int(11) DEFAULT NULL,
   `pay_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `discount` int(11) DEFAULT NULL
+  `discount` int(11) DEFAULT NULL,
+  `address` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `order`
+--
+
+INSERT INTO `order` (`order_id`, `order_date`, `order_total`, `order_total_quatity`, `order_status`, `pay_id`, `user_id`, `discount`, `address`) VALUES
+(1, '2024-11-01 19:21:40', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(2, '2024-11-01 19:21:50', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(3, '2024-11-01 19:23:01', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(4, '2024-11-01 19:23:23', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(5, '2024-11-01 19:23:26', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
+(6, '2024-11-01 19:54:45', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí');
 
 -- --------------------------------------------------------
 
@@ -273,7 +294,18 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_star`, `product_discount`, `product_hot`, `product_date`, `product_quantity`, `image_id`, `infor_product`, `category_id`) VALUES
-(1, 'Updated Product Name', 150, 4, 5, 0, '2024-10-29', 4, NULL, NULL, NULL);
+(17, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
+(18, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
+(19, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
+(20, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
+(21, 'Product Name 2', 100, 5, 10, 1, '2024-11-02', 50, NULL, NULL, NULL),
+(22, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(23, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(24, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(25, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(27, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(28, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(33, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -286,6 +318,19 @@ CREATE TABLE `product_colors` (
   `color` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `quality` int(11) DEFAULT NULL,
   `image_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `product_storage`
+--
+
+CREATE TABLE `product_storage` (
+  `id_storage` int(11) NOT NULL,
+  `storage` int(11) DEFAULT NULL,
+  `storage_price` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -395,9 +440,9 @@ ALTER TABLE `discount`
 -- Chỉ mục cho bảng `favorite_product`
 --
 ALTER TABLE `favorite_product`
-  ADD UNIQUE KEY `favorite_product_id` (`favorite_product_id`),
-  ADD KEY `fk_useriddd_user` (`user_id`),
-  ADD KEY `fk_proiductddd_prodyuctt` (`product_id`);
+  ADD PRIMARY KEY (`favorite_product_id`),
+  ADD KEY `fk_favorite_product` (`product_id`),
+  ADD KEY `fk_favorite_user` (`user_id`);
 
 --
 -- Chỉ mục cho bảng `image_product`
@@ -468,6 +513,12 @@ ALTER TABLE `product_colors`
   ADD KEY `fk_color_product123` (`image_id`);
 
 --
+-- Chỉ mục cho bảng `product_storage`
+--
+ALTER TABLE `product_storage`
+  ADD PRIMARY KEY (`id_storage`);
+
+--
 -- Chỉ mục cho bảng `replies_comment_product`
 --
 ALTER TABLE `replies_comment_product`
@@ -495,7 +546,7 @@ ALTER TABLE `banner`
 -- AUTO_INCREMENT cho bảng `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `chat`
@@ -519,7 +570,7 @@ ALTER TABLE `comment_posts`
 -- AUTO_INCREMENT cho bảng `comment_product`
 --
 ALTER TABLE `comment_product`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `detail_order`
@@ -531,13 +582,13 @@ ALTER TABLE `detail_order`
 -- AUTO_INCREMENT cho bảng `discount`
 --
 ALTER TABLE `discount`
-  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `discount_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `favorite_product`
 --
 ALTER TABLE `favorite_product`
-  MODIFY `favorite_product_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `favorite_product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `image_product`
@@ -549,7 +600,7 @@ ALTER TABLE `image_product`
 -- AUTO_INCREMENT cho bảng `infor_product`
 --
 ALTER TABLE `infor_product`
-  MODIFY `infor_product` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `infor_product` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `likes`
@@ -567,7 +618,7 @@ ALTER TABLE `media_post`
 -- AUTO_INCREMENT cho bảng `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `pay`
@@ -585,13 +636,19 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT cho bảng `product_colors`
 --
 ALTER TABLE `product_colors`
   MODIFY `color_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `product_storage`
+--
+ALTER TABLE `product_storage`
+  MODIFY `id_storage` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `replies_comment_product`
@@ -645,8 +702,8 @@ ALTER TABLE `detail_order`
 -- Các ràng buộc cho bảng `favorite_product`
 --
 ALTER TABLE `favorite_product`
-  ADD CONSTRAINT `fk_favotireproduct_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `fk_proiductddd_prodyuctt` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
+  ADD CONSTRAINT `fk_favorite_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
+  ADD CONSTRAINT `fk_favorite_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Các ràng buộc cho bảng `likes`
@@ -667,9 +724,9 @@ ALTER TABLE `media_post`
 -- Các ràng buộc cho bảng `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `fk_discountid_discount` FOREIGN KEY (`discount`) REFERENCES `discount` (`discount_id`) ON UPDATE SET NULL,
-  ADD CONSTRAINT `fk_order_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON UPDATE SET NULL,
-  ADD CONSTRAINT `fk_payid_pay` FOREIGN KEY (`pay_id`) REFERENCES `pay` (`pay_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_discountid_discount` FOREIGN KEY (`discount`) REFERENCES `discount` (`discount_id`),
+  ADD CONSTRAINT `fk_order_userid` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  ADD CONSTRAINT `fk_payid_pay` FOREIGN KEY (`pay_id`) REFERENCES `pay` (`pay_id`) ON DELETE SET NULL;
 
 --
 -- Các ràng buộc cho bảng `pay`
@@ -682,7 +739,7 @@ ALTER TABLE `pay`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
-  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`),
+  ADD CONSTRAINT `fk_infor_inforproduct` FOREIGN KEY (`infor_product`) REFERENCES `infor_product` (`infor_product`) ON DELETE SET NULL,
   ADD CONSTRAINT `fkimage` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`);
 
 --

@@ -33,25 +33,26 @@ const createorder = async (req, res) => {
         const {
             order_id,
             order_total,
-            order_total_quantity,
+            order_total_quatity,
             order_status,
+            pay_id,
+            discount,
+            address,
         } = req.body;
 
         const user_id = req.id;
-        const pay_id = req.id;
-        const discount = req.id;
-
         let date = new Date();
 
         const neworder = await order.create({
             order_id,
             order_date: date,
             order_total,
-            order_total_quantity,
+            order_total_quatity,
             order_status,
             pay_id,
             user_id,
-            discount
+            discount,
+            address
         });
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {
@@ -65,7 +66,7 @@ const updateorder = async (req, res) => {
         const {
             order_date,
             order_total,
-            order_total_quantity,
+            order_total_quatity,
             order_status,
         } = req.body;
         const pay_id =  req.id;
@@ -76,17 +77,14 @@ const updateorder = async (req, res) => {
             responseSend(res, "", "Đơn hàng không tồn tại!", 404);
             return;
         }
-
         order.order_date = order_date;
         order.order_total = order_total;
-        order.order_total_quantity = order_total_quantity;
+        order.order_total_quatity = order_total_quatity;
         order.order_status = order_status;
         order.pay_id = pay_id;
         order.user_id = user_id;
         order.discount = discount;
-
         await order.save();
-
         responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
     } catch (error) {
         console.error("Error updating order:", error);

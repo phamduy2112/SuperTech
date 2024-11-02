@@ -12,11 +12,11 @@ export default class products extends Model {
     },
     product_name: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: false
     },
     product_price: {
       type: DataTypes.FLOAT,
-      allowNull: true
+      allowNull: false
     },
     product_star: {
       type: DataTypes.INTEGER,
@@ -44,7 +44,8 @@ export default class products extends Model {
       references: {
         model: 'image_product',
         key: 'image_id'
-      }
+      },
+
     },
     infor_product: {
       type: DataTypes.INTEGER,
@@ -52,7 +53,9 @@ export default class products extends Model {
       references: {
         model: 'infor_product',
         key: 'infor_product'
-      }
+      },
+onUpdate: 'CASCADE',
+  onDelete: 'SET NULL'
     },
     category_id: {
       type: DataTypes.INTEGER,
@@ -60,43 +63,13 @@ export default class products extends Model {
       references: {
         model: 'categories',
         key: 'category_id'
-      }
+      },
+
     }
   }, {
     sequelize,
     tableName: 'products',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "product_id" },
-        ]
-      },
-      {
-        name: "fk_infor_inforproduct",
-        using: "BTREE",
-        fields: [
-          { name: "infor_product" },
-        ]
-      },
-      {
-        name: "fk_category_id",
-        using: "BTREE",
-        fields: [
-          { name: "category_id" },
-        ]
-      },
-      {
-        name: "fkimage",
-        using: "BTREE",
-        fields: [
-          { name: "image_id" },
-        ]
-      },
-    ]
+    timestamps: false
   });
-  }
+}
 }
