@@ -18,3 +18,8 @@ export const createDetailOrder = (data:any) => {
  
   );
   };
+export const getOrderByIdUser=()=>{
+  return axiosWithAuth(`/order-by-id-user`,{
+    method:"get"
+  })
+}

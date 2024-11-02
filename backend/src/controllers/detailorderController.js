@@ -14,9 +14,38 @@ const getdetailorder = async (req, res) => {
     }
 };
 
-const getdetailorderById = async (req, res) => {
+
+const getDetailOrderById = async (req, res) => {
     try {
-        let data = await detailorder.findByPk(req.params.id);
+        
+        // const user_id=req.id;
+
+        const order_id = req.params.id;
+        let data = await detailorder.findAll({
+            where:{
+                order_id,
+
+            },
+            include: [
+       
+                {
+                model: models.order,
+                    as:'order',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user' // Bao gồm replies cho mỗi comment
+                        }
+                    ]
+            },
+            
+      
+            
+         
+        
+        ]
+        });
+        
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -75,7 +104,7 @@ const deletedetailorder = async (req, res) => {
 
 export {
     getdetailorder,
-    getdetailorderById,
+    getDetailOrderById,
     createdetailorder,
     updatedetailorder,
     deletedetailorder

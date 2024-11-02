@@ -15,9 +15,15 @@ const getorder = async (req, res) => {
     }
 };
 
-const getorderById = async (req, res) => {
+const getOrderById = async (req, res) => {
+    
     try {
-        let data = await order.findByPk(req.params.id);
+    const user_id=req.id;
+        let data = await order.findAll({
+            where:{
+                user_id
+            }
+        });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -111,7 +117,7 @@ const deleteorder = async (req, res) => {
 
 export {
     getorder,
-    getorderById,
+    getOrderById,
     createorder,
     updateorder,
     deleteorder

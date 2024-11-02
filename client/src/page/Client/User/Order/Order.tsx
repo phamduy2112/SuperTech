@@ -1,8 +1,10 @@
 import { Space, Table, Tag, Tooltip } from 'antd';
 import Search from 'antd/es/input/Search'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './css/TableEdit.css'
 import { NavLink } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { getOrderByIdProductThunk } from '../../../../redux/order/Order.slice';
 function Order() {
   const colorText=[
     {
@@ -33,14 +35,14 @@ function Order() {
   const columns = [
     {
       title: 'Đơn hàng',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <NavLink to={""} className="text-[#0084FF]">{text}</NavLink>,
+      dataIndex: 'order_id',
+      key: 'order_id',
+      render: (text) => <NavLink to={""} className="text-[#0084FF]">#{text}</NavLink>,
     },
     {
       title: 'Ngày mua',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'order_date',
+      key: 'order_date',
     },
     {
       title: 'Địa chỉ',
@@ -87,30 +89,15 @@ function Order() {
       }
     },
   ];
-  const data = [
-    {
-      key: '1',
-      name: '#3054',
-      age: "2024-05-21 10:15",
-      address: 'New York No. 1 Lake Park',
-      tags: "5.000.000đ",
-      TrangThai:1
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: "ASdasdasd",
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: "ASdasd",
-    },
-  ];
+  const [data,setData]=useState([]);
+  const dispatch=useAppDispatch()
+  const listOrder=useAppSelector((state)=>state.listOrder.listOrder)
+  
+
+  
+ useEffect(()=>{
+  dispatch(getOrderByIdProductThunk())
+ },[dispatch])
   return (
     <div>
       <h3 className='text-[2.5rem] text-customColor font-semibold'>
@@ -163,7 +150,7 @@ function Order() {
             </form>
             
       <div className='tableEdit'>
-      <Table columns={columns} dataSource={data} className='mt-[3rem]'/>
+      <Table columns={columns} dataSource={listOrder} className='mt-[3rem]'/>
       </div>
     </div>
   )

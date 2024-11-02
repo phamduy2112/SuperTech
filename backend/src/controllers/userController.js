@@ -41,7 +41,7 @@ const register = async (req, res) => {
             user_name,
             user_email,
             user_password:hashedPassword,
-            user_role:"user"
+            user_role:0
         })
         responseSend(res,{
             success: true
