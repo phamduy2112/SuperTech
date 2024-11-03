@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 02, 2024 lúc 07:00 PM
+-- Thời gian đã tạo: Th10 03, 2024 lúc 10:21 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -257,7 +257,9 @@ INSERT INTO `order` (`order_id`, `order_date`, `order_total`, `order_total_quati
 (4, '2024-11-01 19:23:23', 1356555, 6, 0, 1, 1, 1, 'Tô Kí'),
 (5, '2024-11-01 19:23:26', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
 (6, '2024-11-01 19:54:45', 150, 6, 1, NULL, NULL, NULL, 'Tô Kí'),
-(11, '2024-11-02 17:59:03', 150, 6, 1, 1, 1, 1, 'Tô Kí');
+(11, '2024-11-02 17:59:03', 150, 6, 1, 1, 1, 1, 'Tô Kí'),
+(12, '2024-11-02 18:10:04', 150, 6, 1, 1, 1, 1, 'Tô Kí'),
+(13, '2024-11-03 09:19:39', 150, 6, 1, 1, 1, 1, 'Tô Kí');
 
 -- --------------------------------------------------------
 
@@ -326,7 +328,10 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `product_
 (24, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
 (25, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
 (27, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
-(28, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL);
+(28, 'Product Name 2', 100, 5, 10, 2, '2024-11-02', 50, NULL, NULL, NULL),
+(39, 'sản phẩm 5', 102323, 5, 10, 2, '2024-11-03', 50, 1, 1, 1),
+(40, 'sản phẩm 5', 102323, 5, 10, 2, '2024-11-03', 50, 1, 1, 1),
+(41, 'sản phẩm 5', 102323, 5, 10, 2, '2024-11-03', 50, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -351,6 +356,7 @@ CREATE TABLE `product_colors` (
 CREATE TABLE `product_storage` (
   `id_storage` int(11) NOT NULL,
   `storage` int(11) DEFAULT NULL,
+  `storage_quatity` int(11) DEFAULT NULL,
   `storage_price` int(11) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -537,7 +543,8 @@ ALTER TABLE `product_colors`
 -- Chỉ mục cho bảng `product_storage`
 --
 ALTER TABLE `product_storage`
-  ADD PRIMARY KEY (`id_storage`);
+  ADD PRIMARY KEY (`id_storage`),
+  ADD KEY `fk_storage_product` (`product_id`);
 
 --
 -- Chỉ mục cho bảng `replies_comment_product`
@@ -639,7 +646,7 @@ ALTER TABLE `media_post`
 -- AUTO_INCREMENT cho bảng `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT cho bảng `pay`
@@ -657,7 +664,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT cho bảng `product_colors`
@@ -769,6 +776,12 @@ ALTER TABLE `products`
 ALTER TABLE `product_colors`
   ADD CONSTRAINT `fk_color_dasdasdasd` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
   ADD CONSTRAINT `fk_color_product123` FOREIGN KEY (`image_id`) REFERENCES `image_product` (`image_id`);
+
+--
+-- Các ràng buộc cho bảng `product_storage`
+--
+ALTER TABLE `product_storage`
+  ADD CONSTRAINT `fk_storage_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

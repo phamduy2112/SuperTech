@@ -14,13 +14,21 @@ export default class product_storage extends Model {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    storage_quatity: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     storage_price: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'products',
+        key: 'product_id'
+      }
     }
   }, {
     sequelize,
@@ -33,6 +41,13 @@ export default class product_storage extends Model {
         using: "BTREE",
         fields: [
           { name: "id_storage" },
+        ]
+      },
+      {
+        name: "fk_storage_product",
+        using: "BTREE",
+        fields: [
+          { name: "product_id" },
         ]
       },
     ]
