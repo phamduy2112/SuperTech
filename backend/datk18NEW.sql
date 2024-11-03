@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 03, 2024 lúc 10:21 AM
+-- Thời gian đã tạo: Th10 03, 2024 lúc 04:00 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.4.1
 
@@ -358,7 +358,8 @@ CREATE TABLE `product_storage` (
   `storage` int(11) DEFAULT NULL,
   `storage_quatity` int(11) DEFAULT NULL,
   `storage_price` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL
+  `product_id` int(11) DEFAULT NULL,
+  `color_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -544,7 +545,8 @@ ALTER TABLE `product_colors`
 --
 ALTER TABLE `product_storage`
   ADD PRIMARY KEY (`id_storage`),
-  ADD KEY `fk_storage_product` (`product_id`);
+  ADD KEY `fk_storage_product` (`product_id`),
+  ADD KEY `fk_storage_color` (`color_id`);
 
 --
 -- Chỉ mục cho bảng `replies_comment_product`
@@ -781,6 +783,7 @@ ALTER TABLE `product_colors`
 -- Các ràng buộc cho bảng `product_storage`
 --
 ALTER TABLE `product_storage`
+  ADD CONSTRAINT `fk_storage_color` FOREIGN KEY (`color_id`) REFERENCES `product_colors` (`color_id`),
   ADD CONSTRAINT `fk_storage_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 COMMIT;
 
