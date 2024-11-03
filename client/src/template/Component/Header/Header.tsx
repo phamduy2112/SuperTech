@@ -85,7 +85,7 @@ const token=getLocalStorage('token')
 console.log(token);
 
   return (
-    <div className="">
+    <div className="bg-white">
 <div className="flex flex-col relative">
     <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
       <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>

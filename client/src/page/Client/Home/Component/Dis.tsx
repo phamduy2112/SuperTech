@@ -4,7 +4,7 @@ import { FaHeadphonesSimple, FaTruckFast } from 'react-icons/fa6'
 
 function Dis() {
   return (
-    <div className='w-[80%] m-auto py-[2rem]'>
+    <div className=' m-auto py-[2rem]'>
         <div className='grid lg:grid-cols-4 xmd:grid-cols-2'>
             <div className='flex flex-col items-center justify-center'>
             <FaTruckFast className='text-[5rem] text-[#7500CF]'/>
