@@ -29,6 +29,14 @@ export default class product_storage extends Model {
         model: 'products',
         key: 'product_id'
       }
+    },
+    color_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'product_colors',
+        key: 'color_id'
+      }
     }
   }, {
     sequelize,
@@ -48,6 +56,13 @@ export default class product_storage extends Model {
         using: "BTREE",
         fields: [
           { name: "product_id" },
+        ]
+      },
+      {
+        name: "fk_storage_color",
+        using: "BTREE",
+        fields: [
+          { name: "color_id" },
         ]
       },
     ]
