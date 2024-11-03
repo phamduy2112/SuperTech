@@ -15,6 +15,8 @@ import Dis from './Component/Dis'
 import ListProductSmall from './Component/ListProductSmall'
 import LaptopComponent from './Component/Laptop'
 import { Container } from '../../../components/Style/Container';
+import ProductHome from './Component/ProductHome';
+import ProductsNew from './Component/ProductsNew';
 
 function Home() {
   return (
@@ -24,24 +26,23 @@ function Home() {
       {/* <Category> */}
       
       <ProductSale/>
-      
-      <LaptopComponent/>
+      <ProductsNew/>
 
-      <div className='mx-auto w-[100%]'>  
-        <h1 className='text-[2.5rem] font-semibold my-5'>Banner 3</h1> 
-        <div className="flex gap-[2%]">
-          <img src={banner3} alt="" className='w-[32%] rounded-3xl py-5'/>
-          <img src={banner4} alt="" className='w-[32%] rounded-3xl py-5'/>
-          <img src={banner4} alt="" className='w-[32%] rounded-3xl py-5'/>
+
+      <div className='mx-auto'>   
+        <div className="flex gap-[1%]">
+          <img src={banner3} alt="" className='w-[50%] rounded-3xl py-5'/>
+          <img src={banner4} alt="" className='w-[50%] rounded-3xl py-5'/>
         </div>
       </div>
-      
+      <LaptopComponent/>
 
       <Catelory2></Catelory2>
       
       {/* <ProductHome/> */}
+      <ProductHome/>
       <div className='mx-auto'>
-        <h1 className='text-[2.5rem] font-semibold my-5'>Banner 1</h1>
+
         <img src={banner1} className='w-[100%] rounded-xl'/>
       </div>
       <div className='mx-auto'>   
@@ -117,7 +118,7 @@ function Home() {
 
 
      {/* <ListProductSmall/> */}
-     
+   
       <Dis/>
     </Container>
   )

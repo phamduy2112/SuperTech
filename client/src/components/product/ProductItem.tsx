@@ -36,16 +36,11 @@ function ProductItem(props) {
         <CiHeart className="text-3xl" />
       </Tooltip>
     </div>
-    {/* Icon xem sản phẩm */}
-    <div className="bg-black p-2 rounded-full text-white cursor-pointer hover:bg-gray-800">
-      <Tooltip title="Xem tóm tắt sản phẩm">
-        <IoEyeOutline onClick={() => setisvisibleProduct(!isvisibleProduct)} className="text-3xl" />
-      </Tooltip>
-    </div>
+  
   </div>
 
   {/* Giảm giá */}
-  <div className="absolute top-4 left-4 bg-[#7500CF] px-3 py-1 rounded-full text-white text-lg font-semibold">
+  <div className="absolute top-4 left-4 bg-[#7500CF] px-3 py-2 rounded-full text-white text-[1.4rem] font-semibold">
     -23%
   </div>
 
@@ -67,27 +62,27 @@ function ProductItem(props) {
       </div>
     </div>
 
-    <h3 className="text-2xl font-bold">iPhone 15 Plus 256GB</h3>
+    <h3 className="text-[1.6rem] font-bold">iPhone 15 Plus 256GB</h3>
     <div className="flex items-center gap-2 my-2">
       <PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
-      <span className="text-gray-600 text-lg">Online giá rẻ quá</span>
+      <span className="text-gray-600 text-[1.2rem]">Online giá rẻ quá</span>
     </div>
 
     {/* Giá */}
-    <div className="flex items-center gap-2 my-2">
+    <div className="flex items-center gap-2 my-2 text-[1.4rem]">
       <span className="bg-gray-100 text-sm font-medium py-1 px-2 rounded">Trả góp 0%</span>
-      <span className="line-through text-gray-400 text-lg">31.990.000đ</span>
+      <span className="line-through text-gray-400 ">31.990.000đ</span>
     </div>
-    <p className="text-red-600 font-semibold text-2xl">30.000.000đ</p>
+    <p className="text-red-600 font-semibold text-[1.6rem]">30.000.000đ</p>
 
     {/* Đánh giá và tình trạng */}
-    <div className="flex justify-between items-center mt-2">
+    <div className="flex justify-between items-center mt-2 text-[1.4rem]">
       <div className="flex items-center gap-1 text-orange-500">
-        <span className="font-semibold text-lg">4.6</span>
+        <span className="font-semibold">4.6</span>
         <IoIosStar className="text-xl" />
-        <span className="text-gray-400 text-lg">(15)</span>
+        <span className="text-gray-400">(15)</span>
       </div>
-      <div className="flex items-center text-green-600 font-semibold text-lg gap-1">
+      <div className="flex items-center text-green-600 font-semibold gap-1">
         <FaTruck />
         <span>Còn hàng</span>
       </div>
@@ -95,7 +90,7 @@ function ProductItem(props) {
 
     {/* Nút thêm giỏ hàng */}
     <button
-      className="w-full mt-4 h-12 border border-[#7500CF] text-[#7500CF] text-lg font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
+      className="w-full mt-4 py-3 border border-[#7500CF] text-[#7500CF]  text-[1.6rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
     >
       Thêm giỏ hàng
     </button>
