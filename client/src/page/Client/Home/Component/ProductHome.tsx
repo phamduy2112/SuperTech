@@ -7,24 +7,24 @@ import { getProductsThunk } from '../../../../redux/product/product.slice';
 
 function ProductHome() {
 
-  // const listProducts = useAppSelector((state) => state.product.listProducts);
-  // const dispatch = useAppDispatch();
-  // const [randomProducts, setRandomProducts] = useState([]);
+  const listProducts = useAppSelector((state) => state.product.listProducts);
+  const dispatch = useAppDispatch();
+  const [randomProducts, setRandomProducts] = useState([]);
 
-  // useEffect(() => {
-  //   dispatch(getProductsThunk());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getProductsThunk());
+  }, [dispatch]);
 
-  // // Xáo trộn và chọn ngẫu nhiên 12 sản phẩm
-  // useEffect(() => {
-  //   if (listProducts.length > 0) {
-  //     const shuffledProducts = [...listProducts]
-  //       .sort(() => 0.5 - Math.random()) // Xáo trộn danh sách
-  //       .slice(0, 12); // Lấy 12 sản phẩm ngẫu nhiên
+  // Xáo trộn và chọn ngẫu nhiên 12 sản phẩm
+  useEffect(() => {
+    if (listProducts.length > 0) {
+      const shuffledProducts = [...listProducts]
+        .sort(() => 0.5 - Math.random()) // Xáo trộn danh sách
+        .slice(0, 12); // Lấy 12 sản phẩm ngẫu nhiên
 
-  //     setRandomProducts(shuffledProducts);
-  //   }
-  // }, [listProducts]);
+      setRandomProducts(shuffledProducts);
+    }
+  }, [listProducts]);
   
   
   return (
@@ -34,17 +34,10 @@ function ProductHome() {
        
       </div>
       <div className='grid grid-cols-6 gap-[.5rem]'>
-     {/* {randomProducts.map((item)=>{
+     {randomProducts.map((item)=>{
       return <ProductItem product={item}/>
-     })} */}
-<ProductItem/>
-<ProductItem/>
-<ProductItem/>
-<ProductItem/>
-<ProductItem/>
-<ProductItem/>
-<ProductItem/>
-      
+     })}
+
       </div>
     </div>
   );

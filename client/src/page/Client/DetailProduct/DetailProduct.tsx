@@ -149,7 +149,7 @@ function DetailProduct() {
             </div>
 
             {/* Main Content */}
-            <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex flex-col md:flex-row gap-8 bg-white rounded-lg p-[1rem]">
               {/* Left Column */}
               <div className="w-full md:w-[55%] p-6">
                 <div className="w-[80%] mx-auto">
@@ -203,7 +203,8 @@ function DetailProduct() {
               </div>
 
               {/* Right Column */}
-              <div className="w-full md:w-[45%] mx-auto text-xl">
+              <div className="w-full md:w-[45%] mx-auto text-xl ">
+                <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">Product 23</h3>
                 {/* Price Section */}
                 <div className="flex items-center gap-4 py-4">
                   <p className="text-red-500 font-semibold text-[2rem]">27.000.000đ</p>
@@ -355,8 +356,8 @@ function DetailProduct() {
                                 </div>
                     </div>
                 </div>                 */}
-                <Comment reviews={getCommentById}/>
-                <CommentForm id={numericId}/>
+                {/* <Comment reviews={getCommentById}/>
+                <CommentForm id={numericId}/> */}
           </div>
         </Container>
 

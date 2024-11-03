@@ -12,6 +12,7 @@ import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskE
 import { useSpring, animated } from "react-spring";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addItemToCart } from "../../redux/cart/cart.slice";
+import { NavLink } from "react-router-dom";
 
 function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
@@ -46,24 +47,24 @@ function ProductItem(props) {
   </div>
 
   {/* Hình ảnh sản phẩm */}
-  <div className="flex justify-center my-4">
+  <NavLink to={`/san-pham-chi-tiet/${props.product.product_id}`} className="flex justify-center my-4">
     <img
       className="w-full p-10 object-contain"
       src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
       alt="Sản phẩm 1"
     />
-  </div>
+  </NavLink>
 
   {/* Thông tin sản phẩm */}
   <div className="px-4">
-    {/* Badge khuyến mãi */}
+    <NavLink to={`/san-pham-chi-tiet/${props.product.product_id}`}>
     <div className="flex items-center justify-start gap-2 mb-2">
       <div className="bg-gradient-to-r from-[#DD720B] to-[#EC6D11] text-white rounded-full px-3 py-1 text-lg font-medium flex items-center">
         <span>Tặng phụ kiện</span>
       </div>
     </div>
 
-    <h3 className="text-[1.6rem] font-bold">iPhone 15 Plus 256GB</h3>
+    <h3 className="text-[1.6rem] font-bold">{props.product.product_name}</h3>
     <div className="flex items-center gap-2 my-2">
       <PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
       <span className="text-gray-600 text-[1.2rem]">Online giá rẻ quá</span>
@@ -89,6 +90,9 @@ function ProductItem(props) {
       </div>
     </div>
 
+    </NavLink>
+    {/* Badge khuyến mãi */}
+   
     {/* Nút thêm giỏ hàng */}
     <button
       className="w-full mt-4 py-3 border border-[#7500CF] text-[#7500CF]  text-[1.6rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"

@@ -58,11 +58,11 @@ export const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "sản-phẩm-yêu-thích",
+        path: "/san-pham-yeu-thich/:id",
         element: <FavoriteProduct />,
       },
       {
-        path: "/sản-phẩm-chi-tiết/:id",
+        path: "/san-pham-chi-tiet/:id",
         element: <DetailProduct />,
       },
       {
