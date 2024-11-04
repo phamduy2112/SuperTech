@@ -17,6 +17,7 @@ import _order from  "./order.js";
 import _pay from  "./pay.js";
 import _posts from  "./posts.js";
 import _product_colors from  "./product_colors.js";
+import _product_storage from  "./product_storage.js";
 import _products from  "./products.js";
 import _replies_comment_product from  "./replies_comment_product.js";
 import _user from  "./user.js";
@@ -39,6 +40,7 @@ export default function initModels(sequelize) {
   const pay = _pay.init(sequelize, DataTypes);
   const posts = _posts.init(sequelize, DataTypes);
   const product_colors = _product_colors.init(sequelize, DataTypes);
+  const product_storage = _product_storage.init(sequelize, DataTypes);
   const products = _products.init(sequelize, DataTypes);
   const replies_comment_product = _replies_comment_product.init(sequelize, DataTypes);
   const user = _user.init(sequelize, DataTypes);
@@ -108,6 +110,7 @@ export default function initModels(sequelize) {
     pay,
     posts,
     product_colors,
+    product_storage,
     products,
     replies_comment_product,
     user,

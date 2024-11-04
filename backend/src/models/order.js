@@ -49,6 +49,10 @@ export default class order extends Model {
         model: 'discount',
         key: 'discount_id'
       }
+    },
+    address: {
+      type: DataTypes.STRING(100),
+      allowNull: true
     }
   }, {
     sequelize,

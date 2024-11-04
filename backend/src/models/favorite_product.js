@@ -5,9 +5,10 @@ export default class favorite_product extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
     favorite_product_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
+      allowNull: false,
+      primaryKey: true
     },
     user_id: {
       type: DataTypes.INTEGER,
@@ -31,7 +32,7 @@ export default class favorite_product extends Model {
     timestamps: false,
     indexes: [
       {
-        name: "favorite_product_id",
+        name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
@@ -39,17 +40,17 @@ export default class favorite_product extends Model {
         ]
       },
       {
-        name: "fk_useriddd_user",
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
-        ]
-      },
-      {
-        name: "fk_proiductddd_prodyuctt",
+        name: "fk_favorite_product",
         using: "BTREE",
         fields: [
           { name: "product_id" },
+        ]
+      },
+      {
+        name: "fk_favorite_user",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
         ]
       },
     ]
