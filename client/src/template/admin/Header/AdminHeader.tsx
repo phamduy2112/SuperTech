@@ -5,7 +5,7 @@ import { FaCloudMoon } from "react-icons/fa6";
 import { HiMenuAlt1 } from 'react-icons/hi'
 import { IoIosSearch, IoMdSettings } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux';
-import { toggle } from '../../../redux/ToggleSliceBar';
+import { toggle } from '../../../redux/admin/component/ToggleSliceBar';
 import { RiAddLargeLine } from 'react-icons/ri';
 import { Popover } from 'antd';
 import { LuUser2 } from "react-icons/lu";

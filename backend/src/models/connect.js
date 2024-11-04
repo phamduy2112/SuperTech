@@ -1,13 +1,29 @@
+
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize('datnk18', 'root', '123', {
-  host: 'localhost',
-  dialect: "mysql"
-});
-try {
-  await sequelize.authenticate();
-  console.log("Kết Nối Thành Công");
-} catch (e) {
-  console.log(e);
+const sequelize = new Sequelize(
+  "nmaplpaa_apitest",
+  "nmaplpaa_tri",
+  "Leminhtri@@",
+  {
+    host: "103.221.221.104",
+    dialect: "mysql",
+    port: 3306,
+    dialectOptions: {
+      connectTimeout: 20000,
+    },
+  }
+);
+
+async function authenticateDB() {
+  try {
+    await sequelize.authenticate();
+    console.log("Kết Nối Thành Công");
+  } catch (e) {
+    console.error("Kết Nối Thất Bại:", e);
+  }
 }
-export default sequelize
+
+authenticateDB();
+
+export default sequelize;

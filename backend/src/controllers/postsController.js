@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import Posts from "../models/posts.js";
 import { responseSend } from "../config/response.js";
-Posts.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let Posts = models.posts; 
 
 const getPosts = async (req, res) => {
     try {
@@ -37,7 +39,7 @@ const createPosts = async (req, res) => {
 const updatePosts = async (req, res) => {
     try {
         let updated = await Posts.update(req.body, {
-            where: { id: req.params.id }
+            where: { post_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -52,7 +54,7 @@ const updatePosts = async (req, res) => {
 const deletePosts = async (req, res) => {
     try {
         let deleted = await Posts.destroy({
-            where: { id: req.params.id }
+            where: { post_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

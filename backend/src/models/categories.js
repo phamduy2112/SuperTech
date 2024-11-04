@@ -5,29 +5,30 @@ export default class categories extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
     category_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     category_name: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     category_image: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     category_dad: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     category_date_task: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     category_task: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

@@ -1,7 +1,9 @@
 import sequelize from "../models/connect.js";
-import imageproduct from "../models/image_product.js";
 import { responseSend } from "../config/response.js";
-imageproduct.init(sequelize);
+import initModels from "../models/init-models.js";
+
+let models = initModels(sequelize); 
+let imageproduct = models.image_product; 
 
 const getimageproduct = async (req, res) => {
     try {
@@ -37,7 +39,7 @@ const createimageproduct = async (req, res) => {
 const updateimageproduct = async (req, res) => {
     try {
         let updated = await imageproduct.update(req.body, {
-            where: { id: req.params.id }
+            where: { image_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -52,7 +54,7 @@ const updateimageproduct = async (req, res) => {
 const deleteimageproduct = async (req, res) => {
     try {
         let deleted = await imageproduct.destroy({
-            where: { id: req.params.id }
+            where: { image_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
@@ -60,6 +62,7 @@ const deleteimageproduct = async (req, res) => {
             responseSend(res, "", "không tìm thấy !", 404);
         }
     } catch (error) {
+        console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };

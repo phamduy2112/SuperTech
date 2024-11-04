@@ -12,11 +12,11 @@ export default class pay extends Model {
     },
     payment_method: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'user',
         key: 'user_id'

@@ -1,8 +1,8 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class media_post extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     media_id: {
       autoIncrement: true,
@@ -12,11 +12,11 @@ export default class media_post extends Model {
     },
     media_url: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: true
     },
     post_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'posts',
         key: 'post_id'

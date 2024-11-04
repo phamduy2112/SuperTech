@@ -24,7 +24,11 @@ import AdminCatelogry from "../page/Admin/Catelogory/AdminCatelogry";
 import AdminUser from "../page/Admin/User/AdminUser";
 import AdminCommentProduct from "../page/Admin/Product/Comment/AdminCommentProduct";
 import AdminOrderDetail from "../page/Admin/Order/OrderDetail/AdminOrderDetail";
-import AdminOrder from "../page/Admin/Order/AdminOrder"; // nếu AdminOrder.tsx tồn tại
+import AdminOrder from "../page/Admin/Order/AdminOrder";
+import UserDetail from "../page/Client/User/UserDetail/UserDetail";
+import Order from "../page/Client/User/Order/Order";
+import User from "../page/Client/User/User";
+import OrderDetail from "../page/Client/User/OrderDetail/OrderDetail";
 
 import ChatAdmin from "../page/Admin/Chat/ChatAdmin";
 import AdminStaff from "../page/Admin/User/AdminStaff";
@@ -39,6 +43,7 @@ import AdminCommentPost from "../page/Admin/Blog/Comment/AdminComment";
 import AdminBlog from "../page/Admin/Blog/AdminBlog";
 import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
 import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
+import ListProduct from "../page/Client/ListProduct/ListProduct";
 
 export const router = createBrowserRouter([
   {
@@ -57,8 +62,12 @@ export const router = createBrowserRouter([
         element: <FavoriteProduct />,
       },
       {
-        path: "/sản-phẩm-chi-tiết",
+        path: "/sản-phẩm-chi-tiết/:id",
         element: <DetailProduct />,
+      },
+      {
+        path: "/list-sản-phẩm",
+        element: <ListProduct />,
       },
 
       // Blog
@@ -70,6 +79,27 @@ export const router = createBrowserRouter([
         path: "/bài-viết-chi-tiết",
         element: <DetailBlog />,
       },
+      // user
+{
+
+element:<User/>,
+children:[
+  {
+    path: "/người-dùng",
+    element: <UserDetail />,
+  },
+  {
+    path: "/đơn-hàng-của-bạn",
+    element: <Order />,
+  },
+  {
+    path: "/đơn-hàng-chi-tiết-của-bạn",
+    element: <OrderDetail />,
+  },
+
+]
+},
+      
       // Mua hàng
       {
         path: "/giỏ-hàng",
@@ -116,7 +146,7 @@ export const router = createBrowserRouter([
         element: <Resigter />,
       },
       {
-        path: "/quên-mật-khẩu",
+        path: "/quen-mat-khau",
         element: <ForgetPassword />,
       },
     ]

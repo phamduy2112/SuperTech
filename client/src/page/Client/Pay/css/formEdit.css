@@ -11,9 +11,17 @@
 .formEdit .ant-input-number-outlined
 {
     border-color:#7500CF ;
+    height: 3.7rem;
 }
 .formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-select .ant-select-arrow{
+
     color: #7500CF;
+    width: 15px;
+    height: 15px;
+    /* margin-top: 1px; */
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
 }
 .formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-form-item{
     margin-bottom: 1rem;
@@ -22,10 +30,22 @@
     border-color: #7500CF;
     background: #7500CF;
 }
-:where(.css-dev-only-do-not-override-5wsri9).ant-steps .ant-steps-item-process .ant-steps-item-icon{
+.ant-steps .ant-steps-item-process .ant-steps-item-icon{
     border-color: #7500CF;
     background: #7500CF;  
 }
-:where(.css-dev-only-do-not-override-5wsri9).ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
+.ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
     stroke: #7500CF;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon{
+    border: 1px solid #7500CF;
+
+    background: #7500CF;
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon >.ant-steps-icon{
+    color: white;
+}
+.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
+    background: #7500CF;
+    
 }

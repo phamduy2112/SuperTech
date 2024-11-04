@@ -1,8 +1,9 @@
 import sequelize from "../models/connect.js";
-import detailorder from "../models/detail_order.js";
 import { responseSend } from "../config/response.js";
+import initModels from "../models/init-models.js";
 
-detailorder.init(sequelize);
+let models = initModels(sequelize); 
+let detailorder = models.detail_order; 
 
 const getdetailorder = async (req, res) => {
     try {
@@ -38,7 +39,7 @@ const createdetailorder = async (req, res) => {
 const updatedetailorder = async (req, res) => {
     try {
         let updated = await detailorder.update(req.body, {
-            where: { id: req.params.id }
+            where: { detail_order_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -53,7 +54,7 @@ const updatedetailorder = async (req, res) => {
 const deletedetailorder = async (req, res) => {
     try {
         let deleted = await detailorder.destroy({
-            where: { id: req.params.id }
+            where: { detail_order_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

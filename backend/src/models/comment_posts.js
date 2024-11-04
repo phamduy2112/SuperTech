@@ -20,11 +20,7 @@ export default class comment_posts extends Model {
     },
     post_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'posts',
-        key: 'post_id'
-      }
+      allowNull: false
     },
     user_id: {
       type: DataTypes.INTEGER,

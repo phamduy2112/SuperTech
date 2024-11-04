@@ -1,7 +1,8 @@
 import sequelize from "../models/connect.js";
-import discount from "../models/discount.js";
 import { responseSend } from "../config/response.js";
-discount.init(sequelize);
+import initModels from "../models/init-models.js";
+let models = initModels(sequelize); 
+let discount = models.discount; 
 
 const getdiscount = async (req, res) => {
     try {
@@ -47,7 +48,7 @@ const updatediscount = async (req, res) => {
         }
 
         let updated = await discount.update(req.body, {
-            where: { id: req.params.id }
+            where: { discount_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -62,7 +63,7 @@ const updatediscount = async (req, res) => {
 const deletediscount = async (req, res) => {
     try {
         let deleted = await discount.destroy({
-            where: { id: req.params.id }
+            where: { discount_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

@@ -39,7 +39,7 @@ const createbanner = async (req, res) => {
 const updatebanner = async (req, res) => {
     try {
         let updated = await bannerModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { banner_id: req.params.id }
         });
         if (updated[0] > 0) {
             let updatedItem = await bannerModel.findByPk(req.params.id);
@@ -56,7 +56,7 @@ const updatebanner = async (req, res) => {
 const deletebanner = async (req, res) => {
     try {
         let deleted = await bannerModel.destroy({
-            where: { id: req.params.id }
+            where: { banner_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
