@@ -13,6 +13,8 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getProductByIdThunk } from "../../../redux/product/product.slice";
 import { getCommentByIdProductThunk } from "../../../redux/comment/comment.slice";
 import CommentForm from "./Component/CommentForm";
+import ProductColor from "./Component/ProductColor";
+import { IMG_BACKEND } from "../../../constants";
 
 
 
@@ -21,122 +23,42 @@ function DetailProduct() {
   const numericId = Number(id); // Ép chuỗi id thành số
 
   const dispatch=useAppDispatch();
-  const userDetail=useAppSelector((state)=>state.product.productDetail)
+  const productDetail=useAppSelector((state)=>state.product.productDetail)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
 
-  console.log(userDetail);
+  // console.log(productDetail);
+  const [selectedColor, setSelectedColor] = useState<any>(null);
+ const [objectColor,setOjectColor]=useState<any>(null)
+
+
   
   useEffect(()=>{
     if (!isNaN(numericId)) {
       dispatch(getProductByIdThunk(numericId));
       dispatch(getCommentByIdProductThunk(numericId))
     }
+ 
   },[numericId,dispatch])
-  console.log(getCommentById);
-  
-  const [listProduct, setProduct] = useState({
-    productName: "Tên sản phẩm",
-    price: 5000000,
-    discount: 10,
-    // color: "Xanh",
-    // storage: "64GB",
-    colors: [
-      {
-        color: "Xanh",
-        variants: [
-          {
-            storage: "64GB",
-            price: 4800000,
-          },
-          {
-            storage: "128GB",
-            price: 51000,
-          },
-        ],
-      },
-      {
-        color: "Đen",
-        variants: [
-          {
-            storage: "64GB",
-            price: 1,
-          },
-          {
-            storage: "128GB",
-            price: 2,
-          },
-        ],
-      },
-      {
-        color: "Trắng",
-        variants: [
-          {
-            storage: "64GB",
-            price: 3,
-          },
-          {
-            storage: "128GB",
-            price: 4,
-          },
-        ],
-      },
-    ],
-    specifications: {
-      screen: "6.5 inch OLED",
-      battery: "4500 mAh",
-    },
-    reviews: [
-      {
-        rating: 4.5,
-        comment: "Sản phẩm tốt, nhưng thời lượng pin cần cải thiện.",
-        replies: [
-          {
-            user: "Nguyễn Văn A",
-            comment: "Đồng ý, pin dùng được khoảng 1 ngày.",
-          },
-          {
-            user: "Lê Thị B",
-            comment: "Mình thấy pin ổn với tầm giá.",
-          },
-        ],
-      },
-      {
-        rating: 5,
-        comment: "Màn hình đẹp, giá hợp lý.",
-        replies: [],
-      },
-    ],
-  });
-  
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedVariant, setSelectedVariant] = useState<any>(null);
-  const [variants, setVariants] = useState<any[]>([]); // Lưu các variants tương ứng với màu
-  
   useEffect(() => {
-    // Mặc định chọn màu và variant đầu tiên khi trang load
-    if (listProduct.colors.length > 0) {
-      const firstColor = listProduct.colors[0];
-      setSelectedColor(firstColor.color);
-      setSelectedVariant(firstColor.variants[0]);
-      setVariants(firstColor.variants); // Lưu variants mặc định
+    if (productDetail?.product_colors?.length > 0) {
+      const firstColor = productDetail.product_colors[0];
+      setSelectedColor(firstColor?.color);
+      setOjectColor(firstColor)
+
     }
-  }, [listProduct]);
-  
+  }, [productDetail]);
+
   const handleColorChange = (color: string) => {
-    const newColor = listProduct.colors.find((item) => item.color === color);
+    const newColor = productDetail.product_colors.find((item) => item.color === color);
     if (newColor) {
       setSelectedColor(newColor.color);
-      setSelectedVariant(newColor.variants[0]); // Chọn bộ nhớ mặc định đầu tiên khi thay đổi màu
-      setVariants(newColor.variants); // Cập nhật các variants cho màu đã chọn
+      setOjectColor(newColor)
     }
   };
-  
-  // Hàm để thay đổi variant khi người dùng chọn bộ nhớ khác
-  const handleVariantChange = (variant: any) => {
-    setSelectedVariant(variant);
-  };
-  
-  const [visibleCommentIndex, setVisibleCommentIndex] = useState<number | null>(null);
+
+ console.log(objectColor);
+ 
+
 
   return (
         <Container>
@@ -155,7 +77,7 @@ function DetailProduct() {
                 <div className="w-[80%] mx-auto">
                   <img 
                     className="w-full my-8 max-w-[300px] mx-auto" 
-                    src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_9_13_638302298834482205_apw-s9-gps-41-dayvai-vang-1.jpg" 
+                    src={`${IMG_BACKEND}/${objectColor?.image?.image_one}`} 
                     alt="product image" 
                   />
                 </div>
@@ -204,7 +126,7 @@ function DetailProduct() {
 
               {/* Right Column */}
               <div className="w-full md:w-[45%] mx-auto text-xl ">
-                <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">Product 23</h3>
+                <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
                 {/* Price Section */}
                 <div className="flex items-center gap-4 py-4">
                   <p className="text-red-500 font-semibold text-[2rem]">27.000.000đ</p>
@@ -213,7 +135,7 @@ function DetailProduct() {
                 </div>
 
                 {/* Storage Variant Buttons */}
-                <div className="flex gap-4 mb-6">
+                {/* <div className="flex gap-4 mb-6">
                   {variants.map((variant, index) => (
                     <button
                       key={index}
@@ -225,32 +147,31 @@ function DetailProduct() {
                       {variant.storage}
                     </button>
                   ))}
-                </div>
+                </div> */}
 
                 {/* Color Selection */}
                 <div className="py-6">
-                  <h4 className="text-2xl">Chọn màu để xem giá và tình trạng hàng</h4>
-                  <div className="flex flex-wrap gap-4 mt-4">
-                    {listProduct.colors.map((item) => (
-                      <div
-                        key={item.color}
-                        onClick={() => handleColorChange(item.color)}
-                        className="flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md"
-                      >
-                        <img 
-                          src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/tai_nghe_airpods_max_2024_xanh_1_3aa5c4886e.jpg" 
-                          alt={item.color} 
-                          className="w-10 rounded-md"
-                        />
-                        <div>
-                          <h4 className="font-semibold text-lg">{item.color}</h4>
-                          <p className="text-red-500 font-semibold">20.000.000đ</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+    <h4 className="text-2xl">Chọn màu để xem giá và tình trạng hàng</h4>
+    <div className="flex flex-wrap gap-4 mt-4">
+        {productDetail?.product_colors?.map((item) => (
+            <div
+                key={item.color}
+                onClick={() => handleColorChange(item.color)}
+                className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectedColor === item.color ? 'bg-slate-50' : ''}`}
+            >
+                <img 
+                    src={`${IMG_BACKEND}/${item?.image?.image_one}`} 
+                    alt={item.color} 
+                    className="w-10 rounded-md"
+                />
+                <div>
+                    <h4 className="font-semibold text-lg">{item.color}</h4>
+                    <p className="text-red-500 font-semibold">20.000.000đ</p>
                 </div>
-
+            </div>
+        ))}
+    </div>
+</div>
                 {/* Delivery & Warranty Info */}
                 <div className="rounded-lg p-6 bg-white shadow-md mb-6">
                   <ul className="space-y-3 items-center text-2xl">
@@ -356,8 +277,8 @@ function DetailProduct() {
                                 </div>
                     </div>
                 </div>                 */}
-                {/* <Comment reviews={getCommentById}/>
-                <CommentForm id={numericId}/> */}
+                <Comment reviews={getCommentById}/>
+                <CommentForm id={numericId}/>
           </div>
         </Container>
 

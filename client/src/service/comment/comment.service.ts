@@ -22,6 +22,13 @@ export const deleteCommentByIdProduct = (id:number) => {
 	
     });
   };
+export const createLike = (id:number) => {
+    return axiosWithAuth(`/create-like/${id}`, {
+      method: "post",
+    
+	
+    });
+  };
 export const putCommentByIdProduct = (id:number,payload:any) => {
     return axiosWithAuth(`/put-comment/${id}`, {
       method: "put",

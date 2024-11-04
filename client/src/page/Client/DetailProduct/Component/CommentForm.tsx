@@ -32,7 +32,7 @@ const CommentForm = (props:any) => {
   const isDisabled = !comment.trim();
 
   return (
-    <div>
+    <div className="px-[2rem] bg-white">
       <h3 className="text-[2rem]">Ý kiến của bạn</h3>
       <div className="mt-[2rem] flex">
         <div className="w-[10%]">

@@ -2,15 +2,20 @@ import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
 import { BsThreeDots } from 'react-icons/bs';
-import { FaStar } from 'react-icons/fa';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 import { IoIosReturnRight, IoMdSend } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
-import { deleteCommentByIdThunk, editCommentByIdThunk } from '../../../../redux/comment/comment.slice';
+import { deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
+import { createLike } from '../../../../service/comment/comment.service';
+import { useAppSelector } from '../../../../redux/hooks';
+import { BiSolidLike } from 'react-icons/bi';
+import { StarRating } from '../../../../components/star/Star';
 
 function Comment(props: any) {
-  
+  const user: any = useAppSelector((state) => state.user.user);
+
   const [expandedComments, setExpandedComments] = useState<boolean[]>(new Array(props.reviews?.length).fill(false));
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [activeAction, setActiveAction] = useState<{ action: 'edit' | 'reply' | null, index: number | null }>({ action: null, index: null });
@@ -38,39 +43,30 @@ function Comment(props: any) {
   };
 
 
-
+const handleLike=async(id:number,idProduct:number)=>{
+  const resp=await createLike(id)
+  dispatch(getCommentByIdProductThunk(idProduct))
+  console.log(resp);
+  
+}
   const CommentSchema = Yup.object().shape({
     commentText: Yup.string().required('Nội dung bình luận không được để trống').min(5, 'Nội dung phải có ít nhất 5 ký tự'),
   });
   
 // Rely comment
+console.log(props.reviews);
 
   return (
     <div>
-      <div className="w-full p-4">
+      <div className="w-full p-4 bg-white mt-[1rem]">
         <div className="flex justify-between items-center">
           <h2 className="text-[2rem] font-bold">Đánh giá Điện Thoại Iphone 15 Pro Max 256GB</h2>
         </div>
-        <div className="mt-4 w-[50%]">
-          <div className="text-[2.4rem] font-semibold text-red-500 flex items-center gap-[.5rem]">
-            4.7 <FaStar className="text-[1.5rem]" />{" "}
-            <span className="text-[1.8rem] text-blue-600">17 đánh giá</span>
-          </div>
-          {/* Rating bars for each star */}
-          {[5, 4, 3, 2, 1].map((star, idx) => (
-            <div className="flex items-center" key={star}>
-              <span className="text-[2rem]">{star}★</span>
-              <div className="w-3/4 h-2 bg-gray-200 ml-2 rounded">
-                <div className="bg-orange-400 h-2" style={{ width: "80%" }} />
-              </div>
-              <span className="text-[2rem] ml-2">80%</span>
-            </div>
-          ))}
-        </div>
+        <StarRating comments={props.reviews}/>
       </div>
-      <div className="p-4">
+      <div className="py-4 px-[2rem] bg-white">
         <div>
-          <h4 className="py-[1rem] text-[2rem] font-semibold">Lọc theo</h4>
+          <h4 className="py-[1rem] text-[2rem] font-semibold ">Lọc theo</h4>
           <div className="flex gap-[1rem] ">
             <div className="cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[7rem] ">
               <span>Tất cả</span>
@@ -99,13 +95,10 @@ function Comment(props: any) {
                         <div className="flex items-center text-[1.5rem] py-[.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">4/5/2025</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                          </div>
+  {[...Array(5)].map((_, index) => (
+    index < Number(review.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
+  ))}
+</div>
                         </div>
                         <p className="mt-1 text-gray-800 text-[1.8rem]">{review.comment_content}</p>
                       </div>
@@ -114,15 +107,15 @@ function Comment(props: any) {
                         <div className="flex gap-[.5rem] ">
                           <span>2h trước</span>
                           <div className='relative'>
-                            <BsThreeDots
+    <BsThreeDots
                               className="cursor-pointer"
                               onClick={() => handleDropdownToggle(index)}
                             />
                             {activeDropdown === index && (
-                              <div className="w-[120px] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
+                              <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
                                 <div className="flex flex-col space-y-2">
                                   <button
-onClick={() => handleActionToggle(index, 'edit')}                                    className="text-sm text-blue-500 hover:text-blue-700 transition-colors"
+onClick={() => handleActionToggle(index, 'edit')}                                    className=" text-blue-500 hover:text-blue-700 transition-colors"
                                   >
                                     Chỉnh sửa
                                   </button>
@@ -133,7 +126,7 @@ onClick={() => handleActionToggle(index, 'edit')}                               
                                       // console.log(review.comment_id);
                                       
                                     }}
-                                    className="text-sm text-red-500 hover:text-red-700 transition-colors"
+                                    className=" text-red-500 hover:text-red-700 transition-colors"
                                   >
                                     Xoá
                                   </button>
@@ -146,9 +139,15 @@ onClick={() => handleActionToggle(index, 'edit')}                               
                         <div className="flex items-center gap-[.5rem]">
                           {/* Like button */}
                           <button className="flex items-center text-purple-600">
-                            <AiOutlineLike /> <span>10</span>
-                          </button>
-                          {/* Dislike button */}
+  {
+    review?.likes?.some(item => item?.user_id === user?.user_id) 
+      ? <BiSolidLike onClick={() => handleLike(review.comment_id, review.product_id)} />
+      : <AiOutlineLike onClick={() => handleLike(review.comment_id, review.product_id)} />
+  }
+  <span>{review.likes.length}</span>
+</button>
+                          
+                          
                           <button
                            onClick={() => handleActionToggle(index, 'reply')}
                             className="flex items-center text-purple-600 ml-4"

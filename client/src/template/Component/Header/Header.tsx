@@ -140,9 +140,9 @@ console.log(token);
               </Badge>
             </div>
             <div>
-              {/* <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
+              <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
-              </Badge> */}
+              </Badge>
               {isvisibleCart &&   <div className="fixed inset-0 z-30">
           <div 
             className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
@@ -214,9 +214,9 @@ console.log(token);
               </Badge>
             </div>
             <div>
-              {/* <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
+              <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
-              </Badge> */}
+              </Badge>
               {isvisibleCart &&   <div className="fixed inset-0 z-30">
           <div 
             className="w-full h-full bg-[rgba(0,0,0,0.5)]" 

@@ -21,6 +21,8 @@ function ProductItem(props) {
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
     dispatch(addItemToCart(product));
+    console.log(product);
+    
   };
 
   
@@ -96,6 +98,7 @@ function ProductItem(props) {
     {/* Nút thêm giỏ hàng */}
     <button
       className="w-full mt-4 py-3 border border-[#7500CF] text-[#7500CF]  text-[1.6rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
+    onClick={()=>{handleAddItem(props.product)}}
     >
       Thêm giỏ hàng
     </button>

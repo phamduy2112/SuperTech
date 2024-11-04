@@ -58,16 +58,23 @@ const getProductById = async (req, res) => {
                     ]
             },
             
-            //     {
-            //     model: models.image_product,
-            //         as:'image'
-            // },
+              
             
             
-            //     {
-            //     model: models.infor_product,
-            //         as:'infor_product_infor_product'
-            // },
+                {
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+                {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
+                    ]
+            },
             
         
         ]

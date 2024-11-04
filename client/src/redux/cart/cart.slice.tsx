@@ -29,7 +29,7 @@ const cartSlice = createSlice({
     // Thêm sản phẩm vào giỏ hàng
     addItemToCart: (state, action: PayloadAction<CartItem>) => {
       if (state.listCart) {
-        const existingItem = state.listCart.find(item => item.product_id === action.payload.product_id);
+        const existingItem = state.listCart.find(item => item.product_id == action.payload.product_id);
         if (existingItem) {
           existingItem.quantity += 1;
         } else {
