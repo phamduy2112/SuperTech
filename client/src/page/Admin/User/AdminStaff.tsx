@@ -1,4 +1,4 @@
-import { Button, Checkbox, Empty, Popover, Table } from 'antd';
+import { Button, Checkbox, Popover, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AiOutlineUserAdd } from 'react-icons/ai';
@@ -88,6 +88,7 @@ function AdminStaff() {
                     return {
                         title: 'Tác Vụ',
                         key: 'tacvu',
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (record: any) => (
                             <div className='flex text-[24px] box-border gap-1 items-center'>
                                 <BiSolidEdit
