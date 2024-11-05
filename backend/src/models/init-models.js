@@ -20,7 +20,7 @@ import _product_colors from  "./product_colors.js";
 import _product_storage from  "./product_storage.js";
 import _products from  "./products.js";
 import _replies_comment_product from  "./replies_comment_product.js";
-import _user from  "./user.js";
+import _user from  "./User.js";
 
 export default function initModels(sequelize) {
   const banner = _banner.init(sequelize, DataTypes);
