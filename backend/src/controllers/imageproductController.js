@@ -39,7 +39,7 @@ const createimageproduct = async (req, res) => {
 const updateimageproduct = async (req, res) => {
     try {
         let updated = await imageproduct.update(req.body, {
-            where: { image_product_id: req.params.id }
+            where: { image_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -54,7 +54,7 @@ const updateimageproduct = async (req, res) => {
 const deleteimageproduct = async (req, res) => {
     try {
         let deleted = await imageproduct.destroy({
-            where: { image_product_id: req.params.id }
+            where: { image_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

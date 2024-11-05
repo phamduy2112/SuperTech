@@ -65,6 +65,8 @@ export default function initModels(sequelize) {
   posts.hasMany(likes, { as: "likes", foreignKey: "post_id"});
   media_post.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(media_post, { as: "media_posts", foreignKey: "post_id"});
+  product_storage.belongsTo(product_colors, { as: "color", foreignKey: "color_id"});
+  product_colors.hasMany(product_storage, { as: "product_storages", foreignKey: "color_id"});
   comment_product.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(comment_product, { as: "comment_products", foreignKey: "product_id"});
   detail_order.belongsTo(products, { as: "product", foreignKey: "product_id"});
@@ -73,6 +75,8 @@ export default function initModels(sequelize) {
   products.hasMany(favorite_product, { as: "favorite_products", foreignKey: "product_id"});
   product_colors.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_colors, { as: "product_colors", foreignKey: "product_id"});
+  product_storage.belongsTo(products, { as: "product", foreignKey: "product_id"});
+  products.hasMany(product_storage, { as: "product_storages", foreignKey: "product_id"});
   likes.belongsTo(replies_comment_product, { as: "reply", foreignKey: "replies_id"});
   replies_comment_product.hasMany(likes, { as: "likes", foreignKey: "replies_id"});
   chat.belongsTo(user, { as: "user", foreignKey: "user_id"});
