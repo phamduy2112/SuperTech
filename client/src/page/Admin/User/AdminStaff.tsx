@@ -288,7 +288,7 @@ function AdminStaff() {
                             ...rowSelection,
                         }}
                         columns={columns || []}
-                        dataSource={Allstaffs || []}
+                        dataSource={Array.isArray(Allstaffs) ? Allstaffs : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
                     />
