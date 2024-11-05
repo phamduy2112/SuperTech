@@ -312,17 +312,7 @@ function Search() {
         </div>
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
+ 
       </div>
     </div>
   )

@@ -78,15 +78,15 @@ function UserDetail() {
               Quản lí hồ sơ để bảo mật tài khoản
             </p>
           </div>
-          <button className="text-[1.7rem] flex gap-[.5rem] bg-[#7500CF] h-[3.5rem] justify-center items-center px-[1.3rem] text-white">
+          <button className="text-[1.7rem] flex gap-[.5rem] bg-customColor h-[3.5rem] justify-center items-center px-[1.3rem] text-white">
             <FaEdit />
             Sửa
           </button>
         </div>
 
-        <div className="border-t-[#7500CF] border border-transparent mt-[1.5rem] ">
+        <div className="border-t-customColor border border-transparent mt-[1.5rem] ">
           <div className="flex">
-            <div className="border-r-[#7500CF] flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
+            <div className="border-r-customColor flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
               <div className="flex flex-col items-center">
               <ImageUploader/>
               </div>
@@ -164,7 +164,7 @@ function UserDetail() {
                       <ModalChangePassword />
                       <button
                         type="submit"
-                        className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]"
+                        className="p-[1rem] border text-[1.6rem] border-customColor text-customColor"
                       >
                         Cập nhật
                       </button>

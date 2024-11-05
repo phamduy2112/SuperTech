@@ -17,8 +17,8 @@ export const getCatelogryDad = () => {
  
   );
   };
-  export const getCatelogryDadById=(name:string)=>{
-    return axiosWithAuth(`/categories_dad/${name}`, {
+  export const getCatelogryDadById=(id:number)=>{
+    return axiosWithAuth(`/categories_dad/${id}`, {
       method: "get",
       
     }

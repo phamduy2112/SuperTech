@@ -15,9 +15,15 @@ const getorder = async (req, res) => {
     }
 };
 
-const getorderById = async (req, res) => {
+const getOrderById = async (req, res) => {
+    
     try {
-        let data = await order.findByPk(req.params.id);
+    const user_id=req.id;
+        let data = await order.findAll({
+            where:{
+                user_id
+            }
+        });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -27,32 +33,47 @@ const getorderById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const  changeStatusOrder=async(req,res)=>{
+    try{
+        const order_id=req.params.id
+        const {order_status}=req.body
+        const order = await orders.findByPk(order_id);
 
+        order.order_status = order_status;
+        await order.save();
+
+        responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
+    }catch(error){
+
+    }
+}
 const createorder = async (req, res) => {
     try {
         const {
-            order_id,
+          
             order_total,
             order_total_quatity,
             order_status,
             pay_id,
-            discount,
+            // discount,
             address,
         } = req.body;
 
         const user_id = req.id;
-        let date = new Date();
+        // const pay_id = req.id;
+        // const discount = req.id;
 
+        let date = new Date();
+              
         const neworder = await order.create({
-            order_id,
+       
             order_date: date,
             order_total,
             order_total_quatity,
             order_status,
-            pay_id,
+            pay_id:null,
             user_id,
-            discount,
-            address
+            // discount
         });
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {
@@ -109,8 +130,9 @@ const deleteorder = async (req, res) => {
 
 export {
     getorder,
-    getorderById,
+    getOrderById,
     createorder,
     updateorder,
-    deleteorder
+    deleteorder,
+    changeStatusOrder
 };

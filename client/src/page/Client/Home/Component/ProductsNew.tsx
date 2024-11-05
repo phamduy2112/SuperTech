@@ -24,15 +24,15 @@ function ProductsNew() {
     const sortedDiscountedProducts = [...listProducts] // Tạo bản sao của listProducts
       .filter((product) => product.product_discount > 0)
       .sort((a, b) => b.product_discount - a.product_discount)
-      .slice(0, 8);
+      .slice(0, 5);
   
     const sortedNewProducts = [...listProducts] // Tạo bản sao của listProducts
       .sort((a, b) => new Date(b.product_date) - new Date(a.product_date)) // Sắp xếp theo ngày
-      .slice(0, 8);
+      .slice(0, 5);
   
     const sortedHotProducts = [...listProducts] // Tạo bản sao của listProducts
       .filter((product) => product.product_hot === 1)
-      .slice(0, 8);
+      .slice(0, 5);
   
     setProductDiscount(sortedDiscountedProducts);
     setProductNew(sortedNewProducts);
@@ -55,7 +55,7 @@ function ProductsNew() {
   };
 
   return (
-    <div className='xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto'>
+    <div className=''>
       <div className='flex gap-[1.5rem] items-center justify-center py-[1.5rem]'>
         <h4
           className={getTabClassName('new')}
@@ -77,18 +77,17 @@ function ProductsNew() {
         </h4>
       </div>
       
-      <div className='sm:w-[85%] md:w-[90%] lg:w-[100%] m-auto grid sm:grid-cols-1 ssm:grid-cols-2 lg:grid-cols-3 mdl:grid-col-3 xl:grid-cols-4 2xl:grid-cols-6 gap-[1rem]'>
-        <div className='col-span-2 row-span-2 sm:hidden 2xl:block'>
-          <ProductLimitOne />
-        </div>
+      <div className=' grid sm:grid-cols-1 ssm:grid-cols-2 lg:grid-cols-3 mdl:grid-col-3 xl:grid-cols-4 2xl:grid-cols-5 gap-[1rem]'>
+    
 
         {/* Render danh sách sản phẩm theo tab */}
         {getCurrentProducts().map((product) => (
-          <NavLink to={`/sản-phẩm-chi-tiết/${product.product_id}`} key={product.id}>
-                      <ProductItem product={product} />
+          <div  key={product.id}>
+                      <ProductItem product={product}/>
 
-          </NavLink>
+          </div>
         ))}
+    
       </div>
     </div>
   );

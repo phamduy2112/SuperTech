@@ -11,8 +11,10 @@
 .formEdit .ant-input-number-outlined
 {
     border-color:#7500CF ;
-    height: 3.7rem;
+    height: 4.5rem;
 }
+/*  */
+
 .formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-select .ant-select-arrow{
 
     color: #7500CF;
@@ -26,7 +28,7 @@
 .formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-form-item{
     margin-bottom: 1rem;
 }
-.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
+.formEdit .ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
     border-color: #7500CF;
     background: #7500CF;
 }

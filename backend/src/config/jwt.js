@@ -32,3 +32,6 @@ export const middleToken=(req,res,next)=>{
     else next();
     
 }
+export const authorizeRoles = (userRole, allowedRoles) => {
+    return allowedRoles.includes(userRole);
+};

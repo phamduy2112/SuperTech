@@ -13,7 +13,7 @@ function UserTemplate() {
 
 
   return (
-    <div className='roboto'>
+    <div className='roboto bg-[#ececec]'>
  
 
          <div className=''>
