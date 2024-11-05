@@ -1,6 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCatelogry } from "../../service/catelogry/catelogry.service";
-import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword } from "../../service/user/user.service";
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser } from '../../service/user/user.service';
+
+export const getAllUserThunk = createAsyncThunk(
+  "getAllUserThunk",
+  async () => {
+    try {
+      const resp = await getAllUser();
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+
+    }
+  },
+)
+
 
 export const getUserThunk = createAsyncThunk(
   "getUserThunk",
@@ -62,16 +76,20 @@ export const changeUploadImage = createAsyncThunk(
 
 
 const initialState = {
-  user:{},
-  token:null,
-  thongBao:"",
-  imgUser:""
+  Alluser: {},
+  user: {},
+  token: null,
+  thongBao: "",
+  imgUser: ""
 };
 
 const UserSlice = createSlice({
   name: "UserSlice",
   initialState,
   reducers: {
+    setAllUser: (state, { payload }) => {
+      state.Alluser = payload;
+    },
     setUserDetail: (state, { payload }) => {
       state.user = payload;
     },
@@ -80,6 +98,11 @@ const UserSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder
+      .addCase(getAllUserThunk.fulfilled, (state, { payload }) => {
+        console.log('Payload:', payload);
+        state.Alluser = payload;
+      })
     builder
       .addCase(getUserThunk.fulfilled, (state, { payload }) => {
         state.user = payload;
@@ -104,6 +127,6 @@ const UserSlice = createSlice({
   },
 });
 
-export const { setUserDetail,setToken } = UserSlice.actions;
+export const { setAllUser, setUserDetail, setToken } = UserSlice.actions;
 
 export const userReducer = UserSlice.reducer;
