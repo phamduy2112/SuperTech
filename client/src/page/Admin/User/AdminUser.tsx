@@ -14,13 +14,17 @@ import { getAllUserThunk } from "../../../redux/user/user.slice";
 function AdminUser() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Alluser: any = useAppSelector((state) => state.user.Alluser);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [DataAlluser, setDataAlluser] = useState<any[]>([]);
   const AppDispatch = useAppDispatch();
   const [userKeys, setuserKeys] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [columns, setColumns] = useState<any[]>([]);
+  const [valueInputSearch, setvalueInputSearch] = useState(``);
 
   useEffect(() => {
     AppDispatch(getAllUserThunk());
+    setDataAlluser(Alluser);
   }, [AppDispatch]);
 
   useEffect(() => {
@@ -162,6 +166,58 @@ function AdminUser() {
       .filter((col) => col !== null);
     setColumns(ColumnStaffs);
   }, [userKeys]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setvalueInputSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    if (valueInputSearch.trim() === "") {
+      setDataAlluser(Alluser);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sanitizedSearchTerm = valueInputSearch
+        .replace(/\s+/g, "")
+        .toLowerCase();
+
+      const filteredData = Alluser.filter((item: any) => {
+        const userName = item?.user_name;
+        const userEmail = item?.user_email;
+        const userPhone = item?.user_phone;
+
+        const userNameString =
+          typeof userName === "string" || userName instanceof String
+            ? userName
+            : String(userName || "");
+        const userEmailString =
+          typeof userEmail === "string" || userEmail instanceof String
+            ? userEmail
+            : String(userEmail || "");
+        const userPhoneString =
+          typeof userPhone === "string" || userPhone instanceof String
+            ? userPhone
+            : String(userPhone || "");
+
+        return (
+          userNameString
+            .replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(sanitizedSearchTerm) ||
+          userEmailString
+            .replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(sanitizedSearchTerm) ||
+          userPhoneString
+            .replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(sanitizedSearchTerm)
+        );
+      });
+
+      setDataAlluser(filteredData);
+    }
+  }, [valueInputSearch, Alluser]);
+
   const [selectedCheckbox, setSelectedCheckbox] = useState("");
   const navigate = useNavigate();
 
@@ -289,6 +345,7 @@ function AdminUser() {
             <input
               type="text"
               className="flex-1 text-[15px] outline-none bg-transparent"
+              onChange={handleSearch}
               placeholder="Tìm kiếm người dùng..."
             />
             <GoSearch className="text-[18px]" />
@@ -333,8 +390,8 @@ function AdminUser() {
             }}
             columns={columns || []}
             dataSource={
-              Array.isArray(Alluser)
-                ? Alluser.filter((user) => user.user_role == 2)
+              Array.isArray(DataAlluser)
+                ? DataAlluser.filter((user) => user.user_role == 2)
                 : []
             }
             size="large"
