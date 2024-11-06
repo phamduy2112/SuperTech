@@ -32,7 +32,7 @@ export default class products extends Model {
     },
     product_date: {
       type: DataTypes.DATEONLY,
-      allowNull: true
+      allowNull: false
     },
     product_quantity: {
       type: DataTypes.INTEGER,

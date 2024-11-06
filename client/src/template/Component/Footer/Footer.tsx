@@ -20,7 +20,7 @@ function Footer() {
 
   ]
   return (
-    <div className='w-[100%] m-auto mt-[1.5rem]'>
+    <div className='w-[100%] m-auto mt-[1.5rem] bg-white'>
       <div className=' bg-[#7500CF] sm:rounded-t-[2rem] md:rounded-none w-[100%] md:h-[6rem] sm:pt-[2rem] md:pt-[0] flex justify-center items-center'>
         <Container className='relative md:flex items-center justify-between'>
         <h1 className='md:hidden text-[3rem] text-white text-center'>SuperTeach</h1>

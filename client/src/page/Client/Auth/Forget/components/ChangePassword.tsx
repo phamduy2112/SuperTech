@@ -88,7 +88,7 @@ const ChangePassword: React.FC <any> = ({email}) => {
               />      </Form.Item>
    
     <div className="button-edit">
-      <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng nhập</Button>
+      <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">Đặt lại mật khẩu</Button>
     </div>
   </Form>
   );

@@ -194,7 +194,7 @@ export default function Cart() {
                   <div className="flex justify-between">
                     <span>Giảm giá</span>
                     <span className="font-bold text-[1.7rem] text-black-500">
-                      -17.200.000 ₫
+                    0 ₫
                     </span>
                   </div>
                   <div className="flex justify-between pb-5">

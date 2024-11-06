@@ -68,9 +68,9 @@ console.log(catelogryLaptop);
           </div>
       
           <div className="grid grid-cols-6 gap-4">
-          <img src={banner3} alt="" className='w-[100%] h-[100%] rounded-3xl py-5'/>
+          {/* <img src={banner3} alt="" className='w-[100%] h-[100%] rounded-3xl py-5'/> */}
 
-            {productLaptop.slice(0, 5).map((product) => (
+            {productLaptop.slice(0, 6).map((product) => (
               <ProductItem product={product}/> // Hiển thị sản phẩm
             ))}
         
