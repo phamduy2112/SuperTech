@@ -1,11 +1,14 @@
 import { Space, Table, Tag, Tooltip } from 'antd';
 import Search from 'antd/es/input/Search'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './css/TableEdit.css'
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../redux/order/Order.slice';
+import { formatCurrencyVND, truncateText } from '../../../../utils';
 function Order() {
+  const userRef = useRef<any>(null);
+
   const colorText = [
     { color: '#DB363B', text: 'Đang chờ duyệt' },     // 0
     { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, // 1
@@ -13,17 +16,20 @@ function Order() {
     { color: '#2101B0', text: 'Đã huỷ hàng' },        // 3
     { color: '#04C621', text: 'Thành công' },         // 4
     { color: '#000000', text: 'Không nhận hàng' },    // 5
-    { color: '#8A2BE2', text: 'Trạng thái khác' },    // 6
+
   ];
+  const [orderStatus, setOrderStatus] = useState(0); // Default status is 0
 
   const [data,setData]=useState([]);
   const dispatch=useAppDispatch()
   const listOrder=useAppSelector((state)=>state.listOrder.listOrder)
+
   
   const handleChangeStatus=(id:number,data:number)=>{
     const dataOrder={
       id,
-      order_status:data
+      order_status:data,
+      status_order:orderStatus
     }
     // console.log(dataOrder);
     dispatch(changeStatusOrderThunk(dataOrder))
@@ -45,14 +51,19 @@ function Order() {
       title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
-      render: (text) => <NavLink to={""} className="text-[red] font-semibold">lorem</NavLink>,
+      render: (text) => <div className="text-[red] font-semibold">
+        
+        <Tooltip title={text}>
+        {truncateText(text,30)}
+        </Tooltip>
+      </div>,
 
     },
     {
       title: 'Tổng tiền',
       key: 'order_total',
       dataIndex: 'order_total',
-      render: (text) => <NavLink to={""} className="text-[red] font-semibold">{text}</NavLink>,
+      render: (text) => <NavLink to={""} className="text-[red] font-semibold">{formatCurrencyVND(text)}</NavLink>,
 
    
     },
@@ -94,61 +105,56 @@ function Order() {
     },
   ];
  useEffect(()=>{
-  dispatch(getOrderByIdProductThunk())
- },[dispatch])
+  dispatch(getOrderByIdProductThunk({ searchKey: '', order_status: orderStatus }));
+},[dispatch,orderStatus])
   return (
     <div>
       <h3 className='text-[2.5rem] text-customColor font-semibold'>
       Quản lý Đơn hàng của bạn
       </h3>
       <div className='py-[1rem] flex gap-[1rem]'>
-  
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#DB363B] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-            <div className={`text-[#DB363B] text-[1.5rem] font-semibold`}>Đang chờ duyệt</div>
+      <div className='flex gap-[1.5rem]'> {/* Adjust gap and layout as needed */}
+      {colorText.map(({ color, text },index) => (
+        <button key={text}
+        onClick={() => {
+            console.log(`Button clicked: ${text} with index: ${index}`); // Debugging
+            setOrderStatus(index); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[${color}] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[${color}] font-semibold`}>
+            {text}
           </div>
+        </button>
+      ))}
+    </div>
        
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#FFCC00] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-            <div className={`text-[#FFCC00] text-[1.5rem] font-semibold`}>Đang chuẩn bị hàng</div>
-          </div>
-       
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#2277C6] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-            <div className={`text-[#2277C6] text-[1.5rem] font-semibold`}>Đang giao hàng</div>
-          </div>
-       
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#2101B0] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-            <div className={`text-[#2101B0] text-[1.5rem] font-semibold`}>Đã huỷ hàng</div>
-          </div>
-       
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#04C621] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-            <div className={`text-[#04C621] text-[1.5rem] font-semibold`}>Thành công</div>
-          </div>
-       
-        <div className='flex gap-[.5rem]'>
-            <div className={`bg-[#000000] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-            <div className={`text-[#000000] text-[1.5rem] font-semibold`}>Không nhận hàng</div>
-          </div>
        
         
       </div>
       <h4 className='text-[1.7rem] font-semibold'>
       Nếu không nhận hàng hoặc huỷ hàng quá 5 lần sẽ vô hiệu quá tài khoản !
       </h4>
-      <form action="" className="w-[100%] h-[38px] py-[1rem] formEdit">
+      <form action="" className="w-[100%] h-[38px] py-[1rem] inputSearch">
       <Search
       placeholder="Tìm kiếm theo mã đơn hàng"
       allowClear
-      // onSearch={onSearch}
-      className='w-[100%] inputSearch'
+      onChange={async (e) => {
+        if (userRef.current) {
+          clearTimeout(userRef.current);
+        }
+        userRef.current = setTimeout(async () => {
+          console.log(e.target.value);
+          dispatch(getOrderByIdProductThunk({searchKey:e.target.value,order_status:orderStatus}));
+        }, 400);
+      }}
+      className='w-[100%] '
     />
             </form>
             
       <div className='tableEdit'>
       <Table columns={columns} dataSource={listOrder} className='mt-[3rem]'/>
+      
       </div>
     </div>
   )

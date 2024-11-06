@@ -40,7 +40,11 @@ const cartSlice = createSlice({
       // state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
       // state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
-    
+    // Thêm sản phẩm vào trực tiếp order
+    addItemToOrder: (state, action: PayloadAction<CartItem>) => {
+      // Thay thế toàn bộ listCart bằng sản phẩm mới
+      state.listCart = [{ ...action.payload, quantity: 1 }];
+    },
     // Xóa sản phẩm khỏi giỏ hàng
     removeItemFromCart: (state, action: PayloadAction<{ product_id: string }>) => {
       state.listCart = state.listCart.filter(item => item.product_id !== action.payload.product_id);
@@ -93,7 +97,7 @@ const cartSlice = createSlice({
 });
 
 // Export các action
-export const { addItemToCart, removeItemFromCart,removeAllCart, decreaseItemQuantity,inCreaseItemQuantity, numCart } = cartSlice.actions;
+export const {addItemToOrder, addItemToCart, removeItemFromCart,removeAllCart, decreaseItemQuantity,inCreaseItemQuantity, numCart } = cartSlice.actions;
 
 // Export reducer
 export const cartReducer = cartSlice.reducer;

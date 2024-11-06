@@ -6,8 +6,11 @@ import axios from 'axios';
 import { getUserThunk } from '../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { createDetailOrder, createOrder } from '../../../service/order/order.service';
+import { removeAllCart } from '../../../redux/cart/cart.slice';
+import { useNavigate } from 'react-router-dom';
 function Pay() {
   const dispatch = useAppDispatch();
+  const navigate=useNavigate();
   const user: any = useAppSelector((state) => state.user.user);
   const listCart:any=useAppSelector((state)=>state.cart.listCart)
   const totalItem=useAppSelector((state)=>state.cart.totalItems)
@@ -97,8 +100,12 @@ console.log(user);
       order_total:100000,
       order_total_quatity:+totalItem,
       order_status:0,
-      user_id:user.user_id
+      user_id:user.user_id,
+      phone_number:formData.sdt,
+      address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
+
+  
     const resp=await createOrder(dataOrder)
     // console.log(resp);
     
@@ -109,10 +116,17 @@ console.log(user);
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
-   
+      detail_order_price:item.product_price,
+      discount_product:item.product_discount,
+
     }));
 
     const responve=await createDetailOrder(detailOrders)
+    if(responve){
+      dispatch(removeAllCart())
+      navigate("/")
+      
+    }
   };
   return (
     <Container>
@@ -328,8 +342,8 @@ console.log(user);
         </div>
       </div>
 
-            <div className="lg:w-[45%] bg-white rounded-lg shadow-xl">
-              <div className="space-y-4 mb-10 px-7 leading-[3.7rem]">
+            <div className="lg:w-[45%] bg-white h-[100%] rounded-lg shadow-xl py-9">
+              <div className="space-y-4 mb-10 px-7 pb-4">
                 <h3 className="text-[2rem] font-semibold">Đơn đặt hàng</h3>
         <div className={`${listCart.length >2 ? "h-[25rem] custom-scrollbar" :""} overflow-y-auto custom-scrollbar`}>
         {
@@ -343,7 +357,7 @@ console.log(user);
                     alt="Iphone"
                   />
                   <div>
-                    <h5 className="font-semibold text-[1.7rem]">IPhone 13 Pro max chính hãng, 256GB (x1)</h5>
+                    <h5 className="font-semibold text-[1.7rem]">{item.product_name}</h5>
                     <p className="text-[1.6rem]">Màu sắc: Xanh</p>
                     <p className="text-red-600 font-semibold">30.000.000đ <span className="text-[#969696] line-through ml-2">31.990.000đ</span></p>
                   </div>
@@ -358,8 +372,8 @@ console.log(user);
            
 
               {/* Order Summary */}
-              <div className="space-y-2">
-                <div className="flex justify-between">
+              <div className="space-y-4 text-[1.6rem] ">
+                <div className="flex justify-between ">
                   <span className="font-medium">Tạm tính</span>
                   <span className="font-semibold text-[1.8rem]">52.000.000đ</span>
                 </div>
@@ -419,7 +433,7 @@ console.log(user);
               <div className="mt-5">
                 <button
                   onClick={handleFormSubmit}
-                  className="w-full my-[1rem] bg-customColor text-white py-1 text-[2rem] rounded-lg font-medium">
+                  className="w-full my-[1rem] py-3 bg-customColor text-white text-[2rem] rounded-lg font-medium">
                     Đặt hàng
                 </button>
               </div>

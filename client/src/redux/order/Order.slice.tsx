@@ -4,10 +4,22 @@ import { changeStatusOrder, getDetailOrder, getOrderByIdUser } from "../../servi
 
 export const getOrderByIdProductThunk = createAsyncThunk(
   "getOrderByIdThunk",
-  async () => {      
+  async ({ searchKey, order_status }: { searchKey: any; order_status: number }) => {
     try {
       const resp = await getOrderByIdUser();
-      return resp.data.content;
+      const result = resp.data.content;
+
+      // Filter results based on searchKey and order_status
+      const filteredResults = result.filter((item: any) => {
+        const matchesSearchKey = searchKey ? Number(item.order_id) === searchKey : true; // If searchKey is provided, match it
+        const matchesOrderStatus = order_status !== undefined ? item.order_status === order_status : true; // Match order_status if provided
+
+        return matchesSearchKey && matchesOrderStatus; // Return true if both conditions match
+      });
+
+      console.log(`Filtered results based on search criteria:`, filteredResults);
+      return filteredResults.length > 0 ? filteredResults : []; // Return filtered results or all results if none found
+
     } catch (e) {
       console.log(e);
     }
@@ -15,13 +27,19 @@ export const getOrderByIdProductThunk = createAsyncThunk(
 );
 export const changeStatusOrderThunk = createAsyncThunk(
   "ChangeStatusOrderThunk",
-  async (data:any) => {      
+  async (data: any, { dispatch }) => {
     try {
-        const updateData=await changeStatusOrder(data.id,data)
-      const resp = await getOrderByIdUser();
-      return resp.data.content;
+      // Update the order status
+      await changeStatusOrder(data.id, data);
+
+      // Dispatch the getOrderByIdProductThunk and wait for it to complete
+      const response = await dispatch(getOrderByIdProductThunk({ searchKey: '', order_status: data.status_order }));
+      
+      // Return the payload of the response if successful
+      return response.payload;
     } catch (e) {
       console.log(e);
+      throw e; // Optionally re-throw to handle it in the calling code
     }
   },
 );

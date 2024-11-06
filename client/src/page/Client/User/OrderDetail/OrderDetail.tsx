@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { getOrderDetail } from '../../../../redux/order/Order.slice';
 import { getDetailOrder } from '../../../../service/order/order.service';
+import { formatCurrencyVND } from '../../../../utils';
 
 function OrderDetail() {
   const { id } = useParams(); // Lấy id từ URL
@@ -12,7 +13,7 @@ function OrderDetail() {
     {
       title: 'Sản phẩm',
       dataIndex: 'name',
-      render: (text:string, record) => {
+      render: (text:string, record:any) => {
         return ( <div className='flex gap-[.2rem]'>
           <div className='w-[80px]'>
             <img src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
@@ -31,9 +32,9 @@ function OrderDetail() {
     {
       title: 'Đơn giá',
       dataIndex: 'product_price',
-      render:(text:string)=>{
+      render:(text:number)=>{
         return (
-          <div className='text-customColor font-semibold text-center'>{text}</div>
+          <div className='text-customColor font-semibold text-center'>{formatCurrencyVND(text)}</div>
         )
       }
     },
@@ -65,7 +66,7 @@ function OrderDetail() {
     {
       title: 'Tổng',
       dataIndex: 'total',
-      render: (text:string, record) => {
+      render: (text:string, record:any) => {
         const donGia =+record.product_price;
         const soLuong = +record.quanlity;
         const giamGia = +record.product_discount;
@@ -73,7 +74,7 @@ function OrderDetail() {
        
         return (
           <div className='text-[#FF0000] font-semibold text-center'>
-            {tongTien.toFixed(2)} đ
+            {formatCurrencyVND(tongTien)}
           </div>
         );
       }
@@ -118,7 +119,7 @@ const [listProduct,setListProduct]=useState([]);
     }
     fetchApi()
   },[idOrder])
-console.log(listProduct);
+console.log(detailOrder);
 
  
 
@@ -139,7 +140,7 @@ return (
           <div className='w-[49%]'>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
             <div className='h-[8rem] shadow-md p-[2rem]'>
-            <p className='text-[1.5rem] font-semibold'>Địa chỉ: <span>123, Huyện Đất Đỏ, Bà Rịa-Vũng Tàu</span></p>
+            <p className='text-[1.5rem] font-semibold'>Địa chỉ: <span>{order?.address}</span></p>
             <p className='text-[1.5rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0798961321</span></p>
             </div>
           </div>

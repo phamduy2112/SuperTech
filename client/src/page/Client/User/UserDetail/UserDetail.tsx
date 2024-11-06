@@ -70,7 +70,7 @@ function UserDetail() {
 
   return (
     <div className="pt-[1rem]">
-      <div className="">
+      <div className=" ">
         <div className="flex justify-between">
           <div>
             <h4 className="text-[2.2rem] font-semibold">Hồ sơ của tôi</h4>

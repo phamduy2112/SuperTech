@@ -218,6 +218,7 @@ const updateUser = async (req, res) => {
         user.user_name =user_name;
         user.user_address =user_address;
         user.user_phone =user_phone;
+        
    
         // Lưu thay đổi vào database
         await user.save();

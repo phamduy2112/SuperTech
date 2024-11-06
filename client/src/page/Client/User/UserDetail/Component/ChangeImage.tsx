@@ -55,7 +55,7 @@ function ImageUploader() {
                   backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
                 }}
               >
-                              {(user?.user_image==null && user?.user_name) ? user.user_name[0].toUpperCase() : null}
+                              {(user?.user_image==null||user?.user_image=='' && user?.user_name) ? user.user_name[0].toUpperCase() : null}
 
               </div>}
                     </div>

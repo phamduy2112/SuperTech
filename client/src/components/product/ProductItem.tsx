@@ -13,16 +13,21 @@ import { useSpring, animated } from "react-spring";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addItemToCart } from "../../redux/cart/cart.slice";
 import { NavLink } from "react-router-dom";
+import useSweetAlert from "../../hooks/Notification.hook";
 
 function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
-  
+  const {showAlert}=useSweetAlert()
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
-    dispatch(addItemToCart(product));
-    console.log(product);
-    
+    const productToCart = {
+      ...product,
+      selectedColor: props.product?.product_colors[0] // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+    };
+    dispatch(addItemToCart(productToCart));
+    // console.log(productToCart);
+    showAlert("success","Thêm giỏ hàng thành công")
   };
 
   

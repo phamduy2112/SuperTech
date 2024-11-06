@@ -21,7 +21,8 @@ const getOrderById = async (req, res) => {
     const user_id=req.id;
         let data = await order.findAll({
             where:{
-                user_id
+                user_id,
+               
             }
         });
         if (data) {
@@ -42,7 +43,7 @@ const  changeStatusOrder=async(req,res)=>{
         order.order_status = order_status;
         await order.save();
 
-        responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
+        responseSend(res, '', "Đã Cập Nhật Thành Công!", 200);
     }catch(error){
 
     }
@@ -57,6 +58,7 @@ const createorder = async (req, res) => {
             pay_id,
             // discount,
             address,
+            phone_number
         } = req.body;
 
         const user_id = req.id;
@@ -73,6 +75,8 @@ const createorder = async (req, res) => {
             order_status,
             pay_id:null,
             user_id,
+            address,
+            phone_number
             // discount
         });
         responseSend(res, neworder, "Thêm Thành công!", 201);

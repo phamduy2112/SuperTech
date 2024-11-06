@@ -6,7 +6,7 @@ import { getorder, getOrderById, createorder, updateorder, deleteorder, changeSt
 const orderRouter = express.Router();
 
 orderRouter.get('/order', getorder);
-orderRouter.get('/order-by-id-user/',middleToken, getOrderById);
+orderRouter.get('/order-by-id-user',middleToken, getOrderById);
 orderRouter.put("/change-status-order/:id",middleToken,changeStatusOrder)
 orderRouter.post('/create-order', middleToken,createorder);
 orderRouter.put('/order/:id', updateorder);

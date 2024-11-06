@@ -33,3 +33,12 @@ font-size: 2rem;
     color: #6308a8;
     border-color: #6308a8;
 }
+.inputSearch :where(.css-dev-only-do-not-override-ni1kz0).ant-input-search .ant-input-search-button{
+    height: 3.8rem;
+  
+}
+.inputSearch :where(.css-dev-only-do-not-override-ni1kz0).ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary){
+    color: #7500CF;
+    border: 1px solid #7500CF;
+
+}
