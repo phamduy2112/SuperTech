@@ -1,74 +1,65 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-// Data for demo purposes
-const categories = [
-  { id: 1, name: "Freeship", icon: "🚚" },
-  { id: 2, name: "Giảm Giá", icon: "💸" },
-  { id: 3, name: "Shopee Pay", icon: "💰" },
-  { id: 4, name: "Điện Tử", icon: "📱" },
-];
-
-const vouchers = [
-  { id: 1, label: "Freeship", discount: "Giảm tối đa 300k", minOrder: "₫0", expiration: "30/11" },
-  { id: 2, label: "Shopee", discount: "Giảm 50k", minOrder: "₫200k", expiration: "30/11" },
-  { id: 3, label: "Điện Tử", discount: "Giảm 15%", minOrder: "₫3.000k", expiration: "30/11" },
-];
-
-const VoucherPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0].id);
+const CouponSection = () => {
+  // Function to handle copying the coupon code
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code)
+      .then(() => alert(`Code của bạn đã được sao chép: ${code}`))
+      .catch(() => alert('Failed to copy the code'));
+  };
 
   return (
-    <div className="p-4 bg-gray-100">
-      {/* Tabs Section */}
-      <div className="flex space-x-4 overflow-x-auto border-b mb-4">
-        {categories.map((category) => (
-          <button
-            key={category.id}
-            className={`px-4 py-2 rounded-t-md font-semibold ${selectedCategory === category.id ? 'border-b-2 border-orange-500 text-orange-500' : 'text-gray-600'}`}
-            onClick={() => setSelectedCategory(category.id)}
-          >
-            {category.icon} {category.name}
-          </button>
-        ))}
-      </div>
+    <section className="container mx-auto mt-12 px-4">
+      <div className="flex flex-wrap justify-center lg:justify-between">
+        {/* Render 6 coupon items in a responsive layout */}
+        {Array(6).fill().map((_, i) => (
+          <div key={i} className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-6">
+            {/* Coupon Item */}
+            <div className="bg-white shadow-lg p-12 relative">
+              {/* Decorative Circles (Left) */}
+              <div className="absolute top-1 left-[-5px] flex flex-col space-y-1">
+                {Array(5).fill().map((_, j) => (
+                  <p key={`left-${i}-${j}`} className="bg-white border border-white rounded-full w-6 h-5"></p>
+                ))}
+              </div>
 
-      {/* Voucher List Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {vouchers.map((voucher) => (
-          <VoucherCard key={voucher.id} {...voucher} />
+              {/* Decorative Circles (Right) */}
+              <div className="absolute top-1 right-[-5px] flex flex-col space-y-1">
+                {Array(5).fill().map((_, j) => (
+                  <p key={`right-${i}-${j}`} className="bg-white border border-white rounded-full w-6 h-5"></p>
+                ))}
+              </div>
+
+              {/* Coupon Content */}
+              <div className="mb-3">
+                <div className="flex justify-between items-center mb-1">
+                  <h3 className="text-2xl font-bold text-[#7500CF]">VOUCHER</h3>
+                  <div className="text-[#7500CF] text-xl">đơn từ 699K</div>
+                </div>
+              </div>
+
+              {/* Voucher Value */}
+              <div className="flex items-baseline text-4xl font-extrabold text-[#7500CF]">
+                <h1>50,000</h1>
+                <p className="text-2xl font-semibold ml-1">VND</p>
+              </div>
+
+              {/* Coupon Footer with Copy Button */}
+              <div className="flex justify-between items-center mt-4 text-xl text-[#7500CF] font-medium">
+                <span>mã: W50</span>
+                <button 
+                  className="border border-[#7500CF] px-4 py-2 rounded-md hover:bg-[#7500CF] hover:text-white"
+                  onClick={() => handleCopyCode('W50')}
+                >
+                  Sao chép
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
-// Single Voucher Card Component
-const VoucherCard = ({ label, discount, minOrder, expiration }) => {
-  return (
-    <div className="flex border border-gray-300 rounded-lg overflow-hidden shadow-sm">
-      {/* Left Section */}
-      <div className="w-1/3 bg-green-500 text-white flex flex-col justify-center items-center p-4">
-        <h2 className="text-lg font-bold">{label}</h2>
-        <p className="text-sm">{discount}</p>
-      </div>
-      
-      {/* Right Section */}
-      <div className="flex-grow bg-white p-4">
-        <div className="flex items-center mb-2">
-          <span className="bg-yellow-400 text-xs font-bold px-2 py-1 rounded-md mr-2">Số lượng có hạn</span>
-          <span className="text-lg font-semibold">Giảm {discount}</span>
-        </div>
-        <p className="text-sm text-gray-700">Đơn tối thiểu: {minOrder}</p>
-        <p className="text-xs text-gray-500">HSD: {expiration}</p>
-        
-        <div className="mt-2">
-          <button className="bg-orange-500 text-white text-sm font-semibold px-4 py-2 rounded-md w-full">
-            Lưu
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default VoucherPage;
+export default CouponSection;
