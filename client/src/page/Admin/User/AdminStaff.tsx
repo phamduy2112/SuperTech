@@ -84,6 +84,49 @@ function AdminStaff() {
                         key: staff,
                     }
 
+                case 'user_role':
+                    return {
+                        title: 'Đối Tượng',
+                        dataIndex: staff,
+                        key: staff,
+                        render: (src: any) => (
+                            <>
+                            
+                            </>
+                        ),
+
+
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        // render: (text: any) => (
+                        //     <div className="flex-1 flex items-center gap-3">
+                        //         <div className={`w-[10px] rounded-full h-[10px] ${text === 'Người Dùng' ? 'bg-[#2af52a]' : ''} ${text === 'Nhân Viên' ? 'bg-[#ffd000]' : ''} ${text === 'Admin' ? 'bg-[red]' : ''}`}></div>
+                        //         {text}
+                        //     </div>
+                        // ),
+                    }
+                case 'user_phone':
+                    return {
+                        title:'Số điện thoại',
+                        dataIndex: staff,
+                        key:staff,
+                    }
+                case 'user_email':
+                    return {
+                        title:'Email',
+                        dataIndex: staff,
+                        key:staff,
+                    }
+                
+                case 'user_address':
+                    return {
+                        title: 'Địa Chỉ',
+                        dataIndex: staff,
+                        key:staff,
+
+                        
+                    }
+                
+                
                 case 'tacvu': {
                     return {
                         title: 'Tác Vụ',
