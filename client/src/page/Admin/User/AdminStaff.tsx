@@ -178,6 +178,8 @@ function AdminStaff() {
             setDataAllstaffs(Allstaffs);
         } else {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
+
             const filteredData = Allstaffs.filter((item: any) => {
                 const userName = item?.user_name;
                 const userEmail = item?.user_email;
@@ -187,9 +189,9 @@ function AdminStaff() {
                 const userEmailString = (typeof userEmail === 'string' || userEmail instanceof String) ? userEmail : String(userEmail || '');
                 const userPhoneString = (typeof userPhone === 'string' || userPhone instanceof String) ? userPhone : String(userPhone || '');
 
-                return userNameString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
-                    userEmailString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
-                    userPhoneString.toLowerCase().includes(valueInputSearch.toLowerCase());
+                return userNameString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm) ||
+                    userEmailString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm) ||
+                    userPhoneString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm);
             });
 
             setDataAllstaffs(filteredData);
