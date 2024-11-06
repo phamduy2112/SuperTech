@@ -97,6 +97,13 @@ function Order() {
               handleChangeStatus(record.order_id, 3);
             }}
             >Huỷ hàng</button>) : null}
+            {
+              record.order_status==4 ?(
+                <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]'>
+                  Bình luận ngay
+                </button>
+              ) :null
+            }
       
         </div>
         )
