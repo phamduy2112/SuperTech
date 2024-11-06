@@ -38,6 +38,7 @@ function AdminStaff() {
     useEffect(() => {
 
 
+        console.log(staffKeys);
 
         const ColumnStaffs = staffKeys.map((staff) => {
 
@@ -83,50 +84,42 @@ function AdminStaff() {
                         dataIndex: staff,
                         key: staff,
                     }
-
-                case 'user_role':
-                    return {
-                        title: 'Đối Tượng',
-                        dataIndex: staff,
-                        key: staff,
-                        render: (src: any) => (
-                            <>
-                            
-                            </>
-                        ),
-
-
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        // render: (text: any) => (
-                        //     <div className="flex-1 flex items-center gap-3">
-                        //         <div className={`w-[10px] rounded-full h-[10px] ${text === 'Người Dùng' ? 'bg-[#2af52a]' : ''} ${text === 'Nhân Viên' ? 'bg-[#ffd000]' : ''} ${text === 'Admin' ? 'bg-[red]' : ''}`}></div>
-                        //         {text}
-                        //     </div>
-                        // ),
-                    }
                 case 'user_phone':
                     return {
-                        title:'Số điện thoại',
+                        title: 'Số điện thoại',
                         dataIndex: staff,
-                        key:staff,
+                        key: staff,
                     }
+
                 case 'user_email':
                     return {
-                        title:'Email',
+                        title: 'Email',
                         dataIndex: staff,
-                        key:staff,
+                        key: staff,
                     }
-                
+
                 case 'user_address':
                     return {
                         title: 'Địa Chỉ',
                         dataIndex: staff,
-                        key:staff,
+                        key: staff,
 
-                        
+
                     }
-                
-                
+                case 'user_role':
+                    return {
+                        title: 'Vai trò',
+                        dataIndex: staff,
+                        key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <div className="flex-1 flex items-center gap-3">
+                                <div className={`w-[10px] rounded-full h-[10px] ${text == 2 ? 'bg-[#2af52a]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+                            </div>
+                        ),
+                    }
+
+
                 case 'tacvu': {
                     return {
                         title: 'Tác Vụ',
@@ -331,7 +324,7 @@ function AdminStaff() {
                             ...rowSelection,
                         }}
                         columns={columns || []}
-                        dataSource={Array.isArray(Allstaffs) ? Allstaffs : []}
+                        dataSource={Array.isArray(Allstaffs) ? Allstaffs.filter(staff => staff.user_role != 2) : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
                     />
