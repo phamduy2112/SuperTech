@@ -135,7 +135,7 @@ function Login() {
               </Button>
             </Form>
             <p className="mt-6 text-gray-600 text-center text-lg lg:text-xl">
-              Bạn chưa có tài khoản? <NavLink to="/đăng-kí" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
+              Bạn chưa có tài khoản? <NavLink to="/dang-ky" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
             </p>
           </div>
         </div>

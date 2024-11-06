@@ -93,7 +93,7 @@ function ForgetPassword() {
           )}
 
           <p className="mt-4 text-gray-600 text-center text-sm sm:text-base md:text-lg">
-            Quay lại <NavLink to="/đăng-kí" className="text-purple-600 hover:text-purple-800">đăng nhập</NavLink>
+            Quay lại <NavLink to="/dang-ki" className="text-purple-600 hover:text-purple-800">đăng nhập</NavLink>
           </p>
         </div>
       </div>

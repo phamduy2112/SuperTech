@@ -21,9 +21,9 @@ function DropdownUser() {
     {
       key: "1",
       label: token ? (
-        <NavLink to={"/người-dùng"}>Trang cá nhân</NavLink>
+        <NavLink to={"/nguoi-dung"}>Trang cá nhân</NavLink>
       ) : (
-        <NavLink to={"/đăng-nhập"}>Đăng nhập</NavLink>
+        <NavLink to={"/dang-nhap"}>Đăng nhập</NavLink>
       ),
     },
     {
@@ -31,7 +31,7 @@ function DropdownUser() {
       label: token ? (
         <button>Đăng xuất</button>
       ) : (
-        <NavLink to={"/đăng-kí"}>Đăng Kí</NavLink>
+        <NavLink to={"/dang-ky"}>Đăng Kí</NavLink>
       ),
     },
     user?.role === "ADMIN"

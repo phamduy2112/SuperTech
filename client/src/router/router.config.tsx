@@ -29,7 +29,7 @@ import UserDetail from "../page/Client/User/UserDetail/UserDetail";
 import Order from "../page/Client/User/Order/Order";
 import User from "../page/Client/User/User";
 import OrderDetail from "../page/Client/User/OrderDetail/OrderDetail";
-
+import Voucher from "../page/Client/Voucher/voucher"
 import ChatAdmin from "../page/Admin/Chat/ChatAdmin";
 import AdminStaff from "../page/Admin/User/AdminStaff";
 import AdminSetting from "../page/Admin/Setting/AdminSetting";
@@ -54,207 +54,203 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "tìm-kiếm",
+        path: "tim-kiem",
         element: <Search />,
       },
       {
-        path: "sản-phẩm-yêu-thích",
+        path: "san-pham-yeu-thich/:id",
         element: <FavoriteProduct />,
       },
       {
-        path: "/sản-phẩm-chi-tiết/:id",
+        path: "san-pham-chi-tiet/:id",
         element: <DetailProduct />,
       },
       {
-        path: "/list-sản-phẩm",
+        path: "list-san-pham",
         element: <ListProduct />,
       },
 
       // Blog
       {
-        path: "/bài-viết",
+        path: "bai-viet",
         element: <ListBlog />,
       },
       {
-        path: "/bài-viết-chi-tiết",
+        path: "bai-viet-chi-tiet",
         element: <DetailBlog />,
       },
-      // user
-{
-
-element:<User/>,
-children:[
-  {
-    path: "/người-dùng",
-    element: <UserDetail />,
-  },
-  {
-    path: "/đơn-hàng-của-bạn",
-    element: <Order />,
-  },
-  {
-    path: "/đơn-hàng-chi-tiết-của-bạn",
-    element: <OrderDetail />,
-  },
-
-]
-},
-      
-      // Mua hàng
+      // User
       {
-        path: "/giỏ-hàng",
+        element: <User />,
+        children: [
+          {
+            path: "nguoi-dung",
+            element: <UserDetail />,
+          },
+          {
+            path: "don-hang-cua-ban",
+            element: <Order />,
+          },
+          {
+            path: "don-hang-chi-tiet-cua-ban/:id",
+            element: <OrderDetail />,
+          },
+        ],
+      },
+
+      // Shopping
+      {
+        path: "gio-hang",
         element: <Cart />,
       },
       {
-        path: "/thanh-toán",
+        path: "thanh-toan",
         element: <Pay />,
       },
       {
-        path: "/xuất-hóa-đơn",
+        path: "xuat-hoa-don",
         element: <Bill />,
       },
-      // các trang khác
       {
-        path: "/giới-thiệu",
+        path: "ma-giam-gia",
+        element:<Voucher/>
+      },
+      // Other pages
+      {
+        path: "gioi-thieu",
         element: <Introduce />,
       },
       {
-        path: "/liên-hệ",
+        path: "lien-he",
         element: <Contact />,
       },
       {
-        path: "chăm-sóc-khách-hàng",
+        path: "cham-soc-khach-hang",
         element: <CustomerCare />,
       },
-
       {
-        path: "/hỏi-đáp",
+        path: "hoi-dap",
         element: <QuestionAnswer />,
       },
     ],
   },
   {
-
-    element: <AuthTemplate />, 
+    element: <AuthTemplate />,
     children: [
       {
-        path: "/đăng-nhập",
+        path: "dang-nhap",
         element: <Login />,
       },
       {
-        path: "/đăng-kí",
+        path: "dang-ky",
         element: <Resigter />,
       },
       {
-        path: "/quen-mat-khau",
+        path: "quen-mat-khau",
         element: <ForgetPassword />,
       },
-    ]
-
+    ],
   },
   {
-    path: '/admin',
+    path: "admin",
     element: <AdminTemplate />,
     children: [
       {
-        path: 'trang-chủ',
-        element: <AdminHome />
+        path: "trang-chu",
+        element: <AdminHome />,
       },
-      // Loại sản phẩm
+      // Category
       {
-        path: 'quản-lí-loại',
-        element: <AdminCatelogry />
+        path: "quan-li-loai",
+        element: <AdminCatelogry />,
       },
-      // sản phẩm
+      // Product
       {
-        path: 'quản-lí-sản-phẩm',
-        element: <AdminProduct />
+        path: "quan-li-san-pham",
+        element: <AdminProduct />,
       },
       {
-        path: 'quản-lí-sản-phẩm/tạo-sản-phẩm-mới',
-        element: <AdminAddProduct />
-      }, {
-        path: 'quản-lí-sản-phẩm/sửa-sản-phẩm/:id',
-        element: <AdminEditProduct />
+        path: "quan-li-san-pham/tao-san-pham-moi",
+        element: <AdminAddProduct />,
       },
-
-
       {
-        path: "quản-lí-sản-phẩm/quản-lí-bình-luận",
-        element: <AdminCommentProduct />
+        path: "quan-li-san-pham/sua-san-pham/:id",
+        element: <AdminEditProduct />,
+      },
+      {
+        path: "quan-li-san-pham/quan-li-binh-luan",
+        element: <AdminCommentProduct />,
       },
       // Blog
       {
-        path: "quản-lí-bài-viết",
-        element: <AdminBlog />
+        path: "quan-li-bai-viet",
+        element: <AdminBlog />,
       },
       {
-        path: "quản-lí-bài-viết/thêm-bài-viết-mới",
-        element: <AdminAddBlog />
+        path: "quan-li-bai-viet/them-bai-viet-moi",
+        element: <AdminAddBlog />,
       },
       {
-
-        path: 'quản-lí-bài-viết/sửa-bài-viết/:id',
-        element: <AdminEditBlog />
+        path: "quan-li-bai-viet/sua-bai-viet/:id",
+        element: <AdminEditBlog />,
       },
       {
-        path: 'quản-lí-bài-viết/quản-lí-bình-luận-bài-viết',
-        element: <AdminCommentPost />
-      },
-
-      // Khách hàng
-      {
-        path: 'quản-lí-khách-hàng',
-        element: <AdminUser />
-      },
-      {
-        path: 'quản-lí-nhân-viên',
-        element: <AdminStaff />
-      }, {
-        path: 'quản-lí-nhân-viên/tạo-nhân-viên-mới',
-        element: <AdminCreateAccount />
-      },
-      {
-        path: 'quản-lí-khách-hàng/tạo-khách-hàng-mới',
-        element: <AdminCreateAccount />
+        path: "quan-li-bai-viet/quan-li-binh-luan-bai-viet",
+        element: <AdminCommentPost />,
       },
 
+      // Customers
       {
-        path: 'quản-lí-nhân-viên/sửa-nhân-viên/:id',
-        element: <AdminCustomerEdit />
+        path: "quan-li-khach-hang",
+        element: <AdminUser />,
       },
       {
-        path: 'quản-lí-khách-hàng/sửa-khách-hàng/:id',
-        element: <AdminCustomerEdit />
+        path: "quan-li-nhan-vien",
+        element: <AdminStaff />,
+      },
+      {
+        path: "quan-li-nhan-vien/tao-nhan-vien-moi",
+        element: <AdminCreateAccount />,
+      },
+      {
+        path: "quan-li-khach-hang/tao-khach-hang-moi",
+        element: <AdminCreateAccount />,
+      },
+      {
+        path: "quan-li-nhan-vien/sua-nhan-vien/:id",
+        element: <AdminCustomerEdit />,
+      },
+      {
+        path: "quan-li-khach-hang/sua-khach-hang/:id",
+        element: <AdminCustomerEdit />,
       },
 
-      // đơn hàng
+      // Orders
       {
-        path: 'quản-lí-đơn-hàng',
-        element: <AdminOrder />
-      },
-      // Đơn hàng chi tiết
-      {
-        path: 'quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/:id',
-        element: <AdminOrderDetail />
+        path: "quan-li-don-hang",
+        element: <AdminOrder />,
       },
       {
-        path: 'quản-lí-đơn-hàng/tạo-đơn-hàng',
-        element: <AdminOrderCreate />
+        path: "quan-li-don-hang/quan-li-don-hang-chi-tiet/:id",
+        element: <AdminOrderDetail />,
       },
       {
-        path: 'quản-lí-đơn-hàng/sửa-đơn-hàng/:id',
-        element: <AdminOrderEdit />
+        path: "quan-li-don-hang/tao-don-hang",
+        element: <AdminOrderCreate />,
+      },
+      {
+        path: "quan-li-don-hang/sua-don-hang/:id",
+        element: <AdminOrderEdit />,
       },
 
       {
-        path: 'quản-lí-tin-nhắn',
-        element: <ChatAdmin />
+        path: "quan-li-tin-nhan",
+        element: <ChatAdmin />,
       },
       {
-        path: 'quản-lí-trang-web',
-        element: <AdminSetting />
-      }
-    ]
-  }
+        path: "quan-li-trang-web",
+        element: <AdminSetting />,
+      },
+    ],
+  },
 ]);

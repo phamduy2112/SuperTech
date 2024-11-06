@@ -152,7 +152,7 @@ function Resigter() {
               </Form.Item>
 
               <div className="flex justify-end mb-4">
-                <NavLink to="#" className="text-[1.5rem] text-[#7500CF] font-semibold hover:text-purple-800">
+                <NavLink to="/quen-mat-khau" className="text-[1.5rem] text-[#7500CF] font-semibold hover:text-purple-800">
                   Quên mật khẩu
                 </NavLink>
               </div>
@@ -165,7 +165,7 @@ function Resigter() {
             </Form>
 
             <p className="mt-4 text-gray-600 text-center text-[1.4rem]">
-              Bạn đã có tài khoản? <NavLink to="/đăng-nhập" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
+              Bạn đã có tài khoản? <NavLink to="/dang-nhap" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
             </p>
           </div>
         </div>
