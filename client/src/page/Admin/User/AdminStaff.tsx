@@ -14,15 +14,20 @@ import { getAllUserThunk } from '../../../redux/user/user.slice';
 function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Allstaffs: any = useAppSelector((state) => state.user.Alluser);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [DataAllstaffs, setDataAllstaffs] = useState<any[]>([]);
     const AppDispatch = useAppDispatch();
     const [staffKeys, setStaffKeys] = useState<string[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [columns, setColumns] = useState<any[]>([]);
+    const [valueInputSearch, setvalueInputSearch] = useState(``);
 
 
 
     useEffect(() => {
         AppDispatch(getAllUserThunk());
+        setDataAllstaffs(Allstaffs);
+
     }, [AppDispatch]);
 
     useEffect(() => {
@@ -164,8 +169,33 @@ function AdminStaff() {
         setColumns(ColumnStaffs);
     }, [staffKeys]);
 
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setvalueInputSearch(e.target.value);
+    }
 
+    useEffect(() => {
+        if (valueInputSearch.trim() === "") {
+            setDataAllstaffs(Allstaffs);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const filteredData = Allstaffs.filter((item: any) => {
+                const userName = item?.user_name;
+                const userEmail = item?.user_email;
+                const userPhone = item?.user_phone;
 
+                const userNameString = (typeof userName === 'string' || userName instanceof String) ? userName : String(userName || '');
+                const userEmailString = (typeof userEmail === 'string' || userEmail instanceof String) ? userEmail : String(userEmail || '');
+                const userPhoneString = (typeof userPhone === 'string' || userPhone instanceof String) ? userPhone : String(userPhone || '');
+
+                return userNameString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
+                    userEmailString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
+                    userPhoneString.toLowerCase().includes(valueInputSearch.toLowerCase());
+            });
+
+            setDataAllstaffs(filteredData);
+
+        }
+    }, [valueInputSearch, Allstaffs]);
 
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
@@ -291,7 +321,7 @@ function AdminStaff() {
 
                 <div className='flex p-[24px] items-center justify-between gap-3'>
                     <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-                        <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm nhân viên hoặc quản trị...' />
+                        <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' onChange={handleSearch} placeholder='Tìm kiếm nhân viên hoặc quản trị...' />
                         <GoSearch className='text-[18px]' />
                     </div>
 
@@ -336,7 +366,8 @@ function AdminStaff() {
                             ...rowSelection,
                         }}
                         columns={columns || []}
-                        dataSource={Array.isArray(Allstaffs) ? Allstaffs.filter(staff => staff.user_role != 2) : []}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 2) : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
                     />
