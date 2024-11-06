@@ -80,7 +80,7 @@ const createorder = async (req, res) => {
             // discount
         });
         responseSend(res, neworder, "Thêm Thành công!", 201);
-    } catch (error) {
+    } catch (error) {       
         console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }

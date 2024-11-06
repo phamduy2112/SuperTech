@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addItemToCart } from "../../redux/cart/cart.slice";
 import { NavLink } from "react-router-dom";
 import useSweetAlert from "../../hooks/Notification.hook";
+import { formatCurrencyVND } from "../../utils";
 
 function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
@@ -49,9 +50,12 @@ function ProductItem(props) {
   </div>
 
   {/* Giảm giá */}
-  <div className="absolute top-4 left-4 bg-[#7500CF] px-3 py-2 rounded-full text-white text-[1.4rem] font-semibold">
-    -23%
+  {props.product?.product_discount>0 ?
+    <div className="absolute top-4 left-4 bg-[#7500CF] px-3 py-2 rounded-full text-white text-[1.4rem] font-semibold">
+    -{props.product?.product_discount}%
   </div>
+  :null}
+
 
   {/* Hình ảnh sản phẩm */}
   <NavLink to={`/san-pham-chi-tiet/${props.product.product_id}`} className="flex justify-center my-4">
@@ -71,7 +75,7 @@ function ProductItem(props) {
       </div>
     </div>
 
-    <h3 className="text-[1.6rem] font-bold">{props.product.product_name}</h3>
+    <h3 className="text-[1.7rem] font-bold">{props.product.product_name}</h3>
     <div className="flex items-center gap-2 my-2">
       <PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
       <span className="text-gray-600 text-[1.2rem]">Online giá rẻ quá</span>
@@ -80,9 +84,20 @@ function ProductItem(props) {
     {/* Giá */}
     <div className="flex items-center gap-2 my-2 text-[1.4rem]">
       <span className="bg-gray-100 text-sm font-medium py-1 px-2 rounded">Trả góp 0%</span>
-      <span className="line-through text-gray-400 ">31.990.000đ</span>
+       {props.product?.product_discount>0 ?
+       <span className="line-through text-gray-400 ">
+       {
+     formatCurrencyVND(props?.product.product_price)
+    
+     
+     }
+     </span>
+  :null}
+ 
     </div>
-    <p className="text-red-600 font-semibold text-[1.6rem]">30.000.000đ</p>
+    <p className="text-red-600 font-semibold text-[1.7rem]">{
+     formatCurrencyVND (Number(props?.product.product_price ) *(1-Number(props?.product.product_discount/100)))
+      }</p>
 
     {/* Đánh giá và tình trạng */}
     <div className="flex justify-between items-center mt-2 text-[1.4rem]">

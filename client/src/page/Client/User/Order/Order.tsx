@@ -97,7 +97,7 @@ function Order() {
               handleChangeStatus(record.order_id, 3);
             }}
             >Huỷ hàng</button>) : null}
-        
+      
         </div>
         )
      
@@ -114,19 +114,79 @@ function Order() {
       </h3>
       <div className='py-[1rem] flex gap-[1rem]'>
       <div className='flex gap-[1.5rem]'> {/* Adjust gap and layout as needed */}
-      {colorText.map(({ color, text },index) => (
+      {/* {colorText.map(({ color, text },index) => (
         <button key={text}
         onClick={() => {
             console.log(`Button clicked: ${text} with index: ${index}`); // Debugging
             setOrderStatus(index); // Update the order status
           }}
-        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+        className='flex text-[1.5rem] items-center gap-2'> 
           <div className={`bg-[${color}] w-6 h-6 rounded-full`}></div>
           <div className={`text-[${color}] font-semibold`}>
             {text}
           </div>
         </button>
-      ))}
+      ))} */}
+       <button 
+        onClick={() => {
+            setOrderStatus(0); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#DB363B] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#DB363B] font-semibold`}>
+          Đang chờ duyệt
+          </div>
+        </button>
+       <button 
+        onClick={() => {
+            setOrderStatus(1); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#FFCC00] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#FFCC00] font-semibold`}>
+          Đang chuẩn bị hàng
+          </div>
+        </button>
+       <button 
+        onClick={() => {
+            setOrderStatus(2); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#2277C6] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#2277C6] font-semibold`}>
+          Đang giao hàng
+          </div>
+        </button>
+       <button 
+        onClick={() => {
+            setOrderStatus(3); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#2101B0] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#2101B0] font-semibold`}>
+          Đã huỷ hàng
+          </div>
+        </button>
+       <button 
+        onClick={() => {
+            setOrderStatus(4); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#04C621] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#04C621] font-semibold`}>
+          Thành công
+          </div>
+        </button>
+       <button 
+        onClick={() => {
+            setOrderStatus(5); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#000000] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#000000] font-semibold`}>
+          Không nhận hàng
+          </div>
+        </button>
     </div>
        
        

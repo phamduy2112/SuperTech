@@ -9,6 +9,15 @@ import { formatCurrencyVND } from '../../../../utils';
 function OrderDetail() {
   const { id } = useParams(); // Lấy id từ URL
   const idOrder=Number(id)
+  const colorText = [
+    { color: '#DB363B', text: 'Đang chờ duyệt' },     // 0
+    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, // 1
+    { color: '#2277C6', text: 'Đang giao hàng' },     // 2
+    { color: '#2101B0', text: 'Đã huỷ hàng' },        // 3
+    { color: '#04C621', text: 'Thành công' },         // 4
+    { color: '#000000', text: 'Không nhận hàng' },    // 5
+
+  ];
   const columns = [
     {
       title: 'Sản phẩm',
@@ -70,7 +79,7 @@ function OrderDetail() {
         const donGia =+record.product_price;
         const soLuong = +record.quanlity;
         const giamGia = +record.product_discount;
-        const tongTien =donGia-soLuong * (1 - +giamGia / 100);
+        const tongTien = donGia * soLuong * (1 - giamGia / 100);
        
         return (
           <div className='text-[#FF0000] font-semibold text-center'>
@@ -100,7 +109,7 @@ const [listProduct,setListProduct]=useState([]);
       try {
         const resp = await getDetailOrder(idOrder);
         setDetailOrder(resp.data.content);
-        setOrder(detailOrder[0]?.order)
+        setOrder(detailOrder[0])
         const products = resp.data.content.map(detail => ({
         quanlity:detail.detail_order_quality,
           name: detail.product.product_name,
@@ -119,29 +128,35 @@ const [listProduct,setListProduct]=useState([]);
     }
     fetchApi()
   },[idOrder])
-console.log(detailOrder);
+console.log(order);
 
- 
+const statusIndex = detailOrder[0]?.order?.order_status; // Giá trị để chỉ định trạng thái (ví dụ 0 là 'Đang chờ duyệt')
+const status = colorText[statusIndex];
 
   
 return (
     <div className='w-[100%] shadow-lg py-[4rem] px-[3rem]'>
       <div>
         <div className='flex justify-between items-center'>
-          <h3 className='text-[2.2rem] font-semibold'>Chi tiết đơn hàng <span className='text-[#0084FF]'>#1306</span></h3>
-          <p className='text-[1.7rem] font-semibold'>Trạng thái vận chuyển: <span className='text-red-500'>Chưa chuyển</span></p>
+          <h3 className='text-[2.2rem] font-semibold'>Chi tiết đơn hàng <span className='text-[#0084FF]'>#{detailOrder[0]?.order?.order_id}</span></h3>
+          <p className={`text-[1.7rem] font-semibold`}>Trạng thái vận chuyển: <span className={`text-[${status?.color}]`}>
+          {status?.text}
+
+            </span></p>
         </div>
         <div className='flex gap-[1rem] py-[1rem]'>
           <p className='text-[1.4rem] font-semibold'>Khuyến mãi: <span>0</span></p>
           <p className='text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
-          <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>{order?.order_total}</span></p>
+          <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>
+            
+            {formatCurrencyVND(detailOrder[0]?.order?.order_total)}</span></p>
         </div>
         <div className='flex justify-between'>
           <div className='w-[49%]'>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
             <div className='h-[8rem] shadow-md p-[2rem]'>
-            <p className='text-[1.5rem] font-semibold'>Địa chỉ: <span>{order?.address}</span></p>
-            <p className='text-[1.5rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0798961321</span></p>
+            <p className='text-[1.5rem] font-semibold'>Địa chỉ: <span>{detailOrder[0]?.order?.address}</span></p>
+            <p className='text-[1.5rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0334491141</span></p>
             </div>
           </div>
           <div className='w-[49%]'>

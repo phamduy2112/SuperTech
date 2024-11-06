@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { createDetailOrder, createOrder } from '../../../service/order/order.service';
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrencyVND } from '../../../utils';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
@@ -19,7 +20,12 @@ function Pay() {
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
-console.log(user);
+  const totalPrice = listCart.reduce((total:number, item) => {
+    const discountAmount = (item.product_price * item.product_discount) / 100; // Tính giảm giá
+    const priceAfterDiscount = item.product_price - discountAmount; // Tính giá sau giảm
+    const itemTotalPrice = item.quantity * priceAfterDiscount; // Tính tổng giá của item
+    return total + itemTotalPrice; // Cộng dồn vào total
+  }, 0);
 
   const [formData, setFormData] = useState({
     name: user?.user_name || '', // Gán giá trị ban đầu cho name
@@ -97,7 +103,7 @@ console.log(user);
     // Xử lý logic khi ấn nút Đặt hàng
 
     const dataOrder={
-      order_total:100000,
+      order_total:totalPrice,
       order_total_quatity:+totalItem,
       order_status:0,
       user_id:user.user_id,
@@ -167,7 +173,7 @@ console.log(user);
           <div className='flex justify-between text-[1.5rem] py-[1rem] font-semibold border border-b-[#969696] border-transparent'>
             <p className='sm:w-[70%] xsm:w-[80%]'>Sản phẩm</p>
             <p className='xsm:w-[20%]'>Tạm tính</p>
-          </div>
+          </div>      
           <div className='flex  sm:text-[1.3rem] sxm:text-[1.4rem] py-[1rem] border border-b-[#969696] border-transparent'>
             <div className='w-[80%] flex'>
               <div className='xsm:w-[70px] sm:w-[60px]'>
@@ -359,10 +365,27 @@ console.log(user);
                   <div>
                     <h5 className="font-semibold text-[1.7rem]">{item.product_name}</h5>
                     <p className="text-[1.6rem]">Màu sắc: Xanh</p>
-                    <p className="text-red-600 font-semibold">30.000.000đ <span className="text-[#969696] line-through ml-2">31.990.000đ</span></p>
+                    {item?.product_discount > 0 ? (
+                                          <p className="text-red-600 font-semibold">
+                                             {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}
+                                             <span className="text-[#969696] line-through ml-2">
+                                             {formatCurrencyVND(item?.product_price)}
+                                             </span></p>
+
+          ):(
+            <p className="text-red-600 font-semibold"> {formatCurrencyVND(item?.product_price)} </p>
+
+
+          )}
                   </div>
                 </div>
-                <div className="text-[1.8rem] font-semibold text-customColor">30.000.000đ</div>
+                <div className="text-[1.8rem] font-semibold text-customColor">       {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}đ</div>
               </div>
             )
           })
@@ -375,7 +398,12 @@ console.log(user);
               <div className="space-y-4 text-[1.6rem] ">
                 <div className="flex justify-between ">
                   <span className="font-medium">Tạm tính</span>
-                  <span className="font-semibold text-[1.8rem]">52.000.000đ</span>
+                  <span className="font-semibold text-[1.8rem]">
+                    
+                  {formatCurrencyVND(totalPrice)}
+                    
+                    
+                    </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Giao hàng</span>
@@ -383,7 +411,7 @@ console.log(user);
                 </div>
                 <div className="flex justify-between border-t pt-5 font-semibold">
                   <span>Tổng tiền</span>
-                  <span className="text-red-600 text-[2.2rem]">52.000.000đ</span>
+                  <span className="text-red-600 text-[2.2rem]">   {formatCurrencyVND(totalPrice)}</span>
                 </div>
               </div>
 
