@@ -177,19 +177,17 @@ function AdminStaff() {
         if (valueInputSearch.trim() === "") {
             setDataAllstaffs(Allstaffs);
         } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const filteredData = Allstaffs.filter((item: any) => {
-                const userId = item?.user_id;
                 const userName = item?.user_name;
                 const userEmail = item?.user_email;
                 const userPhone = item?.user_phone;
 
-                const userIdString = (typeof userId === 'string' || userId instanceof String) ? userId : String(userId || '');
                 const userNameString = (typeof userName === 'string' || userName instanceof String) ? userName : String(userName || '');
                 const userEmailString = (typeof userEmail === 'string' || userEmail instanceof String) ? userEmail : String(userEmail || '');
                 const userPhoneString = (typeof userPhone === 'string' || userPhone instanceof String) ? userPhone : String(userPhone || '');
 
-                return userIdString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
-                    userNameString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
+                return userNameString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
                     userEmailString.toLowerCase().includes(valueInputSearch.toLowerCase()) ||
                     userPhoneString.toLowerCase().includes(valueInputSearch.toLowerCase());
             });
@@ -198,13 +196,6 @@ function AdminStaff() {
 
         }
     }, [valueInputSearch, Allstaffs]);
-
-
-
-
-
-
-
 
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
