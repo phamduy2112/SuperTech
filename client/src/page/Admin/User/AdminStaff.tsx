@@ -59,7 +59,7 @@ function AdminStaff() {
                         render: (src: any) => (
                             <>
                                 {
-                                    src == '' ?
+                                    src == '' || src == null || src == undefined ?
                                         <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
                                         : <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
 
@@ -115,6 +115,18 @@ function AdminStaff() {
                         render: (text: any) => (
                             <div className="flex-1 flex items-center gap-3">
                                 <div className={`w-[10px] rounded-full h-[10px] ${text == 2 ? 'bg-[#2af52a]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+                            </div>
+                        ),
+                    }
+                case 'level':
+                    return {
+                        title: 'Thăng hạng',
+                        dataIndex: staff,
+                        key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <div className="flex-1 flex items-center gap-3">
+                                {text == 4 ? 'Đồng' : ''} {text == 3 ? 'Bạc' : ''} {text == 2 ? 'Vàng' : ''} {text == 1 ? 'Kim Cương' : ''} {text == 0 ? 'Tối Thượng' : ''}
                             </div>
                         ),
                     }
