@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../redux/order/Order.slice';
 import { formatCurrencyVND, truncateText } from '../../../../utils';
+import CancelOrderModal from './component/ModalCancer';
 function Order() {
   const userRef = useRef<any>(null);
 
@@ -92,11 +93,8 @@ function Order() {
           <div className='flex gap-[.5rem]'>
           <NavLink to={`/don-hang-chi-tiet-cua-ban/${record.order_id}`} className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
           {record.order_status<=2 ?
-          (  <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]' 
-            onClick={()=>{
-              handleChangeStatus(record.order_id, 3);
-            }}
-            >Huỷ hàng</button>) : null}
+          (      <CancelOrderModal orderId={record.order_id} />
+          ) : null}
             {
               record.order_status==4 ?(
                 <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]'>

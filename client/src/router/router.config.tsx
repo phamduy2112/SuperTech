@@ -80,6 +80,11 @@ export const router = createBrowserRouter([
         element: <DetailBlog />,
       },
       // user
+      {
+        path: "/don-hang-chi-tiet-cua-ban/:id",
+        element: <OrderDetail />,
+      },
+    
 {
 
 element:<User/>,
@@ -91,10 +96,6 @@ children:[
   {
     path: "/don-hang-cua-ban",
     element: <Order />,
-  },
-  {
-    path: "/don-hang-chi-tiet-cua-ban/:id",
-    element: <OrderDetail />,
   },
 
 ]

@@ -11,14 +11,15 @@ export const getOrderByIdProductThunk = createAsyncThunk(
 
       // Filter results based on searchKey and order_status
       const filteredResults = result.filter((item: any) => {
-        const matchesSearchKey = searchKey ? Number(item.order_id) === searchKey : true; // If searchKey is provided, match it
+        // Check if order_id starts with searchKey (convert both to string for comparison)
+        const matchesSearchKey = searchKey ? item.order_id.toString().startsWith(searchKey.toString()) : true; 
         const matchesOrderStatus = order_status !== undefined ? item.order_status === order_status : true; // Match order_status if provided
 
         return matchesSearchKey && matchesOrderStatus; // Return true if both conditions match
       });
 
       console.log(`Filtered results based on search criteria:`, filteredResults);
-      return filteredResults.length > 0 ? filteredResults : []; // Return filtered results or all results if none found
+      return filteredResults.length > 0 ? filteredResults : []; // Return filtered results or an empty array if none found
 
     } catch (e) {
       console.log(e);

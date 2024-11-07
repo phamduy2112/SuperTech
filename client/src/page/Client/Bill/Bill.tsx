@@ -120,8 +120,8 @@ function Bill() {
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white rounded-lg shadow-md">
                 <thead>
-                  <tr className="border-b bg-gray-100 text-gray-600 text-lg">
-                    <th className="py-4 px-6 text-left">Hàng</th>
+                  <tr className="border-b bg-gray-100 text-gray-600 text-[1.8rem]">
+                    <th className="py-4 px-6 text-left">Sản phẩm</th>
                     <th className="py-4 px-6 text-left">Đơn giá</th>
                     <th className="py-4 px-6 text-center">Số Lượng</th>
                     <th className="py-4 px-6 text-right">Thành tiền</th>
@@ -132,15 +132,15 @@ function Bill() {
                   <tr className="border-b">
                     <td className="py-6 px-6 text-gray-800 flex items-center gap-4">
                       <img
-                        src=""
+                        src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
                         alt="Điện thoại"
                         className="w-20 h-20 rounded-md object-cover"
                       />
-                      <span className="text-roboto">IphoneX</span>
+                      <span className="text-roboto">IphoneXasdasd</span>
                     </td>
-                    <td className="py-6 px-6 text-gray-800 text-roboto">17,000₫</td>
-                    <td className="py-6 px-6 text-center text-gray-800 text">2</td>
-                    <td className="py-6 px-6 text-right text-gray-800 text">34,000₫</td>
+                    <td className="py-6 px-6 text-customColor font-semibold">1.700.000₫</td>
+                    <td className="py-6 px-6 text-center text-gray-800 font-semibold">2</td>
+                    <td className="py-6 px-6 text-right text-red-600 font-semibold">14.000.000₫</td>
                   </tr>
                   {/* Add more items here as needed */}
                 </tbody>

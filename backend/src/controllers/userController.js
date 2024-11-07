@@ -231,6 +231,21 @@ const updateUser = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const deleteEmployee=async(req,res)=>{
+  try{
+
+    let deleted = await User.destroy({
+      where: { user_id: req.params.id }
+  });
+  if (deleted) {
+      responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+  } else {
+      responseSend(res, "", "không tìm thấy !", 404);
+  }
+  }catch(e){
+
+  }
+}
 const updateImage=async(req,res)=>{
     try{
         const user_id=req.id;
@@ -484,6 +499,7 @@ export {
     loginFacebook,
     forgetCheckMail,
     forgetCheckCode,
-    resetPasswordNoToken
+    resetPasswordNoToken,
+    deleteEmployee
 };
 
