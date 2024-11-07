@@ -120,6 +120,8 @@ function AdminStaff() {
                         render: (text: any) => (
                             <div className="flex-1 flex items-center gap-3">
                                 <div className={`w-[10px] rounded-full h-[10px] ${text == 2 ? 'bg-[#2af52a]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+                                {text == 2 ? 'Người dùng' : ''} {text == 1 ? 'Nhân viên' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
+
                             </div>
                         ),
                     }
