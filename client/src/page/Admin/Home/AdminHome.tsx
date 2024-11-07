@@ -370,7 +370,6 @@ function AdminHome() {
               
 
             />
-            <div className='text-[30px] flex justify-center items-center  mt-10 font-bold text-[#FFD700]'>100%</div>
           </div>
         </div>
 

@@ -2,8 +2,8 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 
-let models = initModels(sequelize); 
-let Posts = models.posts; 
+let models = initModels(sequelize);
+let Posts = models.posts;
 
 const getPosts = async (req, res) => {
     try {

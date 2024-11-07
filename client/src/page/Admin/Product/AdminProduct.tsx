@@ -1,4 +1,4 @@
-import { Button, Checkbox, Popover, Table } from 'antd';
+import { Button, Drawer, Select, Table } from 'antd';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { BiSolidEdit } from 'react-icons/bi';
@@ -7,9 +7,20 @@ import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { TbPlaylistAdd } from 'react-icons/tb';
-
+import { Link, useNavigate } from 'react-router-dom';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 function AdminProduct() {
-  const [selectedCheckbox, setSelectedCheckbox] = useState('');
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
@@ -17,6 +28,10 @@ function AdminProduct() {
       icon: 'info',
       text: `Đã mở trang sửa cho sản phẩm có ID: ${key}`,
       confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
+      }
     });
   };
 
@@ -48,7 +63,6 @@ function AdminProduct() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSelectChange = (selectedRowKeys: any) => {
-    setSelectedCheckbox(selectedRowKeys);
     if (selectedRowKeys.length > 0) {
       showModal(selectedRowKeys.length);
     }
@@ -277,6 +291,81 @@ function AdminProduct() {
     });
   };
 
+  const Datasao = [
+    {
+      value: '1',
+      label: '⭐',
+    },
+    {
+      value: '2',
+      label: '⭐⭐',
+    },
+    {
+      value: '3',
+      label: '⭐⭐⭐',
+    },
+  ]
+  const Datamau = [
+    {
+      value: 'Xanh',
+      label: 'Xanh',
+    },
+    {
+      value: 'Vàng',
+      label: 'Vàng',
+    },
+
+  ]
+
+  const Dataloai = [
+    {
+      value: 'Iphone',
+      label: 'Iphone',
+    },
+    {
+      value: 'Máy tính',
+      label: 'Máy tính',
+    },
+    {
+      value: 'Chuột',
+      label: 'Chuột',
+    }, {
+      value: 'Tai nghe',
+      label: 'Tai nghe',
+    },
+  ]
+  const Datahang = [
+    {
+      value: 'Iphone',
+      label: 'Iphone',
+    },
+    {
+      value: 'SamSung',
+      label: 'SamSung',
+    },
+    {
+      value: 'Xiaomi',
+      label: 'Xiaomi',
+    }, {
+      value: 'Oppo',
+      label: 'Oppo',
+    },
+
+  ]
+  const Dataman = [
+
+    {
+      value: '19.9',
+      label: 'Oppo',
+    },
+
+  ]
+  const [priceRange, setPriceRange] = useState([0, 30000000]); // Set initial range values
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onChange = (value: any) => {
+    setPriceRange(value);
+  };
+
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
       <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
@@ -287,10 +376,13 @@ function AdminProduct() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Sản Phẩm Mới
-            </Button>
+            <Link to={`/admin/quản-lí-sản-phẩm/tạo-sản-phẩm-mới`}>
+              <Button className='p-10' type="primary">
+                <TbPlaylistAdd className='text-[18px]' />
+                Thêm Sản Phẩm Mới
+              </Button>
+            </Link>
+
           </div>
         </div>
 
@@ -300,33 +392,189 @@ function AdminProduct() {
             <GoSearch className='text-[18px]' />
           </div>
 
-          <Popover
-            content={<div className='flex flex-col'>
+          <Button onClick={() => showDrawer()} className='p-10'>
+            <FiFilter className='text-[18px]' />
+            Lọc
+          </Button>
+          <Drawer className='' title="Lọc chọn tìm sản phẩm" width={700} onClose={onClose} open={open}>
+            <form className='grid grid-cols-3 gap-[20px]' action="">
+              <div className='flex h-auto flex-col gap-4'>
+                <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Tên sản phẩm</label>
+                <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+
+              </div>
+              <div className='flex h-auto flex-col gap-4'>
+                <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Số sao</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn mức sao ban đầu "
+                  optionFilterProp="label"
+                  options={Datasao}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+
+                />
+              </div>
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Màu sắc</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn màu"
+                  optionFilterProp="label"
+                  options={Datamau}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Loại</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn loại"
+                  optionFilterProp="label"
+                  options={Dataloai}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Hãng</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn hãng"
+                  optionFilterProp="label"
+                  options={Datahang}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Màn hình</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn màn hình"
+                  optionFilterProp="label"
+                  options={Dataman}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='ram' className='text-[13px] text-[#81818177] font-medium'>RAM</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn RAM"
+                  optionFilterProp="label"
+                  options={[
+                    { label: '4GB', value: '4GB' },
+                    { label: '6GB', value: '6GB' },
+                    { label: '8GB', value: '8GB' },
+                    { label: '12GB', value: '12GB' },
+                    { label: '16GB', value: '16GB' },
+                  ]}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='rom' className='text-[13px] text-[#81818177] font-medium'>ROM</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn ROM"
+                  optionFilterProp="label"
+                  options={[
+                    { label: '64GB', value: '64GB' },
+                    { label: '128GB', value: '128GB' },
+                    { label: '256GB', value: '256GB' },
+                    { label: '512GB', value: '512GB' },
+                  ]}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='pin' className='text-[13px] text-[#81818177] font-medium'>Dung lượng pin</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn dung lượng pin"
+                  optionFilterProp="label"
+                  options={[
+                    { label: '3000mAh', value: '3000mAh' },
+                    { label: '4000mAh', value: '4000mAh' },
+                    { label: '5000mAh', value: '5000mAh' },
+                    { label: '6000mAh', value: '6000mAh' },
+                  ]}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='tinh_nang' className='text-[13px] text-[#81818177] font-medium'>Tính năng</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn tính năng"
+                  optionFilterProp="label"
+                  options={[
+                    { label: 'Chống nước', value: 'Chống nước' },
+                    { label: 'Camera tốt', value: 'Camera tốt' },
+                    { label: 'Mặt kính cường lực', value: 'Mặt kính cường lực' },
+                  ]}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='so_luong' className='text-[13px] text-[#81818177] font-medium'>Số lượng</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn số lương"
+                  optionFilterProp="label"
+                  options={[
+                    { label: 'Dưới 10 cái', value: 'Dưới 10 cái' },
+                    { label: 'Từ 10 cái đến 50 cái', value: 'Từ 10 cái đến 50 cái' },
+                    { label: 'Trên 50 cái', value: 'Trên 50 cái' },
+                  ]}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+              <div className='flex h-full flex-col gap-4'>
+                <label htmlFor='so_luong' className='text-[13px] text-[#81818177] font-medium'>Giảm giá</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn số giảm giá"
+                  optionFilterProp="label"
+                  options={[
+                    { label: '10%', value: '10%' },
+                    { label: '30%', value: '30%' },
+                    { label: '50%', value: '50%' },
+                  ]}
+                  className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                />
+              </div>
+              <div className='flex col-span-3 h-full flex-col gap-4'>
+                <label htmlFor='price' className='text-[13px] text-[#81818177] font-medium'>Giá (VNĐ)</label>
+                <Slider
+                  range
+                  min={0}
+                  max={30000000}
+                  value={priceRange}
+                  onChange={onChange}
+                  className='bg-[#81818113]'
+                />
+                <div className='flex justify-between text-[13px] text-[#81818177]'>
+                  <span>{priceRange[0].toLocaleString()} VNĐ</span>
+                  <span>{priceRange[1].toLocaleString()} VNĐ</span>
+                </div>
+              </div>
+              <div className='col-span-3 flex h-[350px] items-end justify-center pb-[20px] flex-row flex-1 gap-4'>
+                <Button  className='w-[150px] bg-transparent h-[45px]' color="danger" variant="dashed">
+                  Hủy bỏ
+                </Button>
+                <Button color="primary" className='w-[150px] h-[45px]'  variant="solid">
+                  Tìm kiếm
+                </Button>
+              </div>
 
 
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Mới nhất</label>
-                <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
-              </div>
-              <div className='flex gap-2 justify-between p-[12px]'>
-                <label className='text-[14px]'>Cũ nhất</label>
-                <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
-              </div>
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Sản Phẩm Mắc Nhất</label>
-                <Checkbox checked={selectedCheckbox === 'productmax'} onChange={() => setSelectedCheckbox('productmax')}></Checkbox>
-              </div>
 
-            </div>}
-            title="Lọc"
-            trigger="click"
-            placement="bottomRight"
-          >
-            <Button className='p-10'>
-              <FiFilter className='text-[18px]' />
-              Lọc
-            </Button>
-          </Popover>
+            </form>
+
+          </Drawer>
         </div>
 
         <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>

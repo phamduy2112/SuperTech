@@ -15,6 +15,8 @@ function TaskCart({ onClose }: TaskCart) {
   const dispatch = useAppDispatch();
 
   const listCart = useAppSelector((state) => state.cart.listCart);
+  console.log(listCart);
+  
   const totalItem = useAppSelector((state) => state.cart.totalItems);
 
   const handleRemoveItem = (product_id: any) => {
@@ -53,7 +55,7 @@ function TaskCart({ onClose }: TaskCart) {
                 />
               </div>
               <div className='w-[65%]'>
-                <h3 className='text-[1.5rem] font-semibold'>{item.product_name}</h3>
+                <h3 className='text-[1.5rem] font-semibold'>{item?.product_name}</h3>
                 <p className='text-[#7500CF] font-semibold text-[1.6rem] py-[.5rem]'>30.000.000 đ
                   <span style={{ textDecoration: 'line-through' }} className='text-[1.5rem] text-[gray]'>28.000.000</span>
                 </p>

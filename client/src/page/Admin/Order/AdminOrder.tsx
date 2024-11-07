@@ -9,19 +9,29 @@ import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { TbPlaylistAdd } from 'react-icons/tb';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AdminOrder() {
+  const navigate = useNavigate();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEdit = (key: any) => {
+  const handleEdit = (event:any,key: any) => {
+    event.stopPropagation();
     Swal.fire({
       icon: 'info',
-      text: `Đã mở trang sửa cho bình luận có ID: ${key}`,
+      text: `Đã mở trang sửa cho đơn hàng có ID: ${key}`,
       confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/admin/quản-lí-đơn-hàng/sửa-đơn-hàng/${key}`);
+      }
     });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDelete = (key: any) => {
+  const handleDelete = (event:any,key: any) => {
+    event.stopPropagation();
+
     Swal.fire({
       icon: 'warning',
       showDenyButton: true,
@@ -105,13 +115,14 @@ function AdminOrder() {
       key: 'key',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (record: any) => (
-        <div className='flex text-[24px] box-border gap-1 items-center'>
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(record.key)}
+        <div className='flex z-[100] text-[24px] box-border gap-1 items-center'>
+          <BiSolidEdit
+            className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+            onClick={(event) => handleEdit(event, record.key)} // Thêm event
           />
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDelete(record.key)}
+            onClick={(event) => handleDelete(event, record.key)} // Thêm event
           />
         </div>
       ),
@@ -242,7 +253,21 @@ function AdminOrder() {
   ];
 
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function handleRowClick(record: any) {
+    Swal.fire({
+      icon: 'success',
+      text: `Đã mở trang đơn hàng chi tiết: ${record.key}`,
+      confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/admin/quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/${record.key}`);
+      }
+    });
 
+
+
+  }
 
 
 
@@ -321,10 +346,14 @@ function AdminOrder() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Đơn Hàng Mới
-            </Button>
+            <Link to={'/admin/quản-lí-đơn-hàng/tạo-đơn-hàng'}>
+              <Button className='p-10' type="primary">
+                <TbPlaylistAdd className='text-[18px]' />
+                Đơn Hàng Mới
+
+              </Button>
+            </Link>
+
           </div>
         </div>
 
@@ -374,6 +403,9 @@ function AdminOrder() {
             dataSource={data}
             size='large'
             pagination={{ pageSize: 10 }}
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record), // Gọi hàm khi click vào hàng
+            })}
           />
         </div>
       </div>

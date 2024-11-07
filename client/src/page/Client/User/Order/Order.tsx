@@ -1,119 +1,104 @@
 import { Space, Table, Tag, Tooltip } from 'antd';
 import Search from 'antd/es/input/Search'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './css/TableEdit.css'
 import { NavLink } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../redux/order/Order.slice';
 function Order() {
-  const colorText=[
-    {
-      color:'#DB363B',
-      text:"Đang chờ duyệt"
-    },
-    {
-      color:'#FFCC00',
-      text:"Đang chuẩn bị hàng"
-    },
-    {
-      color:'#2277C6',
-      text:"Đang giao hàng"
-    },
-    {
-      color:'#2101B0',
-      text:"Đã huỷ hàng"
-    },
-    {
-      color:'#04C621',
-      text:"Thành công"
-    },
-    {
-      color:'#000000',
-      text:"Không nhận hàng"
-    },
-  ]
+  const colorText = [
+    { color: '#DB363B', text: 'Đang chờ duyệt' },     // 0
+    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, // 1
+    { color: '#2277C6', text: 'Đang giao hàng' },     // 2
+    { color: '#2101B0', text: 'Đã huỷ hàng' },        // 3
+    { color: '#04C621', text: 'Thành công' },         // 4
+    { color: '#000000', text: 'Không nhận hàng' },    // 5
+    { color: '#8A2BE2', text: 'Trạng thái khác' },    // 6
+  ];
+
+  const [data,setData]=useState([]);
+  const dispatch=useAppDispatch()
+  const listOrder=useAppSelector((state)=>state.listOrder.listOrder)
+  
+  const handleChangeStatus=(id:number,data:number)=>{
+    const dataOrder={
+      id,
+      order_status:data
+    }
+    // console.log(dataOrder);
+    dispatch(changeStatusOrderThunk(dataOrder))
+    
+  }
   const columns = [
     {
       title: 'Đơn hàng',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <NavLink to={""} className="text-[#0084FF]">{text}</NavLink>,
+      dataIndex: 'order_id',
+      key: 'order_id',
+      render: (text) => <NavLink to={""} className="text-[#0084FF]">#{text}</NavLink>,
     },
     {
       title: 'Ngày mua',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'order_date',
+      key: 'order_date',
     },
     {
       title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
+      render: (text) => <NavLink to={""} className="text-[red] font-semibold">lorem</NavLink>,
+
     },
     {
       title: 'Tổng tiền',
-      key: 'tags',
-      dataIndex: 'tags',
+      key: 'order_total',
+      dataIndex: 'order_total',
       render: (text) => <NavLink to={""} className="text-[red] font-semibold">{text}</NavLink>,
 
    
     },
+  
     {
       title: 'Trạng thái',
-      key: 'trangThai',
-      dataIndex: 'trangThai',
-      render:(text)=>{
+      key: 'order_status',
+      dataIndex: 'order_status',
+      render: (statusIndex) => {
+        const statusItem = colorText[statusIndex] || {};
         return (
           <div className='flex justify-center cursor-pointer'>
-              <Tooltip title="Đang chờ duyệt">
-              <div className={`bg-[#DB363B] w-[1.5rem] h-[1.5rem] rounded-[50%]`}></div>
-              </Tooltip>
-          
-                 </div>
-        )
-
-       
+            <Tooltip title={statusItem.text}>
+              <div style={{ backgroundColor: statusItem.color }} className='w-[1.5rem] h-[1.5rem] rounded-[50%]'></div>
+            </Tooltip>
+          </div>
+        );
 
       }
     },
     {
       title: '',
       key: 'edit',
-      render:()=>{
+      render: (text, record) => {
         return (
           <div className='flex gap-[.5rem]'>
-          <NavLink to="" className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
-          <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]'>Huỷ hàng</button>
+          <NavLink to={`/don-hang-chi-tiet-cua-ban/${record.order_id}`} className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
+          {record.order_status<=2 ?
+          (  <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]' 
+            onClick={()=>{
+              handleChangeStatus(record.order_id, 3);
+            }}
+            >Huỷ hàng</button>) : null}
+        
         </div>
         )
      
       }
     },
   ];
-  const data = [
-    {
-      key: '1',
-      name: '#3054',
-      age: "2024-05-21 10:15",
-      address: 'New York No. 1 Lake Park',
-      tags: "5.000.000đ",
-      TrangThai:1
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: "ASdasdasd",
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: "ASdasd",
-    },
-  ];
+ useEffect(()=>{
+  dispatch(getOrderByIdProductThunk())
+ },[dispatch])
   return (
     <div>
-      <h3 className='text-[2.5rem] text-[#7500CF] font-semibold'>
+      <h3 className='text-[2.5rem] text-customColor font-semibold'>
       Quản lý Đơn hàng của bạn
       </h3>
       <div className='py-[1rem] flex gap-[1rem]'>
@@ -163,7 +148,7 @@ function Order() {
             </form>
             
       <div className='tableEdit'>
-      <Table columns={columns} dataSource={data} className='mt-[3rem]'/>
+      <Table columns={columns} dataSource={listOrder} className='mt-[3rem]'/>
       </div>
     </div>
   )

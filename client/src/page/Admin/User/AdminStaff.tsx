@@ -7,15 +7,22 @@ import { GoSearch } from 'react-icons/go';
 import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
+import { Link, useNavigate } from 'react-router-dom';
 
 function AdminStaff() {
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
+    const navigate = useNavigate();
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleEdit = (key: any) => {
         Swal.fire({
             icon: 'info',
             text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
             confirmButtonText: 'OK',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+            }
         });
     };
 
@@ -264,7 +271,7 @@ function AdminStaff() {
             } else if (result.isConfirmed) {
                 Swal.fire({
                     icon: 'info',
-                    text: `Đã mở trang sửa cho ${count} tài khoản`, 
+                    text: `Đã mở trang sửa cho ${count} tài khoản`,
                     confirmButtonText: 'OK',
                 });
             }
@@ -288,10 +295,12 @@ function AdminStaff() {
                             <IoCloudDownloadOutline className='text-[18px]' />
                             Tải về PDF
                         </Button>
-                        <Button className='p-10' type="primary">
-                            <AiOutlineUserAdd className='text-[18px]'/>
-                            Thêm Người Mới
-                        </Button>
+                        <Link to={`/admin/quản-lí-nhân-viên/tạo-nhân-viên-mới`}>
+                            <Button className='p-10' type="primary">
+                                <AiOutlineUserAdd className='text-[18px]' />
+                                Thêm Người Mới
+                            </Button>
+                        </Link>
                     </div>
                 </div>
 
@@ -300,7 +309,7 @@ function AdminStaff() {
                         <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm nhân viên hoặc quản trị...' />
                         <GoSearch className='text-[18px]' />
                     </div>
-                    
+
 
                     <Popover
                         content={<div className='flex flex-col'>

@@ -1,5 +1,5 @@
 .slick-prev:before, .slick-next:before {
-    font-family: 'slick';
+    font-family: 'Roboto';
     font-size: 20px;
     line-height: 1;
     opacity: .75;
@@ -66,10 +66,3 @@
   .slideProductHome .slick-dots{
     bottom: 0;
   }
-  .slick-slider .slick-track, .slick-slider .slick-list {
-    transform: none !important;
-}
-
-.slideShow .slick-track {
-  transform: none !important;
-}

@@ -11,10 +11,22 @@ const getProducts = async (req, res) => {
     try {
         let data = await Products.findAll( 
             {
-                include: [{
+                include: [
+                {
                     model: models.product_colors,
-                    as: 'product_colors'
-                }]
+                    as: 'product_colors',
+                    include: [
+                        {
+                            model: models.product_storage,
+                            as: 'product_storages'
+                        }
+                    ]
+                },
+                {
+                    model: models.product_storage,
+                    as: 'product_storages'
+                }
+            ]
             }
         );
         responseSend(res, data, "Thành công!", 200);
@@ -36,7 +48,6 @@ const getProductsByCategoryId = async (req, res) => {
         }else{
             responseSend(res, "", "không tồn tại !", 404);
         }
-       
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra khi truy vấn sản phẩm", 500);
     }
@@ -47,26 +58,29 @@ const getProductById = async (req, res) => {
         let data = await Products.findByPk(req.params.id, {
             include: [
                 {
-                model: models.product_colors,
-                as: 'colors'
-            },
-                {
                 model: models.comment_product,
-                    as:'comment_products'
+                    as:'comment_products',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user'
+                        }
+                    ]
             },
-            
-                {
-                model: models.image_product,
-                    as:'image'
-            },
-            
-            
                 {
                 model: models.infor_product,
                     as:'infor_product_infor_product'
             },
-            
-        
+                {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
+                    ]
+            },
         ]
         });
         if (data) {
@@ -80,12 +94,11 @@ const getProductById = async (req, res) => {
     }
 };
 const getProductByIdCatelogryDad = async (req, res) => {
-    const { category_dad, category } = req.query;  // Get the category_dad and category from the URL
+    const { category_dad, category } = req.query;
 
     try {
         const whereClause = {};
 
-        // Add `category_dad` to the where clause if it exists
         if (category_dad) {
             whereClause.category_dad = category_dad;
         }

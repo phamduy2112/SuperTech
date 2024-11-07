@@ -58,11 +58,11 @@ export const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "sản-phẩm-yêu-thích",
+        path: "/san-pham-yeu-thich/:id",
         element: <FavoriteProduct />,
       },
       {
-        path: "/sản-phẩm-chi-tiết/:id",
+        path: "/san-pham-chi-tiet/:id",
         element: <DetailProduct />,
       },
       {
@@ -89,11 +89,11 @@ children:[
     element: <UserDetail />,
   },
   {
-    path: "/đơn-hàng-của-bạn",
+    path: "/don-hang-cua-ban",
     element: <Order />,
   },
   {
-    path: "/đơn-hàng-chi-tiết-của-bạn",
+    path: "/don-hang-chi-tiet-cua-ban/:id",
     element: <OrderDetail />,
   },
 
@@ -162,7 +162,7 @@ children:[
       },
       // Loại sản phẩm
       {
-        path: 'quản-lí-loại',
+        path: 'quản-lí-loại/danh-mục-sản-phẩm',
         element: <AdminCatelogry />
       },
       // sản phẩm

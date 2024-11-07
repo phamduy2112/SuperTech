@@ -30,6 +30,8 @@ const getUser = async (req, res) => {
 const register = async (req, res) => {
     try{
         const {user_name,user_email,user_password}=req.body
+        console.log(user_name,user_email,user_password);
+        
         const user = await User.findOne({ where: { user_email } });
         if(user){
             return responseSend(res,{success:false},"Email đã tồn tại",200)
@@ -38,7 +40,8 @@ const register = async (req, res) => {
         await User.create({
             user_name,
             user_email,
-            user_password:hashedPassword
+            user_password:hashedPassword,
+            user_role:0
         })
         responseSend(res,{
             success: true
@@ -80,6 +83,7 @@ const login = async (req, res) => {
 
       const userDetail = {
           user_id: user.user_id,
+          user_role:user.user_role
       };
       const token = createToken(userDetail);
       const tokenRef = createTokenRef(userDetail);

@@ -1,39 +1,24 @@
-.formEdit .ant-form-item .ant-form-item-label {
-
-    text-align: start;
-    font-weight: 600;
-}
-.formEdit .ant-row{
-    display: block;
-}
-.formEdit .ant-input-outlined,
-.formEdit .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector,
-.formEdit .ant-input-number-outlined
-{
-    border-color:#7500CF ;
-    height: 3.7rem;
-}
-.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-select .ant-select-arrow{
-    color: #7500CF;
-}
-.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-form-item{
-    margin-bottom: 1rem;
-}
-.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
-    border-color: #7500CF;
-    background: #7500CF;
-}
-.formEdit .ant-steps .ant-steps-item-process .ant-steps-item-icon{
-    border-color: #7500CF;
-    background: #7500CF;  
-}
-.formEdit .ant-progress .ant-progress-inner:not(.ant-progress-circle-gradient) .ant-progress-circle-path{
-    stroke: #7500CF;
-}
-.formEdit .ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary){
-    height: 37px;
-    border-color: #7500CF;
-    color: #7500CF;
-    
-
-}
+/* Tùy chỉnh thanh cuộn cho trình duyệt hỗ trợ */
+.custom-scrollbar {
+    scrollbar-width: thin; /* Dùng cho Firefox */
+    scrollbar-color: #7500CF #f1f1f1; /* Dùng cho Firefox */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Độ rộng của thanh cuộn */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Màu nền của track */
+    border-radius: 4px; /* Bo góc */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #4a90e2; /* Màu của thanh kéo */
+    border-radius: 4px; /* Bo góc */
+    border: 2px solid #f1f1f1; /* Viền xung quanh */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #357ab7; /* Màu của thanh kéo khi hover */
+  }

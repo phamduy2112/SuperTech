@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProductCateloriesByDad, getProducts } from "../../service/product/product.service";
+import { getProductCateloriesByDad, getProductDetail, getProducts } from "../../service/product/product.service";
 
 export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
@@ -23,12 +23,22 @@ export const getProductsThunk = createAsyncThunk(
     }
   },
 );
-
-
+export const getProductByIdThunk = createAsyncThunk(
+  "getProductByIdThunk",
+  async (id) => {
+    try {
+      const resp = await getProductDetail(id);
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 
 const initialState = {
   listProduct: [],
   listProducts:[],
+  productDetail:{}
 };
 
 const ProductSlice = createSlice({
@@ -47,6 +57,10 @@ const ProductSlice = createSlice({
     builder
       .addCase(getProductsThunk.fulfilled, (state, { payload }) => {
         state.listProducts = payload;
+      })
+    builder
+      .addCase(getProductByIdThunk.fulfilled, (state, { payload }) => {
+        state.productDetail = payload;
       })
 
   },

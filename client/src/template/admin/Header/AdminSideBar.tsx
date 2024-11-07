@@ -5,6 +5,7 @@ import './Sidebar.css';
 import { useSelector } from 'react-redux';
 import LogoDoc from '../../../assets/LogoSuperTech.png';
 import LogoNgang from '../../../assets/LogoSuperTechNgang.png'
+import { Link } from 'react-router-dom';
 
 
 function AdminSideBar() {
@@ -44,36 +45,46 @@ function AdminSideBar() {
                     {Array.isArray(item.box) && item.box.length > 0 && (
                         <>
                             {item.box.map((box, j) => (
-                                <div key={j} className='grid py-[15px] grid-cols-1 box-border justify-center items-start auto-rows-auto'>
-                                    <div
-                                        onClick={() => toggleBox(item.id, box.box_id)}
-                                        className={`transition-all ${item.box.length > 1 ? (openBoxIndex === item.id ? (openBoxChild === box.box_id ? 'bg-[#c345feb1] text-[white] duration-700' : 'duration-[500ms]') : '') : (openBoxIndex === item.id ? 'bg-[#c345feb1] text-[white]' : 'duration-[500ms]')} flex items-center box-border w-full h-[46px] rounded cursor-pointer`}
-                                    >
-                                        <span className='ml-[12px] text-[25px]'>{box.icon}</span>
-                                        <span className={`ml-[12px] font-medium text-[14px] ${isOpen ? 'block' : 'hidden'} `}>{box.box_title}</span>
-                                        {box.iconChevronRight && (
-                                            <span className={`transition-all ${isOpen ? 'block' : 'hidden'} text-[15px] ${openBoxIndex === item.id ? 'transform rotate-90 duration-500 text-white' : 'transform rotate-0 duration-500'} ml-[104px]`}>
-                                                {box.iconChevronRight}
-                                            </span>
+
+                                <Link to={box.url}>
+
+
+                                    <div key={j} className='grid py-[15px] grid-cols-1 box-border justify-center items-start auto-rows-auto'>
+                                        <div
+                                            onClick={() => toggleBox(item.id, box.box_id)}
+                                            className={`transition-all ${item.box.length > 1 ? (openBoxIndex === item.id ? (openBoxChild === box.box_id ? 'bg-[#c345feb1] text-[white] duration-700' : 'duration-[500ms]') : '') : (openBoxIndex === item.id ? 'bg-[#c345feb1] text-[white]' : 'duration-[500ms]')} flex items-center box-border w-full h-[46px] rounded cursor-pointer`}
+                                        >
+                                            <span className='ml-[12px] text-[25px]'>{box.icon}</span>
+                                            <span className={`ml-[12px] font-medium text-[14px] ${isOpen ? 'block' : 'hidden'} `}>{box.box_title}</span>
+                                            {box.iconChevronRight && (
+                                                <span className={`transition-all ${isOpen ? 'block' : 'hidden'} text-[15px] ${openBoxIndex === item.id ? 'transform rotate-90 duration-500 text-white' : 'transform rotate-0 duration-500'} ml-[104px]`}>
+                                                    {box.iconChevronRight}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {Array.isArray(box.child) && box.child.length > 0 && (
+                                            <div
+                                                className={`transition-all overflow-hidden cursor-pointer ${openBoxIndex === item.id ? 'max-h-screen duration-1000' : 'max-h-0 duration-[600ms]'}`}
+                                            >
+                                                {box.child.map((child, k) => (
+                                                    <Link to={child.url_child}>
+
+                                                        <div key={k} onClick={() => toggleChild(child.id_child)} className={`${openChildIndex === child.id_child ? 'bg-[#c345feb1] text-[white]' : 'duration-[500ms]'} w-full h-[46px] box-border flex items-center`}>
+                                                            <span className={` ${isOpen ? 'ml-[42px]' : 'ml-[12px]'}  text-[24px]`}>{child.icon_child}</span>
+                                                            <span className={`ml-[12px] text-[15px] font-medium ${isOpen ? 'block' : 'hidden'}  `}>{child.title_child}</span>
+                                                        </div>
+                                                    </Link>
+
+                                                ))}
+                                            </div>
                                         )}
                                     </div>
-                                    {Array.isArray(box.child) && box.child.length > 0 && (
-                                        <div
-                                            className={`transition-all overflow-hidden cursor-pointer ${openBoxIndex === item.id ? 'max-h-screen duration-1000' : 'max-h-0 duration-[600ms]'}`}
-                                        >
-                                            {box.child.map((child, k) => (
-                                                <div key={k} onClick={() => toggleChild(child.id_child)} className={`${openChildIndex === child.id_child ? 'bg-[#c345feb1] text-[white]' : 'duration-[500ms]'} w-full h-[46px] box-border flex items-center`}>
-                                                    <span className={` ${isOpen ? 'ml-[42px]' : 'ml-[12px]'}  text-[24px]`}>{child.icon_child}</span>
-                                                    <span className={`ml-[12px] text-[15px] font-medium ${isOpen ? 'block' : 'hidden'}  `}>{child.title_child}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                </Link>
                             ))}
                         </>
                     )}
                 </div>
+
             ))}
         </div>
     );

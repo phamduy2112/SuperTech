@@ -85,7 +85,7 @@ const token=getLocalStorage('token')
 console.log(token);
 
   return (
-    <div className="">
+    <div className="bg-white">
 <div className="flex flex-col relative">
     <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
       <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
@@ -140,7 +140,7 @@ console.log(token);
               </Badge>
             </div>
             <div>
-              <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
+              <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
               {isvisibleCart &&   <div className="fixed inset-0 z-30">
@@ -157,7 +157,7 @@ console.log(token);
               <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
             </div>
           </div>
-        <DropdownUser/>
+        {/* <DropdownUser/> */}
         </div>
       </div>
       {

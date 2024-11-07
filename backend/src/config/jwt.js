@@ -35,3 +35,6 @@ export const middleToken=(req,res,next)=>{
     if(error) res.status(401).send(error.name);
     else next();
 }
+export const authorizeRoles = (userRole, allowedRoles) => {
+    return allowedRoles.includes(userRole);
+};

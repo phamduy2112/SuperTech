@@ -4,11 +4,14 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
+import { useParams } from 'react-router-dom';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
 function AdminEditProduct() {
+  const { id } = useParams();
+
   const [fileList, setFileList] = useState<UploadFile[]>([
     {
       uid: '-1',
@@ -232,7 +235,7 @@ function AdminEditProduct() {
   return (
     <div className='flex-1 bg-[#f2edf3]  grid xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
       <div className='bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col '>
-        <span className='text-[20px] font-semibold'>Sửa Sản Phẩm </span>
+        <span className='text-[20px] font-semibold'>Sửa Sản Phẩm {id} </span>
         <form action="" className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
           <div className='flex h-auto flex-col gap-4'>
             <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Loại</label>

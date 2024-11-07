@@ -53,6 +53,10 @@ export default class order extends Model {
     address: {
       type: DataTypes.STRING(100),
       allowNull: true
+    },
+    phone_number: {
+      type: DataTypes.STRING(15),
+      allowNull: true
     }
   }, {
     sequelize,
