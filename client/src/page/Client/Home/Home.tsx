@@ -20,8 +20,10 @@ import ProductsNew from './Component/ProductsNew';
 
 function Home() {
   return (
+    <div>
+  <Carousel></Carousel>
     <Container>
-      <Carousel></Carousel>
+   
       {/* <Catelogry/> */}
       {/* <Category> */}
       
@@ -121,6 +123,8 @@ function Home() {
    
       <Dis/>
     </Container>
+    </div>
+  
   )
 }
 

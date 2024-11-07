@@ -14,7 +14,7 @@ function User() {
   return (
     <Container className="pt-[1rem]">
    <div className="flex justify-between">
-        <div className="w-[25%] p-[2rem]">
+        <div className="w-[25%] p-[2rem] bg-white h-[100%] shadow-md">
           <div className="flex gap-[1rem]">
             <div className="w-[7rem] h-[7rem] rounded-[50%] overflow-hidden">
             <div className="xl:text-[25px] md:text-[2rem]">
@@ -24,7 +24,7 @@ function User() {
                   backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
                 }}
               >
-                              {(user?.user_image==null && user?.user_name) ? user.user_name[0].toUpperCase() : null}
+                              {(user?.user_image==null||user?.user_image=='' && user?.user_name) ? user.user_name[0].toUpperCase() : null}
 
               </div>}
                     </div>
@@ -84,7 +84,7 @@ function User() {
           </ul>
     
         </div>
-        <div className='w-[70%] p-[2rem]'>
+        <div className='w-[70%] p-[2rem] bg-white h-[100%] shadow-md'>
          <Outlet/>    
         </div>
     

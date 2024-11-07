@@ -20,7 +20,7 @@ export const createDetailOrder = (data:any) => {
   };
 export const getOrderByIdUser=()=>{
   return axiosWithAuth(`/order-by-id-user`,{
-    method:"get"
+    method:"get",
   })
 }
 export const changeStatusOrder=(id:number,data:any)=>{

@@ -14,6 +14,7 @@ import _infor_product from  "./infor_product.js";
 import _likes from  "./likes.js";
 import _media_post from  "./media_post.js";
 import _order from  "./order.js";
+import _order_status from  "./order_status.js";
 import _pay from  "./pay.js";
 import _posts from  "./posts.js";
 import _product_colors from  "./product_colors.js";
@@ -37,6 +38,7 @@ export default function initModels(sequelize) {
   const likes = _likes.init(sequelize, DataTypes);
   const media_post = _media_post.init(sequelize, DataTypes);
   const order = _order.init(sequelize, DataTypes);
+  const order_status = _order_status.init(sequelize, DataTypes);
   const pay = _pay.init(sequelize, DataTypes);
   const posts = _posts.init(sequelize, DataTypes);
   const product_colors = _product_colors.init(sequelize, DataTypes);
@@ -111,6 +113,7 @@ export default function initModels(sequelize) {
     likes,
     media_post,
     order,
+    order_status,
     pay,
     posts,
     product_colors,

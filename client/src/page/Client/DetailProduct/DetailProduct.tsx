@@ -8,21 +8,41 @@ import { Rate } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { data } from "./data";
 import Comment from "./Component/Comment";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getProductByIdThunk } from "../../../redux/product/product.slice";
 import { getCommentByIdProductThunk } from "../../../redux/comment/comment.slice";
 import CommentForm from "./Component/CommentForm";
 import ProductColor from "./Component/ProductColor";
 import { IMG_BACKEND } from "../../../constants";
+import { addItemToCart, addItemToOrder } from "../../../redux/cart/cart.slice";
 
 
 
 function DetailProduct() {
   const { id } = useParams(); // Lấy id từ URL
   const numericId = Number(id); // Ép chuỗi id thành số
-
+  const navigate=useNavigate();
+  
   const dispatch=useAppDispatch();
+  const handleAddItem = (product: any) => {
+    const productToCart = {
+      ...product,
+      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+    };
+    console.log(productToCart);
+    
+  };
+
+  const handleAddOrder=(product:any)=>{
+    const productToCart = {
+      ...product,
+      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+    };
+    dispatch(addItemToOrder(productToCart))
+    navigate("/thanh-toan")
+    
+  }
   const productDetail=useAppSelector((state)=>state.product.productDetail)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
 
@@ -248,10 +268,16 @@ function DetailProduct() {
 
                 {/* Cart and Buy Now Buttons */}
                 <div className="flex gap-4 mt-4">
-                  <button className="w-1/2 py-6 text-[1.7rem] font-medium border border-customColor text-customColor rounded-2xl hover:bg-purple-100">
+                  <button 
+                  onClick={()=>{
+                    handleAddItem(productDetail)
+                  }}
+                  className="w-1/2 py-6 text-[1.7rem] font-medium border border-customColor text-customColor rounded-2xl hover:bg-purple-100">
                     Thêm giỏ hàng
                   </button>
-                  <button className="w-1/2 py-6 text-[1.7rem] font-medium bg-customColor text-white rounded-2xl hover:bg-purple-700">
+                  <button 
+                  onClick={()=>{handleAddOrder(productDetail)}}
+                  className="w-1/2 py-6 text-[1.7rem] font-medium bg-customColor text-white rounded-2xl hover:bg-purple-700">
                     Mua ngay
                   </button>
                 </div>                    

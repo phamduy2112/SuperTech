@@ -7,7 +7,6 @@ import Login from "../page/Client/Auth/Login/Login";
 import Resigter from "../page/Client/Auth/Resigter/Resigter";
 import ForgetPassword from "../page/Client/Auth/Forget/ForgetPassword";
 import DetailBlog from "../page/Client/Blog/DetailBlog/DetailBlog";
-import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import Cart from "../page/Client/Cart/Cart";
 import Pay from "../page/Client/Pay/Pay";
 import Bill from "../page/Client/Bill/Bill";
@@ -44,6 +43,7 @@ import AdminBlog from "../page/Admin/Blog/AdminBlog";
 import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
 import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
 import ListProduct from "../page/Client/ListProduct/ListProduct";
+import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 
 export const router = createBrowserRouter([
   {
@@ -61,15 +61,15 @@ export const router = createBrowserRouter([
         path: "/san-pham-yeu-thich/:id",
         element: <FavoriteProduct />,
       },
-      {
-        path: "/san-pham-chi-tiet/:id",
-        element: <DetailProduct />,
-      },
+
       {
         path: "/list-sản-phẩm",
         element: <ListProduct />,
       },
-
+      {
+        path: "/san-pham-chi-tiet/:id",
+        element: <DetailProduct />,
+      },
       // Blog
       {
         path: "/bài-viết",
@@ -80,6 +80,11 @@ export const router = createBrowserRouter([
         element: <DetailBlog />,
       },
       // user
+      {
+        path: "/don-hang-chi-tiet-cua-ban/:id",
+        element: <OrderDetail />,
+      },
+    
 {
 
 element:<User/>,
@@ -92,10 +97,6 @@ children:[
     path: "/don-hang-cua-ban",
     element: <Order />,
   },
-  {
-    path: "/don-hang-chi-tiet-cua-ban/:id",
-    element: <OrderDetail />,
-  },
 
 ]
 },
@@ -106,7 +107,7 @@ children:[
         element: <Cart />,
       },
       {
-        path: "/thanh-toán",
+        path: "/thanh-toan",
         element: <Pay />,
       },
       {

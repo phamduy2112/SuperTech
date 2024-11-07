@@ -62,7 +62,7 @@ const getDetailOrderById = async (req, res) => {
 const createdetailorder = async (req, res) => {
     try {
         const detailOrders = req.body; // Giả định body chứa một mảng đối tượng
-        console.log(detailOrders);
+      
 
         const newOrders = await Promise.all(detailOrders.map(async (order) => {
             // Kiểm tra số lượng tồn kho trước khi tạo detailOrder
