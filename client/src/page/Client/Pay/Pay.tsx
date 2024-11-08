@@ -9,6 +9,7 @@ import { createDetailOrder, createOrder } from '../../../service/order/order.ser
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND } from '../../../utils';
+import { setOrderId } from '../../../redux/order/Order.slice';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
@@ -129,9 +130,10 @@ function Pay() {
 
     const responve=await createDetailOrder(detailOrders)
     if(responve){
-      dispatch(removeAllCart())
-      navigate("/")
-      
+    
+      dispatch(setOrderId(resp.data.content.order_id))
+      navigate("/xuất-hóa-đơn")
+      // dispatch(removeAllCart())
     }
   };
   return (

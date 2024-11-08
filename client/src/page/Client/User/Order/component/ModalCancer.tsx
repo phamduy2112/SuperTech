@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Modal, Button, Radio, Input } from 'antd';
 import axios from 'axios';
+import { changeStatusOrderThunk } from '../../../../../redux/order/Order.slice';
+import { useAppDispatch } from '../../../../../redux/hooks';
 
 interface CancelOrderModalProps {
   orderId: string;
 }
 
 const CancelOrderModal: React.FC<CancelOrderModalProps> = ({ orderId }) => {
+  const dispatch=useAppDispatch()
   const [visible, setVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState<string>('');
   const [customReason, setCustomReason] = useState<string>('');
@@ -14,7 +17,7 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({ orderId }) => {
   const showCancelModal = () => {
     setVisible(true);
   };
-
+ 
   const handleCloseModal = () => {
     setVisible(false);
     setSelectedReason('');
@@ -23,7 +26,16 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({ orderId }) => {
 
   const handleOk = async () => {
     const reason = selectedReason === 'other' ? customReason : selectedReason;
-
+    const cancelOrder={
+      order_id:orderId,
+      order_status:3,
+      order_status_text_cancel:reason
+    }
+    console.log(cancelOrder);
+    
+    dispatch(changeStatusOrderThunk(cancelOrder))
+    console.log(cancelOrder);
+    
     console.log(reason);
     
   };

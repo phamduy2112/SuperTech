@@ -21,11 +21,15 @@ export default class order_status extends Model {
     order_id: {
       type: DataTypes.INTEGER,
       allowNull: true
-    }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
   }, {
     sequelize,
     tableName: 'order_status',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
