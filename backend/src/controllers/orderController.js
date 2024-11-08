@@ -86,7 +86,6 @@ const changeStatusOrder = async (req, res) => {
 const createorder = async (req, res) => {
     try {
         const {
-          
             order_total,
             order_total_quatity,
             order_status,
@@ -99,11 +98,8 @@ const createorder = async (req, res) => {
         const user_id = req.id;
         // const pay_id = req.id;
         // const discount = req.id;
-
         let date = new Date();
-              
         const neworder = await order.create({
-       
             order_date: date,
             order_total,
             order_total_quatity,

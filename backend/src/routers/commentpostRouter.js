@@ -9,4 +9,4 @@ commentpostRouter.post('/commentpost', createcommentpost);
 commentpostRouter.put('/commentpost/:id', updatecommentpost);
 commentpostRouter.delete('/commentpost/:id', deletecommentpost);
 
-export default commentpostRouter;
+export default commentpostRouter;   

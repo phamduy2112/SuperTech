@@ -9,9 +9,9 @@ const searchProducts = async (req, res) => {
         const { tukhoa } = req.query;
         let products = await Products.findAll({
             where: sequelize.where(
-                sequelize.fn('LOWER', sequelize.col('product_name')),
+                sequelize.fn('LOWER', sequelize.fn('TRIM', sequelize.col('product_name'))),
                 'LIKE',
-                '%' + tukhoa.toLowerCase() + '%'
+                '%' + tukhoa.trim().toLowerCase() + '%'
             )
         });
         if (products.length > 0) {
