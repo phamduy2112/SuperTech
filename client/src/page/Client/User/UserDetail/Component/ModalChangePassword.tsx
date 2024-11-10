@@ -9,6 +9,7 @@ import useSweetAlert from '../../../../../hooks/Notification.hook';
 
 // Schema validation bằng Yup
 const validationSchemaStep1 = Yup.object().shape({
+  
   oldPassword: Yup.string().required('Vui lòng nhập mật khẩu cũ'),
 });
 

@@ -28,6 +28,7 @@ export const getCatelogryDadThunk = createAsyncThunk(
 
 const initialState = {
   catelogryDad: [],
+  listCatelories:[],
 };
 
 const CatelogrySlice = createSlice({
@@ -41,7 +42,7 @@ const CatelogrySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCatelogryThunk.fulfilled, (state, { payload }) => {
-        state.catelogryDad = payload;
+        state.listCatelories = payload;
       })
     builder
       .addCase(getCatelogryDadThunk.fulfilled, (state, { payload }) => {

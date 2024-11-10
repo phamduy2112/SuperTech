@@ -23,6 +23,29 @@ export const getProductsThunk = createAsyncThunk(
     }
   },
 );
+
+export const getProductsAdminThunk = createAsyncThunk(
+  "getAdminLocation",
+  async (searchKey:string) => {
+    try {
+      
+      const resp = await getProducts();
+      const result = resp.data.content;
+      if (searchKey.trim()) {
+        const filteredResults = result.filter((item:any) =>
+          item.product_name.toLowerCase().includes(searchKey.toLowerCase())
+        );
+        return filteredResults;
+      } else {
+        // Return all results if no search key is provided
+        return result.reverse();
+      }
+      // return resp.content.reverse();
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 export const getProductByIdThunk = createAsyncThunk(
   "getProductByIdThunk",
   async (id) => {
@@ -38,6 +61,7 @@ export const getProductByIdThunk = createAsyncThunk(
 const initialState = {
   listProduct: [],
   listProducts:[],
+  listAdminProducts:[],
   productDetail:{}
 };
 
@@ -57,6 +81,10 @@ const ProductSlice = createSlice({
     builder
       .addCase(getProductsThunk.fulfilled, (state, { payload }) => {
         state.listProducts = payload;
+      })
+    builder
+      .addCase(getProductsAdminThunk.fulfilled, (state, { payload }) => {
+        state.listAdminProducts = payload;
       })
     builder
       .addCase(getProductByIdThunk.fulfilled, (state, { payload }) => {

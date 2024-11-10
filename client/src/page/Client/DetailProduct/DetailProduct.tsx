@@ -16,6 +16,7 @@ import CommentForm from "./Component/CommentForm";
 import ProductColor from "./Component/ProductColor";
 import { IMG_BACKEND } from "../../../constants";
 import { addItemToCart, addItemToOrder } from "../../../redux/cart/cart.slice";
+import { formatCurrencyVND } from "../../../utils";
 
 
 
@@ -30,7 +31,7 @@ function DetailProduct() {
       ...product,
       selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
     };
-    console.log(productToCart);
+
     
   };
 
@@ -43,12 +44,16 @@ function DetailProduct() {
     navigate("/thanh-toan")
     
   }
+  
   const productDetail=useAppSelector((state)=>state.product.productDetail)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
 
   // console.log(productDetail);
   const [selectedColor, setSelectedColor] = useState<any>(null);
+  const [selectetStorage, setSelectedStorage] = useState<any>(null);
  const [objectColor,setOjectColor]=useState<any>(null)
+const [objectStorage,setObjectStorage]=useState<any>(null)
+console.log(objectColor);
 
 
   
@@ -63,20 +68,55 @@ function DetailProduct() {
     if (productDetail?.product_colors?.length > 0) {
       const firstColor = productDetail.product_colors[0];
       setSelectedColor(firstColor?.color);
-      setOjectColor(firstColor)
-
+      setOjectColor(firstColor);
+  
+      // Cập nhật storage nếu có
+      if (firstColor?.product_storages?.length > 0) {
+        const firstStorage = firstColor.product_storages[0];
+        setObjectStorage(firstStorage);
+        setSelectedStorage(firstStorage);
+      } else {
+        setObjectStorage([]); // Hoặc giá trị mặc định
+        setSelectedStorage(null); 
+      }
     }
   }, [productDetail]);
+console.log(objectStorage);
 
-  const handleColorChange = (color: string) => {
-    const newColor = productDetail.product_colors.find((item) => item.color === color);
-    if (newColor) {
-      setSelectedColor(newColor.color);
-      setOjectColor(newColor)
+const handleColorChange = (color: string) => {
+  const newColor = productDetail.product_colors.find((item) => item.color === color);
+  
+  if (newColor) {
+    setSelectedColor(newColor.color);
+    setOjectColor(newColor);
+
+    // Nếu không có product_storages, đặt objectStorage về null
+    if (newColor?.product_storages?.length > 0) {
+      const firstStorage = newColor.product_storages[0];
+      setObjectStorage(firstStorage);
+      setSelectedStorage(firstStorage);
+    } else {
+      // Nếu không có storage, có thể reset objectStorage
+      setObjectStorage([]); // Hoặc giá trị mặc định của bạn
     }
-  };
+  }
+};
 
- console.log(objectColor);
+const handleStorageChange = (storage: string) => {
+  if (objectColor?.product_storages?.length > 0) {
+    const newStorage = objectColor.product_storages.find((item) => item.storage === storage);
+    if (newStorage) {
+      setObjectStorage(newStorage);
+      setSelectedStorage(newStorage);
+    }
+  } else {
+    // Nếu không có storage, có thể đặt lại objectStorage
+    setObjectStorage([]);
+    setSelectedStorage(null);
+  }
+};
+console.log(objectStorage);
+
  
 
 
@@ -149,25 +189,24 @@ function DetailProduct() {
                 <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
                 {/* Price Section */}
                 <div className="flex items-center gap-4 py-4">
-                  <p className="text-red-500 font-semibold text-[2rem]">27.000.000đ</p>
+                  <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.storage_price ||0))}</p>
                   <p className="text-xl text-gray-500 line-through">31.000.000đ</p>
                   <p className="text-xl px-4 py-2 border border-gray-300">30%</p>
                 </div>
 
                 {/* Storage Variant Buttons */}
-                {/* <div className="flex gap-4 mb-6">
-                  {variants.map((variant, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleVariantChange(variant)}
-                      className={`py-3 px-6 text-xl text-white ${
-                        selectedVariant?.storage === variant.storage ? 'bg-customColor' : 'bg-gray-400'
-                      }`}
-                    >
-                      {variant.storage}
-                    </button>
-                  ))}
-                </div> */}
+                <div className="flex gap-4 mb-6">
+              
+                {objectColor?.product_storages?.map((variant, index) => (
+  <button key={index}                
+  onClick={()=>{handleStorageChange(variant)}}
+  className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
+>
+
+    {variant?.storage} MB
+  </button>
+))}
+                </div>
 
                 {/* Color Selection */}
                 <div className="py-6">
@@ -179,6 +218,7 @@ function DetailProduct() {
                 onClick={() => handleColorChange(item.color)}
                 className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectedColor === item.color ? 'bg-slate-50' : ''}`}
             >
+              
                 <img 
                     src={`${IMG_BACKEND}/${item?.image?.image_one}`} 
                     alt={item.color} 
@@ -284,25 +324,7 @@ function DetailProduct() {
               </div>
             </div>
                 {/* Ý kiến */}
-                {/* <div>
-                    <h3 className="text-[2rem]">Ý kiến của bạn</h3>
-                    <div className="mt-[2rem] flex">
-                      <div className="w-[10%] mx-[1rem]">
-                      <img
-                              src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                              alt="news image"
-                              className="w-[12rem] h-[12rem] rounded-[50%] object-cover"
-                            />
-                        <Rate className="mt-4"/>
-                      </div>
-                                <div className="w-[90%]">
-                                <TextArea rows={6} placeholder="Đánh giá của bạn"  />
-                                <div className="flex justify-end">
-                                <button className="bg-customColor text-white py-[1rem] px-[2rem] font-medium text-[1.5rem] mt-4 rounded-md">Hoàn tất</button>
-                                </div>
-                                </div>
-                    </div>
-                </div>                 */}
+      
                 <Comment reviews={getCommentById}/>
                 <CommentForm id={numericId}/>
           </div>

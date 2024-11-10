@@ -28,7 +28,7 @@ function Home() {
       {/* <Category> */}
       
       <ProductSale/>
-      <ProductsNew/>
+      {/* <ProductsNew/> */}
 
 
       <div className='mx-auto'>   

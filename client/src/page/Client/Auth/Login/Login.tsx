@@ -12,10 +12,14 @@ import { login } from "../../../../service/auth/auth.service";
 import { saveLocalStorage } from "../../../../utils";
 import FacebookLogin from 'react-facebook-login';
 import useSweetAlert from "../../../../hooks/Notification.hook";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { setToken } from "../../../../redux/user/user.slice";
 
 function Login() {
   const navigate = useNavigate();
   const {showAlert}= useSweetAlert();
+  const dispatch=useAppDispatch();
+
   const formik = useFormik({
     initialValues: {
   
@@ -47,6 +51,7 @@ function Login() {
        
         const token = res.data.content.token; 
         saveLocalStorage("token",token)
+        dispatch(setToken(token))
         navigate("/")
        
       } else {

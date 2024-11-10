@@ -6,7 +6,7 @@ import { getProductsThunk } from '../../../../redux/product/product.slice';
 import { NavLink } from 'react-router-dom';
 
 function ProductsNew() {
-  const listProducts = useAppSelector((state) => state.product.listProducts);
+  const listProducts = useAppSelector((state) => state.product?.listProducts);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

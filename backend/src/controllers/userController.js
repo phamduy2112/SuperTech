@@ -270,7 +270,7 @@ const updateImage=async(req,res)=>{
 
 
             if(result){
-                responseSend(res, user, "Cập nhận thành công!", 200);
+                responseSend(res, user, "Cập nhật thành công!", 200);
     
             } else {
                 responseSend(res, null, "Thêm thất bại!", 500);

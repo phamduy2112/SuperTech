@@ -79,9 +79,15 @@ const getProductById = async (req, res) => {
                             model: models.image_product,
                                 as:'image'
                         },
+                        {
+                            model: models.product_storage,
+                                as:'product_storages',
+                                required: false
+                        },
                     ]
             },
         ]
+   
         });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
