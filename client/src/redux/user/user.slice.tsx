@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCatelogry } from "../../service/catelogry/catelogry.service";
-import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser } from '../../service/user/user.service';
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, DeleteStaff, DeleteStaffSend } from '../../service/user/user.service';
+
 
 export const getAllUserThunk = createAsyncThunk(
   "getAllUserThunk",
@@ -13,8 +13,21 @@ export const getAllUserThunk = createAsyncThunk(
 
     }
   },
-)
+);
 
+export const deleteStaffThunk = createAsyncThunk(
+  "deleteStaffThunk",
+  async (id: number) => {
+    try {
+      const resp = await DeleteStaffSend(id);
+      return resp.data.content;
+
+    } catch (e) {
+      console.log(e);
+
+    }
+  },
+);
 
 export const getUserThunk = createAsyncThunk(
   "getUserThunk",
@@ -75,8 +88,17 @@ export const changeUploadImage = createAsyncThunk(
 
 
 
+
+
+
+
+
+
+
+
 const initialState = {
-  Alluser: {},
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Alluser: [] as any[],
   user: {},
   token: null,
   thongBao: "",
@@ -100,7 +122,10 @@ const UserSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAllUserThunk.fulfilled, (state, { payload }) => {
-        console.log('Payload:', payload);
+        state.Alluser = payload;
+      })
+    builder
+      .addCase(deleteStaffThunk.fulfilled, (state, { payload }) => {
         state.Alluser = payload;
       })
     builder

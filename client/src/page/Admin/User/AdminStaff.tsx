@@ -9,7 +9,7 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getAllUserThunk } from '../../../redux/user/user.slice';
+import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
 
 function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,6 +39,89 @@ function AdminStaff() {
         }
     }, [Allstaffs])
 
+    const Level = (src: number) => {
+        switch (src) {
+            case 0:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/Boss_pukaxj.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 1:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731057050/laolang_jljhqn.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 2:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang2_jnucif.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 3:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034725/hang3_gtgheu.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 4:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang1_uv6dcs.png" alt="" style={{ width: 50, height: 50 }} />
+
+                    </>
+                )
+            case 5:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/5year_flnse0.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 6:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/4-5year_whzi45.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 7:
+                return (
+                    <>
+
+
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/1year_xmnffl.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 8:
+                return (
+                    <>
+
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/2-4year_qdloen.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+            case 9:
+                return (
+                    <>
+
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/-1year_x8oqsg.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+
+
+            default:
+                return (
+                    <>
+                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/c_thumb,w_200,g_face/v1731038485/tapsu_ejr7bo.png" alt="" style={{ width: 50, height: 50 }} />
+                    </>
+                )
+        }
+
+    }
+
+    const reverseDate = (dateString: string) => {
+        const [year, month, day] = dateString.split('-');
+        return `${day}-${month}-${year}`;
+    };
 
     useEffect(() => {
 
@@ -67,7 +150,6 @@ function AdminStaff() {
                                     src == '' || src == null || src == undefined ?
                                         <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
                                         : <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-
                                 }
 
                             </>
@@ -80,20 +162,48 @@ function AdminStaff() {
                         title: 'Tên',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
 
                     };
 
                 case 'user_birth':
                     return {
-                        title: 'Tuổi',
+                        title: 'Ngày Sinh Nhật',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : reverseDate(text)
+                                }
+                            </>
+                        ),
+
+
+
                     }
                 case 'user_phone':
                     return {
                         title: 'Số điện thoại',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
+
                     }
 
                 case 'user_email':
@@ -101,6 +211,14 @@ function AdminStaff() {
                         title: 'Email',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
                     }
 
                 case 'user_address':
@@ -108,6 +226,15 @@ function AdminStaff() {
                         title: 'Địa Chỉ',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
+
 
 
                     }
@@ -118,10 +245,12 @@ function AdminStaff() {
                         key: staff,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
-                            <div className="flex-1 flex items-center gap-3">
-                                <div className={`w-[10px] rounded-full h-[10px] ${text == 2 ? 'bg-[#2af52a]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
-                                {text == 2 ? 'Người dùng' : ''} {text == 1 ? 'Nhân viên' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
-
+                            <div className={`w-[200px] text-white font-medium rounded-md p-2 flex items-center ${text == 11 ? 'bg-[#3aff2085]' : ''} ${text == 10 ? 'bg-[#77757575]' : ''} ${text == 9 ? 'bg-[#1a1c9685]' : ''} ${text == 8 ? 'bg-[#00000093]' : ''} ${text == 7 ? 'bg-[#7c164685]' : ''} ${text == 6 ? 'bg-[#dd741285]' : ''} ${text == 5 ? 'bg-[#ab2af585]' : ''} ${text == 4 ? 'bg-[#f52ac285]' : ''} ${text == 3 ? 'bg-[#3963f085]' : ''} ${text == 2 ? 'bg-[#0eb397d2]' : ''} ${text == 1 ? 'bg-[#b6b30eb7]' : ''} ${text == 0 ? 'bg-[#ff000085]' : ''} gap-4`}>
+                                <div className={`w-[10px] ml-4 rounded-full h-[10px] ${text == 11 ? 'bg-[#3aff20]' : ''} ${text == 10 ? 'bg-[#77777798]' : ''} ${text == 9 ? 'bg-[#1a1c96]' : ''} ${text == 8 ? 'bg-[#000000]' : ''} ${text == 7 ? 'bg-[#7c1646]' : ''} ${text == 6 ? 'bg-[#dd7412]' : ''} ${text == 5 ? 'bg-[#ab2af5]' : ''} ${text == 4 ? 'bg-[#f52ac2]' : ''} ${text == 3 ? 'bg-[#3963f0b2]' : ''} ${text == 2 ? 'bg-[#2af5d3]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+                                {text == 11 ? 'Người Dùng' : ''} {text == 10 ? 'Nhân Viên Thử Việc' : ''} {text == 9 ? 'Nhân Viên Bảo Vệ' : ''}
+                                {text == 8 ? 'Nhân Viên Kho' : ''}{text == 7 ? 'Nhân Viên Hỗ Trợ' : ''} {text == 6 ? 'Nhân Viên Pháp Lý' : ''}
+                                {text == 5 ? 'Nhân Viên Kế Toán' : ''} {text == 4 ? 'Nhân Viên Tiếp Thị' : ''} {text == 3 ? 'Nhân Viên IT' : ''}
+                                {text == 2 ? 'Nhân Viên Bán Hàng' : ''} {text == 1 ? 'Nhân Viên Quản Lí' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
                             </div>
                         ),
                     }
@@ -131,9 +260,9 @@ function AdminStaff() {
                         dataIndex: staff,
                         key: staff,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        render: (text: any) => (
+                        render: (src: any) => (
                             <div className="flex-1 flex items-center gap-3">
-                                {text == 4 ? 'Đồng' : ''} {text == 3 ? 'Bạc' : ''} {text == 2 ? 'Vàng' : ''} {text == 1 ? 'Kim Cương' : ''} {text == 0 ? 'Tối Thượng' : ''}
+                                {Level(src)}
                             </div>
                         ),
                     }
@@ -182,6 +311,7 @@ function AdminStaff() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const filteredData = Allstaffs.filter((item: any) => {
                 const userName = item?.user_name;
                 const userEmail = item?.user_email;
@@ -226,13 +356,15 @@ function AdminStaff() {
             text: `Bạn có chắc muốn xóa ?`,
             confirmButtonText: 'Xóa',
             denyButtonText: 'Hủy',
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đã Xóa',
-                    text: `Bạn đã Xóa ${key}`,
-                });
+                try {
+                    await AppDispatch(deleteStaffThunk(key));
+                    Swal.fire('Đã Xóa!', 'Người dùng đã được xóa thành công.', 'success');
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                    Swal.fire('Lỗi!', 'Đã có lỗi xảy ra khi xóa người dùng.', error);
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -371,7 +503,7 @@ function AdminStaff() {
                         }}
                         columns={columns || []}
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 2) : []}
+                        dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 11).reverse() : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
                     />

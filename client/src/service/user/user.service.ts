@@ -6,6 +6,12 @@ export const getAllUser = () => {
   });
 };
 
+export const DeleteStaffSend = (IdStaff: number) => {
+  return axiosWithAuth(`/remove-employee/${IdStaff}`, {
+    method: "delete",
+  });
+};
+
 export const getUserDetail = () => {
   return axiosWithAuth("/user-detail", {
     method: "get",
