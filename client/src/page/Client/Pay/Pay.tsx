@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { createDetailOrder, createOrder } from '../../../service/order/order.service';
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrencyVND } from '../../../utils';
+import { formatCurrencyVND, truncateText } from '../../../utils';
 import { setOrderId } from '../../../redux/order/Order.slice';
 function Pay() {
   const dispatch = useAppDispatch();
@@ -133,7 +133,7 @@ function Pay() {
     
       dispatch(setOrderId(resp.data.content.order_id))
       navigate("/xuất-hóa-đơn")
-      // dispatch(removeAllCart())
+      dispatch(removeAllCart())
     }
   };
   return (
@@ -357,16 +357,21 @@ function Pay() {
         {
           listCart.map((item)=>{
             return (
-              <div className="flex justify-between items-center border-b pb-5">
-                <div className="flex items-center space-x-4">
+              <div className="flex justify-between items-center border-b">
+                <div className="flex items-center space-x-4 py-[1rem]">
                   <img
                     className="w-[8rem] h-[8rem] object-cover"
                     src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
                     alt="Iphone"
                   />
                   <div>
-                    <h5 className="font-semibold text-[1.7rem]">{item.product_name}</h5>
-                    <p className="text-[1.6rem]">Màu sắc: Xanh</p>
+                    <h5 className="font-semibold tex
+                    t-[1.7rem]">{truncateText(item?.product_name,25)}</h5>
+                    <p className="text-[1.6rem]">    
+                      {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
+                    {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
+                    {` (x${item.quantity})`}
+                    </p>
                     {item?.product_discount > 0 ? (
                                           <p className="text-red-600 font-semibold">
                                              {formatCurrencyVND(

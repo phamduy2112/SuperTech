@@ -9,7 +9,7 @@ import {
   inCreaseItemQuantity,
 } from "../../../redux/cart/cart.slice";
 import { useNavigate } from "react-router-dom";
-import { formatCurrencyVND } from "../../../utils";
+import { formatCurrencyVND, truncateText } from "../../../utils";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -82,9 +82,12 @@ export default function Cart() {
                       />
                       <div className="flex-1 leading-[3rem]">
                         <h2 className="text-[1.7rem] font-semibold">
-                          {item?.product_name}
+                        {truncateText(item?.product_name,25)}
                         </h2>
-                        <p className="text-gray-500 text-[1.3rem]">Màu: Đen</p>
+                        <p className="text-gray-500 text-[1.3rem]">
+                        {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
+                        {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
+                        </p>
                         <div className="flex flex-col leading-normal text-lg ">
                           {item?.product_discount > 0 ? (
                             <span className="text-customColor text-[1.6rem] font-medium">

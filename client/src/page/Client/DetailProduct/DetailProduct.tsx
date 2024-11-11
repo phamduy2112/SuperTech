@@ -29,9 +29,11 @@ function DetailProduct() {
   const handleAddItem = (product: any) => {
     const productToCart = {
       ...product,
-      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+      selectedColor: objectColor,
+      selectedStorage:objectStorage
     };
-
+    console.log(productToCart);
+    
     
   };
 

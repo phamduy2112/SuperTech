@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getOrderDetail } from "../../../redux/order/Order.slice";
 import { getDetailOrder } from "../../../service/order/order.service";
 import StepOrderDetail from "../User/OrderDetail/component/StepOrderDetai";
+import { formatCurrencyVND } from "../../../utils";
 
 function Bill(props) {
   const orderId:any=useAppSelector((state)=>state.listOrder.orderId)
@@ -41,7 +42,12 @@ function Bill(props) {
   }, [dispatch]);
 
   console.log(listProduct);
-  
+  const totalPrice = listProduct.reduce((total:number, item) => {
+    const discountAmount = +(item.product_price * item.product_discount) / 100; // Tính giảm giá
+    const priceAfterDiscount = + item.product_price - discountAmount; // Tính giá sau giảm
+    const itemTotalPrice = + item.quantity * priceAfterDiscount; // Tính tổng giá của item
+    return total + itemTotalPrice; // Cộng dồn vào total
+  }, 0);
   return (
     <Container>
          <div className=' py-6 text-[1.5rem]'>
@@ -169,9 +175,29 @@ function Bill(props) {
                           />
                           <span className="text-roboto">{item.name}</span>
                         </td>
-                        <td className="py-6 px-6 text-customColor font-semibold">1.700.000₫</td>
-                        <td className="py-6 px-6 text-center text-gray-800 font-semibold">2</td>
-                        <td className="py-6 px-6 text-right text-red-600 font-semibold">14.000.000₫</td>
+                        <td className="py-6 px-6 text-customColor font-semibold">  
+                        {item?.product_discount > 0 ? (
+                            <span className="text-customColor font-semibold text-[1.6rem] ">
+                              {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}
+                              
+                            </span>
+                          ) : (
+                            <span className="text-customColor font-semibold  text-[1.6rem] ">
+                              {formatCurrencyVND(item?.product_price)}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-6 px-6 text-center text-gray-800 font-semibold">{item.quanlity}</td>
+                        <td className="py-6 px-6 text-right text-red-600 font-semibold">{
+                    formatCurrencyVND(
+
+                      +item?.product_price * +item?.quanlity * (1 - +item?.product_discount / 100)
+
+                    )
+                    }</td>
                       </tr>
                       )
                     })

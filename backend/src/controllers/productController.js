@@ -11,22 +11,37 @@ const getProducts = async (req, res) => {
     try {
         let data = await Products.findAll( 
             {
-                include: [
+                   include: [
                 {
-                    model: models.product_colors,
-                    as: 'product_colors',
+                model: models.comment_product,
+                    as:'comment_products',
                     include: [
                         {
-                            model: models.product_storage,
-                            as: 'product_storages'
+                            model: models.user,
+                            as: 'user'
                         }
                     ]
-                },
+            },
                 {
-                    model: models.product_storage,
-                    as: 'product_storages'
-                }
-            ]
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+                {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
+                        {
+                            model: models.product_storage,
+                                as:'product_storages',
+                                required: false
+                        },
+                    ]
+            },
+        ]
             }
         );
         responseSend(res, data, "Thành công!", 200);
@@ -41,7 +56,38 @@ const getProductsByCategoryId = async (req, res) => {
         const products = await Products.findAll({
             where: {
                 category_id: categoryId
-            }
+            },
+            include:[
+                {
+                    model: models.comment_product,
+                        as:'comment_products',
+                        include: [
+                            {
+                                model: models.user,
+                                as: 'user'
+                            }
+                        ]
+                },
+                    {
+                    model: models.infor_product,
+                        as:'infor_product_infor_product'
+                },
+                    {
+                    model: models.product_colors,
+                        as:'product_colors',
+                        include:[
+                            {
+                                model: models.image_product,
+                                    as:'image'
+                            },
+                            {
+                                model: models.product_storage,
+                                    as:'product_storages',
+                                    required: false
+                            },
+                        ]
+                },
+            ]
         });
         if (products.length > 0) {
             responseSend(res, products, "Thành công!", 200);
@@ -120,7 +166,40 @@ const getProductByIdCatelogryDad = async (req, res) => {
                 as: "category",
                 where: whereClause,
                 attributes: []
-            }]
+            },
+            {
+                model: models.comment_product,
+                    as:'comment_products',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user'
+                        }
+                    ]
+            },
+                {
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+                {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
+                        {
+                            model: models.product_storage,
+                                as:'product_storages',
+                                required: false
+                        },
+                    ]
+            },
+        ]
+           
+             
+     
         });
 
         responseSend(res, products, "Products retrieved successfully!", 200);
