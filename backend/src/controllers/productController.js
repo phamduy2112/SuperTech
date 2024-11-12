@@ -25,6 +25,10 @@ const getProducts = async (req, res) => {
                 {
                     model: models.product_storage,
                     as: 'product_storages'
+                },
+                {
+                    model: models.infor_product,
+                    as: 'infor_product_infor_product'
                 }
             ]
             }

@@ -980,11 +980,7 @@ babel-plugin-polyfill-regenerator@^0.6.1:
 "backend@file:.":
   version "1.0.0"
   dependencies:
-<<<<<<< HEAD
-    backend "file:../../../../Users/admin/AppData/Local/Yarn/Cache/v6/npm-backend-1.0.0-93412e86-e293-4986-833c-ac52d4b2d636-1730788430068/node_modules/backend"
-=======
-    backend "file:../../../../../AppData/Local/Yarn/Cache/v6/npm-backend-1.0.0-13cfec4f-37a0-44f0-9b78-a3c11c928073-1730529514916/node_modules/backend"
->>>>>>> 625bb5e1b0a79d9df20036ec4c4d4737905577d9
+    backend "file:../../../../Users/admin/AppData/Local/Yarn/Cache/v6/npm-backend-1.0.0-108f979f-ea37-4f5a-81a0-03314c6ab428-1731217631180/node_modules/backend"
     bcryptjs "^2.4.3"
     cloudinary "^2.5.1"
     cookie-parser "^1.4.7"
@@ -1000,6 +996,7 @@ babel-plugin-polyfill-regenerator@^0.6.1:
     nodemon "^3.1.7"
     sequelize "^6.37.3"
     sequelize-auto "^0.8.8"
+    socket.io "^4.8.1"
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -1872,7 +1869,7 @@ ms@2.1.3, ms@^2.1.1, ms@^2.1.3:
 
 multer@^1.4.5-lts.1:
   version "1.4.5-lts.1"
-  resolved "https://registry.npmjs.org/multer/-/multer-1.4.5-lts.1.tgz"
+  resolved "https://registry.yarnpkg.com/multer/-/multer-1.4.5-lts.1.tgz#803e24ad1984f58edffbc79f56e305aec5cfd1ac"
   integrity sha512-ywPWvcDMeH+z9gQq5qYHCCy+ethsk4goepZ45GLD63fOu0YcNecQxi64nDs3qluZB+murG3/D4dJ7+dGctcCQQ==
   dependencies:
     append-field "^1.0.0"

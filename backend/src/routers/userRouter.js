@@ -17,7 +17,6 @@ userRouter.get('/user-detail',middleToken, userDetail);
 userRouter.put("/user-update",middleToken,updateUser)
 userRouter.post ("/verify-password",middleToken,verifyOldPassword)
 userRouter.put ("/change-password",middleToken,changePassword)
-
 userRouter.post("/forget-check-mail",forgetCheckMail)
 userRouter.post("/forget-check-code",forgetCheckCode)
 userRouter.put("/forget-reset-password",resetPasswordNoToken)

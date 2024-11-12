@@ -1,5 +1,6 @@
 import _sequelize from "sequelize";
 const DataTypes = _sequelize.DataTypes;
+import _bank from  "./bank.js";
 import _banner from  "./banner.js";
 import _categories from  "./categories.js";
 import _chat from  "./chat.js";
@@ -24,6 +25,7 @@ import _replies_comment_product from  "./replies_comment_product.js";
 import _user from  "./user.js";
 
 export default function initModels(sequelize) {
+  const bank = _bank.init(sequelize, DataTypes);
   const banner = _banner.init(sequelize, DataTypes);
   const categories = _categories.init(sequelize, DataTypes);
   const chat = _chat.init(sequelize, DataTypes);
@@ -61,6 +63,8 @@ export default function initModels(sequelize) {
   infor_product.hasMany(products, { as: "products", foreignKey: "infor_product"});
   detail_order.belongsTo(order, { as: "order", foreignKey: "order_id"});
   order.hasMany(detail_order, { as: "detail_orders", foreignKey: "order_id"});
+  order_status.belongsTo(order, { as: "order", foreignKey: "order_id"});
+  order.hasMany(order_status, { as: "order_statuses", foreignKey: "order_id"});
   order.belongsTo(pay, { as: "pay", foreignKey: "pay_id"});
   pay.hasMany(order, { as: "orders", foreignKey: "pay_id"});
   likes.belongsTo(posts, { as: "post", foreignKey: "post_id"});
@@ -99,6 +103,7 @@ export default function initModels(sequelize) {
   user.hasMany(pay, { as: "pays", foreignKey: "user_id"});
 
   return {
+    bank,
     banner,
     categories,
     chat,

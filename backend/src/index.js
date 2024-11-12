@@ -21,6 +21,7 @@ import cors from 'cors';
 import path from "path"
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
+import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -59,4 +60,5 @@ app.use(categoriesRouter);
 app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
+app.use (uploadImgUserRouter)
 app.listen(8080);
