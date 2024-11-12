@@ -16,6 +16,7 @@ const getinforproduct = async (req, res) => {
 
 const getinforproductById = async (req, res) => {
     try {
+       
         let data = await inforproduct.findByPk(req.params.id);
         if (data) {
             responseSend(res, data, "Thành công!", 200);
@@ -29,7 +30,18 @@ const getinforproductById = async (req, res) => {
 
 const createinforproduct = async (req, res) => {
     try {
-        let newinforproduct = await inforproduct.create(req.body);
+        const {
+            infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_more
+        }=req.body
+        let newinforproduct = await inforproduct.create({  infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_more});
         responseSend(res, newinforproduct, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);

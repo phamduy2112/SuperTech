@@ -16,7 +16,7 @@ export const getProducts = () => {
  
   );
   };
-export const getProductsByIdCatelogry = (id) => {
+export const getProductsByIdCatelogry = (id:number) => {
     return axiosWithAuth(`/products/categories/${id}`, {
       method: "get",
       
@@ -24,8 +24,27 @@ export const getProductsByIdCatelogry = (id) => {
  
   );
   };
-export const getProductDetail=(id)=>{
+export const getProductDetail=(id:number)=>{
   return axiosWithAuth(`product-detail/${id}`,{
     method:"get"
+  })
+}
+
+export const createProduct=(dataCreate:any)=>{
+  return axiosWithAuth(`/create-products`,{
+    method:"post",
+    data:dataCreate
+  })
+}
+export const createInforProduct=(dataCreate:any)=>{
+  return axiosWithAuth(`/create-inforproduct`,{
+    method:"post",
+    data:dataCreate
+  })
+}
+export const deleteProduct=(id:number)=>{
+  return axiosWithAuth(`/detele-products/${id}`,{
+    method:"delete",
+  
   })
 }

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProductCateloriesByDad, getProductDetail, getProducts } from "../../service/product/product.service";
+import { createInforProduct, createProduct, deleteProduct, getProductCateloriesByDad, getProductDetail, getProducts } from "../../service/product/product.service";
 
 export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
@@ -12,6 +12,7 @@ export const getProductByCateloriesDad = createAsyncThunk(
     }
   },
 );
+
 export const getProductsThunk = createAsyncThunk(
   "getProductsThunk",
   async () => {
@@ -25,7 +26,7 @@ export const getProductsThunk = createAsyncThunk(
 );
 
 export const getProductsAdminThunk = createAsyncThunk(
-  "getAdminLocation",
+  "getProductsAdminThunk",
   async (searchKey:string) => {
     try {
       
@@ -46,6 +47,44 @@ export const getProductsAdminThunk = createAsyncThunk(
     }
   },
 );
+
+export const createProductAdminThunk = createAsyncThunk(
+  "createProductAdminThunk",
+  async (dataCreate:any,{dispatch}) => {
+    try {
+      await createProduct(dataCreate);
+      const response = await dispatch(getProductsAdminThunk(''));
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const createInforProductAdminThunk = createAsyncThunk(
+  "createInforProductAdminThunk",
+  async (dataCreate:any,{dispatch}) => {
+    try {
+      await createInforProduct(dataCreate);
+      const response = await dispatch(getProductsAdminThunk(''));
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const deleteProductAdminThunk = createAsyncThunk(
+  "deleteProductAdminThunk",
+  async (id:number,{dispatch}) => {
+    try {
+      await deleteProduct(id);
+      const response = await dispatch(getProductsAdminThunk(''));
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
 export const getProductByIdThunk = createAsyncThunk(
   "getProductByIdThunk",
   async (id) => {
@@ -62,7 +101,10 @@ const initialState = {
   listProduct: [],
   listProducts:[],
   listAdminProducts:[],
-  productDetail:{}
+  productDetail:{},
+  productColors:[],
+  listProductStorage:[],
+  
 };
 
 const ProductSlice = createSlice({
@@ -72,6 +114,10 @@ const ProductSlice = createSlice({
     setProduct: (state, { payload }) => {
       state.listProduct = payload;
     },
+    setProductColors:(state,{payload})=>{
+      state.productColors.push(payload);    },
+      setProductStorage:(state,{payload})=>{
+        state.listProductStorage.push(payload);    }
   },
   extraReducers: (builder) => {
     builder
@@ -90,10 +136,17 @@ const ProductSlice = createSlice({
       .addCase(getProductByIdThunk.fulfilled, (state, { payload }) => {
         state.productDetail = payload;
       })
-
+    builder
+      .addCase(createInforProductAdminThunk.fulfilled, (state, { payload }) => {
+        state.productDetail = payload;
+      })
+      builder
+      .addCase(deleteProductAdminThunk.fulfilled, (state, { payload }) => {
+        state.listAdminProducts = payload;
+      });
   },
 });
 
-export const { setProduct } = ProductSlice.actions;
+export const { setProduct,setProductColors,setProductStorage } = ProductSlice.actions;
 
 export const productReducer = ProductSlice.reducer;

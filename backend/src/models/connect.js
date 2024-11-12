@@ -3,8 +3,8 @@ import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(
   "nmaplpaa_apitest",
-  "nmaplpaa_tri",
-  "Leminhtri@@",
+  "nmaplpaa_duy",
+  "Phamngocduy@@",
   {
     host: "103.221.221.104",
     dialect: "mysql",

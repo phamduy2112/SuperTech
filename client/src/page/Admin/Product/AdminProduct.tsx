@@ -11,12 +11,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getProductsAdminThunk } from '../../../redux/product/product.slice';
+import { deleteProductAdminThunk, getProductsAdminThunk } from '../../../redux/product/product.slice';
 import { getCatelogryThunk } from '../../../redux/catelogry/catelogry.slice';
 import AdminFilterProduct from './Component/AdminFilterProduct';
 function AdminProduct() {
   const navigate = useNavigate();
-
+  const listProductColor=useAppSelector(state=>state.product.productColors)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
@@ -74,14 +74,18 @@ function AdminProduct() {
   const dispatch=useAppDispatch();
   const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
   const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
-
+  const handleDeteleProduct=async (id:number)=>{
+    dispatch(deleteProductAdminThunk(id))
+  }
   useEffect(()=>{
     dispatch(getProductsAdminThunk(''));
     dispatch(getCatelogryThunk());
+
+  },[dispatch])
+  useEffect(()=>{
     setProducts(listProducts);
     setFilteredProducts(listProducts); // Mặc định hiển thị tất cả sản phẩm
-  },[dispatch])
-  
+  },[listProducts])
   const handleEye=()=>{
     navigate("/")
   }
@@ -103,7 +107,8 @@ function AdminProduct() {
       title: 'Hình Ảnh',
       dataIndex: 'image',
       render: (src: string) => (
-        <img className='rounded-md' src="https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg" alt="" style={{ width: 50, height: 50 }} />
+        <img className='rounded-md' 
+        src="https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg" alt="" style={{ width: 50, height: 50 }} />
       ),
     },
     {
@@ -146,7 +151,7 @@ function AdminProduct() {
           />
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDelete(record.key)}
+            onClick={() => handleDeteleProduct(+record.product_id)}
           />
         </div>
       ),
@@ -208,76 +213,7 @@ function AdminProduct() {
     });
   };
 
-  const Datasao = [
-    {
-      value: '1',
-      label: '⭐',
-    },
-    {
-      value: '2',
-      label: '⭐⭐',
-    },
-    {
-      value: '3',
-      label: '⭐⭐⭐',
-    },
-  ]
-  const Datamau = [
-    {
-      value: 'Xanh',
-      label: 'Xanh',
-    },
-    {
-      value: 'Vàng',
-      label: 'Vàng',
-    },
-
-  ]
-
-  const Dataloai = [
-    {
-      value: 'Iphone',
-      label: 'Iphone',
-    },
-    {
-      value: 'Máy tính',
-      label: 'Máy tính',
-    },
-    {
-      value: 'Chuột',
-      label: 'Chuột',
-    }, {
-      value: 'Tai nghe',
-      label: 'Tai nghe',
-    },
-  ]
-  const Datahang = [
-    {
-      value: 'Iphone',
-      label: 'Iphone',
-    },
-    {
-      value: 'SamSung',
-      label: 'SamSung',
-    },
-    {
-      value: 'Xiaomi',
-      label: 'Xiaomi',
-    }, {
-      value: 'Oppo',
-      label: 'Oppo',
-    },
-
-  ]
-  const Dataman = [
-
-    {
-      value: '19.9',
-      label: 'Oppo',
-    },
-
-  ]
-  const [priceRange, setPriceRange] = useState([0, 30000000]); // Set initial range values
+   const [priceRange, setPriceRange] = useState([0, 30000000]); // Set initial range values
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (value: any) => {
     setPriceRange(value);
