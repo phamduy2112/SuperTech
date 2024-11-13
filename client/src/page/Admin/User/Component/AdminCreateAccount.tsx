@@ -1,7 +1,7 @@
 
 
-import { Calendar, ConfigProvider, Empty, GetProp, message, Popover, Select, Upload, UploadFile } from 'antd';
-import React, { useRef, useState } from 'react';
+import { Calendar, ConfigProvider, Empty, GetProp, message, Popover, Select, Spin, Upload, UploadFile } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
@@ -9,11 +9,60 @@ import { UploadProps } from 'antd/lib';
 import './AdminCreateAccout.css'
 import { IoMdCloudUpload } from 'react-icons/io';
 import { datanganhang } from './Databank';
+import { DataRole, imageStaffLevel, StaffGender } from './DataStaff';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
 function AdminCreateAccount() {
+
+    const [staffData, setstaffData] = useState({
+        user_name: '',
+        user_email: '',
+        user_password: '',
+        user_address: '',
+        user_phone: '',
+        user_role: 10,
+        level: 9,
+        user_gender: null,
+        user_birth: '',
+        user_time: '',
+    });
+    // const [PayData, setPayData] = useState({
+    //     accountName: '',
+    //     accountNumber: ''
+    // })
+
+    const [staffImage, setstaffImage] = useState({
+        user_image: {},
+    })
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setstaffData(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    const handleSelectOnChange = (value: number, title: string) => {
+        setstaffData(prevState => ({
+            ...prevState,
+            [title]: value,
+        }));
+    }
+
+    // const handleInputChangePay = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setPayData(prevState => ({
+    //         ...prevState,
+    //         [name]: value,
+    //     }));
+    // };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(staffData);
+    };
 
     const uploadRef = useRef<HTMLDivElement>(null); // Sử dụng HTMLDivElement
 
@@ -46,13 +95,6 @@ function AdminCreateAccount() {
         const imgWindow = window.open(src);
         imgWindow?.document.write(image.outerHTML);
     };
-
-
-
-
-
-
-    const [value, setValue] = useState('')
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
@@ -90,6 +132,40 @@ function AdminCreateAccount() {
 
     }));
 
+    const OptionsImageStaffLevel = imageStaffLevel.map(item => ({
+        value: item.value,
+        label: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                    src={item?.label}
+                    style={{ width: '50px', marginRight: '8px' }}
+                />
+            </div>
+        )
+    }))
+
+
+    const OptionsStaffGender = StaffGender.map(item => ({
+        value: item.value,
+        label: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span>{item.label}</span>
+            </div>
+        )
+    }))
+
+
+    const filteredDataRole = DataRole.filter(role => role.value !== 11);
+    const OptionsStaffRole = filteredDataRole.map(role => ({
+
+        value: role.value,
+        label: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span>{role.label}</span>
+            </div>
+        )
+    }))
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [bank, setBank] = useState<any | null>(null); // Thay đổi từ {} thành null
 
@@ -109,27 +185,34 @@ function AdminCreateAccount() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueBirthDate = (value: any) => {
+        const formattedDate = value.format('YYYY-MM-DD HH:mm:ss');
+        setBirthDate(formattedDate);
 
-        setBirthDate(value.format('YYYY-MM-DD HH:mm:ss'));
+        setstaffData(prevState => ({
+            ...prevState,
+            user_birth: formattedDate,
+        }));
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueJoinDate = (value: any) => {
-
-        setJoinDate(value.format('YYYY-MM-DD HH:mm:ss'));
+        const formattedDate = value.format('YYYY-MM-DD HH:mm:ss');
+        setJoinDate(formattedDate);
+        setstaffData(prevState => ({
+            ...prevState,
+            user_time: formattedDate,
+        }));
     };
 
-    const DataGender = [
-        { label: 'Nam', value: 'Nam' },
-        { label: 'Nữ', value: 'Nữ' },
-        { label: 'Khác', value: 'Khác' },
-    ]
 
-    const DataRole = [
-        { label: 'Admin', value: 'Admin' },
-        { label: 'Nhân viên', value: 'Nhân viên' },
-        { label: 'Khách hàng', value: 'Khác hàng' },
-    ]
+    const handleInputChangeWord = (value: string) => {
+        setstaffData(prevState => ({
+            ...prevState,
+            user_address: value,
+        }));
+    };
+
+
 
 
 
@@ -141,7 +224,7 @@ function AdminCreateAccount() {
 
 
     return (
-        <div className='flex-1 bg-[#f2edf3]  grid grid-cols-1 xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
+        <form action='' onSubmit={handleSubmit} className='flex-1 bg-[#f2edf3]  grid grid-cols-1 xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
 
             <div className='bg-white shadow-lg rounded-xl  p-[12px] gap-8 flex flex-col'>
                 <span className='text-[20px] font-semibold'>Tải ảnh  </span>
@@ -152,24 +235,24 @@ function AdminCreateAccount() {
                 </div>
                 <div className='flex- items-center flex justify-center'>
                     <ImgCrop rotationSlider>
-                        <Upload
-                            ref={uploadRef}
-                            action="" // Đặt URL phù hợp với server của bạn
+                        <Upload.Dragger
+                            listType='picture'
                             fileList={fileList}
                             onChange={onChange}
                             onPreview={onPreview}
-                            maxCount={1}
-                            beforeUpload={(file) => {
-                                const isValidType = ['image/jpeg', 'image/png'].includes(file.type);
-                                const isValidSize = file.size / 1024 / 1024 < 0.5; // 500kb
-                                if (!isValidType) {
-                                    message.error('Bạn chỉ có thể tải lên định dạng JPG/PNG!');
-                                }
-                                if (!isValidSize) {
-                                    message.error('Kích thước file phải nhỏ hơn 500kb!');
-                                }
-                                return isValidType && isValidSize;
+                            showUploadList={{
+                                showRemoveIcon: true
                             }}
+                            maxCount={1}
+                            accept=".png,.jpg,.doc"
+                            beforeUpload={(file) => {
+                                setstaffImage(prevState => ({
+                                    ...prevState,
+                                    user_image: file,
+                                }));
+                                return false;
+                            }}
+
                         >
                             <div className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}>
                                 <p className="text-4xl  " onClick={() => uploadRef.current?.querySelector('input[type="file"]')}>
@@ -182,7 +265,7 @@ function AdminCreateAccount() {
                                 <img src={fileList[0]?.url} alt="Uploaded" className="rounded-lg w-[70rem] h-[35rem] object-cover   shadow-lg" />
                             </div>
 
-                        </Upload>
+                        </Upload.Dragger>
                     </ImgCrop>
 
 
@@ -195,27 +278,59 @@ function AdminCreateAccount() {
             </div>
             <div className='bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col '>
                 <span className='text-[20px] font-semibold'>Thêm Tài Khoản </span>
-                <form action="" className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
-                    <div className='flex h-auto col-span-2 flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Tên tài khoản</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                <div className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
+                    <div className="flex h-auto flex-col gap-4">
+                        <label htmlFor="" className="text-[13px] text-[#81818177] font-medium">Tên tài khoản</label>
+                        <input
+                            onChange={handleInputChange}
+                            name="user_name"  // Đảm bảo tên đúng với key trong state
+                            value={staffData.user_name} // Dùng value thay vì placeholder
+                            type="text"
+                            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
+                        />
+                    </div>
+                    <div className='flex h-auto flex-col gap-4'>
+                        <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Email</label>
+                        <input type='text'
+                            onChange={handleInputChange}
+                            name="user_email"
+                            value={staffData.user_email}
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Email</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                        <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
+                        <input type='text'
+                            onChange={handleInputChange}
+                            name="user_password"
+                            value={staffData.user_password}
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Level</label>
+                        <Select
+                            showSearch
+                            placeholder="Vui lòng chọn Level "
+                            optionFilterProp="label"
+                            options={
+                                OptionsImageStaffLevel
+                            }
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+                            onChange={(value) => handleSelectOnChange(value, 'level')}
 
+                        />
                     </div>
+
 
 
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Điện thoại</label>
-                        <input type='number' min={0} max={100} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                        <input
+                            onChange={handleInputChange}
+                            name="user_phone"
+                            value={staffData.user_phone}
+                            type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính</label>
@@ -223,21 +338,25 @@ function AdminCreateAccount() {
                             showSearch
                             placeholder="Vui lòng chọn giới tính "
                             optionFilterProp="label"
-                            options={DataGender}
+                            options={OptionsStaffGender}
+                            onChange={(value) => handleSelectOnChange(value, 'user_gender')}
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
                         />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Vai trò</label>
                         <Select
                             showSearch
-                            placeholder="Vui lòng chọn vai trò "
+                            placeholder="Vui lòng chọn vai trò"
                             optionFilterProp="label"
-                            options={DataRole}
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+                            options={
+                                OptionsStaffRole
+                            }
+                            onChange={(value) => handleSelectOnChange(value, 'user_role')}
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                        />
 
-                        />                    </div>
+                    </div>
 
                     <div className='flex h-auto flex-col gap-4 '>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Ngày sinh</label>
@@ -252,7 +371,7 @@ function AdminCreateAccount() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={birthdate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                            <input type='text' placeholder={birthdate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
                     </div>
                     <div className='flex h-auto flex-col gap-4 '>
@@ -268,22 +387,22 @@ function AdminCreateAccount() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={Joindate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                            <input type='text' placeholder={Joindate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
 
                     </div>
 
-                    <div className=' col-span-3 flex h-[450px] overflow-y-hidden flex-col gap-4'>
+                    <div className=' col-span-3 flex  flex-col gap-4'>
                         <label htmlFor='ten_sp' className=' text-[13px] text-[#81818177] font-medium'>Địa chỉ</label>
-                        <ReactQuill
-                            theme='snow'
-                            value={value}
-                            onChange={setValue}
-                            modules={{
-                                toolbar: toolbarOptions,
-                            }}
-                            className='h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
-                        />
+                        <div className="quill-container">
+                            <ReactQuill
+                                theme="snow"
+                                value={staffData.user_address}
+                                onChange={handleInputChangeWord}
+                                modules={{ toolbar: toolbarOptions }}
+                                className=" bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
+                            />
+                        </div>
                     </div>
 
 
@@ -291,23 +410,27 @@ function AdminCreateAccount() {
 
 
 
-                </form>
+                </div>
             </div>
             <div className='bg-white shadow-lg rounded-xl xl:col-span-3  p-[12px] gap-3 flex flex-col '>
                 <span className='text-[20px] font-semibold'> Thẻ </span>
-                <form action="" className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
+                <div className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
                     <div className='flex h-full flex-col gap-4'>
                         <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Mã thẻ</label>
-                        <input type='number' min={0} max={100} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
+                        <input
+                            // onChange={handleInputChangePay}
+                            // name="accountNumber"
+                            // value={PayData.accountNumber}
+                            type='number' min={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Ngày hết hạn</label>
-                        <input type='text' min={0} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
+                        <input type='text' min={0} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='hot' className='text-[13px] text-[#81818177] font-medium'>CVV</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='hot' name='hot' required />
+                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
                     </div>
                     <div className='flex-1 flex flex-col gap-4 col-span-1'>
                         <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Ngân hàng</label>
@@ -323,7 +446,7 @@ function AdminCreateAccount() {
                         />                    </div>
                     <div className='flex-1 flex flex-col gap-4 col-span-2'>
                         <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Tên chủ thẻ</label>
-                        <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='favorite' name='favorite' required />
+                        <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
                     </div>
                     <div className='flex-1 justify-center items-center p-[60px] flex flex-col gap-4 col-span-3'>
                         <div className='w-[40%] h-full rounded-xl '>
@@ -337,7 +460,7 @@ function AdminCreateAccount() {
                         </div>
 
                     </div>
-                </form>
+                </div>
 
             </div>
 
@@ -346,7 +469,7 @@ function AdminCreateAccount() {
 
             </div>
 
-        </div >
+        </form >
     );
 }
 

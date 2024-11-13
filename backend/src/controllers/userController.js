@@ -231,6 +231,8 @@ const updateUser = async (req, res) => {
   }
 };
 const deleteEmployee = async (req, res) => {
+  console.log(req.params.id);
+  
   try {
     let deleted = await User.destroy({
       where: { user_id: req.params.id },

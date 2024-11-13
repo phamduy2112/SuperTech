@@ -7,7 +7,7 @@ import { HiMiniPencilSquare } from "react-icons/hi2";
 import { IoCellularOutline, IoHome, IoSettingsOutline } from "react-icons/io5";
 import { LiaUsersCogSolid } from "react-icons/lia";
 import { MdBarChart, MdOutlineCategory } from "react-icons/md";
-import { PiMessengerLogo, PiUsersThreeThin } from "react-icons/pi";
+import {  PiUsersThreeThin } from "react-icons/pi";
 
 export interface Child {
   id_child: number;
@@ -145,14 +145,6 @@ export const DataSideBar: SidebarItem[] = [
     box: [
       {
         box_id: 1,
-        box_title: 'Tin Nhắn hỗ Trợ',
-        icon: <PiMessengerLogo />,
-        iconChevronRight: null,
-        url: '/admin/quản-lí-tin-nhắn',
-        child: [],
-      },
-      {
-        box_id: 2,
         box_title: 'Bài Viết',
         icon: <BiBookAlt />,
         iconChevronRight: null,
@@ -160,7 +152,7 @@ export const DataSideBar: SidebarItem[] = [
         child: [],
       },
       {
-        box_id: 3,
+        box_id: 2,
         box_title: 'Mã Giảm Giá',
         icon: <IoCellularOutline />,
         iconChevronRight: null,

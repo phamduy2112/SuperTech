@@ -10,6 +10,7 @@ import { RiAddLargeLine } from 'react-icons/ri';
 import { Popover } from 'antd';
 import { LuUser2 } from "react-icons/lu";
 import { IoSettingsOutline } from 'react-icons/io5';
+import { PiMessengerLogo } from 'react-icons/pi';
 
 
 
@@ -63,12 +64,14 @@ function AdminHeader() {
 
           </div>
           <div className='opacity-[25%]'>
+            <PiMessengerLogo />
+          </div>
+          <div className='opacity-[25%]'>
             <FaCloudMoon />
-
-
           </div>
           <div className='relative flex justify-end items-start'>
-            <span className='opacity-[25%]'>            <FaRegBell />
+            <span className='opacity-[25%]'>
+              <FaRegBell />
             </span>
             <div className='absolute text-[6px] flex items-center justify-center text-white  font-bold bg-red-600 w-[10px] h-[10px] rounded-lg'>
 

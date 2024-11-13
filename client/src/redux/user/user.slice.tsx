@@ -44,6 +44,7 @@ export const getUserThunk = createAsyncThunk(
 export const updateUserDetailThunk = createAsyncThunk(
   "updateUserThunk",
   async (payload) => {
+    console.log("dtaa",payload)
     try {
       const resp = await updateUserDetail(payload);
       return resp.data.content;

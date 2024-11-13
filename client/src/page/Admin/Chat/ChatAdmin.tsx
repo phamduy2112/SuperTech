@@ -1,220 +1,234 @@
-import React, { useState } from 'react';
-import './Chat.css';
-import { GoArrowLeft, GoSearch } from 'react-icons/go';
-import { HiOutlineEllipsisVertical } from 'react-icons/hi2';
-import { LuCheckCheck } from 'react-icons/lu';
-import { BsEmojiSmile, BsSendFill } from 'react-icons/bs';
-import EmojiPicker from 'emoji-picker-react';
-import { Popover } from 'antd';
-import { FiUploadCloud } from 'react-icons/fi';
-import { IoAddCircle } from 'react-icons/io5';
-import { CiFilter } from 'react-icons/ci';
+import React from 'react'
+import { Drawer, Popover } from 'antd';
+import { BsThreeDots } from 'react-icons/bs';
+import { MdOutlineMarkEmailUnread, MdOutlineZoomOutMap } from 'react-icons/md';
+import { FaRegPenToSquare } from 'react-icons/fa6';
+import { IoAdd, IoSearchOutline } from 'react-icons/io5';
+import { FaRegBellSlash } from 'react-icons/fa';
+import { PiMessengerLogoBold, PiMinus } from 'react-icons/pi';
+import { LuDelete } from 'react-icons/lu';
+import { LiaUserAltSlashSolid } from 'react-icons/lia';
+import BoxChat from './BoxChat';
 
 function ChatAdmin() {
-  const [inputValue, setInputValue] = useState('');
+  const boxChats = [1, 2, 3, 4, 5];
 
-  function handleEmojiClick(emoji) {
-    setInputValue((prev) => prev + emoji.emoji);
+  const numberOfItemsToShow = 3;
+  const filteredBoxChats = boxChats.slice(-Math.min(numberOfItemsToShow, boxChats.length));
+
+  const PopupMes = () => {
+    return (
+      <div className='flex-1 cursor-pointer flex gap-3 flex-col items-center h-auto box-border'>
+        <div className='flex-1 w-[400px] h-auto box-border'>
+          <div className='flex flex-1 h-auto items-center hover:bg-[#85858525] justify-start rounded-lg p-[7px] gap-3 font-semibold text-[14px]'>
+            <MdOutlineMarkEmailUnread className='text-[20px]' />
+            <span>Đánh dấu là chưa đọc</span>
+          </div>
+          <div className='flex items-center justify-start hover:bg-[#85858525]  rounded-lg p-[7px] gap-3 font-semibold text-[14px]'>
+            <PiMessengerLogoBold className='text-[20px]' />
+            <span>Dùng thử SuperTech Messenger dành cho Windows</span>
+          </div>
+          <div className='flex items-center justify-start hover:bg-[#85858525]  rounded-lg p-[7px] gap-3 font-semibold text-[14px]'>
+            <FaRegBellSlash className='text-[20px] ' />
+            <span>Bật lại thông báo</span>
+          </div>
+
+        </div>
+        <div className='bg-[#79797953] h-[1px] w-[380px] rounded-full'>
+
+        </div>
+        <div className='flex-1 w-[400px] cursor-pointer h-auto box-border'>
+
+          <div className='flex flex-1 h-auto items-center hover:bg-[#85858525] justify-start rounded-lg p-[7px] gap-3 font-semibold text-[14px]'>
+            <LiaUserAltSlashSolid className='text-[20px]' />
+            <span>Chặn</span>
+          </div>
+          <div className='flex items-center justify-start hover:bg-[#85858525]  rounded-lg p-[7px] gap-3 font-semibold text-[14px]'>
+            <LuDelete className='text-[20px]' />
+            <span>Xóa đoạn chat</span>
+          </div>
+        </div>
+      </div>
+    )
   }
 
-  function handleInputChange(e) {
-    setInputValue(e.target.value);
+
+
+  const RecentMessages = () => {
+    return (
+      <div className='flex flex-col'>
+        <span className='text-[14px] font-semibold'>Nguyễn Thu Lê</span>
+        <span className='text-[12px]'>Xin Chào Shop!</span>
+      </div>
+    )
   }
+
+
+  const HeaderMess = () => {
+    return (
+      <div className='flex-1 text-[#5d5d5e] items-center flex justify-between'>
+        <div className='text-[24px] flex items-center'>
+          <span>Đoạn Chat</span>
+        </div>
+        <div className='flex cursor-pointer text-[20px] gap-[25px]'>
+          <div className='hover:bg-[rgba(0,0,0,0.15)] transition-all hover:text-[#00000084] duration-500 flex items-center justify-center rounded-full w-[32px] h-[32px]'>
+            <BsThreeDots className='' />
+          </div>
+          <div className='hover:bg-[rgba(0,0,0,0.15)] transition-all duration-500 flex items-center justify-center  rounded-full  w-[32px] h-[32px]'>
+            <MdOutlineZoomOutMap />
+          </div>
+          <div className='hover:bg-[rgba(0,0,0,0.15)] transition-all duration-500 flex items-center justify-center  text-[16px] rounded-full  w-[32px] h-[32px]'>
+            <FaRegPenToSquare />
+
+          </div>
+
+        </div>
+
+
+
+
+      </div>
+    )
+  }
+
+  const CreateChat = () => {
+    return (
+      <div className='text-[12px]'>
+        <span>Tin nhắn mới</span>
+      </div>
+    )
+  }
+  const OptionMess = () => {
+    return (
+      <div className='text-[12px]'>
+        <span>Tùy chọn</span>
+      </div>
+    )
+  }
+  const ValueOption = () => {
+    return (
+      <div className='text-[12px] box-border cursor-pointer gap-4 flex flex-col'>
+        <div className='flex gap-3 hover:bg-[rgba(0,0,0,0.08)] duration-500 transition-all rounded-md p-[5px] items-center'>
+          <div className='border border-spacing-1 box-border hover:bg-[#85858525] flex items-center justify-center transition-all duration-500  rounded-full'>
+            <IoAdd className='text-[20px] transform rotate-[45deg]' />
+          </div>
+          <span>Đóng tất cả đoạn chat</span>
+        </div>
+        <div className='flex hover:bg-[rgba(0,0,0,0.08)] duration-500 transition-all rounded-md p-[5px] gap-3 items-center'>
+          <div className='border border-spacing-1 hover:bg-[#85858525] flex items-center justify-center transition-all duration-500  rounded-full'>
+            <PiMinus className='text-[20px]' />
+          </div>
+          <span>Thu nhỏ đoạn chat đang mở</span>
+        </div>
+      </div>
+    )
+  }
+
 
   return (
-    <div className='grid bg-[#f2edf3] box-border lg:grid-cols-[30%_1fr] sm:grid-cols-1 h-auto p-[24px]'>
-      <div className='flex flex-col p-[24px] gap-[20px] box-shadow rounded-lg linear-gradient h-full text-white'>
-        <div className='flex flex-col gap-6'>
-          <div className='flex font-bold text-3xl justify-between items-center'>
-            <span>Tin nhắn</span>
-            <div className='flex gap-4'>
-              <IoAddCircle className='text-white text-3xl' />
-              <HiOutlineEllipsisVertical className='text-white text-3xl' />
-            </div>
+    <div className='flex h-[100vh] cursor-pointer relative overflow-hidden  flex-col p-12 gap-5 bg-[#f2edf3]'>
+      <Drawer
+        title={<HeaderMess />}
+        placement="right"
+        closable={false}
+        open={false}
+        getContainer={false}
+        mask={false}
+        loading={false}
+        width={440}
+        style={{ minHeight: '100vh' }}
+      >
+        <div className=' flex-1 flex flex-col h-full gap-7'>
+          <div className='bg-[rgba(0,0,0,0.08)]  text-[#5d5d5e] gap-2 flex items-center rounded-full px-[10px]'>
+            <IoSearchOutline className='text-[20px]' />
+            <input type="text" className='flex-1 h-[40px] text-[14px] bg-transparent outline-none' placeholder='Tìm kiếm trên SuperTech Messenger' />
           </div>
-          <div className='bg-gray-200 rounded-md overflow-hidden flex text-xl justify-between'>
-            <input
-              type="text"
-              placeholder='Tìm kiếm người dùng'
-              className='bg-transparent text-xl p-4 flex-1 outline-none text-white' />
-            <div className='w-16 h-16 flex justify-center items-center rounded-md'>
-              <GoSearch className='text-white text-3xl' />
-            </div>
+          <div className=' text-[14px] font-medium flex gap-3'>
+            <button className='px-[15px] py-[11px] bg-[#c345feb1] text-[white] rounded-3xl'>Hộp Thư</button>
+            <button className='px-[15px] py-[11px] transition-all duration-500 hover:bg-[rgba(0,0,0,0.08)] rounded-3xl'>Nhóm</button>
           </div>
-        </div>
-
-        <div className='flex flex-col gap-4'>
-          <div className='text-3xl font-semibold'>Đang hoạt động</div>
-          <div className='w-full overflow-x-auto hide-scrollbar'>
-            <div className='flex gap-8 items-center'>
-              {Array(10).fill(null).map((_, index) => (
-                <div key={index} className='flex flex-col items-center'>
-                  <div className='relative flex items-center'>
-                    <div className='w-28 h-28 rounded-full overflow-hidden border-2 border-green-500 shadow-md'>
-                      <img
-                        className='object-cover w-full h-full'
-                        src="https://upload.wikimedia.org/wikipedia/commons/2/20/%C4%90%C3%80M_V%C4%A8NH_H%C6%AFNG_2023.jpg"
-                        alt="Vĩnh Hưng"
-                      />
-                    </div>
-                    <div className='w-6 h-6 absolute rounded-full bg-green-500 right-0 bottom-0' />
+          <div className='flex-1 overflow-y-auto'>
+            <div className='hover:bg-[rgb(0,0,0,0.10)] flex flex-row transition-all items-center justify-between duration-500 rounded-lg box-border  p-[6px]'>
+              <div className='flex flex-1 flex-row items-center gap-3'>
+                <div className='w-[68px] h-[68px] flex items-center justify-center overflow-hidden relative'>
+                  <div className='w-[56px] h-[56px] rounded-full  overflow-hidden'>
+                    <img className='w-full h-full object-cover ' src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/465713850_122113169258572750_2010770374122077854_n.jpg?stp=dst-jpg_s200x200&_nc_cat=108&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=Hx5rvX4UPj4Q7kNvgGUTKBQ&_nc_zt=24&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AwmEUqU-ci1wUIHtkjJDYiS&oh=00_AYDog5dZwqVgegWznA_S6-SDoWisIeP8x_aQnIDrcFrqpg&oe=67390EAD" alt="" />
                   </div>
-                  <div className='mt-1 text-center font-medium text-lg'>Vĩnh Hưng</div>
+                  <div className='bg-[#62e823] absolute w-[15px] bottom-[10px] right-[5px] h-[15px] rounded-full'></div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className='flex flex-col gap-6'>
-          <div className='flex justify-between text-2xl font-medium'>
-            <div>Tất cả tin nhắn</div>
-            <Popover placement="bottomRight" trigger="click" content={
-              <div className='flex w-48 gap-2 flex-col'>
-                <button className='flex-1 rounded-md p-3 text-xl bg-gradient-to-r from-purple-600 to-blue-500 text-white font-medium'>Tất cả</button>
-                <button className='flex-1 rounded-md p-3 text-xl bg-transparent text-[#af1bff] font-medium'>Nhóm</button>
-                <button className='flex-1 rounded-md p-3 text-xl bg-transparent text-[#af1bff] font-medium'>Nhân viên</button>
-                <button className='flex-1 rounded-md p-3 text-xl bg-transparent text-[#af1bff] font-medium'>Khách hàng</button>
-              </div>
-            }>
-              <CiFilter className='text-white text-3xl' />
-            </Popover>
-          </div>
-
-          <div className='flex w-full h-[550px] overflow-y-auto hide-scrollbar'>
-            <div className='flex-1 gap-3'>
-              {/* Messages */}
-              {Array(10).fill(null).map((_, index) => (
-                <div key={index} className='flex items-center justify-between p-4 rounded-lg'>
-                  <div className='flex gap-4 items-center'>
-                    <div className='relative flex items-center'>
-                      <div className='w-20 h-20 rounded-full overflow-hidden border-2 border-green-500 shadow-md'>
-                        <img
-                          className='object-cover w-full h-full'
-                          src="https://upload.wikimedia.org/wikipedia/commons/2/20/%C4%90%C3%80M_V%C4%A8NH_H%C6%AFNG_2023.jpg"
-                          alt="Đàm Vĩnh Hưng"
-                        />
-                      </div>
-                    </div>
-                    <div className='flex flex-col'>
-                      <div className='font-semibold text-xl'>Đàm Vĩnh Hưng</div>
-                      <div className='font-medium text-lg'>Xin chào bạn, cho mình hỏi</div>
-                    </div>
+                <div className='flex flex-col gap-3'>
+                  <div className='text-[14px] font-semibold'>
+                    <span >Nguyễn Thu Lê</span>
                   </div>
-                  <div className='flex flex-col items-end'>
-                    <div className='text-lg'>03:15 AM</div>
-                    <div className='flex items-center justify-center w-10 h-10 rounded-full font-medium text-white bg-red-600 text-xl'>
-                      55
-                    </div>
+                  <div className='flex text-[12px] gap-2'>
+                    <span>Xin Chào Shop! </span>
+                    <span>18 phút trước</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className='bg-white rounded-lg p-[24px] gap-[44px] flex flex-col h-full'>
-        <div className='box-border w-full h-auto grid grid-cols-[5%_90%_1fr]'>
-          <div className='flex items-center justify-start text-xl'>
-            <GoArrowLeft size={24} />
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex items-center relative justify-center'>
-              <div className='w-16 h-16 rounded-full overflow-hidden'>
-                <img className='object-cover' src="https://upload.wikimedia.org/wikipedia/commons/2/20/%C4%90%C3%80M_V%C4%A8NH_H%C6%AFNG_2023.jpg" alt="Đàm Vĩnh Hưng" />
               </div>
-              <div className='w-4 h-4 ml-12 mt-12 absolute rounded-full bg-green-500' />
+              <div className='hover:bg-[rgba(0,0,0,0.15)] text-[#5d5d5e98] transition-all hover:text-[#ffffff] duration-500 flex items-center justify-center rounded-full w-[32px] h-[32px]'>
+
+                <Popover placement="bottom" trigger="click" content={<PopupMes />}>
+                  <button>
+                    <BsThreeDots className='text-[17px]' />
+                  </button>
+                </Popover>
+
+              </div>
+              <div className=' text-[#ff0000] transition-all duration-500 flex items-center justify-center rounded-full w-[32px] h-[32px]'>
+                <FaRegBellSlash className='text-[20px] ' />
+              </div>
             </div>
-            <div className='flex flex-col gap-2 text-xl'>
-              <span className='font-medium'>Đàm Vĩnh Hưng</span>
-              <span className='font-light'>Online</span>
-            </div>
-          </div>
-          <div className='flex justify-center items-center text-xl gap-6'>
-            <GoSearch size={24} />
-            <HiOutlineEllipsisVertical size={24} />
+
           </div>
         </div>
 
-        <div className='w-full h-[630px] overflow-y-auto hide-scrollbar text-lg'>
-          {Array(10).fill(null).map((_, index) => (
-            <div className={`flex items-end gap-3 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`} key={index}>
-              {
-                index % 2 === 0 ? (
-                  <>
-                    <div className={`flex items-center relative justify-center`}>
-                      <div className='w-16 h-16 rounded-full overflow-hidden'>
-                        <img className='object-cover' src="https://upload.wikimedia.org/wikipedia/commons/2/20/%C4%90%C3%80M_V%C4%A8NH_H%C6%AFNG_2023.jpg" alt="" />
-                      </div>
-                      <div className='w-4 h-4 ml-12 mt-12 absolute rounded-full bg-green-500' />
-                    </div>
-                    <div className={`p-4 flex flex-col justify-start items-start gap-3 rounded-2xl bg-[#b81dff] text-white`}>
-                      <div className='flex items-center gap-3'>
-                        <span className='font-medium'>Đàm Vĩnh Hưng</span>
-                        <div className='flex items-center gap-3'>
-                          <span className='text-gray-600'>02:39 PM</span>
-                          <span className='text-[#22b922]'><LuCheckCheck size={20} /></span>
-                        </div>
-                      </div>
-                      <div className='min-h-[44px] p-3 w-[350px] flex rounded-2xl'>
-                        <span className=''>Xin chào bạn, tôi muốn mua đơn hàng này?</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={`p-4 flex flex-col justify-start items-start gap-3 rounded-2xl bg-gray-200 text-black`}>
-                      <div className='flex items-center gap-3'>
-                        <span className='font-medium'>Đàm Vĩnh Hưng</span>
-                        <div className='flex items-center gap-3'>
-                          <span className='text-gray-600'>02:39 PM</span>
-                          <span className='text-[#22b922]'><LuCheckCheck size={20} /></span>
-                        </div>
-                      </div>
-                      <div className='min-h-[44px] p-3 w-[350px] flex rounded-2xl'>
-                        <span className=''>Xin chào bạn, tôi muốn mua đơn hàng này?</span>
-                      </div>
-                    </div>
-                    <div className={`flex items-center relative justify-center`}>
-                      <div className='w-16 h-16 rounded-full overflow-hidden'>
-                        <img className='object-cover' src="https://upload.wikimedia.org/wikipedia/commons/2/20/%C4%90%C3%80M_V%C4%A8NH_H%C6%AFNG_2023.jpg" alt="" />
-                      </div>
-                      <div className='w-4 h-4 ml-12 mt-12 absolute rounded-full bg-green-500' />
-                    </div>
-                  </>
-                )
-              }
+      </Drawer>
+      <div className='absolute bottom-0 right-0 w-auto gap-4 items-end justify-end flex flex-row h-[500px]'>
+
+        {filteredBoxChats.map((item, index) => (
+          <BoxChat key={index} index={index} data={item} />
+        ))}
+        <div className='flex flex-col py-[20px] gap-4 justify-end items-center w-[80px] box-border h-auto '>
+          <Popover placement="left" trigger="hover" content={<OptionMess />}>
+            <Popover placement='topLeft' trigger={'click'} content={<ValueOption />}>
+              <div className='text-[20px] rounded-full bg-[rgba(0,0,0,0.15)]  p-[8px]'>
+                <BsThreeDots className='text-[white]' />
+              </div>
+            </Popover>
+
+          </Popover>
+
+
+          {filteredBoxChats.map((item, index) => (
+            <div className='w-full relative flex items-center justify-center h-[56px]'>
+              <Popover placement="left" trigger="hover" content={<RecentMessages />}>
+                <div className='w-[48px] h-[48px] rounded-full overflow-hidden'>
+                  <img className='w-full h-full object-cover ' src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/465713850_122113169258572750_2010770374122077854_n.jpg?stp=dst-jpg_s200x200&_nc_cat=108&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=Hx5rvX4UPj4Q7kNvgGUTKBQ&_nc_zt=24&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AwmEUqU-ci1wUIHtkjJDYiS&oh=00_AYDog5dZwqVgegWznA_S6-SDoWisIeP8x_aQnIDrcFrqpg&oe=67390EAD" alt="" />
+                </div>
+              </Popover>
+              <div className='absolute rounded-full right-[10px]  top-[5px] bg-black'>
+                <IoAdd className=' text-[white]  text-[20px] transform rotate-[45deg]' />
+              </div>
+              <div className='absolute rounded-full w-[12px] h-[12px] right-[15px]  bottom-[7px] bg-[#62e823]'>
+              </div>
+            </div>))}
+          <Popover placement="left" trigger="hover" content={<CreateChat />}>
+            <div className='text-[20px] w-[48px] h-[48px] flex items-center justify-center rounded-full bg-[rgba(0,0,0,0.15)]  p-[8px]'>
+              <FaRegPenToSquare className='text-[white]' />
             </div>
-          ))}
+
+          </Popover>
+
+
         </div>
 
-        <div className='h-auto'>
-          <div className='flex gap-6 py-4 text-[16px] rounded-lg overflow-hidden h-[80px] items-center'>
-            <input
-              type="text"
-              value={inputValue}
-              placeholder='Vui lòng nhập nội dung'
-              onChange={handleInputChange}
-              className='box-border outline-none p-[14px] h-[90%] rounded-lg flex-1 bg-[#7471711f]' />
-            <Popover
-              placement="topRight"
-              trigger="click"
-              content={<EmojiPicker onEmojiClick={handleEmojiClick} />}
-            >
-              <BsEmojiSmile className='cursor-pointer text-xl' />
-            </Popover>
-            <Popover placement="topRight" trigger="click" content={<FiUploadCloud />}>
-              <HiOutlineEllipsisVertical className='cursor-pointer text-xl' />
-            </Popover>
-            <div className='h-[80%] w-[50px] flex items-center justify-center rounded-full text-white bg-red-600'>
-              <BsSendFill className='cursor-pointer' />
-            </div>
-          </div>
-        </div>
       </div>
+
+
+
     </div>
-  );
+  )
 }
 
-export default ChatAdmin;
+export default ChatAdmin
