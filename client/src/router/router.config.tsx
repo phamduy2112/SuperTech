@@ -45,6 +45,7 @@ import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
 import ListProduct from "../page/Client/ListProduct/ListProduct";
 import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
+import CouponSection from "../page/Client/Voucher/Voucher";
 
 export const router = createBrowserRouter([
   {
@@ -101,7 +102,10 @@ children:[
 
 ]
 },
-      
+      {
+        path:"/giam-gia",
+        element:<CouponSection/>
+      },
       // Mua hàng
       {
         path: "/giỏ-hàng",

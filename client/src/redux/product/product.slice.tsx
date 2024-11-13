@@ -3,9 +3,9 @@ import { createInforProduct, createProduct, deleteProduct, getProductCateloriesB
 
 export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
-  async (name:string) => {
+  async (name:any) => {
     try {
-      const resp = await getProductCateloriesByDad(name);
+      const resp = await getProductCateloriesByDad(name.categoryDad,name.category);
       return resp.data.content;
     } catch (e) {
       console.log(e);

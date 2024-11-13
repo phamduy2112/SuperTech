@@ -20,15 +20,8 @@ function AdminProduct() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
-    Swal.fire({
-      icon: 'info',
-      text: `Đã mở trang sửa cho sản phẩm có ID: ${key}`,
-      confirmButtonText: 'OK',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
-      }
-    });
+    
+    navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
   };
 
   const [filteredProducts, setFilteredProducts] = useState([]); // Dữ liệu đã lọc
@@ -144,7 +137,7 @@ function AdminProduct() {
 
 
           <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(record.key)}
+            onClick={() => handleEdit(+record.product_id)}
           />
           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}

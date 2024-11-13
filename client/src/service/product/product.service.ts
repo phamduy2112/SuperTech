@@ -1,7 +1,7 @@
 import { axiosWithAuth } from "../axios.config";
 
-export const getProductCateloriesByDad = (name:string) => {
-    return axiosWithAuth(`/list-product-catelories?category_dad=${name}`, {
+export const getProductCateloriesByDad = (name:string,category:number) => {
+    return axiosWithAuth(`/list-product-catelories?category_dad=${name}&category=${category}`, {
       method: "get",
       
     }
@@ -48,3 +48,12 @@ export const deleteProduct=(id:number)=>{
   
   })
 }
+
+
+export const createImage = (data: FormData) => {
+  return axiosWithAuth.post(`/upload-images`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};

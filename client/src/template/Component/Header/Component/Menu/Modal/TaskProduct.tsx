@@ -1,111 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import { getCatelogry } from "../../../../../../service/catelogry/catelogry.service";
 
 function TaskProduct() {
+  const [cateloriesDad, setCatelories] = useState([]);
+  
+  useEffect(() => {
+    const getCategoriesDad = async () => {
+      const resp = await getCatelogry();
+      setCatelories(resp.data.content);
+    };
+    getCategoriesDad();
+  }, []);
+  
   return (
-    <div className="absolute z-50 di left-0 top-full mt-2 bg-white p-4 ">
-      <div className="w-[500px] py-[2rem]  px-[1.6rem]">
-        <ul className="flex justify-between">
-          <div className="">
-            <h3 className="text-[1.6rem] text-[#7500CF] mb-[.5rem] font-semibold">
+    <div className="absolute z-50 left-0 top-full mt-2 bg-white p-4 shadow-lg rounded-lg">
+      <div className="w-[250px] py-[1.5rem] px-[1.6rem]">
+        <ul className="space-y-6">
+          <div>
+            <h3 className="text-[1.6rem] text-[#7500CF] mb-[1rem] font-semibold border-b-2 border-[#7500CF] pb-2">
               Điện thoại
             </h3>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem]">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem]">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
+            {cateloriesDad
+              .filter((item) => item.category_dad === 1)
+              .map((item) => (
+                <li key={item.id} className="py-2 hover:bg-gray-100 rounded-lg">
+                  <NavLink
+                    to={`/list-sản-phẩm?category_dad=${item.category_dad}&category=${item.category_id}`}
+                    className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
+                  >
+                    {item.category_name}
+                  </NavLink>
+                </li>
+              ))}
           </div>
-          <div className="">
-            <h3 className="text-[1.6rem] text-[#7500CF] mb-[.5rem] font-semibold">
+
+          <div>
+            <h3 className="text-[1.6rem] text-[#7500CF] mb-[1rem] font-semibold border-b-2 border-[#7500CF] pb-2">
               Laptop
             </h3>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-          </div>
-          <div className="">
-            <h3 className="text-[1.6rem] text-[#7500CF] mb-[.5rem] font-semibold">
-              Phụ kiện
-            </h3>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-          </div>
-          <div className="">
-            <h3 className="text-[1.6rem] text-[#7500CF] mb-[.5rem] font-semibold">
-              Sản phẩm
-            </h3>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Sản phẩm mới
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
-            <li className="w-[100%] py-2">
-              <NavLink to="" className="text-[1.6rem] ">
-                Iphone
-              </NavLink>
-            </li>
+            {cateloriesDad
+              .filter((item) => item.category_dad === 2)
+              .map((item) => (
+                <li key={item.id} className="py-2 hover:bg-gray-100 rounded-lg">
+                  <NavLink
+                    to=""
+                    className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
+                  >
+                    {item.category_name}
+                  </NavLink>
+                </li>
+              ))}
           </div>
         </ul>
       </div>

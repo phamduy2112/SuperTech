@@ -18,7 +18,7 @@ function ListProduct() {
 
   useEffect(() => {
     dispatch(getProductByCateloriesDad(category_dad));
-  }, [category_dad, dispatch]);
+  }, [category_dad,category, dispatch]);
 
   // Lọc sản phẩm theo trạng thái checkbox
   const filteredProducts = isDiscounted

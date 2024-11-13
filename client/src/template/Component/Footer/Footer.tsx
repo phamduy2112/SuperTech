@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaFacebook, FaRegPaperPlane } from 'react-icons/fa'
 import { RiHeadphoneFill } from 'react-icons/ri'
 import nganHang from "../../../assets/nganhang.png"
 import { Container } from '../../../components/Style/Container'
+import LoadingFooter from './Component/Loading/LoadingFooter'
 function Footer() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 5000);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingFooter />;
+  }
   const listFooter=[
     {
       title:"Tìm kiếm nhanh",

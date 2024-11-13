@@ -10,7 +10,7 @@ productRouter.get('/products/categories/:categoryId', getProductsByCategoryId);
 productRouter.get('/list-product-catelories', getProductByIdCatelogryDad);
 productRouter.get('/product-detail/:id', getProductById);
 productRouter.post('/create-products',middleToken, createProduct);
-productRouter.put('/products/:id',middleToken, updateProduct);
-productRouter.delete('/detele-products/:id',middleToken, deleteProduct);
+productRouter.put('/products-edit/:id',middleToken, updateProduct);
+productRouter.delete('/products-delete/:id',middleToken, deleteProduct);
 
 export default productRouter;
