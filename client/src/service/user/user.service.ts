@@ -1,9 +1,20 @@
-import { axiosWithAuth, options } from "../axios.config";
+import { Header } from "antd/es/layout/layout";
+import { DataStaffInterface } from "../../page/Admin/User/Component/DataStaff";
+import { axiosWithAuth } from "../axios.config";
 
 export const getAllUser = () => {
   return axiosWithAuth("/users", {
     method: "get",
   });
+};
+export const createStaff = async (DataStaff: DataStaffInterface) => {
+    return axiosWithAuth("/create-users", {
+      method: "post",
+      data: DataStaff.staffData,
+      headers: {
+        token: DataStaff.tokenStaff,
+      },
+    });
 };
 
 export const DeleteStaffSend = (IdStaff: number) => {

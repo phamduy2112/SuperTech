@@ -13,7 +13,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 function AdminCustomerEdit() {
 
-    const uploadRef = useRef<HTMLDivElement>(null); // Sử dụng HTMLDivElement
+    const uploadRef = useRef<HTMLDivElement>(null); 
 
     const [fileList, setFileList] = useState<UploadFile[]>([
     ]);

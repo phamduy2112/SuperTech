@@ -44,7 +44,7 @@ const register = async (req, res) => {
       user_name,
       user_email,
       user_password: hashedPassword,
-      user_role: 0,
+      user_role: 11,
     });
     responseSend(
       res,
@@ -58,6 +58,54 @@ const register = async (req, res) => {
     console.log(e);
   }
 };
+
+const createUser = async (req, res) => {
+  try {
+    const {
+      user_name,
+      user_email,
+      user_password,
+      user_address,
+      user_phone,
+      user_role,
+      level,
+      user_gender,
+      user_birth,
+      user_time,
+      user_image,
+    } = req.body;
+
+    const user = await User.findOne({ where: { user_email } });
+    if (user) {
+      return responseSend(res, { success: false }, "Email đã tồn tại", 201);
+    }
+    const hashedPassword = await bcrypt.hash(user_password, 10);
+    await User.create({
+      user_name,
+      user_email,
+      user_password: hashedPassword,
+      user_address,
+      user_phone,
+      user_role,
+      level,
+      user_gender,
+      user_birth,
+      user_time,
+      user_image,
+    });
+    responseSend(
+      res,
+      {
+        success: true,
+      },
+      "Thêm nhân viên thành thành công!",
+      200
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -111,6 +159,7 @@ const login = async (req, res) => {
     });
   }
 };
+
 const resetToken = async (req, res) => {
   try {
     let { token } = req.body;
@@ -232,7 +281,7 @@ const updateUser = async (req, res) => {
 };
 const deleteEmployee = async (req, res) => {
   console.log(req.params.id);
-  
+
   try {
     let deleted = await User.destroy({
       where: { user_id: req.params.id },
@@ -489,4 +538,5 @@ export {
   forgetCheckCode,
   resetPasswordNoToken,
   deleteEmployee,
+  createUser,
 };

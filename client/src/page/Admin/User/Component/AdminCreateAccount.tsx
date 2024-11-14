@@ -1,6 +1,6 @@
 
 
-import { Calendar, ConfigProvider, Empty, GetProp, message, Popover, Select, Spin, Upload, UploadFile } from 'antd';
+import { Calendar, ConfigProvider, Empty, Popover, Select, Upload, UploadFile } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
@@ -9,14 +9,31 @@ import { UploadProps } from 'antd/lib';
 import './AdminCreateAccout.css'
 import { IoMdCloudUpload } from 'react-icons/io';
 import { datanganhang } from './Databank';
-import { DataRole, imageStaffLevel, StaffGender } from './DataStaff';
+import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface } from './DataStaff';
+import { createStaffThunk } from '../../../../redux/user/user.slice';
+import { useAppDispatch } from '../../../../redux/hooks';
+import Swal from 'sweetalert2';
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
 function AdminCreateAccount() {
+    const AppDispatch = useAppDispatch();
+    const token = localStorage.getItem('token');
 
-    const [staffData, setstaffData] = useState({
+
+
+
+    const [tokenStaff, setTokenStaff] = useState('');
+
+    useEffect(() => {
+        if (token) {
+            const cleanedToken = token.replace(/"/g, '');
+            setTokenStaff(cleanedToken);
+        }
+    }, [token]);
+
+
+    const [staffData, setstaffData] = useState<StaffInterface>({
         user_name: '',
         user_email: '',
         user_password: '',
@@ -27,15 +44,8 @@ function AdminCreateAccount() {
         user_gender: null,
         user_birth: '',
         user_time: '',
+        user_image: '',
     });
-    // const [PayData, setPayData] = useState({
-    //     accountName: '',
-    //     accountNumber: ''
-    // })
-
-    const [staffImage, setstaffImage] = useState({
-        user_image: {},
-    })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -51,7 +61,10 @@ function AdminCreateAccount() {
             [title]: value,
         }));
     }
-
+    // const [PayData, setPayData] = useState({
+    //     accountName: '',
+    //     accountNumber: ''TokenStaffInterface
+    // })
     // const handleInputChangePay = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     const { name, value } = e.target;
     //     setPayData(prevState => ({
@@ -61,40 +74,92 @@ function AdminCreateAccount() {
     // };
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(staffData);
+        let CheckValue = true;
+        Object.keys(staffData).forEach((key) => {
+            const value = staffData[key as keyof StaffInterface];
+            if (value === '' || value === null || value === undefined) {
+                CheckValue = false;
+                Swal.fire({
+                    title: ` ${key}`,
+                    icon: 'error',
+                    text: `Dữ liệu này chưa có`,
+                    showCancelButton: true,
+                    cancelButtonText: `Thoát ra nhập thêm ${key}`,
+                    cancelButtonColor: "#d33",
+                    showConfirmButton: false
+
+                })
+                return
+            }
+
+        });
+        if (CheckValue == true) {
+            const DataStaff: DataStaffInterface = {
+                staffData: staffData,
+                tokenStaff: tokenStaff,
+            };
+            SendDataStaffThunk(DataStaff)
+        }
+
     };
 
-    const uploadRef = useRef<HTMLDivElement>(null); // Sử dụng HTMLDivElement
+    const SendDataStaffThunk = async (DataStaff: DataStaffInterface) => {
+        try {
+            const data = await AppDispatch(createStaffThunk(DataStaff));
+            if (data.payload.success === true) {
+                Swal.fire({
+                    title: 'Thành công',
+                    text: 'Thêm thành công nhân viên',
+                    icon: 'success',
+                    confirmButtonText: 'Chuyển tới trang quản lý nhân viên',
+                    confirmButtonColor: '#008000',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/admin/quản-lí-nhân-viên';
+                    }
+                })
+            };
 
-    const [fileList, setFileList] = useState<UploadFile[]>([
-    ]);
 
-    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-        const updatedFileList = newFileList.map(file => {
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    const uploadRef = useRef<HTMLDivElement>(null);
+
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+    const onChange: UploadProps['onChange'] = async (info) => {
+        const { fileList: file } = info;
+
+        const updatedFileList = file.map(file => {
             if (file.originFileObj) {
                 file.url = URL.createObjectURL(file.originFileObj);
             }
             return file;
         });
+
         setFileList(updatedFileList);
-    };
 
-
-
-    const onPreview = async (file: UploadFile) => {
-        let src = file.url as string;
-        if (!src) {
-            src = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj as FileType);
-                reader.onload = () => resolve(reader.result as string);
-            });
+        if (file[0].response.statusCode === 200) {
+            try {
+                const imageUrl = file[0].response.content;
+                setstaffData(prevState => ({
+                    ...prevState,
+                    user_image: imageUrl,
+                }));
+            } catch (error) {
+                console.error("Có lỗi trong khi xử lý phản hồi:", error);
+            }
+        } else {
+            console.error("Tải lên không thành công, mã lỗi:", file[0].response?.statusCode);
         }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow?.document.write(image.outerHTML);
     };
+
+
+
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
@@ -119,7 +184,7 @@ function AdminCreateAccount() {
     const options = datanganhang.map(item => ({
         value: item.code,
         label: (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className='' style={{ display: 'flex', alignItems: 'center' }}>
                 <img
                     src={item?.logo}
                     alt={item?.label}
@@ -236,21 +301,37 @@ function AdminCreateAccount() {
                 <div className='flex- items-center flex justify-center'>
                     <ImgCrop rotationSlider>
                         <Upload.Dragger
+                            action="https://test-api-nodejs-440616.appspot.com/uploadimguser"
                             listType='picture'
                             fileList={fileList}
                             onChange={onChange}
-                            onPreview={onPreview}
                             showUploadList={{
                                 showRemoveIcon: true
                             }}
                             maxCount={1}
                             accept=".png,.jpg,.doc"
+                            headers={{
+                                token: tokenStaff,
+                            }}
                             beforeUpload={(file) => {
-                                setstaffImage(prevState => ({
-                                    ...prevState,
-                                    user_image: file,
-                                }));
-                                return false;
+                                const isImage = ['image/jpeg', 'image/png', 'image/jpg'].includes(file.type);
+                                const isSmallerThan10MB = file.size / 1024 / 1024 < 10; // file size in MB
+                                if (!isImage) {
+                                    console.log('Chỉ hỗ trợ hình ảnh .jpg, .jpeg, .png');
+                                }
+                                if (!isSmallerThan10MB) {
+                                    console.log('Kích thước tệp không vượt quá 10MB');
+                                }
+                                return isImage && isSmallerThan10MB;
+                            }}
+                            name="user_image"
+                            onRemove={() => {
+                                if (fileList.length === 1) {
+                                    setstaffData(prevState => ({
+                                        ...prevState,
+                                        user_image: '',
+                                    }));
+                                }
                             }}
 
                         >
@@ -272,7 +353,7 @@ function AdminCreateAccount() {
 
                 </div>
                 <div className='text-[14px] text-[#9696968e]  font-medium'>
-                    <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 500kb.</span>
+                    <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 10MB.</span>
                 </div>
 
             </div>

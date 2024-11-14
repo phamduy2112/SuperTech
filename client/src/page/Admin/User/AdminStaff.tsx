@@ -1,5 +1,5 @@
 import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { FiFilter } from 'react-icons/fi';
@@ -10,7 +10,6 @@ import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
-
 function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Allstaffs: any = useAppSelector((state) => state.user.Alluser);
@@ -21,6 +20,9 @@ function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [columns, setColumns] = useState<any[]>([]);
     const [valueInputSearch, setvalueInputSearch] = useState(``);
+
+
+
 
 
 
@@ -442,11 +444,12 @@ function AdminStaff() {
                 <div className='flex items-center justify-between box-border p-[24px]'>
                     <span className='text-[30px] font-medium text-[#ffd700]'>Nhân Viên</span>
                     <div className='flex gap-3'>
-                        <Button className='p-10'>
-                            <IoCloudDownloadOutline className='text-[18px]' />
-                            Tải về PDF
-                        </Button>
+
+                        {/* <Button className='p-10'>
+                            
+                        </Button> */}
                         <Link to={`/admin/quản-lí-nhân-viên/tạo-nhân-viên-mới`}>
+
                             <Button className='p-10' type="primary">
                                 <AiOutlineUserAdd className='text-[18px]' />
                                 Thêm Người Mới
@@ -494,8 +497,9 @@ function AdminStaff() {
                     </Popover>
                 </div>
 
-                <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+                <div className='p-[24px] relative w-full overflow-x-auto h-[1000px] flex flex-col'>
                     <Table
+
                         className='flex-1'
                         rowSelection={{
                             type: 'checkbox',

@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, DeleteStaff, DeleteStaffSend } from '../../service/user/user.service';
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, DeleteStaffSend, createStaff } from '../../service/user/user.service';
+import { DataStaffInterface } from "../../page/Admin/User/Component/DataStaff";
+import Swal from "sweetalert2";
 
 
 export const getAllUserThunk = createAsyncThunk(
@@ -29,6 +31,34 @@ export const deleteStaffThunk = createAsyncThunk(
   },
 );
 
+
+export const createStaffThunk = createAsyncThunk(
+  "createStaffThunk",
+  async (DataStaff: DataStaffInterface) => {
+    try {
+      const resp = await createStaff(DataStaff);
+
+
+      if (resp.data.statusCode === 200) {
+        return resp.data.content;
+      } else {
+        Swal.fire({
+          title: `Thất bại lỗi ${resp.data.statusCode}`,
+          text: `${resp.data.message}`,
+          icon: 'error',
+          showCancelButton: true,
+          cancelButtonText: `Thử lại`,
+          cancelButtonColor: "#d33",
+          showConfirmButton: false
+        })
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
 export const getUserThunk = createAsyncThunk(
   "getUserThunk",
   async () => {
@@ -44,7 +74,7 @@ export const getUserThunk = createAsyncThunk(
 export const updateUserDetailThunk = createAsyncThunk(
   "updateUserThunk",
   async (payload) => {
-    console.log("dtaa",payload)
+    console.log("dtaa", payload)
     try {
       const resp = await updateUserDetail(payload);
       return resp.data.content;
@@ -129,6 +159,13 @@ const UserSlice = createSlice({
       .addCase(deleteStaffThunk.fulfilled, (state, { payload }) => {
         state.Alluser = payload;
       })
+
+    builder
+      .addCase(createStaffThunk.fulfilled, (state, { payload }) => {
+        state.Alluser = payload;
+      })
+    //Ở trên là khu vực builder của devTri
+
     builder
       .addCase(getUserThunk.fulfilled, (state, { payload }) => {
         state.user = payload;
