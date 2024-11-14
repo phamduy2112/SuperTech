@@ -11,4 +11,4 @@ commentpostRouter.post('/commentpost-create',middleToken, createcommentpost);
 commentpostRouter.put('/commentpost-edit/:id',middleToken, updatecommentpost);
 commentpostRouter.delete('/commentpost-delete/:id',middleToken, deletecommentpost);
 
-export default commentpostRouter;   
+export default commentpostRouter;

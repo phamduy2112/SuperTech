@@ -1,7 +1,7 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class replies_comment_product extends Model {
+export default class user_discounts extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
     id: {
@@ -9,10 +9,6 @@ export default class replies_comment_product extends Model {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    comment: {
-      type: DataTypes.TEXT,
-      allowNull: true
     },
     user_id: {
       type: DataTypes.INTEGER,
@@ -22,21 +18,22 @@ export default class replies_comment_product extends Model {
         key: 'user_id'
       }
     },
-    comment_id: {
+    discount_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'comment_product',
-        key: 'comment_id'
+        model: 'discount',
+        key: 'discount_id'
       }
     },
-    repiles_date: {
+    user_at: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
-    tableName: 'replies_comment_product',
+    tableName: 'user_discounts',
     timestamps: false,
     indexes: [
       {
@@ -48,17 +45,17 @@ export default class replies_comment_product extends Model {
         ]
       },
       {
-        name: "fk_commentttt_repilse",
-        using: "BTREE",
-        fields: [
-          { name: "comment_id" },
-        ]
-      },
-      {
-        name: "fk_uuuserrrr_repilse",
+        name: "fk_userdiscoubnt_userid",
         using: "BTREE",
         fields: [
           { name: "user_id" },
+        ]
+      },
+      {
+        name: "fk_userdiscoubnt_discount",
+        using: "BTREE",
+        fields: [
+          { name: "discount_id" },
         ]
       },
     ]

@@ -46,4 +46,44 @@ const uploadFields = upload.fields([
     }
   };
 
-export { uploadImages, uploadFields };
+const updateImages = async (req, res) => {
+  try {
+    const files = req.files;
+    if (!files) {
+      return res.status(400).json({ error: 'No files were uploaded.' });
+    }
+
+    const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
+    const updatePromises = imageFields.filter(field => files[field] && files[field].length > 0).map(async field => {
+      const file = files[field][0];
+      if (!file) {
+        throw new Error(`File for ${field} is missing.`);
+      }
+      const existingImage = await ImageModel.findOne({ field });
+      const result = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ resource_type: 'image' },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }).end(file.buffer);
+      });
+
+      const imageId = result.public_id.split('/').pop();
+      if (existingImage) {
+        await ImageModel.updateOne({ _id: existingImage._id }, { [field]: imageId });
+      } else {
+        await ImageModel.create({ [field]: imageId });
+      }
+      return { [field]: imageId };
+    });
+
+    const results = await Promise.all(updatePromises);
+    const imageNames = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+    res.json({ message: 'Images updated successfully', data: imageNames });
+  } catch (error) {
+    console.error("Error updating images:", error);
+    res.status(500).json({ error: 'Error updating images' });
+  }
+};
+
+export { uploadImages, uploadFields, updateImages };

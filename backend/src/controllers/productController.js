@@ -3,7 +3,7 @@ import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import categories from "../models/categories.js";
 import { Op } from "sequelize";
-
+import cloudinary from '../config/cloudinaryConfig.js';
 let models = initModels(sequelize); 
 let Products = models.products; 
 
@@ -204,19 +204,45 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
+        const product = await Products.findByPk(req.params.id, {
+            include: [{
+                model: models.image_product,
+                as: 'image'
+            }]
+        });
+        if (!product) {
+            responseSend(res, "", "không tìm thấy !", 404);
+            return;
+        }
+
+        const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
+        if (product.image) {
+            for (const field of imageFields) {
+                if (product.image[field]) {
+                    await cloudinary.uploader.destroy(product.image[field]);
+                }
+            }
+        }
+
+        await models.image_product.destroy({
+            where: { image_id: product.image_id }
+        });
+        
         const deleted = await Products.destroy({
             where: { product_id: req.params.id }
         });
+
         if (deleted) {
-            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
-        } else {
             responseSend(res, "", "không tìm thấy !", 404);
+          
+        } else {
+            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         }
     } catch (error) {
+        console.error("Lỗi Khi Xóa Sản Phẩm - KIỂU LỖI:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-
 export {
     getProducts,
     getProductById,

@@ -23,6 +23,7 @@ import _product_storage from  "./product_storage.js";
 import _products from  "./products.js";
 import _replies_comment_product from  "./replies_comment_product.js";
 import _user from  "./user.js";
+import _user_discounts from  "./user_discounts.js";
 
 export default function initModels(sequelize) {
   const bank = _bank.init(sequelize, DataTypes);
@@ -48,13 +49,18 @@ export default function initModels(sequelize) {
   const products = _products.init(sequelize, DataTypes);
   const replies_comment_product = _replies_comment_product.init(sequelize, DataTypes);
   const user = _user.init(sequelize, DataTypes);
+  const user_discounts = _user_discounts.init(sequelize, DataTypes);
 
   products.belongsTo(categories, { as: "category", foreignKey: "category_id"});
   categories.hasMany(products, { as: "products", foreignKey: "category_id"});
   likes.belongsTo(comment_product, { as: "comment", foreignKey: "comment_id"});
   comment_product.hasMany(likes, { as: "likes", foreignKey: "comment_id"});
+  replies_comment_product.belongsTo(comment_product, { as: "parent_comment", foreignKey: "comment_id"});
+  comment_product.hasMany(replies_comment_product, { as: "replies", foreignKey: "comment_id"});
   order.belongsTo(discount, { as: "discount_discount", foreignKey: "discount"});
   discount.hasMany(order, { as: "orders", foreignKey: "discount"});
+  user_discounts.belongsTo(discount, { as: "discount", foreignKey: "discount_id"});
+  discount.hasMany(user_discounts, { as: "user_discounts", foreignKey: "discount_id"});
   product_colors.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
   image_product.hasMany(product_colors, { as: "product_colors", foreignKey: "image_id"});
   products.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
@@ -101,6 +107,10 @@ export default function initModels(sequelize) {
   user.hasMany(order, { as: "orders", foreignKey: "user_id"});
   pay.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(pay, { as: "pays", foreignKey: "user_id"});
+  replies_comment_product.belongsTo(user, { as: "user", foreignKey: "user_id"});
+  user.hasMany(replies_comment_product, { as: "replies_comment_products", foreignKey: "user_id"});
+  user_discounts.belongsTo(user, { as: "user", foreignKey: "user_id"});
+  user.hasMany(user_discounts, { as: "user_discounts", foreignKey: "user_id"});
 
   return {
     bank,
@@ -126,5 +136,6 @@ export default function initModels(sequelize) {
     products,
     replies_comment_product,
     user,
+    user_discounts,
   };
 }
