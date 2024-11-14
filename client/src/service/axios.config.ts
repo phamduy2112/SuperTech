@@ -1,27 +1,29 @@
 import axios from "axios";
 import { URL_BACKEND } from "../constants";
 import { getLocalStorage, saveLocalStorage } from "../utils";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setToken } from "../redux/user/user.slice";
+import store from "../redux/store";
 
 export const axiosWithAuth = axios.create({
     baseURL: `${URL_BACKEND}`,
     timeout: 180_000,
 });
-
 // Request Interceptor
 axiosWithAuth.interceptors.request.use(
     (config) => {
-        // Lấy token từ local storage và thêm vào headers
-        const token = getLocalStorage("token");
-        if (token) {
-            config.headers.token = token;
-        }
-        return config;
+      // Lấy token từ Redux store thông qua store.getState()
+      const token = store.getState().user.token; // Lấy token từ Redux state
+      if (token) {
+        // Thêm token vào headers nếu có
+        config.headers['Token'] = `${token}`;
+      }
+      return config;
     },
     (error) => {
-        return Promise.reject(error);
+      return Promise.reject(error);
     }
-);
-
+  );
 // Response Interceptor
 axiosWithAuth.interceptors.response.use(
     (response) => {
@@ -37,13 +39,14 @@ axiosWithAuth.interceptors.response.use(
             try {
                 // Gọi API reset-token
                 const response = await axios.post(`${URL_BACKEND}reset-token`, {
-                    token: getLocalStorage("token"), // Gửi token hiện tại
+                    token: store.getState().user.token, // Gửi token hiện tại
                 });
 
                 const newToken = response.data.content; // Giả định bạn nhận được token mới từ phản hồi
 
                 // Cập nhật token mới vào local storage
-                saveLocalStorage("token", newToken);
+                // saveLocalStorage("token", newToken);
+                store.dispatch(setToken(newToken)); // Cập nhật token mới vào Redux
                 // Cập nhật lại headers cho yêu cầu gốc
                 originalRequest.headers.token = newToken;
 

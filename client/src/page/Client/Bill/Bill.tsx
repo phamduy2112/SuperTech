@@ -1,9 +1,53 @@
 // Bill.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "../../../components/Style/Container";
 import { Steps } from "antd";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { getOrderDetail } from "../../../redux/order/Order.slice";
+import { getDetailOrder } from "../../../service/order/order.service";
+import StepOrderDetail from "../User/OrderDetail/component/StepOrderDetai";
+import { formatCurrencyVND } from "../../../utils";
 
-function Bill() {
+function Bill(props) {
+  const orderId:any=useAppSelector((state)=>state.listOrder.orderId)
+  const orderDetail=useAppSelector((state)=>state.listOrder.detailOrder)
+  const [order,setOrder]=useState({})
+  const [detailOrder,setDetailOrder]=useState([]); 
+
+  const [listProduct,setListProduct]=useState([]);
+  const dispatch=useAppDispatch();
+  useEffect(() => {
+    const fetchApi=async ()=>{
+      try {
+        const resp = await getDetailOrder(orderId);
+        setDetailOrder(resp.data.content);
+        setOrder(detailOrder[0])
+        const products = resp.data.content.map(detail => ({
+        quanlity:detail.detail_order_quality,
+          name: detail.product.product_name,
+          product_price: detail.product.product_price,
+          product_star: detail.product.product_star,
+          product_discount: detail.product.product_discount,
+          product_hot: detail.product.product_hot,
+          image_id: detail.product.image_id,
+          category_id: 2
+        }));
+  
+        setListProduct(products);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchApi()
+  }, [dispatch]);
+
+  console.log(listProduct);
+  const totalPrice = listProduct.reduce((total:number, item) => {
+    const discountAmount = +(item.product_price * item.product_discount) / 100; // Tính giảm giá
+    const priceAfterDiscount = + item.product_price - discountAmount; // Tính giá sau giảm
+    const itemTotalPrice = + item.quantity * priceAfterDiscount; // Tính tổng giá của item
+    return total + itemTotalPrice; // Cộng dồn vào total
+  }, 0);
   return (
     <Container>
          <div className=' py-6 text-[1.5rem]'>
@@ -20,21 +64,10 @@ function Bill() {
         {/* Order Progress Tracker */}
         <div className="lg:w-1/3 bg-white shadow-md rounded-lg p-8">
           <h3 className="text-[1.8rem] font-semibold text-gray-800 mb-6">
-            Trình trạng đơn hàng
+            Trình trạng đơn hàng 
           </h3>
-          <Steps
-  direction="vertical"
-  size="large"
-  current={3}
-  items={[
-    { title: "Đơn hàng đã được nhận", description: "19:00 15/11/2023" },
-    { title: "Shipper đã nhận đơn", description: "19:15 15/11/2023" },
-    { title: "Shipper đang đến nhận hàng", description: "19:30 15/11/2023" },
-    { title: "Shipper đã đến nhận hàng", description: "19:45 15/11/2023" },
-    { title: "Shipper đang giao hàng", description: "20:00 15/11/2023" },
-    { title: "Đơn hàng hoàn tất", description: "20:30 15/11/2023" },
-  ]}
-/>
+    
+       <StepOrderDetail  order={detailOrder[0]?.order}/>
         </div>
 
         {/* Order Success Message & Summary */}
@@ -78,7 +111,7 @@ function Bill() {
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h3 className="text-[1.8rem] font-semibold text-gray-800">
-                Mã đơn hàng: W199883
+                Mã đơn hàng: #{orderId}
                 </h3>
                 <p className="text-[1.5rem] text-gray-500 mt-[.5rem]">Thời gian đặt: 19:00 15/11/2023</p>
               </div>
@@ -129,19 +162,47 @@ function Bill() {
                 </thead>
                 <tbody>
                   {/* Example Order Item */}
-                  <tr className="border-b">
-                    <td className="py-6 px-6 text-gray-800 flex items-center gap-4">
-                      <img
-                        src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
-                        alt="Điện thoại"
-                        className="w-20 h-20 rounded-md object-cover"
-                      />
-                      <span className="text-roboto">IphoneXasdasd</span>
-                    </td>
-                    <td className="py-6 px-6 text-customColor font-semibold">1.700.000₫</td>
-                    <td className="py-6 px-6 text-center text-gray-800 font-semibold">2</td>
-                    <td className="py-6 px-6 text-right text-red-600 font-semibold">14.000.000₫</td>
-                  </tr>
+                  {
+                    listProduct?.map((item)=>{
+                      return (
+                        <tr className="border-b">
+                    
+                        <td className="py-6 px-6 text-gray-800 flex items-center gap-4">
+                          <img
+                            src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
+                            alt="Điện thoại"
+                            className="w-20 h-20 rounded-md object-cover"
+                          />
+                          <span className="text-roboto">{item.name}</span>
+                        </td>
+                        <td className="py-6 px-6 text-customColor font-semibold">  
+                        {item?.product_discount > 0 ? (
+                            <span className="text-customColor font-semibold text-[1.6rem] ">
+                              {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}
+                              
+                            </span>
+                          ) : (
+                            <span className="text-customColor font-semibold  text-[1.6rem] ">
+                              {formatCurrencyVND(item?.product_price)}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-6 px-6 text-center text-gray-800 font-semibold">{item.quanlity}</td>
+                        <td className="py-6 px-6 text-right text-red-600 font-semibold">{
+                    formatCurrencyVND(
+
+                      +item?.product_price * +item?.quanlity * (1 - +item?.product_discount / 100)
+
+                    )
+                    }</td>
+                      </tr>
+                      )
+                    })
+                  }
+             
                   {/* Add more items here as needed */}
                 </tbody>
               </table>

@@ -44,6 +44,7 @@ import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
 import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
 import ListProduct from "../page/Client/ListProduct/ListProduct";
 import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
+import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
 
 export const router = createBrowserRouter([
   {
@@ -170,6 +171,10 @@ children:[
       {
         path: 'quản-lí-sản-phẩm',
         element: <AdminProduct />
+      },
+      {
+        path: 'quan-li-san-pham-chi-tiet/:id',
+        element: <AdminProductDetail />
       },
       {
         path: 'quản-lí-sản-phẩm/tạo-sản-phẩm-mới',

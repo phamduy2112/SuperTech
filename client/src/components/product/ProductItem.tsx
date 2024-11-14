@@ -15,6 +15,7 @@ import { addItemToCart } from "../../redux/cart/cart.slice";
 import { NavLink } from "react-router-dom";
 import useSweetAlert from "../../hooks/Notification.hook";
 import { formatCurrencyVND } from "../../utils";
+import toast from "react-hot-toast";
 
 function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
@@ -24,11 +25,13 @@ function ProductItem(props) {
   const handleAddItem = (product: any) => {
     const productToCart = {
       ...product,
-      selectedColor: props.product?.product_colors[0] // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+      selectedColor: props.product?.product_colors[0], 
+      selectedStorage: props.product?.product_colors[0]?.product_storages[0]
     };
     dispatch(addItemToCart(productToCart));
     // console.log(productToCart);
-    showAlert("success","Thêm giỏ hàng thành công")
+    toast.success('Đây là thông báo thành công!');
+
   };
 
   

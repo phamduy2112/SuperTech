@@ -6,6 +6,7 @@ import { IoMdClose } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { decreaseItemQuantity, inCreaseItemQuantity, removeItemFromCart } from '../../../../../../redux/cart/cart.slice';
+import { formatCurrencyVND, truncateText } from '../../../../../../utils';
 
 interface TaskCart {
   onClose: () => void;
@@ -55,10 +56,34 @@ function TaskCart({ onClose }: TaskCart) {
                 />
               </div>
               <div className='w-[65%]'>
-                <h3 className='text-[1.5rem] font-semibold'>{item?.product_name}</h3>
-                <p className='text-[#7500CF] font-semibold text-[1.6rem] py-[.5rem]'>30.000.000 đ
+                <h3 className='text-[1.6rem] font-semibold'>
+                  {truncateText(item?.product_name,20)}
+                  </h3>
+                  <p className='text-[1.5rem] mt-[.5rem]'>
+                    {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
+                    {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
+                  </p>
+                  <div className='py-[.5rem]'>
+                  {item?.product_discount > 0 ? (
+                            <span className="text-customColor font-semibold text-[1.6rem] ">
+                              {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}
+                              <span className="text-gray-400 font-semibold line-through text-[1.5rem] ">
+                                {formatCurrencyVND(item?.product_price)}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-customColor font-semibold  text-[1.6rem] ">
+                              {formatCurrencyVND(item?.product_price)}
+                            </span>
+                          )}
+                  </div>
+              
+                {/* <p className='text-[#7500CF] font-semibold text-[1.6rem] py-[.5rem]'>30.000.000 đ
                   <span style={{ textDecoration: 'line-through' }} className='text-[1.5rem] text-[gray]'>28.000.000</span>
-                </p>
+                </p> */}
                 <div className='text-[1.6rem] border border-[#7500CF] flex items-center w-[33%] justify-between'>
                   <div className='border text-[1.7rem] border-r-[#7500CF] py-1 cursor-pointer'>
                     <FiMinus onClick={() => decreaseItem(item.product_id)} />

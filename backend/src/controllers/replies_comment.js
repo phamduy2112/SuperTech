@@ -31,28 +31,20 @@ const createRepliesComment = async (req, res) => {
     try {
         const user_id = req.id;
         const { comment,comment_id   } = req.body;
-        
-    
-      
-    
-        // Log để kiểm tra dữ liệu đầu vào
+
         console.log({
           user_id,
           comment,
           comment_id,
-         
 
         });
-    
+
         // Tạo comment mới
         const newComment = await repliesCommentProduct.create({
           user_id,
           comment_id,
           comment,
-         
-
         });
-    
         responseSend(res, newComment, "Thêm thành công!", 201);
       } catch (error) {
         console.error("Error creating comment:", error); // Log chi tiết lỗi

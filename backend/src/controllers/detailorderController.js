@@ -38,14 +38,14 @@ const getDetailOrderById = async (req, res) => {
                         {
                             model: models.user,
                             as: 'user' // Bao gồm replies cho mỗi comment
+                        },
+                        {
+                            model:models.order_status,
+                            as:"order_statuses",
+                           
                         }
                     ]
             },
-            
-      
-            
-         
-        
         ]
         });
         
@@ -79,6 +79,7 @@ const createdetailorder = async (req, res) => {
             const createdOrder = await detailorder.create(order);
 
             // Cập nhật số lượng sản phẩm sau khi tạo đơn hàng thành công
+
             await models.products.update(
                 {
                     product_quantity: sequelize.literal(`product_quantity - ${order.detail_order_quality}`)

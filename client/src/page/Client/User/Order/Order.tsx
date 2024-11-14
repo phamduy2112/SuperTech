@@ -93,8 +93,11 @@ function Order() {
           <div className='flex gap-[.5rem]'>
           <NavLink to={`/don-hang-chi-tiet-cua-ban/${record.order_id}`} className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
           {record.order_status<=2 ?
-          (      <CancelOrderModal orderId={record.order_id} />
-          ) : null}
+          (     
+             <CancelOrderModal orderId={record.order_id} />
+             
+          ) 
+          : null}
             {
               record.order_status==4 ?(
                 <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]'>

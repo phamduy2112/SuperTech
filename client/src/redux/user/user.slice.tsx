@@ -147,7 +147,7 @@ const UserSlice = createSlice({
       state.user = payload;
     },
     setToken: (state, { payload }) => {
-      state.user = payload;
+      state.token = payload;
     },
   },
   extraReducers: (builder) => {

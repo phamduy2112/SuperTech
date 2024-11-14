@@ -11,6 +11,7 @@ export const getOrderByIdProductThunk = createAsyncThunk(
 
       // Filter results based on searchKey and order_status
       const filteredResults = result.filter((item: any) => {
+
         // Check if order_id starts with searchKey (convert both to string for comparison)
         const matchesSearchKey = searchKey ? item.order_id.toString().startsWith(searchKey.toString()) : true; 
         const matchesOrderStatus = order_status !== undefined ? item.order_status === order_status : true; // Match order_status if provided
@@ -26,12 +27,13 @@ export const getOrderByIdProductThunk = createAsyncThunk(
     }
   },
 );
+
 export const changeStatusOrderThunk = createAsyncThunk(
   "ChangeStatusOrderThunk",
   async (data: any, { dispatch }) => {
     try {
       // Update the order status
-      await changeStatusOrder(data.id, data);
+      await changeStatusOrder(data.order_id, data);
 
       // Dispatch the getOrderByIdProductThunk and wait for it to complete
       const response = await dispatch(getOrderByIdProductThunk({ searchKey: '', order_status: data.status_order }));
@@ -60,14 +62,15 @@ export const getOrderDetail = createAsyncThunk(
 const initialState = {
   listOrder: [] ,
   detailOrder:[],
+  orderId:null
 };
 
 const orderSlice = createSlice({
   name: "orderSlice",
   initialState,
   reducers: {
-    setOrder: (state, { payload }) => {
-      state.listOrder = payload;
+    setOrderId: (state, { payload }) => {
+      state.orderId = payload;
     },
   },
   extraReducers: (builder) => {
@@ -91,6 +94,6 @@ const orderSlice = createSlice({
 
 });
 
-export const { setOrder } = orderSlice.actions;
+export const { setOrderId } = orderSlice.actions;
 
 export const orderReducer = orderSlice.reducer;

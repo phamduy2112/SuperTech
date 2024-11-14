@@ -3,21 +3,20 @@ import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 
 let models = initModels(sequelize); 
-let inforproduct = models.infor_product; 
+let productStorage = models.product_storage; 
 
-const getinforproduct = async (req, res) => {
+const getProduct_colors= async (req, res) => {
     try {
-        let data = await inforproduct.findAll();
+        let data = await productStorage.findAll();
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
 
-const getinforproductById = async (req, res) => {
+const getProduct_colorsById = async (req, res) => {
     try {
-       
-        let data = await inforproduct.findByPk(req.params.id);
+        let data = await productStorage.findByPk(req.params.id);
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -28,30 +27,19 @@ const getinforproductById = async (req, res) => {
     }
 };
 
-const createinforproduct = async (req, res) => {
+const createProduct_colors = async (req, res) => {
     try {
-        const {
-            infor_screen,
-            infor_system,
-            infor_cpu,
-            infor_ram,
-            infor_more
-        }=req.body
-        let newinforproduct = await inforproduct.create({  infor_screen,
-            infor_system,
-            infor_cpu,
-            infor_ram,
-            infor_more});
-        responseSend(res, newinforproduct, "Thêm Thành công!", 201);
+        let newProduct = await productStorage.create(req.body);
+        responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
 
-const updateinforproduct = async (req, res) => {
+const updateProduct_colors = async (req, res) => {
     try {
-        let updated = await inforproduct.update(req.body, {
-            where: { infor_product: req.params.id }
+        let updated = await productStorage.update(req.body, {
+            where: { color_id: req.params.id }
         });
         if (updated[0] > 0) {
             responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
@@ -63,10 +51,10 @@ const updateinforproduct = async (req, res) => {
     }
 };
 
-const deleteinforproduct = async (req, res) => {
+const deleteProduct_colors = async (req, res) => {
     try {
-        let deleted = await inforproduct.destroy({
-            where: { infor_product: req.params.id }
+        let deleted = await productStorage.destroy({
+            where: { color_id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
@@ -79,9 +67,9 @@ const deleteinforproduct = async (req, res) => {
 };
 
 export {
-    getinforproduct,
-    getinforproductById,
-    createinforproduct,
-    updateinforproduct,
-    deleteinforproduct
+    getProduct_colors,
+    getProduct_colorsById,
+    createProduct_colors,
+    updateProduct_colors,
+    deleteProduct_colors
 };

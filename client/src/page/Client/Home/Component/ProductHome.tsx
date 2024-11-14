@@ -17,7 +17,7 @@ function ProductHome() {
 
   // Xáo trộn và chọn ngẫu nhiên 12 sản phẩm
   useEffect(() => {
-    if (listProducts.length > 0) {
+    if (listProducts?.length > 0) {
       const shuffledProducts = [...listProducts]
         .sort(() => 0.5 - Math.random()) // Xáo trộn danh sách
         .slice(0, 12); // Lấy 12 sản phẩm ngẫu nhiên
