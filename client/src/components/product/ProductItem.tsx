@@ -16,11 +16,27 @@ import { NavLink } from "react-router-dom";
 import useSweetAlert from "../../hooks/Notification.hook";
 import { formatCurrencyVND } from "../../utils";
 import toast from "react-hot-toast";
+import { checkFavouriteProducts, createFavouriteProduct, getFavouriteProducts } from "../../service/product/favourite.service";
+import { BiSolidLike } from "react-icons/bi";
+import { AiOutlineLike } from "react-icons/ai";
 
 function ProductItem(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const {showAlert}=useSweetAlert()
+  const user: any = useAppSelector((state) => state.user.user);
+  const token:any=useAppSelector(state=>state.user.token)
+  // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
+  const [favouriteProduct, setFavouriteProduct] = useState([]);
+
+  useEffect(() => {
+    const getFavourite = async () => {
+      const response = await getFavouriteProducts();
+      setFavouriteProduct(response.data.content); // Lưu lại danh sách sản phẩm yêu thích
+    };
+    getFavourite();
+  }, []);
+
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
     const productToCart = {
@@ -39,14 +55,36 @@ function ProductItem(props) {
     transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isvisibleProduct ? 1 : 0,
   });
-
+  const handleFavouriteProduct = async (id: number) => {
+    const product = { product_id: id };
+    await createFavouriteProduct(product);
+  
+    // Cập nhật lại danh sách yêu thích
+    const response = await getFavouriteProducts();
+    setFavouriteProduct(response.data.content);
+    toast.success('Đã thêm vào yêu thích!');
+  };
   return (
 <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
   <div className="absolute top-4 right-4 flex flex-col gap-3">
     {/* Icon yêu thích */}
     <div className="bg-black p-2 rounded-full text-white cursor-pointer hover:bg-gray-800">
       <Tooltip title="Thêm yêu thích">
-        <CiHeart className="text-3xl" />
+        <CiHeart
+              //         {
+              //           token
+              //           ?
+              // (          Array.isArray(favouriteProduct) && favouriteProduct.some(item => item?.user_id === user?.user_id)
+              //             ? <BiSolidLike />
+              //             : <AiOutlineLike />)
+              //             :null
+
+              //         }
+
+         
+         onClick={()=>{
+          handleFavouriteProduct(props.product.product_id)
+        }} />
       </Tooltip>
     </div>
   

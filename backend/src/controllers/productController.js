@@ -159,7 +159,7 @@ const getProductByIdCatelogryDad = async (req, res) => {
 
         // Add `category` to the where clause if it exists
         if (category) {
-            whereClause.category_name = category;
+            whereClause.category_id = category;
         }
 
         const products = await Products.findAll({

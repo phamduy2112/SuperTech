@@ -10,6 +10,7 @@ import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
 import { setOrderId } from '../../../redux/order/Order.slice';
+import toast from 'react-hot-toast';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
@@ -46,6 +47,10 @@ function Pay() {
   const [districtsCity,setDistrictsCity]=useState([])
   
   useEffect(() => {
+    if(!(listCart.length>0)){
+      toast.success("Bạn cần thêm sản phẩm")
+      navigate("/")
+    }
     const fetchProvinces = async () => {
       try {
         // Gọi API bằng async/await
@@ -137,7 +142,9 @@ function Pay() {
     }
   };
   return (
+
     <Container>
+    
     <div className=' py-6 text-[1.5rem]'>
           <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
             <a href="/" className="text-customColor hover:underline">

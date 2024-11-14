@@ -1,22 +1,28 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button, Dropdown } from 'antd';
 import { FaBars, FaUserCircle } from 'react-icons/fa';
-import { getUserThunk } from '../../../../redux/user/user.slice';
+import { getUserThunk, setToken } from '../../../../redux/user/user.slice';
 import { IMG_BACKEND } from '../../../../constants';
+import toast from 'react-hot-toast';
 
 function DropdownUser() {
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
-
+  const navigate=useNavigate()
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
 
   // Check if the token exists in local storage
-  const token = localStorage.getItem('token');
+  const token = useAppSelector((state)=>state.user.token)
+  const logout=()=>{
+    dispatch(setToken(null))
+    toast.success('Đăng xuất thành công!');
+    navigate("/đăng-nhập")
 
+  }
   const items = [
     {
       key: "1",
@@ -29,7 +35,7 @@ function DropdownUser() {
     {
       key: "2",
       label: token ? (
-        <button>Đăng xuất</button>
+        <button onClick={()=>{logout()}}>Đăng xuất</button>
       ) : (
         <NavLink to={"/đăng-kí"}>Đăng Kí</NavLink>
       ),

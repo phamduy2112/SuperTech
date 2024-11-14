@@ -5,8 +5,11 @@ export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
   async (name:any) => {
     try {
-      const resp = await getProductCateloriesByDad(name.categoryDad,name.category);
+      console.log(name.category);
+      const resp = await getProductCateloriesByDad(name.category_dad,name.category);
       return resp.data.content;
+    
+      
     } catch (e) {
       console.log(e);
     }

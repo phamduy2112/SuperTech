@@ -65,7 +65,9 @@ function Footer() {
             <div>
                 <h4 className='md:text-[1.8rem] sm:text-[1.9rem] font-semibold'>Liên hệ</h4>
                 <p className='md:text-[1.6rem] my-[1rem] sm:text-[1.8rem]'>Công Viên Phần Mềm Quang Trung, Tân Chánh Hiệp, Quận 12, Hồ ChÍ Minh, Việt Nam</p>
-                <p><FaFacebook className='text-[1.7rem]'/></p>
+                <p>
+                  <FaFacebook className='text-[1.7rem]'/>
+                  </p>
               </div>
           </div>
           {

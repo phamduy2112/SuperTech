@@ -15,6 +15,22 @@ const getorder = async (req, res) => {
     }
 };
 
+const getOrdersForToday = async () => {
+    const today = new Date();
+    const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
+    const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
+  
+    const orders = await order.findAll({
+      where: {
+        order_date: {
+          [Op.between]: [startOfToday, endOfToday],
+        },
+      },
+    });
+  
+    return orders;
+  };
+
 const getOrderById = async (req, res) => {
     
     try {
@@ -176,5 +192,6 @@ export {
     createorder,
     updateorder,
     deleteorder,
-    changeStatusOrder
+    changeStatusOrder,
+    getOrdersForToday
 };

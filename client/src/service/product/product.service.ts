@@ -1,12 +1,12 @@
 import { axiosWithAuth } from "../axios.config";
 
 export const getProductCateloriesByDad = (name:string,category:number) => {
-    return axiosWithAuth(`/list-product-catelories?category_dad=${name}&category=${category}`, {
-      method: "get",
-      
-    }
- 
-  );
+  const url = `/list-product-catelories?category_dad=${name}` + (category ? `&category=${category}` : "");
+
+  return axiosWithAuth(url, {
+    method: "get",
+  });
+
   };
 export const getProducts = () => {
     return axiosWithAuth(`/products`, {

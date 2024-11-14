@@ -5,10 +5,9 @@ import { middleToken } from '../config/jwt.js';
 import { getfavoriteproduct, getfavoriteproductById, createfavoriteproduct, updatefavoriteproduct, deletefavoriteproduct } from '../controllers/favoriteproductController.js';
 const favoriteproductRouter = express.Router();
 
-favoriteproductRouter.get('/favoriteproduct', getfavoriteproduct);
-favoriteproductRouter.get('/favoriteproduct/:id', getfavoriteproductById);
-favoriteproductRouter.post('/favoriteproduct-create',middleToken, createfavoriteproduct);
-favoriteproductRouter.put('/favoriteproduct-edit/:id',middleToken, updatefavoriteproduct);
+favoriteproductRouter.get('/favorite-product', middleToken,getfavoriteproduct);
+favoriteproductRouter.get('/favorite-product/:id',middleToken, getfavoriteproductById);
+favoriteproductRouter.post('/favorite-product-create',middleToken, createfavoriteproduct);
 favoriteproductRouter.delete('/favoriteproduct-delete/:id',middleToken, deletefavoriteproduct);
 
 export default favoriteproductRouter;
