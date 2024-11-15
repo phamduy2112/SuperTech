@@ -27,10 +27,10 @@ function AdminAddProduct() {
 
   useEffect(()=>{
    
-    dispatch(getCatelogryThunk());
+    dispatch(getCatelogryThunk(""));
 
   },[dispatch])
-  const formattedCategories = listCatelogry.map(category => ({
+  const formattedCategories = listCatelogry?.map(category => ({
     value: category.category_id,   // Make sure category.id is available
     label: category.category_name, // Make sure category.name is available
     category_dad:category.category_dad
@@ -302,8 +302,8 @@ dispatch(createProductAdminThunk(dataInforProduct))
                       className="w-20 rounded-md"
                   />
                   <div>
-                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item.color}</h4>
-                      <p className="text-red-500 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage.map((item)=>{
+                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
+                      <p className="text-red-500 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
                         return item.storage
                       })}</p>
                   </div>
