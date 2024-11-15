@@ -16,6 +16,8 @@ import {
   userDetail,
   verifyOldPassword,
   createUser,
+  checkuserdetailadmin,
+  UpdateUsersAdmin,
 } from "../controllers/userController.js";
 import isAuthenticated from "../config/auth.js";
 import { middleToken } from "../config/jwt.js";
@@ -40,5 +42,7 @@ userRouter.post("/forget-check-code", forgetCheckCode);
 userRouter.put("/forget-reset-password", resetPasswordNoToken);
 
 userRouter.post("/create-users", createUser);
+userRouter.get("/user-detail-admin/:id", checkuserdetailadmin);
+userRouter.get("/update-users-admin/:id", UpdateUsersAdmin);
 
 export default userRouter;

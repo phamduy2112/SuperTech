@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, DeleteStaffSend, createStaff } from '../../service/user/user.service';
-import { DataStaffInterface } from "../../page/Admin/User/Component/DataStaff";
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, DeleteStaffSend, createStaff, getUserAdmin, UpdateStaff } from '../../service/user/user.service';
+import { DataStaffInterface, UpdateStaffInterface } from "../../page/Admin/User/Component/DataStaff";
 import Swal from "sweetalert2";
 
 
@@ -37,8 +37,6 @@ export const createStaffThunk = createAsyncThunk(
   async (DataStaff: DataStaffInterface) => {
     try {
       const resp = await createStaff(DataStaff);
-
-
       if (resp.data.statusCode === 200) {
         return resp.data.content;
       } else {
@@ -58,6 +56,46 @@ export const createStaffThunk = createAsyncThunk(
     }
   },
 );
+
+export const UpdateStaffThunk = createAsyncThunk(
+  "UpdateStaffThunk", async (UpdateStaffSend:UpdateStaffInterface) => {  // Destructure đúng cách
+
+    try {
+      const resp = await UpdateStaff(UpdateStaffSend);
+      if (resp.data.statusCode === 200) {
+        return resp.data.content;
+      } else {
+        Swal.fire({
+          title: `Thất bại lỗi ${resp.data.statusCode}`,
+          text: `${resp.data.message}`,
+          icon: 'error',
+          showCancelButton: true,
+          cancelButtonText: `Thử lại`,
+          cancelButtonColor: "#d33",
+          showConfirmButton: false
+        })
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
+
+export const getUserAdminThunk = createAsyncThunk(
+  "getUserAdminThunk",
+  async (id: number) => {
+    try {
+      const resp = await getUserAdmin(id);
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
+
 
 export const getUserThunk = createAsyncThunk(
   "getUserThunk",
@@ -131,6 +169,7 @@ const initialState = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Alluser: [] as any[],
   user: {},
+  userAdmin: {},
   token: null,
   thongBao: "",
   imgUser: ""
@@ -163,6 +202,16 @@ const UserSlice = createSlice({
     builder
       .addCase(createStaffThunk.fulfilled, (state, { payload }) => {
         state.Alluser = payload;
+      })
+
+    builder
+      .addCase(getUserAdminThunk.fulfilled, (state, { payload }) => {
+        state.userAdmin = payload;
+      })
+
+    builder
+      .addCase(UpdateStaffThunk.fulfilled, (state, { payload }) => {
+        state.userAdmin = payload;
       })
     //Ở trên là khu vực builder của devTri
 

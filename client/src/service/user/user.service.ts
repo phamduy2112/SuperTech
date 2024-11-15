@@ -1,5 +1,8 @@
 import { Header } from "antd/es/layout/layout";
-import { DataStaffInterface } from "../../page/Admin/User/Component/DataStaff";
+import {
+  DataStaffInterface,
+  UpdateStaffInterface,
+} from "../../page/Admin/User/Component/DataStaff";
 import { axiosWithAuth } from "../axios.config";
 
 export const getAllUser = () => {
@@ -7,14 +10,31 @@ export const getAllUser = () => {
     method: "get",
   });
 };
+
+export const getUserAdmin = (id: number) => {
+  return axiosWithAuth(`/user-detail-admin/${id}`, {
+    method: "get",
+  });
+};
+
 export const createStaff = async (DataStaff: DataStaffInterface) => {
-    return axiosWithAuth("/create-users", {
-      method: "post",
-      data: DataStaff.staffData,
-      headers: {
-        token: DataStaff.tokenStaff,
-      },
-    });
+  return axiosWithAuth("/create-users", {
+    method: "post",
+    data: DataStaff.staffData,
+    headers: {
+      token: DataStaff.tokenStaff,
+    },
+  });
+};
+export const UpdateStaff = async (UpdateStaffSend: UpdateStaffInterface) => {
+  console.log(UpdateStaffSend);
+  return axiosWithAuth(`/update-users-admin/${UpdateStaffSend.userId}`, {
+    method: "put",
+    data: UpdateStaffSend.DataStaff.staffData,
+    headers: {
+      token: UpdateStaffSend.DataStaff.tokenStaff,
+    },
+  });
 };
 
 export const DeleteStaffSend = (IdStaff: number) => {

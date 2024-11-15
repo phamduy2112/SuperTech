@@ -98,12 +98,29 @@ const createUser = async (req, res) => {
       {
         success: true,
       },
-      "Thêm nhân viên thành thành công!",
+      "Thêm thành thành công!",
       200
     );
   } catch (e) {
     console.log(e);
   }
+};
+
+const checkuserdetailadmin = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+    const user = await User.findByPk(user_id, {
+      attributes: { exclude: ["user_password"] },
+    });
+    responseSend(res, user, "Thành công!", 200);
+  } catch (error) {
+    console.log(e);
+  }
+};
+
+const UpdateUsersAdmin = async (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
 };
 
 const login = async (req, res) => {
@@ -539,4 +556,6 @@ export {
   resetPasswordNoToken,
   deleteEmployee,
   createUser,
+  checkuserdetailadmin,
+  UpdateUsersAdmin,
 };

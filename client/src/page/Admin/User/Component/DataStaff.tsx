@@ -38,17 +38,18 @@ export const StaffGender = [
 
 
 export interface StaffInterface {
-  user_name: string,
-  user_email: string,
-  user_password: string,
-  user_address: string,
-  user_phone: string,
-  user_role: number,
-  level: number,
-  user_gender: number | null,
-  user_birth: string,
-  user_time: string,
-  user_image: string,
+  user_name?: string,
+  user_email?: string,
+  user_password?: string,
+  user_address?: string,
+  user_phone?: string,
+  user_role?: number | null,
+  level?: number | null,
+  user_gender?: number | null,
+  user_birth?: string,
+  user_time?: string,
+  user_image?: string,
+  [key: string]: string | number | null | undefined;
 
 
 }
@@ -56,5 +57,9 @@ export interface StaffInterface {
 
 export interface DataStaffInterface {
   staffData: StaffInterface,
-  tokenStaff:string
+  tokenStaff: string
+}
+export interface UpdateStaffInterface {
+  userId: number,
+  DataStaff: DataStaffInterface;
 }
