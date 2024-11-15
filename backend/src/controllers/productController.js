@@ -1,7 +1,6 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-import categories from "../models/categories.js";
 import { Op } from "sequelize";
 import cloudinary from '../config/cloudinaryConfig.js';
 let models = initModels(sequelize); 
@@ -153,7 +152,7 @@ const createProduct = async (req, res) => {
             infor_product,
             category_id,
         });
-        responseSend(res, newProduct, "Thêm Thành công!", 201);
+        responseSend(res, newProduct, "Thêm Thành công!", 200);
     } catch (error) {
         console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);

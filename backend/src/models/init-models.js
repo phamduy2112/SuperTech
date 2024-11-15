@@ -1,6 +1,6 @@
 import _sequelize from "sequelize";
 const DataTypes = _sequelize.DataTypes;
-import _bank from  "./bank.js";
+import _bankauto from  "./bankauto.js";
 import _banner from  "./banner.js";
 import _categories from  "./categories.js";
 import _chat from  "./chat.js";
@@ -26,7 +26,7 @@ import _user from  "./user.js";
 import _user_discounts from  "./user_discounts.js";
 
 export default function initModels(sequelize) {
-  const bank = _bank.init(sequelize, DataTypes);
+  const bankauto = _bankauto.init(sequelize, DataTypes);
   const banner = _banner.init(sequelize, DataTypes);
   const categories = _categories.init(sequelize, DataTypes);
   const chat = _chat.init(sequelize, DataTypes);
@@ -55,8 +55,8 @@ export default function initModels(sequelize) {
   categories.hasMany(products, { as: "products", foreignKey: "category_id"});
   likes.belongsTo(comment_product, { as: "comment", foreignKey: "comment_id"});
   comment_product.hasMany(likes, { as: "likes", foreignKey: "comment_id"});
-  replies_comment_product.belongsTo(comment_product, { as: "parent_comment", foreignKey: "comment_id"});
-  comment_product.hasMany(replies_comment_product, { as: "replies", foreignKey: "comment_id"});
+  replies_comment_product.belongsTo(comment_product, { as: "commentProduct", foreignKey: "comment_id"});
+  comment_product.hasMany(replies_comment_product, { as: "repliesToComment", foreignKey: "comment_id"});
   order.belongsTo(discount, { as: "discount_discount", foreignKey: "discount"});
   discount.hasMany(order, { as: "orders", foreignKey: "discount"});
   user_discounts.belongsTo(discount, { as: "discount", foreignKey: "discount_id"});
@@ -113,7 +113,7 @@ export default function initModels(sequelize) {
   user.hasMany(user_discounts, { as: "user_discounts", foreignKey: "user_id"});
 
   return {
-    bank,
+    bankauto,
     banner,
     categories,
     chat,
