@@ -50,6 +50,9 @@ const getOrderById = async (req, res) => {
                           SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
                         )`),
                       },
+                      model:models.discount,
+                      as:"discount_discount",
+                     
                 }
             ]
         });
@@ -106,7 +109,7 @@ const createorder = async (req, res) => {
             order_total_quatity,
             order_status,
             pay_id,
-            // discount,
+            discount,
             address,
             phone_number
         } = req.body;
@@ -121,6 +124,7 @@ const createorder = async (req, res) => {
             order_total_quatity,
             order_status,
             pay_id:null,
+            discount,
             user_id,
             address,
             phone_number

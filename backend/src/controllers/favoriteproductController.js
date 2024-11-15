@@ -54,7 +54,7 @@ const getfavoriteproductById = async (req, res) => {
     }
 };
 
-const createfavoriteproduct = async (req, res) => {
+const createDetelefavoriteproduct = async (req, res) => {
     try {
         const user_id=req.id;
         const {product_id}=req.body
@@ -62,6 +62,17 @@ const createfavoriteproduct = async (req, res) => {
             user_id,
             product_id,
         }
+        const existingLike = await favoriteproduct.findOne({
+            where: { user_id, product_id },
+          });
+      
+          if (existingLike) {
+            
+            await existingLike.destroy();
+            return         responseSend(res, existingLike, "Xóa Thành công!", 201);
+
+          }
+      
         let newfavoriteproduct = await favoriteproduct.create(newCreateFavouriteProduct);
         responseSend(res, newfavoriteproduct, "Thêm Thành công!", 201);
     } catch (error) {
@@ -103,7 +114,7 @@ const deletefavoriteproduct = async (req, res) => {
 export {
     getfavoriteproduct,
     getfavoriteproductById,
-    createfavoriteproduct,
+    createDetelefavoriteproduct,
     updatefavoriteproduct,
     deletefavoriteproduct
 };

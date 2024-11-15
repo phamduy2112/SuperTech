@@ -49,7 +49,7 @@ export const deleteCategoryThunk=createAsyncThunk("deleteCategoryThunk",
 export const putCategoryThunk=createAsyncThunk("putCategoryThunk",
   async(category:any,{dispatch})=>{
     try{
-      const resp = await putCategory(category.data,category.id);
+      const resp = await putCategory(category.values,category.id);
       const response = await dispatch(getCatelogryThunk(''));
 
       return response.payload;

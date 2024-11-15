@@ -28,6 +28,10 @@ function Pay() {
     const itemTotalPrice = item.quantity * priceAfterDiscount; // Tính tổng giá của item
     return total + itemTotalPrice; // Cộng dồn vào total
   }, 0);
+  const getDiscount=useAppSelector(state=>state.cart.discount);
+  const getShip=useAppSelector(state=>state.cart.ship);
+   
+  const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
   const [formData, setFormData] = useState({
     name: user?.user_name || '', // Gán giá trị ban đầu cho name
@@ -45,7 +49,7 @@ function Pay() {
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
-  
+  const getDiscountId=useAppSelector((state)=>state.cart.discount_id)
   useEffect(() => {
     if(!(listCart.length>0)){
       toast.success("Bạn cần thêm sản phẩm")
@@ -113,6 +117,7 @@ function Pay() {
       order_total_quatity:+totalItem,
       order_status:0,
       user_id:user.user_id,
+      discount:getDiscountId,
       phone_number:formData.sdt,
       address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
@@ -420,12 +425,17 @@ function Pay() {
                     </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-medium">Giao hàng</span>
-                  <span className="font-semibold text-[1.8rem]">0</span>
+                  <span className="font-medium">Giảm giá</span>
+                  <span className="font-semibold text-[1.8rem]">{getDiscount}%</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Giao hàng</span>
+                  <span className="font-semibold text-[1.8rem]">{formatCurrencyVND(getShip)}</span>
+                </div>
+        
                 <div className="flex justify-between border-t pt-5 font-semibold">
                   <span>Tổng tiền</span>
-                  <span className="text-red-600 text-[2.2rem]">   {formatCurrencyVND(totalPrice)}</span>
+                  <span className="text-red-600 text-[2.2rem]">   {formatCurrencyVND(totalPriceWithVoucher)}</span>
                 </div>
               </div>
 

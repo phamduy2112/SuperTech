@@ -6,13 +6,23 @@ type PrivateRouteProps = {
 };
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-  const token = useAppSelector((state) => state.user.token);
+  const login = useAppSelector((state) => state.user.login);
 
-  if (token) {
-    return <Navigate to="/đăng-nhập" replace />;
+  if (login) {
+    return <>{element}</>;
   }
 
-  return <>{element}</>;
+  return <Navigate to="/đăng-nhập" replace />;
 };
 
-export default PrivateRoute;
+const AuthRoute: React.FC<PrivateRouteProps> = ({ element }) => {
+  const login = useAppSelector((state) => state.user.login);
+
+  if (login) {
+    return <Navigate to="/" replace />; // Nếu đã đăng nhập, điều hướng về trang chủ
+  }
+
+  return <>{element}</>; // Nếu chưa đăng nhập, hiển thị trang đăng nhập
+};
+
+export { PrivateRoute, AuthRoute };

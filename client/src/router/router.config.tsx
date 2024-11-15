@@ -121,7 +121,8 @@ children:[
       {
         path: "/thanh-toan",
         element: (
-          <PrivateRoute element={  <Pay />}/>
+          // <PrivateRoute element={  <Pay />}/>
+          <Pay />
         
         ),
       },
@@ -129,7 +130,8 @@ children:[
       {
         path: "/xuất-hóa-đơn",
         element: (
-          <PrivateRoute element={  <Bill />}/>
+          // <PrivateRoute element={  <Bill />}/>
+          <Bill />
         
         ),
         

@@ -3,7 +3,7 @@ import image from '../../assets/new.png';
 import oficie from '../../assets/oficie.png';
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
 import { IoIosStar } from "react-icons/io";
-import { FaTruck } from "react-icons/fa";
+import { FaHeart, FaTruck } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { Tooltip } from "antd";
 import { IoEyeOutline } from "react-icons/io5";
@@ -21,11 +21,14 @@ import { BiSolidLike } from "react-icons/bi";
 import { AiOutlineLike } from "react-icons/ai";
 
 function ProductItem(props) {
+
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const {showAlert}=useSweetAlert()
   const user: any = useAppSelector((state) => state.user.user);
   const token:any=useAppSelector(state=>state.user.token)
+  const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
+
   // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
   const [favouriteProduct, setFavouriteProduct] = useState([]);
 
@@ -56,35 +59,40 @@ function ProductItem(props) {
     opacity: isvisibleProduct ? 1 : 0,
   });
   const handleFavouriteProduct = async (id: number) => {
-    const product = { product_id: id };
-    await createFavouriteProduct(product);
-  
-    // Cập nhật lại danh sách yêu thích
-    const response = await getFavouriteProducts();
-    setFavouriteProduct(response.data.content);
-    toast.success('Đã thêm vào yêu thích!');
+    try {
+      const product = { product_id: id };
+
+      if (isFavourited) {
+        // Nếu sản phẩm đã được yêu thích, hủy yêu thích
+        await createFavouriteProduct(product);
+        setIsFavourited(false); // Cập nhật trạng thái yêu thích
+        toast.success('Đã bỏ yêu thích sản phẩm!');
+      } else {
+        // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
+        await createFavouriteProduct(product);
+        setIsFavourited(true); // Cập nhật trạng thái yêu thích
+        toast.success('Đã thêm vào yêu thích!');
+      }
+
+      // Cập nhật lại danh sách yêu thích sau khi thao tác
+      const response = await getFavouriteProducts();
+      setFavouriteProduct(response.data.content);
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
+    }
   };
   return (
 <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
   <div className="absolute top-4 right-4 flex flex-col gap-3">
     {/* Icon yêu thích */}
-    <div className="bg-black p-2 rounded-full text-white cursor-pointer hover:bg-gray-800">
+    <div className="bg-black p-2 text-[1.5rem] rounded-full text-white cursor-pointer hover:bg-gray-800">
       <Tooltip title="Thêm yêu thích">
-        <CiHeart
-              //         {
-              //           token
-              //           ?
-              // (          Array.isArray(favouriteProduct) && favouriteProduct.some(item => item?.user_id === user?.user_id)
-              //             ? <BiSolidLike />
-              //             : <AiOutlineLike />)
-              //             :null
-
-              //         }
-
-         
-         onClick={()=>{
-          handleFavouriteProduct(props.product.product_id)
-        }} />
+     
+      {
+  Array.isArray(favouriteProduct) && favouriteProduct.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
+    ? <FaHeart   onClick={() => handleFavouriteProduct(props.product.product_id)} />
+    : <CiHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
+}
       </Tooltip>
     </div>
   

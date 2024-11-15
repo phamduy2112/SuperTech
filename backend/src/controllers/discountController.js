@@ -12,6 +12,19 @@ const getdiscount = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const createUserDiscount = async (req, res) => {
+    try {
+        const {user_id,discount_id}=req.body;
+        const user_at=new Date();
+          const newDiscount = await models.user_discounts.create({
+            user_id,discount_id,user_at
+        });
+
+        responseSend(res, newDiscount, "Thành công!", 200);
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
 
 const getdiscountById = async (req, res) => {
     try {
@@ -28,38 +41,46 @@ const getdiscountById = async (req, res) => {
 
 const creatediscount = async (req, res) => {
     try {
-        const { discount_name, discount_percent, discount_date_start, discount_date_end, condition } = req.body;
-
-        // Kiểm tra nếu ngày bắt đầu hoặc ngày kết thúc không có
-        if (!discount_date_start || !discount_date_end) {
-            return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ ngày bắt đầu và ngày kết thúc.' });
-        }
-
-        // Chuyển ngày bắt đầu và ngày kết thúc thành đối tượng Date
-        const startDate = new Date(discount_date_start);
-        const endDate = new Date(discount_date_end);
-
-        // Kiểm tra xem ngày kết thúc có lớn hơn ngày bắt đầu không
-        if (endDate <= startDate) {
-            return res.status(400).json({ message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu.' });
-        }
-
-        // Tạo mã giảm giá mới
-        const newDiscount = await sequelize.models.discount.create({
-            discount_name,
-            discount_percent,
-            discount_date_start: startDate,
-            discount_date_end: endDate,
-            condition,
+      const { discount_name, discount_percent, discount_date_start, discount_date_end, condition } = req.body;
+  
+      if (!discount_date_start || !discount_date_end) {
+        return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ ngày bắt đầu và ngày kết thúc.' });
+      }
+  
+      const startDate = new Date(discount_date_start);
+      const endDate = new Date(discount_date_end);
+  
+      if (endDate <= startDate) {
+        return res.status(400).json({ message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu.' });
+      }
+  
+      const newDiscount = await sequelize.models.discount.create({
+        discount_name,
+        discount_percent,
+        discount_date_start: startDate,
+        discount_date_end: endDate,
+        condition,
+      });
+  
+      // Tính thời gian hết hạn và lên lịch xóa
+      const expirationDate = new Date(endDate);
+      expirationDate.setDate(expirationDate.getDate() + 1); // Thêm 1 ngày sau ngày kết thúc
+      const timeUntilDeletion = expirationDate.getTime() - Date.now();
+  
+      setTimeout(async () => {
+        await sequelize.models.discount.destroy({
+          where: { id: newDiscount.id },
         });
-
-        res.status(201).json({ message: 'Thêm mã giảm giá thành công!', data: newDiscount });
+        console.log(`Đã tự động xóa mã giảm giá "${discount_name}" do đã hết hạn.`);
+      }, timeUntilDeletion);
+  
+      res.status(201).json({ message: 'Thêm mã giảm giá thành công!', data: newDiscount });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Có lỗi xảy ra khi thêm mã giảm giá.' });
+      console.error(error);
+      res.status(500).json({ message: 'Có lỗi xảy ra khi thêm mã giảm giá.' });
     }
-};
-
+  };
+  
 
 const applyDiscount = async (req, res) => {
     try {
@@ -90,20 +111,9 @@ const applyDiscount = async (req, res) => {
             return res.status(400).json({ message: 'Mã giảm giá không hợp lệ hoặc đã hết hạn.' });
         }
 
-        // Áp dụng mã giảm giá cho đơn hàng của người dùng (giả sử bạn có bảng orders)
-        const newOrder = await sequelize.models.orders.create({
-            user_id,
-            discount_code: discount.id,
-            total_amount: 100, // Giả sử tổng tiền là 100, bạn sẽ tính lại với discount
-        });
+      
 
-        // Lưu thông tin sử dụng mã giảm giá của người dùng
-        await sequelize.models.user_discounts.create({
-            user_id,
-            discount_code: discount.id,
-            used_at: new Date(),
-        });
-
+     
         res.status(201).json({ message: 'Đơn hàng đã được tạo và mã giảm giá đã được áp dụng.' });
     } catch (error) {
         console.error(error);
@@ -130,5 +140,6 @@ export {
     getdiscountById,
     creatediscount,
     applyDiscount,
+    createUserDiscount,
     deletediscount
 };
