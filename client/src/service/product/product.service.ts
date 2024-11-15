@@ -1,12 +1,12 @@
 import { axiosWithAuth } from "../axios.config";
 
-export const getProductCateloriesByDad = (name:string) => {
-    return axiosWithAuth(`/list-product-catelories?category_dad=${name}`, {
-      method: "get",
-      
-    }
- 
-  );
+export const getProductCateloriesByDad = (name:string,category:number) => {
+  const url = `/list-product-catelories?category_dad=${name}` + (category ? `&category=${category}` : "");
+
+  return axiosWithAuth(url, {
+    method: "get",
+  });
+
   };
 export const getProducts = () => {
     return axiosWithAuth(`/products`, {
@@ -48,3 +48,12 @@ export const deleteProduct=(id:number)=>{
   
   })
 }
+
+
+export const createImage = (data: FormData) => {
+  return axiosWithAuth.post(`/upload-images`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};

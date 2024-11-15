@@ -43,6 +43,10 @@ const getDetailOrderById = async (req, res) => {
                             model:models.order_status,
                             as:"order_statuses",
                            
+                        },
+                        {
+                            model:models.discount,
+                            as:"discount_discount",
                         }
                     ]
             },

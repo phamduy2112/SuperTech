@@ -45,6 +45,8 @@ import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
 import ListProduct from "../page/Client/ListProduct/ListProduct";
 import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
+import CouponSection from "../page/Client/Voucher/Voucher";
+import PrivateRoute from "./component/RouterPrivate";
 
 export const router = createBrowserRouter([
   {
@@ -59,7 +61,7 @@ export const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "/san-pham-yeu-thich/:id",
+        path: "/san-pham-yeu-thich",
         element: <FavoriteProduct />,
       },
 
@@ -83,7 +85,11 @@ export const router = createBrowserRouter([
       // user
       {
         path: "/don-hang-chi-tiet-cua-ban/:id",
-        element: <OrderDetail />,
+        element: (
+          <PrivateRoute element={  <OrderDetail />}/>
+        
+        ),
+       
       },
     
 {
@@ -92,28 +98,43 @@ element:<User/>,
 children:[
   {
     path: "/người-dùng",
-    element: <UserDetail />,
+    
+    element:     <PrivateRoute element={  <UserDetail />}/>,
   },
   {
     path: "/don-hang-cua-ban",
-    element: <Order />,
+    element: <PrivateRoute element={  <Order />}/>,
   },
 
 ]
 },
-      
+      {
+        path:"/giam-gia",
+        element:<CouponSection/>
+      },
       // Mua hàng
       {
         path: "/giỏ-hàng",
         element: <Cart />,
       },
+
       {
         path: "/thanh-toan",
-        element: <Pay />,
+        element: (
+          // <PrivateRoute element={  <Pay />}/>
+          <Pay />
+        
+        ),
       },
+      
       {
         path: "/xuất-hóa-đơn",
-        element: <Bill />,
+        element: (
+          // <PrivateRoute element={  <Bill />}/>
+          <Bill />
+        
+        ),
+        
       },
       // các trang khác
       {

@@ -15,6 +15,22 @@ const getorder = async (req, res) => {
     }
 };
 
+const getOrdersForToday = async () => {
+    const today = new Date();
+    const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
+    const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
+  
+    const orders = await order.findAll({
+      where: {
+        order_date: {
+          [Op.between]: [startOfToday, endOfToday],
+        },
+      },
+    });
+  
+    return orders;
+  };
+
 const getOrderById = async (req, res) => {
     
     try {
@@ -34,6 +50,9 @@ const getOrderById = async (req, res) => {
                           SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
                         )`),
                       },
+                      model:models.discount,
+                      as:"discount_discount",
+                     
                 }
             ]
         });
@@ -90,7 +109,7 @@ const createorder = async (req, res) => {
             order_total_quatity,
             order_status,
             pay_id,
-            // discount,
+            discount,
             address,
             phone_number
         } = req.body;
@@ -105,6 +124,7 @@ const createorder = async (req, res) => {
             order_total_quatity,
             order_status,
             pay_id:null,
+            discount,
             user_id,
             address,
             phone_number
@@ -176,5 +196,6 @@ export {
     createorder,
     updateorder,
     deleteorder,
-    changeStatusOrder
+    changeStatusOrder,
+    getOrdersForToday
 };

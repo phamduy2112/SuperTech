@@ -171,6 +171,7 @@ const initialState = {
   user: {},
   userAdmin: {},
   token: null,
+  login:false,
   thongBao: "",
   imgUser: ""
 };
@@ -181,6 +182,9 @@ const UserSlice = createSlice({
   reducers: {
     setAllUser: (state, { payload }) => {
       state.Alluser = payload;
+    },
+    setLogin: (state, { payload }) => {
+      state.login = payload;
     },
     setUserDetail: (state, { payload }) => {
       state.user = payload;
@@ -239,6 +243,6 @@ const UserSlice = createSlice({
   },
 });
 
-export const { setAllUser, setUserDetail, setToken } = UserSlice.actions;
+export const { setAllUser, setUserDetail, setToken,setLogin } = UserSlice.actions;
 
 export const userReducer = UserSlice.reducer;

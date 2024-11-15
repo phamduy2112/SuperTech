@@ -8,6 +8,7 @@ import ModalAdminProduct from './ModalAdminProduct';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
 import { createInforProductAdminThunk, createProductAdminThunk, deleteProductAdminThunk } from '../../../../redux/product/product.slice';
+import { IoMdClose } from 'react-icons/io';
 
 
 
@@ -35,35 +36,7 @@ function AdminAddProduct() {
     category_dad:category.category_dad
   }));
 
-  const Datacpu = [
-    {
-      value: '1',
-      label: 'CPU Level 1',
-    },
-    {
-      value: '2',
-      label: 'CPU Level 2',
-    },
-    {
-      value: '3',
-      label: 'CPU Level 3',
-    },
-  ];
 
-  const Dataram = [
-    {
-      value: '1',
-      label: 'RAM Level 1',
-    },
-    {
-      value: '2',
-      label: 'RAM Level 2',
-    },
-    {
-      value: '3',
-      label: 'RAM Level 3',
-    },
-  ];
 
   const Datahe = [
     {
@@ -81,28 +54,6 @@ function AdminAddProduct() {
   ];
 
   
-
-  const Dataman = [
-    { label: 'Điện thoại', value: 'phone' },
-    { label: 'Laptop', value: 'laptop' },
-    { label: 'Máy tính bảng', value: 'tablet' }
-    // ... Thêm các lựa chọn khác nếu cần
-  ];
-
-  const Datapin = [
-    {
-      value: '1',
-      label: 'Pin Level 1',
-    },
-    {
-      value: '2',
-      label: 'Pin Level 2',
-    },
-    {
-      value: '3',
-      label: 'Pin Level 3',
-    },
-  ];
 
 
  // Initial values của form
@@ -340,8 +291,11 @@ dispatch(createProductAdminThunk(dataInforProduct))
               <div
                   key={item.color}
               
-                  className={`flex w-[25%] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
+                  className={`relative flex w-[25%] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
               >
+                <div className='absolute right-0 top-0 text-[1.5rem]'>
+                  <IoMdClose />
+                </div>
                   <img 
                       src='https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg'
                       alt={item.color} 

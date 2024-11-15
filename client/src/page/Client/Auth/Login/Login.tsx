@@ -13,7 +13,7 @@ import { saveLocalStorage } from "../../../../utils";
 import FacebookLogin from 'react-facebook-login';
 import useSweetAlert from "../../../../hooks/Notification.hook";
 import { useAppDispatch } from "../../../../redux/hooks";
-import { setToken } from "../../../../redux/user/user.slice";
+import { setLogin, setToken } from "../../../../redux/user/user.slice";
 
 function Login() {
   const navigate = useNavigate();
@@ -50,6 +50,7 @@ function Login() {
         });
        
         const token = res.data.content.token; 
+        dispatch(setLogin(true))
         saveLocalStorage("token",token)
         dispatch(setToken(token))
         navigate("/")

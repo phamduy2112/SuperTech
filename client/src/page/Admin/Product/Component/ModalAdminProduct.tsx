@@ -7,20 +7,14 @@ import { useAppDispatch } from '../../../../redux/hooks';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { setProductColors } from '../../../../redux/product/product.slice';
+import { createImage } from '../../../../service/product/product.service';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const validationSchema = Yup.object().shape({
   color: Yup.string().required('Màu sắc không được để trống'),
   quantity: Yup.number().min(0, 'Số lượng không hợp lệ').required('Số lượng không được để trống'),
-//   capacity: Yup.string().when('showDetails', {
-//     is: true,
-//     then: Yup.string().required('Dung lượng không được để trống')
-//   }),
-//   additionalPrice: Yup.number().when('showDetails', {
-//     is: true,
-//     then: Yup.number().min(0, 'Giá không hợp lệ').required('Giá cộng thêm không được để trống')
-//   }),
+
 });
 
 function ModalAdminProduct() {
@@ -50,17 +44,29 @@ function ModalAdminProduct() {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-
+  const handleImageUpload = async (formData: FormData) => {
+    try {
+      const response = await createImage(formData);
+      console.log(response);
+      
+      console.log('Image uploaded successfully:', response.data);
+      // Handle success response, such as showing a success message or updating state
+    } catch (error) {
+      console.error('Image upload failed:', error);
+      // Handle error, such as showing an error message to the user
+    }
+  };
   const handleSubmit = async (values: any) => {
     const formData = new FormData();
-
+  
     // Append each file to FormData
-    fileList.forEach((file) => {
+    fileList.forEach((file, index) => {
       if (file.originFileObj) {
-        formData.append('images', file.originFileObj);
+        const imageKey = `image_${["one", "two", "three", "four", "five", "six", "seven"][index]}`;
+        formData.append(imageKey, file.originFileObj); // Ensure file is appended
       }
     });
-
+  
     // Append form values to FormData
     formData.append('color', values.color);
     formData.append('quantity', values.quantity.toString());
@@ -68,28 +74,50 @@ function ModalAdminProduct() {
       formData.append('capacity', values.capacity);
       formData.append('additionalPrice', values.additionalPrice.toString());
     }
-
+  
     try {
-      console.log(fileList);
-      console.log(values);
+      // Upload image and log the response to confirm `image_id` structure
+      const response = await createImage(formData);
+      console.log('Upload response:', response);
+  
+      // Verify response path to `image_id`
+      const image_id = response.data?.data?.image_id; // Adjust if necessary
+  
+      if (!image_id) {
+        console.error('Image ID not found in the response:', response);
+        return;
+      }
+  
+      // Dispatch action with the obtained `image_id`
       dispatch(setProductColors({
-        color:values.color,
-        quantity:values.quantity,
-        productStorage:[
-            {
-                storage:values.capacity,
-                storage_price:values.additionalPrice,
-                
-            }
-            
+        color: values.color,
+        quantity: values.quantity,
+        image_id: image_id, // Include image_id here
+        productStorage: [
+          {
+            storage: values.capacity,
+            storage_price: values.additionalPrice,
+          }
         ]
-      }))
-
+      }));
+  
+      console.log('Product color saved successfully:', {
+        color: values.color,
+        quantity: values.quantity,
+        image_id,
+        productStorage: [
+          {
+            storage: values.capacity,
+            storage_price: values.additionalPrice,
+          }
+        ]
+      });
+  
     } catch (error) {
       console.error('Upload failed', error);
     }
   };
-
+  
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowDetails(e.target.checked);
   };

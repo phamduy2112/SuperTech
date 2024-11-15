@@ -1,111 +1,46 @@
 import { GetProp, Select, Upload, UploadFile } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
 import { useParams } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../../redux/hooks';
+import { getProductByIdThunk } from '../../../../redux/product/product.slice';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import ModalAdminProduct from './ModalAdminProduct';
+import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
-function AdminEditProduct() {
+function AdminEditProduct(props) {
+  const [showForm, setShowForm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   const { id } = useParams();
+  const numericId = Number(id); // Ép chuỗi id thành số
+const dispatch=useDispatch()
+const productDetail=useAppSelector((state)=>state.product.productDetail)
+console.log(productDetail);
+const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
 
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://thanhnien.mediacdn.vn/Uploaded/hienth/2022_11_19/316091470-2471686993007760-1140655755716974663-n-1348.jpeg',
-    },
-    {
-      uid: '-2',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://thanhnien.mediacdn.vn/Uploaded/hienth/2022_11_19/316091470-2471686993007760-1140655755716974663-n-1348.jpeg',
-    },
-    {
-      uid: '-3',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://thanhnien.mediacdn.vn/Uploaded/hienth/2022_11_19/316091470-2471686993007760-1140655755716974663-n-1348.jpeg',
-    },
-    {
-      uid: '-4',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://thanhnien.mediacdn.vn/Uploaded/hienth/2022_11_19/316091470-2471686993007760-1140655755716974663-n-1348.jpeg',
-    },
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://thanhnien.mediacdn.vn/Uploaded/hienth/2022_11_19/316091470-2471686993007760-1140655755716974663-n-1348.jpeg',
-    },
-  ]);
+const formattedCategories = listCatelogry.map(category => ({
+  value: category.category_id,   // Make sure category.id is available
+  label: category.category_name, // Make sure category.name is available
+  category_dad:category.category_dad
+}));
+useEffect(()=>{
+  if (!isNaN(numericId)) {
+    dispatch(getProductByIdThunk(numericId));
 
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-  };
+  }
+  dispatch(getCatelogryThunk());
 
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as FileType);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-  const Datasao = [
-    {
-      value: '1',
-      label: '⭐',
-    },
-    {
-      value: '2',
-      label: '⭐⭐',
-    },
-    {
-      value: '3',
-      label: '⭐⭐⭐',
-    },
-  ]
-  const Datacpu = [
-    {
-      value: '1',
-      label: 'CPU Level 1',
-    },
-    {
-      value: '2',
-      label: 'CPU Level 2',
-    },
-    {
-      value: '3',
-      label: 'CPU Level 3',
-    },
-  ];
+},[numericId,dispatch])
+ 
 
-  const Dataram = [
-    {
-      value: '1',
-      label: 'RAM Level 1',
-    },
-    {
-      value: '2',
-      label: 'RAM Level 2',
-    },
-    {
-      value: '3',
-      label: 'RAM Level 3',
-    },
-  ];
 
   const Datahe = [
     {
@@ -122,66 +57,6 @@ function AdminEditProduct() {
     },
   ];
 
-  const Datakho = [
-    {
-      value: '1',
-      label: 'Storage Level 1',
-    },
-    {
-      value: '2',
-      label: 'Storage Level 2',
-    },
-    {
-      value: '3',
-      label: 'Storage Level 3',
-    },
-  ];
-
-  const Dataman = [
-    {
-      value: '1',
-      label: 'Mainboard Level 1',
-    },
-    {
-      value: '2',
-      label: 'Mainboard Level 2',
-    },
-    {
-      value: '3',
-      label: 'Mainboard Level 3',
-    },
-  ];
-
-  const Datapin = [
-    {
-      value: '1',
-      label: 'Pin Level 1',
-    },
-    {
-      value: '2',
-      label: 'Pin Level 2',
-    },
-    {
-      value: '3',
-      label: 'Pin Level 3',
-    },
-  ];
-
-
-  const Dataloai = [
-    {
-      value: 'Điện thoại',
-      label: 'Điện',
-    },
-    {
-      value: 'Máy tính',
-      label: 'Máy tinh',
-    },
-    {
-      value: 'Tai nghe',
-      label: 'Tai nghe',
-    },
-  ]
   const Datagiamgia = [
     {
       value: '10%',
@@ -197,17 +72,7 @@ function AdminEditProduct() {
     },
 
   ]
-  const Datamau = [
-    {
-      value: 'Xanh',
-      label: 'Xanh',
-    },
-    {
-      value: 'Vàng',
-      label: 'Vàng',
-    },
-
-  ]
+ 
   const [value, setValue] = useState('')
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -229,234 +94,250 @@ function AdminEditProduct() {
 
     ['clean']
   ];
+ 
 
-
+ // Initial values của form
+ const initialValues = {
+  category: '',
+  price: '',
+  discount:0,
+  product_name:productDetail.product_name,
+  hot:0,
+  quantity:0,
+  infor_screen:"",
+  infor_system:"",
+  infor_cpu:"",
+  infor_ram:"",
+  moTa:"",
+};
+const validationSchema = Yup.object({
+  // category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
+  // price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
+  // Thêm các validation cho các trường khác nếu cần
+});
 
   return (
     <div className='flex-1 bg-[#f2edf3]  grid xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
       <div className='bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col '>
         <span className='text-[20px] font-semibold'>Sửa Sản Phẩm {id} </span>
-        <form action="" className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Loại</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn loại "
-              optionFilterProp="label"
-              options={Dataloai}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+        <Formik
+  initialValues={initialValues}
+  validationSchema={validationSchema}
+  onSubmit={(values) => {
+  
 
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giá sản phẩm</label>
-            <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+const dataInforProduct={
+  infor_screen:values.infor_screen,
+  infor_system:values.infor_system,
+  infor_cpu:values.infor_cpu,
+  infor_ram:values.infor_ram,
+  infor_more:values.moTa,
 
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giảm giá</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn mức giảm giá "
-              optionFilterProp="label"
-              options={Datagiamgia}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+  product_name:values.product_name,
+  product_price:values.price,
+  product_hot:values.hot,
+  product_quantity:values.quantity,
+  product_discount:values.discount,
+  category_id:values.category,
 
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Số sao</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn mức sao ban đầu "
-              optionFilterProp="label"
-              options={Datasao}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+ 
+  // listProductStorage
+  
+}
 
-            />
-          </div>
 
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Số Lượng</label>
-            <input type='number' min={0} max={100} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+
+
+console.log(dataInforProduct);
+
+
+
+
+}}
+>
+  {({ setFieldValue, values }) => (
+    <Form className="flex flex-col gap-4">
+      {/* Chọn loại sản phẩm */}
+      <div className="flex gap-[1%]">
+        <div className="flex w-[33%] h-auto flex-col gap-4">
+          <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
+          <Select
+            value={values.category}  // bind value to Formik state
+            onChange={(value,category_dad) => 
+              
+            {
+              setFieldValue('category', value);
+              handleCategoryChange(category_dad.category_dad)
+            }  
+            
+            } // update Formik state when changed
+            options={formattedCategories}
+            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+          />
+        </div>
+        {/* Nhập giá sản phẩm */}
+        <div className="flex w-[33%] h-auto flex-col gap-4">
+          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
+          <Field
+            type="number"
+            name="price"
+            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            placeholder="Nhập giá sản phẩm"
+          />
+          <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" />
+        </div>
+        {/* Chọn mức giảm giá */}
+        <div className="flex w-[33%] h-auto flex-col gap-4">
+          <label htmlFor="discount" className="text-[13px] text-[#81818177] font-medium">Giảm giá</label>
+          <Select
+            value={values.discount}  // bind value to Formik state
+            onChange={(value) => setFieldValue('discount', value)}  // update Formik state when changed
+            options={Datagiamgia}
+            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+          />
+        </div>
+      </div>
+       <div className="flex w-[100%] h-auto flex-col gap-4">
+          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Tên sản phẩm</label>
+          <Field
+            type="text"
+            name="product_name"
+            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            placeholder="Nhập tên sản phẩm"
+          />
+          <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" />
+        </div>
+        <div className='flex'>
+        <div className="flex w-[49%] h-auto flex-col gap-4">
+          <label htmlFor="hot" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Hot</label>
+          <Field
+            type="text"
+            name="hot"
+            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            placeholder="Nhập tên sản phẩm"
+          />
+          <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" />
+        </div>
+        <div className="flex w-[49%] h-auto flex-col gap-4">
+          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Số lượng</label>
+          <Field
+            type="text"
+            name="quantity"
+            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            placeholder="Nhập tên sản phẩm"
+          />
+          <ErrorMessage name="quantity" component="div" className="text-[1.5rem] text-red-500" />
+        </div>
+        </div>
+
+        {(selectedCategory == '1' || selectedCategory == '2') && (
+          <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
+            <span className="text-[20px] font-semibold">Tạo thuộc tính</span>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex h-auto flex-col gap-4">
+              <label htmlFor="infor_screen" className="text-[13px] font-medium">Màn hình</label>
+                      <Field
+                        type="number"
+                        name="infor_screen"
+                        placeholder="Kích thước màn hình"
+                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                        />
+              </div>
+             
+              <div className="flex h-auto flex-col gap-4">
+              <label htmlFor="infor_cpu" className="text-[13px] font-medium">Cpu</label>
+                      <Field
+                        type="number"
+                        name="infor_cpu"
+                        placeholder="Kích thước màn hình"
+                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                        />
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+              <label htmlFor="infor_ram" className="text-[13px] font-medium">Ram</label>
+                      <Field
+                        type="number"
+                        name="infor_ram"
+                        placeholder="Kích thước màn hình"
+                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                        />
+              </div>
+            
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="os" className="text-[13px] text-[#81818177] font-medium">Hệ điều hành</label>
+                <Select
+                 value={values.infor_system}  // bind value to Formik state
+                 onChange={(value,category_dad) => 
+                   
+                 {
+                   setFieldValue('infor_system', value);
+               
+                 }  
+                }
+                  placeholder="Vui lòng chọn hệ điều hành"
+                
+                  options={Datahe}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+              
+            </div>
           </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Ngày</label>
-            <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
-          </div>
-          <div className='flex h-auto flex-col gap-4 col-span-3'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Tên sản phẩm</label>
-            <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
-          </div>
-          <div className=' col-span-3 flex h-[400px] overflow-y-hidden flex-col gap-4'>
-            <label htmlFor='ten_sp' className=' text-[13px] text-[#81818177] font-medium'>Mô tả</label>
+        )}
+
+{/* <ModalAdminProduct/> */}
+<div>
+{/* {listProductColor?.map((item) => (
+              <div
+                  key={item.color}
+              
+                  className={`relative flex w-[25%] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
+              >
+                <div className='absolute right-0 top-0 text-[1.5rem]'>
+                  <IoMdClose />
+                </div>
+                  <img 
+                      src='https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg'
+                      alt={item.color} 
+                      className="w-20 rounded-md"
+                  />
+                  <div>
+                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item.color}</h4>
+                      <p className="text-red-500 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage.map((item)=>{
+                        return item.storage
+                      })}</p>
+                  </div>
+              </div>
+          ))} */}
+</div>
+        <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
+          <div className="col-span-3 flex h-[400px] overflow-y-hidden flex-col gap-4">
+            <label htmlFor="moTa" className="text-[13px] text-[#81818177] font-medium">Mô tả</label>
             <ReactQuill
-              theme='snow'
-              value={value}
-
-              onChange={setValue}
+              theme="snow"
+              value={values.moTa}
+            onChange={(value) => setFieldValue('moTa', value)}  // update Formik state when changed
               modules={{
                 toolbar: toolbarOptions,
               }}
-              className='h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
+              className="h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
             />
           </div>
-
-
-
-
-
-        </form>
-      </div>
-      <div className='bg-white shadow-lg rounded-xl  p-[12px] gap-8 flex flex-col'>
-        <span className='text-[20px] font-semibold'>Tải ảnh  </span>
-
-        <div className='text-[14px] font-medium text-[#9696968e]'>
-          <span>Chọn ảnh sản phẩm hoặc chỉ cần kéo và thả tối đa 6 ảnh tại đây.</span>
-
-        </div>
-        <div className='flex-1'>
-          <ImgCrop rotationSlider>
-            <Upload
-              action=""
-              listType="picture-card"
-              fileList={fileList}
-              onChange={onChange}
-              onPreview={onPreview}
-            >
-              {fileList.length < 7 && '+ Upload'}
-            </Upload>
-          </ImgCrop>
-
-        </div>
-        <div className='text-[14px] text-[#9696968e] font-medium'>
-          <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 500kb.</span>
         </div>
 
-      </div>
-      <div className='bg-white shadow-lg rounded-xl  p-[12px] gap-3 flex flex-col '>
-        <span className='text-[20px] font-semibold'> Liên quan </span>
-        <form action="" className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
-          <div className='flex h-full flex-col gap-4'>
-            <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Màu sắc</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn màu"
-              optionFilterProp="label"
-              options={Datamau}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Số lượng sản phẩm màu đó</label>
-            <input type='number' min={0} max={100} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='hot' className='text-[13px] text-[#81818177] font-medium'>Hot</label>
-            <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='hot' name='hot' required />
-          </div>
-          <div className='flex-1 flex flex-col gap-4 col-span-3'>
-            <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Yêu Thích</label>
-            <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='favorite' name='favorite' required />
-          </div>
-        </form>
+      {/* Submit Button */}
+        <button type="submit" className="text-center bg-[#1A73E8] text-white text-[1.5rem] py-2 px-6 rounded-lg">
+          Thêm sản phẩm
+        </button>
+      
+    </Form>
+  )}
+</Formik>
+      
 
-      </div>
-      <div className='bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col '>
-        <span className='text-[20px] font-semibold'> Sửa thuộc tính </span>
-        <form action="" className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Màn</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn mà "
-              optionFilterProp="label"
-              options={Dataman}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Pin</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn pin "
-              optionFilterProp="label"
-              options={Datapin}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Cpu</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn cpu "
-              optionFilterProp="label"
-              options={Datacpu}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Số Ram</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn mức ram "
-              optionFilterProp="label"
-              options={Dataram}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Hệ điều hành</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn hệ "
-              optionFilterProp="label"
-              options={Datahe}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Kho</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn kho "
-              optionFilterProp="label"
-              options={Datakho}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-          <div className=' col-span-3 flex h-[450px] overflow-y-hidden flex-col gap-4'>
-            <label htmlFor='ten_sp' className=' text-[13px] text-[#81818177] font-medium'>Mô tả nhiều hơn</label>
-            <ReactQuill
-              theme='snow'
-              value={value}
-              onChange={setValue}
-              modules={{
-                toolbar: toolbarOptions,
-              }}
-              className='h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
-            />
-          </div>
-
-
-
-
-
-        </form>
-      </div>
-      <div className='bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col '>
-        <button type='submit' className='col-span-3 text-[16px] mt-4 h-[48px] linear-gradient text-white .box-shadow  rounded-lg'>Sửa Sản Phẩm</button>
-
-      </div>
 
     </div >
+    </div>
   );
 }
 

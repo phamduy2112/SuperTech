@@ -21,7 +21,7 @@ function Bill(props) {
       try {
         const resp = await getDetailOrder(orderId);
         setDetailOrder(resp.data.content);
-        setOrder(detailOrder[0])
+        setOrder(detailOrder[0].order)
         const products = resp.data.content.map(detail => ({
         quanlity:detail.detail_order_quality,
           name: detail.product.product_name,
@@ -40,14 +40,18 @@ function Bill(props) {
     }
     fetchApi()
   }, [dispatch]);
-
+  // console.log(order.discount_discount.discount_percent);
+  
   console.log(listProduct);
-  const totalPrice = listProduct.reduce((total:number, item) => {
-    const discountAmount = +(item.product_price * item.product_discount) / 100; // Tính giảm giá
-    const priceAfterDiscount = + item.product_price - discountAmount; // Tính giá sau giảm
-    const itemTotalPrice = + item.quantity * priceAfterDiscount; // Tính tổng giá của item
-    return total + itemTotalPrice; // Cộng dồn vào total
+  const totalPrice = detailOrder.reduce((total:number, item) => {
+    const discountAmount = +(item.detail_order_price * item.discount_product) / 100; // Tính giảm giá
+    const priceAfterDiscount = + item.detail_order_price - discountAmount; // Tính giá sau giảm
+    const itemTotalPrice = + item.detail_order_quality *  + priceAfterDiscount; // Tính tổng giá của item
+    return itemTotalPrice; // Cộng dồn vào total
   }, 0);
+  const getDiscount=+order?.discount_discount?.discount_percent
+  const totalPriceWithVoucher = totalPrice * (1 -  getDiscount/ 100) + 300000;
+
   return (
     <Container>
          <div className=' py-6 text-[1.5rem]'>
@@ -129,23 +133,20 @@ function Bill(props) {
               <h4 className="text-[1.8rem] font-semibold text-gray-800 mb-3">Tổng trị giá (tạm tính)</h4>
               <div className="flex justify-between text-[1.6rem] text-gray-600 mb-1">
                 <span>Phí giao hàng:</span>
-                <span>16,000₫</span>
+                <span>30,000₫</span>
               </div>
               <div className="flex justify-between text-[1.6rem] text-gray-600 mb-1">
                 <span>Giá sản phẩm:</span>
-                <span>148,000₫</span>
+                <span>{totalPrice}</span>
               </div>
-              <div className="flex justify-between text-[1.6rem] text-gray-600 mb-1">
-                <span>Phụ phí dịch vụ:</span>
-                <span>10,000₫</span>
-              </div>
+            
               <div className="flex justify-between text-[1.6rem] font-semibold text-gray-800 mt-3">
                 <span>Giảm giá:</span>
-                <span>-10,000₫</span>
+                <span>{getDiscount}%</span>
               </div>
               <div className="flex justify-between text-[1.8rem] font-bold text-green-600 mt-4">
                 <span>Tổng cộng:</span>
-                <span>164,000₫</span>
+                <span>{totalPriceWithVoucher}</span>
               </div>
             </div>
 

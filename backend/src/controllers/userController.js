@@ -29,7 +29,20 @@ const getUser = async (req, res) => {
     });
   }
 };
+const getNewCustomersLast7Days = async () => {
+  const today = new Date();
+  const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7)); // 7 ngày trước
 
+  const newCustomers = await User.findAll({
+    where: {
+      createdAt: {
+        [Op.gte]: sevenDaysAgo, // Ngày tạo >= 7 ngày trước
+      },
+    },
+  });
+
+  return newCustomers;
+};
 const register = async (req, res) => {
   try {
     const { user_name, user_email, user_password } = req.body;

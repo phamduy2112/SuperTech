@@ -7,16 +7,43 @@ let favoriteproduct = models.favorite_product;
 
 const getfavoriteproduct = async (req, res) => {
     try {
-        let data = await favoriteproduct.findAll();
+        const user_id=req.id;
+
+        let data = await favoriteproduct.findAll({
+            where:{
+                user_id
+            },
+            include:[
+                {
+                    model:models.products,
+                    as:"product",
+                }
+            ]
+        });
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.log(error);
+        
     }
 };
 
 const getfavoriteproductById = async (req, res) => {
     try {
-        let data = await favoriteproduct.findByPk(req.params.id);
+        const user_id=req.id;
+ 
+        let data = await favoriteproduct.findOne({
+            where:{
+                user_id,
+                product_id:req.params.id
+            },
+            include:[
+                {
+                    model:models.products,
+                    as:"product",
+                }
+            ]
+        });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -27,9 +54,26 @@ const getfavoriteproductById = async (req, res) => {
     }
 };
 
-const createfavoriteproduct = async (req, res) => {
+const createDetelefavoriteproduct = async (req, res) => {
     try {
-        let newfavoriteproduct = await favoriteproduct.create(req.body);
+        const user_id=req.id;
+        const {product_id}=req.body
+        const newCreateFavouriteProduct={
+            user_id,
+            product_id,
+        }
+        const existingLike = await favoriteproduct.findOne({
+            where: { user_id, product_id },
+          });
+      
+          if (existingLike) {
+            
+            await existingLike.destroy();
+            return         responseSend(res, existingLike, "Xóa Thành công!", 201);
+
+          }
+      
+        let newfavoriteproduct = await favoriteproduct.create(newCreateFavouriteProduct);
         responseSend(res, newfavoriteproduct, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -53,6 +97,7 @@ const updatefavoriteproduct = async (req, res) => {
 
 const deletefavoriteproduct = async (req, res) => {
     try {
+        
         let deleted = await favoriteproduct.destroy({
             where: { favorite_product_id: req.params.id }
         });
@@ -69,7 +114,7 @@ const deletefavoriteproduct = async (req, res) => {
 export {
     getfavoriteproduct,
     getfavoriteproductById,
-    createfavoriteproduct,
+    createDetelefavoriteproduct,
     updatefavoriteproduct,
     deletefavoriteproduct
 };

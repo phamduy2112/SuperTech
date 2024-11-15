@@ -40,7 +40,7 @@ export default class order_status extends Model {
         ]
       },
       {
-        name: "order_id",
+        name: "fk_status_order",
         using: "BTREE",
         fields: [
           { name: "order_id" },

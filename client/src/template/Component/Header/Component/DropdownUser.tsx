@@ -1,26 +1,35 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button, Dropdown } from 'antd';
 import { FaBars, FaUserCircle } from 'react-icons/fa';
-import { getUserThunk } from '../../../../redux/user/user.slice';
+import { getUserThunk, setLogin, setToken } from '../../../../redux/user/user.slice';
 import { IMG_BACKEND } from '../../../../constants';
+import toast from 'react-hot-toast';
 
 function DropdownUser() {
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
-
+  const login: any = useAppSelector((state) => state.user.login);
+  
+  const navigate=useNavigate()
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
 
   // Check if the token exists in local storage
-  const token = localStorage.getItem('token');
+  const token = useAppSelector((state)=>state.user.token)
+  const logout=()=>{
+    dispatch(setToken(null))
+    toast.success('Đăng xuất thành công!');
+    navigate("/đăng-nhập")
+    dispatch(setLogin(false))
 
+  }
   const items = [
     {
       key: "1",
-      label: token ? (
+      label: login ? (
         <NavLink to={"/người-dùng"}>Trang cá nhân</NavLink>
       ) : (
         <NavLink to={"/đăng-nhập"}>Đăng nhập</NavLink>
@@ -28,8 +37,8 @@ function DropdownUser() {
     },
     {
       key: "2",
-      label: token ? (
-        <button>Đăng xuất</button>
+      label: login ? (
+        <button onClick={()=>{logout()}}>Đăng xuất</button>
       ) : (
         <NavLink to={"/đăng-kí"}>Đăng Kí</NavLink>
       ),
@@ -54,7 +63,7 @@ function DropdownUser() {
         >
           <FaBars />
           <div className="xl:text-[25px] md:text-[2rem]">
-            {token ? (
+            {login ? (
               <div
                 className={`flex h-12 w-12 items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
                 style={{

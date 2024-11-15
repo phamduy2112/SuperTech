@@ -18,7 +18,10 @@ import { useSpring,animated, useTransition } from "react-spring";
 import { getLocalStorage } from "../../../utils";
 import DropdownUser from "./Component/DropdownUser";
 import { useAppSelector } from "../../../redux/hooks";
+import LoadingHeader from "./Component/Loading/LoadingHeader";
 function Header() {
+
+
   const onSearch = (value: any, _e: any, info: any) =>
     console.log(info?.source, value);
   const items = [
@@ -43,9 +46,10 @@ function Header() {
         setScrollY(true); // Thanh điều hướng cuộn lại vị trí ban đầu
       }
     };
-  
+
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {window.removeEventListener("scroll", handleScroll)};
   }, []);
   const [isProductHovered, setIsProductHovered] = useState(false);
 

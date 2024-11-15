@@ -4,6 +4,7 @@ import initModels from "../models/init-models.js";
 import categories from "../models/categories.js";
 import { Op } from "sequelize";
 import e from "express";
+import { uploadFields, uploadImages } from "./uploadController.js";
 
 let models = initModels(sequelize); 
 let Products = models.products; 
@@ -158,7 +159,7 @@ const getProductByIdCatelogryDad = async (req, res) => {
 
         // Add `category` to the where clause if it exists
         if (category) {
-            whereClause.category_name = category;
+            whereClause.category_id = category;
         }
 
         const products = await Products.findAll({
@@ -250,6 +251,8 @@ const createProduct = async (req, res) => {
             infor_product: newinforproduct.infor_product,
             category_id,
         });
+        // uploadFields();
+        // const rep=uploadImages()
 
         // Create entries in `product_colors` and `product_storage`
         if (listProductColor.length > 0) {
@@ -259,7 +262,7 @@ const createProduct = async (req, res) => {
                     color: order.color,
                     quality: order.quality,
                     product_id: newProduct.product_id,
-                    image_id
+                    image_id:order.image_id
                 });
 
                 // Check if `productStorage` exists within `order` and create `product_storage` entries
@@ -308,6 +311,8 @@ const updateProduct = async (req, res) => {
                 success: false
             });
         }
+       
+
         product.product_name = product_name;
         product.product_price = product_price;
         product.product_star = product_star;
