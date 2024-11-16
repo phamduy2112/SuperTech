@@ -83,7 +83,7 @@ function AdminProduct() {
     navigate("/")
   }
   const getCategoryNameById = (id) => {
-    const category = listCatelogry.find((cat) => cat.category_id == id);
+    const category = listCatelogry?.find((cat) => cat.category_id == id);
     return category ? category.category_name : 'Unknown'; // 'Unknown' là giá trị mặc định nếu không tìm thấy id
   };
   const columns = [

@@ -119,16 +119,27 @@ const createUser = async (req, res) => {
   }
 };
 
-const checkuserdetailadmin = async (req, res) => {
-  try {
-    const user_id = req.params.id;
-    const user = await User.findByPk(user_id, {
-      attributes: { exclude: ["user_password"] },
-    });
-    responseSend(res, user, "Thành công!", 200);
-  } catch (error) {
-    console.log(e);
-  }
+const Checkuserdetailadmin = async (req, res) => {
+  const user_id = req.params.id;
+
+  const user = await User.findByPk(user_id, {
+    attributes: { exclude: ["user_password"] },
+  });
+  console.log("user", user);
+
+  const token = createToken(user);
+  const tokenRef = createTokenRef(user);
+
+  return responseSend(
+    res,
+    {
+      token: token,
+      refreshToken: tokenRef,
+      success: true,
+    },
+    "Thành công!",
+    200
+  );
 };
 
 const UpdateUsersAdmin = async (req, res) => {
@@ -569,6 +580,6 @@ export {
   resetPasswordNoToken,
   deleteEmployee,
   createUser,
-  checkuserdetailadmin,
+  Checkuserdetailadmin,
   UpdateUsersAdmin,
 };

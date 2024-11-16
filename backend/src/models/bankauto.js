@@ -1,38 +1,34 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infor_product extends Model {
+export default class bankauto extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    infor_product: {
+    id_bank: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    infor_screen: {
-      type: DataTypes.INTEGER,
+    short_name: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
-    infor_system: {
-      type: DataTypes.STRING(50),
+    image: {
+      type: DataTypes.TEXT,
       allowNull: true
     },
-    infor_cpu: {
-      type: DataTypes.STRING(50),
+    accountName: {
+      type: DataTypes.TEXT,
       allowNull: true
     },
-    infor_ram: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    infor_more: {
+    accountNumber: {
       type: DataTypes.TEXT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infor_product',
+    tableName: 'bankauto',
     timestamps: false,
     indexes: [
       {
@@ -40,7 +36,7 @@ export default class infor_product extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "infor_product" },
+          { name: "id_bank" },
         ]
       },
     ]

@@ -35,7 +35,7 @@ export default class user extends Model {
       allowNull: true
     },
     user_role: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     level: {
@@ -43,7 +43,7 @@ export default class user extends Model {
       allowNull: true
     },
     user_gender: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     user_birth: {

@@ -4,12 +4,22 @@ import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
-import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
+import { checkRoleAndShowAlert, Level } from './Component/DataStaff';
+import { jwtDecode } from "jwt-decode";
+
+interface tokenDataClient {
+    user_id: number,
+    user_role: number
+}
+interface UserTokenClientInterface extends tokenDataClient {
+    data: tokenDataClient
+}
+
 function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Allstaffs: any = useAppSelector((state) => state.user.Alluser);
@@ -20,17 +30,40 @@ function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [columns, setColumns] = useState<any[]>([]);
     const [valueInputSearch, setvalueInputSearch] = useState(``);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const TokenstaffsClient: any = useAppSelector((state) => state.user.token);
+
+    const [RoleStaff, setRoleStaff] = useState<number>();
+    const [IdStaff, setIdStaff] = useState<number>();
+
+    useEffect(() => {
+        const UserTokenClient: UserTokenClientInterface = jwtDecode(TokenstaffsClient);
+        setRoleStaff(UserTokenClient.data.user_role);
+        setIdStaff(UserTokenClient.data.user_id);
+    }, [TokenstaffsClient]);
 
 
+
+
+
+
+
+
+
+    // const [TokenstaffsAdmin, setTokenstaffsAdmin]
 
 
 
 
     useEffect(() => {
         AppDispatch(getAllUserThunk());
-        setDataAllstaffs(Allstaffs);
-
     }, [AppDispatch]);
+
+    useEffect(() => {
+        setDataAllstaffs(Allstaffs);
+    }, [Allstaffs])
+
+
 
     useEffect(() => {
         if (Allstaffs && Allstaffs.length > 0) {
@@ -41,84 +74,7 @@ function AdminStaff() {
         }
     }, [Allstaffs])
 
-    const Level = (src: number) => {
-        switch (src) {
-            case 0:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/Boss_pukaxj.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 1:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731057050/laolang_jljhqn.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 2:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang2_jnucif.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 3:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034725/hang3_gtgheu.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 4:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang1_uv6dcs.png" alt="" style={{ width: 50, height: 50 }} />
 
-                    </>
-                )
-            case 5:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/5year_flnse0.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 6:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/4-5year_whzi45.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 7:
-                return (
-                    <>
-
-
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/1year_xmnffl.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 8:
-                return (
-                    <>
-
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/2-4year_qdloen.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-            case 9:
-                return (
-                    <>
-
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/-1year_x8oqsg.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-
-
-            default:
-                return (
-                    <>
-                        <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/c_thumb,w_200,g_face/v1731038485/tapsu_ejr7bo.png" alt="" style={{ width: 50, height: 50 }} />
-                    </>
-                )
-        }
-
-    }
 
     const reverseDate = (dateString: string) => {
         const [year, month, day] = dateString.split('-');
@@ -279,11 +235,11 @@ function AdminStaff() {
                             <div className='flex text-[24px] box-border gap-1 items-center'>
                                 <BiSolidEdit
                                     className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-                                    onClick={() => handleEdit(record.user_id)}
+                                    onClick={() => handleEdit(record.user_id, record.user_role, RoleStaff, IdStaff)}
                                 />
                                 <CiBookmarkRemove
                                     className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-                                    onClick={() => handleDelete(record.user_id)}
+                                    onClick={() => handleDelete(record.user_id, record.user_role, RoleStaff, IdStaff)}
                                 />
                             </div>
                         ),
@@ -310,7 +266,6 @@ function AdminStaff() {
         if (valueInputSearch.trim() === "") {
             setDataAllstaffs(Allstaffs);
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -337,7 +292,7 @@ function AdminStaff() {
     const navigate = useNavigate();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleEdit = (key: any) => {
+    const handleEdit = (key: number) => {
         Swal.fire({
             icon: 'info',
             text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
@@ -349,9 +304,8 @@ function AdminStaff() {
         });
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleDelete = (key: any) => {
-        Swal.fire({
+    const removeDeteleStaff = (key: number) => {
+        return Swal.fire({
             icon: 'warning',
             showDenyButton: true,
             title: `Bạn Chọn Người Dùng Có ID ${key}`,
@@ -375,6 +329,59 @@ function AdminStaff() {
                 });
             }
         });
+    }    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleDelete = (key: number, key_role: number, RoleStaff: number, IdStaff: number) => {
+        if (RoleStaff == 0) {
+
+            if (key == IdStaff && key_role == RoleStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Bạn Vẫn Là Chủ',
+                    text: 'Bạn không được xóa chính bạn',
+                });
+
+
+            }
+            if (key != IdStaff && key_role == RoleStaff) {
+                console.log(key);
+
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Người Đồng Cấp',
+                    text: 'Bạn Không Được Xóa Người Đồng Cấp Với Bạn',
+                });
+            }
+            if (key != IdStaff && key_role != RoleStaff) {
+                removeDeteleStaff(key);
+            }
+        } else {
+            if (RoleStaff != key_role && key != IdStaff) {
+                checkRoleAndShowAlert(RoleStaff, key_role)
+            }
+            if (RoleStaff == key_role && key == IdStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Bạn Không Được Xóa Chính Bạn',
+                });
+            }
+            if (RoleStaff == key_role && key != IdStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Người Đồng Cấp',
+                    text: 'Bạn Không Được Xóa Người Đồng Cấp Với Bạn',
+                });
+            }
+
+
+        }
+
+
+
+        // } else {
+
+
+        // }
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSelectChange = (selectedRowKeys: any) => {

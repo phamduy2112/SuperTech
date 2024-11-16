@@ -1,17 +1,25 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class replies_comment_product extends Model {
+export default class history_bank extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    id: {
+    idbank: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    comment: {
+    transactionId: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    description: {
       type: DataTypes.TEXT,
+      allowNull: true
+    },
+    amount: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     user_id: {
@@ -21,22 +29,10 @@ export default class replies_comment_product extends Model {
         model: 'user',
         key: 'user_id'
       }
-    },
-    comment_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'comment_product',
-        key: 'comment_id'
-      }
-    },
-    repiles_date: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'replies_comment_product',
+    tableName: 'history_bank',
     timestamps: false,
     indexes: [
       {
@@ -44,18 +40,11 @@ export default class replies_comment_product extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
+          { name: "idbank" },
         ]
       },
       {
-        name: "fk_commentttt_repilse",
-        using: "BTREE",
-        fields: [
-          { name: "comment_id" },
-        ]
-      },
-      {
-        name: "fk_uuuserrrr_repilse",
+        name: "fk_bankautohistory_userid",
         using: "BTREE",
         fields: [
           { name: "user_id" },

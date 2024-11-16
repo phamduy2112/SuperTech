@@ -1,14 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createCategory, deleteCategory, getCatelogry, getCatelogryDad, putCategory } from "../../service/catelogry/catelogry.service";
+import { createCategory, deleteCategory, getCatelogry, getCatelogryDad, getCatelogryById, putCategory } from "../../service/catelogry/catelogry.service";
+
+export const getCatelogryThunkId = createAsyncThunk(
+  "getCatelogryThunkId",
+  async (searchKey: number) => {
+    const resp = await getCatelogryById(searchKey);
+    return resp.data.content;
+  },
+);
+//Khu vực trên của devTri
+
 
 export const getCatelogryThunk = createAsyncThunk(
   "getCatelogryThunk",
-  async (searchKey:string) => {
+  async (searchKey: string) => {
     try {
       const resp = await getCatelogry();
       const result = resp.data.content;
       if (searchKey.trim()) {
-        const filteredResults = result.filter((item:any) =>
+        const filteredResults = result.filter((item: any) =>
           item.product_name.toLowerCase().includes(searchKey.toLowerCase())
         );
         return filteredResults;
@@ -21,39 +31,39 @@ export const getCatelogryThunk = createAsyncThunk(
     }
   },
 );
-export const createCategoryThunk=createAsyncThunk("createCategoryThunk",
-  async(data:any,{dispatch})=>{
-    try{
+export const createCategoryThunk = createAsyncThunk("createCategoryThunk",
+  async (data: any, { dispatch }) => {
+    try {
       const resp = await createCategory(data);
       const response = await dispatch(getCatelogryThunk(''));
 
       return response.payload;
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   }
 )
-export const deleteCategoryThunk=createAsyncThunk("deleteCategoryThunk",
-  async(id:number,{dispatch})=>{
-    try{
+export const deleteCategoryThunk = createAsyncThunk("deleteCategoryThunk",
+  async (id: number, { dispatch }) => {
+    try {
       const resp = await deleteCategory(id);
       const response = await dispatch(getCatelogryThunk(''));
 
       return response.payload;
-   
-    }catch(e){
+
+    } catch (e) {
       console.log(e);
     }
   }
 )
-export const putCategoryThunk=createAsyncThunk("putCategoryThunk",
-  async(category:any,{dispatch})=>{
-    try{
-      const resp = await putCategory(category.values,category.id);
+export const putCategoryThunk = createAsyncThunk("putCategoryThunk",
+  async (category: any, { dispatch }) => {
+    try {
+      const resp = await putCategory(category.values, category.id);
       const response = await dispatch(getCatelogryThunk(''));
 
       return response.payload;
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   }
@@ -74,7 +84,8 @@ export const getCatelogryDadThunk = createAsyncThunk(
 
 const initialState = {
   catelogryDad: [],
-  listCatelories:[],
+  listCatelories: [],
+  listCateloriesOne: {},
 };
 
 const CatelogrySlice = createSlice({
@@ -86,6 +97,12 @@ const CatelogrySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder
+      .addCase(getCatelogryThunkId.fulfilled, (state, { payload }) => {
+        state.listCatelories = payload;
+      })
+
+
     builder
       .addCase(getCatelogryThunk.fulfilled, (state, { payload }) => {
         state.listCatelories = payload;

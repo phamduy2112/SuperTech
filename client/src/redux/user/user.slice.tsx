@@ -58,7 +58,7 @@ export const createStaffThunk = createAsyncThunk(
 );
 
 export const UpdateStaffThunk = createAsyncThunk(
-  "UpdateStaffThunk", async (UpdateStaffSend:UpdateStaffInterface) => {  // Destructure đúng cách
+  "UpdateStaffThunk", async (UpdateStaffSend: UpdateStaffInterface) => {  // Destructure đúng cách
 
     try {
       const resp = await UpdateStaff(UpdateStaffSend);
@@ -169,9 +169,8 @@ const initialState = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Alluser: [] as any[],
   user: {},
-  userAdmin: {},
   token: null,
-  login:false,
+  login: false,
   thongBao: "",
   imgUser: ""
 };
@@ -210,12 +209,14 @@ const UserSlice = createSlice({
 
     builder
       .addCase(getUserAdminThunk.fulfilled, (state, { payload }) => {
-        state.userAdmin = payload;
+        console.log("payload", payload.token)
+
+        state.token = payload;
       })
 
     builder
       .addCase(UpdateStaffThunk.fulfilled, (state, { payload }) => {
-        state.userAdmin = payload;
+        state.token = payload;
       })
     //Ở trên là khu vực builder của devTri
 
@@ -243,6 +244,6 @@ const UserSlice = createSlice({
   },
 });
 
-export const { setAllUser, setUserDetail, setToken,setLogin } = UserSlice.actions;
+export const { setAllUser, setUserDetail, setToken, setLogin } = UserSlice.actions;
 
 export const userReducer = UserSlice.reducer;
