@@ -18,20 +18,29 @@ function LaptopComponent() {
   const [activeTab, setActiveTab] = useState('Asus'); // Tab mặc định
 
   // Gọi API để lấy danh mục và sản phẩm tương ứng
-  useEffect(() => {
-    IIFE(async () => {
-      try {
-        const data = await getCatelogryDadById(idCatelogry);
-        setCatelogryLaptop(data.data.content);
-        const dataProduct = await getProductsByIdCatelogry(idCatelogry);
-        setProductLaptop(dataProduct.data.content);
-      } catch (e) {
-        console.error(e);
-      }
-    });
-  }, [idCatelogry]); // Gọi lại mỗi khi idCatelogry thay đổi
-console.log(catelogryLaptop);
 
+useEffect(() => {
+  IIFE(async () => {
+    try {
+      const data = await getCatelogryDadById(idCatelogry); // Lấy toàn bộ danh mục
+      setCatelogryLaptop(data.data.content.slice(0, 5)); // Lấy 5 danh mục đầu tiên
+    } catch (e) {
+      console.error(e);
+    }
+  });
+}, []); // Chỉ chạy 1 lần khi component được mount
+
+// Lấy sản phẩm theo danh mục
+useEffect(() => {
+  IIFE(async () => {
+    try {
+      const dataProduct = await getProductsByIdCatelogry(idCatelogry);
+      setProductLaptop(dataProduct.data.content); // Lấy toàn bộ sản phẩm của danh mục hiện tại
+    } catch (e) {
+      console.error(e);
+    }
+  });
+}, [idCatelogry]); // Chạy lại khi idCatelogry thay đổi
   // Xử lý khi bấm vào tab để thay đổi activeTab và idCatelogry
   const handleTabClick = (tab, id) => {
     setActiveTab(tab); // Cập nhật tab đang được chọn
@@ -70,7 +79,7 @@ console.log(catelogryLaptop);
           <div className="grid grid-cols-6 gap-4">
           {/* <img src={banner3} alt="" className='w-[100%] h-[100%] rounded-3xl py-5'/> */}
 
-            {productLaptop.slice(0, 6).map((product) => (
+            {productLaptop.slice(0,6).map((product) => (
               <ProductItem product={product}/> // Hiển thị sản phẩm
             ))}
         

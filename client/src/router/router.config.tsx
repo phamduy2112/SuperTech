@@ -46,7 +46,7 @@ import ListProduct from "../page/Client/ListProduct/ListProduct";
 import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
 import CouponSection from "../page/Client/Voucher/Voucher";
-import { PrivateRoute } from "./component/RouterPrivate";
+import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
 // import PrivateRoute from "./component/RouterPrivate";
 
 export const router = createBrowserRouter([
@@ -163,15 +163,15 @@ children:[
     children: [
       {
         path: "/đăng-nhập",
-        element: <Login />,
+        element: <AuthRoute element={<Login/>} />,
       },
       {
         path: "/đăng-kí",
-        element: <Resigter />,
+        element:  <AuthRoute element={<Resigter/>} />,
       },
       {
         path: "/quen-mat-khau",
-        element: <ForgetPassword />,
+        element: <AuthRoute element={<ForgetPassword/>} />,
       },
     ]
 
