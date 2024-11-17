@@ -26,6 +26,7 @@ const CommentForm = (props:any) => {
 }
 // const id=props.id
 dispatch(createCommentByIdProductThunk(newComment))
+toast.success("Bình luận thành công")
  }else{
   toast.success('Bạn cần đăng nhập!');
   navigate("/đăng-nhập")

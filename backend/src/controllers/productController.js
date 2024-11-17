@@ -1,11 +1,8 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-import categories from "../models/categories.js";
 import { Op } from "sequelize";
-import e from "express";
-import { uploadFields, uploadImages } from "./uploadController.js";
-
+import cloudinary from '../config/cloudinaryConfig.js';
 let models = initModels(sequelize); 
 let Products = models.products; 
 
@@ -367,12 +364,11 @@ const deleteProduct = async (req, res) => {
             responseSend(res, "", "Không tìm thấy sản phẩm hoặc thông tin sản phẩm!", 404);
         }
     } catch (error) {
+        console.error("Lỗi Khi Xóa Sản Phẩm - KIỂU LỖI:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
         console.log(error);
     }
 };
-
-
 export {
     getProducts,
     getProductById,

@@ -2,7 +2,7 @@ import cloudinary from '../config/cloudinaryConfig.js';
 import multer from 'multer';
 import ImageModel from '../models/user.js';
 import path from 'path';
-
+import { responseSend } from "../config/response.js";
 const storage = multer.memoryStorage();
 const upload = multer({ storage }).single('user_image');
 
@@ -48,4 +48,26 @@ const uploadimagesUser = async (req, res) => {
   });
 };
 
-export { uploadimagesUser };
+const deleteUser = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await ImageModel.findOne({ where: { user_id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    if (user.user_image) {
+      const imageName = user.user_image;
+      await cloudinary.uploader.destroy(`User/${imageName}`, function(error,result) {
+        console.log(result, error);
+      });
+    }
+
+    await ImageModel.destroy({ where: { user_id: userId } });
+    responseSend(res, "", "Xóa người dùng thành công!", 200);
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    responseSend(res, "", "Có lỗi xảy ra khi xóa người dùng!", 500);
+  }
+};
+export { uploadimagesUser, deleteUser };

@@ -48,16 +48,20 @@ const getCommentProductByIdProduct = async (req, res) => {
             model: models.likes, // Kết hợp bảng user
             as: 'likes', // Alias cho kết hợp bảng
           },
-          // {
-          //   model: models.replies_comment_product, // Kết hợp bảng user
-          //   as: 'replies_comment_products', // Alias cho kết hợp bảng
-          //   include:[
-          //     {
-          //       model: models.user, // Kết hợp bảng user
-          //       as: 'user', // Alias cho kết hợp bảng
-          //     },
-          //   ]
-          // },
+          {
+            model: models.replies_comment_product, // Kết hợp bảng user
+            as: 'repliesToComment', // Alias cho kết hợp bảng
+            include:[
+              {
+                model: models.user, // Kết hợp bảng user
+                as: 'user', // Alias cho kết hợp bảng
+              },
+              {
+                model: models.likes, // Kết hợp bảng user
+                as: 'likes', // Alias cho kết hợp bảng
+              },
+            ]
+          },
           
         ],
       });

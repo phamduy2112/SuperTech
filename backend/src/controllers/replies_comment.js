@@ -32,13 +32,7 @@ const createRepliesComment = async (req, res) => {
         const user_id = req.id;
         const { comment,comment_id   } = req.body;
 
-        console.log({
-          user_id,
-          comment,
-          comment_id,
-
-        });
-
+       
         // Tạo comment mới
         const newComment = await repliesCommentProduct.create({
           user_id,
@@ -52,14 +46,14 @@ const createRepliesComment = async (req, res) => {
       }
 };
 
-const updatecommentpost = async (req, res) => {
+const updateCommentReply = async (req, res) => {
     try {
         const { comment   } = req.body;
         const newRepliesComment={
             comment
         }
         let updated = await repliesCommentProduct.update(newRepliesComment, {
-            where: { comment_post_id: req.params.id }
+            where: { id: req.params.id }
         });
         if (updated[0] > 0) {
             let updatedItem = await repliesCommentProduct.findByPk(req.params.id);
@@ -73,10 +67,10 @@ const updatecommentpost = async (req, res) => {
     }
 };
 
-const deletecommentpost = async (req, res) => {
+const deleteCommentReply = async (req, res) => {
     try {
         let deleted = await repliesCommentProduct.destroy({
-            where: { comment_post_id: req.params.id }
+            where: { id: req.params.id }
         });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
@@ -92,6 +86,6 @@ export {
     getcommentpost,
     getcommentpostById,
     createRepliesComment,
-    updatecommentpost,
-    deletecommentpost
+    updateCommentReply,
+    deleteCommentReply
 };

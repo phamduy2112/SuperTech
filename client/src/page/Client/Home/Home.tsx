@@ -17,8 +17,11 @@ import LaptopComponent from './Component/Laptop'
 import { Container } from '../../../components/Style/Container';
 import ProductHome from './Component/ProductHome';
 import ProductsNew from './Component/ProductsNew';
+import UseSocket from '../../../socket/useSocket';
 
 function Home() {
+  UseSocket(); // Gọi custom hook useSocket trong component này
+
   return (
     <div>
   <Carousel></Carousel>

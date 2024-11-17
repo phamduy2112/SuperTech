@@ -17,14 +17,49 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import path from "path"
+import http from 'http';
+import { Server } from 'socket.io';
+import cors from 'cors';
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173', // Địa chỉ frontend (React)
+    credentials: true,
+    methods: ['GET', 'POST'],
+  },
+});
+
+const userSocketMap = {}; // Lưu trữ userId -> socketId
+
+io.on('connection', (socket) => {
+  const userId = socket.handshake.query.user_id; // Lấy user_id từ query params khi kết nối
+  if (userId) {
+    userSocketMap[userId] = socket.id; // Gán socket id cho userId
+    console.log(`User connected: ${userId}, Socket ID: ${socket.id}`);
+  }
+
+  console.log(userSocketMap);
+  
+  socket.on('disconnect', () => {
+    if (userId) {
+      delete userSocketMap[userId]; // Xóa khi người dùng ngắt kết nối
+    }
+    console.log(`User disconnected: ${userId}, Socket ID: ${socket.id}`);
+  });
+});
+
+
+
 
 app.use(urlencoded({extended:true}))
 app.use(express.static("."))
@@ -61,4 +96,6 @@ app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
 app.use (uploadImgUserRouter)
-app.listen(8080);
+server.listen(8080, () => {
+  console.log('Server running on http://localhost:8080');
+});
