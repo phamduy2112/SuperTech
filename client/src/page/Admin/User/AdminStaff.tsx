@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
 import { checkRoleAndShowAlert, Level } from './Component/DataStaff';
 import { jwtDecode } from "jwt-decode";
+import { IMG_USER_BACKEND } from '../../../constants/index';
 
 interface tokenDataClient {
     user_id: number,
@@ -103,11 +104,12 @@ function AdminStaff() {
                         key: staff,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (src: any) => (
+
                             <>
                                 {
                                     src == '' || src == null || src == undefined ?
                                         <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
-                                        : <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
+                                        : <img className='rounded-full object-cover' src={IMG_USER_BACKEND + src} alt="" style={{ width: 50, height: 50 }} />
                                 }
 
                             </>

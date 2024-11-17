@@ -20,24 +20,18 @@ import { useParams } from 'react-router-dom';
 function AdminCustomerEdit() {
     const AppDispatch = useAppDispatch();
     const token = localStorage.getItem('token');
-    const staffsData = useAppSelector((state) => state.user.userAdmin);
+    const staffsData = useAppSelector((state) => state.user.Alluser);
+    const [staff, setStaff] = useState<StaffInterface>({});
     const { id } = useParams();
     const userId = Number(id);
 
+
     useEffect(() => {
-        if (id) {
-            AppDispatch(getUserAdminThunk(userId));
+        if (userId) {
+            const newObj_staff = staffsData.find(staff => staff.user_id === userId);
+            setStaff(newObj_staff);
         }
-    }, [id, userId, AppDispatch]);
-
-
-
-
-
-
-
-
-
+    }, [staffsData, userId]);
     const [tokenStaff, setTokenStaff] = useState('');
 
     useEffect(() => {
@@ -62,6 +56,25 @@ function AdminCustomerEdit() {
         user_image: '',
     });
 
+    useEffect(() => {
+        if (staff) {
+            setstaffData({
+                user_name: staff.user_name || '',
+                user_email: staff.user_email || '',
+                user_password: staff.user_password || '',
+                user_address: staff.user_address || '',
+                user_phone: staff.user_phone || '',
+                user_role: staff.user_role || null,
+                level: staff.level || null,
+                user_gender: staff.user_gender || null,
+                user_birth: staff.user_birth || '',
+                user_time: staff.user_time || '',
+                user_image: staff.user_image || '',
+            });
+        }
+    }, [staff]);
+
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setstaffData(prevState => ({
@@ -76,17 +89,6 @@ function AdminCustomerEdit() {
             [title]: value,
         }));
     }
-    // const [PayData, setPayData] = useState({
-    //     accountName: '',
-    //     accountNumber: ''TokenStaffInterface
-    // })
-    // const handleInputChangePay = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     setPayData(prevState => ({
-    //         ...prevState,
-    //         [name]: value,
-    //     }));
-    // };
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const filteredData: StaffInterface = {};
@@ -254,17 +256,11 @@ function AdminCustomerEdit() {
             setBank(codebank);
         }
 
-
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [Joindate, setJoinDate] = useState<any | null>(null); // Thay đổi từ {} thành null
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [birthdate, setBirthDate] = useState<any | null>(null); // Thay đổi từ {} thành null
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueBirthDate = (value: any) => {
         const formattedDate = value.format('YYYY-MM-DD HH:mm:ss');
-        setBirthDate(formattedDate);
 
         setstaffData(prevState => ({
             ...prevState,
@@ -275,7 +271,6 @@ function AdminCustomerEdit() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueJoinDate = (value: any) => {
         const formattedDate = value.format('YYYY-MM-DD HH:mm:ss');
-        setJoinDate(formattedDate);
         setstaffData(prevState => ({
             ...prevState,
             user_time: formattedDate,
@@ -289,18 +284,6 @@ function AdminCustomerEdit() {
             user_address: value,
         }));
     };
-
-
-
-
-
-
-
-
-
-
-
-
     return (
         <form action='' onSubmit={handleSubmit} className='flex-1 bg-[#f2edf3]  grid grid-cols-1 xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
 
@@ -379,6 +362,7 @@ function AdminCustomerEdit() {
                             onChange={handleInputChange}
                             name="user_name"  // Đảm bảo tên đúng với key trong state
                             value={staffData.user_name} // Dùng value thay vì placeholder
+                            placeholder={staff.user_name}
                             type="text"
                             className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
                         />
@@ -388,6 +372,7 @@ function AdminCustomerEdit() {
                         <input type='text'
                             onChange={handleInputChange}
                             name="user_email"
+                            placeholder={staff.user_email}
                             value={staffData.user_email}
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
@@ -398,6 +383,7 @@ function AdminCustomerEdit() {
                             onChange={handleInputChange}
                             name="user_password"
                             value={staffData.user_password}
+                            placeholder={staff.user_password}
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
@@ -405,8 +391,8 @@ function AdminCustomerEdit() {
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Level</label>
                         <Select
                             showSearch
-                            placeholder="Vui lòng chọn Level "
                             optionFilterProp="label"
+                            value={staffData.level}
                             options={
                                 OptionsImageStaffLevel
                             }
@@ -415,24 +401,22 @@ function AdminCustomerEdit() {
 
                         />
                     </div>
-
-
-
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Điện thoại</label>
                         <input
                             onChange={handleInputChange}
                             name="user_phone"
+                            placeholder={staff.user_phone == null ? 'Chưa có số trong tài khoản' : staff.user_phone}
                             value={staffData.user_phone}
                             type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính</label>
+                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính {staffData.user_gender}</label>
                         <Select
                             showSearch
-                            placeholder="Vui lòng chọn giới tính "
                             optionFilterProp="label"
                             options={OptionsStaffGender}
+                            value={staffData.user_gender}
                             onChange={(value) => handleSelectOnChange(value, 'user_gender')}
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
                         />
@@ -441,8 +425,9 @@ function AdminCustomerEdit() {
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Vai trò</label>
                         <Select
                             showSearch
-                            placeholder="Vui lòng chọn vai trò"
+
                             optionFilterProp="label"
+                            value={staffData.user_role}
                             options={
                                 OptionsStaffRole
                             }
@@ -465,7 +450,7 @@ function AdminCustomerEdit() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={birthdate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            <input type='text' value={staffData.user_birth == null ? 'Chưa có ngày sinh' : staffData.user_birth} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
                     </div>
                     <div className='flex h-auto flex-col gap-4 '>
@@ -481,7 +466,7 @@ function AdminCustomerEdit() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={Joindate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            <input type='text' value={staffData.user_time == null ? 'Chưa có ngày tham gia' : staffData.user_time} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
 
                     </div>

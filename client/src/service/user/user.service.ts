@@ -4,6 +4,7 @@ import {
   UpdateStaffInterface,
 } from "../../page/Admin/User/Component/DataStaff";
 import { axiosWithAuth } from "../axios.config";
+import axios from "axios";
 
 export const getAllUser = () => {
   return axiosWithAuth("/users", {
@@ -18,8 +19,9 @@ export const getUserAdmin = (id: number) => {
 };
 
 export const createStaff = async (DataStaff: DataStaffInterface) => {
-  return axiosWithAuth("/create-users", {
+  return axios("http://localhost:8080/create-users", {
     method: "post",
+
     data: DataStaff.staffData,
     headers: {
       token: DataStaff.tokenStaff,
@@ -38,10 +40,11 @@ export const UpdateStaff = async (UpdateStaffSend: UpdateStaffInterface) => {
 };
 
 export const DeleteStaffSend = (IdStaff: number) => {
-  return axiosWithAuth(`/remove-employee/${IdStaff}`, {
+  return axios(`http://localhost:8080/remove-employee/${IdStaff}`, {
     method: "delete",
   });
 };
+//Khu vực trên của devTri
 
 export const getUserDetail = () => {
   return axiosWithAuth("/user-detail", {
@@ -54,6 +57,7 @@ export const updateUserDetail = (payload: any) => {
     data: payload,
   });
 };
+
 export const verifyPassword = (password: string) => {
   return axiosWithAuth("/verify-password", {
     method: "post",
