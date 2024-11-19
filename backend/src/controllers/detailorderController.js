@@ -1,7 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-import { col, fn, literal } from "sequelize";
+import { col, fn, literal, Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let detailorder = models.detail_order; 
@@ -16,17 +16,29 @@ const getdetailorder = async (req, res) => {
 };
 
 const getWeeklySales = async (req, res) => {
-    const results = await models.order.findAll({
-      attributes: [
-        [literal(`DATE(DATE_SUB(order_date, INTERVAL WEEKDAY(order_date) DAY))`), 'week_start'],
-        [fn('SUM', col('order_total')), 'total_sales'],
-      ],
-      group: [literal(`DATE(DATE_SUB(order_date, INTERVAL WEEKDAY(order_date) DAY))`)],
-      order: [literal(`week_start ASC`)],
-      logging: console.log, // Ghi log SQL
-    });
+    try {
+      const results = await models.order.findAll({
+        attributes: [
+          [literal(`DATE(DATE_SUB(order_date, INTERVAL WEEKDAY(order_date) DAY))`), 'week_start'], // Bắt đầu tuần
+          [fn('SUM', col('order_total')), 'total_sales'], // Tổng doanh số
+        ],
+        where: {
+          order_date: {
+            [Op.gte]: literal(
+              `DATE_SUB(CURDATE(), INTERVAL (WEEKDAY(CURDATE()) + 21) DAY)`
+            ), // Lấy ngày của 4 tuần gần nhất
+          },
+        },
+        group: [literal(`DATE(DATE_SUB(order_date, INTERVAL WEEKDAY(order_date) DAY))`)],
+        order: [literal(`week_start ASC`)],
+        logging: console.log, // Ghi log SQL để kiểm tra
+      });
   
-    responseSend(res, results, "", 200);
+      responseSend(res, results, '', 200);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Internal Server Error' });
+    }
   };
   const getUserOrderCounts = async (req, res) => {
     try {
@@ -56,6 +68,7 @@ const getWeeklySales = async (req, res) => {
       res.status(500).send({ error: 'Internal Server Error' });
     }
   };
+
   const getTop5BestSellingProducts = async (req, res) => {
     try {
       const results = await models.products.findAll({
@@ -72,8 +85,7 @@ const getWeeklySales = async (req, res) => {
           },
         ],
         group: ['products.product_id', 'products.product_name'], // Nhóm theo sản phẩm
-        order: [[literal('total_quantity'), 'DESC']], // Sắp xếp theo số lượng bán ra giảm dần
-        limit: 5, // Giới hạn chỉ lấy 5 sản phẩm bán chạy nhất
+        order: [[literal('detail_order_quality'), 'DESC']], // Sắp xếp theo số lượng bán ra giảm dần
       });
   
       responseSend(res, results, '', 200); // Trả về kết quả
@@ -82,6 +94,7 @@ const getWeeklySales = async (req, res) => {
       res.status(500).send({ error: 'Internal Server Error' });
     }
   };
+
 const getDetailOrderById = async (req, res) => {
     try {
         

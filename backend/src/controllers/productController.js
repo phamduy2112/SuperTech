@@ -217,7 +217,7 @@ const createProduct = async (req, res) => {
             product_discount,
             product_hot,
             product_quantity,
-            image_id,
+                
             category_id,
             infor_screen,
             infor_system,
@@ -246,8 +246,6 @@ const createProduct = async (req, res) => {
             product_discount,
             product_hot,
             product_date: date,
-            product_quantity,
-            image_id,
             infor_product: newinforproduct.infor_product,
             category_id,
         });
