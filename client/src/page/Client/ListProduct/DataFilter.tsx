@@ -1,12 +1,12 @@
 export const trademark = [
-    { id: 1, url: 'https://logo.clearbit.com/apple.com' },
-    { id: 2, url: 'https://logo.clearbit.com/oppo.com' },
-    { id: 3, url: 'https://i.pinimg.com/originals/49/55/f5/4955f570b6a593717a23b1bb20e38d98.jpg' },
-    { id: 4, url: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Realme_logo.png' },
-    { id: 5, url: 'https://logos-world.net/wp-content/uploads/2020/05/Xiaomi-Logo.png' },
-    { id: 6, url: 'https://www.vanillaplus.com/wp-content/uploads/2023/02/Nokia-new-logo-transparent-background.png' },
-    { id: 7, url: 'https://www.pngplay.com/wp-content/uploads/13/Asus-Logo-PNG-Clipart-Background.png' },
-    { id: 8, url: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/29242b9e-4caa-4723-a7df-7053a4a08f16.__CR0,0,600,180_PT0_SX600_V1___.jpg' }
+    { id: 1, label: 'iphone', url: 'https://logo.clearbit.com/apple.com' },
+    { id: 2, label: 'oppo', url: 'https://logo.clearbit.com/oppo.com' },
+    { id: 3, label: 'samsung', url: 'https://i.pinimg.com/originals/49/55/f5/4955f570b6a593717a23b1bb20e38d98.jpg' },
+    { id: 4, label: 'realme', url: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Realme_logo.png' },
+    { id: 5, label: 'xiaomi', url: 'https://logos-world.net/wp-content/uploads/2020/05/Xiaomi-Logo.png' },
+    { id: 6, label: 'nokia', url: 'https://www.vanillaplus.com/wp-content/uploads/2023/02/Nokia-new-logo-transparent-background.png' },
+    { id: 7, label: 'asus', url: 'https://www.pngplay.com/wp-content/uploads/13/Asus-Logo-PNG-Clipart-Background.png' },
+    { id: 8, label: 'lumbia', url: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/29242b9e-4caa-4723-a7df-7053a4a08f16.__CR0,0,600,180_PT0_SX600_V1___.jpg' }
 
 
 
@@ -66,6 +66,14 @@ export const screenSizes = [
     { id: 6, size: '6.7 inches' },
     { id: 7, size: '7.0 inches+' },
 ];
+export const rearCameras = [
+    { id: 1, resolution: '12 MP' },
+    { id: 2, resolution: '48 MP' },
+    { id: 3, resolution: '64 MP' },
+    { id: 4, resolution: '108 MP' },
+    { id: 5, resolution: '50 MP' },
+    { id: 6, resolution: '200 MP' },
+];
 
 export const frontCameras = [
     { id: 1, resolution: '5 MP' },
@@ -76,14 +84,7 @@ export const frontCameras = [
     { id: 6, resolution: '48 MP' },
 ];
 
-export const rearCameras = [
-    { id: 1, resolution: '12 MP' },
-    { id: 2, resolution: '48 MP' },
-    { id: 3, resolution: '64 MP' },
-    { id: 4, resolution: '108 MP' },
-    { id: 5, resolution: '50 MP' },
-    { id: 6, resolution: '200 MP' },
-];
+
 export const batterySpecs = [
     { id: 1, capacity: '4500 mAh', fastCharging: '25W' },
     { id: 2, capacity: '5000 mAh', fastCharging: '30W' },

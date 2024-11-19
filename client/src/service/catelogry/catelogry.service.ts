@@ -2,10 +2,13 @@ import { axiosWithAuth, options } from "../axios.config";
 import { TPayloadCatelogry } from "./catelogry.type";
 
 export const getCatelogryById = (id: number) => {
-  return axiosWithAuth(`/categoriesId/${id}`, {
+  return axiosWithAuth(`/categories/${id}`, {
     method: "get",
   });
 };
+
+
+// Khu vực phía trên của devTri
 
 export const getCatelogry = () => {
   return axiosWithAuth("/categories", {

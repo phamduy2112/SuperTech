@@ -293,7 +293,6 @@ function AdminStaff() {
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleEdit = (key: number) => {
         Swal.fire({
             icon: 'info',
@@ -331,7 +330,7 @@ function AdminStaff() {
                 });
             }
         });
-    }    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }
     const handleDelete = (key: number, key_role: number, RoleStaff: number, IdStaff: number) => {
         if (RoleStaff == 0) {
 

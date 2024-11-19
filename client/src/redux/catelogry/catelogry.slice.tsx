@@ -3,8 +3,18 @@ import { createCategory, deleteCategory, getCatelogry, getCatelogryDad, getCatel
 
 export const getCatelogryThunkId = createAsyncThunk(
   "getCatelogryThunkId",
-  async (searchKey: number) => {
-    const resp = await getCatelogryById(searchKey);
+  async (key: number) => {
+
+    const resp = await getCatelogryById(key);
+    return resp.data.content;
+  },
+);
+
+export const getCatelogryThunkAll = createAsyncThunk(
+  "getCatelogryThunkAll",
+  async () => {
+
+    const resp = await getCatelogry();
     return resp.data.content;
   },
 );
@@ -97,11 +107,17 @@ const CatelogrySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+
     builder
-      .addCase(getCatelogryThunkId.fulfilled, (state, { payload }) => {
+      .addCase(getCatelogryThunkAll.fulfilled, (state, { payload }) => {
         state.listCatelories = payload;
       })
 
+    builder
+      .addCase(getCatelogryThunkId.fulfilled, (state, { payload }) => {
+        state.listCateloriesOne = payload;
+      })
+    //Khu vực phía trên của devTri
 
     builder
       .addCase(getCatelogryThunk.fulfilled, (state, { payload }) => {

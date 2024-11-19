@@ -13,7 +13,8 @@ function TaskProduct() {
     };
     getCategoriesDad();
   }, []);
-  
+
+
   return (
     <div className="absolute z-50 left-0 top-full mt-2 bg-white p-4 shadow-lg rounded-lg">
       <div className="w-[250px] py-[1.5rem] px-[1.6rem]">
@@ -27,8 +28,8 @@ function TaskProduct() {
               .map((item) => (
                 <li key={item.id} className="py-2 hover:bg-gray-100 rounded-lg">
                   <NavLink
-to={`/list-sản-phẩm?category_dad=${item.category_dad}&category=${item.category_id}`}
-className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
+                    to={`/list-sản-phẩm?category_dad=${item.category_dad}&category=${item.category_id}`}
+                    className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
                   >
                     {item.category_name}
                   </NavLink>
