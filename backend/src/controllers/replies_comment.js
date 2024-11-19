@@ -72,6 +72,8 @@ const deleteCommentReply = async (req, res) => {
         let deleted = await repliesCommentProduct.destroy({
             where: { id: req.params.id }
         });
+         // Trả về danh sách reply còn lại cho comment cha
+  const remainingReplies = await Comment.findAll({ where: { comment_id: req.body.parentId } });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {

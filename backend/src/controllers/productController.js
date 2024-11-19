@@ -92,9 +92,12 @@ const getProductsByCategoryId = async (req, res) => {
             responseSend(res, products, "Thành công!", 200);
         }else{
             responseSend(res, "", "không tồn tại !", 404);
+           
+            
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra khi truy vấn sản phẩm", 500);
+        console.log(error);
     }
 };
 

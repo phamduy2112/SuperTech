@@ -321,10 +321,11 @@ const verifyOldPassword = async (req, res) => {
             return res.status(404).json({ message: "User không tồn tại" });
         }
 
+
        
-        const isMatch = await bcrypt.compare(oldPassword, user.user_password);
-        if (!isMatch) {
-            return responseSend(res, null, "Mật khẩu cũ không chính xác", 400);
+        const isPasswordMatch = await bcrypt.compare(oldPassword, user.user_password);
+        if (!isPasswordMatch) {
+            return responseSend(res, null, "Mật khẩu cũ không chính xác", 200);
 
         }
 

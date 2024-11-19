@@ -28,6 +28,7 @@ function Comment(props: any) {
       ? { action: null, index: null }
       : { action, index });
   };
+  
   const dispatch=useDispatch();
   const handleDelete=(data:any)=>{
     setActiveDropdown(null);

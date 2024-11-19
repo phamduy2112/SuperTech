@@ -20,7 +20,7 @@ export const getReceiverSocketId = (receiverId) => userSocketMap[receiverId];
 
 io.on('connection', (socket) => {
 
-    console.log(socket);
+    // console.log(socket);
     
     const userId = socket.handshake.query.user_id;  // Lấy user_id từ query params
     console.log(`User connected: ${userId}, Socket ID: ${socket.id}`);  // Log khi có kết nối mới

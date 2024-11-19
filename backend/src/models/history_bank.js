@@ -1,38 +1,38 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infor_product extends Model {
+export default class history_bank extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    infor_product: {
+    idbank: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    infor_screen: {
-      type: DataTypes.INTEGER,
+    transactionId: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
-    infor_system: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    infor_cpu: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    infor_ram: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    infor_more: {
+    description: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'user',
+        key: 'user_id'
+      }
     }
   }, {
     sequelize,
-    tableName: 'infor_product',
+    tableName: 'history_bank',
     timestamps: false,
     indexes: [
       {
@@ -40,7 +40,14 @@ export default class infor_product extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "infor_product" },
+          { name: "idbank" },
+        ]
+      },
+      {
+        name: "fk_bankautohistory_userid",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
         ]
       },
     ]

@@ -22,11 +22,21 @@ function Pay() {
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
-  const totalPrice = listCart.reduce((total:number, item) => {
-    const discountAmount = (item.product_price * item.product_discount) / 100; // Tính giảm giá
-    const priceAfterDiscount = item.product_price - discountAmount; // Tính giá sau giảm
-    const itemTotalPrice = item.quantity * priceAfterDiscount; // Tính tổng giá của item
-    return total + itemTotalPrice; // Cộng dồn vào total
+  const totalPrice = listCart.reduce((total: number, item) => {
+    // Tính giá sản phẩm ban đầu cộng thêm giá storage
+    const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
+  
+    // Tính giảm giá
+    const discountAmount = (basePriceWithStorage * item.product_discount) / 100;
+  
+    // Giá sau khi giảm
+    const priceAfterDiscount = basePriceWithStorage - discountAmount;
+  
+    // Tính tổng giá của sản phẩm (giá sau giảm x số lượng)
+    const itemTotalPrice = item.quantity * priceAfterDiscount;
+  
+    // Cộng dồn vào tổng giá
+    return total + itemTotalPrice;
   }, 0);
   const getDiscount=useAppSelector(state=>state.cart.discount);
   const getShip=useAppSelector(state=>state.cart.ship);
@@ -124,16 +134,13 @@ function Pay() {
 
   
     const resp=await createOrder(dataOrder)
-    // console.log(resp);
-    
-    // Thực hiện các bước cần thiết sau khi lấy được dữ liệu
-    // create detail order
+   
 
     const detailOrders = listCart.map(item => ({
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
-      detail_order_price:item.product_price,
+      detail_order_price:item.product_price + Number(item?.selectedStorage?.storage_price || 0),
       discount_product:item.product_discount,
 
     }));
@@ -386,25 +393,32 @@ function Pay() {
                     </p>
                     {item?.product_discount > 0 ? (
                                           <p className="text-red-600 font-semibold">
-                                             {formatCurrencyVND(
-                                Number(item?.product_price) *
+                                           {formatCurrencyVND(
+                               ( Number(item?.product_price)+Number(item?.selectedStorage?.storage_price || 0)) *
                                   (1 - Number(item?.product_discount / 100))
+                          
                               )}
                                              <span className="text-[#969696] line-through ml-2">
-                                             {formatCurrencyVND(item?.product_price)}
+                                             {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price ||0)}
                                              </span></p>
 
           ):(
-            <p className="text-red-600 font-semibold"> {formatCurrencyVND(item?.product_price)} </p>
+            <p className="text-red-600 font-semibold"> 
+                                        {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price ||0)}
+
+            </p>
 
 
           )}
                   </div>
                 </div>
-                <div className="text-[1.8rem] font-semibold text-customColor">       {formatCurrencyVND(
-                                Number(item?.product_price) *
+                <div className="text-[1.8rem] font-semibold text-customColor">      
+                {formatCurrencyVND(
+                               ( Number(item?.product_price) + Number(item?.selectedStorage?.storage_price || 0)) *Number(item?.quantity)*
                                   (1 - Number(item?.product_discount / 100))
-                              )}đ</div>
+                              )}
+                            
+                            </div>
               </div>
             )
           })

@@ -25,12 +25,12 @@ function Bill(props) {
         const products = resp.data.content.map(detail => ({
         quanlity:detail.detail_order_quality,
           name: detail.product.product_name,
-          product_price: detail.product.product_price,
-          product_star: detail.product.product_star,
+          product_price: detail.detail_order_price,
           product_discount: detail.product.product_discount,
           product_hot: detail.product.product_hot,
           image_id: detail.product.image_id,
           category_id: 2
+        
         }));
   
         setListProduct(products);
@@ -42,7 +42,7 @@ function Bill(props) {
   }, [dispatch]);
   // console.log(order.discount_discount.discount_percent);
   
-  console.log(listProduct);
+  console.log(orderDetail);
   const totalPrice = detailOrder.reduce((total:number, item) => {
     const discountAmount = +(item.detail_order_price * item.discount_product) / 100; // Tính giảm giá
     const priceAfterDiscount = + item.detail_order_price - discountAmount; // Tính giá sau giảm

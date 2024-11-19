@@ -34,18 +34,6 @@ export default class products extends Model {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    product_quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    image_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'image_product',
-        key: 'image_id'
-      }
-    },
     infor_product: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -87,13 +75,6 @@ export default class products extends Model {
         using: "BTREE",
         fields: [
           { name: "category_id" },
-        ]
-      },
-      {
-        name: "fkimage",
-        using: "BTREE",
-        fields: [
-          { name: "image_id" },
         ]
       },
     ]

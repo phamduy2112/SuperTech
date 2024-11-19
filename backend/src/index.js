@@ -24,39 +24,14 @@ import cors from 'cors';
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
+import { app, server } from './socker/socker.js';
 
-const app = express();
+
 app.use(express.json());
 app.use(cookieParser());
 
 
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: 'http://localhost:5173', // Địa chỉ frontend (React)
-    credentials: true,
-    methods: ['GET', 'POST'],
-  },
-});
 
-const userSocketMap = {}; // Lưu trữ userId -> socketId
-
-io.on('connection', (socket) => {
-  const userId = socket.handshake.query.user_id; // Lấy user_id từ query params khi kết nối
-  if (userId) {
-    userSocketMap[userId] = socket.id; // Gán socket id cho userId
-    console.log(`User connected: ${userId}, Socket ID: ${socket.id}`);
-  }
-
-  console.log(userSocketMap);
-  
-  socket.on('disconnect', () => {
-    if (userId) {
-      delete userSocketMap[userId]; // Xóa khi người dùng ngắt kết nối
-    }
-    console.log(`User disconnected: ${userId}, Socket ID: ${socket.id}`);
-  });
-});
 
 
 

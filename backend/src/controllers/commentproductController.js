@@ -2,6 +2,7 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import { Op } from "sequelize";
+import { io } from "../socker/socker.js";
 
 let models = initModels(sequelize); 
 let commentProductModel = models.comment_product; 
@@ -91,7 +92,13 @@ const createcommentproduct = async (req, res) => {
         comment_star,
         comment_date: date, // Đặt ngày tạo dưới dạng đối tượng Date
       });
-  
+      io.emit('new_comment', {
+        user_id: newComment.id,
+        product_id: newComment.product_id,
+        comment_content: newComment.comment_content,
+        comment_star: newComment.comment_star,
+        comment_date: newComment.comment_date,
+      });
       responseSend(res, newComment, "Thêm thành công!", 201);
     } catch (error) {
       console.error("Error creating comment:", error); // Log chi tiết lỗi
@@ -135,11 +142,12 @@ const createcommentproduct = async (req, res) => {
 const deletecommentproduct = async (req, res) => {
     try {
         const id=req.params.id;
-        console.log(id);
+    
         
         let deleted = await commentProductModel.destroy({
             where: { comment_id:id}
         });
+        
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {

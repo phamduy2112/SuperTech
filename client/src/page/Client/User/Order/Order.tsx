@@ -64,8 +64,11 @@ function Order() {
       title: 'Tổng tiền',
       key: 'order_total',
       dataIndex: 'order_total',
-      render: (text) => <NavLink to={""} className="text-[red] font-semibold">{formatCurrencyVND(text)}</NavLink>,
-
+      render: (text,value) => 
+      <NavLink to={""} className="text-[red] font-semibold">
+        {formatCurrencyVND(text * (1 - Number(value?.discount_discount?.discount_percent / 100 ||0)))}
+        </NavLink>,
+// discount_discount
    
     },
   

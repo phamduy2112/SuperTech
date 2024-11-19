@@ -3,20 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
 import ProductItem from '../../../components/product/ProductItem';
 import { getFavouriteProducts } from '../../../service/product/favourite.service';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { getFavouriteByIdProductThunk } from '../../../redux/favourite/favourite.slice';
 
 function FavoriteProduct() {
-  const [favouriteProduct, setFavouriteProduct] = useState([]);
+  // const [favouriteProduct, setFavouriteProduct] = useState([]);
+  // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
+  // const dispatch=useAppDispatch()
+  // useEffect(() => {
+  //  dispatch(getFavouriteByIdProductThunk())
+  // }, []);
 
-  useEffect(() => {
-    const getFavourite = async () => {
-      const response = await getFavouriteProducts();
-      setFavouriteProduct(response.data.content); // Lưu lại danh sách sản phẩm yêu thích
-    };
-    getFavourite();
-  }, []);
-
-  // Lọc các sản phẩm có product_id !== null
-  const validProducts = favouriteProduct.filter(item => item.product_id !== null);
+  // // Lọc các sản phẩm có product_id !== null
+  // const validProducts = favouriteProduct.filter(item => item.product_id !== null);
 
   return (
     <div className='w-[80%] m-auto'>

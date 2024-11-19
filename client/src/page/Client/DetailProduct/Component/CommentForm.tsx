@@ -32,7 +32,7 @@ toast.success("Bình luận thành công")
   navigate("/đăng-nhập")
  }
     
-    // console.log(newComment);
+  
     
     } catch (error) {
       console.error("Error submitting comment:", error);
