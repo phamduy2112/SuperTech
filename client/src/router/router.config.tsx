@@ -47,6 +47,7 @@ import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
 import CouponSection from "../page/Client/Voucher/Voucher";
 import { PrivateRoute } from "./component/RouterPrivate";
+import SetUpchat from "../page/Admin/Chat/SetUpchat";
 
 export const router = createBrowserRouter([
   {
@@ -277,6 +278,10 @@ export const router = createBrowserRouter([
       {
         path: 'quản-lí-tin-nhắn',
         element: <ChatAdmin />
+      },
+      {
+        path: 'quản-lí-tin-nhắn2',
+        element: <SetUpchat />
       },
       {
         path: 'quản-lí-trang-web',

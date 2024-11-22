@@ -43,6 +43,6 @@ userRouter.put("/forget-reset-password", resetPasswordNoToken);
 
 userRouter.post("/create-users", createUser);
 userRouter.get("/user_detail_admin/:id", Checkuserdetailadmin);
-userRouter.get("/update-users-admin/:id", UpdateUsersAdmin);
+userRouter.put("/update-users-admin/:id", UpdateUsersAdmin);
 
 export default userRouter;

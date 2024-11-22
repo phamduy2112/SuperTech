@@ -1,20 +1,25 @@
 import { Server } from "socket.io";
-import express from "express";
-import http from "http";
 
-const app = express();
+const setupSocket = (server) => {
+  const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:5173",
+      methods: ["GET", "POST"],
+    },
+  });
 
-const server = http.createServer(app);
+  io.on("connection", (socket) => {
+    console.log("Người dùng đã kết nối " + socket.id);
 
-const io = new Server(server, {
-  cors: {
-    origin: process.env.URL,
-    methods: ["GET", "POST"],
-  },
-});
+    socket.on("authentic_user", (data) => {
+      console.log(data);
+      io.to(socket.id).emit("authentication",data);
+    });
 
-io.on("connection", (socket) => {
-  console.log(socket);
-});
+    socket.on("disconnect", () => {
+      console.log("Người dùng " + socket.id + " đã ngắt kết nối");
+    });
+  });
+};
 
-export { app, server, io };
+export default setupSocket;

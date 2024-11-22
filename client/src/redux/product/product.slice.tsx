@@ -153,6 +153,9 @@ const ProductSlice = createSlice({
     },
     setProductStorage: (state, { payload }) => {
       state.listProductStorage.push(payload);
+    },
+    setlistProductByIdCategory: (state, { payload }) => {
+      state.listProductByIdCategory = payload;
     }
   },
   extraReducers: (builder) => {
@@ -193,6 +196,6 @@ const ProductSlice = createSlice({
   },
 });
 
-export const { setProduct, setProductColors, setProductStorage } = ProductSlice.actions;
+export const { setProduct, setProductColors, setlistProductByIdCategory, setProductStorage } = ProductSlice.actions;
 
 export const productReducer = ProductSlice.reducer;

@@ -7,17 +7,18 @@ export const trademark = [
     { id: 6, label: 'nokia', url: 'https://www.vanillaplus.com/wp-content/uploads/2023/02/Nokia-new-logo-transparent-background.png' },
     { id: 7, label: 'asus', url: 'https://www.pngplay.com/wp-content/uploads/13/Asus-Logo-PNG-Clipart-Background.png' },
     { id: 8, label: 'lumbia', url: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/29242b9e-4caa-4723-a7df-7053a4a08f16.__CR0,0,600,180_PT0_SX600_V1___.jpg' }
-
-
-
-
 ]
+
+
+
 export const operatingSystems = [
     { id: 1, name: 'Android' },
-    { id: 2, name: 'iOS' },
+    { id: 2, name: 'iOS 17' },
     { id: 3, name: 'Windows Phone' },
     { id: 4, name: 'KaiOS' },
     { id: 5, name: 'HarmonyOS' },
+    { id: 6, name: 'iOS 16' },
+
 ];
 
 export const priceList = [
@@ -36,7 +37,7 @@ export const ramOptions = [
     { id: 5, capacity: '12GB' },
     { id: 6, capacity: '16GB' },
     { id: 7, capacity: '18GB' },
-    { id: 7, capacity: '32GB' },
+    { id: 8, capacity: '32GB' },
 ];
 
 export const romOptions = [
@@ -65,6 +66,12 @@ export const screenSizes = [
     { id: 5, size: '6.5 inches' },
     { id: 6, size: '6.7 inches' },
     { id: 7, size: '7.0 inches+' },
+    { id: 8, size: '6.8 inches' },
+    { id: 9, size: '6.5 inches' },
+    { id: 10, size: '6.2 inches' },
+
+
+
 ];
 export const rearCameras = [
     { id: 1, resolution: '12 MP' },
@@ -79,9 +86,13 @@ export const frontCameras = [
     { id: 1, resolution: '5 MP' },
     { id: 2, resolution: '8 MP' },
     { id: 3, resolution: '12 MP' },
-    { id: 4, resolution: '20 MP' },
-    { id: 5, resolution: '32 MP' },
-    { id: 6, resolution: '48 MP' },
+    { id: 4, resolution: '13 MP' },
+    { id: 5, resolution: '20 MP' },
+    { id: 6, resolution: '32 MP' },
+    { id: 7, resolution: '48 MP' },
+    { id: 8, resolution: '50 MP' },
+    { id: 9, resolution: '200 MP' },
+
 ];
 
 
@@ -91,6 +102,9 @@ export const batterySpecs = [
     { id: 3, capacity: '4000 mAh', fastCharging: '18W' },
     { id: 4, capacity: '3000 mAh', fastCharging: '20W' },
     { id: 5, capacity: '6000 mAh', fastCharging: '40W' },
+    { id: 6, capacity: '5000 mAh', fastCharging: '25W' },
+    { id: 7, capacity: '5000 mAh', fastCharging: '45W' },
+
 ];
 
 export const performanceSpecs = [

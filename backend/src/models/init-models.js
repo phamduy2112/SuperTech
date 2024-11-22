@@ -23,7 +23,7 @@ import _product_colors from "./product_colors.js";
 import _product_storage from "./product_storage.js";
 import _products from "./products.js";
 import _replies_comment_product from "./replies_comment_product.js";
-import _user from "./user.js";
+import _user from "./User.js";
 import _user_discounts from "./user_discounts.js";
 
 export default function initModels(sequelize) {
@@ -61,7 +61,7 @@ export default function initModels(sequelize) {
   likes.belongsTo(comment_product, { as: "comment", foreignKey: "comment_id" });
   comment_product.hasMany(likes, { as: "likes", foreignKey: "comment_id" });
   replies_comment_product.belongsTo(comment_product, {
-    as: "parentComment",
+    as: "parent_comment",
     foreignKey: "comment_id",
   });
   comment_product.hasMany(replies_comment_product, {

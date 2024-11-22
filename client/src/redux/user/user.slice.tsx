@@ -58,7 +58,7 @@ export const createStaffThunk = createAsyncThunk(
 );
 
 export const UpdateStaffThunk = createAsyncThunk(
-  "UpdateStaffThunk", async (UpdateStaffSend: UpdateStaffInterface) => {  // Destructure đúng cách
+  "UpdateStaffThunk", async (UpdateStaffSend: UpdateStaffInterface) => {
 
     try {
       const resp = await UpdateStaff(UpdateStaffSend);
@@ -216,7 +216,9 @@ const UserSlice = createSlice({
 
     builder
       .addCase(UpdateStaffThunk.fulfilled, (state, { payload }) => {
-        state.token = payload;
+        state.token = payload.token;
+
+
       })
     //Ở trên là khu vực builder của devTri
 

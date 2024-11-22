@@ -142,11 +142,6 @@ const Checkuserdetailadmin = async (req, res) => {
   );
 };
 
-const UpdateUsersAdmin = async (req, res) => {
-  console.log(req.params.id);
-  console.log(req.body);
-};
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -292,6 +287,44 @@ const userDetail = async (req, res) => {
     responseSend(res, user, "Thành công!", 200);
   } catch (e) {
     console.log(e);
+  }
+};
+const UpdateUsersAdmin = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+
+    const user = await User.findByPk(user_id);
+    req.body;
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    Object.entries(req.body).forEach(([key, value]) => {
+      user[key] = value;
+    });
+    console.log(user);
+
+    await user.save();
+    const userDB = await User.findByPk(user_id);
+    console.log(userDB);
+
+    const token = createToken(userDB);
+    const tokenRef = createTokenRef(userDB);
+    return responseSend(
+      res,
+      {
+        token: token,
+        refreshToken: tokenRef,
+        success: true,
+      },
+      "Cập Nhật Thành Công!",
+      200
+    );
+  } catch (error) {
+    console.error("Error updating user:", error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
   }
 };
 const updateUser = async (req, res) => {

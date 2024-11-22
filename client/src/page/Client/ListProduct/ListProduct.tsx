@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import ProductItem from '../../../components/product/ProductItem';
-import { Breadcrumb, Checkbox, Form, Select } from 'antd';
+import { Breadcrumb, Checkbox, Empty, Form, Select } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { GetAllImgThunk, ProductByIdCatelogryThunk } from '../../../redux/product/product.slice';
 import { useLocation } from 'react-router-dom';
 import Filter from './Filter';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ListProduct() {
+
   const [Products, setProducts] = useState([]);
   const location = useLocation();
   const [category, setcategory] = useState<number>();
@@ -21,10 +23,6 @@ function ListProduct() {
   useEffect(() => {
     AppDispatch(GetAllImgThunk())
   }, [AppDispatch]);
-
-
-
-
 
 
   useEffect(() => {
@@ -49,6 +47,7 @@ function ListProduct() {
   useEffect(() => {
     setProducts(ProductsByIdComponent)
   }, [ProductsByIdComponent])
+
 
   const handleCheckboxChangeSale = (e: { target: { checked: boolean; }; }) => {
     if (e.target.checked === true) {
@@ -104,10 +103,19 @@ function ListProduct() {
           </div>
         </div>
       </div>
-      <div className='grid grid-cols-6 gap-y-3'>
-        {Products?.map((item, index) => (
-          <ProductItem key={index} product={item} />
-        ))}
+      <div className='w-full grid grid-cols-6 gap-y-3'>
+        {
+          Products.length > 0 ? (
+            Products?.map((item, index) => (
+              <ProductItem key={index} product={item} />
+            ))
+          ) : (
+            <div className='col-span-6 w-[100%]'>
+              <Empty description={'Không có dữ liệu để hiener thị'} />
+            </div>
+          )
+        }
+
       </div>
     </div>
   );

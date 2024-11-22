@@ -7,6 +7,7 @@ import { operatingSystems, priceList, refreshRates, screenSizes, trademark, ramO
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getCatelogryThunkAll, getCatelogryThunkId } from '../../../redux/catelogry/catelogry.slice';
 import { IoAddOutline } from 'react-icons/io5';
+import { setlistProductByIdCategory } from '../../../redux/product/product.slice';
 type ObjFilterType = {
     company: string,
     price: string[];
@@ -54,6 +55,10 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
 
     const ProductsByIdComponent = useAppSelector((state) => state.product.listProductByIdCategory);
 
+    const [open, setopen] = useState(false);
+    const handleVisibleChange = (event: boolean) => {
+        setopen(event);
+    };
 
 
     useEffect(() => {
@@ -105,13 +110,13 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
 
     useEffect(() => {
         if (listCateloriesOne && listCateloriesOne.category_name) {
-            console.log(listCateloriesOne.category_name);
 
             setObjFilter((prev) => ({
                 ...prev, // Giữ lại các thuộc tính cũ
                 company: listCateloriesOne.category_name, // Cập nhật company
             }));
         }
+
     }, [listCateloriesOne]);
 
     console.log(ObjFilter)
@@ -157,14 +162,14 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
     const handleSelectSize = (size: string) => {
         setObjFilter((prev) => ({
             ...prev,
-            size: prev.size.includes(size) ? prev.size : [...prev.size, size], // Kiểm tra trùng lặp trước khi thêm
+            size: prev.size.includes(size) ? prev.size : [...prev.size, size],
         }));
     };
 
     const handleprice = (price: string) => {
         setObjFilter((prev) => ({
             ...prev,
-            price: prev.price.includes(price) ? prev.price : [...prev.price, price], // Kiểm tra trùng lặp trước khi thêm
+            price: prev.price.includes(price) ? prev.price : [...prev.price, price],
         }));
     };
 
@@ -184,28 +189,23 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
                 ? prev.refreshRate
                 : [...prev.refreshRate, rate],
         }));
-        console.log('Selected refresh rate:', rate);
     };
 
-    // Hàm để cập nhật ObjFilter với RAM
+
     const handleSelectRam = (ram: string) => {
         setObjFilter((prev) => ({
             ...prev,
             ram: prev.ram.includes(ram) ? prev.ram : [...prev.ram, ram],
         }));
-        console.log('Selected RAM:', ram);
     };
 
-    // Hàm để cập nhật ObjFilter với ROM
     const handleSelectRom = (rom: string) => {
         setObjFilter((prev) => ({
             ...prev,
             rom: prev.rom.includes(rom) ? prev.rom : [...prev.rom, rom],
         }));
-        console.log('Selected ROM:', rom);
     };
 
-    // Hàm để cập nhật ObjFilter với camera trước
     const FrontCameras = (frontCameras: string) => {
         setObjFilter((prev) => ({
             ...prev,
@@ -224,7 +224,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         }));
     };
 
-    // Hàm để cập nhật ObjFilter với hiệu suất (CPU)
     const PerformanceSpecs = (cpu: string) => {
         setObjFilter((prev) => ({
             ...prev,
@@ -232,7 +231,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         }));
     };
 
-    // Hàm để cập nhật ObjFilter với dung lượng pin và sạc nhanh
     const BatterySpecs = (capacity: string, fastCharging: string) => {
         setObjFilter((prev) => ({
             ...prev,
@@ -245,7 +243,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         }));
     };
 
-    // Hàm để cập nhật ObjFilter với tính năng đặc biệt
     const SpecialFeatures = (feature: string) => {
         setObjFilter((prev) => ({
             ...prev,
@@ -305,16 +302,32 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         });
     };
 
-    // const filterProducts = (products: any[], conditions: any) => {
-    //     return products.filter(product => {
-    //        if()
-    //     })
-    // }
+    const FilterData = () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const NewData = ProductsByIdComponent.filter((item: any) => {
+            return (
+                (ObjFilter.size.length > 0 ? ObjFilter.size.some(size => (item.infor_product_infor_product.infor_screen).toLowerCase().includes(size.toLowerCase())) : true),
 
-    // const filteredProducts = filterProducts(ProductsByIdComponent, ObjFilter);
+                (ObjFilter.operatingSystem.length > 0 ? ObjFilter.operatingSystem.some(operatingSystem => (item.infor_product_infor_product.infor_system).toLowerCase().includes(operatingSystem.toLowerCase())) : true)
+
+            );
+        });
+
+        setarrayFilterShowProduct(NewData)
+    };
+
+    const [arrayFilterShowProduct, setarrayFilterShowProduct] = useState([]);
+
+    useEffect(() => {
+        FilterData();
+
+    }, [ObjFilter]);
+    useEffect(() => {
+        AppDispatch(setlistProductByIdCategory(arrayFilterShowProduct))
+    }, [AppDispatch, arrayFilterShowProduct])
 
 
-
+    console.log('data', arrayFilterShowProduct);
 
 
 
@@ -557,11 +570,15 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
                         </div>
                     </div>
                     <div className="flex border-t-[1px] pt-6 flex-row justify-center items-center gap-[5px] col-span-3 mt-4">
-                        <Button color='danger' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
+                        <Button onClick={() => handleVisibleChange(false)} color='danger' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
                             <span>Bỏ chọn</span>
                         </Button>
-                        <Button color='primary' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="solid">
-                            <span>Xem 19 kết quả</span>
+                        <Button color='primary' onClick={() => handleVisibleChange(false)} className="min-w-[200px] h-[50px] flex justify-center items-center" variant="solid">
+                            {
+                                arrayFilterShowProduct.length != 0 ? <span>Xem thêm {arrayFilterShowProduct.length} kết quả</span>
+                                    : <span>Không có kết quả</span>
+
+                            }
                         </Button>
                     </div>
                 </div >
@@ -576,13 +593,17 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
 
 
 
+
     return (
-        <Popover placement="bottomLeft" trigger={'click'} title={Selected} content={<OptionSelected />}>
-            <Button className='text-[17px] font-bold'>
+        <Popover open={open} placement="bottomLeft" trigger={'click'} title={Selected} content={<OptionSelected />}>
+            <Button onClick={() => handleVisibleChange(!open)} className='text-[17px] font-bold'>
                 <CiFilter />
                 <span>Lọc</span>
             </Button>
         </Popover>
+
+
+
     )
 }
 

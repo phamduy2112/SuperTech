@@ -7,13 +7,14 @@ import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
 import './AdminCreateAccout.css'
-import { IoMdCloudUpload } from 'react-icons/io';
 import { datanganhang } from './Databank';
 import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface, UpdateStaffInterface } from './DataStaff';
-import { getUserAdminThunk, UpdateStaffThunk } from '../../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import Swal from 'sweetalert2';
 import { useParams } from 'react-router-dom';
+import { IMG_USER_BACKEND } from '../../../../constants';
+import { IoMdCloudUpload } from 'react-icons/io';
+import { UpdateStaffThunk } from '../../../../redux/user/user.slice';
 
 
 
@@ -24,6 +25,9 @@ function AdminCustomerEdit() {
     const [staff, setStaff] = useState<StaffInterface>({});
     const { id } = useParams();
     const userId = Number(id);
+    console.log(IMG_USER_BACKEND);
+
+
 
 
     useEffect(() => {
@@ -72,8 +76,7 @@ function AdminCustomerEdit() {
                 user_image: staff.user_image || '',
             });
         }
-    }, [staff]);
-
+    }, [staff]); // Chỉ phụ thuộc vào staff, không phụ thuộc vào staffData nữa
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -115,11 +118,10 @@ function AdminCustomerEdit() {
             DataStaff
         }
 
-        console.log(UpdateStaff);
 
 
         try {
-            const data = await AppDispatch(UpdateStaffThunk(UpdateStaffSend));
+            const data = await AppDispatch(UpdateStaffThunk(UpdateStaff));
             if (data.payload.success === true) {
                 Swal.fire({
                     title: 'Thành công',
@@ -130,8 +132,7 @@ function AdminCustomerEdit() {
                 })
                     .then((result) => {
                         if (result.isConfirmed) {
-                            console.log('abc');
-
+                            window.location.href = '/admin/quản-lí-nhân-viên';
                         }
                     })
             };
@@ -144,7 +145,9 @@ function AdminCustomerEdit() {
 
     const uploadRef = useRef<HTMLDivElement>(null);
 
+
     const [fileList, setFileList] = useState<UploadFile[]>([]);
+
 
     const onChange: UploadProps['onChange'] = async (info) => {
         const { fileList: file } = info;
@@ -172,7 +175,6 @@ function AdminCustomerEdit() {
             console.error("Tải lên không thành công, mã lỗi:", file[0].response?.statusCode);
         }
     };
-
 
 
     const toolbarOptions = [
@@ -291,7 +293,7 @@ function AdminCustomerEdit() {
                 <span className='text-[20px] font-semibold'>Tải ảnh  </span>
 
                 <div className='text-[14px] font-medium text-[#9696968e]'>
-                    <span>Chọn ảnh sản phẩm hoặc chỉ cần kéo và thả tối đa 6 ảnh tại đây.</span>
+                    <span>Chọn ảnh sản phẩm hoặc chỉ cần kéo và thả tối đa 1 ảnh tại đây.</span>
 
                 </div>
                 <div className='flex- items-center flex justify-center'>
@@ -305,7 +307,7 @@ function AdminCustomerEdit() {
                                 showRemoveIcon: true
                             }}
                             maxCount={1}
-                            accept=".png,.jpg,.doc"
+                            accept=".png,.jpg,.jpeg"
                             headers={{
                                 token: tokenStaff,
                             }}
@@ -325,31 +327,45 @@ function AdminCustomerEdit() {
                                 if (fileList.length === 1) {
                                     setstaffData(prevState => ({
                                         ...prevState,
-                                        user_image: '',
+                                        user_image: staff.user_image,
                                     }));
                                 }
                             }}
-
                         >
-                            <div className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}>
-                                <p className="text-4xl  " onClick={() => uploadRef.current?.querySelector('input[type="file"]')}>
-                                    <IoMdCloudUpload />
-                                </p>
-                                <p className="mt-2 text-lg text-center">Bấm hoặc kéo thả ảnh vào đây</p>
+                            <div
+                                className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}
+                            >
+                                {
+                                    staff.user_image != null ? (
+                                        <img
+                                            src={IMG_USER_BACKEND + staff.user_image}
+                                            alt="Uploaded"
+                                            className="rounded-lg w-[70rem] h-[35rem] object-cover shadow-lg"
+                                        />
+                                    ) : (
+                                        <>
+                                            <p className="text-4xl  " onClick={() => uploadRef.current?.querySelector('input[type="file"]')}>
+                                                <IoMdCloudUpload />
+                                            </p>
+                                            <p className="mt-2 text-lg text-center">Ảnh chưa có vui lòng bấm kéo thả ảnh vào đây</p>
+                                        </>
+                                    )
+                                }
                             </div>
 
                             <div className={`flex w-[70rem] h-[40rem] items-center  justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'block' : 'hidden'}`}>
                                 <img src={fileList[0]?.url} alt="Uploaded" className="rounded-lg w-[70rem] h-[35rem] object-cover   shadow-lg" />
                             </div>
-
                         </Upload.Dragger>
                     </ImgCrop>
+
 
 
 
                 </div>
                 <div className='text-[14px] text-[#9696968e]  font-medium'>
                     <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 10MB.</span>
+
                 </div>
 
             </div>
@@ -360,9 +376,9 @@ function AdminCustomerEdit() {
                         <label htmlFor="" className="text-[13px] text-[#81818177] font-medium">Tên tài khoản</label>
                         <input
                             onChange={handleInputChange}
-                            name="user_name"  // Đảm bảo tên đúng với key trong state
-                            value={staffData.user_name} // Dùng value thay vì placeholder
-                            placeholder={staff.user_name}
+                            value={staffData.user_name}
+                            name="user_name"
+                            placeholder='Không có dữ liệu tên tài khoản'
                             type="text"
                             className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
                         />
@@ -371,9 +387,10 @@ function AdminCustomerEdit() {
                         <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Email</label>
                         <input type='text'
                             onChange={handleInputChange}
-                            name="user_email"
-                            placeholder={staff.user_email}
                             value={staffData.user_email}
+
+                            name="user_email"
+                            placeholder='Không có dữ liệu email'
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
@@ -383,7 +400,8 @@ function AdminCustomerEdit() {
                             onChange={handleInputChange}
                             name="user_password"
                             value={staffData.user_password}
-                            placeholder={staff.user_password}
+
+                            placeholder='Không có dữ liệu mật khẩu'
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
@@ -392,10 +410,12 @@ function AdminCustomerEdit() {
                         <Select
                             showSearch
                             optionFilterProp="label"
-                            value={staffData.level}
                             options={
                                 OptionsImageStaffLevel
                             }
+                            value={staffData.level}
+                            placeholder={staffData.level == null ? 'Chưa có level' : ''}
+
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
                             onChange={(value) => handleSelectOnChange(value, 'level')}
 
@@ -406,8 +426,9 @@ function AdminCustomerEdit() {
                         <input
                             onChange={handleInputChange}
                             name="user_phone"
-                            placeholder={staff.user_phone == null ? 'Chưa có số trong tài khoản' : staff.user_phone}
                             value={staffData.user_phone}
+
+                            placeholder='Không có dữ liệu số điện thoại'
                             type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
@@ -417,6 +438,8 @@ function AdminCustomerEdit() {
                             optionFilterProp="label"
                             options={OptionsStaffGender}
                             value={staffData.user_gender}
+                            placeholder={staffData.user_gender == null ? 'Chưa có dữ liệu giới tính' : ''}
+
                             onChange={(value) => handleSelectOnChange(value, 'user_gender')}
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
                         />
@@ -427,6 +450,7 @@ function AdminCustomerEdit() {
                             showSearch
 
                             optionFilterProp="label"
+                            placeholder={staffData.user_role == null ? 'Chưa có dữ liệu vai trò' : ''}
                             value={staffData.user_role}
                             options={
                                 OptionsStaffRole
@@ -450,7 +474,9 @@ function AdminCustomerEdit() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' value={staffData.user_birth == null ? 'Chưa có ngày sinh' : staffData.user_birth} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            <input type='text'
+                                placeholder={staffData.user_birth == null || staffData.user_birth == "" ? 'Chưa có dữ liệu ngày sinh' : ''}
+                                value={staffData.user_birth} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
                     </div>
                     <div className='flex h-auto flex-col gap-4 '>
@@ -466,7 +492,8 @@ function AdminCustomerEdit() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' value={staffData.user_time == null ? 'Chưa có ngày tham gia' : staffData.user_time} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            <input type='text' placeholder={staffData.user_time == null || staffData.user_time == "" ? 'Chưa có dữ liệu ngày tham gia' : ''}
+                                value={staffData.user_time} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
 
                     </div>
@@ -476,9 +503,10 @@ function AdminCustomerEdit() {
                         <div className="quill-container">
                             <ReactQuill
                                 theme="snow"
-                                value={staffData.user_address}
                                 onChange={handleInputChangeWord}
                                 modules={{ toolbar: toolbarOptions }}
+                                value={staffData.user_address}
+
                                 className=" bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
                             />
                         </div>

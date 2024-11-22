@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Drawer, Popover } from 'antd';
 import { BsThreeDots } from 'react-icons/bs';
 import { MdOutlineMarkEmailUnread, MdOutlineZoomOutMap } from 'react-icons/md';
@@ -9,8 +9,22 @@ import { PiMessengerLogoBold, PiMinus } from 'react-icons/pi';
 import { LuDelete } from 'react-icons/lu';
 import { LiaUserAltSlashSolid } from 'react-icons/lia';
 import BoxChat from './BoxChat';
+import { socket } from '../../../service/ChatApp/Socket.io';
+
 
 function ChatAdmin() {
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server with socket ID: ", socket.id);
+    });
+    socket.on("authentication", (data) => {
+      console.log("Received authentication response:", data);
+    });
+  }, [])
+
+
+
+
   const boxChats = [1, 2, 3, 4, 5];
 
   const numberOfItemsToShow = 3;

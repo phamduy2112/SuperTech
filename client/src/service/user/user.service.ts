@@ -1,4 +1,3 @@
-import { Header } from "antd/es/layout/layout";
 import {
   DataStaffInterface,
   UpdateStaffInterface,
@@ -30,7 +29,8 @@ export const createStaff = async (DataStaff: DataStaffInterface) => {
 };
 export const UpdateStaff = async (UpdateStaffSend: UpdateStaffInterface) => {
   console.log(UpdateStaffSend);
-  return axiosWithAuth(`/update-users-admin/${UpdateStaffSend.userId}`, {
+
+  return axios(`http://localhost:8080/update-users-admin/${UpdateStaffSend.userId}`, {
     method: "put",
     data: UpdateStaffSend.DataStaff.staffData,
     headers: {
