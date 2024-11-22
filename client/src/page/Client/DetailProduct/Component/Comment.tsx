@@ -84,6 +84,7 @@ const handleLike=async(id:number,idProduct:number)=>{
           {props.reviews?.map((review, index) => {
             return (
               <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
+              
                 <img
                   src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
                   alt="Avatar"
@@ -91,15 +92,16 @@ const handleLike=async(id:number,idProduct:number)=>{
                 />
 
                 <div className="flex w-[100%] justify-between">
+                  
                   <div className="w-[100%]">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-bold text-[2rem]">{review.user.user_name}</h3>
+                        <h3 className="font-bold text-[2rem]">{review.user?.user_name} || {review?.isPurchase ? "Đã mua hàng" : ""}</h3>
                         <div className="flex items-center text-[1.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">4/5/2025</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
   {[...Array(5)].map((_, index) => (
-    index < Number(review.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
+    index < Number(review?.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
   ))}
 </div>
                         </div>
@@ -145,7 +147,7 @@ const handleLike=async(id:number,idProduct:number)=>{
                   )}
                 </Formik>
               ) : (
-                <p className="text-[1.8rem] text-gray-800">{review.comment_content}</p>
+                <p className="text-[1.8rem] text-gray-800">{review?.comment_content}</p>
               )}
                         
                       </div>
@@ -191,7 +193,7 @@ onClick={() => handleActionToggle(index, 'edit')}                               
       ? <BiSolidLike onClick={() => handleLike(review.comment_id, review.product_id)} />
       : <AiOutlineLike onClick={() => handleLike(review.comment_id, review.product_id)} />
   }
-  <span>{review.likes.length}</span>
+  <span>{review.likes?.length}</span>
 </button>
                           
                           

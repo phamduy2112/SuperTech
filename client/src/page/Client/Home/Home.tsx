@@ -20,7 +20,6 @@ import ProductsNew from './Component/ProductsNew';
 import UseSocket from '../../../socket/useSocket';
 
 function Home() {
-  UseSocket(); // Gọi custom hook useSocket trong component này
 
   return (
     <div>

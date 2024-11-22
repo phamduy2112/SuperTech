@@ -26,7 +26,7 @@ function Bill(props) {
         quanlity:detail.detail_order_quality,
           name: detail.product.product_name,
           product_price: detail.detail_order_price,
-          product_discount: detail.product.product_discount,
+          product_discount: detail.discount_product,
           product_hot: detail.product.product_hot,
           image_id: detail.product.image_id,
           category_id: 2

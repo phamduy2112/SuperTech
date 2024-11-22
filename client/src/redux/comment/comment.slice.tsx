@@ -100,7 +100,7 @@ const commentSlice = createSlice({
   name: "commentSlice",
   initialState,
   reducers: {
-    setcomment: (state, { payload }) => {
+    setCommentReducer: (state, { payload }) => {
       state.listComment = payload;
     },
   },
@@ -140,6 +140,6 @@ const commentSlice = createSlice({
 
 });
 
-export const { setcomment } = commentSlice.actions;
+export const { setCommentReducer } = commentSlice.actions;
 
 export const commentReducer = commentSlice.reducer;

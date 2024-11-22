@@ -11,12 +11,12 @@ function Order() {
   const userRef = useRef<any>(null);
 
   const colorText = [
-    { color: '#DB363B', text: 'Đang chờ duyệt' },     // 0
-    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, // 1
-    { color: '#2277C6', text: 'Đang giao hàng' },     // 2
-    { color: '#2101B0', text: 'Đã huỷ hàng' },        // 3
-    { color: '#04C621', text: 'Thành công' },         // 4
-    { color: '#000000', text: 'Không nhận hàng' },    // 5
+    { color: '#DB363B', text: 'Đang chờ duyệt' },     
+    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, 
+    { color: '#2277C6', text: 'Đang giao hàng' },    
+    { color: '#2101B0', text: 'Đã huỷ hàng' },        
+    { color: '#04C621', text: 'Thành công' },        
+    { color: '#000000', text: 'Không nhận hàng' },    
 
   ];
   const [orderStatus, setOrderStatus] = useState(0); // Default status is 0

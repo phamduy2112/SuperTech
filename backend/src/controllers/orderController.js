@@ -8,7 +8,23 @@ let orders = models.order;
 
 const getorder = async (req, res) => {
     try {
-        let data = await order.findAll();
+        let data = await order.findAll({
+            include: [
+                {
+                    model: models.order_status,
+                    as: "order_statuses",
+                    where: {
+                        order_status_id: sequelize.literal(`(
+                          SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
+                        )`),
+                      },
+                },
+                {
+                    model: models.discount,
+                    as: "discount_discount",
+                },
+            ],
+        });
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -70,6 +86,7 @@ const getOrderById = async (req, res) => {
 
 const changeStatusOrder = async (req, res) => {
     try {
+        const idUser=req.id;
       const order_id = req.params.id;  // Lấy ID đơn hàng từ params
       const { order_status, order_status_text_cancel } = req.body;  // Lấy trạng thái và lý do hủy (nếu có)
       const order = await orders.findByPk(order_id);
@@ -89,7 +106,23 @@ const changeStatusOrder = async (req, res) => {
         order_status_text_cancel: order_status_text_cancel || null,  // Lý do hủy nếu có
         created_at: new Date(),  // Thời gian tạo
       });
+      if (order_status ==6) {
+        // Lấy danh sách sản phẩm liên quan đến đơn hàng
+        const orderItems = await models.detail_order.findAll({
+          where: { order_id },
+          attributes: ['product_id'], // Chỉ lấy product_id
+        });
   
+        const productIds = orderItems.map((item) => item.product_id);
+        
+        console.log(productIds);
+        
+        // Cập nhật cờ isPurchase = true cho các bình luận liên quan đến các sản phẩm trong đơn hàng
+        await models.comment_product.update(
+          { isPurchase: true },
+          { where: { product_id: productIds, user_id:idUser }, }
+        );
+      }
       // Trả về phản hồi thành công với dữ liệu đã tạo
       return res.status(201).json({
         message: 'Đã tạo mới trạng thái đơn hàng thành công!',
@@ -98,6 +131,8 @@ const changeStatusOrder = async (req, res) => {
     } catch (error) {
       // Nếu có lỗi, trả về lỗi cho người dùng
       console.error('Error creating order status:', error);
+      console.log(error);
+      
       return res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau.' });
     }
   };

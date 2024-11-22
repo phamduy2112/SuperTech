@@ -76,13 +76,12 @@ const getCommentProductByIdProduct = async (req, res) => {
       responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
   };
-const createcommentproduct = async (req, res) => {
+  const createcommentproduct = async (req, res) => {
     try {
-      const user_id = req.id;
-      const { comment_content, comment_star,product_id } = req.body;
-      
+      const user_id = req.id; // Lấy user_id từ middleware xác thực
+      const { comment_content, comment_star, product_id } = req.body;
   
-      let date = new Date(); // Ngày tạo hiện tại
+     
   
       // Tạo comment mới
       const newComment = await commentProductModel.create({
@@ -90,21 +89,28 @@ const createcommentproduct = async (req, res) => {
         product_id,
         comment_content,
         comment_star,
-        comment_date: date, // Đặt ngày tạo dưới dạng đối tượng Date
+        comment_date: new Date(),
       });
-      io.emit('new_comment', {
-        user_id: newComment.id,
-        product_id: newComment.product_id,
-        comment_content: newComment.comment_content,
-        comment_star: newComment.comment_star,
-        comment_date: newComment.comment_date,
+  
+      // Lấy dữ liệu bình luận chi tiết để gửi qua Socket.IO
+      const fullComment = await commentProductModel.findByPk(newComment.comment_id, {
+        include: [
+          { model: models.user, as: 'user' },
+          { model: models.products, as: 'product' },
+        ],
       });
+  
+      // Phát sự kiện tới các client
+      io.emit('new_comment', fullComment);
+  
+      // Phản hồi lại client
       responseSend(res, newComment, "Thêm thành công!", 201);
     } catch (error) {
-      console.error("Error creating comment:", error); // Log chi tiết lỗi
+      console.error("Error creating comment:", error);
       responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
   };
+  
 
   const updatecommentproduct = async (req, res) => {
     try {

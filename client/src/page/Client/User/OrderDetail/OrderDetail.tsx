@@ -26,7 +26,8 @@ function OrderDetail() {
       title: 'Sản phẩm',
       dataIndex: 'name',
       render: (text:string, record:any) => {
-        return ( <div className='flex gap-[.2rem]'>
+        return ( 
+        <div className='flex gap-[.2rem]'>
           <div className='w-[80px]'>
             <img src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
           </div>
@@ -36,7 +37,8 @@ function OrderDetail() {
            <div>Mã sản phẩm: ipmax-1s</div>
           </div>
           
-        </div>) 
+        </div>
+        ) 
        },
 
       width: '40%',
@@ -217,7 +219,6 @@ return (
           </div>
         </div>
         <div className='mt-[3rem] table-detail-order'>
-        <Table columns={columns} dataSource={listProduct} onChange={onChange} className='' />;
         
         </div>
         <div className='rounded-lg mt-[1rem]'>

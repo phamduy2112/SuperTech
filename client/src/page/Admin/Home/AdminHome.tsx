@@ -1,13 +1,15 @@
-import React from 'react';
-import { DataPageHome } from '../DataPageAdmin/DataPageHome';
+import React, { useEffect, useState } from 'react';
 import './AdminHome.css';
 import { MdBarChart, MdCalendarMonth } from 'react-icons/md';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
-import { TbPlayerTrackNextFilled } from 'react-icons/tb';
+import { TbChartBubbleFilled, TbPlayerTrackNextFilled } from 'react-icons/tb';
 import { Calendar, ConfigProvider, Table } from 'antd';
 import viVN from 'antd/lib/locale/vi_VN';
 import LineChart from './Component/chart/LineChart';
+import { useAppSelector } from '../../../redux/hooks';
+import { BiBox } from 'react-icons/bi';
+import { Box } from '../DataPageAdmin/DataPageHome';
 
 
 Chart.register(...registerables);
@@ -22,7 +24,23 @@ function AdminHome() {
   };
 
 
+// online 
+const [onlineCount, setOnlineCount] = useState<number>(0);
+const socket = useAppSelector((store) => store.socket.socket); // Lấy socket từ Redux
 
+useEffect(() => {
+  if (!socket) return; // Nếu socket chưa được kết nối thì không làm gì
+
+  // Lắng nghe sự kiện "getOnlineUsersCount"
+  socket.on("getOnlineUsersCount", (count: number) => {
+    setOnlineCount(count); // Cập nhật số lượng người dùng online
+  });
+
+  // Cleanup sự kiện khi component unmount
+  return () => {
+    socket.off("getOnlineUsersCount");
+  };
+}, [socket]);
   const columns2 = [
     {
       title: 'Hình',
@@ -238,7 +256,7 @@ function AdminHome() {
   return (
     <div className=' flex flex-col gap-6 bg-[#f2edf3] p-12'>
       <div className='w-full h-[full] grid grid-cols-1 auto-rows-auto gap-[16px] md:grid-cols-2 items-start lg:gap-[12px] lg:grid-cols-3'>
-        {DataPageHome.map((item, i) => (
+        {/* {DataPageHome.map((item, i) => (
           <div key={i} className='bg-[white] flex items-start gap-[12px] px-[16px] py-[20px] rounded-xl'>
             <div className='w-[48px] h-[48px] min-w-[48px] flex justify-center items-center rounded-full linear-gradient box-shadow text-white'>
               <span className='text-[32px]'>{item.icon_box_page_home}</span>
@@ -250,7 +268,14 @@ function AdminHome() {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
+          <Box
+        id_box_page_home={1}
+        title_box_page_home="Khách hàng và admin Online"
+        total_box_page_home={onlineCount}
+        icon_box_page_home={<TbChartBubbleFilled />}
+        symbol=""
+      />
       </div>
 
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-3 w-full auto-cols-auto justify-center items-center'>

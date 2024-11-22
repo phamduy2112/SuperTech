@@ -6,7 +6,7 @@ import { getorder, getOrderById, createorder, updateorder, deleteorder, changeSt
 import { getTop5BestSellingProducts, getUserOrderCounts, getWeeklySales } from '../controllers/detailorderController.js';
 const orderRouter = express.Router();
 
-orderRouter.get('/order', getorder);
+orderRouter.get('/get-order-all', getorder);
 orderRouter.get('/order-by-id-user',middleToken, getOrderById);
 orderRouter.get('/get-week-order-sales',middleToken, getWeeklySales);
 orderRouter.get('/get-user-order-count',middleToken, getUserOrderCounts);

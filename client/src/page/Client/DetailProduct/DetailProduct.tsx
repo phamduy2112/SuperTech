@@ -58,23 +58,6 @@ function DetailProduct() {
 const [objectStorage,setObjectStorage]=useState<any>(null)
 console.log(objectColor);
 
-useEffect(() => {
-  if (socket) {
-      // Lắng nghe sự kiện 'new_comment' từ server
-      const handleNewComment = (comment: any) => {
-          console.log('New comment received:', comment);
-          dispatch(setcomment((prevComments: any) => [comment, ...prevComments])); // Thêm bình luận mới vào đầu danh sách
-      };
-
-      socket.on('new_comment', handleNewComment);
-
-      // Cleanup function để tắt sự kiện khi component unmount hoặc socket thay đổi
-      return () => {
-          socket.off('new_comment', handleNewComment);
-      };
-  }
-}, [socket, dispatch]); // Chỉ lắng nghe socket và dispatch, không đưa `comments` vào dependency array
-
 
   
   useEffect(()=>{
