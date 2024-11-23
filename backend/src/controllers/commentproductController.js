@@ -2,6 +2,7 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import { Op } from "sequelize";
+import { io } from "../socker/socker.js";
 
 let models = initModels(sequelize); 
 let commentProductModel = models.comment_product; 
@@ -48,16 +49,20 @@ const getCommentProductByIdProduct = async (req, res) => {
             model: models.likes, // Kết hợp bảng user
             as: 'likes', // Alias cho kết hợp bảng
           },
-          // {
-          //   model: models.replies_comment_product, // Kết hợp bảng user
-          //   as: 'replies_comment_products', // Alias cho kết hợp bảng
-          //   include:[
-          //     {
-          //       model: models.user, // Kết hợp bảng user
-          //       as: 'user', // Alias cho kết hợp bảng
-          //     },
-          //   ]
-          // },
+          {
+            model: models.replies_comment_product, // Kết hợp bảng user
+            as: 'repliesToComment', // Alias cho kết hợp bảng
+            include:[
+              {
+                model: models.user, // Kết hợp bảng user
+                as: 'user', // Alias cho kết hợp bảng
+              },
+              {
+                model: models.likes, // Kết hợp bảng user
+                as: 'likes', // Alias cho kết hợp bảng
+              },
+            ]
+          },
           
         ],
       });
@@ -71,13 +76,12 @@ const getCommentProductByIdProduct = async (req, res) => {
       responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
   };
-const createcommentproduct = async (req, res) => {
+  const createcommentproduct = async (req, res) => {
     try {
-      const user_id = req.id;
-      const { comment_content, comment_star,product_id } = req.body;
-      
+      const user_id = req.id; // Lấy user_id từ middleware xác thực
+      const { comment_content, comment_star, product_id } = req.body;
   
-      let date = new Date(); // Ngày tạo hiện tại
+     
   
       // Tạo comment mới
       const newComment = await commentProductModel.create({
@@ -85,15 +89,28 @@ const createcommentproduct = async (req, res) => {
         product_id,
         comment_content,
         comment_star,
-        comment_date: date, // Đặt ngày tạo dưới dạng đối tượng Date
+        comment_date: new Date(),
       });
   
+      // Lấy dữ liệu bình luận chi tiết để gửi qua Socket.IO
+      const fullComment = await commentProductModel.findByPk(newComment.comment_id, {
+        include: [
+          { model: models.user, as: 'user' },
+          { model: models.products, as: 'product' },
+        ],
+      });
+  
+      // Phát sự kiện tới các client
+      io.emit('new_comment', fullComment);
+  
+      // Phản hồi lại client
       responseSend(res, newComment, "Thêm thành công!", 201);
     } catch (error) {
-      console.error("Error creating comment:", error); // Log chi tiết lỗi
+      console.error("Error creating comment:", error);
       responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
   };
+  
 
   const updatecommentproduct = async (req, res) => {
     try {
@@ -131,11 +148,12 @@ const createcommentproduct = async (req, res) => {
 const deletecommentproduct = async (req, res) => {
     try {
         const id=req.params.id;
-        console.log(id);
+    
         
         let deleted = await commentProductModel.destroy({
             where: { comment_id:id}
         });
+        
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {

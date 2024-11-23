@@ -29,7 +29,19 @@ const getProduct_colorsById = async (req, res) => {
 
 const createProduct_colors = async (req, res) => {
     try {
-        let newProduct = await Products_color.create(req.body);
+        const {
+            color,
+            quality,
+            image_id,
+            product_id
+        } = req.body;
+
+        const newProduct = await Products_color.create({
+            color,
+            quality,
+            image_id,
+            product_id
+        });
         responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -38,15 +50,31 @@ const createProduct_colors = async (req, res) => {
 
 const updateProduct_colors = async (req, res) => {
     try {
-        let updated = await Products_color.update(req.body, {
-            where: { color_id: req.params.id }
-        });
-        if (updated[0] > 0) {
-            responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
-        } else {
-            responseSend(res, "", "không tồn tại !", 404);
+        const color_id = req.params.id;
+        const {
+            color,
+            quality,
+
+        } = req.body;
+         const image_id = req.id;
+         const product_id = req.id;
+        const product_color = await Products_color.findByPk(color_id);
+        if (!product_color) {
+            return res.status(404).json({
+                message: "Color not found",
+                success: false
+            });
         }
+        product_color.color = color;
+        product_color.quality = quality;
+        product_color.image_id = image_id;
+        product_color.product_id = product_id;
+
+        await product_color.save();
+
+        responseSend(res, product_color, "Đã Cập Nhật Thành Công!", 200);
     } catch (error) {
+        console.error("Error updating product color:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };

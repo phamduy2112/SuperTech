@@ -1,7 +1,11 @@
 // create-order
 
 import { axiosWithAuth } from "../axios.config";
-
+export const getOrderAll=()=>{
+  return axiosWithAuth("/get-order-all",{
+    method:"get"
+  })
+}
 export const createOrder = (data:any) => {
     return axiosWithAuth(`/create-order`, {
       method: "post",
@@ -20,7 +24,7 @@ export const createDetailOrder = (data:any) => {
   };
 export const getOrderByIdUser=()=>{
   return axiosWithAuth(`/order-by-id-user`,{
-    method:"get"
+    method:"get",
   })
 }
 export const changeStatusOrder=(id:number,data:any)=>{

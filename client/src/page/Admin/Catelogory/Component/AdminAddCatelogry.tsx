@@ -1,17 +1,26 @@
-import { GetProp, message, Select, Upload, UploadFile, Button, Modal, } from 'antd';
-import React, { useRef, useState } from 'react'
+import { message, Select, Upload, UploadFile, Button, Modal, Switch, GetProp } from 'antd';
+import React, { useState } from 'react';
 import { TbPlaylistAdd } from 'react-icons/tb';
 import { UploadProps } from 'antd/lib';
 import ImgCrop from 'antd-img-crop';
-import { IoMdCloudUpload } from 'react-icons/io';
+import { Formik, Form, Field } from 'formik';
+import { useAppDispatch } from '../../../../redux/hooks';
+import { createCategoryThunk } from '../../../../redux/catelogry/catelogry.slice';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-function AdminAddCatelogry() {
-  const uploadRef = useRef<HTMLDivElement>(null); // Sử dụng HTMLDivElement
+function AdminAddCategory() {
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [fileList, setFileList] = useState<UploadFile[]>([
-  ]);
+  const DataCategory = [
+    { label: 'Điện thoại', value: 1 },
+    { label: 'Laptop', value: 2 },
+    // Add more categories as needed
+  ];
+
+  const showModal = () => setIsModalOpen(true);
+  const handleCancel = () => setIsModalOpen(false);
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     const updatedFileList = newFileList.map(file => {
@@ -37,94 +46,100 @@ function AdminAddCatelogry() {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const DataCategory = [
-    { label: 'Danh Mục Thường', value: 'Danh Mục Thường' },
-    { label: 'Danh Mục Nổi Bật', value: 'Danh Mục Nổi Bật' },
-    { label: 'Danh Mục Khuyến Mãi', value: 'Danh Mục Khuyến Mãi' },
-  ]
-  const ShowModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+const dispatch=useAppDispatch()
   return (
     <>
-      <Button onClick={ShowModal} className='p-10' type="primary">
-        <TbPlaylistAdd className='text-[18px]' />
-        Danh Mục Sản Phẩm Mới
+      <Button onClick={showModal} className="p-10" type="primary">
+        <TbPlaylistAdd className="text-[18px]" /> Danh Mục Sản Phẩm Mới
       </Button>
-      <Modal title="Danh mục sản phẩm mới" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText="Thêm"
-        cancelText="Hủy bỏ">
-        <form action="">
-          <div className='flex h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Thêm Danh mục Sản Phẩm</label>
-            <Select
-              showSearch
-              placeholder="Vui lòng chọn vai trò danh mục "
-              optionFilterProp="label"
-              options={DataCategory}
-              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-
-            />
-          </div>
-          <div className='flex h-auto col-span-2 flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Tên danh mục sản phẩm</label>
-            <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
-
-          </div>
-          <div className='flex h-auto col-span-2 flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Catelogory_dad</label>
-            <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
-
-          </div>
-          <div className='flex w-full h-auto flex-col gap-4'>
-            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Hình</label>
-            <ImgCrop rotationSlider>
-              <Upload
-                className='col-span-2'
-                ref={uploadRef}
-                action="" // Đặt URL phù hợp với server của bạn
-                fileList={fileList}
-                onChange={onChange}
-                onPreview={onPreview}
-                maxCount={1}
-                beforeUpload={(file) => {
-                  const isValidType = ['image/jpeg', 'image/png'].includes(file.type);
-                  const isValidSize = file.size / 1024 / 1024 < 0.5; // 500kb
-                  if (!isValidType) {
-                    message.error('Bạn chỉ có thể tải lên định dạng JPG/PNG!');
-                  }
-                  if (!isValidSize) {
-                    message.error('Kích thước file phải nhỏ hơn 500kb!');
-                  }
-                  return isValidType && isValidSize;
-                }}
-              >
-                <div className={`flex flex-col w-[470px]  items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}>
-                  <p className="text-4xl  " onClick={() => uploadRef.current?.querySelector('input[type="file"]')}>
-                    <IoMdCloudUpload />
-                  </p>
-                  <p className="mt-2 text-lg text-center">Bấm hoặc kéo thả ảnh vào đây</p>
+      
+      <Modal
+        title="Danh mục sản phẩm mới"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Formik
+          initialValues={{
+            category_name: '',
+            category_dad: 0,
+            category_task: 1, // Default value for Switch, set as 1 (true)
+          }}
+          onSubmit={(values) => {
+            console.log(values); // 'category_task' will be 1 for true and 0 for false
+            setIsModalOpen(false);
+            dispatch(createCategoryThunk(values))
+          }}
+        >
+          {({ values, setFieldValue }) => (
+            <Form>
+              <div className="flex gap-4">
+                <div className="flex w-full flex-col gap-4">
+                  <label
+                    htmlFor="category_name"
+                    className="text-[13px] text-[#81818177] font-medium"
+                  >
+                    Tên Loại
+                  </label>
+                  <Field
+                    type="text"
+                    name="category_name"
+                    className="h-[48px] bg-[#f7f7f7] border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                  />
                 </div>
+              </div>
 
-                <div className={`flex w-full items-center  justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'block' : 'hidden'}`}>
-                  <img src={fileList[0]?.url} alt="Uploaded" className="rounded-lg w-[70rem] h-[35rem] object-cover   shadow-lg" />
+              <div className="flex gap-4 mt-4">
+                <div className="flex w-full flex-col gap-4">
+                  <label htmlFor="category_dad" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
+                  <Select
+
+                    defaultValue={"Mời bạn nhập"}
+                    onChange={(value) => setFieldValue("category_dad", value)}
+                    options={DataCategory}
+                    className="h-[48px] bg-[#81818113] rounded-lg text-[13px] outline-none"
+                  />
                 </div>
+              </div>
 
-              </Upload>
-            </ImgCrop>
-          </div>
-        </form>
+              <div className="bg-white shadow-lg rounded-xl p-[12px] gap-8 flex flex-col mt-4">
+                <span className="text-[20px] font-semibold">Tải ảnh</span>
+                <div className="text-[14px] font-medium text-[#9696968e]">
+                  <span>Chọn ảnh sản phẩm hoặc chỉ cần kéo và thả tối đa 6 ảnh tại đây.</span>
+                </div>
+                <div className="flex-1">
+                  <ImgCrop rotationSlider>
+                    <Upload
+                      listType="picture-card"
+                      fileList={fileList}
+                      onChange={onChange}
+                      onPreview={onPreview}
+                      beforeUpload={() => false}
+                    >
+                      {fileList.length < 6 && '+ Upload'}
+                    </Upload>
+                  </ImgCrop>
+                </div>
+                <div className="text-[14px] text-[#9696968e] font-medium">
+                  <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 500kb.</span>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <label htmlFor="category_task" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Hoạt động</label>
+                <Switch
+                  checked={values.category_task === 1}
+                  onChange={(checked) => setFieldValue("category_task", checked ? 1 : 0)}
+                />
+              </div>
+
+              <Button type="primary" htmlType="submit" className="mt-4">Lưu sản phẩm</Button>
+            </Form>
+          )}
+        </Formik>
       </Modal>
     </>
-  )
+  );
 }
 
-export default AdminAddCatelogry
+export default AdminAddCategory;

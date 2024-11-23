@@ -17,12 +17,24 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import path from "path"
+import http from 'http';
+import { Server } from 'socket.io';
+import cors from 'cors';
 import searchRouter from './routers/searchproductRouter.js';
-const app = express();
+import uploadRouter from './routers/uploadRoutes.js';
+import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
+import { app, server } from './socker/socker.js';
+
+
 app.use(express.json());
 app.use(cookieParser());
+
+
+
+
+
+
 
 app.use(urlencoded({extended:true}))
 app.use(express.static("."))
@@ -39,9 +51,8 @@ app.get('/', (req, res) => {
 });
 
 app.use(userRouter);
-
+app.use(uploadRouter)
 app.use(productRouter);
-
 app.use(product_colorsRouter);
 app.use(PostsRouter);
 app.use(orderRouter);
@@ -59,4 +70,7 @@ app.use(categoriesRouter);
 app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
-app.listen(8080);
+app.use (uploadImgUserRouter)
+server.listen(8080, () => {
+  console.log('Server running on http://localhost:8080');
+});

@@ -28,3 +28,25 @@ export const getCookie = () => {
   export const removeLocalStorage = (key: string) => {
     localStorage.removeItem(key);
   };
+  export const truncateText = (text: string | null | undefined, limit: number) => {
+    if (typeof text !== 'string') {
+      return '';
+    }
+  
+    if (text.length <= limit) {
+      return text;
+    } else {
+      return text.substring(0, limit) + "...";
+    }
+  };
+  export const formatCurrencyVND = (amount: number) => {
+    // Làm tròn số đến hàng đơn vị
+    const roundedAmount = Math.round(amount);
+  
+    // Định dạng số sang tiền Việt Nam
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(roundedAmount);
+  };
+  

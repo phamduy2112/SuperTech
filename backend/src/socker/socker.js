@@ -1,39 +1,56 @@
-import {Server} from "socket.io";
+import { Server } from "socket.io";
 import express from "express";
 import http from "http";
 
 const app = express();
-
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    cors:{
-        origin:process.env.URL,
-        methods:['GET','POST']
-    }
-})
+  cors: {
+    origin: process.env.URL, // Cần chắc chắn rằng URL chính xác
+    methods: ["GET", "POST"],
+  },
+});
 
-const userSocketMap = {} ; // this map stores socket id corresponding the user id; userId -> socketId
+// Map to track userId -> socketId mapping
+const userSocketMap = new Map(); // Sử dụng Map để quản lý socket hiệu quả hơn
 
-export const getReceiverSocketId = (receiverId) => userSocketMap[receiverId];
+// Function to get the socket ID for a given userId
+export const getReceiverSocketId = (receiverId) => userSocketMap.get(receiverId);
 
-io.on('connection', (socket)=>{
-    const userId = socket.handshake.query.userId;
-    if(userId){
-        userSocketMap[userId] = socket.id;
-        console.log(`UserId = ${userId},SocketId = ${socket.id}`);
+io.on("connection", (socket) => {
+  const userId = socket.handshake.query.user_id; // Lấy user_id từ query params
+  if (!userId) {
+    console.error("Connection attempt without user_id");
+    socket.disconnect(); // Ngắt kết nối nếu thiếu user_id
+    return;
+  }
 
-    }
+  // Thêm userId và socketId vào map
+  userSocketMap.set(userId, socket.id);
+  console.log(`User connected: userId = ${userId}, socketId = ${socket.id}`);
 
-    io.emit('getOnlineUsers', Object.keys(userSocketMap));
+  // Log danh sách người dùng online
+  console.log("Online Users:", Array.from(userSocketMap.keys()));
 
-    socket.on('disconnect',()=>{
-        if(userId){
-            delete userSocketMap[userId];
-        }
-        io.emit('getOnlineUsers', Object.keys(userSocketMap));
-    });
-})
+  // Emit danh sách userId online
+  io.emit("getOnlineUsers", Array.from(userSocketMap.keys()));
 
-export {app, server, io};
+  // Emit số lượng người dùng online tới frontend
+  io.emit("getOnlineUsersCount", userSocketMap.size);
 
+  // Xử lý sự kiện khi user ngắt kết nối
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: userId = ${userId}`);
+    userSocketMap.delete(userId); // Xóa user khỏi map
+
+    // Log danh sách sau khi user ngắt kết nối
+    console.log("Online Users after disconnect:", Array.from(userSocketMap.keys()));
+
+    // Cập nhật danh sách userId online và số lượng người dùng online
+    io.emit("getOnlineUsers", Array.from(userSocketMap.keys()));
+    io.emit("getOnlineUsersCount", userSocketMap.size);
+  });
+});
+
+export { app, server, io };

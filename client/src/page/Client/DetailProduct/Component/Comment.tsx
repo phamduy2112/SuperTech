@@ -5,13 +5,15 @@ import { BsThreeDots } from 'react-icons/bs';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 import { IoIosReturnRight, IoMdSend } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
-import { deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
+import { createCommentRepliesByIdProductThunk, deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
 import { createLike } from '../../../../service/comment/comment.service';
 import { useAppSelector } from '../../../../redux/hooks';
 import { BiSolidLike } from 'react-icons/bi';
 import { StarRating } from '../../../../components/star/Star';
+import CommentComponent from './RelyComment';
+import ReplyComment from './RelyComment';
 
 function Comment(props: any) {
   const user: any = useAppSelector((state) => state.user.user);
@@ -26,6 +28,7 @@ function Comment(props: any) {
       ? { action: null, index: null }
       : { action, index });
   };
+  
   const dispatch=useDispatch();
   const handleDelete=(data:any)=>{
     setActiveDropdown(null);
@@ -54,7 +57,7 @@ const handleLike=async(id:number,idProduct:number)=>{
   });
   
 // Rely comment
-console.log(props.reviews);
+
 
   return (
     <div>
@@ -81,26 +84,72 @@ console.log(props.reviews);
           {props.reviews?.map((review, index) => {
             return (
               <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
+              
                 <img
                   src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
                   alt="Avatar"
                   className="w-[5rem] h-[5rem] rounded-full"
                 />
-                {/* Comment Content */}
+
                 <div className="flex w-[100%] justify-between">
+                  
                   <div className="w-[100%]">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-bold text-[2rem]">{review.user.user_name}</h3>
-                        <div className="flex items-center text-[1.5rem] py-[.5rem]">
+                        <h3 className="font-bold text-[2rem]">{review.user?.user_name} || {review?.isPurchase ? "Đã mua hàng" : ""}</h3>
+                        <div className="flex items-center text-[1.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">4/5/2025</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
   {[...Array(5)].map((_, index) => (
-    index < Number(review.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
+    index < Number(review?.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
   ))}
 </div>
                         </div>
-                        <p className="mt-1 text-gray-800 text-[1.8rem]">{review.comment_content}</p>
+                        {activeAction.index === index && activeAction.action === 'edit' ? (
+                <Formik
+                initialValues={{ commentText: review.comment_content }}
+                validationSchema={CommentSchema}
+                onSubmit={(values, { resetForm }) => {
+                  const updatedComment = {
+                    comment_id: review.comment_id,
+                    product_id: review.product_id,
+                    comment_content: values.commentText,
+                  };
+              
+                  console.log(updatedComment);
+                  // dispatch(editCommentByIdThunk(updatedComment));  // Gọi API chỉnh sửa bình luận
+              
+                  // Reset form và đóng action
+                  // resetForm();
+                  // setActiveAction({ action: null, index: null });
+                }}
+                >
+                  {({ errors, touched }) => (
+                    <FormikForm className="flex items-center gap-2 w-full text-[1.8rem]">
+                      <Field
+                        name="commentText"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Chỉnh sửa bình luận..."
+                      />
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                      >
+                        Lưu
+                      </button>
+                      <button
+                        type="button"
+                        className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+                      >
+                        Hủy
+                      </button>
+                    </FormikForm>
+                  )}
+                </Formik>
+              ) : (
+                <p className="text-[1.8rem] text-gray-800">{review?.comment_content}</p>
+              )}
+                        
                       </div>
 
                       <div className="flex justify-between items-center flex-col text-[1.8rem] text-gray-500 mt-2 space-x-3">
@@ -144,7 +193,7 @@ onClick={() => handleActionToggle(index, 'edit')}                               
       ? <BiSolidLike onClick={() => handleLike(review.comment_id, review.product_id)} />
       : <AiOutlineLike onClick={() => handleLike(review.comment_id, review.product_id)} />
   }
-  <span>{review.likes.length}</span>
+  <span>{review.likes?.length}</span>
 </button>
                           
                           
@@ -166,72 +215,56 @@ onClick={() => handleActionToggle(index, 'edit')}                               
                     </button>
 
                     <div className="flex items-center justify-between">
-                    {activeAction.index === index && activeAction.action === 'edit' && (
-              <Formik
-                initialValues={{ commentText: review.comment_content }}
-                validationSchema={CommentSchema}
-                onSubmit={(values, { resetForm }) =>
-           {
-            const newComment={
-              comment_id:review.comment_id,
-              product_id:review.product_id,
-              comment_content:values.commentText
-            }
-            console.log(newComment);
-            
-            dispatch(editCommentByIdThunk(newComment));
-            setActiveDropdown(null);
-            setActiveAction({ action: null, index: null });
-                      resetForm();
-           }
-                }
-              >
-                {({ errors, touched }) => (
-                  <FormikForm className="flex items-center gap-2 w-full text-[1.8rem]">
-                    <Field
-                      name="commentText"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Chỉnh sửa bình luận..."
-                    />
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-                    
-                   >
-                      Lưu
-                    </button>
-                   
-                  </FormikForm>
-                )}
-              </Formik>
-            )
-            }
-    {activeAction.index === index && activeAction.action === 'reply' && (
+             
+
+{activeAction.index === index && activeAction.action === 'reply' && (
   <Formik
-    initialValues={{ repliesText: '' }}  // Set initial value to an empty string
+    initialValues={{ commentText: '' }} // Giá trị ban đầu từ review.comment_content
     validationSchema={CommentSchema}
-    onSubmit={(values) => console.log(values)}
+    onSubmit={(values, { resetForm }) => {
+      const newComment = {
+        comment_id: review.comment_id,
+        product_id: review.product_id,
+        comment: values.commentText, // Gửi giá trị commentText
+        repiles_date:new Date()
+      };
+
+      console.log(newComment);
+dispatch(createCommentRepliesByIdProductThunk(newComment))
+      // Reset form (nếu cần thiết)
+      resetForm();
+
+      // Đóng dropdown hoặc hành động sau khi submit (nếu có)
+      setActiveAction({ action: null, index: null });
+    }}
   >
-    {({ errors, touched }) => (
-      <FormikForm className="flex items-center gap-2 w-full text-[1.8rem]">
+    {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
+      <FormikForm onSubmit={handleSubmit} className="flex items-center gap-2 w-full text-[1.8rem]">
         <Field
-          name="repliesText"
+          name="commentText" // Tên của trường phải trùng với initialValues
           className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Nhập phản hồi..."
+          placeholder="Chỉnh sửa bình luận..."
+          value={values.commentText} // Bind giá trị vào input
+          onChange={handleChange}    // Xử lý sự kiện thay đổi giá trị
+          onBlur={handleBlur}        // Xử lý sự kiện blur
         />
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
         >
-          Phản hồi
+          Lưu
         </button>
       </FormikForm>
     )}
   </Formik>
 )}
-          </div>
 
-                 
+          </div>
+          {expandedComments[index] && (
+            <div className="pl-8">
+              <ReplyComment replies={review?.repliesToComment} productId={review?.product_id} />
+            </div>
+          )}          
                   </div>
                 </div>
               </div>

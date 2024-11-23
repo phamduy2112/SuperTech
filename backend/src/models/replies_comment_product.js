@@ -16,11 +16,19 @@ export default class replies_comment_product extends Model {
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'user',
+        key: 'user_id'
+      }
     },
     comment_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      references: {
+        model: 'comment_product',
+        key: 'comment_id'
+      }
     },
     repiles_date: {
       type: DataTypes.DATE,

@@ -1,28 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Rate, Input } from "antd";
 import axios from "axios"; // Hoặc thư viện gọi API bạn đang dùng
-import { useAppDispatch } from "../../../../redux/hooks";
-import { createCommentByIdProductThunk } from "../../../../redux/comment/comment.slice";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { createCommentByIdProductThunk, setCommentReducer } from "../../../../redux/comment/comment.slice";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const { TextArea } = Input;
 
 const CommentForm = (props:any) => {
+  const navigate=useNavigate()
+  const token=useAppSelector((state)=>state.user.token)
 
   const [comment, setComment] = useState("");
+  const commentList=useAppSelector(state=>state.listComment.listComment);
+
   const [rating, setRating] = useState(0);
     const dispatch=useAppDispatch();
-    
+    const socket = useAppSelector((state:any) => state.socket.socket); // Get socket from Redux store
+   
+    useEffect(() => {
+        if (socket) {
+            socket.on('new_comment', (post:any) => {
+            
+
+                const commentListNew=[post,...commentList]
+dispatch(setCommentReducer(commentListNew))
+            });
+        }
+
+        return () => {
+            if (socket) {
+                socket.off('newPost');
+            }
+        };
+    }, [socket, commentList, dispatch]);
   const handleSubmit = async () => {
     try {
-   console.log(props.id);
-   
-    const newComment={
-        product_id:Number(props.id),
-             comment_content: comment,
-        comment_star: rating,
-    }
-    // const id=props.id
-    dispatch(createCommentByIdProductThunk(newComment))
-    // console.log(newComment);
+
+ if(token){
+  const newComment={
+    product_id:Number(props.id),
+         comment_content: comment,
+    comment_star: rating,
+}
+
+// const id=props.id
+// dispatch(createCommentByIdProductThunk(newComment))
+const commentListNew=[...commentList,dispatch(createCommentByIdProductThunk(newComment))]
+dispatch(setCommentReducer(commentListNew))
+toast.success("Bình luận thành công")
+ }else{
+  toast.success('Bạn cần đăng nhập!');
+  navigate("/đăng-nhập")
+
+ }
+    
+  
     
     } catch (error) {
       console.error("Error submitting comment:", error);

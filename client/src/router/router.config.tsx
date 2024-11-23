@@ -7,7 +7,6 @@ import Login from "../page/Client/Auth/Login/Login";
 import Resigter from "../page/Client/Auth/Resigter/Resigter";
 import ForgetPassword from "../page/Client/Auth/Forget/ForgetPassword";
 import DetailBlog from "../page/Client/Blog/DetailBlog/DetailBlog";
-import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import Cart from "../page/Client/Cart/Cart";
 import Pay from "../page/Client/Pay/Pay";
 import Bill from "../page/Client/Bill/Bill";
@@ -44,6 +43,12 @@ import AdminBlog from "../page/Admin/Blog/AdminBlog";
 import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
 import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
 import ListProduct from "../page/Client/ListProduct/ListProduct";
+import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
+import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
+import CouponSection from "../page/Client/Voucher/Voucher";
+import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
+import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
+// import PrivateRoute from "./component/RouterPrivate";
 
 export const router = createBrowserRouter([
   {
@@ -58,60 +63,80 @@ export const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "/san-pham-yeu-thich/:id",
+        path: "/san-pham-yeu-thich",
         element: <FavoriteProduct />,
+      },
+
+      {
+        path: "/list-sản-phẩm",
+        element: <ListProduct />,
       },
       {
         path: "/san-pham-chi-tiet/:id",
         element: <DetailProduct />,
       },
-      {
-        path: "/list-sản-phẩm",
-        element: <ListProduct />,
-      },
-
       // Blog
       {
         path: "/bài-viết",
         element: <ListBlog />,
       },
       {
-        path: "/bài-viết-chi-tiết",
+        path: "/bài-viết-chi-tiết/:id",
         element: <DetailBlog />,
       },
       // user
+      {
+        path: "/don-hang-chi-tiet-cua-ban/:id",
+        element: (
+          <PrivateRoute element={  <OrderDetail />}/>
+        
+        ),
+       
+      },
+    
 {
 
 element:<User/>,
 children:[
   {
     path: "/người-dùng",
-    element: <UserDetail />,
+    
+    element:     <PrivateRoute element={  <UserDetail />}/>,
   },
   {
     path: "/don-hang-cua-ban",
-    element: <Order />,
-  },
-  {
-    path: "/don-hang-chi-tiet-cua-ban/:id",
-    element: <OrderDetail />,
+    element: <PrivateRoute element={  <Order />}/>,
   },
 
 ]
 },
-      
+      {
+        path:"/giam-gia",
+        element:<CouponSection/>
+      },
       // Mua hàng
       {
         path: "/giỏ-hàng",
         element: <Cart />,
       },
+
       {
-        path: "/thanh-toán",
-        element: <Pay />,
+        path: "/thanh-toan",
+        element: (
+          // <PrivateRoute element={  <Pay />}/>
+          <Pay />
+        
+        ),
       },
+      
       {
         path: "/xuất-hóa-đơn",
-        element: <Bill />,
+        element: (
+          // <PrivateRoute element={  <Bill />}/>
+          <Bill />
+        
+        ),
+        
       },
       // các trang khác
       {
@@ -139,15 +164,15 @@ children:[
     children: [
       {
         path: "/đăng-nhập",
-        element: <Login />,
+        element: <AuthRoute element={<Login/>} />,
       },
       {
         path: "/đăng-kí",
-        element: <Resigter />,
+        element:  <AuthRoute element={<Resigter/>} />,
       },
       {
         path: "/quen-mat-khau",
-        element: <ForgetPassword />,
+        element: <AuthRoute element={<ForgetPassword/>} />,
       },
     ]
 
@@ -169,6 +194,10 @@ children:[
       {
         path: 'quản-lí-sản-phẩm',
         element: <AdminProduct />
+      },
+      {
+        path: 'quan-li-san-pham-chi-tiet/:id',
+        element: <AdminProductDetail />
       },
       {
         path: 'quản-lí-sản-phẩm/tạo-sản-phẩm-mới',
@@ -230,14 +259,20 @@ children:[
 
       // đơn hàng
       {
-        path: 'quản-lí-đơn-hàng',
-        element: <AdminOrder />
+        path: 'quản-lí-đơn-hàng', // Không có dấu "/"
+        element: <AdminOrder />,
+        children: [
+          {
+            path: '', // Đường dẫn mặc định, tương ứng với "/admin/quản-lí-đơn-hàng"
+            element: <PrivateRoute element={<ListOrder />} />,
+          },
+          {
+            path: 'quản-lí-đơn-hàng-chi-tiết/:id', // Đường dẫn tương đối
+            element: <PrivateRoute element={<AdminOrderDetail />} />,
+          },
+        ],
       },
-      // Đơn hàng chi tiết
-      {
-        path: 'quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/:id',
-        element: <AdminOrderDetail />
-      },
+     
       {
         path: 'quản-lí-đơn-hàng/tạo-đơn-hàng',
         element: <AdminOrderCreate />

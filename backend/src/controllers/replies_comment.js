@@ -31,28 +31,14 @@ const createRepliesComment = async (req, res) => {
     try {
         const user_id = req.id;
         const { comment,comment_id   } = req.body;
-        
-    
-      
-    
-        // Log để kiểm tra dữ liệu đầu vào
-        console.log({
-          user_id,
-          comment,
-          comment_id,
-         
 
-        });
-    
+       
         // Tạo comment mới
         const newComment = await repliesCommentProduct.create({
           user_id,
           comment_id,
           comment,
-         
-
         });
-    
         responseSend(res, newComment, "Thêm thành công!", 201);
       } catch (error) {
         console.error("Error creating comment:", error); // Log chi tiết lỗi
@@ -60,14 +46,14 @@ const createRepliesComment = async (req, res) => {
       }
 };
 
-const updatecommentpost = async (req, res) => {
+const updateCommentReply = async (req, res) => {
     try {
         const { comment   } = req.body;
         const newRepliesComment={
             comment
         }
         let updated = await repliesCommentProduct.update(newRepliesComment, {
-            where: { comment_post_id: req.params.id }
+            where: { id: req.params.id }
         });
         if (updated[0] > 0) {
             let updatedItem = await repliesCommentProduct.findByPk(req.params.id);
@@ -81,11 +67,13 @@ const updatecommentpost = async (req, res) => {
     }
 };
 
-const deletecommentpost = async (req, res) => {
+const deleteCommentReply = async (req, res) => {
     try {
         let deleted = await repliesCommentProduct.destroy({
-            where: { comment_post_id: req.params.id }
+            where: { id: req.params.id }
         });
+         // Trả về danh sách reply còn lại cho comment cha
+  const remainingReplies = await Comment.findAll({ where: { comment_id: req.body.parentId } });
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {
@@ -100,6 +88,6 @@ export {
     getcommentpost,
     getcommentpostById,
     createRepliesComment,
-    updatecommentpost,
-    deletecommentpost
+    updateCommentReply,
+    deleteCommentReply
 };

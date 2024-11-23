@@ -41,7 +41,7 @@ export const updateUserDetailThunk = createAsyncThunk(
 );
 export const verifyPasswordDetail = createAsyncThunk(
   "verifyPasswordThunk",
-  async (payload) => {
+  async (payload:any) => {
     try {
       const resp = await verifyPassword(payload);
       return resp.data;
@@ -79,6 +79,7 @@ const initialState = {
   Alluser: {},
   user: {},
   token: null,
+  login:false,
   thongBao: "",
   imgUser: ""
 };
@@ -90,11 +91,14 @@ const UserSlice = createSlice({
     setAllUser: (state, { payload }) => {
       state.Alluser = payload;
     },
+    setLogin: (state, { payload }) => {
+      state.login = payload;
+    },
     setUserDetail: (state, { payload }) => {
       state.user = payload;
     },
     setToken: (state, { payload }) => {
-      state.user = payload;
+      state.token = payload;
     },
   },
   extraReducers: (builder) => {
@@ -127,6 +131,6 @@ const UserSlice = createSlice({
   },
 });
 
-export const { setAllUser, setUserDetail, setToken } = UserSlice.actions;
+export const { setAllUser, setUserDetail, setToken,setLogin } = UserSlice.actions;
 
 export const userReducer = UserSlice.reducer;

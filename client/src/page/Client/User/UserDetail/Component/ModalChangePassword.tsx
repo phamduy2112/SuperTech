@@ -1,14 +1,15 @@
-import { Button, Modal, Steps } from 'antd';
+import { Button,Form, Input, Modal, Steps } from 'antd';
 import React, { useState } from 'react';
 import '../css/ModalEdit.css';
 import { useAppDispatch, useAppSelector } from '../../../../../redux/hooks';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { changePasswordDetail, verifyPasswordDetail } from '../../../../../redux/user/user.slice';
 import useSweetAlert from '../../../../../hooks/Notification.hook';
 
 // Schema validation bằng Yup
 const validationSchemaStep1 = Yup.object().shape({
+  
   oldPassword: Yup.string().required('Vui lòng nhập mật khẩu cũ'),
 });
 
@@ -58,44 +59,55 @@ function ModalChangePassword() {
           <div>
             <Steps current={0} percent={60} labelPlacement="vertical" items={[{ title: 'Mật khẩu' }, { title: 'Đổi mật khẩu' }]} />
             <Formik
-              initialValues={{ oldPassword: '' }}
-              validationSchema={validationSchemaStep1}
-              onSubmit={async (values) => {
-                const payload:object={
-                  oldPassword:values.oldPassword
-                }
-                const response = await dispatch(verifyPasswordDetail(payload)).unwrap(); // unwrap helps get the actual result
-               
-                if(response.message=="Thành công!"){
-                  setPage(2)
-                }else{
-                  showAlert("error",response.data.message);
+            className
+      initialValues={{ oldPassword: '' }}
+      validationSchema={validationSchemaStep1}
+      onSubmit={async (values) => {
+        const payload = {
+          oldPassword: values.oldPassword,
+        };
+      
+        try {
+          const response = await dispatch(verifyPasswordDetail(payload)).unwrap();
+          console.log(payload);
+          
+          if (response.message === "Thành công!") {
+            setPage(2); // Di chuyển đến bước 2 nếu thành công
+          } else {
+            showAlert("error", response.data.message); // Hiển thị thông báo lỗi nếu không thành công
+          }
+        } catch (error) {
+          // Xử lý lỗi nếu có lỗi xảy ra trong quá trình gửi yêu cầu
+          showAlert("error", "Có lỗi xảy ra, vui lòng thử lại.");
+        }
+      }}
+    >
+      {({ errors, touched }) => (
+        <Form className='formEdit'>
+          <div className="form-group">
+          
 
-                }
-                
-                // setPage(2);
-              }}
+            <Form.Item
+              className="w-[100%]"
+              label="Mật khẩu cũ"
+              validateStatus={errors.oldPassword && touched.oldPassword ? 'error' : ''}
+              help={errors.oldPassword && touched.oldPassword ? errors.oldPassword : null}
             >
-              {({ errors, touched }) => (
-                <Form>
-                  <div className="form-group">
-                    <label>Mật khẩu cũ</label>
-                    <Field name="oldPassword" type="password" className="ant-input" />
-                    {errors.oldPassword && touched.oldPassword ? (
-                      <div className="error">{errors.oldPassword}</div>
-                    ) : null}
-                  </div>
-                  <div className="flex gap-[1rem] justify-end button-edit">
-                    <Button type="default" onClick={handleCancel}>
-                      Hủy
-                    </Button>
-                    <Button type="primary" htmlType="submit">
-                      Tiếp tục
-                    </Button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
+              <Field name="oldPassword" as={Input.Password} />
+            </Form.Item>
+          </div>
+        <div>Gửi mã otp</div>
+          <div className="flex gap-[1rem] justify-end button-edit">
+            <Button type="default" onClick={handleCancel}>
+              Hủy
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Tiếp tục
+            </Button>
+          </div>
+        </Form>
+      )}
+    </Formik>
           </div>
         ) : (
           <div>
@@ -142,9 +154,10 @@ function ModalChangePassword() {
                     <Button type="default" onClick={handleCancel}>
                       Hủy
                     </Button>
-                    <Button type="primary" htmlType="submit">
-                      Đổi mật khẩu
-                    </Button>
+                    <button
+                  type="button"
+                  className="p-[1rem] border text-[1.6rem] border-customColor text-customColor"
+                ></button>
                   </div>
                 </Form>
               )}

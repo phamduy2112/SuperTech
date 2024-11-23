@@ -27,11 +27,7 @@ export default class infor_product extends Model {
       allowNull: true
     },
     infor_more: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
-    image_product: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.TEXT,
       allowNull: true
     }
   }, {

@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaFacebook, FaRegPaperPlane } from 'react-icons/fa'
 import { RiHeadphoneFill } from 'react-icons/ri'
 import nganHang from "../../../assets/nganhang.png"
 import { Container } from '../../../components/Style/Container'
+import LoadingFooter from './Component/Loading/LoadingFooter'
 function Footer() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 5000);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingFooter />;
+  }
   const listFooter=[
     {
       title:"Tìm kiếm nhanh",
@@ -20,7 +30,7 @@ function Footer() {
 
   ]
   return (
-    <div className='w-[100%] m-auto mt-[1.5rem]'>
+    <div className='w-[100%] m-auto mt-[1.5rem] bg-white'>
       <div className=' bg-[#7500CF] sm:rounded-t-[2rem] md:rounded-none w-[100%] md:h-[6rem] sm:pt-[2rem] md:pt-[0] flex justify-center items-center'>
         <Container className='relative md:flex items-center justify-between'>
         <h1 className='md:hidden text-[3rem] text-white text-center'>SuperTeach</h1>
@@ -55,7 +65,9 @@ function Footer() {
             <div>
                 <h4 className='md:text-[1.8rem] sm:text-[1.9rem] font-semibold'>Liên hệ</h4>
                 <p className='md:text-[1.6rem] my-[1rem] sm:text-[1.8rem]'>Công Viên Phần Mềm Quang Trung, Tân Chánh Hiệp, Quận 12, Hồ ChÍ Minh, Việt Nam</p>
-                <p><FaFacebook className='text-[1.7rem]'/></p>
+                <p>
+                  <FaFacebook className='text-[1.7rem]'/>
+                  </p>
               </div>
           </div>
           {

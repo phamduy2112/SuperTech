@@ -8,27 +8,55 @@ import { Rate } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { data } from "./data";
 import Comment from "./Component/Comment";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getProductByIdThunk } from "../../../redux/product/product.slice";
-import { getCommentByIdProductThunk } from "../../../redux/comment/comment.slice";
+import { getCommentByIdProductThunk, setcomment } from "../../../redux/comment/comment.slice";
 import CommentForm from "./Component/CommentForm";
 import ProductColor from "./Component/ProductColor";
 import { IMG_BACKEND } from "../../../constants";
+import { addItemToCart, addItemToOrder } from "../../../redux/cart/cart.slice";
+import { formatCurrencyVND } from "../../../utils";
 
 
 
 function DetailProduct() {
   const { id } = useParams(); // Lấy id từ URL
   const numericId = Number(id); // Ép chuỗi id thành số
-
+  const navigate=useNavigate();
+  
   const dispatch=useAppDispatch();
+  const handleAddItem = (product: any) => {
+    const productToCart = {
+      ...product,
+      selectedColor: objectColor,
+      selectedStorage:objectStorage
+    };
+    console.log(productToCart);
+    
+    
+  };
+
+  const handleAddOrder=(product:any)=>{
+    const productToCart = {
+      ...product,
+      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+    };
+    dispatch(addItemToOrder(productToCart))
+    navigate("/thanh-toan")
+    
+  }
+  
   const productDetail=useAppSelector((state)=>state.product.productDetail)
+  const socket=useAppSelector((state)=>state.socket.socket)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
 
   // console.log(productDetail);
   const [selectedColor, setSelectedColor] = useState<any>(null);
+  const [selectetStorage, setSelectedStorage] = useState<any>(null);
  const [objectColor,setOjectColor]=useState<any>(null)
+const [objectStorage,setObjectStorage]=useState<any>(null)
+console.log(objectColor);
 
 
   
@@ -41,22 +69,57 @@ function DetailProduct() {
   },[numericId,dispatch])
   useEffect(() => {
     if (productDetail?.product_colors?.length > 0) {
-      const firstColor = productDetail.product_colors[0];
+      const firstColor = productDetail?.product_colors[0];
       setSelectedColor(firstColor?.color);
-      setOjectColor(firstColor)
-
+      setOjectColor(firstColor);
+  
+      // Cập nhật storage nếu có
+      if (firstColor?.product_storages?.length > 0) {
+        const firstStorage = firstColor.product_storages[0];
+        setObjectStorage(firstStorage);
+        setSelectedStorage(firstStorage);
+      } else {
+        setObjectStorage([]); // Hoặc giá trị mặc định
+        setSelectedStorage(null); 
+      }
     }
   }, [productDetail]);
+console.log(objectStorage);
 
-  const handleColorChange = (color: string) => {
-    const newColor = productDetail.product_colors.find((item) => item.color === color);
-    if (newColor) {
-      setSelectedColor(newColor.color);
-      setOjectColor(newColor)
+const handleColorChange = (color: string) => {
+  const newColor = productDetail.product_colors.find((item) => item.color === color);
+  
+  if (newColor) {
+    setSelectedColor(newColor.color);
+    setOjectColor(newColor);
+
+    // Nếu không có product_storages, đặt objectStorage về null
+    if (newColor?.product_storages?.length > 0) {
+      const firstStorage = newColor.product_storages[0];
+      setObjectStorage(firstStorage);
+      setSelectedStorage(firstStorage);
+    } else {
+      // Nếu không có storage, có thể reset objectStorage
+      setObjectStorage([]); // Hoặc giá trị mặc định của bạn
     }
-  };
+  }
+};
 
- console.log(objectColor);
+const handleStorageChange = (storage: string) => {
+  if (objectColor?.product_storages?.length > 0) {
+    const newStorage = objectColor.product_storages.find((item) => item.storage === storage);
+    if (newStorage) {
+      setObjectStorage(newStorage);
+      setSelectedStorage(newStorage);
+    }
+  } else {
+    // Nếu không có storage, có thể đặt lại objectStorage
+    setObjectStorage([]);
+    setSelectedStorage(null);
+  }
+};
+console.log(objectStorage);
+
  
 
 
@@ -128,26 +191,35 @@ function DetailProduct() {
               <div className="w-full md:w-[45%] mx-auto text-xl ">
                 <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
                 {/* Price Section */}
+                {productDetail?.product_discount > 0 ?
                 <div className="flex items-center gap-4 py-4">
-                  <p className="text-red-500 font-semibold text-[2rem]">27.000.000đ</p>
-                  <p className="text-xl text-gray-500 line-through">31.000.000đ</p>
-                  <p className="text-xl px-4 py-2 border border-gray-300">30%</p>
-                </div>
+            
+                <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}</p>
+                <p className="text-xl text-gray-500 line-through">              
+                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                </p>
+                <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
+              </div>
+                : 
+                <p className="text-red-500 font-semibold text-[2rem]">
+                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                    </p>
+                }
+                
 
                 {/* Storage Variant Buttons */}
-                {/* <div className="flex gap-4 mb-6">
-                  {variants.map((variant, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleVariantChange(variant)}
-                      className={`py-3 px-6 text-xl text-white ${
-                        selectedVariant?.storage === variant.storage ? 'bg-customColor' : 'bg-gray-400'
-                      }`}
-                    >
-                      {variant.storage}
-                    </button>
-                  ))}
-                </div> */}
+                <div className="flex gap-4 mb-6">
+              
+                {objectColor?.product_storages?.map((variant, index) => (
+  <button key={index}                
+  onClick={()=>{handleStorageChange(variant)}}
+  className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
+>
+
+    {variant?.storage} MB
+  </button>
+))}
+                </div>
 
                 {/* Color Selection */}
                 <div className="py-6">
@@ -159,6 +231,7 @@ function DetailProduct() {
                 onClick={() => handleColorChange(item.color)}
                 className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectedColor === item.color ? 'bg-slate-50' : ''}`}
             >
+              
                 <img 
                     src={`${IMG_BACKEND}/${item?.image?.image_one}`} 
                     alt={item.color} 
@@ -166,7 +239,7 @@ function DetailProduct() {
                 />
                 <div>
                     <h4 className="font-semibold text-lg">{item.color}</h4>
-                    <p className="text-red-500 font-semibold">20.000.000đ</p>
+                    {/* <p className="text-red-500 font-semibold">{item.storage_price}đ</p> */}
                 </div>
             </div>
         ))}
@@ -248,35 +321,23 @@ function DetailProduct() {
 
                 {/* Cart and Buy Now Buttons */}
                 <div className="flex gap-4 mt-4">
-                  <button className="w-1/2 py-6 text-[1.7rem] font-medium border border-customColor text-customColor rounded-2xl hover:bg-purple-100">
+                  <button 
+                  onClick={()=>{
+                    handleAddItem(productDetail)
+                  }}
+                  className="w-1/2 py-6 text-[1.7rem] font-medium border border-customColor text-customColor rounded-2xl hover:bg-purple-100">
                     Thêm giỏ hàng
                   </button>
-                  <button className="w-1/2 py-6 text-[1.7rem] font-medium bg-customColor text-white rounded-2xl hover:bg-purple-700">
+                  <button 
+                  onClick={()=>{handleAddOrder(productDetail)}}
+                  className="w-1/2 py-6 text-[1.7rem] font-medium bg-customColor text-white rounded-2xl hover:bg-purple-700">
                     Mua ngay
                   </button>
                 </div>                    
               </div>
             </div>
                 {/* Ý kiến */}
-                {/* <div>
-                    <h3 className="text-[2rem]">Ý kiến của bạn</h3>
-                    <div className="mt-[2rem] flex">
-                      <div className="w-[10%] mx-[1rem]">
-                      <img
-                              src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                              alt="news image"
-                              className="w-[12rem] h-[12rem] rounded-[50%] object-cover"
-                            />
-                        <Rate className="mt-4"/>
-                      </div>
-                                <div className="w-[90%]">
-                                <TextArea rows={6} placeholder="Đánh giá của bạn"  />
-                                <div className="flex justify-end">
-                                <button className="bg-customColor text-white py-[1rem] px-[2rem] font-medium text-[1.5rem] mt-4 rounded-md">Hoàn tất</button>
-                                </div>
-                                </div>
-                    </div>
-                </div>                 */}
+      
                 <Comment reviews={getCommentById}/>
                 <CommentForm id={numericId}/>
           </div>

@@ -4,52 +4,55 @@ import TaskProduct from "./Modal/TaskProduct";
 
 function Menu() {
   const [isProductHovered, setIsProductHovered] = useState(false);
+  const [isProductClicked, setIsProductClicked] = useState(false); // State for click
 
-  const menuIcons = [
-    { name: "Trang chủ", path: "/" },
-    { name: "Giới thiệu", path: "gioi-thieu" },
-    { name: "Sản phẩm", path: "san-pham" },
-    { name: "Bài viết", path: "bai-viet" },
-    { name: "Liên hệ", path: "lien-he" },
-  ];
-
-  const handleMouseEnter = (itemName: string) => {
-    if (itemName === "Sản phẩm") {
-      setIsProductHovered(true);
-    }
+  const handleMouseEnter = () => {
+    setIsProductHovered(true); // Set to true on hover
   };
 
-  const handleMouseLeave = (itemName: string) => {
-    if (itemName === "Sản phẩm") {
-      setIsProductHovered(false);
-    }
+  const handleMouseLeave = () => {
+    setIsProductHovered(false); // Set to false when hover leaves
+  };
+
+  const handleClick = () => {
+    setIsProductClicked(!isProductClicked); // Toggle on click
   };
 
   return (
     <div>
       <ul className="flex items-center">
-        {menuIcons.map((item) => (
-          <li
-            key={item.path}
-            className="relative md:mr-6"
-            onMouseEnter={() => handleMouseEnter(item.name)}
-            onMouseLeave={() => handleMouseLeave(item.name)}
+        <li className="relative md:mr-6">
+          <NavLink
+            to="/"
+            className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
           >
-            <NavLink
-              to={item.path}
-              className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
-            >
-              {item.name}
-            </NavLink>
-
-            {/* Hiển thị TaskProduct khi hover vào "Sản phẩm" */}
-            {item.name === "Sản phẩm" && isProductHovered && (
-              <div className="absolute left-0 top-full z-20">
-                <TaskProduct />
-              </div>
-            )}
-          </li>
-        ))}
+            Trang chủ
+          </NavLink>
+        </li>
+        <li className="relative md:mr-6">
+          <NavLink
+            to="/"
+            className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
+          >
+            Giới thiệu
+          </NavLink>
+        </li>
+        <li
+          className="relative md:mr-6"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick} // Toggle click state
+        >
+          <div className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative">
+            Sản phẩm
+          </div>
+          {/* Display TaskProduct when hovered or clicked */}
+          {(isProductHovered || isProductClicked) && (
+            <div className="absolute left-0 top-full z-20">
+              <TaskProduct />
+            </div>
+          )}
+        </li>
       </ul>
     </div>
   );

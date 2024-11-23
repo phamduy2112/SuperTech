@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Định nghĩa kiểu cho một sản phẩm trong giỏ hàng
-interface CartItem {
-//   id: string;
-//   name: string;
-//   price: number;
-//   quantity: number;
-}
 
 // Định nghĩa kiểu cho state của giỏ hàng
 interface CartState {
   listCart: CartItem[];
   totalItems: number; // Biến để lưu tổng số lượng sản phẩm trong giỏ hàng
-  totalAmount:number
+  totalAmount:number,
+  discount:number
+  ship:number,
+  discount_id:number
 }
 
 const initialState: CartState = {
   listCart: [],  // Phải là một mảng rỗng
   totalItems: 0,
   totalAmount: 0,
+  discount:0,
+  discount_id:0,
+  ship:30000,
 };
 
 // Tạo slice cho giỏ hàng
@@ -26,6 +26,13 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // Set mã giảm giá
+    setDiscoutCart: (state, action) => {
+      state.discount = action.payload; // setting the discount value
+    },
+    setDiscoutId: (state, action) => {
+      state.discount_id = action.payload; // setting the discount value
+    },
     // Thêm sản phẩm vào giỏ hàng
     addItemToCart: (state, action: PayloadAction<CartItem>) => {
       if (state.listCart) {
@@ -40,7 +47,11 @@ const cartSlice = createSlice({
       // state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
       // state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
-    
+    // Thêm sản phẩm vào trực tiếp order
+    addItemToOrder: (state, action: PayloadAction<CartItem>) => {
+      // Thay thế toàn bộ listCart bằng sản phẩm mới
+      state.listCart = [{ ...action.payload, quantity: 1 }];
+    },
     // Xóa sản phẩm khỏi giỏ hàng
     removeItemFromCart: (state, action: PayloadAction<{ product_id: string }>) => {
       state.listCart = state.listCart.filter(item => item.product_id !== action.payload.product_id);
@@ -93,7 +104,7 @@ const cartSlice = createSlice({
 });
 
 // Export các action
-export const { addItemToCart, removeItemFromCart,removeAllCart, decreaseItemQuantity,inCreaseItemQuantity, numCart } = cartSlice.actions;
+export const {addItemToOrder,setDiscoutCart,setDiscoutId, addItemToCart, removeItemFromCart,removeAllCart, decreaseItemQuantity,inCreaseItemQuantity, numCart } = cartSlice.actions;
 
 // Export reducer
 export const cartReducer = cartSlice.reducer;
