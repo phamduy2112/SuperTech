@@ -38,14 +38,18 @@ const getDetailOrderById = async (req, res) => {
                         {
                             model: models.user,
                             as: 'user' // Bao gồm replies cho mỗi comment
+                        },
+                        {
+                            model:models.order_status,
+                            as:"order_statuses",
+                           
+                        },
+                        {
+                            model:models.discount,
+                            as:"discount_discount",
                         }
                     ]
             },
-            
-      
-            
-         
-        
         ]
         });
         
@@ -62,7 +66,7 @@ const getDetailOrderById = async (req, res) => {
 const createdetailorder = async (req, res) => {
     try {
         const detailOrders = req.body; // Giả định body chứa một mảng đối tượng
-        console.log(detailOrders);
+      
 
         const newOrders = await Promise.all(detailOrders.map(async (order) => {
             // Kiểm tra số lượng tồn kho trước khi tạo detailOrder
@@ -79,6 +83,7 @@ const createdetailorder = async (req, res) => {
             const createdOrder = await detailorder.create(order);
 
             // Cập nhật số lượng sản phẩm sau khi tạo đơn hàng thành công
+
             await models.products.update(
                 {
                     product_quantity: sequelize.literal(`product_quantity - ${order.detail_order_quality}`)

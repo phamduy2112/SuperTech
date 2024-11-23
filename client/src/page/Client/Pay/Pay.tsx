@@ -6,8 +6,14 @@ import axios from 'axios';
 import { getUserThunk } from '../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { createDetailOrder, createOrder } from '../../../service/order/order.service';
+import { removeAllCart } from '../../../redux/cart/cart.slice';
+import { useNavigate } from 'react-router-dom';
+import { formatCurrencyVND, truncateText } from '../../../utils';
+import { setOrderId } from '../../../redux/order/Order.slice';
+import toast from 'react-hot-toast';
 function Pay() {
   const dispatch = useAppDispatch();
+  const navigate=useNavigate();
   const user: any = useAppSelector((state) => state.user.user);
   const listCart:any=useAppSelector((state)=>state.cart.listCart)
   const totalItem=useAppSelector((state)=>state.cart.totalItems)
@@ -16,7 +22,16 @@ function Pay() {
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
-console.log(user);
+  const totalPrice = listCart.reduce((total:number, item) => {
+    const discountAmount = (item.product_price * item.product_discount) / 100; // Tính giảm giá
+    const priceAfterDiscount = item.product_price - discountAmount; // Tính giá sau giảm
+    const itemTotalPrice = item.quantity * priceAfterDiscount; // Tính tổng giá của item
+    return total + itemTotalPrice; // Cộng dồn vào total
+  }, 0);
+  const getDiscount=useAppSelector(state=>state.cart.discount);
+  const getShip=useAppSelector(state=>state.cart.ship);
+   
+  const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
   const [formData, setFormData] = useState({
     name: user?.user_name || '', // Gán giá trị ban đầu cho name
@@ -34,8 +49,12 @@ console.log(user);
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
-  
+  const getDiscountId=useAppSelector((state)=>state.cart.discount_id)
   useEffect(() => {
+    if(!(listCart.length>0)){
+      toast.success("Bạn cần thêm sản phẩm")
+      navigate("/")
+    }
     const fetchProvinces = async () => {
       try {
         // Gọi API bằng async/await
@@ -94,11 +113,16 @@ console.log(user);
     // Xử lý logic khi ấn nút Đặt hàng
 
     const dataOrder={
-      order_total:100000,
+      order_total:totalPrice,
       order_total_quatity:+totalItem,
       order_status:0,
-      user_id:user.user_id
+      user_id:user.user_id,
+      discount:getDiscountId,
+      phone_number:formData.sdt,
+      address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
+
+  
     const resp=await createOrder(dataOrder)
     // console.log(resp);
     
@@ -109,13 +133,23 @@ console.log(user);
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
-   
+      detail_order_price:item.product_price,
+      discount_product:item.product_discount,
+
     }));
 
     const responve=await createDetailOrder(detailOrders)
+    if(responve){
+    
+      dispatch(setOrderId(resp.data.content.order_id))
+      navigate("/xuất-hóa-đơn")
+      dispatch(removeAllCart())
+    }
   };
   return (
+
     <Container>
+    
     <div className=' py-6 text-[1.5rem]'>
           <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
             <a href="/" className="text-customColor hover:underline">
@@ -153,7 +187,7 @@ console.log(user);
           <div className='flex justify-between text-[1.5rem] py-[1rem] font-semibold border border-b-[#969696] border-transparent'>
             <p className='sm:w-[70%] xsm:w-[80%]'>Sản phẩm</p>
             <p className='xsm:w-[20%]'>Tạm tính</p>
-          </div>
+          </div>      
           <div className='flex  sm:text-[1.3rem] sxm:text-[1.4rem] py-[1rem] border border-b-[#969696] border-transparent'>
             <div className='w-[80%] flex'>
               <div className='xsm:w-[70px] sm:w-[60px]'>
@@ -328,27 +362,49 @@ console.log(user);
         </div>
       </div>
 
-            <div className="lg:w-[45%] bg-white rounded-lg shadow-xl">
-              <div className="space-y-4 mb-10 px-7 leading-[3.7rem]">
+            <div className="lg:w-[45%] bg-white h-[100%] rounded-lg shadow-xl py-9">
+              <div className="space-y-4 mb-10 px-7 pb-4">
                 <h3 className="text-[2rem] font-semibold">Đơn đặt hàng</h3>
         <div className={`${listCart.length >2 ? "h-[25rem] custom-scrollbar" :""} overflow-y-auto custom-scrollbar`}>
         {
           listCart.map((item)=>{
             return (
-              <div className="flex justify-between items-center border-b pb-5">
-                <div className="flex items-center space-x-4">
+              <div className="flex justify-between items-center border-b">
+                <div className="flex items-center space-x-4 py-[1rem]">
                   <img
                     className="w-[8rem] h-[8rem] object-cover"
                     src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
                     alt="Iphone"
                   />
                   <div>
-                    <h5 className="font-semibold text-[1.7rem]">IPhone 13 Pro max chính hãng, 256GB (x1)</h5>
-                    <p className="text-[1.6rem]">Màu sắc: Xanh</p>
-                    <p className="text-red-600 font-semibold">30.000.000đ <span className="text-[#969696] line-through ml-2">31.990.000đ</span></p>
+                    <h5 className="font-semibold tex
+                    t-[1.7rem]">{truncateText(item?.product_name,25)}</h5>
+                    <p className="text-[1.6rem]">    
+                      {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
+                    {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
+                    {` (x${item.quantity})`}
+                    </p>
+                    {item?.product_discount > 0 ? (
+                                          <p className="text-red-600 font-semibold">
+                                             {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}
+                                             <span className="text-[#969696] line-through ml-2">
+                                             {formatCurrencyVND(item?.product_price)}
+                                             </span></p>
+
+          ):(
+            <p className="text-red-600 font-semibold"> {formatCurrencyVND(item?.product_price)} </p>
+
+
+          )}
                   </div>
                 </div>
-                <div className="text-[1.8rem] font-semibold text-customColor">30.000.000đ</div>
+                <div className="text-[1.8rem] font-semibold text-customColor">       {formatCurrencyVND(
+                                Number(item?.product_price) *
+                                  (1 - Number(item?.product_discount / 100))
+                              )}đ</div>
               </div>
             )
           })
@@ -358,18 +414,28 @@ console.log(user);
            
 
               {/* Order Summary */}
-              <div className="space-y-2">
-                <div className="flex justify-between">
+              <div className="space-y-4 text-[1.6rem] ">
+                <div className="flex justify-between ">
                   <span className="font-medium">Tạm tính</span>
-                  <span className="font-semibold text-[1.8rem]">52.000.000đ</span>
+                  <span className="font-semibold text-[1.8rem]">
+                    
+                  {formatCurrencyVND(totalPrice)}
+                    
+                    
+                    </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Giảm giá</span>
+                  <span className="font-semibold text-[1.8rem]">{getDiscount}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Giao hàng</span>
-                  <span className="font-semibold text-[1.8rem]">0</span>
+                  <span className="font-semibold text-[1.8rem]">{formatCurrencyVND(getShip)}</span>
                 </div>
+        
                 <div className="flex justify-between border-t pt-5 font-semibold">
                   <span>Tổng tiền</span>
-                  <span className="text-red-600 text-[2.2rem]">52.000.000đ</span>
+                  <span className="text-red-600 text-[2.2rem]">   {formatCurrencyVND(totalPriceWithVoucher)}</span>
                 </div>
               </div>
 
@@ -419,7 +485,7 @@ console.log(user);
               <div className="mt-5">
                 <button
                   onClick={handleFormSubmit}
-                  className="w-full my-[1rem] bg-customColor text-white py-1 text-[2rem] rounded-lg font-medium">
+                  className="w-full my-[1rem] py-3 bg-customColor text-white text-[2rem] rounded-lg font-medium">
                     Đặt hàng
                 </button>
               </div>

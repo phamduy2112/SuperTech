@@ -70,4 +70,21 @@ const deleteUser = async (req, res) => {
     responseSend(res, "", "Có lỗi xảy ra khi xóa người dùng!", 500);
   }
 };
-export { uploadimagesUser, deleteUser };
+const deleteImageCloud = async (req, res) => {
+  const imageId = req.params.imageId; 
+  try {
+    await cloudinary.uploader.destroy(`User/${imageId}`, function(error, result) {
+      if (error) {
+        console.error('Error deleting image:', error);
+        return res.status(500).json({ error: 'Có lỗi xảy ra khi xóa hình ảnh!' });
+      }
+      console.log('Delete result:', result);
+      responseSend(res, "", "Xóa hình ảnh thành công!", 200);
+    });
+  } catch (error) {
+    console.error('Error handling the request:', error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
+  }
+};
+
+export { uploadimagesUser, deleteUser, deleteImageCloud };

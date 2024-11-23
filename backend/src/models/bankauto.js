@@ -25,6 +25,10 @@ export default class bankauto extends Model {
     accountNumber: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    on_off: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,

@@ -1,6 +1,6 @@
 
 import { Popover, Button, Checkbox, Table, } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
@@ -9,6 +9,9 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import AdminAddCatelogry from './Component/AdminAddCatelogry';
 import AdminEditCatelogry from './Component/AdminEditCatelogry';
+import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { deleteCategoryThunk, getCatelogryThunk } from '../../../redux/catelogry/catelogry.slice';
 
 
 function AdminCatelogry() {
@@ -20,82 +23,68 @@ function AdminCatelogry() {
   const handleEdit = (key: any) => {
     setKey(key)
   }
+  const DataCategory = [
+    { label: 'Điện thoại', value: 1 },
+    { label: 'Laptop', value: 2 },
+    { label: 'Table', value: 3 },
+  ];
+  // const dispatch=useAppDispatch();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {
-    Swal.fire({
-      icon: 'warning',
-      showDenyButton: true,
-      title: `Bạn Chọn Danh Mục Sản Phẩm Có ID ${key}`,
-      text: `Bạn có chắc muốn xóa ?`,
-      confirmButtonText: 'Xóa',
-      denyButtonText: 'Hủy',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Đã Xóa',
-          text: `Bạn đã Xóa ${key}`,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Đã Hủy',
-          text: 'Bạn đã hủy thao tác xóa.',
-        });
-      }
-    });
+  dispatch(deleteCategoryThunk(key))
+
+  
   };
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'key',
-      key: 'key',
+      title: 'STT', // Serial Number
+      render: (_, __, index:number) => index + 1, // Display the row index + 1 as STT
+      key: 'stt', // Key for this column
     },
-    {
-      title: 'Hình',
-      dataIndex: 'image',
-      key: 'image',
-      render: (src: string) => (
-        <img className='rounded-md object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-      ),
-    },
+    // {
+    //   title: 'Hình',
+    //   dataIndex: 'image',
+    //   key: 'image',
+    //   render: (src: string) => (
+    //     <img className='rounded-md object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
+    //   ),
+    // },
     {
       title: 'Tên Danh Mục',
-      dataIndex: 'name',
+      dataIndex: 'category_name',
       render: (text: string) => <a>{text}</a>,
     },
     {
       title: 'Ngày',
-      dataIndex: 'date',
+      dataIndex: 'category_date_task',
     },
     {
-      title: 'Catelogory_dad',
-      dataIndex: 'catelogory_dad',
+      title: 'Loại chung',
+      dataIndex: 'category_dad',
+      render: (value: number) => {
+        const category = DataCategory.find((item) => item.value === value);
+        return category ? category.label : 'Không xác định'; // Return the label or a fallback text
+      },
     },
     {
       title: 'Vai Trò',
-      dataIndex: 'role',
-      render: (text: string) => (
-        <div className="flex-1 flex items-center gap-3">
-          <div className={`w-[10px] rounded-full h-[10px] ${text === 'Danh Mục Thường' ? 'bg-[#2af52a]' : ''} ${text === 'Danh Mục Khuyến Mãi' ? 'bg-[#ffd000]' : ''} ${text === 'Danh Mục Nổi Bật' ? 'bg-[red]' : ''}`}></div>
-          {text}
-        </div>
-      ),
+      dataIndex: 'category_task',
+      render: (value) => value == 1 ? "true" : "false",
+      
     },
     {
       title: 'Tác Vụ',
       key: 'key',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (record: any) => (
+      render: (_,record: any) => (
         <div className='flex text-[24px] box-border gap-1 items-center'>
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(record.key)}
+          <AdminEditCatelogry category={record}
           />
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDelete(record.key)}
+            onClick={() => handleDelete(record.category_id)}
           />
         </div>
       ),
@@ -186,7 +175,12 @@ function AdminCatelogry() {
     },
   ];
 
+  const dispatch=useAppDispatch()
+  const dataCategories=useAppSelector(state=>state.category.listCatelories)
+  useEffect(()=>{
 
+    dispatch(getCatelogryThunk(""))
+  },[dispatch])
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSelectChange = (selectedRowKeys: any) => {
     setSelectedCheckbox(selectedRowKeys);
@@ -302,7 +296,7 @@ function AdminCatelogry() {
               ...rowSelection,
             }}
             columns={columns}
-            dataSource={data}
+            dataSource={dataCategories}
             size='large'
             pagination={{ pageSize: 10 }}
           />

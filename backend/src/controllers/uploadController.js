@@ -37,9 +37,9 @@ const uploadFields = upload.fields([
   
       const results = await Promise.all(uploadPromises);
       const imageNames = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-      await ImageModel.create(imageNames);
+      const resp=await ImageModel.create(imageNames);
   
-      res.json({ message: 'Images uploaded successfully', data: imageNames });
+      res.json({ message: 'Images uploaded successfully', data: resp });
     } catch (error) {
       console.error("Error uploading images:", error);
       res.status(500).json({ error: 'Error uploading images' });

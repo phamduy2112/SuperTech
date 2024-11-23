@@ -1,7 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-
+import multer from 'multer';
 let models = initModels(sequelize); 
 let inforproduct = models.infor_product; 
 
@@ -29,7 +29,31 @@ const getinforproductById = async (req, res) => {
 
 const createinforproduct = async (req, res) => {
     try {
-        let newinforproduct = await inforproduct.create(req.body);
+        const {
+            infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_compan,
+            infor_rom,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
+            infor_more
+        }=req.body
+        let newinforproduct = await inforproduct.create({
+            infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_compan,
+            infor_rom,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
+            infor_more});
         responseSend(res, newinforproduct, "Thêm Thành công!", 201);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);

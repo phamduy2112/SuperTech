@@ -3,6 +3,7 @@ import express from 'express';
 import isAuthenticated from '../config/auth.js';
 import { middleToken } from '../config/jwt.js';
 import { getimageproduct, getimageproductById, createimageproduct, updateimageproduct, deleteimageproduct } from '../controllers/imageproductController.js';
+import { upload } from '../config/upload.js';
 const imageproductRouter = express.Router();
 
 imageproductRouter.get('/imageproduct', getimageproduct);

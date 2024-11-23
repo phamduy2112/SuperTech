@@ -11,7 +11,7 @@ export default class infor_product extends Model {
       primaryKey: true
     },
     infor_screen: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     infor_system: {
@@ -23,7 +23,31 @@ export default class infor_product extends Model {
       allowNull: true
     },
     infor_ram: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_compan: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_rom: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_frontCamera: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_rearCamera: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_scanning_frequency: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_chip_battery: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     infor_more: {

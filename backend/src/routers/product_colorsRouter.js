@@ -11,4 +11,5 @@ product_colorsRouter.post('/product_colors_create',middleToken, createProduct_co
 product_colorsRouter.put('/product_colors_edit/:id',middleToken, updateProduct_colors);
 product_colorsRouter.delete('/product_colors_delete/:id',middleToken, deleteProduct_colors);
 
+
 export default product_colorsRouter;

@@ -12,6 +12,7 @@ import { createLike } from '../../../../service/comment/comment.service';
 import { useAppSelector } from '../../../../redux/hooks';
 import { BiSolidLike } from 'react-icons/bi';
 import { StarRating } from '../../../../components/star/Star';
+import CommentComponent from './RelyComment';
 
 function Comment(props: any) {
   const user: any = useAppSelector((state) => state.user.user);
@@ -230,8 +231,8 @@ onClick={() => handleActionToggle(index, 'edit')}                               
   </Formik>
 )}
           </div>
-
-                 
+{/* <ReplyComment reviews={}/> */}
+          
                   </div>
                 </div>
               </div>

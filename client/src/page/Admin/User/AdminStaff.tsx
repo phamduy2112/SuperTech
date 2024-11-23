@@ -1,5 +1,5 @@
 import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { FiFilter } from 'react-icons/fi';
@@ -8,8 +8,199 @@ import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { getAllUserThunk } from '../../../redux/user/user.slice';
 
 function AdminStaff() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const Allstaffs: any = useAppSelector((state) => state.user.Alluser);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [DataAllstaffs, setDataAllstaffs] = useState<any[]>([]);
+    const AppDispatch = useAppDispatch();
+    const [staffKeys, setStaffKeys] = useState<string[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [columns, setColumns] = useState<any[]>([]);
+    const [valueInputSearch, setvalueInputSearch] = useState(``);
+
+
+
+    useEffect(() => {
+        AppDispatch(getAllUserThunk());
+        setDataAllstaffs(Allstaffs);
+
+    }, [AppDispatch]);
+
+    useEffect(() => {
+        if (Allstaffs && Allstaffs.length > 0) {
+            const keys = Allstaffs.map((staff: string) => Object.keys(staff));
+            keys.push('tacvu');
+
+            setStaffKeys([...new Set(keys.flat())] as string[]);
+        }
+    }, [Allstaffs])
+
+
+    useEffect(() => {
+
+
+        console.log(staffKeys);
+
+        const ColumnStaffs = staffKeys.map((staff) => {
+
+            switch (staff) {
+                case 'user_id':
+                    return {
+                        title: 'ID',
+                        dataIndex: staff,
+                        key: staff,
+                    };
+
+                case 'user_image':
+                    return {
+                        title: 'Hình',
+                        dataIndex: staff,
+                        key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (src: any) => (
+                            <>
+                                {
+                                    src == '' || src == null || src == undefined ?
+                                        <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
+                                        : <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
+
+                                }
+
+                            </>
+                        ),
+
+
+                    };
+                case 'user_name':
+                    return {
+                        title: 'Tên',
+                        dataIndex: staff,
+                        key: staff,
+
+                    };
+
+                case 'user_birth':
+                    return {
+                        title: 'Tuổi',
+                        dataIndex: staff,
+                        key: staff,
+                    }
+                case 'user_phone':
+                    return {
+                        title: 'Số điện thoại',
+                        dataIndex: staff,
+                        key: staff,
+                    }
+
+                case 'user_email':
+                    return {
+                        title: 'Email',
+                        dataIndex: staff,
+                        key: staff,
+                    }
+
+                case 'user_address':
+                    return {
+                        title: 'Địa Chỉ',
+                        dataIndex: staff,
+                        key: staff,
+
+
+                    }
+                case 'user_role':
+                    return {
+                        title: 'Vai trò',
+                        dataIndex: staff,
+                        key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <div className="flex-1 flex items-center gap-3">
+                                <div className={`w-[10px] rounded-full h-[10px] ${text == 2 ? 'bg-[#2af52a]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+                                {text == 2 ? 'Người dùng' : ''} {text == 1 ? 'Nhân viên' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
+
+                            </div>
+                        ),
+                    }
+                case 'level':
+                    return {
+                        title: 'Thăng hạng',
+                        dataIndex: staff,
+                        key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <div className="flex-1 flex items-center gap-3">
+                                {text == 4 ? 'Đồng' : ''} {text == 3 ? 'Bạc' : ''} {text == 2 ? 'Vàng' : ''} {text == 1 ? 'Kim Cương' : ''} {text == 0 ? 'Tối Thượng' : ''}
+                            </div>
+                        ),
+                    }
+
+
+                case 'tacvu': {
+                    return {
+                        title: 'Tác Vụ',
+                        key: 'tacvu',
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (record: any) => (
+                            <div className='flex text-[24px] box-border gap-1 items-center'>
+                                <BiSolidEdit
+                                    className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+                                    onClick={() => handleEdit(record.user_id)}
+                                />
+                                <CiBookmarkRemove
+                                    className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
+                                    onClick={() => handleDelete(record.user_id)}
+                                />
+                            </div>
+                        ),
+                    };
+                }
+
+
+
+
+
+                default:
+                    return null;
+            }
+
+        }).filter(col => col !== null);
+        setColumns(ColumnStaffs);
+    }, [staffKeys]);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setvalueInputSearch(e.target.value);
+    }
+
+    useEffect(() => {
+        if (valueInputSearch.trim() === "") {
+            setDataAllstaffs(Allstaffs);
+        } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
+
+            const filteredData = Allstaffs.filter((item: any) => {
+                const userName = item?.user_name;
+                const userEmail = item?.user_email;
+                const userPhone = item?.user_phone;
+
+                const userNameString = (typeof userName === 'string' || userName instanceof String) ? userName : String(userName || '');
+                const userEmailString = (typeof userEmail === 'string' || userEmail instanceof String) ? userEmail : String(userEmail || '');
+                const userPhoneString = (typeof userPhone === 'string' || userPhone instanceof String) ? userPhone : String(userPhone || '');
+
+                return userNameString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm) ||
+                    userEmailString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm) ||
+                    userPhoneString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm);
+            });
+
+            setDataAllstaffs(filteredData);
+
+        }
+    }, [valueInputSearch, Allstaffs]);
+
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
 
@@ -51,178 +242,6 @@ function AdminStaff() {
             }
         });
     };
-
-    const columns = [
-        {
-            title: 'ID',
-            dataIndex: 'key',
-            key: 'key',
-        },
-        {
-            title: 'Hình',
-            dataIndex: 'image',
-            key: 'image',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            render: (src: any) => (
-                <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-            ),
-        },
-        {
-            title: 'Tên',
-            dataIndex: 'name',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            render: (text: any) => <a>{text}</a>,
-        },
-        {
-            title: 'Tuổi',
-            dataIndex: 'age',
-        },
-        {
-            title: 'Đối Tượng',
-            dataIndex: 'obj',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            render: (text: any) => (
-                <div className="flex-1 flex items-center gap-3">
-                    <div className={`w-[10px] rounded-full h-[10px] ${text === 'Người Dùng' ? 'bg-[#2af52a]' : ''} ${text === 'Nhân Viên' ? 'bg-[#ffd000]' : ''} ${text === 'Admin' ? 'bg-[red]' : ''}`}></div>
-                    {text}
-                </div>
-            ),
-        },
-        {
-            title: 'Điện Thoại',
-            dataIndex: 'phone',
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-        },
-        {
-            title: 'Địa Chỉ',
-            dataIndex: 'address',
-        },
-        {
-            title: 'Tác Vụ',
-            key: 'key',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            render: (record: any) => (
-                <div className='flex  text-[24px] box-border gap-1 items-center'>
-                    <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-                        onClick={() => handleEdit(record.key)}
-                    />
-                    <CiBookmarkRemove
-                        className='cursor-pointer text-red-300 transition-all duration-700  hover:text-[red]'
-                        onClick={() => handleDelete(record.key)}
-                    />
-
-
-                </div>
-            ),
-        },
-    ];
-
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            obj: 'Admin',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'New York No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'London No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'Sydney No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '4',
-            name: 'Disabled User',
-            age: 99,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'Sydney No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '5',
-            name: 'John Brown',
-            age: 32,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'New York No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '6',
-            name: 'Jim Green',
-            age: 42,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'London No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '7',
-            name: 'Joe Black',
-            age: 32,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'Sydney No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '8',
-            name: 'Disabled User',
-            age: 99,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'Sydney No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '9',
-            name: 'Joe Black',
-            age: 32,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'Sydney No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-        {
-            key: '10',
-            name: 'Disabled User',
-            age: 99,
-            obj: 'Nhân Viên',
-            phone: '0123 456 789',
-            email: 'nguyen.van.a@example.com',
-            address: 'Sydney No. 1 Lake Park',
-            image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-        },
-    ];
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSelectChange = (selectedRowKeys: any) => {
         setSelectedCheckbox(selectedRowKeys);
@@ -306,7 +325,7 @@ function AdminStaff() {
 
                 <div className='flex p-[24px] items-center justify-between gap-3'>
                     <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-                        <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm nhân viên hoặc quản trị...' />
+                        <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' onChange={handleSearch} placeholder='Tìm kiếm nhân viên hoặc quản trị...' />
                         <GoSearch className='text-[18px]' />
                     </div>
 
@@ -350,8 +369,9 @@ function AdminStaff() {
                             type: 'checkbox',
                             ...rowSelection,
                         }}
-                        columns={columns}
-                        dataSource={data}
+                        columns={columns || []}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 2) : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
                     />

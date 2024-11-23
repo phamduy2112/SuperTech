@@ -1,4 +1,5 @@
 import express, { urlencoded } from 'express';
+import cron from "node-cron";
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import product_colorsRouter from './routers/product_colorsRouter.js';
@@ -22,6 +23,10 @@ import path from "path"
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
+import bankAutoRouter from './routers/bankAutoRouter.js';
+import { checkTransactionStatus } from './controllers/bankAutoController.js'; 
+import product_storageRouter from './routers/product_storage.js';
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -29,17 +34,21 @@ app.use(cookieParser());
 app.use(urlencoded({extended:true}))
 app.use(express.static("."))
 
-const corsOptions={
-    origin:'http://localhost:5173',
-    credentials:true,
-    
-
-}
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://127.0.0.1:62769'],
+  credentials: true
+};
+// cron.schedule("*/1 * * * *", async () => {
+//   console.log("Chạy auto-update trạng thái đơn hàng...");
+//   await checkTransactionStatus();
+// });
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
 });
 
+app.use(product_storageRouter);
+app.use(bankAutoRouter);
 app.use(userRouter);
 app.use(uploadRouter)
 app.use(productRouter);
@@ -61,4 +70,5 @@ app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
 app.use (uploadImgUserRouter)
+
 app.listen(8080);

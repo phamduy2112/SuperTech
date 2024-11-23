@@ -2,34 +2,46 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import { Op } from "sequelize";
-import cloudinary from '../config/cloudinaryConfig.js';
+
 let models = initModels(sequelize); 
 let Products = models.products; 
 
 const getProducts = async (req, res) => {
     try {
         let data = await Products.findAll( 
+        {
+            include: [
             {
+                model: models.comment_product,
+                as:'comment_products',
                 include: [
-                {
-                    model: models.product_colors,
-                    as: 'product_colors',
-                    include: [
+                        {
+                            model: models.user,
+                            as: 'user',
+                            attributes: { exclude: ['user_password', 'user_phone'] }
+                        }
+                ]
+            },
+            {
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+            {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
                         {
                             model: models.product_storage,
-                            as: 'product_storages'
-                        }
+                                as:'product_storages',
+                                required: false
+                        },
                     ]
-                },
-                {
-                    model: models.product_storage,
-                    as: 'product_storages'
-                },
-                {
-                    model: models.infor_product,
-                    as: 'infor_product_infor_product'
-                }
-            ]
+            },
+        ]
             }
         );
         responseSend(res, data, "Thành công!", 200);
@@ -44,7 +56,38 @@ const getProductsByCategoryId = async (req, res) => {
         const products = await Products.findAll({
             where: {
                 category_id: categoryId
-            }
+            },
+            include:[
+                {
+                    model: models.comment_product,
+                        as:'comment_products',
+                        include: [
+                            {
+                                model: models.user,
+                                as: 'user'
+                            }
+                        ]
+                },
+                    {
+                    model: models.infor_product,
+                        as:'infor_product_infor_product'
+                },
+                    {
+                    model: models.product_colors,
+                        as:'product_colors',
+                        include:[
+                            {
+                                model: models.image_product,
+                                    as:'image'
+                            },
+                            {
+                                model: models.product_storage,
+                                    as:'product_storages',
+                                    required: false
+                            },
+                        ]
+                },
+            ]
         });
         if (products.length > 0) {
             responseSend(res, products, "Thành công!", 200);
@@ -82,9 +125,15 @@ const getProductById = async (req, res) => {
                             model: models.image_product,
                                 as:'image'
                         },
+                        {
+                            model: models.product_storage,
+                                as:'product_storages',
+                                required: false
+                        },
                     ]
             },
         ]
+   
         });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
@@ -108,7 +157,7 @@ const getProductByIdCatelogryDad = async (req, res) => {
 
         // Add `category` to the where clause if it exists
         if (category) {
-            whereClause.category_name = category;
+            whereClause.category_id = category;
         }
 
         const products = await Products.findAll({
@@ -117,7 +166,40 @@ const getProductByIdCatelogryDad = async (req, res) => {
                 as: "category",
                 where: whereClause,
                 attributes: []
-            }]
+            },
+            {
+                model: models.comment_product,
+                    as:'comment_products',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user'
+                        }
+                    ]
+            },
+                {
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+                {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
+                        {
+                            model: models.product_storage,
+                                as:'product_storages',
+                                required: false
+                        },
+                    ]
+            },
+        ]
+           
+             
+     
         });
 
         responseSend(res, products, "Products retrieved successfully!", 200);
@@ -130,34 +212,49 @@ const createProduct = async (req, res) => {
         const {
             product_name,
             product_price,
-            product_star,
             product_discount,
             product_hot,
             product_quantity,
             image_id,
-            infor_product,
-            category_id
+            category_id,
+            infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_more,
+            listProductColor = [],
         } = req.body;
 
         let date = new Date();
+        
+        let newinforproduct = await models.infor_product.create({
+            infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_more
+        });
+
+        // Create `products` entry
         const newProduct = await Products.create({
             product_name,
             product_price,
-            product_star,
+            product_star: 0,
             product_discount,
             product_hot,
             product_date: date,
             product_quantity,
             image_id,
-            infor_product,
+            infor_product: newinforproduct.infor_product,
             category_id,
         });
-        responseSend(res, newProduct, "Thêm Thành công!", 200);
+        responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
         console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+
 
 const updateProduct = async (req, res) => {
     try {
@@ -181,6 +278,8 @@ const updateProduct = async (req, res) => {
                 success: false
             });
         }
+       
+
         product.product_name = product_name;
         product.product_price = product_price;
         product.product_star = product_star;
@@ -203,45 +302,21 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const product = await Products.findByPk(req.params.id, {
-            include: [{
-                model: models.image_product,
-                as: 'image'
-            }]
-        });
-        if (!product) {
-            responseSend(res, "", "không tìm thấy !", 404);
-            return;
-        }
-
-        const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
-        if (product.image) {
-            for (const field of imageFields) {
-                if (product.image[field]) {
-                    await cloudinary.uploader.destroy(product.image[field]);
-                }
-            }
-        }
-
-        await models.image_product.destroy({
-            where: { image_id: product.image_id }
-        });
-        
         const deleted = await Products.destroy({
             where: { product_id: req.params.id }
         });
-
         if (deleted) {
-            responseSend(res, "", "không tìm thấy !", 404);
-          
-        } else {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+        } else {
+            responseSend(res, "", "không tìm thấy !", 404);
         }
     } catch (error) {
         console.error("Lỗi Khi Xóa Sản Phẩm - KIỂU LỖI:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.log(error);
     }
 };
+
 export {
     getProducts,
     getProductById,

@@ -1,8 +1,9 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const categories = [
-  { name: 'Laptop', image: 'https://th.bing.com/th/id/R.8593980719357abc021e94c5524207ca?rik=Ghr77UIYArniOQ&pid=ImgRaw&r=0', colSpan: 1, rowSpan: 2 },
-  { name: 'Điện thoại', image: 'https://th.bing.com/th/id/R.fe521fc082526d2881fabcaf9147d651?rik=ilc%2bV%2bCKcgdfIg&pid=ImgRaw&r=0', colSpan: 1, rowSpan: 1 },
+  { name: 'Laptop', image: 'https://th.bing.com/th/id/R.8593980719357abc021e94c5524207ca?rik=Ghr77UIYArniOQ&pid=ImgRaw&r=0', colSpan: 1, rowSpan: 2 ,idDad:1},
+  { name: 'Điện thoại', image: 'https://th.bing.com/th/id/R.fe521fc082526d2881fabcaf9147d651?rik=ilc%2bV%2bCKcgdfIg&pid=ImgRaw&r=0', colSpan: 1, rowSpan: 1,idDad:2 },
   { name: 'Sạc dự phòng', image: 'https://t.ctcdn.com.br/kizy-zFscU7eCIBBRz8XCeZDXjE=/1024x0/smart/i484174.png', colSpan: 1, rowSpan: 1 },
   { name: 'Máy tính bảng', image: 'https://www.pngall.com/wp-content/uploads/5/Apple-IPad-PNG-Image-HD.png', colSpan: 1, rowSpan: 2 },
   { name: 'Chuột máy tính', image: 'https://th.bing.com/th/id/OIP.F-oj7W9agXsYpwPuxlXjtwHaHa?w=181&h=181&c=7&r=0&o=5&pid=1.7', colSpan: 1, rowSpan: 1 },
@@ -16,7 +17,8 @@ const Catelory2: React.FC = () => {
     <div className="py-10 rounded-lg">
       <div className="grid grid-cols-5 gap-7">
         {categories.map((category, index) => (
-            <div
+            <NavLink 
+            to={`/list-sản-phẩm?category_dad=${category.idDad}`}
             key={index}
             className={`flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md transition-all duration-200 ${
                 category.rowSpan === 2 ? 'row-span-2 hover:scale-105 hover:shadow-lg' : 'hover:scale-105 hover:shadow-lg'
@@ -30,7 +32,7 @@ const Catelory2: React.FC = () => {
                 category.rowSpan === 2 ? 'w-full h-[70%]' : 'w-[60%] h-[55%] m-10 '
               }`} 
             />
-          </div>
+          </NavLink>
         ))}
       </div>
     </div>

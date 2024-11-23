@@ -15,14 +15,46 @@ const getorder = async (req, res) => {
     }
 };
 
+const getOrdersForToday = async () => {
+    const today = new Date();
+    const startOfToday = new Date(today.setHours(0, 0, 0, 0));
+    const endOfToday = new Date(today.setHours(23, 59, 59, 999));
+  
+    const orders = await order.findAll({
+      where: {
+        order_date: {
+          [Op.between]: [startOfToday, endOfToday],
+        },
+      },
+    });
+  
+    return orders;
+  };
+
 const getOrderById = async (req, res) => {
     
     try {
     const user_id=req.id;
+    
         let data = await order.findAll({
             where:{
-                user_id
-            }
+                user_id,
+
+            },
+            include:[
+                {
+                    model:models.order_status,
+                    as:"order_statuses",
+                    where: {
+                        order_status_id: sequelize.literal(`(
+                          SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
+                        )`),
+                      },
+                      model:models.discount,
+                      as:"discount_discount",
+                     
+                }
+            ]
         });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
@@ -33,20 +65,41 @@ const getOrderById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-const  changeStatusOrder=async(req,res)=>{
-    try{
-        const order_id=req.params.id
-        const {order_status}=req.body
-        const order = await orders.findByPk(order_id);
 
-        order.order_status = order_status;
-        await order.save();
 
-        responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
-    }catch(error){
 
+const changeStatusOrder = async (req, res) => {
+    try {
+      const order_id = req.params.id;  // Lấy ID đơn hàng từ params
+      const { order_status, order_status_text_cancel } = req.body;  // Lấy trạng thái và lý do hủy (nếu có)
+      const order = await orders.findByPk(order_id);
+        console.log(order_id);
+        
+    
+      
+
+      order.order_status = order_status;
+      await order.save();
+
+      const newOrderStatus = await models.order_status.create({
+        order_id: order_id, 
+        order_status: order_status, 
+        order_status_text_cancel: order_status_text_cancel || null,  // Lý do hủy nếu có
+        created_at: new Date(),  // Thời gian tạo
+      });
+  
+      // Trả về phản hồi thành công với dữ liệu đã tạo
+      return res.status(201).json({
+        message: 'Đã tạo mới trạng thái đơn hàng thành công!',
+        data: newOrderStatus,
+      });
+    } catch (error) {
+      // Nếu có lỗi, trả về lỗi cho người dùng
+      console.error('Error creating order status:', error);
+      return res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau.' });
     }
-}
+  };
+  
 const createorder = async (req, res) => {
     try {
         const {
@@ -54,8 +107,9 @@ const createorder = async (req, res) => {
             order_total_quatity,
             order_status,
             pay_id,
-            // discount,
+            discount,
             address,
+            phone_number
         } = req.body;
 
         const user_id = req.id;
@@ -68,10 +122,21 @@ const createorder = async (req, res) => {
             order_total_quatity,
             order_status,
             pay_id:null,
+            discount,
             user_id,
+            address,
+            phone_number
+            // discount
         });
+        // order_statis
+        const newOrderStatus=await models.order_status.create({
+            order_id:neworder.order_id,
+            order_status,
+            created_at:date
+        })
+        
         responseSend(res, neworder, "Thêm Thành công!", 201);
-    } catch (error) {
+    } catch (error) {       
         console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
@@ -123,11 +188,67 @@ const deleteorder = async (req, res) => {
     }
 };
 
+
+const autoUpdateOrderStatus = async (req, res) => {
+    try {
+        // Lấy tất cả các giao dịch chưa được xử lý (user_id = null)
+        const transactions = await bankAuto.findAll({
+            where: { user_id: null },
+        });
+
+        const updatedOrders = [];
+
+        for (const txn of transactions) {
+            const { id, description, amount } = txn;
+
+            // Giả sử nội dung giao dịch chứa mã đơn hàng dạng "ORDER123"
+            const orderIdMatch = description.match(/ORDER(\d+)/);
+            if (orderIdMatch) {
+                const orderId = orderIdMatch[1];
+
+                // Tìm đơn hàng
+                const order = await orders.findByPk(orderId);
+                if (order && order.order_total === amount && order.order_status === 'PENDING') {
+                    // Cập nhật trạng thái đơn hàng
+                    order.order_status = 'PAID';
+                    await order.save();
+
+                    // Gán user_id cho giao dịch
+                    txn.user_id = order.user_id;
+                    await txn.save();
+
+                    // (Tùy chọn) Ghi trạng thái vào bảng `order_status`
+                    if (orderStatus) {
+                        await orderStatus.create({
+                            order_id: orderId,
+                            status: 'Đã thanh toán',
+                            updated_at: new Date(),
+                        });
+                    }
+
+                    updatedOrders.push(order);
+                }
+            }
+        }
+
+        if (updatedOrders.length > 0) {
+            responseSend(res, updatedOrders, "Cập nhật trạng thái đơn hàng thành công!", 200);
+        } else {
+            responseSend(res, [], "Không có giao dịch nào khớp với đơn hàng.", 200);
+        }
+    } catch (error) {
+        console.error("Error in autoUpdateOrderStatus:", error);
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+
 export {
     getorder,
     getOrderById,
     createorder,
     updateorder,
     deleteorder,
-    changeStatusOrder
+    changeStatusOrder,
+    getOrdersForToday,
+    autoUpdateOrderStatus
 };

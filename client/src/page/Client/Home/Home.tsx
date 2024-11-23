@@ -20,13 +20,15 @@ import ProductsNew from './Component/ProductsNew';
 
 function Home() {
   return (
+    <div>
+  <Carousel></Carousel>
     <Container>
-      <Carousel></Carousel>
+   
       {/* <Catelogry/> */}
       {/* <Category> */}
       
       <ProductSale/>
-      <ProductsNew/>
+      {/* <ProductsNew/> */}
 
 
       <div className='mx-auto'>   
@@ -121,6 +123,8 @@ function Home() {
    
       <Dis/>
     </Container>
+    </div>
+  
   )
 }
 

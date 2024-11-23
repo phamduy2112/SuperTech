@@ -117,7 +117,7 @@ function ForgetPassword() {
         </Form.Item>
        
         <div className="button-edit">
-          <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">Đăng nhập</Button>
+          <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">Gửi email</Button>
         </div>
       </Form>) :
       number ==2 ? (

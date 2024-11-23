@@ -26,7 +26,20 @@ const getUser = async (req, res) => {
       });
   }
 };
+const getNewCustomersLast7Days = async () => {
+  const today = new Date();
+  const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7)); // 7 ngày trước
 
+  const newCustomers = await User.findAll({
+    where: {
+      createdAt: {
+        [Op.gte]: sevenDaysAgo, // Ngày tạo >= 7 ngày trước
+      },
+    },
+  });
+
+  return newCustomers;
+};
 const register = async (req, res) => {
     try{
         const {user_name,user_email,user_password}=req.body
@@ -218,6 +231,7 @@ const updateUser = async (req, res) => {
         user.user_name =user_name;
         user.user_address =user_address;
         user.user_phone =user_phone;
+        
    
         // Lưu thay đổi vào database
         await user.save();
@@ -230,6 +244,21 @@ const updateUser = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const deleteEmployee=async(req,res)=>{
+  try{
+
+    let deleted = await User.destroy({
+      where: { user_id: req.params.id }
+  });
+  if (deleted) {
+      responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+  } else {
+      responseSend(res, "", "không tìm thấy !", 404);
+  }
+  }catch(e){
+
+  }
+}
 const updateImage=async(req,res)=>{
     try{
         const user_id=req.id;
@@ -254,7 +283,7 @@ const updateImage=async(req,res)=>{
 
 
             if(result){
-                responseSend(res, user, "Cập nhận thành công!", 200);
+                responseSend(res, user, "Cập nhật thành công!", 200);
     
             } else {
                 responseSend(res, null, "Thêm thất bại!", 500);
@@ -483,6 +512,8 @@ export {
     loginFacebook,
     forgetCheckMail,
     forgetCheckCode,
-    resetPasswordNoToken
+    resetPasswordNoToken,
+    deleteEmployee,
+    getNewCustomersLast7Days
 };
 

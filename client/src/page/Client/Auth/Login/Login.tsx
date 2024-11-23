@@ -12,10 +12,14 @@ import { login } from "../../../../service/auth/auth.service";
 import { saveLocalStorage } from "../../../../utils";
 import FacebookLogin from 'react-facebook-login';
 import useSweetAlert from "../../../../hooks/Notification.hook";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { setLogin, setToken } from "../../../../redux/user/user.slice";
 
 function Login() {
   const navigate = useNavigate();
   const {showAlert}= useSweetAlert();
+  const dispatch=useAppDispatch();
+
   const formik = useFormik({
     initialValues: {
   
@@ -46,7 +50,9 @@ function Login() {
         });
        
         const token = res.data.content.token; 
+        dispatch(setLogin(true))
         saveLocalStorage("token",token)
+        dispatch(setToken(token))
         navigate("/")
        
       } else {
@@ -93,23 +99,10 @@ function Login() {
       <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng nhập</p>
       {/* Social Buttons */}
       <div className="flex gap-4 mb-6 w-[70%] m-auto">
-        {/* <button className="w-1/2 py-5  border text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg ">
+        <button className="w-1/2 py-5  border text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg ">
     <FaFacebookF className="mr-[.5rem]"/>
-    asd
-        </button> */}
-        {/* <FacebookLogin /> */}
-           {/* <FacebookLogin
-    appId="476126624973243"
-   
-    callback={(resp:any)=>{
-      let newUser={
-        ...resp,
-        face_app_id:resp.id
-      }
-      console.log(newUser);
-      
-    
-    }} /> */}
+          Facebook
+        </button>
         <button className="w-1/2 py-5 border text-[1.6rem] border-customColor flex items-center justify-center rounded-lg text-customColor">
 <FaGoogle className="mr-[.5rem]" />
           Google
