@@ -23,10 +23,10 @@ export default class comment_product extends Model {
       allowNull: true
     },
     isPurchase: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false, // Giá trị mặc định là false
-    },
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false, // Giá trị mặc định là false
+  },
     product_id: {
       type: DataTypes.INTEGER,
       allowNull: true,

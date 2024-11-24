@@ -3,7 +3,7 @@ import { AiOutlineLike } from 'react-icons/ai';
 import { BsThreeDots } from 'react-icons/bs';
 import { Formik, Field, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
-import { useAppDispatch } from '../../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { deleteCommentRepliesByIdThunk, editCommentRepliesByIdThunk } from '../../../../redux/comment/comment.slice';
 
 const CommentSchema = Yup.object().shape({
@@ -23,6 +23,8 @@ const ReplyComment = ({ replies, productId }) => {
     setEditingIndex(editingIndex === index ? null : index);
     setActiveDropdown(null);
   };
+  const user: any = useAppSelector((state) => state.user.user);
+
 
   const handleEditSubmit = (values, commentId) => {
     const data = {
@@ -109,9 +111,12 @@ const ReplyComment = ({ replies, productId }) => {
                 className="cursor-pointer text-gray-500 hover:text-gray-700"
                 onClick={() => handleDropdownToggle(index)}
               />
+              
               {activeDropdown === index && (
-                <div className="absolute right-0 mt-2 w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg p-2">
-                  <button
+    <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
+                        {review.user_id === user.user_id ? (
+                        <div>
+                           <button
                     onClick={() => handleEditToggle(index)}
                     className="w-full text-left text-blue-500 hover:text-blue-700 transition-colors mb-2"
                   >
@@ -123,6 +128,10 @@ const ReplyComment = ({ replies, productId }) => {
                   >
                     Xoá
                   </button>
+                        </div>
+                      ):(          <span className="text-gray-400 text-center">Không có quyền</span>
+                      )} 
+                 
                 </div>
               )}
             </div>

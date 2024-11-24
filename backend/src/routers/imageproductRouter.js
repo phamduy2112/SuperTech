@@ -7,7 +7,7 @@ import { upload } from '../config/upload.js';
 const imageproductRouter = express.Router();
 
 imageproductRouter.get('/imageproduct', getimageproduct);
-imageproductRouter.get('/imageproduct/:id', getimageproductById);
+imageproductRouter.get('/image-product/:id', getimageproductById);
 imageproductRouter.post('/imageproduct-create',middleToken, createimageproduct);
 imageproductRouter.put('/imageproduct-edit/:id',middleToken, updateimageproduct);
 imageproductRouter.delete('/imageproduct-delete/:id',middleToken, deleteimageproduct);

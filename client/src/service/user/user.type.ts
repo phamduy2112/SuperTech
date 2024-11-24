@@ -7,3 +7,8 @@ export type TpayloadCheckCode={
 export type TpayloadPassword={
     password: string
 }
+export type TpayloadUser = {
+    user_name: string;
+    user_address: string;
+    user_phone: string;
+};

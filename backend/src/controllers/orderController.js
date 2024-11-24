@@ -2,6 +2,8 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import order from "../models/order.js";
+import { startOfWeek,endOfWeek } from "date-fns";
+import { fn } from "sequelize";
 
 let models = initModels(sequelize); 
 let orders = models.order; 
@@ -31,22 +33,38 @@ const getorder = async (req, res) => {
     }
 };
 
-const getOrdersForToday = async () => {
-    const today = new Date();
-    const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
-    const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
+const getOrdersForToday = async (req, res) => {
+    try {
+      const today = new Date();
+      const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
+      const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
   
-    const orders = await order.findAll({
-      where: {
-        order_date: {
-          [Op.between]: [startOfToday, endOfToday],
+      // Truy vấn tổng số tiền đơn hàng trong ngày hôm nay
+      const totalRevenue = await order.findAll({
+        attributes: [
+          [fn('SUM', col('order_amount')), 'total_revenue'], // Tính tổng doanh thu của ngày
+        ],
+        where: {
+          order_date: {
+            [Op.between]: [startOfToday, endOfToday], // Lọc đơn hàng trong ngày hôm nay
+          },
         },
-      },
-    });
+      });
   
-    return orders;
+      // Kiểm tra nếu không có dữ liệu
+      if (!totalRevenue || totalRevenue.length === 0) {
+        return res.status(404).json({ message: 'No orders found for today' });
+      }
+  
+      // Trả về tổng doanh thu
+      return res.status(200).json({
+        total_revenue: totalRevenue[0].total_revenue, // Trả giá trị tổng doanh thu
+      });
+    } catch (error) {
+      console.error('Error fetching orders for today:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
   };
-
 const getOrderById = async (req, res) => {
     
     try {
@@ -66,12 +84,12 @@ const getOrderById = async (req, res) => {
                           SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
                         )`),
                       },
-                      model:models.discount,
-                      as:"discount_discount",
+                     
                      
                 }
             ]
         });
+        
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -81,7 +99,38 @@ const getOrderById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-
+const getMonthlyRevenue = async (req, res) => {
+    try {
+      // Lấy ngày đầu tháng và cuối tháng hiện tại
+      const today = new Date();
+      const startDate = startOfMonth(today);
+      const endDate = endOfMonth(today);
+  
+      // Query dữ liệu doanh thu
+      const results = await models.order.findAll({
+        attributes: [
+          [fn('SUM', col('total_price')), 'total_revenue'], // Tính tổng doanh thu
+        ],
+        where: {
+          createdAt: {
+            [Op.between]: [startDate, endDate], // Lọc đơn hàng trong tháng hiện tại
+          },
+        },
+      });
+  
+      // Trả về kết quả
+      res.status(200).json({
+        success: true,
+        data: results,
+      });
+    } catch (error) {
+      console.error('Error fetching monthly revenue:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Có lỗi xảy ra khi lấy tổng doanh thu hàng tháng.',
+      });
+    }
+  };
 
 
 const changeStatusOrder = async (req, res) => {
@@ -232,5 +281,6 @@ export {
     updateorder,
     deleteorder,
     changeStatusOrder,
+    getMonthlyRevenue,
     getOrdersForToday
 };

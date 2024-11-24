@@ -59,7 +59,7 @@ function Pay() {
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
-  const getDiscountId=useAppSelector((state)=>state.cart.discount_id)
+const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   useEffect(() => {
     if(!(listCart.length>0)){
       toast.success("Bạn cần thêm sản phẩm")
@@ -127,7 +127,7 @@ function Pay() {
       order_total_quatity:+totalItem,
       order_status:0,
       user_id:user.user_id,
-      discount:getDiscountId,
+      discount:getDiscountId ==0 ? null : getDiscountId,
       phone_number:formData.sdt,
       address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }

@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { signup } from "../../../../service/auth/auth.service";
 import Swal from 'sweetalert2'
 import useSweetAlert from "../../../../hooks/Notification.hook";
+import toast from "react-hot-toast";
 
 function Resigter() {
   // Sử dụng hook useFormik để quản lý form
@@ -44,10 +45,10 @@ function Resigter() {
       const res = await signup(payload);
 
       if (res.data.message === "Đăng kí thành công!") {
-        showAlert("success","Đăng kí thành công");
+        toast.success('Đăng kí thành công')
         navigate("/đăng-nhập")
       } else {
-        showAlert("success","Email đã tồn tại");
+        toast.error(res.data.message) 
       }
 console.log(res);
 

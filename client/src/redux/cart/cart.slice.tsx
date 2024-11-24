@@ -1,24 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 // Định nghĩa kiểu cho một sản phẩm trong giỏ hàng
 
 // Định nghĩa kiểu cho state của giỏ hàng
 interface CartState {
   listCart: CartItem[];
-  totalItems: number; // Biến để lưu tổng số lượng sản phẩm trong giỏ hàng
-  totalAmount:number,
-  discount:number
-  ship:number,
-  discount_id:number
+  totalItems: number; // Tổng số lượng sản phẩm
+  totalAmount: number; // Tổng tiền
+  discount: number | null; // Mã giảm giá
+  ship: number; // Phí ship
+  discount_id: number | null; // ID giảm giá
 }
 
+// Khởi tạo state ban đầu
 const initialState: CartState = {
-  listCart: [],  // Phải là một mảng rỗng
+  listCart: [], // Giỏ hàng rỗng
   totalItems: 0,
   totalAmount: 0,
-  discount:0,
-  discount_id:0,
-  ship:30000,
+  discount: null, // Mặc định là null
+  discount_id: null, // Mặc định là null
+  ship: 30000,
 };
 
 // Tạo slice cho giỏ hàng
@@ -39,12 +41,13 @@ const cartSlice = createSlice({
         const existingItem = state.listCart.find(item => item.product_id == action.payload.product_id);
         if (existingItem) {
           existingItem.quantity += 1;
+          
         } else {
           state.listCart.push({ ...action.payload, quantity: 1 });
         }
       }
       // Cập nhật tổng số lượng và tổng tiền
-      // state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
+      state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
       // state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
     // Thêm sản phẩm vào trực tiếp order
@@ -67,12 +70,13 @@ const cartSlice = createSlice({
       if (existingItem && existingItem.quantity > 1) {
         existingItem.quantity -= 1;
       } else {
-        // Nếu số lượng <= 1, xóa sản phẩm khỏi giỏ hàng
+  
         state.listCart = state.listCart.filter(item => item.product_id !== action.payload.product_id);
       }
       // Cập nhật tổng số lượng sản phẩm
+  
       state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
-       // Cập nhật tổng tiền
+     // Cập nhật tổng tiền
   state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
     inCreaseItemQuantity: (state, action: PayloadAction<{ product_id: string }>) => {

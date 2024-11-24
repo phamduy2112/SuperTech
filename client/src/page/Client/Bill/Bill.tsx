@@ -17,29 +17,38 @@ function Bill(props) {
   const [listProduct,setListProduct]=useState([]);
   const dispatch=useAppDispatch();
   useEffect(() => {
-    const fetchApi=async ()=>{
+    const fetchApi = async () => {
       try {
         const resp = await getDetailOrder(orderId);
-        setDetailOrder(resp.data.content);
-        setOrder(detailOrder[0].order)
-        const products = resp.data.content.map(detail => ({
-        quanlity:detail.detail_order_quality,
-          name: detail.product.product_name,
-          product_price: detail.detail_order_price,
-          product_discount: detail.discount_product,
-          product_hot: detail.product.product_hot,
-          image_id: detail.product.image_id,
-          category_id: 2
-        
-        }));
+        const details = resp.data.content;
   
-        setListProduct(products);
+        // Cập nhật detailOrder
+        setDetailOrder(details);
+  
+        if (details.length > 0) {
+          // Cập nhật order nếu có dữ liệu
+          setOrder(details[0].order);
+  
+          // Cập nhật danh sách sản phẩm từ detailOrder
+          const products = details.map(detail => ({
+            quanlity: detail.detail_order_quality,
+            name: detail.product.product_name,
+            product_price: detail.detail_order_price,
+            product_discount: detail.discount_product,
+            product_hot: detail.product.product_hot,
+            image_id: detail.product.image_id,
+            category_id: 2,
+          }));
+  
+          setListProduct(products);
+        }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
-    }
-    fetchApi()
-  }, [dispatch]);
+    };
+  
+    fetchApi();
+  }, [orderId]);
   // console.log(order.discount_discount.discount_percent);
   
   console.log(orderDetail);
@@ -49,8 +58,8 @@ function Bill(props) {
     const itemTotalPrice = + item.detail_order_quality *  + priceAfterDiscount; // Tính tổng giá của item
     return itemTotalPrice; // Cộng dồn vào total
   }, 0);
-  const getDiscount=+order?.discount_discount?.discount_percent
-  const totalPriceWithVoucher = totalPrice * (1 -  getDiscount/ 100) + 300000;
+  const getDiscount=+order?.discount_discount?.discount_percent || 0
+  const totalPriceWithVoucher = totalPrice * (1 -  getDiscount / 100) + 300000;
 
   return (
     <Container>
@@ -142,7 +151,7 @@ function Bill(props) {
             
               <div className="flex justify-between text-[1.6rem] font-semibold text-gray-800 mt-3">
                 <span>Giảm giá:</span>
-                <span>{getDiscount}%</span>
+                <span>{getDiscount || 0}%</span>
               </div>
               <div className="flex justify-between text-[1.8rem] font-bold text-green-600 mt-4">
                 <span>Tổng cộng:</span>

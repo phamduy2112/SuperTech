@@ -249,9 +249,7 @@ const createProduct = async (req, res) => {
             infor_product: newinforproduct.infor_product,
             category_id,
         });
-        // uploadFields();
-        // const rep=uploadImages()
-
+       
         // Create entries in `product_colors` and `product_storage`
         if (listProductColor.length > 0) {
             await Promise.all(listProductColor.map(async (order) => {

@@ -1,4 +1,5 @@
-import { axiosWithAuth, options } from "../axios.config";
+import { axiosWithAuth } from "../axios.config";
+import { TpayloadCheckCode, TpayloadCheckEmail, TpayloadPassword, TpayloadUser } from "./user.type";
 
 export const getAllUser = () => {
   return axiosWithAuth("/users", {
@@ -11,7 +12,7 @@ export const getUserDetail = () => {
     method: "get",
   });
 };
-export const updateUserDetail = (payload: any) => {
+export const updateUserDetail = (payload: TpayloadUser) => {
   return axiosWithAuth("/user-update", {
     method: "put",
     data: payload,
@@ -29,7 +30,7 @@ export const changePassword = (password: string) => {
     data: password,
   });
 };
-export const uploadImage = (file) => {
+export const uploadImage = (file:string) => {
   return axiosWithAuth("/user-upload-image", {
     headers: {
       "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng loại dữ liệu
@@ -39,20 +40,20 @@ export const uploadImage = (file) => {
   });
 };
 
-export const checkEmail = (payload) => {
+export const checkEmail = (payload:TpayloadCheckEmail) => {
   return axiosWithAuth("/forget-check-mail", {
     method: "post",
     data: payload,
   });
 };
 
-export const checkCode = (code) => {
+export const checkCode = (code:TpayloadCheckCode) => {
   return axiosWithAuth("/forget-check-code", {
     method: "post",
     data: code,
   });
 };
-export const fogetCheckPassword = (payload) => {
+export const fogetCheckPassword = (payload:TpayloadPassword) => {
   return axiosWithAuth("/forget-reset-password", {
     method: "put",
     data: payload,

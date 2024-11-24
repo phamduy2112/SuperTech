@@ -68,7 +68,38 @@ const getWeeklySales = async (req, res) => {
       res.status(500).send({ error: 'Internal Server Error' });
     }
   };
-
+  const getMonthlyRevenue = async (req, res) => {
+    try {
+      // Lấy ngày đầu tháng và cuối tháng hiện tại
+      const today = new Date();
+      const startDate = startOfMonth(today);
+      const endDate = endOfMonth(today);
+  
+      // Query dữ liệu doanh thu
+      const results = await models.order.findAll({
+        attributes: [
+          [fn('SUM', col('total_price')), 'total_revenue'], // Tính tổng doanh thu
+        ],
+        where: {
+          createdAt: {
+            [Op.between]: [startDate, endDate], // Lọc đơn hàng trong tháng hiện tại
+          },
+        },
+      });
+  
+      // Trả về kết quả
+      res.status(200).json({
+        success: true,
+        data: results,
+      });
+    } catch (error) {
+      console.error('Error fetching monthly revenue:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Có lỗi xảy ra khi lấy tổng doanh thu hàng tháng.',
+      });
+    }
+  };
   const getTop5BestSellingProducts = async (req, res) => {
     try {
       const results = await models.products.findAll({

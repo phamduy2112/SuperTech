@@ -10,6 +10,8 @@ import LineChart from './Component/chart/LineChart';
 import { useAppSelector } from '../../../redux/hooks';
 import { BiBox } from 'react-icons/bi';
 import { Box } from '../DataPageAdmin/DataPageHome';
+import BarChart from './Component/chart/BarChart';
+import TableChiTieu from './Component/chart/TableChiTieu';
 
 
 Chart.register(...registerables);
@@ -213,45 +215,6 @@ useEffect(() => {
     },
   ]
 
-  const BarDouble = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        stacked: true,
-        beginAtZero: true,
-        grid: {
-          display: false,
-        },
-      },
-      y: {
-        stacked: true,
-        beginAtZero: true,
-        grid: {
-          display: false,
-        },
-      },
-    },
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        grid: {
-          display: false,
-        },
-      },
-      x: {
-        beginAtZero: true,
-        grid: {
-          display: false,
-        },
-      },
-    },
-  };
 
   return (
     <div className=' flex flex-col gap-6 bg-[#f2edf3] p-12'>
@@ -313,28 +276,7 @@ useEffect(() => {
           </div>
           <div className='w-full box-border h-full gap-7 flex flex-col xl:flex-row'>
             <div className='flex-1 box-border h-[300px]'>
-              <Bar
-                data={{
-                  labels: ['Iphone 15', 'SamSung S24 UnTraGalaxy', 'Oppol A15', 'MSI GAMING'],
-                  datasets: [
-                    {
-                      label: 'Nhập',
-                      data: [200, 3000, 400, 600],
-                      backgroundColor: 'rgba(75, 112, 192, 0.2)',
-                      borderColor: 'rgba(75, 112, 192,1)',
-                      borderWidth: 1,
-                    },
-                    {
-                      label: 'Bán',
-                      data: [100, 8000, 2980, 15020],
-                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                      borderColor: 'rgba(75, 192, 192, 1)',
-                      borderWidth: 1,
-                    },
-                  ],
-                }}
-                options={BarDouble}
-              />
+      <BarChart></BarChart>
             </div>
           </div>
         </div>
@@ -405,13 +347,7 @@ useEffect(() => {
             </div>
           </div>
           <div className='flex-1'>
-            <Table
-              columns={columns2}
-              dataSource={data2}
-              pagination={{ pageSize: 5 }}
-              size="large"
-              onChange={onChange}
-            />
+       <TableChiTieu/>
           </div>
         </div>
         <div className='w-full lg:w-[40%] bg-white p-12 box-border shadow-lg rounded-xl text-[13px] font-medium flex flex-col gap-7'>

@@ -23,7 +23,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['user','cart','listOrder','socket'], // Chỉ persist `user` và `cart`
+  whitelist: ['user','cart','product','listOrder','socket'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
