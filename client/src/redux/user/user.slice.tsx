@@ -41,7 +41,7 @@ export const updateUserDetailThunk = createAsyncThunk(
 );
 export const verifyPasswordDetail = createAsyncThunk(
   "verifyPasswordThunk",
-  async (payload) => {
+  async (payload:any) => {
     try {
       const resp = await verifyPassword(payload);
       return resp.data;

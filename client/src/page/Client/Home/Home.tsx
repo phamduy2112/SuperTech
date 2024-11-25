@@ -17,8 +17,10 @@ import LaptopComponent from './Component/Laptop'
 import { Container } from '../../../components/Style/Container';
 import ProductHome from './Component/ProductHome';
 import ProductsNew from './Component/ProductsNew';
+import UseSocket from '../../../socket/useSocket';
 
 function Home() {
+
   return (
     <div>
   <Carousel></Carousel>

@@ -11,7 +11,7 @@ import Comment from "./Component/Comment";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getProductByIdThunk } from "../../../redux/product/product.slice";
-import { getCommentByIdProductThunk } from "../../../redux/comment/comment.slice";
+import { getCommentByIdProductThunk, setcomment } from "../../../redux/comment/comment.slice";
 import CommentForm from "./Component/CommentForm";
 import ProductColor from "./Component/ProductColor";
 import { IMG_BACKEND } from "../../../constants";
@@ -48,6 +48,7 @@ function DetailProduct() {
   }
   
   const productDetail=useAppSelector((state)=>state.product.productDetail)
+  const socket=useAppSelector((state)=>state.socket.socket)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
 
   // console.log(productDetail);
@@ -68,7 +69,7 @@ console.log(objectColor);
   },[numericId,dispatch])
   useEffect(() => {
     if (productDetail?.product_colors?.length > 0) {
-      const firstColor = productDetail.product_colors[0];
+      const firstColor = productDetail?.product_colors[0];
       setSelectedColor(firstColor?.color);
       setOjectColor(firstColor);
   
@@ -190,11 +191,21 @@ console.log(objectStorage);
               <div className="w-full md:w-[45%] mx-auto text-xl ">
                 <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
                 {/* Price Section */}
+                {productDetail?.product_discount > 0 ?
                 <div className="flex items-center gap-4 py-4">
-                  <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.storage_price ||0))}</p>
-                  <p className="text-xl text-gray-500 line-through">31.000.000đ</p>
-                  <p className="text-xl px-4 py-2 border border-gray-300">30%</p>
-                </div>
+            
+                <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}</p>
+                <p className="text-xl text-gray-500 line-through">              
+                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                </p>
+                <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
+              </div>
+                : 
+                <p className="text-red-500 font-semibold text-[2rem]">
+                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                    </p>
+                }
+                
 
                 {/* Storage Variant Buttons */}
                 <div className="flex gap-4 mb-6">
@@ -228,7 +239,7 @@ console.log(objectStorage);
                 />
                 <div>
                     <h4 className="font-semibold text-lg">{item.color}</h4>
-                    <p className="text-red-500 font-semibold">20.000.000đ</p>
+                    {/* <p className="text-red-500 font-semibold">{item.storage_price}đ</p> */}
                 </div>
             </div>
         ))}

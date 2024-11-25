@@ -46,7 +46,8 @@ import ListProduct from "../page/Client/ListProduct/ListProduct";
 import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
 import CouponSection from "../page/Client/Voucher/Voucher";
-import { PrivateRoute } from "./component/RouterPrivate";
+import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
+import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
 // import PrivateRoute from "./component/RouterPrivate";
 
 export const router = createBrowserRouter([
@@ -80,7 +81,7 @@ export const router = createBrowserRouter([
         element: <ListBlog />,
       },
       {
-        path: "/bài-viết-chi-tiết",
+        path: "/bài-viết-chi-tiết/:id",
         element: <DetailBlog />,
       },
       // user
@@ -163,15 +164,15 @@ children:[
     children: [
       {
         path: "/đăng-nhập",
-        element: <Login />,
+        element: <AuthRoute element={<Login/>} />,
       },
       {
         path: "/đăng-kí",
-        element: <Resigter />,
+        element:  <AuthRoute element={<Resigter/>} />,
       },
       {
         path: "/quen-mat-khau",
-        element: <ForgetPassword />,
+        element: <AuthRoute element={<ForgetPassword/>} />,
       },
     ]
 
@@ -258,14 +259,20 @@ children:[
 
       // đơn hàng
       {
-        path: 'quản-lí-đơn-hàng',
-        element: <AdminOrder />
+        path: 'quản-lí-đơn-hàng', // Không có dấu "/"
+        element: <AdminOrder />,
+        children: [
+          {
+            path: '', // Đường dẫn mặc định, tương ứng với "/admin/quản-lí-đơn-hàng"
+            element: <PrivateRoute element={<ListOrder />} />,
+          },
+          {
+            path: 'quản-lí-đơn-hàng-chi-tiết/:id', // Đường dẫn tương đối
+            element: <PrivateRoute element={<AdminOrderDetail />} />,
+          },
+        ],
       },
-      // Đơn hàng chi tiết
-      {
-        path: 'quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/:id',
-        element: <AdminOrderDetail />
-      },
+     
       {
         path: 'quản-lí-đơn-hàng/tạo-đơn-hàng',
         element: <AdminOrderCreate />

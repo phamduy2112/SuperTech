@@ -16,23 +16,32 @@ import { productReducer } from './product/product.slice';
 import { cartReducer } from './cart/cart.slice';
 import { commentReducer } from './comment/comment.slice';
 import { orderReducer } from './order/Order.slice';
+import { socketReducer } from './socket/socker.slice';
+import { FavouriteReducer } from './favourite/favourite.slice';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['user','cart','listOrder'], // Chỉ persist `user` và `cart`
+  whitelist: ['user','cart','listOrder','socket'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
   category: categoryReducer,
+  socket: socketReducer,
+  // listFavourite:FavouriteReducer,
   toggleSidebar: toggleSidebarReducer,
   user: userReducer,
   product: productReducer,
   cart: cartReducer,
   listComment: commentReducer,
-  listOrder:orderReducer
-});
+  listOrder:orderReducer,
+
+},
+
+)
+
+;
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

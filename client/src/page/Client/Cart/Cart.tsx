@@ -37,15 +37,26 @@ export default function Cart() {
   };
     // Áp dụng mã giảm giá
   
-  const totalPrice = listCart.reduce((total: number, item) => {
-    const discountAmount = (item.product_price * item.product_discount) / 100; // Tính giảm giá
-    const priceAfterDiscount = item.product_price - discountAmount; // Tính giá sau giảm
-    const itemTotalPrice = item.quantity * priceAfterDiscount; // Tính tổng giá của item
-    return total + itemTotalPrice; // Cộng dồn vào total
-  }, 0);
+    const totalPrice = listCart.reduce((total: number, item) => {
+      // Tính giá sản phẩm ban đầu cộng thêm giá storage
+      const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
+    
+      // Tính giảm giá
+      const discountAmount = (basePriceWithStorage * item.product_discount) / 100;
+    
+      // Giá sau khi giảm
+      const priceAfterDiscount = basePriceWithStorage - discountAmount;
+    
+      // Tính tổng giá của sản phẩm (giá sau giảm x số lượng)
+      const itemTotalPrice = item.quantity * priceAfterDiscount;
+    
+      // Cộng dồn vào tổng giá
+      return total + itemTotalPrice;
+    }, 0);
   const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
   // 10000 - (10000 * 10 / 100); mã khuyết mãi
+  
   return (
     <Container>
       <div className=" py-6 text-[1.5rem]">
@@ -96,23 +107,24 @@ export default function Cart() {
                         {truncateText(item?.product_name,25)}
                         </h2>
                         <p className="text-gray-500 text-[1.3rem]">
-                        {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
+                        {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage_price} MB/` :''}
                         {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
                         </p>
                         <div className="flex flex-col leading-normal text-lg ">
                           {item?.product_discount > 0 ? (
                             <span className="text-customColor text-[1.6rem] font-medium">
                               {formatCurrencyVND(
-                                Number(item?.product_price) *
+                               ( Number(item?.product_price)+Number(item?.selectedStorage?.storage_price || 0)) *
                                   (1 - Number(item?.product_discount / 100))
+                          
                               )}
                               <span className="text-gray-400 line-through text-[1.5rem] px-[1rem] font-normal">
-                                {formatCurrencyVND(item?.product_price)}
+                                {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price ||0)}
                               </span>
                             </span>
                           ) : (
                             <span className="text-customColor text-[1.6rem] font-medium">
-                              {formatCurrencyVND(item?.product_price)}
+                              {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price ||0)}
                             </span>
                           )}
                         </div>
@@ -140,7 +152,7 @@ export default function Cart() {
                     <div className="flex flex-col leading-normal text-lg w-[20%]">
                       <span className="text-customColor text-[1.7rem] font-semibold">
                       {formatCurrencyVND(
-                                Number(item?.product_price) *
+                               ( Number(item?.product_price) + Number(item?.selectedStorage?.storage_price || 0)) *Number(item?.quantity)*
                                   (1 - Number(item?.product_discount / 100))
                               )}
                       </span>

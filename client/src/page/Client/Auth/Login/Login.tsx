@@ -10,7 +10,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { login } from "../../../../service/auth/auth.service";
 import { saveLocalStorage } from "../../../../utils";
-import FacebookLogin from 'react-facebook-login';
 import useSweetAlert from "../../../../hooks/Notification.hook";
 import { useAppDispatch } from "../../../../redux/hooks";
 import { setLogin, setToken } from "../../../../redux/user/user.slice";
@@ -35,7 +34,6 @@ function Login() {
    
     }),
     onSubmit:async (values) => {
-      console.log("Form data", values);
      
     
       const res = await login(values);
@@ -65,10 +63,8 @@ function Login() {
   return (
 <div className="">
   <div className="flex overflow-hidden relative h-[100vh]">
-    {/* Left Section: Registration Form */}
 
  <div className="w-[60%] relative  overflow-hidden">
-      {/* Diagonal Purple Background */}
    
       <div className="absolute inset-0 bg-customColor clip-diagonal-left" />
       <div className="bg-white shadow-lg w-[4rem] h-[4rem] rounded-[50%] absolute top-[2rem] left-[2rem] ">
@@ -108,19 +104,13 @@ function Login() {
           Google
         </button>
       </div>
-      {/* Form */}
+     
       <Form
       layout="vertical"
     className="sign-edit"
     onFinish={formik.handleSubmit}
 
-      // initialValues={{
-      //   // layout: formLayout,
-      // }}
-      // onValuesChange={onFormLayoutChange}
-      // style={{
-      //   maxWidth: formLayout === 'inline' ? 'none' : 600,
-      // }}
+
     >
      
       <Form.Item 

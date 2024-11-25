@@ -22,6 +22,7 @@ import _product_colors from  "./product_colors.js";
 import _product_storage from  "./product_storage.js";
 import _products from  "./products.js";
 import _replies_comment_product from  "./replies_comment_product.js";
+import _setting from  "./setting.js";
 import _user from  "./user.js";
 import _user_discounts from  "./user_discounts.js";
 
@@ -48,6 +49,7 @@ export default function initModels(sequelize) {
   const product_storage = _product_storage.init(sequelize, DataTypes);
   const products = _products.init(sequelize, DataTypes);
   const replies_comment_product = _replies_comment_product.init(sequelize, DataTypes);
+  const setting = _setting.init(sequelize, DataTypes);
   const user = _user.init(sequelize, DataTypes);
   const user_discounts = _user_discounts.init(sequelize, DataTypes);
 
@@ -63,8 +65,6 @@ export default function initModels(sequelize) {
   discount.hasMany(user_discounts, { as: "user_discounts", foreignKey: "discount_id"});
   product_colors.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
   image_product.hasMany(product_colors, { as: "product_colors", foreignKey: "image_id"});
-  products.belongsTo(image_product, { as: "image", foreignKey: "image_id"});
-  image_product.hasMany(products, { as: "products", foreignKey: "image_id"});
   products.belongsTo(infor_product, { as: "infor_product_infor_product", foreignKey: "infor_product"});
   infor_product.hasMany(products, { as: "products", foreignKey: "infor_product"});
   detail_order.belongsTo(order, { as: "order", foreignKey: "order_id"});
@@ -136,6 +136,7 @@ export default function initModels(sequelize) {
     product_storage,
     products,
     replies_comment_product,
+    setting,
     user,
     user_discounts,
   };

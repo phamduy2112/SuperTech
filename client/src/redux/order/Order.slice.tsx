@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { changeStatusOrder, getDetailOrder, getOrderByIdUser } from "../../service/order/order.service";
+import { changeStatusOrder, getDetailOrder, getOrderAll, getOrderByIdUser } from "../../service/order/order.service";
+
 
 
 export const getOrderByIdProductThunk = createAsyncThunk(
@@ -46,6 +47,8 @@ export const changeStatusOrderThunk = createAsyncThunk(
     }
   },
 );
+
+
 export const getOrderDetail = createAsyncThunk(
   "getOrderDetail",
   async (id:number) => {      
@@ -58,10 +61,40 @@ export const getOrderDetail = createAsyncThunk(
   },
 );
 
+export const getOrderAllThunk = createAsyncThunk(
+  "getOrderAllThunk",
+  async () => {      
+    try {
+      const resp = await getOrderAll();
+      return resp.data.content.reverse();
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const changeStatusOrderAdminThunk = createAsyncThunk(
+  "changeStatusOrderAdminThunk",
+  async (data: any, { dispatch }) => {
+    try {
+      // Update the order status
+      await changeStatusOrder(data.order_id, data);
+
+      // Dispatch the getOrderByIdProductThunk and wait for it to complete
+      const response = await dispatch(getOrderAllThunk());
+      
+      // Return the payload of the response if successful
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+      throw e; // Optionally re-throw to handle it in the calling code
+    }
+  },
+);
 
 const initialState = {
   listOrder: [] ,
   detailOrder:[],
+
   orderId:null
 };
 
@@ -83,8 +116,16 @@ const orderSlice = createSlice({
         state.listOrder = payload;
       });
     builder
+      .addCase(changeStatusOrderAdminThunk.fulfilled, (state, { payload }) => {
+        state.listOrder = payload;
+      });
+    builder
       .addCase(getOrderDetail.fulfilled, (state, { payload }) => {
         state.detailOrder = payload;
+      });
+    builder
+      .addCase(getOrderAllThunk.fulfilled, (state, { payload }) => {
+        state.listOrder = payload;
       });
   
   },

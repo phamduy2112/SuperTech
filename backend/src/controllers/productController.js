@@ -2,7 +2,9 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import { Op } from "sequelize";
-
+import e from "express";
+import { uploadFields, uploadImages } from "./uploadController.js";
+import cloudinary from '../config/cloudinaryConfig.js';
 let models = initModels(sequelize); 
 let Products = models.products; 
 
@@ -93,9 +95,11 @@ const getProductsByCategoryId = async (req, res) => {
             responseSend(res, products, "Thành công!", 200);
         }else{
             responseSend(res, "", "không tồn tại !", 404);
+
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra khi truy vấn sản phẩm", 500);
+        console.log(error);
     }
 };
 
@@ -214,8 +218,6 @@ const createProduct = async (req, res) => {
             product_price,
             product_discount,
             product_hot,
-            product_quantity,
-            image_id,
             category_id,
             infor_screen,
             infor_system,
@@ -243,11 +245,38 @@ const createProduct = async (req, res) => {
             product_discount,
             product_hot,
             product_date: date,
-            product_quantity,
-            image_id,
             infor_product: newinforproduct.infor_product,
             category_id,
         });
+        // uploadFields();
+        // const rep=uploadImages()
+
+        // Create entries in `product_colors` and `product_storage`
+        if (listProductColor.length > 0) {
+            await Promise.all(listProductColor.map(async (order) => {
+                // Create `product_colors` entry
+                const createColors = await models.product_colors.create({
+                    color: order.color,
+                    quality: order.quality,
+                    product_id: newProduct.product_id,
+                });
+
+                // Check if `productStorage` exists within `order` and create `product_storage` entries
+                if (order.productStorage && order.productStorage.length > 0) {
+                    await Promise.all(order.productStorage.map(async (storage) => {
+                        return await models.product_storage.create({
+                            color_id: createColors.color_id, 
+                            storage: storage.storage,       // Link to `product_colors` entry
+                            storage_quality: storage.quality, // Replace with actual storage quality field
+                            storage_price: storage.storage_price,      // Replace with actual storage price field
+                            product_id: newProduct.product_id,
+
+                        });
+                    }));
+                }
+            }));
+        }
+
         responseSend(res, newProduct, "Thêm Thành công!", 201);
     } catch (error) {
         console.log(error);
@@ -265,9 +294,7 @@ const updateProduct = async (req, res) => {
             product_star,
             product_discount,
             product_hot,
-            product_quantity,
         } = req.body;
-        const image_id = req.id;
         const infor_product = req.id;
         const category_id = req.id;
         const product_date = new Date();
@@ -278,16 +305,11 @@ const updateProduct = async (req, res) => {
                 success: false
             });
         }
-       
-
         product.product_name = product_name;
         product.product_price = product_price;
         product.product_star = product_star;
         product.product_discount = product_discount;
         product.product_hot = product_hot;
-        product.product_date = product_date;
-        product.product_quantity = product_quantity;
-        product.image_id = image_id;
         product.infor_product = infor_product;
         product.category_id = category_id;
 
@@ -302,13 +324,36 @@ const updateProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
     try {
-        const deleted = await Products.destroy({
-            where: { product_id: req.params.id }
+        const product = await Products.findOne({
+            where: {
+                product_id: req.params.id
+            },
+            include: {
+                model: models.infor_product, // Giả sử bạn đã thiết lập quan hệ 1-1 giữa `Products` và `InforProduct`
+                as: 'infor_product_infor_product' // Tên alias phải khớp với tên alias trong mối quan hệ đã định nghĩa
+            }
         });
-        if (deleted) {
-            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+
+        if (product && product.infor_product) {
+            // Xóa bản ghi `infor_product` liên quan
+            await models.infor_product.destroy({
+                where: {
+                    infor_product: product.infor_product
+                }
+            });
+
+            // Xóa sản phẩm
+            const deleted = await Products.destroy({
+                where: { product_id: req.params.id }
+            });
+
+            if (deleted) {
+                responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+            } else {
+                responseSend(res, "", "Không tìm thấy sản phẩm!", 404);
+            }
         } else {
-            responseSend(res, "", "không tìm thấy !", 404);
+            responseSend(res, "", "Không tìm thấy sản phẩm hoặc thông tin sản phẩm!", 404);
         }
     } catch (error) {
         console.error("Lỗi Khi Xóa Sản Phẩm - KIỂU LỖI:", error);
@@ -316,6 +361,7 @@ const deleteProduct = async (req, res) => {
         console.log(error);
     }
 };
+
 
 export {
     getProducts,

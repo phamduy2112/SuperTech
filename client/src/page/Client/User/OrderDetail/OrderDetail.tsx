@@ -26,7 +26,8 @@ function OrderDetail() {
       title: 'Sản phẩm',
       dataIndex: 'name',
       render: (text:string, record:any) => {
-        return ( <div className='flex gap-[.2rem]'>
+        return ( 
+        <div className='flex gap-[.2rem]'>
           <div className='w-[80px]'>
             <img src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
           </div>
@@ -36,7 +37,8 @@ function OrderDetail() {
            <div>Mã sản phẩm: ipmax-1s</div>
           </div>
           
-        </div>) 
+        </div>
+        ) 
        },
 
       width: '40%',
@@ -44,9 +46,14 @@ function OrderDetail() {
     {
       title: 'Đơn giá',
       dataIndex: 'product_price',
-      render:(text:number)=>{
+      render:(text:number,value)=>{
         return (
-          <div className='text-customColor font-semibold text-center'>{formatCurrencyVND(text)}</div>
+          <div className='text-customColor font-semibold text-center'>
+            
+            {formatCurrencyVND(text * (1 - Number(value?.product_discount / 100 ||0)))}
+
+            
+            </div>
         )
       }
     },
@@ -86,7 +93,7 @@ function OrderDetail() {
        
         return (
           <div className='text-[#FF0000] font-semibold text-center'>
-            {formatCurrencyVND(tongTien)}
+            {formatCurrencyVND(tongTien + 30000)}
           </div>
         );
       }
@@ -107,34 +114,41 @@ const [user,setUser]=useState({});
 
 const [order,setOrder]=useState({})
 const [listProduct,setListProduct]=useState([]);
-  useEffect(()=>{
-    const fetchApi=async ()=>{
-      try {
-        const resp = await getDetailOrder(idOrder);
-        setDetailOrder(resp.data.content);
-        setOrder(detailOrder[0])
-        const products = resp.data.content.map(detail => ({
-        quanlity:detail.detail_order_quality,
-          name: detail.product.product_name,
-          product_price: detail.product.product_price,
-          product_star: detail.product.product_star,
-          product_discount: detail.product.product_discount,
-          product_hot: detail.product.product_hot,
-          image_id: detail.product.image_id,
-          category_id: 2
-        }));
-  
-        setListProduct(products);
-      } catch (e) {
-        console.log(e);
+useEffect(() => {
+  const fetchApi = async () => {
+    try {
+      const resp = await getDetailOrder(idOrder);
+      const details = resp.data.content;
+
+      setDetailOrder(details);
+
+      if (details.length > 0) {
+        setOrder(details[0]?.order); // Đặt order từ phần tử đầu tiên trong detailOrder
       }
+
+      const products = details.map(detail => ({
+        quanlity: detail.detail_order_quality,
+        name: detail.product.product_name,
+        product_price: detail.detail_order_price,
+        product_discount: detail.discount_product,
+        product_hot: detail.product.product_hot,
+        image_id: detail.product.image_id,
+        category_id: detail.product.category_id,
+      }));
+
+      setListProduct(products);
+    } catch (e) {
+      console.log(e);
     }
-    fetchApi()
-  },[idOrder])
-console.log(order);
+  };
+
+  fetchApi();
+}, [idOrder]);
+
 
 const statusIndex = detailOrder[0]?.order?.order_status; // Giá trị để chỉ định trạng thái (ví dụ 0 là 'Đang chờ duyệt')
 const status = colorText[statusIndex];
+
 
   
 return (
@@ -181,11 +195,10 @@ return (
             <div className='mt-[1.5rem]'>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Tổng thanh toán</h4>
             <div className='h-[100%] shadow-md p-[2rem]'>
-            <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền hàng: <span className='font-semibold'>30.000</span></p>
+            <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền hàng: <span className='font-semibold'>{formatCurrencyVND(detailOrder[0]?.order?.order_total)}</span></p>
             <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền ship: <span className='font-semibold'>30.000</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Giảm giá tiền ship: <span className='font-semibold'>30.000</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Mã giảm giá:<span className='font-semibold'>30.000</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Thành tiền: <span className='font-semibold'>30.000</span></p>
+            <p className='text-[1.7rem]  py-[1rem]'>Giảm giá: <span className='font-semibold'>{order?.discount_discount?.discount_percent || 0}%</span></p>
+            <p className='text-[1.7rem]  py-[1rem]'>Thành tiền: <span className='font-semibold'>{formatCurrencyVND(Number(order?.order_total) * (1 - Number(order?.discount_discount?.discount_percent / 100 ||0)) + 30000)}</span></p>
         
             </div>
             </div>
@@ -206,7 +219,6 @@ return (
           </div>
         </div>
         <div className='mt-[3rem] table-detail-order'>
-        <Table columns={columns} dataSource={listProduct} onChange={onChange} className='' />;
         
         </div>
         <div className='rounded-lg mt-[1rem]'>

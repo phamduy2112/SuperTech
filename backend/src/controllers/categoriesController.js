@@ -18,7 +18,14 @@ const getcategory_dad = async (req, res) => {
 try {
     let data = await categoriesModel.findAll({
         attributes: ['category_dad'],
-        group: ['category_dad']
+        group: ['category_dad'],
+        include:[
+            {
+                model:models.products,
+                as:"products"
+            }
+        ]
+        
     });
     responseSend(res, data, "Thành công!", 200);
     } catch (error) {
