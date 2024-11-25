@@ -37,7 +37,9 @@ function ModalChangePassword() {
     setIsModalOpen(true);
     setPage(1);
   };
-
+  const updateNumber = (newNumber: number) => {
+    setPage(newNumber);
+  };
   const handleOk = () => {
     setIsModalOpen(false);
     setPage(1);

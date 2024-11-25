@@ -2,11 +2,15 @@ import { Breadcrumb, Checkbox, Form, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
 import ProductItem from '../../../components/product/ProductItem';
+<<<<<<< HEAD
 import { getFavouriteProducts } from '../../../service/product/favourite.service';
+=======
+>>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getFavouriteByIdProductThunk } from '../../../redux/favourite/favourite.slice';
 
 function FavoriteProduct() {
+<<<<<<< HEAD
   // const [favouriteProduct, setFavouriteProduct] = useState([]);
   // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
   // const dispatch=useAppDispatch()
@@ -17,6 +21,14 @@ function FavoriteProduct() {
   // // Lọc các sản phẩm có product_id !== null
   // const validProducts = favouriteProduct.filter(item => item.product_id !== null);
 
+=======
+  const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
+  const dispatch=useAppDispatch()
+  useEffect(() => {
+   dispatch(getFavouriteByIdProductThunk())
+  }, []);
+  
+>>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
   return (
     <div className='w-[80%] m-auto'>
       <Breadcrumb
@@ -67,8 +79,8 @@ function FavoriteProduct() {
       </div>
 
       <div className='grid grid-cols-6 gap-y-3'>
-        {validProducts.length > 0 ? (
-          validProducts.map((item) => {
+        {favouriteProduct.length > 0 ? (
+          favouriteProduct.map((item) => {
             console.log(item);
             return <ProductItem key={item.product_id} product={item.product} />;
           })

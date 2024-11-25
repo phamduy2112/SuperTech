@@ -48,6 +48,12 @@ export const deleteProduct=(id:number)=>{
   
   })
 }
+export const getImageProductByImage=(id:number)=>{
+  return axiosWithAuth(`/image-product/${id}`,{
+    method:"get",
+  
+  })
+}
 
 
 export const createImage = (data: FormData) => {

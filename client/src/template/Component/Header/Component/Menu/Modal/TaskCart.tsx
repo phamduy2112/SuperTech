@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { decreaseItemQuantity, inCreaseItemQuantity, removeItemFromCart } from '../../../../../../redux/cart/cart.slice';
 import { formatCurrencyVND, truncateText } from '../../../../../../utils';
 import img from '../../../../../../assets/pngwing.com 1.png'
+import toast from 'react-hot-toast';
 interface TaskCart {
   onClose: () => void;
 }
@@ -22,16 +23,36 @@ function TaskCart({ onClose }: TaskCart) {
 
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
+    toast.success('Xóa sản phẩm thành công!');
+
   };
 
   const decreaseItem = (product_id: any) => {
     dispatch(decreaseItemQuantity({ product_id }));
+ 
+
   };
 
   const inCreaseItem = (product_id: any) => {
     dispatch(inCreaseItemQuantity({ product_id }));
-  };
 
+  };
+  const totalPrice = listCart.reduce((total: number, item) => {
+    // Tính giá sản phẩm ban đầu cộng thêm giá storage
+    const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
+  
+    // Tính giảm giá
+    const discountAmount = (basePriceWithStorage * item.product_discount) / 100;
+  
+    // Giá sau khi giảm
+    const priceAfterDiscount = basePriceWithStorage - discountAmount;
+  
+    // Tính tổng giá của sản phẩm (giá sau giảm x số lượng)
+    const itemTotalPrice = item.quantity * priceAfterDiscount;
+  
+    // Cộng dồn vào tổng giá
+    return total + itemTotalPrice;
+  }, 0);
   const navigate = useNavigate();
 
   return (
@@ -68,20 +89,21 @@ function TaskCart({ onClose }: TaskCart) {
                          </p>
                          <div className='py-[.5rem]'>
                          {item?.product_discount > 0 ? (
-                                   <span className="text-customColor font-semibold text-[1.6rem] ">
-                                     {formatCurrencyVND(
-                                       Number(item?.product_price) *
-                                         (1 - Number(item?.product_discount / 100))
-                                     )}
-                                     <span className="text-gray-400 font-semibold line-through text-[1.5rem] ">
-                                       {formatCurrencyVND(item?.product_price)}
-                                     </span>
-                                   </span>
-                                 ) : (
-                                   <span className="text-customColor font-semibold  text-[1.6rem] ">
-                                     {formatCurrencyVND(item?.product_price)}
-                                   </span>
-                                 )}
+                            <span className="text-customColor text-[1.6rem] font-medium">
+                              {formatCurrencyVND(
+                               ( Number(item?.product_price)+Number(item?.selectedStorage?.storage_price || 0)) *
+                                  (1 - Number(item?.product_discount / 100))
+                          
+                              )}
+                              <span className="text-gray-400 line-through text-[1.5rem] px-[1rem] font-normal">
+                                {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price ||0)}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-customColor text-[1.6rem] font-medium">
+                              {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price ||0)}
+                            </span>
+                          )}
                          </div>
                      
                        {/* <p className='text-[#7500CF] font-semibold text-[1.6rem] py-[.5rem]'>30.000.000 đ
@@ -105,7 +127,7 @@ function TaskCart({ onClose }: TaskCart) {
                })}
         
                <div className='flex justify-end pt-6'>
-                 <h4 className='text-[1.5rem] font-semibold'>Tổng đơn: <span>0 đ</span></h4>
+                 <h4 className='text-[1.5rem] font-semibold'>Tổng đơn: <span>{formatCurrencyVND(totalPrice)}đ</span></h4>
                </div>
              </div>
         

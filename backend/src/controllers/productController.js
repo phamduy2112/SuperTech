@@ -95,7 +95,6 @@ const getProductsByCategoryId = async (req, res) => {
             responseSend(res, products, "Thành công!", 200);
         }else{
             responseSend(res, "", "không tồn tại !", 404);
-
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra khi truy vấn sản phẩm", 500);
@@ -218,6 +217,8 @@ const createProduct = async (req, res) => {
             product_price,
             product_discount,
             product_hot,
+            product_quantity,
+            image_id,
             category_id,
             infor_screen,
             infor_system,
@@ -361,7 +362,6 @@ const deleteProduct = async (req, res) => {
         console.log(error);
     }
 };
-
 
 export {
     getProducts,

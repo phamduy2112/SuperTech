@@ -27,10 +27,10 @@ import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
 import product_storageRouter from './routers/product_storage.js';
 import autobankrouter from './routers/bankAutoRouter.js';
+import settingRouter from './routers/settingRouter.js';
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-
 
 app.use(urlencoded({extended:true}))
 app.use(express.static("."))
@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
 });
 
+app.use(settingRouter);
 app.use(product_storageRouter);
 app.use(autobankrouter);
 app.use(userRouter);

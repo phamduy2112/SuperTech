@@ -44,6 +44,8 @@ export const verifyPasswordDetail = createAsyncThunk(
   async (payload:any) => {
     try {
       const resp = await verifyPassword(payload);
+      console.log(resp.data);
+      
       return resp.data;
     } catch (e) {
       console.log(e);
@@ -52,7 +54,7 @@ export const verifyPasswordDetail = createAsyncThunk(
 );
 export const changePasswordDetail = createAsyncThunk(
   "changePasswordDetail",
-  async (payload) => {
+  async (payload:any) => {
     try {
       const resp = await changePassword(payload);
       return resp.data;

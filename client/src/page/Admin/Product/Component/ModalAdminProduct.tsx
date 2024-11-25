@@ -78,7 +78,7 @@ function ModalAdminProduct() {
     try {
       // Upload image and log the response to confirm `image_id` structure
       const response = await createImage(formData);
-      console.log('Upload response:', response);
+ 
   
       // Verify response path to `image_id`
       const image_id = response.data?.data?.image_id; // Adjust if necessary
@@ -104,7 +104,7 @@ function ModalAdminProduct() {
       console.log('Product color saved successfully:', {
         color: values.color,
         quantity: values.quantity,
-        image_id,
+        image_id:image_id,
         productStorage: [
           {
             storage: values.capacity,

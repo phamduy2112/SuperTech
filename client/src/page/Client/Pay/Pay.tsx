@@ -59,7 +59,7 @@ function Pay() {
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
-  const getDiscountId=useAppSelector((state)=>state.cart.discount_id)
+const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   useEffect(() => {
     if(!(listCart.length>0)){
       toast.success("Bạn cần thêm sản phẩm")
@@ -127,8 +127,9 @@ function Pay() {
       order_total_quatity:+totalItem,
       order_status:0,
       user_id:user.user_id,
-      discount:getDiscountId,
+      discount:getDiscountId ==0 ? null : getDiscountId,
       phone_number:formData.sdt,
+      
       address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
 
@@ -140,6 +141,11 @@ function Pay() {
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
+<<<<<<< HEAD
+=======
+      product_color:item?.selectedColor?.color,
+      product_storage:item?.selectedStorage?.storage,
+>>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
       detail_order_price:item.product_price + Number(item?.selectedStorage?.storage_price || 0),
       discount_product:item.product_discount,
 

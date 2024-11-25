@@ -92,88 +92,7 @@ function AdminCatelogry() {
   ];
 
 
-  const data = [
-    {
-      key: '1',
-      name: 'Sản Phẩm A',
-      date: '2023-01-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Thường',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '2',
-      name: 'Sản Phẩm B',
-      date: '2023-02-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Khuyến Mãi',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '3',
-      name: 'Sản Phẩm C',
-      date: '2023-03-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Nổi Bật',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '4',
-      name: 'Sản Phẩm D',
-      date: '2023-04-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Thường',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '5',
-      name: 'Sản Phẩm E',
-      date: '2023-05-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Khuyến Mãi',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '6',
-      name: 'Sản Phẩm F',
-      date: '2023-06-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Nổi Bật',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '7',
-      name: 'Sản Phẩm G',
-      date: '2023-07-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Thường',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '8',
-      name: 'Sản Phẩm H',
-      date: '2023-08-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Khuyến Mãi',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '9',
-      name: 'Sản Phẩm I',
-      date: '2023-09-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Nổi Bật',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-    {
-      key: '10',
-      name: 'Sản Phẩm J',
-      date: '2023-10-01',
-      catelogory_dad: 'Chưa nhập',
-      role: 'Danh Mục Thường',
-      image: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-    },
-  ];
+
 
   const dispatch=useAppDispatch()
   const dataCategories=useAppSelector(state=>state.category.listCatelories)
@@ -238,6 +157,7 @@ function AdminCatelogry() {
 
 
 
+  const userRef = useRef<any>(null);
 
 
   const rowSelection = {
@@ -260,10 +180,21 @@ function AdminCatelogry() {
         </div>
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
-          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm danh mục sản phẩm...' />
+          <form className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+            <input type="text" 
+            className='flex-1 text-[15px] outline-none bg-transparent'
+            onChange={async (e) => {
+              if (userRef.current) {
+                clearTimeout(userRef.current);
+              }
+              userRef.current = setTimeout(async () => {
+                console.log(e.target.value);
+                dispatch(getCatelogryThunk((e)=>{e.target.value}));
+              }, 400);
+            }}
+            placeholder='Tìm kiếm danh mục sản phẩm...' />
             <GoSearch className='text-[18px]' />
-          </div>
+          </form>
 
           <Popover
             content={<div className='flex flex-col'>

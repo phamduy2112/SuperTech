@@ -7,6 +7,8 @@ import { createToken, createTokenRef, decodeToken, verifyToken } from "../config
 import { deleteFile, upload } from "../config/upload.js";
 import path from"path"
 import nodemailer from 'nodemailer';
+import { Op } from "sequelize";
+import { startOfWeek,endOfWeek } from "date-fns";
 
 
 
@@ -26,25 +28,43 @@ const getUser = async (req, res) => {
       });
   }
 };
-const getNewCustomersLast7Days = async () => {
-  const today = new Date();
-  const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7)); // 7 ngày trước
+const getNewCustomersThisWeek = async  (req, res) => {
+  try {
+    const today = new Date();
 
-  const newCustomers = await User.findAll({
-    where: {
-      createdAt: {
-        [Op.gte]: sevenDaysAgo, // Ngày tạo >= 7 ngày trước
+    // Tính ngày bắt đầu và kết thúc tuần hiện tại
+    const thisWeekStart = startOfWeek(today, { weekStartsOn: 1 }); // Thứ Hai
+    const thisWeekEnd = endOfWeek(today, { weekStartsOn: 1 }); // Chủ Nhật
+
+    // Truy vấn dữ liệu từ DB
+    const newCustomers = await User.findAll({
+      where: {
+        user_time: {
+          [Op.between]: [thisWeekStart, thisWeekEnd], // Từ đầu tuần đến cuối tuần
+        },
       },
-    },
-  });
+    });
 
-  return newCustomers;
-};
+    // Trả về danh sách khách hàng mới
+    return res.status(200).json({
+      success: true,
+      data: newCustomers,
+    });
+  } catch (error) {
+    console.error('Error fetching new customers:', error);
+    console.log(e);
+    
+    return res.status(500).json({
+      success: false,
+      message: 'Có lỗi xảy ra khi lấy danh sách khách hàng mới.',
+    });
+  }
+}
 const register = async (req, res) => {
     try{
         const {user_name,user_email,user_password}=req.body
-        console.log(user_name,user_email,user_password);
-        
+        let user_time=new Date();
+
         const user = await User.findOne({ where: { user_email } });
         if(user){
             return responseSend(res,{success:false},"Email đã tồn tại",200)
@@ -54,7 +74,8 @@ const register = async (req, res) => {
             user_name,
             user_email,
             user_password:hashedPassword,
-            user_role:0
+            user_role:0,
+            user_time
         })
         responseSend(res,{
             success: true
@@ -70,27 +91,24 @@ const login = async (req, res) => {
   try {
       const { email, password } = req.body;
 
-      console.log("Email Input:", email); // Log email nhập vào
-      console.log("Password Input:", password); // Log mật khẩu nhập vào
+ 
 
       const user = await User.findOne({ where: { user_email: email.trim() } }); // Sử dụng trim() để loại bỏ khoảng trắng
       if (!user) {
           console.log("No user found with that email");
-          return res.status(401).json({
-              message: "Incorrect email or password",
+          return res.status(200).json({
+              message: "Sai email hoặc mật khẩu",
               success: false,
           });
       }
 
-      console.log("Hashed password from database:", user.user_password); // Log mật khẩu đã mã hóa từ DB
 
       const isPasswordMatch = await bcrypt.compare(password, user.user_password);
-      console.log("Password match result:", isPasswordMatch); // Log kết quả so sánh mật khẩu
 
       if (!isPasswordMatch) {
-          return res.status(401).json({
-              message: "Incorrect email or password",
-              success: false,
+          return res.status(200).json({
+            message: "Sai email hoặc mật khẩu",
+            success: false,
           });
       }
 
@@ -121,7 +139,7 @@ const resetToken = async (req, res) => {
         let errorToken=verifyToken(token);
         // console.log(token);
         if(errorToken!=null && errorToken.name!="TokenExpiredError"){
-            responseSend(res,"","Not Authorize !",401);
+            responseSend(res,"","Not Authorize !",200);
             return
     
         }
@@ -134,7 +152,7 @@ const resetToken = async (req, res) => {
         
         // console.log(getUser.dataValues.refresh_token);
         // if(checkTokenRef(getUser.dataValues.refresh_token)!=null){
-        //     responseSend(res,"","Not Authorize !",401);
+        //     responseSend(res,"","Not Authorize !",200);
         //     return
         // }else{
         //     console.log("thanh cong");
@@ -515,6 +533,6 @@ export {
     forgetCheckCode,
     resetPasswordNoToken,
     deleteEmployee,
-    getNewCustomersLast7Days
+    getNewCustomersThisWeek
 };
 

@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
 import { createInforProductAdminThunk, createProductAdminThunk, deleteProductAdminThunk } from '../../../../redux/product/product.slice';
 import { IoMdClose } from 'react-icons/io';
+import { getImageProductByImage } from '../../../../service/product/product.service';
+import { IMG_BACKEND } from '../../../../constants';
 
 
 
@@ -17,7 +19,8 @@ function AdminAddProduct() {
   const [showForm, setShowForm] = useState(false);
   const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
   const listProductColor=useAppSelector(state=>state.product.productColors)
-
+  const [image,setImage]=useState("");
+  
   const handleCategoryChange = (category_dad) => {
     setSelectedCategory(category_dad);
    
@@ -36,7 +39,7 @@ function AdminAddProduct() {
     category_dad:category.category_dad
   }));
 
-
+  
 
   const Datahe = [
     {
@@ -113,7 +116,13 @@ const initialValues = {
 
     ['clean']
   ];
-
+  useEffect(()=>{
+    const fetchApi=async()=>{
+      const responive=await getImageProductByImage(listProductColor[0].image_id)
+      setImage(responive.data.content.image_one)
+    } 
+    fetchApi()
+  },[])
 
 
   return (
@@ -125,7 +134,7 @@ const initialValues = {
   validationSchema={validationSchema}
   onSubmit={(values) => {
   
-
+    
 const dataInforProduct={
   infor_screen:values.infor_screen,
   infor_system:values.infor_system,
@@ -297,7 +306,7 @@ dispatch(createProductAdminThunk(dataInforProduct))
                   <IoMdClose />
                 </div>
                   <img 
-                      src='https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg'
+                      src={`${IMG_BACKEND}/${image}`}
                       alt={item.color} 
                       className="w-20 rounded-md"
                   />

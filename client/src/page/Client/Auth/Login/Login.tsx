@@ -13,6 +13,7 @@ import { saveLocalStorage } from "../../../../utils";
 import useSweetAlert from "../../../../hooks/Notification.hook";
 import { useAppDispatch } from "../../../../redux/hooks";
 import { setLogin, setToken } from "../../../../redux/user/user.slice";
+import toast from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
@@ -39,13 +40,7 @@ function Login() {
       const res = await login(values);
 
       if (res.data.message === "Thành công!") {
-        Swal.fire({
-          position: "top-end",
-          title: res.data.message,
-          showConfirmButton: false,
-          timer: 1500, // Thời gian hiển thị
-          timerProgressBar: true, // Kích hoạt thanh tiến trình
-        });
+        toast.success('Đăng nhập thành công')
        
         const token = res.data.content.token; 
         dispatch(setLogin(true))
@@ -54,8 +49,7 @@ function Login() {
         navigate("/")
        
       } else {
-        showAlert("error","Enail hoặc mật khẩu không đúng")
-      }
+  toast.error(res.data.message)      }
 
 
     },

@@ -4,54 +4,34 @@ const { Model, Sequelize } = _sequelize;
 export default class setting extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    id_setting: {
+    id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false,
+      primaryKey: true
     },
-    title_website: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    description_website: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    color_website: {
+    name: {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    author_website: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    logo_website: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    favicon_website: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    popup_website: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    content_autobank: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    token_bank: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    recharge_notice: {
+    value: {
       type: DataTypes.TEXT,
       allowNull: true
     }
   }, {
     sequelize,
     tableName: 'setting',
-    timestamps: false
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+    ]
   });
   }
 }

@@ -155,34 +155,37 @@ const handleLike=async(id:number,idProduct:number)=>{
                       <div className="flex justify-between items-center flex-col text-[1.8rem] text-gray-500 mt-2 space-x-3">
                         <div className="flex gap-[.5rem] ">
                           <span>2h trước</span>
-                          <div className='relative'>
-    <BsThreeDots
-                              className="cursor-pointer"
-                              onClick={() => handleDropdownToggle(index)}
-                            />
-                            {activeDropdown === index && (
-                              <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
-                                <div className="flex flex-col space-y-2">
-                                  <button
-onClick={() => handleActionToggle(index, 'edit')}                                    className=" text-blue-500 hover:text-blue-700 transition-colors"
-                                  >
-                                    Chỉnh sửa
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      // Handle delete
-                                      handleDelete(review)
-                                      // console.log(review.comment_id);
-                                      
-                                    }}
-                                    className=" text-red-500 hover:text-red-700 transition-colors"
-                                  >
-                                    Xoá
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                          <div className="relative">
+  <BsThreeDots
+    className="cursor-pointer"
+    onClick={() => handleDropdownToggle(index)}
+  />
+  {activeDropdown === index && (
+    <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
+      <div className="flex flex-col space-y-2">
+        {/* Hiển thị nút "Chỉnh sửa" và "Xóa" nếu là chủ sở hữu bình luận */}
+        {review.user_id === user.user_id ? (
+          <>
+            <button
+              onClick={() => handleActionToggle(index, 'edit')}
+              className="text-blue-500 hover:text-blue-700 transition-colors"
+            >
+              Chỉnh sửa
+            </button>
+            <button
+              onClick={() => handleDelete(review)}
+              className="text-red-500 hover:text-red-700 transition-colors"
+            >
+              Xoá
+            </button>
+          </>
+        ) : (
+          <span className="text-gray-400 text-center">Không có quyền</span>
+        )}
+      </div>
+    </div>
+  )}
+</div>
                         </div>
 
                         <div className="flex items-center gap-[.5rem]">

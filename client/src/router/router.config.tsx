@@ -48,6 +48,10 @@ import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDeta
 import CouponSection from "../page/Client/Voucher/Voucher";
 import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
 import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
+<<<<<<< HEAD
+=======
+import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
+>>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
 // import PrivateRoute from "./component/RouterPrivate";
 
 export const router = createBrowserRouter([
@@ -102,6 +106,11 @@ children:[
     path: "/người-dùng",
     
     element:     <PrivateRoute element={  <UserDetail />}/>,
+  },
+  {
+    path: "/người-dùng/doi-mat-khau",
+    
+    element:     <PrivateRoute element={  <ChangePasswordUser />}/>,
   },
   {
     path: "/don-hang-cua-ban",
