@@ -59,3 +59,10 @@ export const fogetCheckPassword = (payload:TpayloadPassword) => {
     data: payload,
   });
 };
+
+export const getNewCustomerThisWeek=()=>{
+  return axiosWithAuth("/get-new-customer-this-week", {
+    method: "get",
+  })
+ 
+}

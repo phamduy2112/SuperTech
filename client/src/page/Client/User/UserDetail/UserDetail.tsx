@@ -13,6 +13,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ImageUploader from "./Component/ChangeImage";
 import useSweetAlert from "../../../../hooks/Notification.hook";
+import { NavLink } from "react-router-dom";
 
 // Yup schema validation
 const validationSchema = Yup.object().shape({
@@ -162,8 +163,8 @@ function UserDetail() {
                 )}
               </Formik>
               <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
-                <ModalChangePassword />
-
+                {/* <ModalChangePassword /> */}
+                <NavLink to="/người-dùng/doi-mat-khau">Đổi mật khẩu</NavLink>
                 <button
                   type="button"
                   onClick={() => formikRef.current.submitForm()} // Submit manually
@@ -172,6 +173,7 @@ function UserDetail() {
                   Cập nhật
                 </button>
               </div>
+           
             </div>
           </div>
         </div>

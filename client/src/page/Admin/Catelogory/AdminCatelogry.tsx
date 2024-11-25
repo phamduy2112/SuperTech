@@ -157,6 +157,7 @@ function AdminCatelogry() {
 
 
 
+  const userRef = useRef<any>(null);
 
 
   const rowSelection = {
@@ -179,11 +180,21 @@ function AdminCatelogry() {
         </div>
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
-          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+          <form className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
             <input type="text" 
-            className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm danh mục sản phẩm...' />
+            className='flex-1 text-[15px] outline-none bg-transparent'
+            onChange={async (e) => {
+              if (userRef.current) {
+                clearTimeout(userRef.current);
+              }
+              userRef.current = setTimeout(async () => {
+                console.log(e.target.value);
+                dispatch(getCatelogryThunk((e)=>{e.target.value}));
+              }, 400);
+            }}
+            placeholder='Tìm kiếm danh mục sản phẩm...' />
             <GoSearch className='text-[18px]' />
-          </div>
+          </form>
 
           <Popover
             content={<div className='flex flex-col'>

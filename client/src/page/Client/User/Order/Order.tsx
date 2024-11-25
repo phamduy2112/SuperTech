@@ -8,7 +8,6 @@ import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../re
 import { formatCurrencyVND, truncateText } from '../../../../utils';
 import CancelOrderModal from './component/ModalCancer';
 function Order() {
-  const userRef = useRef<any>(null);
 
   const colorText = [
     { color: '#DB363B', text: 'Đang chờ duyệt' },     

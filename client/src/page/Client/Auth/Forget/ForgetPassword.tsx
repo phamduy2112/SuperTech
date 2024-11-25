@@ -85,7 +85,7 @@ function ForgetPassword() {
       <h2 className="text-[3rem] font-bold mb-4 text-center">Quên mật khẩu</h2>
       <p className="mb-4 text-gray-600 text-center text-[1.5rem]">
 
-      Quên mật khẩu? aVui lòng nhập tên người dùng hoặc địa chỉ email của bạn. Bạn sẽ nhận được liên kết để tạo mật khẩu mới qua email.
+      Quên mật khẩu? Vui lòng nhập tên người dùng hoặc địa chỉ email của bạn. Bạn sẽ nhận được liên kết để tạo mật khẩu mới qua email.
       </p>
       {/* Social Buttons */}
    

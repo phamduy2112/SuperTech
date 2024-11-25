@@ -129,6 +129,7 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
       user_id:user.user_id,
       discount:getDiscountId ==0 ? null : getDiscountId,
       phone_number:formData.sdt,
+      
       address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
 
@@ -140,6 +141,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
+      product_color:item?.selectedColor?.color,
+      product_storage:item?.selectedStorage?.storage,
       detail_order_price:item.product_price + Number(item?.selectedStorage?.storage_price || 0),
       discount_product:item.product_discount,
 

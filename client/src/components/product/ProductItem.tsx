@@ -16,12 +16,12 @@ import { NavLink } from "react-router-dom";
 import useSweetAlert from "../../hooks/Notification.hook";
 import { formatCurrencyVND } from "../../utils";
 import toast from "react-hot-toast";
-import { checkFavouriteProducts, createFavouriteProduct, getFavouriteProducts } from "../../service/product/favourite.service";
+// import { checkFavouriteProducts, createFavouriteProduct, getFavouriteProducts } from "../../service/product/favourite.service";
 import { BiSolidLike } from "react-icons/bi";
 import { AiOutlineLike } from "react-icons/ai";
 import { IMG_BACKEND } from "../../constants";
-import { createfavouriteByIdProductThunk, getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
-function ProductItem(props) {
+import { getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
+function ProductItem(props:any) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const { showAlert } = useSweetAlert();
@@ -39,9 +39,11 @@ function ProductItem(props) {
     return total;
   }, 0);
   // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
-  // useEffect(() => {
-  //  dispatch(getFavouriteByIdProductThunk())
-  // }, []);
+  // console.log(favouriteProduct);
+  
+  useEffect(() => {
+   dispatch(getFavouriteByIdProductThunk())
+  }, []);
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
     const productToCart = {
@@ -59,27 +61,27 @@ function ProductItem(props) {
     opacity: isvisibleProduct ? 1 : 0,
   });
 
-  const handleFavouriteProduct = async (id: number) => {
-    try {
-      const product = { product_id: id };
+  // const handleFavouriteProduct = async (id: number) => {
+  //   try {
+  //     const product = { product_id: id };
 
-      if (isFavourited) {
-        // Nếu sản phẩm đã được yêu thích, hủy yêu thích
-        await dispatch(createfavouriteByIdProductThunk(product))
-        setIsFavourited(false); // Cập nhật trạng thái yêu thích
-        toast.success('Đã bỏ yêu thích sản phẩm!');
-      } else {
-        // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
-        await dispatch(createfavouriteByIdProductThunk(product))
-        setIsFavourited(true); // Cập nhật trạng thái yêu thích
-        toast.success('Đã thêm vào yêu thích!');
-      }
+  //     if (isFavourited) {
+  //       // Nếu sản phẩm đã được yêu thích, hủy yêu thích
+  //       // await dispatch(createfavouriteByIdProductThunk(product))
+  //       setIsFavourited(false); // Cập nhật trạng thái yêu thích
+  //       toast.success('Đã bỏ yêu thích sản phẩm!');
+  //     } else {
+  //       // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
+  //       // await dispatch(createfavouriteByIdProductThunk(product))
+  //       setIsFavourited(true); // Cập nhật trạng thái yêu thích
+  //       toast.success('Đã thêm vào yêu thích!');
+  //     }
 
       
-    } catch (error) {
-      toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
-    }
-  };
+  //   } catch (error) {
+  //     toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
+  //   }
+  // };
 console.log(props);
 
   return (

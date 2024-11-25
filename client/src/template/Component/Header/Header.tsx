@@ -84,7 +84,7 @@ const handleMouseLeave = (itemName: string) => {
   }
 };
 const listCart=useAppSelector((state)=>state.cart.listCart)
-
+const listFavourite=useAppSelector(state=>state.product.listFavouriteProduct)
 const token=getLocalStorage('token')
 console.log(token);
 
@@ -212,13 +212,13 @@ console.log(token);
                 <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" />
    
             </div>
-            <div>
-              <Badge count={0} showZero>
+            <NavLink to={"/san-pham-yeu-thich"}>
+              <Badge count={listFavourite?.length||0} showZero>
                 <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
-            </div>
+            </NavLink>
             <div>
-              <Badge count={listCart.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
+              <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
               {isvisibleCart &&   <div className="fixed inset-0 z-30">
