@@ -1,0 +1,414 @@
+import { GetProp, Select, Upload, UploadFile } from 'antd';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'
+
+
+import ModalAdminProduct from './ModalAdminProduct';
+
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+function AdminAddProduct() {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+  };
+ 
+
+
+  const Datacpu = [
+    {
+      value: '1',
+      label: 'CPU Level 1',
+    },
+    {
+      value: '2',
+      label: 'CPU Level 2',
+    },
+    {
+      value: '3',
+      label: 'CPU Level 3',
+    },
+  ];
+
+  const Dataram = [
+    {
+      value: '1',
+      label: 'RAM Level 1',
+    },
+    {
+      value: '2',
+      label: 'RAM Level 2',
+    },
+    {
+      value: '3',
+      label: 'RAM Level 3',
+    },
+  ];
+
+  const Datahe = [
+    {
+      value: '1',
+      label: 'HDD Level 1',
+    },
+    {
+      value: '2',
+      label: 'HDD Level 2',
+    },
+    {
+      value: '3',
+      label: 'HDD Level 3',
+    },
+  ];
+
+  const Datakho = [
+    {
+      value: '1',
+      label: 'Storage Level 1',
+    },
+    {
+      value: '2',
+      label: 'Storage Level 2',
+    },
+    {
+      value: '3',
+      label: 'Storage Level 3',
+    },
+  ];
+
+  const Dataman = [
+    { label: 'Điện thoại', value: 'phone' },
+    { label: 'Laptop', value: 'laptop' },
+    { label: 'Máy tính bảng', value: 'tablet' }
+    // ... Thêm các lựa chọn khác nếu cần
+  ];
+
+  const Datapin = [
+    {
+      value: '1',
+      label: 'Pin Level 1',
+    },
+    {
+      value: '2',
+      label: 'Pin Level 2',
+    },
+    {
+      value: '3',
+      label: 'Pin Level 3',
+    },
+  ];
+
+
+ 
+  const Datagiamgia = [
+    {
+      value: '10%',
+      label: '10%',
+    },
+    {
+      value: '75%',
+      label: '75%',
+    },
+    {
+      value: '100%',
+      label: '100%',
+    },
+
+  ]
+  const validationSchema = Yup.object({
+    category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
+    price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
+    discount: Yup.number().min(0, 'Giảm giá không thể nhỏ hơn 0').max(100, 'Giảm giá không thể lớn hơn 100'),
+    description: Yup.string().required('Mô tả là bắt buộc'),
+    // Thêm các validation cho các trường khác nếu cần
+  });
+  const initialValues = {
+    category: '',
+    price: '',
+    discount: '',
+    screenSize: '',
+    battery: '',
+    cpu: '',
+    ram: '',
+    os: '',
+    warehouse: '',
+    description: '',
+  };
+
+  const [value, setValue] = useState('')
+  const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video', 'formula'],
+
+    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
+
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+
+    ['clean']
+  ];
+
+ 
+  
+
+  return (
+    <div className="flex-1 bg-[#f2edf3] grid xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]">
+    <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
+      <span className="text-[20px] font-semibold">Tạo Sản Phẩm Mới</span>
+      <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            console.log('Form Data', values);
+          }}
+          className="flex flex-col auto-rows-auto gap-4"
+        >
+          {({ setFieldValue }) => (
+            <Form className="flex flex-col gap-4">
+              {/* Chọn loại sản phẩm */}
+              <div className="flex gap-[1%]">
+                <div className="flex w-[33%] h-auto flex-col gap-4">
+                  <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
+                  <Select
+                    showSearch
+                    placeholder="Vui lòng chọn danh mục"
+                    optionFilterProp="label"
+                    onChange={handleCategoryChange}
+                    options={Dataman}
+                    className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                  />
+                </div>
+                {/* Nhập giá sản phẩm */}
+                <div className="flex w-[33%] h-auto flex-col gap-4">
+                  <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
+                  <Field
+                    type="text"
+                    name="price"
+                    className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                    placeholder="Nhập giá sản phẩm"
+                  />
+                  <ErrorMessage name="price" component="div" className="text-red-500 text-xs" />
+                </div>
+                {/* Chọn mức giảm giá */}
+                <div className="flex w-[33%] h-auto flex-col gap-4">
+                  <label htmlFor="discount" className="text-[13px] text-[#81818177] font-medium">Giảm giá</label>
+                  <Select
+                    showSearch
+                    placeholder="Vui lòng chọn mức giảm giá"
+                    optionFilterProp="label"
+                    options={Datagiamgia}
+                    className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Thuộc tính chỉ hiển thị khi sản phẩm là điện thoại hoặc laptop */}
+              {(selectedCategory === 'phone' || selectedCategory === 'laptop') && (
+                <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
+                  <span className="text-[20px] font-semibold">Tạo thuộc tính</span>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="flex h-auto flex-col gap-4">
+                      <label htmlFor="screenSize" className="text-[13px] text-[#81818177] font-medium">Màn hình</label>
+                      <Select
+                        showSearch
+                        placeholder="Vui lòng chọn kích thước màn hình"
+                        optionFilterProp="label"
+                        options={Dataman}
+                        className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                      />
+                    </div>
+                    <div className="flex h-auto flex-col gap-4">
+                      <label htmlFor="battery" className="text-[13px] text-[#81818177] font-medium">Pin</label>
+                      <Select
+                        showSearch
+                        placeholder="Vui lòng chọn dung lượng pin"
+                        optionFilterProp="label"
+                        options={Datapin}
+                        className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                      />
+                    </div>
+                    <div className="flex h-auto flex-col gap-4">
+                      <label htmlFor="cpu" className="text-[13px] text-[#81818177] font-medium">CPU</label>
+                      <Select
+                        showSearch
+                        placeholder="Vui lòng chọn loại CPU"
+                        optionFilterProp="label"
+                        options={Datacpu}
+                        className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Mô tả sản phẩm */}
+              <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
+                <label htmlFor="description" className="text-[13px] text-[#81818177] font-medium">Mô tả</label>
+                <ReactQuill
+                  theme="snow"
+                  value={value}
+                  onChange={setValue}
+                  className="h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
+                />
+              </div>
+
+              {/* Nút thêm sản phẩm */}
+              <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
+                <button type="submit" className="text-center bg-[#1A73E8] text-white py-2 px-6 rounded-lg">
+                  Thêm sản phẩm
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+    </div>
+  </div>
+  );
+}
+
+export default AdminAddProduct;
+
+
+   
+     
+
+       <form action="" className="flex flex-col auto-rows-auto gap-4">
+        <div className="flex gap-[1%]">
+          <div className="flex w-[33%] h-auto flex-col gap-4">
+            <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
+            <Select
+              showSearch
+              placeholder="Vui lòng chọn danh mục"
+              optionFilterProp="label"
+              onChange={handleCategoryChange}
+              options={Dataman}
+              className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+            />
+          </div>
+          <div className="flex w-[33%] h-auto flex-col gap-4">
+            <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
+            <input
+              type="text"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+              id="price"
+              name="price"
+              required
+              placeholder="Nhập giá sản phẩm"
+            />
+          </div>
+          <div className="flex w-[33%] h-auto flex-col gap-4">
+            <label htmlFor="discount" className="text-[13px] text-[#81818177] font-medium">Giảm giá</label>
+            <Select
+              showSearch
+              placeholder="Vui lòng chọn mức giảm giá"
+              optionFilterProp="label"
+              options={Datagiamgia}
+              className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+            />
+          </div>
+        </div>
+  
+        {/* Thêm thuộc tính chỉ hiển thị khi loại sản phẩm là 'phone' hoặc 'laptop' */}
+        {(selectedCategory === 'phone' || selectedCategory === 'laptop') && (
+          <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
+            <span className="text-[20px] font-semibold">Tạo thuộc tính</span>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="screenSize" className="text-[13px] text-[#81818177] font-medium">Màn hình</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn kích thước màn hình"
+                  optionFilterProp="label"
+                  options={Dataman}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="battery" className="text-[13px] text-[#81818177] font-medium">Pin</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn dung lượng pin"
+                  optionFilterProp="label"
+                  options={Datapin}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="cpu" className="text-[13px] text-[#81818177] font-medium">CPU</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn loại CPU"
+                  optionFilterProp="label"
+                  options={Datacpu}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="ram" className="text-[13px] text-[#81818177] font-medium">RAM</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn dung lượng RAM"
+                  optionFilterProp="label"
+                  options={Dataram}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="os" className="text-[13px] text-[#81818177] font-medium">Hệ điều hành</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn hệ điều hành"
+                  optionFilterProp="label"
+                  options={Datahe}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+                <label htmlFor="warehouse" className="text-[13px] text-[#81818177] font-medium">Kho</label>
+                <Select
+                  showSearch
+                  placeholder="Vui lòng chọn kho"
+                  optionFilterProp="label"
+                  options={Datakho}
+                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+  
+        {/* Form mô tả sản phẩm */}
+        <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
+          <div className="col-span-3 flex h-[400px] overflow-y-hidden flex-col gap-4">
+            <label htmlFor="description" className="text-[13px] text-[#81818177] font-medium">Mô tả</label>
+            <ReactQuill
+              theme="snow"
+              value={value}
+              onChange={setValue}
+              modules={{
+                toolbar: toolbarOptions,
+              }}
+              className="h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
+            />
+          </div>
+        </div>
+  
+        {/* Nút thêm sản phẩm */}
+        <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
+          <button type="submit" className="col-span-3 text-[16px] mt-4 h-[48px] linear-gradient text-white .box-shadow rounded-lg">
+            Thêm Sản Phẩm
+          </button>
+        </div>
+      </form>
