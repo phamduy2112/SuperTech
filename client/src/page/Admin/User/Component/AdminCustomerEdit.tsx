@@ -1,56 +1,182 @@
-import { Calendar, ConfigProvider, Empty, GetProp, message, Popover, Select, Upload, UploadFile } from 'antd';
-import React, { useRef, useState } from 'react';
+
+
+import { Calendar, ConfigProvider, Empty, Popover, Select, Upload, UploadFile } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
 import './AdminCreateAccout.css'
-import { IoMdCloudUpload } from 'react-icons/io';
 import { datanganhang } from './Databank';
+import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface, UpdateStaffInterface } from './DataStaff';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
+import { IMG_USER_BACKEND } from '../../../../constants';
+import { IoMdCloudUpload } from 'react-icons/io';
+import { UpdateStaffThunk } from '../../../../redux/user/user.slice';
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
 function AdminCustomerEdit() {
+    const AppDispatch = useAppDispatch();
+    const token = localStorage.getItem('token');
+    const staffsData = useAppSelector((state) => state.user.Alluser);
+    const [staff, setStaff] = useState<StaffInterface>({});
+    const { id } = useParams();
+    const userId = Number(id);
+    console.log(IMG_USER_BACKEND);
 
-    const uploadRef = useRef<HTMLDivElement>(null); // Sử dụng HTMLDivElement
 
-    const [fileList, setFileList] = useState<UploadFile[]>([
-    ]);
 
-    const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-        const updatedFileList = newFileList.map(file => {
+
+    useEffect(() => {
+        if (userId) {
+            const newObj_staff = staffsData.find(staff => staff.user_id === userId);
+            setStaff(newObj_staff);
+        }
+    }, [staffsData, userId]);
+    const [tokenStaff, setTokenStaff] = useState('');
+
+    useEffect(() => {
+        if (token) {
+            const cleanedToken = token.replace(/"/g, '');
+            setTokenStaff(cleanedToken);
+        }
+    }, [token]);
+
+
+    const [staffData, setstaffData] = useState<StaffInterface>({
+        user_name: '',
+        user_email: '',
+        user_password: '',
+        user_address: '',
+        user_phone: '',
+        user_role: null,
+        level: null,
+        user_gender: null,
+        user_birth: '',
+        user_time: '',
+        user_image: '',
+    });
+
+    useEffect(() => {
+        if (staff) {
+            setstaffData({
+                user_name: staff.user_name || '',
+                user_email: staff.user_email || '',
+                user_password: staff.user_password || '',
+                user_address: staff.user_address || '',
+                user_phone: staff.user_phone || '',
+                user_role: staff.user_role || null,
+                level: staff.level || null,
+                user_gender: staff.user_gender || null,
+                user_birth: staff.user_birth || '',
+                user_time: staff.user_time || '',
+                user_image: staff.user_image || '',
+            });
+        }
+    }, [staff]); // Chỉ phụ thuộc vào staff, không phụ thuộc vào staffData nữa
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setstaffData(prevState => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    const handleSelectOnChange = (value: number, title: string) => {
+        setstaffData(prevState => ({
+            ...prevState,
+            [title]: value,
+        }));
+    }
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const filteredData: StaffInterface = {};
+
+        Object.keys(staffData).forEach(key => {
+            if (staffData[key] !== "" && staffData[key] !== null) {
+                filteredData[key] = staffData[key];
+            }
+        });
+
+
+        const DataStaff: DataStaffInterface = {
+            staffData: filteredData,
+            tokenStaff: tokenStaff,
+        };
+        SendDataStaffThunk(DataStaff);
+
+    };
+
+    const SendDataStaffThunk = async (DataStaff: DataStaffInterface) => {
+
+        const UpdateStaff: UpdateStaffInterface = {
+            userId,
+            DataStaff
+        }
+
+
+
+        try {
+            const data = await AppDispatch(UpdateStaffThunk(UpdateStaff));
+            if (data.payload.success === true) {
+                Swal.fire({
+                    title: 'Thành công',
+                    text: 'Sửa thành công nhân viên',
+                    icon: 'success',
+                    confirmButtonText: 'Chuyển tới trang quản lý nhân viên',
+                    confirmButtonColor: '#008000',
+                })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/admin/quản-lí-nhân-viên';
+                        }
+                    })
+            };
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const uploadRef = useRef<HTMLDivElement>(null);
+
+
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+
+    const onChange: UploadProps['onChange'] = async (info) => {
+        const { fileList: file } = info;
+
+        const updatedFileList = file.map(file => {
             if (file.originFileObj) {
                 file.url = URL.createObjectURL(file.originFileObj);
             }
             return file;
         });
+
         setFileList(updatedFileList);
-    };
 
-
-
-    const onPreview = async (file: UploadFile) => {
-        let src = file.url as string;
-        if (!src) {
-            src = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj as FileType);
-                reader.onload = () => resolve(reader.result as string);
-            });
+        if (file[0].response.statusCode === 200) {
+            try {
+                const imageUrl = file[0].response.content;
+                setstaffData(prevState => ({
+                    ...prevState,
+                    user_image: imageUrl,
+                }));
+            } catch (error) {
+                console.error("Có lỗi trong khi xử lý phản hồi:", error);
+            }
+        } else {
+            console.error("Tải lên không thành công, mã lỗi:", file[0].response?.statusCode);
         }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow?.document.write(image.outerHTML);
     };
 
 
-
-
-
-
-    const [value, setValue] = useState('')
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
@@ -75,7 +201,7 @@ function AdminCustomerEdit() {
     const options = datanganhang.map(item => ({
         value: item.code,
         label: (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className='' style={{ display: 'flex', alignItems: 'center' }}>
                 <img
                     src={item?.logo}
                     alt={item?.label}
@@ -88,6 +214,40 @@ function AdminCustomerEdit() {
 
     }));
 
+    const OptionsImageStaffLevel = imageStaffLevel.map(item => ({
+        value: item.value,
+        label: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                    src={item?.label}
+                    style={{ width: '50px', marginRight: '8px' }}
+                />
+            </div>
+        )
+    }))
+
+
+    const OptionsStaffGender = StaffGender.map(item => ({
+        value: item.value,
+        label: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span>{item.label}</span>
+            </div>
+        )
+    }))
+
+
+    const filteredDataRole = DataRole.filter(role => role.value !== 11);
+    const OptionsStaffRole = filteredDataRole.map(role => ({
+
+        value: role.value,
+        label: (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span>{role.label}</span>
+            </div>
+        )
+    }))
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [bank, setBank] = useState<any | null>(null); // Thay đổi từ {} thành null
 
@@ -98,144 +258,208 @@ function AdminCustomerEdit() {
             setBank(codebank);
         }
 
-
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [Joindate, setJoinDate] = useState<any | null>(null); // Thay đổi từ {} thành null
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [birthdate, setBirthDate] = useState<any | null>(null); // Thay đổi từ {} thành null
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueBirthDate = (value: any) => {
+        const formattedDate = value.format('YYYY-MM-DD HH:mm:ss');
 
-        setBirthDate(value.format('YYYY-MM-DD HH:mm:ss'));
+        setstaffData(prevState => ({
+            ...prevState,
+            user_birth: formattedDate,
+        }));
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueJoinDate = (value: any) => {
-
-        setJoinDate(value.format('YYYY-MM-DD HH:mm:ss'));
+        const formattedDate = value.format('YYYY-MM-DD HH:mm:ss');
+        setstaffData(prevState => ({
+            ...prevState,
+            user_time: formattedDate,
+        }));
     };
 
-    const DataGender = [
-        { label: 'Nam', value: 'Nam' },
-        { label: 'Nữ', value: 'Nữ' },
-        { label: 'Khác', value: 'Khác' },
-    ]
 
-    const DataRole = [
-        { label: 'Admin', value: 'Admin' },
-        { label: 'Nhân viên', value: 'Nhân viên' },
-        { label: 'Khách hàng', value: 'Khác hàng' },
-    ]
-
-
-
-
-
-
-
-
-
-
+    const handleInputChangeWord = (value: string) => {
+        setstaffData(prevState => ({
+            ...prevState,
+            user_address: value,
+        }));
+    };
     return (
-        <div className='flex-1 bg-[#bg-[#f2edf3]] grid grid-cols-1 xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
+        <form action='' onSubmit={handleSubmit} className='flex-1 bg-[#f2edf3]  grid grid-cols-1 xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
 
             <div className='bg-white shadow-lg rounded-xl  p-[12px] gap-8 flex flex-col'>
                 <span className='text-[20px] font-semibold'>Tải ảnh  </span>
 
                 <div className='text-[14px] font-medium text-[#9696968e]'>
-                    <span>Chọn ảnh sản phẩm hoặc chỉ cần kéo và thả tối đa 6 ảnh tại đây.</span>
+                    <span>Chọn ảnh sản phẩm hoặc chỉ cần kéo và thả tối đa 1 ảnh tại đây.</span>
 
                 </div>
                 <div className='flex- items-center flex justify-center'>
                     <ImgCrop rotationSlider>
-                        <Upload
-                            ref={uploadRef}
-                            action="" // Đặt URL phù hợp với server của bạn
+                        <Upload.Dragger
+                            action="https://test-api-nodejs-440616.appspot.com/uploadimguser"
+                            listType='picture'
                             fileList={fileList}
                             onChange={onChange}
-                            onPreview={onPreview}
+                            showUploadList={{
+                                showRemoveIcon: true
+                            }}
                             maxCount={1}
+                            accept=".png,.jpg,.jpeg"
+                            headers={{
+                                token: tokenStaff,
+                            }}
                             beforeUpload={(file) => {
-                                const isValidType = ['image/jpeg', 'image/png'].includes(file.type);
-                                const isValidSize = file.size / 1024 / 1024 < 0.5; // 500kb
-                                if (!isValidType) {
-                                    message.error('Bạn chỉ có thể tải lên định dạng JPG/PNG!');
+                                const isImage = ['image/jpeg', 'image/png', 'image/jpg'].includes(file.type);
+                                const isSmallerThan10MB = file.size / 1024 / 1024 < 10; // file size in MB
+                                if (!isImage) {
+                                    console.log('Chỉ hỗ trợ hình ảnh .jpg, .jpeg, .png');
                                 }
-                                if (!isValidSize) {
-                                    message.error('Kích thước file phải nhỏ hơn 500kb!');
+                                if (!isSmallerThan10MB) {
+                                    console.log('Kích thước tệp không vượt quá 10MB');
                                 }
-                                return isValidType && isValidSize;
+                                return isImage && isSmallerThan10MB;
+                            }}
+                            name="user_image"
+                            onRemove={() => {
+                                if (fileList.length === 1) {
+                                    setstaffData(prevState => ({
+                                        ...prevState,
+                                        user_image: staff.user_image,
+                                    }));
+                                }
                             }}
                         >
-                            <div className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}>
-                                <p className="text-4xl  " onClick={() => uploadRef.current?.querySelector('input[type="file"]')}>
-                                    <IoMdCloudUpload />
-                                </p>
-                                <p className="mt-2 text-lg text-center">Bấm hoặc kéo thả ảnh vào đây</p>
+                            <div
+                                className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}
+                            >
+                                {
+                                    staff.user_image != null ? (
+                                        <img
+                                            src={IMG_USER_BACKEND + staff.user_image}
+                                            alt="Uploaded"
+                                            className="rounded-lg w-[70rem] h-[35rem] object-cover shadow-lg"
+                                        />
+                                    ) : (
+                                        <>
+                                            <p className="text-4xl  " onClick={() => uploadRef.current?.querySelector('input[type="file"]')}>
+                                                <IoMdCloudUpload />
+                                            </p>
+                                            <p className="mt-2 text-lg text-center">Ảnh chưa có vui lòng bấm kéo thả ảnh vào đây</p>
+                                        </>
+                                    )
+                                }
                             </div>
 
                             <div className={`flex w-[70rem] h-[40rem] items-center  justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'block' : 'hidden'}`}>
                                 <img src={fileList[0]?.url} alt="Uploaded" className="rounded-lg w-[70rem] h-[35rem] object-cover   shadow-lg" />
                             </div>
-
-                        </Upload>
+                        </Upload.Dragger>
                     </ImgCrop>
+
 
 
 
                 </div>
                 <div className='text-[14px] text-[#9696968e]  font-medium'>
-                    <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 500kb.</span>
+                    <span>Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước ưa thích: 1:1, kích thước tệp bị giới hạn ở mức tối đa 10MB.</span>
+
                 </div>
 
             </div>
             <div className='bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col '>
-                <span className='text-[20px] font-semibold'>Sửa Tài Khoản </span>
-                <form action="" className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
-                    <div className='flex h-auto col-span-2 flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Tên tài khoản</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                <span className='text-[20px] font-semibold'>Thêm Tài Khoản </span>
+                <div className=' flex-1 grid grid-cols-3 auto-rows-auto gap-4'>
+                    <div className="flex h-auto flex-col gap-4">
+                        <label htmlFor="" className="text-[13px] text-[#81818177] font-medium">Tên tài khoản</label>
+                        <input
+                            onChange={handleInputChange}
+                            value={staffData.user_name}
+                            name="user_name"
+                            placeholder='Không có dữ liệu tên tài khoản'
+                            type="text"
+                            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
+                        />
+                    </div>
+                    <div className='flex h-auto flex-col gap-4'>
+                        <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Email</label>
+                        <input type='text'
+                            onChange={handleInputChange}
+                            value={staffData.user_email}
+
+                            name="user_email"
+                            placeholder='Không có dữ liệu email'
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Email</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                        <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
+                        <input type='text'
+                            onChange={handleInputChange}
+                            name="user_password"
+                            value={staffData.user_password}
+
+                            placeholder='Không có dữ liệu mật khẩu'
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
-
-                    </div>
-
-
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Điện thoại</label>
-                        <input type='number' min={0} max={100} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
-                    </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính</label>
+                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Level</label>
                         <Select
                             showSearch
-                            placeholder="Vui lòng chọn giới tính "
                             optionFilterProp="label"
-                            options={DataGender}
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+                            options={
+                                OptionsImageStaffLevel
+                            }
+                            value={staffData.level}
+                            placeholder={staffData.level == null ? 'Chưa có level' : ''}
 
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+                            onChange={(value) => handleSelectOnChange(value, 'level')}
+
+                        />
+                    </div>
+                    <div className='flex h-auto flex-col gap-4'>
+                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Điện thoại</label>
+                        <input
+                            onChange={handleInputChange}
+                            name="user_phone"
+                            value={staffData.user_phone}
+
+                            placeholder='Không có dữ liệu số điện thoại'
+                            type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                    </div>
+                    <div className='flex h-auto flex-col gap-4'>
+                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính {staffData.user_gender}</label>
+                        <Select
+                            showSearch
+                            optionFilterProp="label"
+                            options={OptionsStaffGender}
+                            value={staffData.user_gender}
+                            placeholder={staffData.user_gender == null ? 'Chưa có dữ liệu giới tính' : ''}
+
+                            onChange={(value) => handleSelectOnChange(value, 'user_gender')}
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
                         />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Vai trò</label>
                         <Select
                             showSearch
-                            placeholder="Vui lòng chọn vai trò "
-                            optionFilterProp="label"
-                            options={DataRole}
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
 
-                        />                    </div>
+                            optionFilterProp="label"
+                            placeholder={staffData.user_role == null ? 'Chưa có dữ liệu vai trò' : ''}
+                            value={staffData.user_role}
+                            options={
+                                OptionsStaffRole
+                            }
+                            onChange={(value) => handleSelectOnChange(value, 'user_role')}
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                        />
+
+                    </div>
 
                     <div className='flex h-auto flex-col gap-4 '>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Ngày sinh</label>
@@ -250,7 +474,9 @@ function AdminCustomerEdit() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={birthdate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                            <input type='text'
+                                placeholder={staffData.user_birth == null || staffData.user_birth == "" ? 'Chưa có dữ liệu ngày sinh' : ''}
+                                value={staffData.user_birth} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
                     </div>
                     <div className='flex h-auto flex-col gap-4 '>
@@ -266,22 +492,24 @@ function AdminCustomerEdit() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={Joindate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' id='ten_sp' name='ten_sp' required />
+                            <input type='text' placeholder={staffData.user_time == null || staffData.user_time == "" ? 'Chưa có dữ liệu ngày tham gia' : ''}
+                                value={staffData.user_time} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
 
                     </div>
 
-                    <div className=' col-span-3 flex h-[450px] overflow-y-hidden flex-col gap-4'>
+                    <div className=' col-span-3 flex  flex-col gap-4'>
                         <label htmlFor='ten_sp' className=' text-[13px] text-[#81818177] font-medium'>Địa chỉ</label>
-                        <ReactQuill
-                            theme='snow'
-                            value={value}
-                            onChange={setValue}
-                            modules={{
-                                toolbar: toolbarOptions,
-                            }}
-                            className='h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2'
-                        />
+                        <div className="quill-container">
+                            <ReactQuill
+                                theme="snow"
+                                onChange={handleInputChangeWord}
+                                modules={{ toolbar: toolbarOptions }}
+                                value={staffData.user_address}
+
+                                className=" bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
+                            />
+                        </div>
                     </div>
 
 
@@ -289,23 +517,27 @@ function AdminCustomerEdit() {
 
 
 
-                </form>
+                </div>
             </div>
             <div className='bg-white shadow-lg rounded-xl xl:col-span-3  p-[12px] gap-3 flex flex-col '>
                 <span className='text-[20px] font-semibold'> Thẻ </span>
-                <form action="" className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
+                <div className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
                     <div className='flex h-full flex-col gap-4'>
                         <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Mã thẻ</label>
-                        <input type='number' min={0} max={100} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
+                        <input
+                            // onChange={handleInputChangePay}
+                            // name="accountNumber"
+                            // value={PayData.accountNumber}
+                            type='number' min={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Ngày hết hạn</label>
-                        <input type='text' min={0} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
+                        <input type='text' min={0} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='hot' className='text-[13px] text-[#81818177] font-medium'>CVV</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='hot' name='hot' required />
+                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
                     </div>
                     <div className='flex-1 flex flex-col gap-4 col-span-1'>
                         <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Ngân hàng</label>
@@ -321,7 +553,7 @@ function AdminCustomerEdit() {
                         />                    </div>
                     <div className='flex-1 flex flex-col gap-4 col-span-2'>
                         <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Tên chủ thẻ</label>
-                        <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='favorite' name='favorite' required />
+                        <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
                     </div>
                     <div className='flex-1 justify-center items-center p-[60px] flex flex-col gap-4 col-span-3'>
                         <div className='w-[40%] h-full rounded-xl '>
@@ -335,16 +567,16 @@ function AdminCustomerEdit() {
                         </div>
 
                     </div>
-                </form>
+                </div>
 
             </div>
 
             <div className='bg-white shadow-lg xl:col-span-3 rounded-xl p-[12px] gap-3 flex flex-col '>
-                <button type='submit' className=' text-[16px] mt-4 h-[48px] rounded-lg linear-gradient text-white .box-shadow '>Sửa Tài Khoản</button>
+                <button type='submit' className=' text-[16px] mt-4 h-[48px] rounded-lg linear-gradient text-white .box-shadow '>Thêm Tài Khoản</button>
 
             </div>
 
-        </div >
+        </form >
     );
 }
 

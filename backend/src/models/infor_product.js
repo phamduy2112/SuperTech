@@ -30,7 +30,7 @@ export default class infor_product extends Model {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    'infor_ rom': {
+    infor_rom: {
       type: DataTypes.STRING(255),
       allowNull: true
     },

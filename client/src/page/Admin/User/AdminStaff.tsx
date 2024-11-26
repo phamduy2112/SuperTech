@@ -4,12 +4,22 @@ import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
-import { IoCloudDownloadOutline } from 'react-icons/io5';
 import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getAllUserThunk } from '../../../redux/user/user.slice';
+import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
+import { checkRoleAndShowAlert, Level } from './Component/DataStaff';
+import { jwtDecode } from "jwt-decode";
+import { IMG_USER_BACKEND } from '../../../constants/index';
+
+interface tokenDataClient {
+    user_id: number,
+    user_role: number
+}
+interface UserTokenClientInterface extends tokenDataClient {
+    data: tokenDataClient
+}
 
 function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,14 +31,35 @@ function AdminStaff() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [columns, setColumns] = useState<any[]>([]);
     const [valueInputSearch, setvalueInputSearch] = useState(``);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const TokenstaffsClient: any = useAppSelector((state) => state.user.token);
+
+    const [RoleStaff, setRoleStaff] = useState<number>();
+    const [IdStaff, setIdStaff] = useState<number>();
+
+    useEffect(() => {
+        if (TokenstaffsClient.length > 0 || TokenstaffsClient != null) {
+            const UserTokenClient: UserTokenClientInterface = jwtDecode(TokenstaffsClient);
+            setRoleStaff(UserTokenClient.data.user_role);
+            setIdStaff(UserTokenClient.data.user_id);
+        }
+    }, [TokenstaffsClient]);
+
+
+    // const [TokenstaffsAdmin, setTokenstaffsAdmin]
+
 
 
 
     useEffect(() => {
         AppDispatch(getAllUserThunk());
-        setDataAllstaffs(Allstaffs);
-
     }, [AppDispatch]);
+
+    useEffect(() => {
+        setDataAllstaffs(Allstaffs);
+    }, [Allstaffs])
+
+
 
     useEffect(() => {
         if (Allstaffs && Allstaffs.length > 0) {
@@ -39,6 +70,12 @@ function AdminStaff() {
         }
     }, [Allstaffs])
 
+
+
+    const reverseDate = (dateString: string) => {
+        const [year, month, day] = dateString.split('-');
+        return `${day}-${month}-${year}`;
+    };
 
     useEffect(() => {
 
@@ -62,12 +99,12 @@ function AdminStaff() {
                         key: staff,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (src: any) => (
+
                             <>
                                 {
                                     src == '' || src == null || src == undefined ?
                                         <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
-                                        : <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-
+                                        : <img className='rounded-full object-cover' src={IMG_USER_BACKEND + src} alt="" style={{ width: 50, height: 50 }} />
                                 }
 
                             </>
@@ -80,20 +117,48 @@ function AdminStaff() {
                         title: 'Tên',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
 
                     };
 
                 case 'user_birth':
                     return {
-                        title: 'Tuổi',
+                        title: 'Ngày Sinh Nhật',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : reverseDate(text)
+                                }
+                            </>
+                        ),
+
+
+
                     }
                 case 'user_phone':
                     return {
                         title: 'Số điện thoại',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
+
                     }
 
                 case 'user_email':
@@ -101,6 +166,14 @@ function AdminStaff() {
                         title: 'Email',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
                     }
 
                 case 'user_address':
@@ -108,6 +181,15 @@ function AdminStaff() {
                         title: 'Địa Chỉ',
                         dataIndex: staff,
                         key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (text: any) => (
+                            <>
+                                {
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                }
+                            </>
+                        ),
+
 
 
                     }
@@ -118,10 +200,12 @@ function AdminStaff() {
                         key: staff,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
-                            <div className="flex-1 flex items-center gap-3">
-                                <div className={`w-[10px] rounded-full h-[10px] ${text == 2 ? 'bg-[#2af52a]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
-                                {text == 2 ? 'Người dùng' : ''} {text == 1 ? 'Nhân viên' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
-
+                            <div className={`w-[200px] text-white font-medium rounded-md p-2 flex items-center ${text == 11 ? 'bg-[#3aff2085]' : ''} ${text == 10 ? 'bg-[#77757575]' : ''} ${text == 9 ? 'bg-[#1a1c9685]' : ''} ${text == 8 ? 'bg-[#00000093]' : ''} ${text == 7 ? 'bg-[#7c164685]' : ''} ${text == 6 ? 'bg-[#dd741285]' : ''} ${text == 5 ? 'bg-[#ab2af585]' : ''} ${text == 4 ? 'bg-[#f52ac285]' : ''} ${text == 3 ? 'bg-[#3963f085]' : ''} ${text == 2 ? 'bg-[#0eb397d2]' : ''} ${text == 1 ? 'bg-[#b6b30eb7]' : ''} ${text == 0 ? 'bg-[#ff000085]' : ''} gap-4`}>
+                                <div className={`w-[10px] ml-4 rounded-full h-[10px] ${text == 11 ? 'bg-[#3aff20]' : ''} ${text == 10 ? 'bg-[#77777798]' : ''} ${text == 9 ? 'bg-[#1a1c96]' : ''} ${text == 8 ? 'bg-[#000000]' : ''} ${text == 7 ? 'bg-[#7c1646]' : ''} ${text == 6 ? 'bg-[#dd7412]' : ''} ${text == 5 ? 'bg-[#ab2af5]' : ''} ${text == 4 ? 'bg-[#f52ac2]' : ''} ${text == 3 ? 'bg-[#3963f0b2]' : ''} ${text == 2 ? 'bg-[#2af5d3]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+                                {text == 11 ? 'Người Dùng' : ''} {text == 10 ? 'Nhân Viên Thử Việc' : ''} {text == 9 ? 'Nhân Viên Bảo Vệ' : ''}
+                                {text == 8 ? 'Nhân Viên Kho' : ''}{text == 7 ? 'Nhân Viên Hỗ Trợ' : ''} {text == 6 ? 'Nhân Viên Pháp Lý' : ''}
+                                {text == 5 ? 'Nhân Viên Kế Toán' : ''} {text == 4 ? 'Nhân Viên Tiếp Thị' : ''} {text == 3 ? 'Nhân Viên IT' : ''}
+                                {text == 2 ? 'Nhân Viên Bán Hàng' : ''} {text == 1 ? 'Nhân Viên Quản Lí' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
                             </div>
                         ),
                     }
@@ -131,9 +215,9 @@ function AdminStaff() {
                         dataIndex: staff,
                         key: staff,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        render: (text: any) => (
+                        render: (src: any) => (
                             <div className="flex-1 flex items-center gap-3">
-                                {text == 4 ? 'Đồng' : ''} {text == 3 ? 'Bạc' : ''} {text == 2 ? 'Vàng' : ''} {text == 1 ? 'Kim Cương' : ''} {text == 0 ? 'Tối Thượng' : ''}
+                                {Level(src)}
                             </div>
                         ),
                     }
@@ -148,11 +232,11 @@ function AdminStaff() {
                             <div className='flex text-[24px] box-border gap-1 items-center'>
                                 <BiSolidEdit
                                     className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-                                    onClick={() => handleEdit(record.user_id)}
+                                    onClick={() => handleEdit(record.user_id, record.user_role, RoleStaff, IdStaff)}
                                 />
                                 <CiBookmarkRemove
                                     className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-                                    onClick={() => handleDelete(record.user_id)}
+                                    onClick={() => handleDelete(record.user_id, record.user_role, RoleStaff, IdStaff)}
                                 />
                             </div>
                         ),
@@ -179,9 +263,9 @@ function AdminStaff() {
         if (valueInputSearch.trim() === "") {
             setDataAllstaffs(Allstaffs);
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const filteredData = Allstaffs.filter((item: any) => {
                 const userName = item?.user_name;
                 const userEmail = item?.user_email;
@@ -204,8 +288,7 @@ function AdminStaff() {
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleEdit = (key: any) => {
+    const handleEdit = (key: number) => {
         Swal.fire({
             icon: 'info',
             text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
@@ -217,22 +300,23 @@ function AdminStaff() {
         });
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleDelete = (key: any) => {
-        Swal.fire({
+    const removeDeteleStaff = (key: number) => {
+        return Swal.fire({
             icon: 'warning',
             showDenyButton: true,
             title: `Bạn Chọn Người Dùng Có ID ${key}`,
             text: `Bạn có chắc muốn xóa ?`,
             confirmButtonText: 'Xóa',
             denyButtonText: 'Hủy',
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Đã Xóa',
-                    text: `Bạn đã Xóa ${key}`,
-                });
+                try {
+                    await AppDispatch(deleteStaffThunk(key));
+                    Swal.fire('Đã Xóa!', 'Người dùng đã được xóa thành công.', 'success');
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                    Swal.fire('Lỗi!', 'Đã có lỗi xảy ra khi xóa người dùng.', error);
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -241,6 +325,59 @@ function AdminStaff() {
                 });
             }
         });
+    }
+    const handleDelete = (key: number, key_role: number, RoleStaff: number, IdStaff: number) => {
+        if (RoleStaff == 0) {
+
+            if (key == IdStaff && key_role == RoleStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Bạn Vẫn Là Chủ',
+                    text: 'Bạn không được xóa chính bạn',
+                });
+
+
+            }
+            if (key != IdStaff && key_role == RoleStaff) {
+                console.log(key);
+
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Người Đồng Cấp',
+                    text: 'Bạn Không Được Xóa Người Đồng Cấp Với Bạn',
+                });
+            }
+            if (key != IdStaff && key_role != RoleStaff) {
+                removeDeteleStaff(key);
+            }
+        } else {
+            if (RoleStaff != key_role && key != IdStaff) {
+                checkRoleAndShowAlert(RoleStaff, key_role)
+            }
+            if (RoleStaff == key_role && key == IdStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Bạn Không Được Xóa Chính Bạn',
+                });
+            }
+            if (RoleStaff == key_role && key != IdStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Người Đồng Cấp',
+                    text: 'Bạn Không Được Xóa Người Đồng Cấp Với Bạn',
+                });
+            }
+
+
+        }
+
+
+
+        // } else {
+
+
+        // }
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSelectChange = (selectedRowKeys: any) => {
@@ -310,11 +447,12 @@ function AdminStaff() {
                 <div className='flex items-center justify-between box-border p-[24px]'>
                     <span className='text-[30px] font-medium text-[#ffd700]'>Nhân Viên</span>
                     <div className='flex gap-3'>
-                        <Button className='p-10'>
-                            <IoCloudDownloadOutline className='text-[18px]' />
-                            Tải về PDF
-                        </Button>
+
+                        {/* <Button className='p-10'>
+                            
+                        </Button> */}
                         <Link to={`/admin/quản-lí-nhân-viên/tạo-nhân-viên-mới`}>
+
                             <Button className='p-10' type="primary">
                                 <AiOutlineUserAdd className='text-[18px]' />
                                 Thêm Người Mới
@@ -362,8 +500,9 @@ function AdminStaff() {
                     </Popover>
                 </div>
 
-                <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+                <div className='p-[24px] relative w-full overflow-x-auto h-[1000px] flex flex-col'>
                     <Table
+
                         className='flex-1'
                         rowSelection={{
                             type: 'checkbox',
@@ -371,7 +510,7 @@ function AdminStaff() {
                         }}
                         columns={columns || []}
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 2) : []}
+                        dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 11).reverse() : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
                     />

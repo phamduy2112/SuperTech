@@ -37,6 +37,11 @@ export default class comment_product extends Model {
         model: 'user',
         key: 'user_id'
       }
+    },
+    isPurchase: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     sequelize,

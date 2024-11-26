@@ -5,7 +5,7 @@ import initModels from "../models/init-models.js";
 let models = initModels(sequelize); 
 let productStorage = models.product_storage; 
 
-const getProduct_colors= async (req, res) => {
+const getProduct_storage= async (req, res) => {
     try {
         let data = await productStorage.findAll();
         responseSend(res, data, "Thành công!", 200);
@@ -14,7 +14,7 @@ const getProduct_colors= async (req, res) => {
     }
 };
 
-const getProduct_colorsById = async (req, res) => {
+const getProduct_storageById = async (req, res) => {
     try {
         let data = await productStorage.findByPk(req.params.id);
         if (data) {
@@ -27,7 +27,7 @@ const getProduct_colorsById = async (req, res) => {
     }
 };
 
-const createProduct_colors = async (req, res) => {
+const createProduct_storage = async (req, res) => {
     try {
         let newProduct = await productStorage.create(req.body);
         responseSend(res, newProduct, "Thêm Thành công!", 201);
@@ -36,7 +36,7 @@ const createProduct_colors = async (req, res) => {
     }
 };
 
-const updateProduct_colors = async (req, res) => {
+const updateProduct_storage = async (req, res) => {
     try {
         let updated = await productStorage.update(req.body, {
             where: { color_id: req.params.id }
@@ -51,7 +51,7 @@ const updateProduct_colors = async (req, res) => {
     }
 };
 
-const deleteProduct_colors = async (req, res) => {
+const deleteProduct_storage = async (req, res) => {
     try {
         let deleted = await productStorage.destroy({
             where: { color_id: req.params.id }
@@ -67,9 +67,9 @@ const deleteProduct_colors = async (req, res) => {
 };
 
 export {
-    getProduct_colors,
-    getProduct_colorsById,
-    createProduct_colors,
-    updateProduct_colors,
-    deleteProduct_colors
+    getProduct_storage,
+    getProduct_storageById,
+    createProduct_storage,
+    updateProduct_storage,
+    deleteProduct_storage
 };

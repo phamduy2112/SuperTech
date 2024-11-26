@@ -15,7 +15,7 @@ export default class banner extends Model {
       allowNull: true
     },
     status: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {

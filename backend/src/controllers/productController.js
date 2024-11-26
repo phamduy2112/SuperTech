@@ -1,34 +1,34 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-import categories from "../models/categories.js";
 import { Op } from "sequelize";
 import e from "express";
 import { uploadFields, uploadImages } from "./uploadController.js";
-
+import cloudinary from '../config/cloudinaryConfig.js';
 let models = initModels(sequelize); 
 let Products = models.products; 
 
 const getProducts = async (req, res) => {
     try {
         let data = await Products.findAll( 
+        {
+            include: [
             {
-                   include: [
-                {
                 model: models.comment_product,
-                    as:'comment_products',
-                    include: [
+                as:'comment_products',
+                include: [
                         {
                             model: models.user,
-                            as: 'user'
+                            as: 'user',
+                            attributes: { exclude: ['user_password', 'user_phone'] }
                         }
-                    ]
+                ]
             },
-                {
+            {
                 model: models.infor_product,
                     as:'infor_product_infor_product'
             },
-                {
+            {
                 model: models.product_colors,
                     as:'product_colors',
                     include:[
@@ -98,6 +98,7 @@ const getProductsByCategoryId = async (req, res) => {
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra khi truy vấn sản phẩm", 500);
+        console.log(error);
     }
 };
 
@@ -224,12 +225,11 @@ const createProduct = async (req, res) => {
             infor_cpu,
             infor_ram,
             infor_more,
-            listProductColor = [], // Default to empty array if undefined
+            listProductColor = [],
         } = req.body;
 
         let date = new Date();
-
-        // Create `infor_product` entry
+        
         let newinforproduct = await models.infor_product.create({
             infor_screen,
             infor_system,
@@ -246,8 +246,6 @@ const createProduct = async (req, res) => {
             product_discount,
             product_hot,
             product_date: date,
-            product_quantity,
-            image_id,
             infor_product: newinforproduct.infor_product,
             category_id,
         });
@@ -262,7 +260,6 @@ const createProduct = async (req, res) => {
                     color: order.color,
                     quality: order.quality,
                     product_id: newProduct.product_id,
-                    image_id:order.image_id
                 });
 
                 // Check if `productStorage` exists within `order` and create `product_storage` entries
@@ -298,9 +295,7 @@ const updateProduct = async (req, res) => {
             product_star,
             product_discount,
             product_hot,
-            product_quantity,
         } = req.body;
-        const image_id = req.id;
         const infor_product = req.id;
         const category_id = req.id;
         const product_date = new Date();
@@ -311,16 +306,11 @@ const updateProduct = async (req, res) => {
                 success: false
             });
         }
-       
-
         product.product_name = product_name;
         product.product_price = product_price;
         product.product_star = product_star;
         product.product_discount = product_discount;
         product.product_hot = product_hot;
-        product.product_date = product_date;
-        product.product_quantity = product_quantity;
-        product.image_id = image_id;
         product.infor_product = infor_product;
         product.category_id = category_id;
 
@@ -367,11 +357,11 @@ const deleteProduct = async (req, res) => {
             responseSend(res, "", "Không tìm thấy sản phẩm hoặc thông tin sản phẩm!", 404);
         }
     } catch (error) {
+        console.error("Lỗi Khi Xóa Sản Phẩm - KIỂU LỖI:", error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
         console.log(error);
     }
 };
-
 
 export {
     getProducts,

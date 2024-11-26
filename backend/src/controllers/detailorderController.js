@@ -1,6 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import { col, fn, literal, Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let detailorder = models.detail_order; 
@@ -71,29 +72,29 @@ const createdetailorder = async (req, res) => {
         const newOrders = await Promise.all(detailOrders.map(async (order) => {
             // Kiểm tra số lượng tồn kho trước khi tạo detailOrder
             const productRecord = await models.products.findOne({ where: { product_id: order.product_id } });
-            if (!productRecord) {
-                throw new Error(`Sản phẩm với ID: ${order.product_id} không tồn tại`);
-            }
+            // if (!productRecord) {
+            //     throw new Error(`Sản phẩm với ID: ${order.product_id} không tồn tại`);
+            // }
 
-            if (productRecord.product_quantity < order.detail_order_quality) {
-                throw new Error(`Số lượng trong kho không đủ cho sản phẩm với ID: ${order.product_id}`);
-            }
+            // if (productRecord.product_quantity < order.detail_order_quality) {
+            //     throw new Error(`Số lượng trong kho không đủ cho sản phẩm với ID: ${order.product_id}`);
+            // }
 
             // Tạo detailOrder
             const createdOrder = await detailorder.create(order);
 
             // Cập nhật số lượng sản phẩm sau khi tạo đơn hàng thành công
 
-            await models.products.update(
-                {
-                    product_quantity: sequelize.literal(`product_quantity - ${order.detail_order_quality}`)
-                },
-                {
-                    where: {
-                        product_id: order.product_id
-                    }
-                }
-            );
+            // await models.products.update(
+            //     {
+            //         product_quantity: sequelize.literal(`product_quantity - ${order.detail_order_quality}`)
+            //     },
+            //     {
+            //         where: {
+            //             product_id: order.product_id
+            //         }
+            //     }
+            // );
 
             return createdOrder;
         }));
@@ -140,5 +141,8 @@ export {
     getDetailOrderById,
     createdetailorder,
     updatedetailorder,
-    deletedetailorder
+    deletedetailorder,
+    // getWeeklySales,
+    // getUserOrderCounts,
+    // getTop5BestSellingProducts
 };

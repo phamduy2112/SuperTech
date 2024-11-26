@@ -1,7 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-
+import multer from 'multer';
 let models = initModels(sequelize); 
 let inforproduct = models.infor_product; 
 
@@ -16,7 +16,6 @@ const getinforproduct = async (req, res) => {
 
 const getinforproductById = async (req, res) => {
     try {
-       
         let data = await inforproduct.findByPk(req.params.id);
         if (data) {
             responseSend(res, data, "Thành công!", 200);
@@ -35,12 +34,25 @@ const createinforproduct = async (req, res) => {
             infor_system,
             infor_cpu,
             infor_ram,
+            infor_compan,
+            infor_rom,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
             infor_more
         }=req.body
-        let newinforproduct = await inforproduct.create({  infor_screen,
+        let newinforproduct = await inforproduct.create({
+            infor_screen,
             infor_system,
             infor_cpu,
             infor_ram,
+            infor_compan,
+            infor_rom,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
             infor_more});
         responseSend(res, newinforproduct, "Thêm Thành công!", 201);
     } catch (error) {

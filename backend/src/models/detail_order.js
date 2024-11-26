@@ -37,6 +37,14 @@ export default class detail_order extends Model {
         model: 'products',
         key: 'product_id'
       }
+    },
+    product_color: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    product_storage: {
+      type: DataTypes.STRING(100),
+      allowNull: true
     }
   }, {
     sequelize,

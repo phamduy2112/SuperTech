@@ -2,7 +2,7 @@ import cloudinary from '../config/cloudinaryConfig.js';
 import multer from 'multer';
 import ImageModel from '../models/user.js';
 import path from 'path';
-
+import { responseSend } from "../config/response.js";
 const storage = multer.memoryStorage();
 const upload = multer({ storage }).single('user_image');
 
@@ -48,4 +48,43 @@ const uploadimagesUser = async (req, res) => {
   });
 };
 
-export { uploadimagesUser };
+const deleteUser = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await ImageModel.findOne({ where: { user_id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    if (user.user_image) {
+      const imageName = user.user_image;
+      await cloudinary.uploader.destroy(`User/${imageName}`, function(error,result) {
+        console.log(result, error);
+      });
+    }
+
+    await ImageModel.destroy({ where: { user_id: userId } });
+    responseSend(res, "", "Xóa người dùng thành công!", 200);
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    responseSend(res, "", "Có lỗi xảy ra khi xóa người dùng!", 500);
+  }
+};
+const deleteImageCloud = async (req, res) => {
+  const imageId = req.params.imageId; 
+  try {
+    await cloudinary.uploader.destroy(`User/${imageId}`, function(error, result) {
+      if (error) {
+        console.error('Error deleting image:', error);
+        return res.status(500).json({ error: 'Có lỗi xảy ra khi xóa hình ảnh!' });
+      }
+      console.log('Delete result:', result);
+      responseSend(res, "", "Xóa hình ảnh thành công!", 200);
+    });
+  } catch (error) {
+    console.error('Error handling the request:', error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
+  }
+};
+
+export { uploadimagesUser, deleteUser, deleteImageCloud };

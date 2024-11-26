@@ -12,10 +12,5 @@ categoriesRouter.get('/categories/:id', getcategoriesById);
 categoriesRouter.post('/categories-create',middleToken, createcategories);
 categoriesRouter.put('/categories-edit/:id',middleToken, updatecategories);
 categoriesRouter.delete('/categories-delete/:id',middleToken, deletecategories);
-//khu vực devTri
-categoriesRouter.get('/categoriesId/:id', getcategoriesById);
-//khu vực devTri
-
-
 
 export default categoriesRouter;

@@ -86,7 +86,6 @@ const applyDiscount = async (req, res) => {
     try {
         const { user_id, discount_code } = req.body;
 
-        // Kiểm tra xem người dùng đã từng sử dụng mã giảm giá chưa
         const usedDiscount = await sequelize.models.user_discounts.findOne({
             where: {
                 user_id,

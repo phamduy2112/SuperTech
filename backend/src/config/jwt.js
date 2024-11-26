@@ -23,9 +23,8 @@ export const decodeToken=(token)=>{
 }
 export const middleToken=(req,res,next)=>{
     let {token}=req.headers;
-    
     const decode=decodeToken(token);
-
+    console.log(token);
     
     if (!decode) {
         return res.status(401).send('Token không hợp lệ hoặc đã hết hạn');
@@ -33,7 +32,6 @@ export const middleToken=(req,res,next)=>{
 
     req.id=decode.data.user_id;
     let error=verifyToken(token);
-    
     if(error) res.status(401).send(error.name);
     else next();
 }
