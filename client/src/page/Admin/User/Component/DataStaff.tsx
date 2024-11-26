@@ -243,3 +243,93 @@ export const checkRoleAndShowAlert = (RoleStaff: number, key_role: number) => {
       });
   }
 }
+
+
+
+export const CheckUpdateUser = (RoleStaff: number, key_role: number) => {
+  const Textrole = DataRole.findIndex(role => role.value == RoleStaff);
+
+
+
+
+  switch (key_role) {
+    case 0:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: `Bạn Không Có Quyền Sửa Chủ, Chỉ Tài Khoản Chủ Mới Được Sửa`,
+      });
+    case 1:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Quản Lí',
+      });
+    case 2:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Bán Hàng',
+      });
+    case 3:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên IT',
+      });
+    case 4:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Tiếp Thị',
+      });
+    case 5:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Kế Toán',
+      });
+    case 6:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Pháp Lý',
+      });
+    case 7:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Hỗ Trợ',
+      });
+    case 8:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Kho',
+      });
+    case 9:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Bảo Vệ',
+      });
+    case 10:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Thử Việc',
+      });
+    case 11:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Người Dùng Thường',
+      });
+    default:
+      return Swal.fire({
+        icon: 'error',
+        title: 'Không Xác Định Quyền',
+        text: 'Không có quyền Sửa với vai trò này',
+      });
+  }
+}

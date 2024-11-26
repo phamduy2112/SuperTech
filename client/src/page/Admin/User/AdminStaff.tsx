@@ -9,9 +9,9 @@ import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
-import { checkRoleAndShowAlert, Level } from './Component/DataStaff';
+import { checkRoleAndShowAlert, CheckUpdateUser, checkUpdateUser, Level } from './Component/DataStaff';
 import { jwtDecode } from "jwt-decode";
-import { IMG_USER_BACKEND } from '../../../constants/index';
+import { IMG_USER_BACKEND } from "../../../constants/index";
 
 interface tokenDataClient {
     user_id: number,
@@ -288,16 +288,64 @@ function AdminStaff() {
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
 
-    const handleEdit = (key: number) => {
-        Swal.fire({
-            icon: 'info',
-            text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
-            confirmButtonText: 'OK',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+    const handleEdit = (key: number, key_role: number, RoleStaff: number, IdStaff: number) => {
+        if (RoleStaff == 0) {
+            if (key == IdStaff && key_role == RoleStaff) {
+                Swal.fire({
+                    icon: 'info',
+                    text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+                    }
+                });
+
             }
-        });
+            if (key != IdStaff && key_role == RoleStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Người Đồng Cấp',
+                    text: 'Bạn Không Được Sửa Người Đồng Cấp Với Bạn',
+                });
+            }
+            if (key != IdStaff && key_role != RoleStaff) {
+                Swal.fire({
+                    icon: 'info',
+                    text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+                    }
+                });
+            }
+        } else {
+            if (RoleStaff != key_role && key != IdStaff) {
+                CheckUpdateUser(RoleStaff, key_role)
+            }
+            if (RoleStaff == key_role && key == IdStaff) {
+                Swal.fire({
+                    icon: 'info',
+                    text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+                    }
+                });
+            }
+            if (RoleStaff == key_role && key != IdStaff) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Người Đồng Cấp',
+                    text: 'Bạn Không Được Sửa Người Đồng Cấp Với Bạn',
+                });
+            }
+
+
+        }
+
     };
 
     const removeDeteleStaff = (key: number) => {
@@ -371,13 +419,6 @@ function AdminStaff() {
 
 
         }
-
-
-
-        // } else {
-
-
-        // }
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSelectChange = (selectedRowKeys: any) => {

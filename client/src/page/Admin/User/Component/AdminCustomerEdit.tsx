@@ -14,18 +14,19 @@ import Swal from 'sweetalert2';
 import { useParams } from 'react-router-dom';
 import { IMG_USER_BACKEND } from '../../../../constants';
 import { IoMdCloudUpload } from 'react-icons/io';
-import { UpdateStaffThunk } from '../../../../redux/user/user.slice';
+import { DeleteImgCloudThunk, UpdateStaffThunk } from '../../../../redux/user/user.slice';
 
 
 
 function AdminCustomerEdit() {
     const AppDispatch = useAppDispatch();
-    const token = localStorage.getItem('token');
+    const token = useAppSelector((state) => state.user.token);
+
     const staffsData = useAppSelector((state) => state.user.Alluser);
     const [staff, setStaff] = useState<StaffInterface>({});
     const { id } = useParams();
     const userId = Number(id);
-    console.log(IMG_USER_BACKEND);
+
 
 
 
@@ -323,13 +324,33 @@ function AdminCustomerEdit() {
                                 return isImage && isSmallerThan10MB;
                             }}
                             name="user_image"
-                            onRemove={() => {
-                                if (fileList.length === 1) {
-                                    setstaffData(prevState => ({
-                                        ...prevState,
-                                        user_image: staff.user_image,
-                                    }));
+                            onRemove={async () => {
+                                try {
+                                    const data = {
+                                        token: token,
+                                        image: staffData.user_image
+                                    }
+                                    const callRemove = await AppDispatch(DeleteImgCloudThunk(data))
+
+                                    if (callRemove.payload.statusCode === 200) {
+                                        Swal.fire({
+                                            title: 'Đã bỏ ảnh tải lên',
+                                            icon: 'success',
+                                            confirmButtonColor: '#008000',
+                                        })
+                                        if (fileList.length === 1) {
+                                            setstaffData(prevState => ({
+                                                ...prevState,
+                                                user_image: staff.user_image,
+                                            }));
+                                        }
+                                    }
+
+                                } catch (error) {
+                                    console.log(error);
+
                                 }
+
                             }}
                         >
                             <div

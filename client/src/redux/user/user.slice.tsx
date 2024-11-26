@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCatelogry } from "../../service/catelogry/catelogry.service";
-import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser } from '../../service/user/user.service';
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, DeleteStaffSend, UpdateStaff, createStaff, DeleteImgCloud } from '../../service/user/user.service';
+import { DataStaffInterface, UpdateStaffInterface } from "../../page/Admin/User/Component/DataStaff";
+import Swal from "sweetalert2";
 
 export const getAllUserThunk = createAsyncThunk(
   "getAllUserThunk",
@@ -14,6 +16,83 @@ export const getAllUserThunk = createAsyncThunk(
     }
   },
 )
+
+export const createStaffThunk = createAsyncThunk(
+  "createStaffThunk",
+  async (DataStaff: DataStaffInterface) => {
+    try {
+      const resp = await createStaff(DataStaff);
+      if (resp.data.statusCode === 200) {
+        return resp.data.content;
+      } else {
+        Swal.fire({
+          title: `Thất bại lỗi ${resp.data.statusCode}`,
+          text: `${resp.data.message}`,
+          icon: 'error',
+          showCancelButton: true,
+          cancelButtonText: `Thử lại`,
+          cancelButtonColor: "#d33",
+          showConfirmButton: false
+        })
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const DeleteImgCloudThunk = createAsyncThunk(
+  "DeleteImgCloudThunk",
+  async (data:any) => {
+    try {
+      const resp = await DeleteImgCloud(data);
+      return resp.data;
+    } catch (e) {
+      console.log(e);
+
+    }
+  },
+)
+
+export const UpdateStaffThunk = createAsyncThunk(
+  "UpdateStaffThunk", async (UpdateStaffSend: UpdateStaffInterface) => {
+
+    try {
+      const resp = await UpdateStaff(UpdateStaffSend);
+      if (resp.data.statusCode === 200) {
+        return resp.data.content;
+      } else {
+        Swal.fire({
+          title: `Thất bại lỗi ${resp.data.statusCode}`,
+          text: `${resp.data.message}`,
+          icon: 'error',
+          showCancelButton: true,
+          cancelButtonText: `Thử lại`,
+          cancelButtonColor: "#d33",
+          showConfirmButton: false
+        })
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
+
+export const deleteStaffThunk = createAsyncThunk(
+  "deleteStaffThunk",
+  async (id: number) => {
+    try {
+      const resp = await DeleteStaffSend(id);
+      return resp.data.content;
+
+    } catch (e) {
+      console.log(e);
+
+    }
+  },
+);
 
 
 export const getUserThunk = createAsyncThunk(
@@ -41,11 +120,11 @@ export const updateUserDetailThunk = createAsyncThunk(
 );
 export const verifyPasswordDetail = createAsyncThunk(
   "verifyPasswordThunk",
-  async (payload:any) => {
+  async (payload: any) => {
     try {
       const resp = await verifyPassword(payload);
       console.log(resp.data);
-      
+
       return resp.data;
     } catch (e) {
       console.log(e);
@@ -54,7 +133,7 @@ export const verifyPasswordDetail = createAsyncThunk(
 );
 export const changePasswordDetail = createAsyncThunk(
   "changePasswordDetail",
-  async (payload:any) => {
+  async (payload: any) => {
     try {
       const resp = await changePassword(payload);
       return resp.data;
@@ -81,9 +160,9 @@ const initialState = {
   Alluser: {},
   user: {},
   token: null,
-  login:false,
+  login: false,
   thongBao: "",
-  imgUser: ""
+  imgUserAdmin: ""
 };
 
 const UserSlice = createSlice({
@@ -104,10 +183,28 @@ const UserSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+
+    builder
+      .addCase(DeleteImgCloudThunk.fulfilled, (state, { payload }) => {
+        state.imgUserAdmin = payload;
+      })
     builder
       .addCase(getAllUserThunk.fulfilled, (state, { payload }) => {
         console.log('Payload:', payload);
         state.Alluser = payload;
+      })
+    builder
+      .addCase(deleteStaffThunk.fulfilled, (state, { payload }) => {
+        state.Alluser = payload;
+      })
+
+    builder
+      .addCase(createStaffThunk.fulfilled, (state, { payload }) => {
+        state.Alluser = payload;
+      })
+    builder
+      .addCase(UpdateStaffThunk.fulfilled, (state, { payload }) => {
+        state.token = payload.token;
       })
     builder
       .addCase(getUserThunk.fulfilled, (state, { payload }) => {
@@ -133,6 +230,6 @@ const UserSlice = createSlice({
   },
 });
 
-export const { setAllUser, setUserDetail, setToken,setLogin } = UserSlice.actions;
+export const { setAllUser, setUserDetail, setToken, setLogin } = UserSlice.actions;
 
 export const userReducer = UserSlice.reducer;

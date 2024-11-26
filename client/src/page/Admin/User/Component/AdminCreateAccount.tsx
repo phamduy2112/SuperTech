@@ -10,7 +10,7 @@ import './AdminCreateAccout.css'
 import { IoMdCloudUpload } from 'react-icons/io';
 import { datanganhang } from './Databank';
 import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface } from './DataStaff';
-import { createStaffThunk } from '../../../../redux/user/user.slice';
+import { createStaffThunk, DeleteImgCloudThunk } from '../../../../redux/user/user.slice';
 import { useAppDispatch } from '../../../../redux/hooks';
 import Swal from 'sweetalert2';
 
@@ -325,13 +325,33 @@ function AdminCreateAccount() {
                                 return isImage && isSmallerThan10MB;
                             }}
                             name="user_image"
-                            onRemove={() => {
-                                if (fileList.length === 1) {
-                                    setstaffData(prevState => ({
-                                        ...prevState,
-                                        user_image: '',
-                                    }));
+                            onRemove={async () => {
+                                try {
+                                    const data = {
+                                        token: token,
+                                        image: staffData.user_image
+                                    }
+                                    const callRemove = await AppDispatch(DeleteImgCloudThunk(data))
+
+                                    if (callRemove.payload.statusCode === 200) {
+                                        Swal.fire({
+                                            title: 'Đã bỏ ảnh tải lên',
+                                            icon: 'success',
+                                            confirmButtonColor: '#008000',
+                                        })
+                                        if (fileList.length === 1) {
+                                            setstaffData(prevState => ({
+                                                ...prevState,
+                                                user_image: '',
+                                            }));
+                                        }
+                                    }
+
+                                } catch (error) {
+                                    console.log(error);
+
                                 }
+
                             }}
 
                         >
