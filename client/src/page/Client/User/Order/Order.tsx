@@ -8,16 +8,16 @@ import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../re
 import { formatCurrencyVND, truncateText } from '../../../../utils';
 import CancelOrderModal from './component/ModalCancer';
 function Order() {
-
   const colorText = [
-    { color: '#DB363B', text: 'Đang chờ duyệt' },     
-    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, 
-    { color: '#2277C6', text: 'Đang giao hàng' },    
-    { color: '#2101B0', text: 'Đã huỷ hàng' },        
-    { color: '#04C621', text: 'Thành công' },        
-    { color: '#000000', text: 'Không nhận hàng' },    
-
+    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
+  { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
+  { status: 2, color: "#ff9100", text: "Đã chuẩn bị hàng" }, 
+  { status: 3, color: "#008000", text: "Đang giao hàng" }, 
+  { status: 4, color: "#800080", text: "Thành công" }, 
+  { status: 5, color: "#111111", text: "Không nhận hàng" }, 
+  { status: 6, color: "#0000FF", text: "Hủy hàng" },        // Màu tím
   ];
+  
   const [orderStatus, setOrderStatus] = useState(0); // Default status is 0
 
   const [data,setData]=useState([]);
@@ -35,6 +35,7 @@ function Order() {
     dispatch(changeStatusOrderThunk(dataOrder))
     
   }
+  
   const columns = [
     {
       title: 'Đơn hàng',
@@ -162,9 +163,19 @@ function Order() {
             setOrderStatus(2); // Update the order status
           }}
         className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
-          <div className={`bg-[#2277C6] w-6 h-6 rounded-full`}></div>
-          <div className={`text-[#2277C6] font-semibold`}>
-          Đang giao hàng
+          <div className={`bg-[#ff9100] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#ff9100] font-semibold`}>
+          Đã chuẩn bị hàng
+          </div>
+        </button>
+        <button 
+        onClick={() => {
+            setOrderStatus(3); // Update the order status
+          }}
+        className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
+          <div className={`bg-[#0000FF] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#0000FF] font-semibold`}>
+          Đã huỷ hàng
           </div>
         </button>
        <button 
@@ -172,21 +183,23 @@ function Order() {
             setOrderStatus(3); // Update the order status
           }}
         className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
-          <div className={`bg-[#2101B0] w-6 h-6 rounded-full`}></div>
-          <div className={`text-[#2101B0] font-semibold`}>
-          Đã huỷ hàng
+          <div className={`bg-[#008000] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#008000] font-semibold`}>
+          Đang giao hàng
           </div>
         </button>
-       <button 
+        <button 
         onClick={() => {
             setOrderStatus(4); // Update the order status
           }}
         className='flex text-[1.5rem] items-center gap-2'> {/* Align items vertically */}
-          <div className={`bg-[#04C621] w-6 h-6 rounded-full`}></div>
-          <div className={`text-[#04C621] font-semibold`}>
+          <div className={`bg-[#800080] w-6 h-6 rounded-full`}></div>
+          <div className={`text-[#800080] font-semibold`}>
           Thành công
           </div>
         </button>
+       
+      
        <button 
         onClick={() => {
             setOrderStatus(5); // Update the order status
@@ -197,6 +210,7 @@ function Order() {
           Không nhận hàng
           </div>
         </button>
+   
     </div>
        
        

@@ -43,7 +43,7 @@ export const createInforProduct=(dataCreate:any)=>{
   })
 }
 export const deleteProduct=(id:number)=>{
-  return axiosWithAuth(`/detele-products/${id}`,{
+  return axiosWithAuth(`/products-delete/${id}`,{
     method:"delete",
   
   })
@@ -52,6 +52,12 @@ export const getImageProductByImage=(id:number)=>{
   return axiosWithAuth(`/image-product/${id}`,{
     method:"get",
   
+  })
+}
+export const putProductById=(data:any,id:number)=>{
+  return axiosWithAuth(`/products-edit/${id}`,{
+    method:"put",
+    data
   })
 }
 

@@ -14,40 +14,16 @@ import ButtonOrder from './Componnent/ButtonOrder'
 
 function AdminOrderDetail() {
   const { id } = useParams();
-  const timeline = [
-    {
-      children: 'Đang chuẩn bị hàng',
-      color: 'blue',
-
-    },
-    {
-      children: 'Hủy hàng',
-      color: 'red',
-
-    },
-    {
-      children: 'Đang chuẩn bị hàng',
-      color: 'blue',
-
-    },
-    {
-      children: 'Đang giao hàng 15-10-2024',
-      color: 'rgb(255 208 0)',
-    },
-    {
-      dot: <div style={{ fontSize: '16px' }} />,
-      children: `Nhận hàng trước ngày 25-10-2024`,
-    },
-    {
-      color: 'green',
-      children: 'Đã giao hàng 24-10-2024',
-    },
-    {
-      color: 'orange',
-      children: 'Đã trả hàng 26-10-2024',
-    },
-
+  const colorText = [
+    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
+    { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
+    { status: 2, color: "#FFFF00", text: "Đã chuẩn bị hàng" }, 
+    { status: 3, color: "#008000", text: "Đang giao hàng" }, 
+    { status: 4, color: "#800080", text: "Thành công" }, 
+    { status: 5, color: "#000000", text: "Không nhận hàng" }, 
+    { status: 6, color: "#000000", text: "Hủy hàng" }, 
   ];
+  
   
   const [order,setOrder]=useState({})
 const [listProduct,setListProduct]=useState([]);
@@ -182,8 +158,15 @@ console.log(detailOrder);
         <p className="">Ngày đặt: {order.order_date}</p>
         <p className="">Nhân viên tư vấn: Nguyễn Tấn Thịnh - thinhntan@gmail.com</p>
       </div>
-      <span className="bg-green-500 px-4 py-2 rounded-full text-[1.5rem]">Đã giao</span>
-    </header>
+      <span
+    className="px-4 py-2 rounded-full text-[1.5rem]"
+    style={{
+      backgroundColor: colorText.find(c => c.status === order?.order_status)?.color || '#ccc',
+      color: '#fff',
+    }}
+  >
+    {colorText.find(c => c.status === order?.order_status)?.text || 'Không xác định'}
+  </span>    </header>
 
     {/* Customer & Receiver Information */}
     <section className="grid grid-cols-2 gap-4 mt-4">

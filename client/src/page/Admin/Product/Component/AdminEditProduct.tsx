@@ -4,14 +4,15 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../../redux/hooks';
-import { getProductByIdThunk } from '../../../../redux/product/product.slice';
+import { getProductByIdThunk, putInforProductAdminThunk } from '../../../../redux/product/product.slice';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import ModalAdminProduct from './ModalAdminProduct';
 import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
+import toast from 'react-hot-toast';
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
@@ -26,7 +27,7 @@ const productDetail=useAppSelector((state)=>state.product.productDetail)
 console.log(productDetail);
 const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
 
-const formattedCategories = listCatelogry.map(category => ({
+const formattedCategories = listCatelogry?.map(category => ({
   value: category.category_id,   // Make sure category.id is available
   label: category.category_name, // Make sure category.name is available
   category_dad:category.category_dad
@@ -36,7 +37,7 @@ useEffect(()=>{
     dispatch(getProductByIdThunk(numericId));
 
   }
-  dispatch(getCatelogryThunk());
+  dispatch(getCatelogryThunk(""));
 
 },[numericId,dispatch])
  
@@ -72,7 +73,7 @@ useEffect(()=>{
     },
 
   ]
- 
+  const navigate=useNavigate();
   const [value, setValue] = useState('')
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -97,19 +98,24 @@ useEffect(()=>{
  
 
  // Initial values của form
- const initialValues = {
-  category: '',
-  price: '',
-  discount:0,
-  product_name:productDetail.product_name,
-  hot:0,
-  quantity:0,
-  infor_screen:"",
-  infor_system:"",
-  infor_cpu:"",
-  infor_ram:"",
-  moTa:"",
-};
+const [initialValues,setInitialValues]=useState({});
+useEffect(() => {
+  if (productDetail) {
+    setInitialValues({
+      category: productDetail.category_id || '',
+      price: productDetail.product_price || '',
+      discount: productDetail.product_discount || 0,
+      product_name: productDetail.product_name || '',
+      hot: productDetail.product_hot || 0,
+      quantity: productDetail.product_quantity || 0,
+      infor_screen: productDetail.infor_screen || '',
+      infor_system: productDetail.infor_system || '',
+      infor_cpu: productDetail.infor_cpu || '',
+      infor_ram: productDetail.infor_ram || '',
+      moTa: productDetail.infor_more || '',
+    });
+  }
+}, [productDetail]);
 const validationSchema = Yup.object({
   // category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
   // price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
@@ -121,6 +127,7 @@ const validationSchema = Yup.object({
       <div className='bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col '>
         <span className='text-[20px] font-semibold'>Sửa Sản Phẩm {id} </span>
         <Formik
+        enableReinitialize
   initialValues={initialValues}
   validationSchema={validationSchema}
   onSubmit={(values) => {
@@ -139,12 +146,14 @@ const dataInforProduct={
   product_quantity:values.quantity,
   product_discount:values.discount,
   category_id:values.category,
-
+  product_id:numericId
  
-  // listProductStorage
+  
   
 }
-
+dispatch(putInforProductAdminThunk(dataInforProduct))
+navigate("/admin/quản-lí-sản-phẩm")
+toast.success("Sửa sản phẩm thành công")
 
 
 

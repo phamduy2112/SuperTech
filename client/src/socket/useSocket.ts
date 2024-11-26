@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client'; // Import type Socket nếu cần
 import { setSocket } from '../redux/socket/socker.slice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { TpayloadUser } from '../service/user/user.type';
 
 const UseSocket = () => {
   const { user } = useAppSelector((store) => store.user); // Lấy user từ Redux

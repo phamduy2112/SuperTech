@@ -13,14 +13,15 @@ function OrderDetail() {
   const { id } = useParams(); // Lấy id từ URL
   const idOrder=Number(id)
   const colorText = [
-    { color: '#DB363B', text: 'Đang chờ duyệt' },     // 0
-    { color: '#FFCC00', text: 'Đang chuẩn bị hàng' }, // 1
-    { color: '#2277C6', text: 'Đang giao hàng' },     // 2
-    { color: '#2101B0', text: 'Đã huỷ hàng' },        // 3
-    { color: '#04C621', text: 'Thành công' },         // 4
-    { color: '#000000', text: 'Không nhận hàng' },    // 5
-
+    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
+  { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
+  { status: 2, color: "#ff9100", text: "Đã chuẩn bị hàng" }, 
+  { status: 3, color: "#008000", text: "Đang giao hàng" }, 
+  { status: 4, color: "#800080", text: "Thành công" }, 
+  { status: 5, color: "#111111", text: "Không nhận hàng" }, 
+  { status: 6, color: "#0000FF", text: "Hủy hàng" },        // Màu tím
   ];
+  
   const columns = [
     {
       title: 'Sản phẩm',
@@ -147,8 +148,11 @@ useEffect(() => {
 
 
 const statusIndex = detailOrder[0]?.order?.order_status; // Giá trị để chỉ định trạng thái (ví dụ 0 là 'Đang chờ duyệt')
-const status = colorText[statusIndex];
+const currentStatus = colorText.find(item => item.status === statusIndex); // Tìm trạng thái tương ứng
 
+const statusText = currentStatus  // Lấy text của trạng thái
+
+console.log(statusText); //
 
   
 return (
@@ -163,8 +167,8 @@ return (
           </div>
           <div className='flex gap-[1rem] justify-center items-center'>
           <h3 className='text-[2rem] font-semibold border-r px-4'>Mã đơn hàng <span className='text-[#0084FF]'>#{detailOrder[0]?.order?.order_id}</span></h3>
-          <p className={`text-[1.7rem] font-semibold`}>Trạng thái vận chuyển: <span className={`text-[${status?.color}]`}>
-          {status?.text}
+          <p className={`text-[1.7rem] font-semibold`}>Trạng thái vận chuyển: <span className={`text-[${statusText?.color}]`}>
+          {statusText?.text}
 
             </span></p>
           </div>

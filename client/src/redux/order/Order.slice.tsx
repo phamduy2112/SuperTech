@@ -54,6 +54,7 @@ export const getOrderDetail = createAsyncThunk(
   async (id:number) => {      
     try {
       const resp = await getDetailOrder(id);
+
       return resp.data.content;
     } catch (e) {
       console.log(e);
@@ -63,10 +64,23 @@ export const getOrderDetail = createAsyncThunk(
 
 export const getOrderAllThunk = createAsyncThunk(
   "getOrderAllThunk",
-  async () => {      
+  async (order_status:number) => {      
     try {
       const resp = await getOrderAll();
-      return resp.data.content.reverse();
+      const result = resp.data.content;
+
+      const filteredResults = result.filter((item: any) => {
+
+        // Check if order_id starts with searchKey (convert both to string for comparison)
+        const matchesOrderStatus = order_status !== undefined ? item.order_status === order_status : true; // Match order_status if provided
+
+        return matchesOrderStatus; // Return true if both conditions match
+      });
+
+      console.log(`Filtered results based on search criteria:`, filteredResults);
+      return filteredResults.length > 0 ? filteredResults : []; // Return filtered results or an empty array if none found
+
+     
     } catch (e) {
       console.log(e);
     }

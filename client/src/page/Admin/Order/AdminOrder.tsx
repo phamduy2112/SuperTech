@@ -10,13 +10,13 @@ import { getOrderAllThunk } from '../../../redux/order/Order.slice';
 
 function AdminOrder() {
   const colorText = [
-    { status: 0, color: '#FF0000', text: 'Đang chờ duyệt' },       // Màu đỏ
-    { status: 1, color: '#FFA500', text: 'Đang chuẩn bị hàng' },  // Màu cam
-    { status: 2, color: '#FFFF00', text: 'Đã chuẩn bị hàng' },  
-    { status: 3, color: '#0000FF', text: 'Đã huỷ hàng' },         // Màu xanh dương
-    { status: 4, color: '#008000', text: 'Đang giao hàng' },      // Màu xanh lá
-    { status: 6, color: '#800080', text: 'Thành công' },          // Màu tím
-    { status: 5, color: '#000000', text: 'Không nhận hàng' },          // Màu tím
+    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
+    { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
+    { status: 2, color: "#FFFF00", text: "Đã chuẩn bị hàng" }, 
+    { status: 3, color: "#008000", text: "Đang giao hàng" }, 
+    { status: 4, color: "#800080", text: "Thành công" }, 
+    { status: 5, color: "#111111", text: "Không nhận hàng" }, 
+    { status: 6, color: "#000000", text: "Hủy hàng" }, 
   ];
   
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ function AdminOrder() {
   const dispatch=useAppDispatch();
   const getOrderAll=useAppSelector((state)=>state.listOrder.listOrder);
   useEffect(()=>{
-    dispatch(getOrderAllThunk())
+    dispatch(getOrderAllThunk(0))
   },[dispatch])
   
   // Trạng thái đang được lọc
@@ -48,18 +48,9 @@ function AdminOrder() {
 
   // Hàm lọc đơn hàng theo trạng thái
   const handleFilterByStatus = (status) => {
-    if (status === "all") {
-      setFilteredOrders(getOrderAll); // Hiển thị tất cả đơn hàng nếu chọn "Tất cả"
-    } else {
-      const filtered = getOrderAll.filter(
-        (order) =>
-          order?.order_statuses?.some(
-            (statusObj) => statusObj.order_status === status
-          )
-      );
-      setFilteredOrders(filtered); // Cập nhật các đơn hàng đã lọc
+dispatch(getOrderAllThunk(status));
     }
-  };
+  
 
   
   return (

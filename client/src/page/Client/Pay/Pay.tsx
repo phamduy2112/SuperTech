@@ -11,17 +11,40 @@ import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
 import { setOrderId } from '../../../redux/order/Order.slice';
 import toast from 'react-hot-toast';
+import { getAllCityThunk, getDistrictsCityThunk } from '../../../redux/order/City.slice';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
   const user: any = useAppSelector((state) => state.user.user);
   const listCart:any=useAppSelector((state)=>state.cart.listCart)
   const totalItem=useAppSelector((state)=>state.cart.totalItems)
-  console.log(totalItem);
-  
+  const socket = useAppSelector((state:any) => state.socket.socket); // Get socket from Redux store
+  // const orderList=useAppDispatch((state)=>state)
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
+  // useEffect(() => {
+  //   // Lắng nghe sự kiện "order_updates" từ server
+  //   socket.on("order_updates", (allUpdates) => {
+    
+
+  //     const { newOrders, updatedOrder } = allUpdates;
+
+  //     // Xử lý dữ liệu newOrders và updatedOrder
+  //     console.log("Đơn hàng mới:", newOrders);
+  //     console.log("Đơn hàng đã cập nhật:", updatedOrder);
+
+  //     // Cập nhật UI hoặc state của bạn ở đây
+      
+  //     const orderList=[post,...commentList]
+  //     // dispatch(setCommentReducer(commentListNew))
+  //   });
+
+  //   return () => {
+  //     // Đảm bảo hủy lắng nghe khi component bị unmount
+  //     socket.off("order_updates");
+  //   };
+  // }, [dispatch]);
   const totalPrice = listCart.reduce((total: number, item) => {
     // Tính giá sản phẩm ban đầu cộng thêm giá storage
     const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
@@ -62,8 +85,9 @@ function Pay() {
 const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   useEffect(() => {
     if(!(listCart.length>0)){
-      toast.success("Bạn cần thêm sản phẩm")
+      
       navigate("/")
+      toast.success("Bạn cần thêm sản phẩm")
     }
     const fetchProvinces = async () => {
       try {
@@ -81,17 +105,22 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
 
     fetchProvinces();
   }, []);
-  const fetchDistricts = async (cityCode) => {
+  const listAllCity=useAppSelector((state:any)=>state.city.listAllCity);
+  const listDataCity=useAppSelector((state:any)=>state.city.listDataCity);
+ 
+  
+  useEffect(()=>{
+    dispatch(getAllCityThunk())
+  },[])
+  const fetchDistricts = async (cityCode:string) => {
     try {
-      const response = await axios.get(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${cityCode}&limit=-1`);
-      if (response.data && response.data.data) {
-        setDistricts(response.data.data.data);
-      }
+      dispatch(getDistrictsCityThunk(cityCode))
+     
     } catch (err) {
       console.error(err);
     }
   };
-  const fetchDistrictsCity = async (cityCode) => {
+  const fetchDistrictsCity = async (cityCode:string) => {
     try {
       const response = await axios.get(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${cityCode}&limit=-1`);
       if (response.data && response.data.data) {
@@ -104,7 +133,9 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   const handleCityChange = (value, option) => {
     setFormData({ ...formData, tinhThanhPho: value });
     setCity(option.key); // Lưu mã tỉnh đã chọn
+
     fetchDistricts(option.key); // Gọi API để lấy quận
+   
   };
   const handleDistrictsChange = (value, option) => {
     setFormData({ ...formData, district: value });
@@ -155,6 +186,10 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
       navigate("/xuất-hóa-đơn")
       dispatch(removeAllCart())
     }
+  
+    
+    console.log(rep);
+    
   };
   return (
 
@@ -313,8 +348,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
                 onChange={handleCityChange}
                 
                >
-         {Array.isArray(city) && city.length > 0 && (
-      city.map((item) => (
+         {Array.isArray(listAllCity) && listAllCity.length > 0 && (
+      listAllCity.map((item) => (
         <Select.Option key={item.code} value={item.name}
         
         >
@@ -330,8 +365,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
               <Select 
                   defaultValue="Mời bạn chọn thành phố"
               onChange={handleDistrictsChange}>
-              {Array.isArray(districts) && districts.length > 0 ? (
-      districts.map((item) => (
+              {Array.isArray(listDataCity) && listDataCity.length > 0 ? (
+      listDataCity.map((item) => (
         <Select.Option key={item.code} value={item.name}>
           {item.name}
         </Select.Option>

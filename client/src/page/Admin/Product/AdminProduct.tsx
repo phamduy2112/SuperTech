@@ -72,7 +72,7 @@ function AdminProduct() {
   }
   useEffect(()=>{
     dispatch(getProductsAdminThunk(''));
-    dispatch(getCatelogryThunk());
+    dispatch(getCatelogryThunk(""));
 
   },[dispatch])
   useEffect(()=>{

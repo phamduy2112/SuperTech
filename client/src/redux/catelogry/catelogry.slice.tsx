@@ -9,7 +9,7 @@ export const getCatelogryThunk = createAsyncThunk(
       const result = resp.data.content;
       if (searchKey.trim()) {
         const filteredResults = result.filter((item:any) =>
-          item.product_name.toLowerCase().includes(searchKey.toLowerCase())
+          item.category_name.toLowerCase().includes(searchKey.toLowerCase())
         );
         return filteredResults;
       } else {
