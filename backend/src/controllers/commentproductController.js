@@ -35,7 +35,6 @@ const getcommentproductById = async (req, res) => {
 const getCommentProductByIdProduct = async (req, res) => {
     try {
       const product_id = req.params.id; // Lấy product_id từ URL
-  
       let data = await commentProductModel.findAll({
         where: {
           product_id: product_id, // Lọc theo product_id
@@ -51,7 +50,7 @@ const getCommentProductByIdProduct = async (req, res) => {
           },
           {
             model: models.replies_comment_product, // Kết hợp bảng user
-            as: 'repliesToComment', // Alias cho kết hợp bảng
+            as: 'replies_comment_products', // Alias cho kết hợp bảng
             include:[
               {
                 model: models.user, // Kết hợp bảng user

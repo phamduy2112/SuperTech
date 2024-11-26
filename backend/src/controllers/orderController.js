@@ -33,40 +33,38 @@ const getorder = async (req, res) => {
     }
 };
 
-
-
-const getOrdersForToday = async (res) => {
-  try {
-    const today = new Date();
-    const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
-    const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
-
-    // Truy vấn tổng số tiền đơn hàng trong ngày hôm nay
-    const totalRevenue = await order.findAll({
-      attributes: [
-        [fn('SUM', col('order_amount')), 'total_revenue'], // Tính tổng doanh thu của ngày
-      ],
-      where: {
-        order_date: {
-          [Op.between]: [startOfToday, endOfToday], // Lọc đơn hàng trong ngày hôm nay
+const getOrdersForToday = async (req, res) => {
+    try {
+      const today = new Date();
+      const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
+      const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
+  
+      // Truy vấn tổng số tiền đơn hàng trong ngày hôm nay
+      const totalRevenue = await order.findAll({
+        attributes: [
+          [fn('SUM', col('order_amount')), 'total_revenue'], // Tính tổng doanh thu của ngày
+        ],
+        where: {
+          order_date: {
+            [Op.between]: [startOfToday, endOfToday], // Lọc đơn hàng trong ngày hôm nay
+          },
         },
-      },
-    });
-
-    // Kiểm tra nếu không có dữ liệu
-    if (!totalRevenue || totalRevenue.length === 0 || totalRevenue[0].total_revenue === null) {
-      return res.status(404).json({ message: 'No orders found for today' });
+      });
+  
+      // Kiểm tra nếu không có dữ liệu
+      if (!totalRevenue || totalRevenue.length === 0) {
+        return res.status(404).json({ message: 'No orders found for today' });
+      }
+  
+      // Trả về tổng doanh thu
+      return res.status(200).json({
+        total_revenue: totalRevenue[0].total_revenue, // Trả giá trị tổng doanh thu
+      });
+    } catch (error) {
+      console.error('Error fetching orders for today:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    // Trả về tổng doanh thu
-    return res.status(200).json({
-      total_revenue: totalRevenue[0].total_revenue, // Trả giá trị tổng doanh thu
-    });
-  } catch (error) {
-    console.error('Error fetching orders for today:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
+  };
 const getOrderById = async (req, res) => {
     
     try {
@@ -149,9 +147,11 @@ const changeStatusOrder = async (req, res) => {
       order.order_status = order_status;
       await order.save();
 
+
+      // Tạo một bản ghi mới trong bảng order_status
       const newOrderStatus = await models.order_status.create({
-        order_id: order_id, 
-        order_status: order_status, 
+        order_id: order_id,  // Liên kết với order_id
+        order_status: order_status,  // Trạng thái của đơn hàng
         order_status_text_cancel: order_status_text_cancel || null,  // Lý do hủy nếu có
         created_at: new Date(),  // Thời gian tạo
       });
@@ -274,60 +274,6 @@ const deleteorder = async (req, res) => {
     }
 };
 
-
-const autoUpdateOrderStatus = async (req, res) => {
-    try {
-        // Lấy tất cả các giao dịch chưa được xử lý (user_id = null)
-        const transactions = await bankAuto.findAll({
-            where: { user_id: null },
-        });
-
-        const updatedOrders = [];
-
-        for (const txn of transactions) {
-            const { id, description, amount } = txn;
-
-            // Giả sử nội dung giao dịch chứa mã đơn hàng dạng "ORDER123"
-            const orderIdMatch = description.match(/ORDER(\d+)/);
-            if (orderIdMatch) {
-                const orderId = orderIdMatch[1];
-
-                // Tìm đơn hàng
-                const order = await orders.findByPk(orderId);
-                if (order && order.order_total === amount && order.order_status === 'PENDING') {
-                    // Cập nhật trạng thái đơn hàng
-                    order.order_status = 'PAID';
-                    await order.save();
-
-                    // Gán user_id cho giao dịch
-                    txn.user_id = order.user_id;
-                    await txn.save();
-
-                    // (Tùy chọn) Ghi trạng thái vào bảng `order_status`
-                    if (orderStatus) {
-                        await orderStatus.create({
-                            order_id: orderId,
-                            status: 'Đã thanh toán',
-                            updated_at: new Date(),
-                        });
-                    }
-
-                    updatedOrders.push(order);
-                }
-            }
-        }
-
-        if (updatedOrders.length > 0) {
-            responseSend(res, updatedOrders, "Cập nhật trạng thái đơn hàng thành công!", 200);
-        } else {
-            responseSend(res, [], "Không có giao dịch nào khớp với đơn hàng.", 200);
-        }
-    } catch (error) {
-        console.error("Error in autoUpdateOrderStatus:", error);
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
-    }
-};
-
 export {
     getorder,
     getOrderById,
@@ -335,5 +281,6 @@ export {
     updateorder,
     deleteorder,
     changeStatusOrder,
+    getMonthlyRevenue,
     getOrdersForToday
 };
