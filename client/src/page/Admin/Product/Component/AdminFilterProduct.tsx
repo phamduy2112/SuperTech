@@ -23,7 +23,6 @@ function AdminFilterProduct({ product, onFilter }) {
   const showDrawer = () => setOpen(true);
   const onClose = () => setOpen(false);
 
-  // Filter products based on criteria
   const handleClick = () => {
     const filtered = product.filter((item) => {
       const meetsName = productName ? item.name.includes(productName) : true;

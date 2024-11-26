@@ -26,7 +26,7 @@ import uploadImgUserRouter from "./routers/uploadImageUserRoutes.js";
 import setupSocket from "./socket/socket.js";
 const app = express();
 const server = http.createServer(app);
-setupSocket(server);
+export const io = setupSocket(server);
 
 app.use(express.json());
 app.use(cookieParser());

@@ -3,7 +3,7 @@ import { Button, Popover, Slider } from 'antd';
 import './css/customCss.css';
 import { CiFilter } from 'react-icons/ci';
 import { HiAdjustmentsHorizontal } from 'react-icons/hi2';
-import { operatingSystems, priceList, refreshRates, screenSizes, trademark, ramOptions, romOptions, frontCameras, rearCameras, performanceSpecs, batterySpecs, specialFeatures } from './DataFilter';
+import { priceList, refreshRates, screenSizes, trademark, ramOptions, romOptions, frontCameras, rearCameras } from './DataFilter';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getCatelogryThunkAll, getCatelogryThunkId } from '../../../redux/catelogry/catelogry.slice';
 import { IoAddOutline } from 'react-icons/io5';
@@ -12,16 +12,13 @@ type ObjFilterType = {
     company: string,
     price: string[];
     size: string[];
-    operatingSystem: string[];
     refreshRate: string[];
     ram: string[];
     rom: string[];
     frontCamera: string[];
     rearCamera: string[];
     cpu: string[];
-    batteryCapacity: string[];
-    fastCharging: string[];
-    specialFeature: string[];
+
 };
 interface FilterProps {
     data: number | undefined;
@@ -30,22 +27,21 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({ data }) => {
     const AppDispatch = useAppDispatch();
     const queryParams = new URLSearchParams();
+    const [arrayFilterShowProduct, setarrayFilterShowProduct] = useState([]);
+
 
 
     const [ObjFilter, setObjFilter] = useState<ObjFilterType>({
         company: '',
-        price: [],              // mảng cho giá
-        size: [],               // mảng cho kích thước
-        operatingSystem: [],    // mảng cho hệ điều hành
+        price: [],
+        size: [],
         refreshRate: [],        // mảng cho tần số quét
         ram: [],                // mảng cho RAM
         rom: [],                // mảng cho ROM
         frontCamera: [],        // mảng cho camera trước
         rearCamera: [],         // mảng cho camera sau
         cpu: [],                // mảng cho hiệu suất (CPU)
-        batteryCapacity: [],    // mảng cho dung lượng pin
-        fastCharging: [],       // mảng cho sạc nhanh
-        specialFeature: [],     // mảng cho tính năng đặc biệt
+
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +57,8 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
     };
 
 
+
+
     useEffect(() => {
         AppDispatch(getCatelogryThunkId(data));
 
@@ -73,35 +71,28 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-
-        // Read existing filters from the URL and update state
         const price = params.get('price')?.split(',') || [];
         const size = params.get('size')?.split(',') || [];
-        const operatingSystem = params.get('operatingSystem')?.split(',') || [];
         const refreshRate = params.get('refreshRate')?.split(',') || [];
         const ram = params.get('ram')?.split(',') || [];
         const rom = params.get('rom')?.split(',') || [];
         const frontCamera = params.get('frontCamera')?.split(',') || [];
         const rearCamera = params.get('rearCamera')?.split(',') || [];
         const cpu = params.get('cpu')?.split(',') || [];
-        const batteryCapacity = params.get('batteryCapacity')?.split(',') || [];
-        const fastCharging = params.get('fastCharging')?.split(',') || [];
-        const specialFeature = params.get('specialFeature')?.split(',') || [];
+
+
 
         setObjFilter((prev) => ({
             ...prev,
             price,
             size,
-            operatingSystem,
             refreshRate,
             ram,
             rom,
             frontCamera,
             rearCamera,
             cpu,
-            batteryCapacity,
-            fastCharging,
-            specialFeature,
+
         }));
 
     }, []);
@@ -112,18 +103,16 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         if (listCateloriesOne && listCateloriesOne.category_name) {
 
             setObjFilter((prev) => ({
-                ...prev, // Giữ lại các thuộc tính cũ
-                company: listCateloriesOne.category_name, // Cập nhật company
+                ...prev,
+                company: listCateloriesOne.category_name,
             }));
         }
 
     }, [listCateloriesOne]);
 
-    console.log(ObjFilter)
 
 
     function handleChangeProduct(key: string) {
-
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const NewId = listCatelories.find((element: any) => element.category_name.toLowerCase() === key)?.category_id;
 
@@ -154,8 +143,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         } else {
             console.log(NewId);
         }
-
-
     }
 
 
@@ -173,14 +160,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         }));
     };
 
-    const handleoperatingSystems = (name: string) => {
-        setObjFilter((prev) => ({
-            ...prev,
-            operatingSystem: prev.operatingSystem.includes(name)
-                ? prev.operatingSystem
-                : [...prev.operatingSystem, name],
-        }));
-    };
 
     const handleSelectRate = (rate: string) => {
         setObjFilter((prev) => ({
@@ -224,36 +203,9 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         }));
     };
 
-    const PerformanceSpecs = (cpu: string) => {
-        setObjFilter((prev) => ({
-            ...prev,
-            cpu: prev.cpu.includes(cpu) ? prev.cpu : [...prev.cpu, cpu],
-        }));
-    };
 
-    const BatterySpecs = (capacity: string, fastCharging: string) => {
-        setObjFilter((prev) => ({
-            ...prev,
-            batteryCapacity: prev.batteryCapacity.includes(capacity)
-                ? prev.batteryCapacity
-                : [...prev.batteryCapacity, capacity],
-            fastCharging: prev.fastCharging.includes(fastCharging)
-                ? prev.fastCharging
-                : [...prev.fastCharging, fastCharging],
-        }));
-    };
-
-    const SpecialFeatures = (feature: string) => {
-        setObjFilter((prev) => ({
-            ...prev,
-            specialFeature: prev.specialFeature.includes(feature)
-                ? prev.specialFeature
-                : [...prev.specialFeature, feature],
-        }));
-    };
 
     const Deletefilter = (id: number, value: string) => {
-        console.log(id, value);
 
         setObjFilter(prev => {
             const newFilter = { ...prev };
@@ -264,9 +216,7 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
             if (newFilter.size) {
                 newFilter.size = newFilter.size.filter(item => item !== value);
             }
-            if (newFilter.operatingSystem) {
-                newFilter.operatingSystem = newFilter.operatingSystem.filter(item => item !== value);
-            }
+
             if (newFilter.refreshRate) {
                 newFilter.refreshRate = newFilter.refreshRate.filter(item => item !== value);
             }
@@ -285,49 +235,81 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
             if (newFilter.cpu) {
                 newFilter.cpu = newFilter.cpu.filter(item => item !== value);
             }
-            if (newFilter.batteryCapacity) {
-                newFilter.batteryCapacity = newFilter.batteryCapacity.filter(item => item !== value);
-            }
-
-            if (newFilter.fastCharging) {
-                newFilter.fastCharging = newFilter.fastCharging.filter(item => item !== value);
-            }
-
-            if (newFilter.specialFeature) {
-                newFilter.specialFeature = newFilter.specialFeature.filter(item => item !== value);
-            }
 
 
             return newFilter;
         });
     };
 
-    const FilterData = () => {
+
+
+
+
+    useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const NewData = ProductsByIdComponent.filter((item: any) => {
-            return (
-                (ObjFilter.size.length > 0 ? ObjFilter.size.some(size => (item.infor_product_infor_product.infor_screen).toLowerCase().includes(size.toLowerCase())) : true),
 
-                (ObjFilter.operatingSystem.length > 0 ? ObjFilter.operatingSystem.some(operatingSystem => (item.infor_product_infor_product.infor_system).toLowerCase().includes(operatingSystem.toLowerCase())) : true)
+            const screenSize = item.infor_product_infor_product.infor_screen.toLowerCase();
+            const Ram = item.infor_product_infor_product.infor_ram.toLowerCase();
+            const Rom = item.infor_product_infor_product.infor_rom.toLowerCase();
+            const Rates = item.infor_product_infor_product.infor_scanning_frequency.toLowerCase();
+            const font = item.infor_product_infor_product.infor_frontCamera.toLowerCase();
+            const rear = item.infor_product_infor_product.infor_rearCamera.toLowerCase();
+            const cpuDB = item.infor_product_infor_product.infor_cpu.toLowerCase();
 
-            );
+
+            const matchesSize = ObjFilter.size.length > 0
+                ? ObjFilter.size.some((size) => screenSize === size.toLowerCase())
+                : true;
+
+            const matchesRam = ObjFilter.ram.length > 0
+                ? ObjFilter.ram.some((ram) => Ram === ram.toLowerCase())
+                : true;
+
+            const matchesRom = ObjFilter.rom.length > 0
+                ? ObjFilter.rom.some((rom) => Rom === rom.toLowerCase())
+                : true;
+
+            const matchesRates = ObjFilter.refreshRate.length > 0
+                ? ObjFilter.refreshRate.some((refreshRate) => Rates === refreshRate.toLowerCase())
+                : true;
+
+
+            const matchesfont = ObjFilter.frontCamera.length > 0
+                ? ObjFilter.frontCamera.some((frontCamera) => font === frontCamera.toLowerCase())
+                : true;
+
+            const matchesrear = ObjFilter.rearCamera.length > 0
+                ? ObjFilter.rearCamera.some((rearCamera) => rear === rearCamera.toLowerCase())
+                : true;
+
+
+            const matchescpu = ObjFilter.cpu.length > 0
+                ? ObjFilter.cpu.some((cpu) => cpuDB === cpu.toLowerCase())
+                : true;
+
+
+
+
+
+
+            return matchesSize && matchesRam && matchesRom && matchesRates && matchesfont && matchesrear && matchescpu
+
         });
 
         setarrayFilterShowProduct(NewData)
-    };
+        // setarrayFilterShowProduct(NewData);
+    }, [ObjFilter.cpu, ObjFilter.frontCamera, ObjFilter.ram, ObjFilter.rearCamera, ObjFilter.refreshRate, ObjFilter.rom, ObjFilter.size, ProductsByIdComponent]);
 
-    const [arrayFilterShowProduct, setarrayFilterShowProduct] = useState([]);
 
-    useEffect(() => {
-        FilterData();
 
-    }, [ObjFilter]);
+
     useEffect(() => {
         AppDispatch(setlistProductByIdCategory(arrayFilterShowProduct))
     }, [AppDispatch, arrayFilterShowProduct])
 
 
-    console.log('data', arrayFilterShowProduct);
+
 
 
 
@@ -408,20 +390,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
                         </div>
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-bold mb-1 ">Hệ điều hành</span>
-                        <div className="grid grid-cols-3 gap-3">
-                            {
-                                operatingSystems.map((item, index) => (
-                                    <Button key={index} onClick={() => handleoperatingSystems(item.name)} className="min-w-[50px] h-[35px] flex justify-center items-center" variant="outlined">
-                                        <span>{item.name}</span>
-                                    </Button>
-                                ))
-                            }
-
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col">
                         <span className="font-bold mb-1">Giá</span>
                         <div className="grid grid-cols-3 gap-3">
                             {
@@ -435,7 +403,7 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
                                 <HiAdjustmentsHorizontal />
                                 <span>Hoặc chọn mức giá</span>
                             </Button>
-                            <div className={`${priceclick != false ? 'block' : 'hidden'} col-span-3`}>
+                            <div className={`${priceclick != false ? 'block' : 'hidden'} col - span - 3`}>
                                 <Slider
                                     range
                                     min={0}
@@ -533,42 +501,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
                             }
                         </div>
                     </div>
-
-                    <div className="flex flex-col">
-                        <span className="font-bold mb-1">Hiệu năng & Pin</span>
-                        <div className='grid grid-cols-3 gap-3'>
-                            {
-                                performanceSpecs.map((item, index) => (
-                                    <Button key={index} onClick={() => PerformanceSpecs(item.cpu)} className="min-w-[60px] h-[35px] flex justify-center items-center" variant="outlined">
-                                        <span>{item.cpu}</span>
-                                    </Button>
-                                ))
-                            }
-                            {
-                                batterySpecs.map((item, index) => (
-                                    <Button key={index} onClick={() => BatterySpecs(item.capacity, item.fastCharging)} className="min-w-[60px] h-[35px] flex justify-center items-center" variant="outlined">
-                                        <span>{item.capacity} & {item.fastCharging}</span>
-                                    </Button>
-                                ))
-                            }
-
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col ">
-                        <span className="font-bold mb-1 text-[14px]">Tính năng đặc biệt</span>
-                        <div className="grid grid-cols-2 gap-3">
-                            {
-                                specialFeatures.map((item, index) => (
-                                    <Button key={index} onClick={() => SpecialFeatures(item.feature)} className="min-w-[60px] h-[35px] flex justify-center items-center" variant="outlined">
-                                        <span>{item.feature}</span>
-                                    </Button>
-                                ))
-
-                            }
-
-                        </div>
-                    </div>
                     <div className="flex border-t-[1px] pt-6 flex-row justify-center items-center gap-[5px] col-span-3 mt-4">
                         <Button onClick={() => handleVisibleChange(false)} color='danger' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
                             <span>Bỏ chọn</span>
@@ -588,11 +520,6 @@ const Filter: React.FC<FilterProps> = ({ data }) => {
         );
 
     }
-
-
-
-
-
 
     return (
         <Popover open={open} placement="bottomLeft" trigger={'click'} title={Selected} content={<OptionSelected />}>

@@ -44,15 +44,6 @@ function AdminStaff() {
             setIdStaff(UserTokenClient.data.user_id);
         }
     }, [TokenstaffsClient]);
-    
-
-
-
-
-
-
-
-
 
 
     // const [TokenstaffsAdmin, setTokenstaffsAdmin]

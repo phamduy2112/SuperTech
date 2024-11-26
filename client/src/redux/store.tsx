@@ -16,12 +16,13 @@ import { productReducer } from './product/product.slice';
 import { cartReducer } from './cart/cart.slice';
 import { commentReducer } from './comment/comment.slice';
 import { orderReducer } from './order/Order.slice';
+import { chatReducer } from './chat/chat.slice';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['user','cart','listOrder'], // Chỉ persist `user` và `cart`
+  whitelist: ['user', 'cart', 'listOrder'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
   product: productReducer,
   cart: cartReducer,
   listComment: commentReducer,
-  listOrder:orderReducer
+  listOrder: orderReducer,
+  chat: chatReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

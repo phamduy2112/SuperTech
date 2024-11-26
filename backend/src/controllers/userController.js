@@ -276,6 +276,18 @@ const loginFacebook = async (req, res) => {
       .json({ message: "Internal server error", success: false });
   }
 };
+const userSocket = async (req, res) => {
+  try {
+    const user_id = req.id;
+
+    const user = await User.findByPk(user_id, {
+      attributes: { exclude: ["user_password"] },
+    });
+    return user;
+  } catch (e) {
+    console.log(e);
+  }
+};
 const userDetail = async (req, res) => {
   try {
     const user_id = req.id;
@@ -615,4 +627,5 @@ export {
   createUser,
   Checkuserdetailadmin,
   UpdateUsersAdmin,
+  userSocket
 };

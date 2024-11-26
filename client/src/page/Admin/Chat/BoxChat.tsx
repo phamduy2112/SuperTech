@@ -15,10 +15,11 @@ import { PiMessengerLogoBold, PiMinus } from 'react-icons/pi';
 import { SiIconify } from "react-icons/si";
 import { FcRemoveImage } from "react-icons/fc";
 import './BoxChat.css'
+import { IMG_USER_BACKEND } from '../../../constants';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function BoxChat({ index, data }: any) {
-    console.log("Index:", index);  // In ra index
+    console.log("Index:", index);
     console.log("Data:", data);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -142,7 +143,7 @@ function BoxChat({ index, data }: any) {
                     <div className='flex hover:bg-[#85858525] transition-all duration-500 rounded-lg p-[5px] w-auto justify-start gap-3 items-center'>
                         <div className='relative flex items-center justify-start'>
                             <div className='w-[32px] h-[32px] rounded-full overflow-hidden'>
-                                <img className='w-full h-full object-cover ' src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/465713850_122113169258572750_2010770374122077854_n.jpg?stp=dst-jpg_s200x200&_nc_cat=108&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=Hx5rvX4UPj4Q7kNvgGUTKBQ&_nc_zt=24&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AwmEUqU-ci1wUIHtkjJDYiS&oh=00_AYDog5dZwqVgegWznA_S6-SDoWisIeP8x_aQnIDrcFrqpg&oe=67390EAD" alt="" />
+                                <img className='w-full h-full object-cover ' src={data.image === null || data.image === "" || data.image === undefined ? `https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg` : IMG_USER_BACKEND + data.image} alt="" />
                             </div>
                             <div className='w-[10px] right-0 bottom-0 absolute h-[10px] bg-green-400 rounded-full'>
 
@@ -150,7 +151,7 @@ function BoxChat({ index, data }: any) {
                         </div>
                         <div className='flex gap-2 items-center justify-between'>
                             <div className='flex gap-1 flex-col text-[12px]'>
-                                <span className='text-[14px] font-semibold'>Nguyễn Thu Lê</span>
+                                <span className='text-[14px] font-semibold'>{data.name}</span>
                                 <span className='text-[#85858595]'>Đang hoạt động</span>
                             </div>
                             <div>
@@ -173,7 +174,7 @@ function BoxChat({ index, data }: any) {
             <div className='w-full py-[10px] flex box-border flex-col gap-3 overflow-y-auto h-[347px]'>
                 <div className='flex items-end justify-start gap-3'>
                     <div className='w-[28px] h-[28px] rounded-full overflow-hidden'>
-                        <img className='w-full h-full object-cover ' src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/465713850_122113169258572750_2010770374122077854_n.jpg?stp=dst-jpg_s200x200&_nc_cat=108&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=Hx5rvX4UPj4Q7kNvgGUTKBQ&_nc_zt=24&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AwmEUqU-ci1wUIHtkjJDYiS&oh=00_AYDog5dZwqVgegWznA_S6-SDoWisIeP8x_aQnIDrcFrqpg&oe=67390EAD" alt="" />
+                        <img className='w-full h-full object-cover ' src={data.image === null || data.image === "" || data.image === undefined ? `https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg` : IMG_USER_BACKEND + data.image} alt="" />
                     </div>
                     <div className='flex flex-col gap-2'>
                         <div className='text-[12px] border-[0.1px] border-[#a5a5a52d] text-black text-justify max-w-[180px] leading-10 h-auto p-[8px] rounded-lg'>
@@ -224,7 +225,7 @@ function BoxChat({ index, data }: any) {
 
                     </div>
                     <div className=' mx-[5px] w-[15px] h-[15px] rounded-full overflow-hidden'>
-                        <img className='w-full h-full object-cover ' src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/465713850_122113169258572750_2010770374122077854_n.jpg?stp=dst-jpg_s200x200&_nc_cat=108&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=Hx5rvX4UPj4Q7kNvgGUTKBQ&_nc_zt=24&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=AwmEUqU-ci1wUIHtkjJDYiS&oh=00_AYDog5dZwqVgegWznA_S6-SDoWisIeP8x_aQnIDrcFrqpg&oe=67390EAD" alt="" />
+                        <img className='w-full h-full object-cover ' src={data.image === null || data.image === "" || data.image === undefined ? `https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg` : IMG_USER_BACKEND + data.image} alt="" />
                     </div>
                 </div>
 

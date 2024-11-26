@@ -217,8 +217,6 @@ const UserSlice = createSlice({
     builder
       .addCase(UpdateStaffThunk.fulfilled, (state, { payload }) => {
         state.token = payload.token;
-
-
       })
     //Ở trên là khu vực builder của devTri
 

@@ -18,7 +18,6 @@ function ListProduct() {
   const AppDispatch = useAppDispatch();
 
   const listImages = useAppSelector((state) => state.product.listProductImage);
-  console.log(listImages);
 
   useEffect(() => {
     AppDispatch(GetAllImgThunk())
@@ -56,7 +55,6 @@ function ListProduct() {
       setProducts(sortedProducts)
     } else {
       setProducts(ProductsByIdComponent)
-
     }
   }
 

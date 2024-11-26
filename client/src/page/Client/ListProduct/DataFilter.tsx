@@ -9,24 +9,11 @@ export const trademark = [
     { id: 8, label: 'lumbia', url: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/29242b9e-4caa-4723-a7df-7053a4a08f16.__CR0,0,600,180_PT0_SX600_V1___.jpg' }
 ]
 
-
-
-export const operatingSystems = [
-    { id: 1, name: 'Android' },
-    { id: 2, name: 'iOS 17' },
-    { id: 3, name: 'Windows Phone' },
-    { id: 4, name: 'KaiOS' },
-    { id: 5, name: 'HarmonyOS' },
-    { id: 6, name: 'iOS 16' },
-
-];
-
 export const priceList = [
     { id: 1, price: 'Dưới 3 triệu' },
     { id: 2, price: 'Từ 3 - 8 triệu' },
     { id: 3, price: 'Từ 8 - 15 triệu' },
     { id: 4, price: 'Trên 15 triệu' },
-
 ]
 
 export const ramOptions = [
@@ -95,30 +82,4 @@ export const frontCameras = [
 
 ];
 
-
-export const batterySpecs = [
-    { id: 1, capacity: '4500 mAh', fastCharging: '25W' },
-    { id: 2, capacity: '5000 mAh', fastCharging: '30W' },
-    { id: 3, capacity: '4000 mAh', fastCharging: '18W' },
-    { id: 4, capacity: '3000 mAh', fastCharging: '20W' },
-    { id: 5, capacity: '6000 mAh', fastCharging: '40W' },
-    { id: 6, capacity: '5000 mAh', fastCharging: '25W' },
-    { id: 7, capacity: '5000 mAh', fastCharging: '45W' },
-
-];
-
-export const performanceSpecs = [
-    { id: 1, cpu: 'Snapdragon 888' },
-    { id: 2, cpu: 'Apple A14' },
-    { id: 3, cpu: 'Exynos 2100' },
-    { id: 4, cpu: 'Snapdragon 865' },
-    { id: 5, cpu: 'Apple A13' },
-];
-export const specialFeatures = [
-    { id: 1, feature: 'Chống nước và bụi IP68' },
-    { id: 2, feature: 'Sạc nhanh 65W' },
-    { id: 3, feature: 'Màn hình tần số quét 120Hz' },
-    { id: 4, feature: 'Camera chụp ảnh ban đêm' },
-    { id: 5, feature: 'Nhận diện khuôn mặt 3D' },
-];
 

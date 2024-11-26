@@ -1,7 +1,7 @@
 
 
 import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
@@ -10,17 +10,73 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import AdminCommentProductEdit from './AdminCommentProductEdit';
 import AdminCommentProductAdd from './AdminCommentProductAdd';
+import { useAppDispatch } from '../../../../redux/hooks';
+import { useSelector } from 'react-redux';
+import { deleteCommentProductThunk, getCommentAllProductThunk } from '../../../../redux/comment/comment.slice';
+import { getProductsThunk } from '../../../../redux/product/product.slice';
+import { IMG_BACKEND, IMG_USER_BACKEND } from '../../../../constants';
+import { getAllUserThunk } from '../../../../redux/user/user.slice';
 
 function AdminCommentProduct() {
+  const AppDispatch = useAppDispatch();
+  const AllListComment_Product = useSelector((state: any) => state.listComment.listAllCommnetAdmin);
+  const AllProduct = useSelector((state: any) => state.product.listProducts);
+  const Alluser = useSelector((state: any) => state.user.Alluser);
+  const Token = useSelector((state: any) => state.user.token);
+
   const [selectedCheckbox, setSelectedCheckbox] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [key, setKey] = useState(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
-    setKey(key)
-
+    setKey(key);
   };
+
+  useEffect(() => {
+    AppDispatch(getCommentAllProductThunk());
+    AppDispatch(getProductsThunk());
+    AppDispatch(getAllUserThunk());
+    AppDispatch(getAllUserThunk())
+  }, [AppDispatch]);
+
+  const [DataCommentAll, setDataCommentAll] = useState([]);
+  const isFetched = useRef(false);
+
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        const newData = [];
+
+        if (isFetched.current) return;
+
+        for (const commentProduct of AllListComment_Product) {
+          for (const product of AllProduct) {
+            for (const user of Alluser) {
+              if (commentProduct.product_id === product.product_id && commentProduct.user_id === user.user_id) {
+                newData.push({
+                  commentProduct,
+                  product,
+                  user,
+                });
+              }
+            }
+          }
+        }
+
+        if (newData.length > 0) {
+          setDataCommentAll(newData);
+          isFetched.current = true;
+        }
+      } catch (error) {
+        console.error('Lỗi khi lấy trả lời:', error);
+      }
+    };
+
+    fetchReplies();
+  }, [AllListComment_Product, AllProduct, Alluser]);
+
+
+
+
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {
@@ -33,6 +89,11 @@ function AdminCommentProduct() {
       denyButtonText: 'Hủy',
     }).then((result) => {
       if (result.isConfirmed) {
+        const dataThunk = {
+          key: key,
+          token: Token
+        }
+        AppDispatch(deleteCommentProductThunk(dataThunk));
         Swal.fire({
           icon: 'success',
           title: 'Đã Xóa',
@@ -66,7 +127,7 @@ function AdminCommentProduct() {
       title: 'Hình Sản Phẩm',
       dataIndex: 'productImage',
       render: (src: string) => (
-        <img className='rounded-md object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
+        <img className='rounded-md object-cover' src={IMG_BACKEND + src} alt="" style={{ width: 50, height: 50 }} />
       ),
     },
     {
@@ -78,7 +139,9 @@ function AdminCommentProduct() {
       dataIndex: 'userImage',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (src: any) => (
-        <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
+        <img className='rounded-full object-cover' src={
+          src == null || src == "" ? `https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg` : IMG_USER_BACKEND + src
+        } alt="" style={{ width: 50, height: 50 }} />
       ),
     },
     {
@@ -88,10 +151,13 @@ function AdminCommentProduct() {
     {
       title: 'Vai Trò',
       dataIndex: 'role',
-      render: (text: string) => (
-        <div className="flex-1 flex items-center gap-3">
-          <div className={`w-[10px] rounded-full h-[10px] ${text === 'Khách Hàng' ? 'bg-[#2af52a]' : ''} ${text === 'Nhân Viên' ? 'bg-[#ffd000]' : ''} ${text === 'Admin' ? 'bg-[red]' : ''}`}></div>
-          {text}
+      render: (text: any) => (
+        <div className={`w-[200px] text-white font-medium rounded-md p-2 flex items-center ${text == 11 ? 'bg-[#3aff2085]' : ''} ${text == 10 ? 'bg-[#77757575]' : ''} ${text == 9 ? 'bg-[#1a1c9685]' : ''} ${text == 8 ? 'bg-[#00000093]' : ''} ${text == 7 ? 'bg-[#7c164685]' : ''} ${text == 6 ? 'bg-[#dd741285]' : ''} ${text == 5 ? 'bg-[#ab2af585]' : ''} ${text == 4 ? 'bg-[#f52ac285]' : ''} ${text == 3 ? 'bg-[#3963f085]' : ''} ${text == 2 ? 'bg-[#0eb397d2]' : ''} ${text == 1 ? 'bg-[#b6b30eb7]' : ''} ${text == 0 ? 'bg-[#ff000085]' : ''} gap-4`}>
+          <div className={`w-[10px] ml-4 rounded-full h-[10px] ${text == 11 ? 'bg-[#3aff20]' : ''} ${text == 10 ? 'bg-[#77777798]' : ''} ${text == 9 ? 'bg-[#1a1c96]' : ''} ${text == 8 ? 'bg-[#000000]' : ''} ${text == 7 ? 'bg-[#7c1646]' : ''} ${text == 6 ? 'bg-[#dd7412]' : ''} ${text == 5 ? 'bg-[#ab2af5]' : ''} ${text == 4 ? 'bg-[#f52ac2]' : ''} ${text == 3 ? 'bg-[#3963f0b2]' : ''} ${text == 2 ? 'bg-[#2af5d3]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
+          {text == 11 ? 'Người Dùng' : ''} {text == 10 ? 'Nhân Viên Thử Việc' : ''} {text == 9 ? 'Nhân Viên Bảo Vệ' : ''}
+          {text == 8 ? 'Nhân Viên Kho' : ''}{text == 7 ? 'Nhân Viên Hỗ Trợ' : ''} {text == 6 ? 'Nhân Viên Pháp Lý' : ''}
+          {text == 5 ? 'Nhân Viên Kế Toán' : ''} {text == 4 ? 'Nhân Viên Tiếp Thị' : ''} {text == 3 ? 'Nhân Viên IT' : ''}
+          {text == 2 ? 'Nhân Viên Bán Hàng' : ''} {text == 1 ? 'Nhân Viên Quản Lí' : ''} {text == 0 ? 'Chủ cửa hàng' : ''}
         </div>
       ),
     },
@@ -122,118 +188,31 @@ function AdminCommentProduct() {
     },
   ];
 
-  const data = [
-    {
-      key: '1',
-      date: '2023-10-01',
-      content: 'Sản phẩm rất tốt, tôi rất hài lòng!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm A',
-      userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-      userName: 'Nguyễn Văn A',
-      role: 'Khách Hàng',
-      rating: 5,
-    },
-    {
-      key: '2',
-      date: '2023-10-02',
-      content: 'Chất lượng vượt xa mong đợi!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm B',
-      userImage: 'https://randomuser.me/api/portraits/men/2.jpg',
-      userName: 'Trần Văn B',
-      role: 'Admin',
-      rating: 4,
-    },
-    {
-      key: '3',
-      date: '2023-10-03',
-      content: 'Tôi không thích sản phẩm này.',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm C',
-      userImage: 'https://randomuser.me/api/portraits/women/1.jpg',
-      userName: 'Lê Thị C',
-      role: 'Nhân Viên',
-      rating: 2,
-    },
-    {
-      key: '4',
-      date: '2023-10-04',
-      content: 'Dịch vụ khách hàng rất tốt!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm D',
-      userImage: 'https://randomuser.me/api/portraits/men/3.jpg',
-      userName: 'Nguyễn Văn D',
-      role: 'Khách Hàng',
-      rating: 5,
-    },
-    {
-      key: '5',
-      date: '2023-10-05',
-      content: 'Tôi sẽ mua lại!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm E',
-      userImage: 'https://randomuser.me/api/portraits/women/2.jpg',
-      userName: 'Trần Thị E',
-      role: 'Khách Hàng',
-      rating: 4,
-    },
-    {
-      key: '6',
-      date: '2023-10-06',
-      content: 'Giá cả hợp lý cho chất lượng!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm F',
-      userImage: 'https://randomuser.me/api/portraits/men/4.jpg',
-      userName: 'Lê Văn F',
-      role: 'Nhân Viên',
-      rating: 5,
-    },
-    {
-      key: '7',
-      date: '2023-10-07',
-      content: 'Không đúng như quảng cáo.',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm G',
-      userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
-      userName: 'Nguyễn Thị G',
-      role: 'Khách Hàng',
-      rating: 2,
-    },
-    {
-      key: '8',
-      date: '2023-10-08',
-      content: 'Rất đáng giá!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm H',
-      userImage: 'https://randomuser.me/api/portraits/men/5.jpg',
-      userName: 'Trần Văn H',
-      role: 'Nhân Viên',
-      rating: 5,
-    },
-    {
-      key: '9',
-      date: '2023-10-09',
-      content: 'Không thể hài lòng hơn.',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm I',
-      userImage: 'https://randomuser.me/api/portraits/women/4.jpg',
-      userName: 'Lê Thị I',
-      role: 'Nhân Viên',
-      rating: 4,
-    },
-    {
-      key: '10',
-      date: '2023-10-10',
-      content: 'Sản phẩm tuyệt vời!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm J',
-      userImage: 'https://randomuser.me/api/portraits/men/6.jpg',
-      userName: 'Nguyễn Văn J',
-      role: 'Khách Hàng',
-      rating: 5,
-    },
-  ];
+  const convertData = (data) => {
+    return data.map((item, index) => {
+      const userImage = item.user ? item.user.user_image : 'default_image_url';
+      return {
+        key: item.commentProduct.comment_id,
+        date: new Date(item.commentProduct.comment_date).toLocaleDateString(),
+        content: item.commentProduct.comment_content,
+        productId: item.product.product_id,
+        productImage: item.product.product_colors[0].image.image_one,
+        productName: item.product.product_name,
+        userImage: userImage,
+        userName: item.user ? item.user.user_name : 'Unknown User',
+        role: item.user ? item.user.user_role : null,
+
+        rating: item.commentProduct.comment_star,
+      };
+    });
+  };
+
+  const data = convertData(DataCommentAll);
+
+  const findItemByKey = (key: number) => {
+    return data.find(item => item.key === key);
+  };
+
 
 
 
@@ -295,6 +274,9 @@ function AdminCommentProduct() {
 
 
 
+
+
+
   const rowSelection = {
     onChange: onSelectChange,
   };
@@ -309,8 +291,8 @@ function AdminCommentProduct() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <AdminCommentProductAdd/>
-           
+            <AdminCommentProductAdd />
+
           </div>
         </div>
 
@@ -361,8 +343,8 @@ function AdminCommentProduct() {
             size='large'
             pagination={{ pageSize: 10 }}
           />
-            {
-            key != 0 ? <AdminCommentProductEdit props={key} /> : ''
+          {
+            key != 0 ? <AdminCommentProductEdit props={findItemByKey(key)} /> : ''
           }
         </div>
       </div>

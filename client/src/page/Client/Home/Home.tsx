@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Carousel from './Component/Carousel'
 // import Catelogry from './Component/Catelogry'
 import ProductSale from './Component/ProductSale'
@@ -17,49 +17,53 @@ import LaptopComponent from './Component/Laptop'
 import { Container } from '../../../components/Style/Container';
 import ProductHome from './Component/ProductHome';
 import ProductsNew from './Component/ProductsNew';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 function Home() {
+
+
+
   return (
     <div>
-  <Carousel></Carousel>
-    <Container>
-   
-      {/* <Catelogry/> */}
-      {/* <Category> */}
-      
-      <ProductSale/>
-      {/* <ProductsNew/> */}
+      <Carousel></Carousel>
+      <Container>
+
+        {/* <Catelogry/> */}
+        {/* <Category> */}
+
+        <ProductSale />
+        {/* <ProductsNew/> */}
 
 
-      <div className='mx-auto'>   
-        <div className="flex gap-[1%]">
-          <img src={banner3} alt="" className='w-[50%] rounded-3xl py-5'/>
-          <img src={banner4} alt="" className='w-[50%] rounded-3xl py-5'/>
+        <div className='mx-auto'>
+          <div className="flex gap-[1%]">
+            <img src={banner3} alt="" className='w-[50%] rounded-3xl py-5' />
+            <img src={banner4} alt="" className='w-[50%] rounded-3xl py-5' />
+          </div>
         </div>
-      </div>
-      <LaptopComponent/>
+        <LaptopComponent />
 
-      <Catelory2></Catelory2>
-      
-      {/* <ProductHome/> */}
-      <ProductHome/>
-      <div className='mx-auto'>
+        <Catelory2></Catelory2>
 
-        <img src={banner1} className='w-[100%] rounded-xl'/>
-      </div>
-      <div className='mx-auto'>   
-        <div className="flex gap-[1%]">
-          <img src={banner3} alt="" className='w-[50%] rounded-3xl py-5'/>
-          <img src={banner4} alt="" className='w-[50%] rounded-3xl py-5'/>
+        {/* <ProductHome/> */}
+        <ProductHome />
+        <div className='mx-auto'>
+
+          <img src={banner1} className='w-[100%] rounded-xl' />
         </div>
-      </div>
+        <div className='mx-auto'>
+          <div className="flex gap-[1%]">
+            <img src={banner3} alt="" className='w-[50%] rounded-3xl py-5' />
+            <img src={banner4} alt="" className='w-[50%] rounded-3xl py-5' />
+          </div>
+        </div>
 
 
 
-      {/*Carousel Banner */}
-      <div className="mx-auto">
+        {/*Carousel Banner */}
+        <div className="mx-auto">
           <h1 className="text-[2.5rem] font-semibold my-5">Banner 2</h1>
-          
+
           <div className="flex gap-5 h-[40rem]">
             {/* Featured Item */}
             <div></div>
@@ -80,7 +84,7 @@ function Home() {
 
               {/* Product Image */}
               <img src='https://midatlanticconsulting.com/blog/wp-content/uploads/2023/10/MacBook-Pro-Space-Black-M3-Pro.png' alt="Macbook" className="w-[60%] mt-10" />
-          </div>
+            </div>
 
 
             {/* Category Sections (làm carousel) */}
@@ -119,12 +123,12 @@ function Home() {
 
 
 
-     {/* <ListProductSmall/> */}
-   
-      <Dis/>
-    </Container>
+        {/* <ListProductSmall/> */}
+
+        <Dis />
+      </Container>
     </div>
-  
+
   )
 }
 
