@@ -89,18 +89,30 @@ const updatecategories = async (req, res) => {
 
 const deletecategories = async (req, res) => {
     try {
+        // Lấy danh sách categoryId từ query string
+        const categoryIds = req.query.ids ? JSON.parse(req.query.ids) : [];
+
+        if (!categoryIds.length) {
+            return responseSend(res, "", "Không có ID nào để xóa!", 400);
+        }
+
+        // Xóa các danh mục với category_id trong mảng categoryIds
         let deleted = await categoriesModel.destroy({
-            where: { category_id: req.params.id }
+            where: {
+                category_id: categoryIds
+            }
         });
+
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {
-            responseSend(res, "", "không tìm thấy !", 404);
+            responseSend(res, "", "Không tìm thấy danh mục nào!", 404);
         }
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+
 
 export {
     getcategories,

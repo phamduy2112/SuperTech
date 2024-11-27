@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "tìm-kiếm",
+        path: "/tim-kiem",
         element: <Search />,
       },
       {

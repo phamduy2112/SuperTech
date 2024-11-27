@@ -25,6 +25,7 @@ import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
 import { app, server } from './socker/socker.js';
+import getCatelories from './routers/exportFile.js';
 
 
 app.use(express.json());
@@ -71,6 +72,7 @@ app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
 app.use (uploadImgUserRouter)
+app.use (getCatelories)
 server.listen(8080, () => {
   console.log('Server running on http://localhost:8080');
 });

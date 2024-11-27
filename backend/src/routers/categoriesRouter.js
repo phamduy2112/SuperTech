@@ -11,6 +11,6 @@ categoriesRouter.get('/categories_dad', getcategory_dad);
 categoriesRouter.get('/categories/:id', getcategoriesById);
 categoriesRouter.post('/categories-create',middleToken, createcategories);
 categoriesRouter.put('/categories-edit/:id',middleToken, updatecategories);
-categoriesRouter.delete('/categories-delete/:id',middleToken, deletecategories);
+categoriesRouter.delete('/categories-delete',middleToken, deletecategories);
 
 export default categoriesRouter;
