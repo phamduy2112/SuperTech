@@ -1,0 +1,44 @@
+.inputSearch .ant-input-outlined {
+border-color: #7500CF;
+height: 38px;
+}
+.inputSearch .ant-btn-variant-solid{
+    background-color: #7500CF;
+    height: 38px;
+}
+.inputSearch .ant-input-outlined:focus, .inputSearch .ant-input-outlined:hover{
+    border-color: #6308a8;
+}
+.inputSearch .ant-btn-variant-solid:hover{
+    background-color: #6308a8;
+}
+.inputSearch .ant-btn-variant-solid:not(:disabled):not(.ant-btn-disabled):hover{
+    background-color: #6308a8;
+}
+.inputSearch .ant-btn .ant-btn-icon {
+font-size: 2rem;
+}
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed{
+    border-color: #7500CF;
+}
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed{
+    color: #7500CF;
+}
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):active, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):active{
+    color: #6308a8;
+    border-color: #6308a8;
+}
+
+.DropDown:where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover{
+    color: #6308a8;
+    border-color: #6308a8;
+}
+.inputSearch :where(.css-dev-only-do-not-override-ni1kz0).ant-input-search .ant-input-search-button{
+    height: 3.8rem;
+  
+}
+.inputSearch :where(.css-dev-only-do-not-override-ni1kz0).ant-input-search >.ant-input-group >.ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary){
+    color: #7500CF;
+    border: 1px solid #7500CF;
+
+}
