@@ -48,7 +48,7 @@ export const createStaff = async (DataStaff: DataStaffInterface) => {
 };
 export const DeleteStaffSend = (IdStaff: number) => {
   console.log(IdStaff);
-  return axiosWithAuth(`deleteuser/${IdStaff}`, {
+  return axiosWithAuth(`/remove-employee/${IdStaff}`, {
     method: "delete",
   });
 };

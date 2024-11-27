@@ -6,22 +6,28 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getCatelogryDadThunk } from '../../../redux/catelogry/catelogry.slice';
 import { getProductByCateloriesDad } from '../../../redux/product/product.slice';
 import { useLocation } from 'react-router-dom';
+import { data } from '../DetailProduct/data';
+import Filter from './Filter';
 
 function ListProduct() {
   const location = useLocation();
 
   const searchParams = new URLSearchParams(location.search);
-  const category_dad = Number(searchParams.get('category_dad'));  // Get 'category_dad' directly
-  const category = Number(searchParams.get('category'));          // Get 'category' directly
+  const category_dad = Number(searchParams.get('category_dad')); 
+  const category = Number(searchParams.get('category'));          
 
   const listProduct = useAppSelector((state) => state.product.listProduct);
   const dispatch = useAppDispatch();
 
   const [isDiscounted, setIsDiscounted] = useState(false); // State cho checkbox giảm giá
-  const [dataCate,setDataCate]=useState({})
+  const [dataCate, setDataCate] = useState({})
 
 
   useEffect(() => {
+
+
+
+
     // Lấy category_dad và category từ URL mới
     const searchParams = new URLSearchParams(location.search);
     const category_dad = searchParams.get('category_dad');
@@ -36,14 +42,31 @@ function ListProduct() {
     // Gọi API hoặc các thao tác khác cần thiết khi `dataCate` thay đổi
     // dispatch(getProductByCategories(dataCate));  // Ví dụ gọi hàm dispatch
   }, [location]);  // Lắng nghe thay đổi của `location`
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getProductByCateloriesDad(dataCate))
-  },[dataCate,dispatch])
+  }, [dataCate, dispatch])
   // Lọc sản phẩm theo trạng thái checkbox
   const filteredProducts = isDiscounted
-    ? listProduct.filter(item => item.product_discount>0) // Giả định rằng sản phẩm có thuộc tính 'isDiscounted'
+    ? listProduct.filter(item => item.product_discount > 0) 
     : listProduct;
-    console.log(dataCate);
+  console.log('date', dataCate);
+
+  // const handleCheckboxChangeSale = (e: { target: { checked: boolean; }; }) => {
+  //   if (e.target.checked === true) {
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     const sortedProducts = [...Products].sort((a: any, b: any) => b.product_discount - a.product_discount);
+  //     setProducts(sortedProducts)
+  //   } else {
+  //     setProducts(ProductsByIdComponent)
+  //   }
+  // }
+
+
+
+
+
+
+
   return (
     <div className='w-[80%] m-auto'>
       <Breadcrumb
@@ -59,9 +82,8 @@ function ListProduct() {
       <div>
         <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm: {category_dad}</h3>
         <div className='flex gap-4'>
-          <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[9rem]'>
-            <MdFilterAlt />
-            <span>Bộ lọc</span>
+          <div className='flex gap-4'>
+            <Filter data={listProduct} />
           </div>
           <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[6rem]'>
             <span>Giá</span>
@@ -72,12 +94,10 @@ function ListProduct() {
             <div className='flex gap-[1rem]'>
               <h4 className='text-[1.8rem] mt-[.5rem] font-semibold'>10 Điện thoại iPhone (Apple)</h4>
               <div className='flex items-center justify-center'>
-                <Form.Item valuePropName="checked">
-                  <Checkbox 
-                    onChange={(e) => setIsDiscounted(e.target.checked)} // Cập nhật trạng thái checkbox
-                  >
+                <Form.Item className='name="isDiscounted" ' valuePropName="checked">
+                  {/* <Checkbox onChange={handleCheckboxChangeSale}>
                     Giảm giá
-                  </Checkbox>
+                  </Checkbox> */}
                 </Form.Item>
                 <Form.Item valuePropName="checked">
                   <Checkbox>Mới</Checkbox>
@@ -96,7 +116,7 @@ function ListProduct() {
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
         {filteredProducts.map((item) => (
-          <ProductItem key={item.id} product={item} /> // Đảm bảo sử dụng key cho mỗi sản phẩm
+          <ProductItem key={item.id} product={item} />
         ))}
       </div>
     </div>
