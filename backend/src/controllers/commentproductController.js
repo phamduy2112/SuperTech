@@ -51,7 +51,7 @@ const getCommentProductByIdProduct = async (req, res) => {
           },
           {
             model: models.replies_comment_product, // Kết hợp bảng user
-            as: 'repliesToComment', // Alias cho kết hợp bảng
+            as: 'replies_comment_products', // Alias cho kết hợp bảng
             include:[
               {
                 model: models.user, // Kết hợp bảng user

@@ -18,6 +18,14 @@ export default class history_bank extends Model {
       type: DataTypes.TEXT,
       allowNull: true
     },
+    order_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'order',
+        key: 'order_id'
+      }
+    },
     amount: {
       type: DataTypes.INTEGER,
       allowNull: true
@@ -48,6 +56,13 @@ export default class history_bank extends Model {
         using: "BTREE",
         fields: [
           { name: "user_id" },
+        ]
+      },
+      {
+        name: "fk_bankautohistory_orderid",
+        using: "BTREE",
+        fields: [
+          { name: "order_id" },
         ]
       },
     ]

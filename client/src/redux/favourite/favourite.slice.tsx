@@ -1,56 +1,53 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {  getFavouriteProducts } from "../../service/product/favourite.service";
+import { getFavouriteProducts } from "../../service/product/favourite.service";
 
-// Thunk for fetching the list of favourite products
+// Async thunk
 export const getFavouriteByIdProductThunk = createAsyncThunk(
-  "getFavouriteByIdProductThunk",
-  async () => {
+  "favourite/getFavouriteByIdProduct",
+  async (_, { rejectWithValue }) => {
     try {
-      const resp = await getFavouriteProducts();
-      return resp.data.content;
-    } catch (e) {
-      console.log(e);
+      const response = await getFavouriteProducts();
+      return response.data.content; // Dữ liệu trả về
+    } catch (error) {
+      console.error("Error fetching favourite products:", error);
+      return rejectWithValue(error.response?.data || "Unknown error");
     }
-  },
+  }
 );
 
-// Thunk for adding a product to favourites
-// export const createfavouriteByIdProductThunk = createAsyncThunk(
-//   "createfavouriteByIdProductThunk",
-//   async (data: any, { dispatch }) => {
-//     try {
-//       await createFavouriteProduct(data);  // Create favourite product
-//       const listFavouriteProduct = await dispatch(getFavouriteByIdProductThunk());  // Fetch updated list
-//       return listFavouriteProduct.payload;
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   },
-// );
-
+// Initial state
 const initialState = {
   listFavouriteProduct: [],
+  loading: false,
+  error: null,
 };
 
-const FavouriteSlice = createSlice({
-  name: "FavouriteSlice",
+// Slice
+const favouriteSlice = createSlice({
+  name: "favourite",
   initialState,
   reducers: {
-    setfavourite: (state, { payload }) => {
-      state.listFavouriteProduct = payload;
+    setSearch: (state, action) => {
+      state.listFavouriteProduct = action.payload; // Gán danh sách sản phẩm yêu thích
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getFavouriteByIdProductThunk.fulfilled, (state, { payload }) => {
-        state.listFavouriteProduct = payload;
+      .addCase(getFavouriteByIdProductThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      // .addCase(createfavouriteByIdProductThunk.fulfilled, (state, { payload }) => {
-      //   state.listFavouriteProduct = payload; // Update state after creating a favourite
-      // });
+      .addCase(getFavouriteByIdProductThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.listFavouriteProduct = payload || [];
+      })
+      .addCase(getFavouriteByIdProductThunk.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload || "Error fetching favourite products";
+      });
   },
 });
 
-export const { setfavourite } = FavouriteSlice.actions;
-
-export const FavouriteReducer = FavouriteSlice.reducer;
+// Export actions và reducer
+export const { setSearch } = favouriteSlice.actions;
+export const FavouriteReducer = favouriteSlice.reducer;

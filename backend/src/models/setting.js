@@ -1,26 +1,26 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class banner extends Model {
+export default class setting extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
-    banner_id: {
+    id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    banner_name: {
-      type: DataTypes.STRING(100),
+    name: {
+      type: DataTypes.STRING(255),
       allowNull: true
     },
-    status: {
-      type: DataTypes.INTEGER,
+    value: {
+      type: DataTypes.TEXT,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'banner',
+    tableName: 'setting',
     timestamps: false,
     indexes: [
       {
@@ -28,7 +28,7 @@ export default class banner extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "banner_id" },
+          { name: "id" },
         ]
       },
     ]

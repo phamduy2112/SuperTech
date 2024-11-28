@@ -22,11 +22,6 @@ export default class comment_product extends Model {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    isPurchase: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false, // Giá trị mặc định là false
-  },
     product_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -42,6 +37,11 @@ export default class comment_product extends Model {
         model: 'user',
         key: 'user_id'
       }
+    },
+    isPurchase: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {
     sequelize,

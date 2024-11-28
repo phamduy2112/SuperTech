@@ -165,10 +165,11 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
       order_total:totalPrice,
       order_total_quatity:+totalItem,
       order_status:0,
+
       user_id:user.user_id,
       discount:getDiscountId ==0 ? null : getDiscountId,
       phone_number:formData.sdt,
-      
+      email:user.user_email,
       address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
 
@@ -177,6 +178,7 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
    
 
     const detailOrders = listCart.map(item => ({
+      product_name:item.product_name,
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
@@ -188,6 +190,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
     }));
 
     const responve=await createDetailOrder(detailOrders)
+    dispatch(setOrderId(resp.data.content.order_id))
+    navigate("/xuất-hóa-đơn")
     if(responve){
     
       dispatch(setOrderId(resp.data.content.order_id))

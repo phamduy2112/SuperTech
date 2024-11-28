@@ -6,7 +6,6 @@ import './css/customCss.css';
 import { CiFilter } from 'react-icons/ci';
 import { IoAddOutline } from 'react-icons/io5';
 import { HiAdjustmentsHorizontal } from 'react-icons/hi2';
-import { operatingSystems, priceList, refreshRates, screenSizes, trademark, ramOptions, romOptions, frontCameras, rearCameras, performanceSpecs, batterySpecs, specialFeatures } from './DataFilter';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { useDispatch } from 'react-redux';
 import { getSearchProductThunk } from '../../../redux/search/Search.slice';
@@ -19,56 +18,10 @@ function Search() {
   useEffect(()=>{
     dispatch(getSearchProductThunk(query))
   },[dispatch,query])
-  // const location = useLocation();
-  // // const [query, setQuery] = useState('');
-  // const [filteredProducts, setFilteredProducts] = useState([]);
- 
-  // console.log(query);
 
+  console.log(getSearch);
+  
 
-  // const dispatch=useAppDispatch();
-  // const listSearch=useAppSelector((state)=>state.listSearch.listSearch)
-  // useEffect(() => {
-
-
-  //   // Dữ liệu sản phẩm mẫu
-  //   const allProducts = [
-  //     { id: 1, name: 'iPhone 12', price: 15000000 },
-  //     { id: 2, name: 'iPhone 13', price: 20000000 },
-  //     { id: 3, name: 'iPhone 14 Pro', price: 30000000 },
-  //     // Thêm các sản phẩm khác nếu cần
-  //   ];
-
-  //   const results = allProducts.filter(product =>
-  //     product.name.toLowerCase().includes(searchQuery?.toLowerCase() || '')
-  //   );
-  //   setFilteredProducts(results);
-  // }, [location.search]);
-
-    const [filter, setFilter] = useState([
-      { id: 1, value: 'iOS' },
-      { id: 2, value: '2G' },
-      { id: 3, value: 'Dưới 3 triệu' }
-    ]);
-
-  function Deletefilter(id) {
-    const newFilter = filter.filter(item => item.id !== id);
-    setFilter(newFilter);
-  }
-
-  function Selected() {
-    return (
-      <div className='flex gap-2 text-lg justify-start items-center'>
-        <span>Đã Chọn:</span>
-        {filter.map(item => (
-          <Button key={item.id} className='min-w-16 h-10 flex justify-center items-center' variant="outlined">
-            <span>{item.value}</span>
-            <IoAddOutline onClick={() => Deletefilter(item.id)} className='hover:text-red-500 text-xl rotate-45' />
-          </Button>
-        ))}
-      </div>
-    );
-  }
 
   function OptionSelected() {
     const [priceclick, setPriceClick] = useState(false);
@@ -98,12 +51,7 @@ function Search() {
           {/* Kết quả phù hợp với từ khóa: <span className='text-purple-700 font-semibold'>{query}</span> */}
         </h3>
         <div className='flex gap-4'>
-          <Popover placement="bottomLeft" trigger='click' title={<Selected />} content={<OptionSelected />}>
-            <Button className='text-lg font-bold'>
-              <CiFilter />
-              <span>Lọc</span>
-            </Button>
-          </Popover>
+          
         </div>
         <div className='mt-2 w-full'>
           <div className='flex justify-between items-center'>
@@ -132,7 +80,7 @@ function Search() {
       </div>
 
       <div className="grid grid-cols-6 gap-y-4 text-[1.6rem]">
-        {getSearch.length > 0 ? (
+        {getSearch ? (
           getSearch.map(product => (
             <ProductItem key={product.id} product={product} />
           ))

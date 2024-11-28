@@ -17,10 +17,10 @@ import { cartReducer } from './cart/cart.slice';
 import { commentReducer } from './comment/comment.slice';
 import { orderReducer } from './order/Order.slice';
 import { socketReducer } from './socket/socker.slice';
-import { FavouriteReducer } from './favourite/favourite.slice';
 import { cityReducer } from './order/City.slice';
 import { nofiReducer } from './admin/component/Nofi';
 import { searchReducer } from './search/Search.slice';
+import  {FavouriteReducer}  from './favourite/favourite.slice';
 
 const persistConfig = {
   key: 'root',

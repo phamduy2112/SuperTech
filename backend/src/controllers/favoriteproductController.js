@@ -17,6 +17,37 @@ const getfavoriteproduct = async (req, res) => {
                 {
                     model:models.products,
                     as:"product",
+                    include: [
+                        {
+                        model: models.comment_product,
+                            as:'comment_products',
+                            include: [
+                                {
+                                    model: models.user,
+                                    as: 'user'
+                                }
+                            ]
+                    },
+                        {
+                        model: models.infor_product,
+                            as:'infor_product_infor_product'
+                    },
+                        {
+                        model: models.product_colors,
+                            as:'product_colors',
+                            include:[
+                                {
+                                    model: models.image_product,
+                                        as:'image'
+                                },
+                                {
+                                    model: models.product_storage,
+                                        as:'product_storages',
+                                        required: false
+                                },
+                            ]
+                    },
+                ]
                 }
             ]
         });

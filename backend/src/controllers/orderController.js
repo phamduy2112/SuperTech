@@ -4,6 +4,7 @@ import initModels from "../models/init-models.js";
 import order from "../models/order.js";
 import { startOfWeek,endOfWeek } from "date-fns";
 import { fn } from "sequelize";
+import { sendMail } from "../config/mail.js";
 
 let models = initModels(sequelize); 
 let orders = models.order; 
@@ -25,12 +26,67 @@ const getorder = async (req, res) => {
                     model: models.discount,
                     as: "discount_discount",
                 },
+                {
+                  model:models.detail_order,
+                  as:"detail_orders"
+                }
             ],
         });
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
+};
+const getSuccessEmailOrder = async (req, res) => {
+  try {
+    const { email, orderDetails } = req.body; // Giả sử thông tin đơn hàng được gửi qua body
+
+  //   ${orderDetails
+  //     .map(
+  //       (item) => `
+  //     <li>
+  //       <b>Sản phẩm:</b> ${item.name} <br>
+  //       <b>Số lượng:</b> ${item.quantity} <br>
+  //       <b>Giá:</b> ${item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+  //     </li>
+  //   `
+  //     )
+  //     .join('')}
+  // 
+  // <p>Tổng thanh toán: <b>${orderDetails
+  //   .reduce((total, item) => total + item.quantity * item.price, 0)
+  //   .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></p>
+    // Tạo nội dung HTML cho email
+    const htmlContent = `
+      <h1 style="color: green;">Đơn hàng của bạn đã được đặt thành công!</h1>
+      <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.</p>
+      <h3>Chi tiết đơn hàng:</h3>
+      <ul>
+      <li>HEHE</li>
+       </ul>
+      <p>Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.</p>
+      <br>
+      <p>Trân trọng,<br>Đội ngũ hỗ trợ</p>
+    `;
+
+    // Gửi email
+    const emailResult = await sendMail(
+      email, // Địa chỉ email người nhận
+      'Xác nhận đơn hàng thành công', // Tiêu đề email
+      htmlContent // Nội dung email
+    );
+
+    if (emailResult) {
+      return res.status(200).json({ message: 'Email xác nhận đơn hàng đã được gửi thành công.' });
+    } else {
+      return res.status(500).json({ message: 'Không thể gửi email xác nhận đơn hàng.' });
+    }
+  } catch (e) {
+    console.error('Lỗi khi gửi email xác nhận:', e);
+    console.log(e);
+    
+    return res.status(500).json({ message: 'Đã xảy ra lỗi khi gửi email.' });
+  }
 };
 
 const getOrdersForToday = async (req, res) => {
@@ -99,38 +155,52 @@ const getOrderById = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-const getMonthlyRevenue = async (req, res) => {
-    try {
-      // Lấy ngày đầu tháng và cuối tháng hiện tại
-      const today = new Date();
-      const startDate = startOfMonth(today);
-      const endDate = endOfMonth(today);
-  
-      // Query dữ liệu doanh thu
-      const results = await models.order.findAll({
-        attributes: [
-          [fn('SUM', col('total_price')), 'total_revenue'], // Tính tổng doanh thu
-        ],
-        where: {
-          createdAt: {
-            [Op.between]: [startDate, endDate], // Lọc đơn hàng trong tháng hiện tại
-          },
-        },
-      });
-  
-      // Trả về kết quả
-      res.status(200).json({
-        success: true,
-        data: results,
-      });
-    } catch (error) {
-      console.error('Error fetching monthly revenue:', error);
-      res.status(500).json({
+
+
+const getRevenueBetweenDates = async (req, res) => {
+  try {
+    // Lấy ngày bắt đầu và ngày kết thúc từ query string hoặc body của request
+    const { startDate, endDate } = req.query; // Hoặc req.body nếu bạn truyền qua body
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({
         success: false,
-        message: 'Có lỗi xảy ra khi lấy tổng doanh thu hàng tháng.',
+        message: 'Cần truyền đủ ngày bắt đầu và ngày kết thúc.',
       });
     }
-  };
+
+    // Chuyển đổi ngày bắt đầu và ngày kết thúc thành định dạng Date
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Đảm bảo ngày kết thúc là 23:59:59 của ngày đó để bao gồm cả ngày kết thúc
+    end.setHours(23, 59, 59, 999);
+
+    // Query dữ liệu doanh thu trong khoảng thời gian từ startDate đến endDate
+    const results = await models.order.findAll({
+      attributes: [
+        [fn('SUM', col('total_price')), 'total_revenue'], // Tính tổng doanh thu
+      ],
+      where: {
+        createdAt: {
+          [Op.between]: [start, end], // Lọc đơn hàng trong khoảng thời gian
+        },
+      },
+    });
+
+    // Trả về kết quả
+    res.status(200).json({
+      success: true,
+      data: results,
+    });
+  } catch (error) {
+    console.error('Error fetching revenue between dates:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Có lỗi xảy ra khi lấy tổng doanh thu trong khoảng thời gian.',
+    });
+  }
+};
 
 
 const changeStatusOrder = async (req, res) => {
@@ -185,8 +255,9 @@ const changeStatusOrder = async (req, res) => {
       return res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau.' });
     }
   };
-  
-const createorder = async (req, res) => {
+
+
+  const createorder = async (req, res) => {
     try {
         const {
             order_total,
@@ -195,38 +266,43 @@ const createorder = async (req, res) => {
             pay_id,
             discount,
             address,
-            phone_number
+            phone_number,
+            email
         } = req.body;
 
         const user_id = req.id;
-        // const pay_id = req.id;
-        // const discount = req.id;
         let date = new Date();
+
+        // Tạo đơn hàng
         const neworder = await order.create({
             order_date: date,
             order_total,
             order_total_quatity,
             order_status,
-            pay_id:null,
+            pay_id: null,
             discount,
             user_id,
             address,
+            email_user:email,
             phone_number
-            // discount
         });
-        // order_statis
-        const newOrderStatus=await models.order_status.create({
-            order_id:neworder.order_id,
+
+        // Tạo trạng thái đơn hàng
+        const newOrderStatus = await models.order_status.create({
+            order_id: neworder.order_id,
             order_status,
-            created_at:date
-        })
+            created_at: date
+        });
+
         
-        responseSend(res, neworder, "Thêm Thành công!", 201);
-    } catch (error) {       
+               responseSend(res, neworder, "Thêm Thành công!", 201);
+ 
+    } catch (error) {
         console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+
 const updateorder = async (req, res) => {
     try {
         const order_id = req.params.id;
@@ -281,6 +357,8 @@ export {
     updateorder,
     deleteorder,
     changeStatusOrder,
-    getMonthlyRevenue,
+    getRevenueBetweenDates,
+    getSuccessEmailOrder,
     getOrdersForToday
-};
+
+  };

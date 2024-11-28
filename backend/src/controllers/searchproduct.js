@@ -12,7 +12,39 @@ const searchProducts = async (req, res) => {
                 sequelize.fn('LOWER', sequelize.fn('TRIM', sequelize.col('product_name'))),
                 'LIKE',
                 '%' + tukhoa.trim().toLowerCase() + '%'
-            )
+            ),
+            include: [
+                {
+                model: models.comment_product,
+                    as:'comment_products',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user'
+                        }
+                    ]
+            },
+                {
+                model: models.infor_product,
+                    as:'infor_product_infor_product'
+            },
+                {
+                model: models.product_colors,
+                    as:'product_colors',
+                    include:[
+                        {
+                            model: models.image_product,
+                                as:'image'
+                        },
+                        {
+                            model: models.product_storage,
+                                as:'product_storages',
+                                required: false
+                        },
+                    ]
+            },
+        ]
+       
         });
         if (products.length > 0) {
             responseSend(res, products, "Thành công!", 200);
