@@ -1,23 +1,20 @@
-import React, { useEffect } from "react";
 import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import { Button, Form, Input } from "antd";
 import { FaArrowLeft, FaFacebookF, FaGoogle } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import '../css/formSign.css'
-import Swal from 'sweetalert2'
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { login } from "../../../../service/auth/auth.service";
 import { saveLocalStorage } from "../../../../utils";
-import useSweetAlert from "../../../../hooks/Notification.hook";
 import { useAppDispatch } from "../../../../redux/hooks";
 import { setLogin, setToken } from "../../../../redux/user/user.slice";
 import toast from "react-hot-toast";
+import { TPayloadLogin } from "../../../../service/auth/auth.type";
 
 function Login() {
   const navigate = useNavigate();
-  const {showAlert}= useSweetAlert();
   const dispatch=useAppDispatch();
 
   const formik = useFormik({
@@ -34,7 +31,7 @@ function Login() {
         .required("Mật khẩu là bắt buộc"),
    
     }),
-    onSubmit:async (values) => {
+    onSubmit:async (values:TPayloadLogin) => {
      
     
       const res = await login(values);

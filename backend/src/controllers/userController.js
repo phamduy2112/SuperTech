@@ -9,6 +9,7 @@ import path from"path"
 import nodemailer from 'nodemailer';
 import { Op } from "sequelize";
 import { startOfWeek,endOfWeek } from "date-fns";
+import jwt from 'jsonwebtoken'
 
 
 
@@ -61,77 +62,134 @@ const getNewCustomersThisWeek = async  (req, res) => {
   }
 }
 const register = async (req, res) => {
-    try{
-        const {user_name,user_email,user_password}=req.body
-        let user_time=new Date();
+  try {
+    const { user_name, user_email, user_password } = req.body;
+    let user_time = new Date();
 
-        const user = await User.findOne({ where: { user_email } });
-        if(user){
-            return responseSend(res,{success:false},"Email đã tồn tại",200)
-        }
-        const hashedPassword=await bcrypt.hash(user_password,10)
-        await User.create({
-            user_name,
-            user_email,
-            user_password:hashedPassword,
-            user_role:0,
-            user_time
-        })
-        responseSend(res,{
-            success: true
-        },"Đăng kí thành công!",201)
-        
-        }catch(e){
-            console.log(e);
-            
-        }
-    
-}
+    // Kiểm tra xem email đã tồn tại chưa
+    const user = await User.findOne({ where: { user_email } });
+    if (user) {
+      return responseSend(res, { success: false }, "Email đã tồn tại", 200);
+    }
+
+    // Mã hóa mật khẩu người dùng
+    const hashedPassword = await bcrypt.hash(user_password, 10);
+
+    // Tạo token xác nhận duy nhất
+    const verificationToken = createToken({ user_email }); // Gửi email thay vì user_id vì người dùng chưa được tạo
+
+    // Tạo người dùng mới
+    const newUser = await User.create({
+      user_name,
+      user_email,
+      user_password: hashedPassword,
+      user_role: 0,
+      user_time,
+      verification_token: verificationToken,
+      is_verified: false,
+    });
+
+    // Tạo liên kết xác nhận email
+    const confirmationLink = `http://localhost:8080/verify-email?token=${verificationToken}`;
+const htmlContent = `
+  <p>Chào ${user_name},</p>
+  <p>Cảm ơn bạn đã đăng ký tài khoản! Vui lòng xác nhận địa chỉ email của bạn bằng cách bấm vào liên kết dưới đây:</p>
+  <p><a href="${confirmationLink}" target="_blank">Xác nhận email</a></p>
+  <p>Trân trọng!</p>
+`;
+
+    // Gửi email xác nhận
+    const emailSent = await sendMail(user_email, "Xác nhận đăng ký tài khoản", htmlContent);
+
+    if (emailSent) {
+      return responseSend(res, { success: true }, "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.", 201);
+    } else {
+      return responseSend(res, { success: false }, "Lỗi khi gửi email xác nhận.", 500);
+    }
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      message: "Đã có lỗi xảy ra trong quá trình đăng ký.",
+      success: false,
+    });
+  }
+};
+
 const login = async (req, res) => {
   try {
-      const { email, password } = req.body;
+    const { email, password } = req.body;
+
+    // Tìm người dùng theo email
+    const user = await User.findOne({ where: { user_email: email.trim() } }); // Sử dụng trim() để loại bỏ khoảng trắng
+
+    if (!user) {
+      // Nếu không tìm thấy người dùng
+      console.log("No user found with that email");
+      return res.status(200).json({
+        message: "Sai email hoặc mật khẩu",
+        success: false,
+      });
+    }
+
+    // Kiểm tra mật khẩu
+    const isPasswordMatch = await bcrypt.compare(password, user.user_password);
+    if (!isPasswordMatch) {
+      return res.status(200).json({
+        message: "Sai email hoặc mật khẩu",
+        success: false,
+      });
+    }
+
+    // Kiểm tra xem người dùng có xác nhận email chưa
+    if (!user.is_verified) {
+      return res.status(403).json({
+        message: "Tài khoản chưa được xác nhận. Vui lòng kiểm tra email của bạn để xác nhận.",
+        success: false,
+      });
+    }
+    const verificationToken = createToken({ user_email:email }); // Gửi email thay vì user_id vì người dùng chưa được tạo
+
+
+    // Tạo liên kết xác nhận email
+    const confirmationLink = `http://localhost:8080/verify-email?token=${verificationToken}`;
+const htmlContent = `
+  <p>Chào ${user.user_name},</p>
+  <p>Cảm ơn bạn đã đăng ký tài khoản! Vui lòng xác nhận địa chỉ email của bạn bằng cách bấm vào liên kết dưới đây:</p>
+  <p><a href="${confirmationLink}" target="_blank">Xác nhận email</a></p>
+  <p>Trân trọng!</p>
+`;
+
+    // Gửi email xác nhận
+await sendMail(email, "Xác nhận đăng ký tài khoản", htmlContent);
 
  
 
-      const user = await User.findOne({ where: { user_email: email.trim() } }); // Sử dụng trim() để loại bỏ khoảng trắng
-      if (!user) {
-          console.log("No user found with that email");
-          return res.status(200).json({
-              message: "Sai email hoặc mật khẩu",
-              success: false,
-          });
-      }
+    // Tạo đối tượng chứa thông tin người dùng
+    const userDetail = {
+      user_id: user.user_id,
+      user_role: user.user_role,
+    };
 
+    // Tạo token và refresh token
+    const token = createToken(userDetail);
+    const tokenRef = createTokenRef(userDetail);
 
-      const isPasswordMatch = await bcrypt.compare(password, user.user_password);
+    // Trả về token và refresh token
+    return responseSend(res, {
+      token: token,
+      refreshToken: tokenRef,
+      success: true,
+    }, "Đăng nhập thành công!", 200);
 
-      if (!isPasswordMatch) {
-          return res.status(200).json({
-            message: "Sai email hoặc mật khẩu",
-            success: false,
-          });
-      }
-
-      const userDetail = {
-          user_id: user.user_id,
-          user_role:user.user_role
-      };
-      const token = createToken(userDetail);
-      const tokenRef = createTokenRef(userDetail);
-
-      return responseSend(res, {
-          token: token,
-          refreshToken: tokenRef,
-          success: true,
-      }, "Thành công!", 200);
   } catch (e) {
-      console.error("Error in login:", e);
-      return res.status(500).json({
-          message: "Internal Server Error",
-          success: false,
-      });
+    console.error("Error in login:", e);
+    return res.status(500).json({
+      message: "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+      success: false,
+    });
   }
-}
+};
+
 const resetToken = async (req, res) => {
     try {
         let {token}=req.body;
@@ -515,6 +573,36 @@ function generateRandomString(length) {
     } catch (error) {
       console.error("Error in resetPasswordNoToken:", error);
       return responseSend(res, "", "Internal server error", 500);
+    }
+  };
+  export const verifyEmail = async (req, res) => {
+    const { token } = req.query;  // Lấy token từ query string
+  
+    if (!token) {
+      return res.status(400).json({ message: 'Token không hợp lệ' });
+    }
+  
+    try {
+      // Giải mã token để lấy thông tin người dùng
+      const decoded = jwt.verify(token, "BI_MAT"); // JWT_SECRET là bí mật bạn đã dùng để mã hóa token
+   
+        // console.log(decoded.data.user_email);
+        
+      const user = await User.findOne({ where: { user_email: decoded.data.user_email } });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'Người dùng không tồn tại' });
+      }
+  
+      // Cập nhật trạng thái is_verified của người dùng
+      user.is_verified = true;
+      await user.save();
+  
+      return res.redirect("http://localhost:5173/%C4%91%C4%83ng-nh%E1%BA%ADp"); // Hoặc bạn có thể trả về trang HTML
+  
+    } catch (error) {
+      console.error('Lỗi xác nhận email:', error);
+      return res.status(500).json({ message: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.' });
     }
   };
 export {

@@ -1,4 +1,3 @@
-import * as React from "react";
 import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import './css/custom.css'
@@ -8,14 +7,13 @@ import { Button, Form, Input } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { signup } from "../../../../service/auth/auth.service";
-import Swal from 'sweetalert2'
-import useSweetAlert from "../../../../hooks/Notification.hook";
+
 import toast from "react-hot-toast";
+import { TPayloadRegister } from '../../../../service/auth/auth.type';
 
 function Resigter() {
   // Sử dụng hook useFormik để quản lý form
   const navigate = useNavigate();
-  const {showAlert}= useSweetAlert();
 
   const formik = useFormik({
     initialValues: {
@@ -31,11 +29,10 @@ function Resigter() {
         .min(6, "Mật khẩu phải có ít nhất 6 kí tự")
         .required("Mật khẩu là bắt buộc"),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Mật khẩu xác nhận không khớp")
+        .oneOf([Yup.ref("password")], "Mật khẩu xác nhận không khớp")
         .required("Xác nhận mật khẩu là bắt buộc"),
     }),
-    onSubmit:async (values) => {
-      console.log("Form data", values);
+    onSubmit:async (values:TPayloadRegister) => {
       const payload={
         user_name:values.fullName,
         user_email:values.email,
@@ -50,7 +47,6 @@ function Resigter() {
       } else {
         toast.error(res.data.message) 
       }
-console.log(res);
 
     },
   });

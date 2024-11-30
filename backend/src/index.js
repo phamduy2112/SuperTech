@@ -39,13 +39,12 @@ app.use(cookieParser());
 
 app.use(urlencoded({extended:true}))
 app.use(express.static("."))
-
-const corsOptions={
-    origin:'http://localhost:5173',
-    credentials:true,
-    
-
-}
+const corsOptions = {
+  origin: 'http://localhost:5173',  // Frontend của bạn đang chạy ở đây
+  credentials: true,  // Cho phép gửi cookie trong các yêu cầu
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Các phương thức HTTP được phép
+  allowedHeaders: ['Content-Type', 'Authorization']  // Các header được phép gửi trong yêu cầu
+};
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");

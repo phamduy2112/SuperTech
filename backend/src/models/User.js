@@ -50,6 +50,10 @@ export default class user extends Model {
       type: DataTypes.STRING(100),
       allowNull: true
     },
+    is_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false // Mặc định là false
+  },
     user_time: {
       type: DataTypes.DATE,
       allowNull: true

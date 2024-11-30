@@ -11,7 +11,7 @@ import { IMG_BACKEND } from '../../../constants';
 function User() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user: any = useAppSelector((state) => state.user.user);
+  const user: any = useAppSelector((state:any) => state.user.user);
 
   // Điều hướng mặc định
   useEffect(() => {

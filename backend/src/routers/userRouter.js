@@ -1,6 +1,6 @@
 
 import express from 'express';
-import {  changePassword, deleteEmployee, forgetCheckCode, forgetCheckMail, getNewCustomersThisWeek, getUser,login,loginFacebook,logout,register, resetPasswordNoToken, resetToken, updateImage, updateUser, userDetail, verifyOldPassword } from '../controllers/userController.js';
+import {  changePassword, deleteEmployee, forgetCheckCode, forgetCheckMail, getNewCustomersThisWeek, getUser,login,loginFacebook,logout,register, resetPasswordNoToken, resetToken, updateImage, updateUser, userDetail, verifyEmail, verifyOldPassword } from '../controllers/userController.js';
 import isAuthenticated from '../config/auth.js';
 import { middleToken } from '../config/jwt.js';
 const userRouter = express.Router();
@@ -11,6 +11,7 @@ userRouter.post("/reset-token", resetToken);
 userRouter.post("/login-facebook", loginFacebook);
 userRouter.get("/logout", logout);
 userRouter.get("/users", getUser);
+userRouter.get("/verify-email", verifyEmail);
 
 userRouter.post('/register', register);
 userRouter.post('/login', login);
