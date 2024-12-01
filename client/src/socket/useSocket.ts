@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { io, Socket } from 'socket.io-client'; // Import type Socket nếu cần
 import { setSocket } from '../redux/socket/socker.slice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { TpayloadUser } from '../service/user/user.type';
 
 const UseSocket = () => {
   const { user } = useAppSelector((store) => store.user); // Lấy user từ Redux
@@ -11,12 +12,8 @@ const UseSocket = () => {
     console.log("User:", user); // Kiểm tra xem user có giá trị hay không
     if (!user) return; // Nếu user chưa đăng nhập thì không tiếp tục kết nối socket
   
-<<<<<<< HEAD
-    const socket: Socket = io('http://dichvumang86.cloud', {
-=======
-    const socket: Socket = io('http://localhost:8080', {
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
-      query: { user_id: user.user_id }, // Gửi user_id trong query
+    const socket: Socket = io('https://dichvumang86.cloud', {
+      query: { user_id: user?.user_id }, // Gửi user_id trong query
       transports: ['websocket'], // Sử dụng websocket làm phương thức truyền tải
     });
   

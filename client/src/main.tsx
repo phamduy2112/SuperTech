@@ -5,7 +5,7 @@ import App from './App.tsx'
 import './index.css'
 import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
-import store from './redux/store';
+import store from './redux/store.tsx';
 import toast, { Toaster } from 'react-hot-toast';
 import ToasterConfig from './components/toask/Toask.tsx';
 

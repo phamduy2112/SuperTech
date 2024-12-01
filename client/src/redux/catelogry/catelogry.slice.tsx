@@ -9,7 +9,7 @@ export const getCatelogryThunk = createAsyncThunk(
       const result = resp.data.content;
       if (searchKey.trim()) {
         const filteredResults = result.filter((item:any) =>
-          item.product_name.toLowerCase().includes(searchKey.toLowerCase())
+          item.category_name.toLowerCase().includes(searchKey.toLowerCase())
         );
         return filteredResults;
       } else {
@@ -34,7 +34,7 @@ export const createCategoryThunk=createAsyncThunk("createCategoryThunk",
   }
 )
 export const deleteCategoryThunk=createAsyncThunk("deleteCategoryThunk",
-  async(id:number,{dispatch})=>{
+  async(id:any[],{dispatch})=>{
     try{
       const resp = await deleteCategory(id);
       const response = await dispatch(getCatelogryThunk(''));
@@ -49,7 +49,7 @@ export const deleteCategoryThunk=createAsyncThunk("deleteCategoryThunk",
 export const putCategoryThunk=createAsyncThunk("putCategoryThunk",
   async(category:any,{dispatch})=>{
     try{
-      const resp = await putCategory(category.values,category.id);
+      const resp = await putCategory(category,category.id);
       const response = await dispatch(getCatelogryThunk(''));
 
       return response.payload;

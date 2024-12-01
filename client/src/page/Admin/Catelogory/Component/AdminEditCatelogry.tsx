@@ -6,6 +6,7 @@ import { UploadProps } from 'antd/lib';
 import { Formik, Form, Field } from 'formik';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { putCategoryThunk } from '../../../../redux/catelogry/catelogry.slice';
+import toast from 'react-hot-toast';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -78,15 +79,20 @@ const dispatch=useAppDispatch();
             
           }}
           onSubmit={(values) => {
-            console.log(values); // category_task will be 1 or 0
+            const  category_date_task=new Date()
             setIsModalOpen(false);
            const data={
-            values,
-            id:props.category.category_id
-            }
+            ...values,
+            id:props.category.category_id,
+            category_date_task:category_date_task
+          }
+          console.log(data);
+          
            dispatch(putCategoryThunk(
             data
            ))
+           toast.success("Sửa loại thành công")
+
           }}
 
         >

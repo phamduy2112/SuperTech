@@ -20,13 +20,8 @@ import toast from "react-hot-toast";
 import { BiSolidLike } from "react-icons/bi";
 import { AiOutlineLike } from "react-icons/ai";
 import { IMG_BACKEND } from "../../constants";
-<<<<<<< HEAD
-import { createfavouriteByIdProductThunk, getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
-function ProductItem(props) {
-=======
 import { getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
 function ProductItem(props:any) {
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const { showAlert } = useSweetAlert();
@@ -44,17 +39,11 @@ function ProductItem(props:any) {
     return total;
   }, 0);
   // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
-<<<<<<< HEAD
-  // useEffect(() => {
-  //  dispatch(getFavouriteByIdProductThunk())
-  // }, []);
-=======
   // console.log(favouriteProduct);
   
   useEffect(() => {
    dispatch(getFavouriteByIdProductThunk())
   }, []);
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
     const productToCart = {
@@ -71,32 +60,6 @@ function ProductItem(props:any) {
     transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isvisibleProduct ? 1 : 0,
   });
-<<<<<<< HEAD
-
-  const handleFavouriteProduct = async (id: number) => {
-    try {
-      const product = { product_id: id };
-
-      if (isFavourited) {
-        // Nếu sản phẩm đã được yêu thích, hủy yêu thích
-        await dispatch(createfavouriteByIdProductThunk(product))
-        setIsFavourited(false); // Cập nhật trạng thái yêu thích
-        toast.success('Đã bỏ yêu thích sản phẩm!');
-      } else {
-        // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
-        await dispatch(createfavouriteByIdProductThunk(product))
-        setIsFavourited(true); // Cập nhật trạng thái yêu thích
-        toast.success('Đã thêm vào yêu thích!');
-      }
-
-      
-    } catch (error) {
-      toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
-    }
-  };
-console.log(props);
-
-=======
 
   // const handleFavouriteProduct = async (id: number) => {
   //   try {
@@ -121,7 +84,6 @@ console.log(props);
   // };
 console.log(props);
 
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
   return (
     <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col h-full">
       <div className="absolute top-4 right-4 flex flex-col gap-3">

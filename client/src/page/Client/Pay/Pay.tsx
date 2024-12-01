@@ -11,17 +11,41 @@ import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
 import { setOrderId } from '../../../redux/order/Order.slice';
 import toast from 'react-hot-toast';
+import { getAllCityThunk, getDistrictsCityThunk } from '../../../redux/order/City.slice';
+import ModalPay from './component/ModalPay';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
   const user: any = useAppSelector((state) => state.user.user);
   const listCart:any=useAppSelector((state)=>state.cart.listCart)
   const totalItem=useAppSelector((state)=>state.cart.totalItems)
-  console.log(totalItem);
-  
+  const socket = useAppSelector((state:any) => state.socket.socket); // Get socket from Redux store
+  // const orderList=useAppDispatch((state)=>state)
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
+  // useEffect(() => {
+  //   // Lắng nghe sự kiện "order_updates" từ server
+  //   socket.on("order_updates", (allUpdates) => {
+    
+
+  //     const { newOrders, updatedOrder } = allUpdates;
+
+  //     // Xử lý dữ liệu newOrders và updatedOrder
+  //     console.log("Đơn hàng mới:", newOrders);
+  //     console.log("Đơn hàng đã cập nhật:", updatedOrder);
+
+  //     // Cập nhật UI hoặc state của bạn ở đây
+      
+  //     const orderList=[post,...commentList]
+  //     // dispatch(setCommentReducer(commentListNew))
+  //   });
+
+  //   return () => {
+  //     // Đảm bảo hủy lắng nghe khi component bị unmount
+  //     socket.off("order_updates");
+  //   };
+  // }, [dispatch]);
   const totalPrice = listCart.reduce((total: number, item) => {
     // Tính giá sản phẩm ban đầu cộng thêm giá storage
     const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
@@ -62,8 +86,9 @@ function Pay() {
 const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   useEffect(() => {
     if(!(listCart.length>0)){
-      toast.success("Bạn cần thêm sản phẩm")
+      
       navigate("/")
+      toast.success("Bạn cần thêm sản phẩm")
     }
     const fetchProvinces = async () => {
       try {
@@ -81,17 +106,24 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
 
     fetchProvinces();
   }, []);
-  const fetchDistricts = async (cityCode) => {
+  const listAllCity=useAppSelector((state:any)=>state.city.listAllCity);
+  const listDataCity=useAppSelector((state:any)=>state.city.listDataCity);
+ 
+  const [selectedPayment, setSelectedPayment] = useState('');
+
+
+  useEffect(()=>{
+    dispatch(getAllCityThunk())
+  },[])
+  const fetchDistricts = async (cityCode:string) => {
     try {
-      const response = await axios.get(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${cityCode}&limit=-1`);
-      if (response.data && response.data.data) {
-        setDistricts(response.data.data.data);
-      }
+      dispatch(getDistrictsCityThunk(cityCode))
+     
     } catch (err) {
       console.error(err);
     }
   };
-  const fetchDistrictsCity = async (cityCode) => {
+  const fetchDistrictsCity = async (cityCode:string) => {
     try {
       const response = await axios.get(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${cityCode}&limit=-1`);
       if (response.data && response.data.data) {
@@ -104,14 +136,21 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   const handleCityChange = (value, option) => {
     setFormData({ ...formData, tinhThanhPho: value });
     setCity(option.key); // Lưu mã tỉnh đã chọn
+
     fetchDistricts(option.key); // Gọi API để lấy quận
+   
   };
   const handleDistrictsChange = (value, option) => {
     setFormData({ ...formData, district: value });
     setDistricts(option.key); // Lưu mã tỉnh đã chọn
     fetchDistrictsCity(option.key); // Gọi API để lấy quận
   };
+  const [paymentMethod, setPaymentMethod] = useState('');  // Lưu trữ phương thức thanh toán đã chọn
 
+  // Hàm xử lý khi click vào div
+  const handleDivClick = (method) => {
+    setPaymentMethod(method);  // Cập nhật phương thức thanh toán khi click vào div
+  };
   const handleFormChange = (changedValues, allValues) => {
     setFormData({ ...formData, ...changedValues });
   };
@@ -126,10 +165,11 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
       order_total:totalPrice,
       order_total_quatity:+totalItem,
       order_status:0,
+
       user_id:user.user_id,
       discount:getDiscountId ==0 ? null : getDiscountId,
       phone_number:formData.sdt,
-      
+      email:user.user_email,
       address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
     }
 
@@ -138,26 +178,30 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
    
 
     const detailOrders = listCart.map(item => ({
+      product_name:item.product_name,
       product_id: item.product_id,
       order_id:resp.data.content.order_id,
       detail_order_quality:item.quantity,
-<<<<<<< HEAD
-=======
       product_color:item?.selectedColor?.color,
       product_storage:item?.selectedStorage?.storage,
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
       detail_order_price:item.product_price + Number(item?.selectedStorage?.storage_price || 0),
       discount_product:item.product_discount,
 
     }));
 
     const responve=await createDetailOrder(detailOrders)
+    dispatch(setOrderId(resp.data.content.order_id))
+    navigate("/xuất-hóa-đơn")
     if(responve){
     
       dispatch(setOrderId(resp.data.content.order_id))
       navigate("/xuất-hóa-đơn")
       dispatch(removeAllCart())
     }
+  
+    
+   
+    
   };
   return (
 
@@ -316,8 +360,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
                 onChange={handleCityChange}
                 
                >
-         {Array.isArray(city) && city.length > 0 && (
-      city.map((item) => (
+         {Array.isArray(listAllCity) && listAllCity.length > 0 && (
+      listAllCity.map((item) => (
         <Select.Option key={item.code} value={item.name}
         
         >
@@ -333,8 +377,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
               <Select 
                   defaultValue="Mời bạn chọn thành phố"
               onChange={handleDistrictsChange}>
-              {Array.isArray(districts) && districts.length > 0 ? (
-      districts.map((item) => (
+              {Array.isArray(listDataCity) && listDataCity.length > 0 ? (
+      listDataCity.map((item) => (
         <Select.Option key={item.code} value={item.name}>
           {item.name}
         </Select.Option>
@@ -462,32 +506,24 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
               <h3 className="text-[1.8rem] py-4">Phương thức thanh toán</h3>
               <div className="space-y-10">
                 {/* Payment method 1 */}
-                <div className="p-4 rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
-                  <div className="flex-shrink-0">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="bank"
-                      onChange={handlePaymentChange}
-                      className="w-10 h-6 text-customColor]" // Adjust size if needed
-                    />
-                  </div>
-                  <div className="ml-5">
-                    <h4 className="text-[1.8rem] font-semibold">Thanh toán ngân hàng</h4>
-                    <p className="text-[1.7rem] text-[#969696] font-medium mt-2">
-                      Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi...
-                    </p>
-                  </div>
-                </div>
+                <ModalPay handlePaymentChange={handlePaymentChange}/>
 
                 {/* Payment method 2 */}
-                <div className="p-4 rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
-                  <div className="flex-shrink-0">
+                <div
+                 onClick={() => handleDivClick('cash')}  // Khi click vào div này, sẽ chọn phương thức 'cash'
+                 style={{ 
+                   padding: '10px', 
+                   cursor: 'pointer', 
+                   backgroundColor: paymentMethod === 'cash' ? '#e0e0e0' : '#fff' 
+                 }}
+                className="p-4  rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
+                  <div className="flex-shrink-0" >
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="cash"
                       onChange={handlePaymentChange}
+                     
                       className="w-10 h-6 text-customColor]" // Adjust size if needed
                     />
                   </div>

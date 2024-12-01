@@ -41,7 +41,7 @@ type Comment = {
     user_id: number;
     user: User;
     likes: Like[];
-    repliesToComment: ReplyToComment[];
+    replies_comment_products: ReplyToComment[];
 };
 
 type CommentList = Comment[];

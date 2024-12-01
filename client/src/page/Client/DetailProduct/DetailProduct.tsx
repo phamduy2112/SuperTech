@@ -201,9 +201,11 @@ console.log(objectStorage);
                 <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
               </div>
                 : 
-                <p className="text-red-500 font-semibold text-[2rem]">
+                <p className="text-red-500 font-semibold text-[2rem] py-6">
                     {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
                     </p>
+
+                    // Hehe
                 }
                 
 
@@ -347,3 +349,4 @@ console.log(objectStorage);
 }
 
 export default DetailProduct;
+// test

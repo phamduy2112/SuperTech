@@ -17,17 +17,17 @@ import { cartReducer } from './cart/cart.slice';
 import { commentReducer } from './comment/comment.slice';
 import { orderReducer } from './order/Order.slice';
 import { socketReducer } from './socket/socker.slice';
-import { FavouriteReducer } from './favourite/favourite.slice';
+import { cityReducer } from './order/City.slice';
+import { nofiReducer } from './admin/component/Nofi';
+import { searchReducer } from './search/Search.slice';
+import  {FavouriteReducer}  from './favourite/favourite.slice';
+import { settingReducer } from './admin/component/Setting';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-<<<<<<< HEAD
-  whitelist: ['user','cart','listOrder','socket'], // Chỉ persist `user` và `cart`
-=======
-  whitelist: ['user','cart','product','listOrder','socket'], // Chỉ persist `user` và `cart`
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
+  whitelist: ['user','cart','product','listOrder','socket','nofi'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
@@ -40,7 +40,10 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   listComment: commentReducer,
   listOrder:orderReducer,
-
+  city:cityReducer,
+  nofi:nofiReducer,
+  search:searchReducer,
+  setting: settingReducer,
 },
 
 )

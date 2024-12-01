@@ -1,3 +1,13 @@
 {
-    "compile-hero.disable-compile-files-on-did-save-code": false
+  "compile-hero.disable-compile-files-on-did-save-code": false,
+  "liveshare.allowGuestDebugControl": true,
+  "liveshare.allowGuestTaskControl": true,
+  "liveshare.alwaysFollowHost": true,
+  "liveshare.diagnosticLogging": true,
+  "liveshare.diagnosticMode": true,
+  "liveshare.guestApprovalRequired": true,
+  "liveshare.languages.allowGuestCommandControl": true,
+  "liveshare.notebooks.allowGuestExecuteCells": true,
+  "liveshare.publishWorkspaceInfo": true,
+  "files.autoSave": "afterDelay"
 }

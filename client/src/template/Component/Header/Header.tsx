@@ -5,7 +5,7 @@ import { Badge, Button, Dropdown } from "antd";
 import { FaBars, FaRegHeart, FaUserCircle } from "react-icons/fa";
 import { MdLanguage, MdOutlineShoppingBag } from "react-icons/md";
 import { AiOutlineShopping } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Menu from "./Component/Menu/Menu";
 import { CiLocationOn } from 'react-icons/ci'
 import { FaRegUser } from 'react-icons/fa'
@@ -21,9 +21,14 @@ import { useAppSelector } from "../../../redux/hooks";
 import LoadingHeader from "./Component/Loading/LoadingHeader";
 function Header() {
 
+  const navigate = useNavigate();
 
-  const onSearch = (value: any, _e: any, info: any) =>
-    console.log(info?.source, value);
+  const onSearch = (value: string) => {
+    if(value!=""){
+      navigate(`/tim-kiem?tukhoa=${value}`);
+    }
+    
+  };
   const items = [
     {
       key: "1",
@@ -123,7 +128,7 @@ console.log(token);
             
           </div>
           <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
-            <form action="" className="w-[100%] h-[38px]">
+          <form className="w-[100%] h-[38px]">
               <Search
                 placeholder="Tìm kiếm sản phẩm"
                 onSearch={onSearch}

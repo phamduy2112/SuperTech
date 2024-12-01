@@ -163,13 +163,8 @@ function UserDetail() {
                 )}
               </Formik>
               <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
-<<<<<<< HEAD
-                <ModalChangePassword />
-
-=======
                 {/* <ModalChangePassword /> */}
                 <NavLink to="/người-dùng/doi-mat-khau">Đổi mật khẩu</NavLink>
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
                 <button
                   type="button"
                   onClick={() => formikRef.current.submitForm()} // Submit manually
@@ -178,10 +173,7 @@ function UserDetail() {
                   Cập nhật
                 </button>
               </div>
-<<<<<<< HEAD
-=======
            
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
             </div>
           </div>
         </div>

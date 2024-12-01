@@ -73,7 +73,6 @@ export default function initModels(sequelize) {
   order.hasMany(history_bank, { as: "history_banks", foreignKey: "order_id"});
   order_status.belongsTo(order, { as: "order", foreignKey: "order_id"});
   order.hasMany(order_status, { as: "order_statuses", foreignKey: "order_id"});
- 
   likes.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(likes, { as: "likes", foreignKey: "post_id"});
   media_post.belongsTo(posts, { as: "post", foreignKey: "post_id"});

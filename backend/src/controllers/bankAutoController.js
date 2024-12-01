@@ -15,6 +15,7 @@ const checkTransactionStatus = async (req, res) => {
         console.log("Recent Transactions: ", recentTransactions);
 
         let processedTransactions = [];
+        let updatePromises = [];
 
         for (const transaction of recentTransactions) {
             const { description, amount, transactionID } = transaction;
@@ -48,6 +49,7 @@ const checkTransactionStatus = async (req, res) => {
                         });
                         console.log("Transaction saved to history_bank.");
                         processedTransactions.push({transactionID, description, amount, status: "Processed"});
+                        updatePromises.push(order.update({ order_pay: 1 }, { where: { order_id: orderId } }));
                     } else {
                         console.log(`No matching order found for order_id: ${orderId}`);
                         processedTransactions.push({transactionID, description, amount, status: "No matching order"});
@@ -61,6 +63,10 @@ const checkTransactionStatus = async (req, res) => {
                 processedTransactions.push({transactionID, description, amount, status: "Invalid description"});
             }
         }
+
+       
+
+        await Promise.all(updatePromises);
         responseSend(res, processedTransactions, "5 giao dịch gần nhất đã được xử lý thành công.", 200);
     } catch (error) {
         console.error("Error checking transactions:", error);
@@ -68,6 +74,35 @@ const checkTransactionStatus = async (req, res) => {
     }
 };
 
+const updateOrderPay = async (req, res) => {
+    const { orderId } = req.params;
+    const { order_pay } = req.body;
+
+    if (order_pay === undefined) {
+        return responseSend(res, "", "order_pay is required", 400);
+    }
+
+    try {
+        const orderToUpdate = await order.findOne({
+            where: { order_id: orderId }
+        });
+
+        if (!orderToUpdate) {
+            return responseSend(res, "", "Order not found", 404);
+        }
+
+        await order.update({ order_pay }, {
+            where: { order_id: orderId }
+        });
+
+        responseSend(res, { order_id: orderId, order_pay }, "Order updated successfully", 200);
+    } catch (error) {
+        console.error("Error updating order:", error);
+        responseSend(res, error.message, "Error updating order", 500);
+    }
+};
+
+export { updateOrderPay };
 
 const getautobank = async (req, res) => {
     try {

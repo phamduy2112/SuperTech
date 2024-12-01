@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createInforProduct, createProduct, deleteProduct, getProductCateloriesByDad, getProductDetail, getProducts } from "../../service/product/product.service";
+import { createInforProduct, createProduct, deleteProduct, getProductCateloriesByDad, getProductDetail, getProducts, putProductById } from "../../service/product/product.service";
 
 export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
@@ -68,6 +68,18 @@ export const createInforProductAdminThunk = createAsyncThunk(
   async (dataCreate:any,{dispatch}) => {
     try {
       await createInforProduct(dataCreate);
+      const response = await dispatch(getProductsAdminThunk(''));
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const putInforProductAdminThunk = createAsyncThunk(
+  "putInforProductAdminThunk",
+  async (dataCreate:any,{dispatch}) => {
+    try {
+      await putProductById(dataCreate,dataCreate.product_id);
       const response = await dispatch(getProductsAdminThunk(''));
       return response.payload;
     } catch (e) {
@@ -145,6 +157,10 @@ const ProductSlice = createSlice({
       })
       builder
       .addCase(deleteProductAdminThunk.fulfilled, (state, { payload }) => {
+        state.listAdminProducts = payload;
+      });
+      builder
+      .addCase(putInforProductAdminThunk.fulfilled, (state, { payload }) => {
         state.listAdminProducts = payload;
       });
   },

@@ -17,13 +17,13 @@ export const createCategory = (data:TPayloadCategory) => {
  
   );
   };
-export const deleteCategory = (id:number) => {
-    return axiosWithAuth(`/categories-delete/${id}`, {
+  export const deleteCategory = (ids: number[]) => {
+    // Chuyển mảng ID thành chuỗi JSON
+    const idsString = JSON.stringify(ids);
+  
+    return axiosWithAuth(`/categories-delete?ids=${encodeURIComponent(idsString)}`, {
       method: "delete",
-      
-    }
- 
-  );
+    });
   };
 export const putCategory = (data:TPayloadCategory,id:number) => {
     return axiosWithAuth(`/categories-edit/${id}`, {

@@ -36,7 +36,7 @@ app.use(urlencoded({extended:true}))
 app.use(express.static("."))
 
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://127.0.0.1:62769'],
+  origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
 // cron.schedule("*/1 * * * *", async () => {

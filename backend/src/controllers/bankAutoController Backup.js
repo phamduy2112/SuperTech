@@ -8,7 +8,7 @@ const { order, bank_auto, history_bank, order_status } = models;
 
 const checkTransactionStatus = async (req, res) => {
     try {
-        const response = await axios.get("https://api.sieuthicode.net/historyapiviettelv2/c9145cb9549734430860e53bfa3bb360");
+        const response = await axios.get("https://api.sieuthicode.net/historyapivcbv2/e5a36bf27929ed0411a791c49594f716");
         const { transactions } = response.data;
 
         const recentTransactions = transactions.slice(0, 5);

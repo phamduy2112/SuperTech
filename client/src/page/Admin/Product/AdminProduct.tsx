@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteProductAdminThunk, getProductsAdminThunk } from '../../../redux/product/product.slice';
 import { getCatelogryThunk } from '../../../redux/catelogry/catelogry.slice';
 import AdminFilterProduct from './Component/AdminFilterProduct';
+import { formatCurrencyVND } from '../../../utils';
 function AdminProduct() {
   const navigate = useNavigate();
   const listProductColor=useAppSelector(state=>state.product.productColors)
@@ -72,15 +73,16 @@ function AdminProduct() {
   }
   useEffect(()=>{
     dispatch(getProductsAdminThunk(''));
-    dispatch(getCatelogryThunk());
+    dispatch(getCatelogryThunk(""));
 
   },[dispatch])
+
   useEffect(()=>{
     setProducts(listProducts);
     setFilteredProducts(listProducts); // Mặc định hiển thị tất cả sản phẩm
   },[listProducts])
-  const handleEye=()=>{
-    navigate("/")
+  const handleEye=(id:string|number)=>{
+    navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
   }
   const getCategoryNameById = (id) => {
     const category = listCatelogry?.find((cat) => cat.category_id == id);
@@ -113,8 +115,8 @@ function AdminProduct() {
     {
       title: 'Giá Gốc',
       dataIndex: 'product_price',
-      render: (price: number) => (
-        <span>{price} VNĐ</span>
+      render: (price: number,recoil:any) => (
+        <span>{formatCurrencyVND(price+Number(recoil?.product_colors[0]?.product_storages[0]?.storage_price ||0))}</span>
       ),
     },
     {
@@ -127,11 +129,18 @@ function AdminProduct() {
         return <span>{record}%</span>;
       },
     },
-  
+    {
+      title: 'Thành tiền',
+      dataIndex: 'product_price',
+      render: (price: number,recoil:any) => (
+        <span>{
+          formatCurrencyVND(((price + Number(recoil?.product_colors[0]?.product_storages[0]?.storage_price ||0)) *(1 - Number(recoil?.product_discount / 100) )))
+          } </span>
+      ),
+    },
     {
       title: 'Tác Vụ',
       key: 'action',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render: (record: any) => (
         <div className='flex text-[24px] gap-1'>
 
@@ -141,6 +150,7 @@ function AdminProduct() {
           />
           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
+            onClick={()=>{handleEye(+record.product_id)}}
           />
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
@@ -152,6 +162,7 @@ function AdminProduct() {
   ];
 
 
+console.log(listProducts);
 
   const rowSelection = {
     onChange: onSelectChange,

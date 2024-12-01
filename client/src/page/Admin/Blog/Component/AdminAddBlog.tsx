@@ -1,61 +1,88 @@
-import React, { useState } from 'react'
-import ReactQuill from 'react-quill'
+import React, { useState, useRef } from 'react';
+import ReactQuill from 'react-quill';
 
 function AdminAddBlog() {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('');
+  const quillRef = useRef();
+
+  // Các tùy chọn của toolbar cho Quill
   const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['bold', 'italic', 'underline', 'strike'],
     ['blockquote', 'code-block'],
-    ['link', 'image', 'video', 'formula'],
-
-    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-    [{ 'direction': 'rtl' }],                         // text direction
-
-    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-    [{ 'font': [] }],
-    [{ 'align': [] }],
-
+    ['link', 'image', 'video'],
+    [{ 'header': 1 }, { 'header': 2 }],
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'indent': '-1' }, { 'indent': '+1' }],
     ['clean']
   ];
 
+  // Hàm upload ảnh lên Cloudinary và chèn vào Quill
+  const handleImageUpload = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'uploadBlog');  // Đảm bảo upload preset đã được tạo trên Cloudinary
+    formData.append('folder', 'Blog');  // Folder lưu ảnh trên Cloudinary
+
+    fetch('https://api.cloudinary.com/v1_1/dcvkmhlhw/image/upload', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.secure_url) {
+        const editor = quillRef.current.getEditor();
+        const range = editor.getSelection();
+        // Chèn ảnh vào Quill tại vị trí con trỏ
+        editor.insertEmbed(range.index, 'image', data.secure_url);
+      }
+    })
+    .catch(error => console.error('Error uploading image: ', error));
+  };
+
   return (
-    <div className=' flex-1 grid grid-cols-1 p-[24px] bg-[#f2edf3]'>
+    <div className="flex-1 p-24 bg-[#f2edf3]">
+      <div className="bg-white shadow-lg rounded-xl p-6">
+        <h2 className="text-2xl font-semibold">Bài Viết</h2>
 
-      <div className='bg-white min-h-[1500px] shadow-lg rounded-xl row-span-2 leading-[2] box-border p-[24px] gap-6 flex flex-col'>
-        <span className='text-[30px] font-medium text-[#ffd700]'>Bài Viết</span>
-
-        <div className='flex h-auto flex-col gap-4'>
-          <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Tiêu đề bài viết</label>
-          <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
-        </div>
-        <div className='flex h-auto flex-col gap-4'>
-          <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Url</label>
-          <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
+        <div className="mt-4">
+          <label htmlFor="title">Tiêu đề bài viết</label>
+          <input type="text" className="w-full p-2 mt-2" id="title" name="title" />
         </div>
 
-        <div className='flex flex-col h-full w-full gap-4'>
-          <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Nội dung bài viết</label>
+        <div className="mt-4">
+          <label htmlFor="content">Nội dung bài viết</label>
           <ReactQuill
-            theme='snow'
+            ref={quillRef}
+            theme="snow"
             value={value}
             onChange={setValue}
             modules={{
-              toolbar: toolbarOptions,
+              toolbar: {
+                container: toolbarOptions,
+                handlers: {
+                  image: () => {
+                    const input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/*');
+                    input.click();
+
+                    input.onchange = () => {
+                      const file = input.files[0];
+                      if (file) {
+                        handleImageUpload(file);
+                      }
+                    };
+                  },
+                },
+              },
             }}
-            className='bg-white flex-1 shadow-lg rounded-xl row-span-2  gap-3 flex flex-col'
+            formats={['bold', 'italic', 'underline', 'link', 'image']}
+            className="bg-white flex-1 shadow-lg rounded-xl"
           />
         </div>
-
       </div>
-
     </div>
-  )
+  );
 }
 
-export default AdminAddBlog
+export default AdminAddBlog;

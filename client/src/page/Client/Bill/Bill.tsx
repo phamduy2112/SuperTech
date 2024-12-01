@@ -20,22 +20,7 @@ function Bill(props) {
     const fetchApi = async () => {
       try {
         const resp = await getDetailOrder(orderId);
-<<<<<<< HEAD
-        setDetailOrder(resp.data.content);
-        setOrder(detailOrder[0].order)
-        const products = resp.data.content.map(detail => ({
-        quanlity:detail.detail_order_quality,
-          name: detail.product.product_name,
-          product_price: detail.detail_order_price,
-          product_discount: detail.discount_product,
-          product_hot: detail.product.product_hot,
-          image_id: detail.product.image_id,
-          category_id: 2
-        
-        }));
-=======
         const details = resp.data.content;
->>>>>>> 01617ad6b15d5958759adc6a722f295cc854661a
   
         // Cập nhật detailOrder
         setDetailOrder(details);

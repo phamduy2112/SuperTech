@@ -6,6 +6,7 @@ import ImgCrop from 'antd-img-crop';
 import { Formik, Form, Field } from 'formik';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { createCategoryThunk } from '../../../../redux/catelogry/catelogry.slice';
+import toast from 'react-hot-toast';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -66,9 +67,14 @@ const dispatch=useAppDispatch()
             category_task: 1, // Default value for Switch, set as 1 (true)
           }}
           onSubmit={(values) => {
-            console.log(values); // 'category_task' will be 1 for true and 0 for false
+            const  category_date_task=new Date()
+            const data={
+              ...values,
+              category_date_task:category_date_task
+            }
             setIsModalOpen(false);
-            dispatch(createCategoryThunk(values))
+            dispatch(createCategoryThunk(data))
+            toast.success("Thêm loại thành công")
           }}
         >
           {({ values, setFieldValue }) => (
