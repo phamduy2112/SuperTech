@@ -21,7 +21,9 @@ import { BiSolidLike } from "react-icons/bi";
 import { AiOutlineLike } from "react-icons/ai";
 import { IMG_BACKEND } from "../../constants";
 import { getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
-function ProductItem(props:any) {
+function ProductItem(props: any) {
+  console.log('props', props);
+
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const { showAlert } = useSweetAlert();
@@ -40,9 +42,9 @@ function ProductItem(props:any) {
   }, 0);
   // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
   // console.log(favouriteProduct);
-  
+
   useEffect(() => {
-   dispatch(getFavouriteByIdProductThunk())
+    dispatch(getFavouriteByIdProductThunk())
   }, []);
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
@@ -77,12 +79,12 @@ function ProductItem(props:any) {
   //       toast.success('Đã thêm vào yêu thích!');
   //     }
 
-      
+
   //   } catch (error) {
   //     toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
   //   }
   // };
-console.log(props);
+  console.log(props);
 
   return (
     <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col h-full">
@@ -141,7 +143,7 @@ console.log(props);
               : null}
           </div>
           <p className="text-red-600 font-semibold text-[1.7rem]">
-            {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price|| 0))* (1 - Number(props?.product.product_discount / 100) ))}
+            {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price || 0)) * (1 - Number(props?.product.product_discount / 100)))}
           </p>
           {/* formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.storage_price ||0)) */}
           {/* Đánh giá và tình trạng */}

@@ -3,24 +3,34 @@ import ProductItem from '../../../components/product/ProductItem';
 import { Breadcrumb, Checkbox, Form, Select } from 'antd';
 import { MdFilterAlt } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getCatelogryDadThunk } from '../../../redux/catelogry/catelogry.slice';
+import { getCatelogryDadThunk, getCatelogryThunkAll } from '../../../redux/catelogry/catelogry.slice';
 import { getProductByCateloriesDad } from '../../../redux/product/product.slice';
 import { useLocation } from 'react-router-dom';
 import { data } from '../DetailProduct/data';
 import Filter from './Filter';
 
 function ListProduct() {
+
   const location = useLocation();
 
   const searchParams = new URLSearchParams(location.search);
-  const category_dad = Number(searchParams.get('category_dad')); 
-  const category = Number(searchParams.get('category'));          
+  const category_dad = Number(searchParams.get('category_dad'));  // Get 'category_dad' directly
 
   const listProduct = useAppSelector((state) => state.product.listProduct);
+  const catelogries = useAppSelector((state) => state.category.AlllistCatelories as Category[]);
+
   const dispatch = useAppDispatch();
 
   const [isDiscounted, setIsDiscounted] = useState(false); // State cho checkbox giảm giá
   const [dataCate, setDataCate] = useState({})
+
+  useEffect(() => {
+    try {
+      dispatch(getCatelogryThunkAll())
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch])
 
 
   useEffect(() => {
@@ -29,7 +39,6 @@ function ListProduct() {
 
 
     // Lấy category_dad và category từ URL mới
-    const searchParams = new URLSearchParams(location.search);
     const category_dad = searchParams.get('category_dad');
     const category = searchParams.get('category');
 
@@ -47,7 +56,7 @@ function ListProduct() {
   }, [dataCate, dispatch])
   // Lọc sản phẩm theo trạng thái checkbox
   const filteredProducts = isDiscounted
-    ? listProduct.filter(item => item.product_discount > 0) 
+    ? listProduct.filter(item => item.product_discount > 0) // Giả định rằng sản phẩm có thuộc tính 'isDiscounted'
     : listProduct;
   console.log('date', dataCate);
 
@@ -60,13 +69,6 @@ function ListProduct() {
   //     setProducts(ProductsByIdComponent)
   //   }
   // }
-
-
-
-
-
-
-
   return (
     <div className='w-[80%] m-auto'>
       <Breadcrumb
@@ -82,8 +84,8 @@ function ListProduct() {
       <div>
         <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm: {category_dad}</h3>
         <div className='flex gap-4'>
-          <div className='flex gap-4'>
-            <Filter data={listProduct} />
+          <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex w-[9rem]'>
+            <Filter data={{ catelogries: catelogries, listProduct: listProduct, dataCate: dataCate }} />
           </div>
           <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[6rem]'>
             <span>Giá</span>
@@ -115,8 +117,8 @@ function ListProduct() {
         </div>
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
-        {filteredProducts.map((item) => (
-          <ProductItem key={item.id} product={item} />
+        {filteredProducts?.map((item) => (
+          <ProductItem key={item.id} product={item} /> // Đảm bảo sử dụng key cho mỗi sản phẩm
         ))}
       </div>
     </div>

@@ -11,6 +11,9 @@ interface OptionSelectedProps {
     handleSelectRom: (rom: string) => void;
     handleFrontCameras: (front: string) => void;
     handleRearCameras: (rear: string) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Datafilter: any[];
+
 }
 const OptionSelected: React.FC<OptionSelectedProps> = ({
     handleChangeProduct,
@@ -20,7 +23,8 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
     handleSelectRam,
     handleSelectRom,
     handleFrontCameras,
-    handleRearCameras
+    handleRearCameras,
+    Datafilter,
 }) => {
     const [priceclick, setPriceClick] = useState(false);
     const [priceRange, setPriceRange] = useState([0, 70000000]);
@@ -29,11 +33,14 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
         setPriceClick(!priceclick);
     };
 
-    const handleChange = (value) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChange = (value: any) => {
         setPriceRange(value);
     };
 
+    const searchParams = new URLSearchParams(location.search);
 
+    const category = searchParams.get('category');
 
     return (
         <>
@@ -167,16 +174,16 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                     </div>
                 </div>
                 <div className="flex border-t-[1px] pt-6 flex-row justify-center items-center gap-[5px] col-span-3 mt-4">
-                    {/* <Button onClick={() => handleVisibleChange(false)} color='danger' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
+                    <Button color='danger' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
                         <span>Bỏ chọn</span>
                     </Button>
-                    <Button color='primary' onClick={() => handleVisibleChange(false)} className="min-w-[200px] h-[50px] flex justify-center items-center" variant="solid">
+                    <Button color='primary' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="solid">
                         {
-                            arrayFilterShowProduct.length != 0 ? <span>Xem thêm {arrayFilterShowProduct.length} kết quả</span>
+                            Datafilter.length != 0 ? <span>Xem thêm {Datafilter.length} kết quả</span>
                                 : <span>Không có kết quả</span>
 
                         }
-                    </Button> */}
+                    </Button>
                 </div>
             </div >
 

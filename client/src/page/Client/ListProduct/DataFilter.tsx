@@ -10,10 +10,11 @@ export const trademark = [
 ]
 
 export const priceList = [
-    { id: 1, price: 'Dưới 3 triệu' },
-    { id: 2, price: 'Từ 3 - 8 triệu' },
-    { id: 3, price: 'Từ 8 - 15 triệu' },
-    { id: 4, price: 'Trên 15 triệu' },
+    { id: 1, price: 'Dưới 5 triệu' },
+    { id: 2, price: 'Dưới 10 triệu' },
+    { id: 3, price: 'Dưới 20 triệu' },
+    { id: 4, price: 'Dưới 30 triệu' },
+    { id: 5, price: 'Trên 30 triệu' },
 ]
 
 export const ramOptions = [
@@ -85,8 +86,8 @@ export const frontCameras = [
 
 
 
-export interface ObjFilterTypeinterface  {
-    company: string,
+export interface ObjFilterTypeinterface {
+    company:string,
     price: string[];
     size: string[];
     refreshRate: string[];
