@@ -38,7 +38,7 @@ function AdminStaff() {
     const [IdStaff, setIdStaff] = useState<number>();
 
     useEffect(() => {
-        if (TokenstaffsClient.length > 0 || TokenstaffsClient != null) {
+        if (TokenstaffsClient?.length > 0 || TokenstaffsClient != null) {
             const UserTokenClient: UserTokenClientInterface = jwtDecode(TokenstaffsClient);
             setRoleStaff(UserTokenClient.data.user_role);
             setIdStaff(UserTokenClient.data.user_id);

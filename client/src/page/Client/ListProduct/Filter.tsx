@@ -5,7 +5,7 @@ import { CiFilter } from 'react-icons/ci';
 import Selected from './Selected';
 import OptionSelected from './OptionSelected';
 import { ObjFilterTypeinterface } from './DataFilter';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { useAppSelector } from '../../../redux/hooks';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate từ React Router
 import { setDatafilterSlice } from '../../../redux/product/product.slice';
 
@@ -16,7 +16,33 @@ function Filter(data: any) {
 
     const Navigate = useNavigate();
 
-    const AppDispatch = useAppDispatch();
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const price = params.get('price')?.split(',') || [];
+        const size = params.get('size')?.split(',') || [];
+        const refreshRate = params.get('refreshRate')?.split(',') || [];
+        const ram = params.get('ram')?.split(',') || [];
+        const rom = params.get('rom')?.split(',') || [];
+        const frontCamera = params.get('frontCamera')?.split(',') || [];
+        const rearCamera = params.get('rearCamera')?.split(',') || [];
+        const cpu = params.get('cpu')?.split(',') || [];
+
+
+
+        setObjFilter((prev) => ({
+            ...prev,
+            price,
+            size,
+            refreshRate,
+            ram,
+            rom,
+            frontCamera,
+            rearCamera,
+
+        }));
+
+    }, []);
+
 
 
 
