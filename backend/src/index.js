@@ -28,6 +28,7 @@ import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
 import product_storageRouter from './routers/product_storage.js';
 import autobankrouter from './routers/bankAutoRouter.js';
 import settingRouter from './routers/settingRouter.js';
+import { checkTransactionStatus } from './controllers/bankAutoController.js';
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -39,10 +40,10 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
-// cron.schedule("*/1 * * * *", async () => {
-//   console.log("Chạy auto-update trạng thái đơn hàng...");
-//   await checkTransactionStatus();
-// });
+cron.schedule("*/1 * * * *", async () => {
+  console.log("Chạy auto-update trạng thái đơn hàng...");
+  await checkTransactionStatus();
+});
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
