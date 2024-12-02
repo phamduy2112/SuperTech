@@ -25,7 +25,6 @@ function Filter(data: any) {
         const rom = params.get('rom')?.split(',') || [];
         const frontCamera = params.get('frontCamera')?.split(',') || [];
         const rearCamera = params.get('rearCamera')?.split(',') || [];
-        const cpu = params.get('cpu')?.split(',') || [];
 
 
 
