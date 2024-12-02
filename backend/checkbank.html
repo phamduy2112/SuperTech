@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Payment and Transaction History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #qr-code {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: inline-block;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .status.pending {
+            color: #842029;
+            background-color: #f8d7da;
+        }
+
+        .status.paid {
+            color: #0f5132;
+            background-color: #d1e7dd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>QR Payment with VietQR</h1>
+        <div id="qr-code"></div>
+        <button id="check-status">Check Payment Status</button>
+        <div id="status" class="status pending">Waiting for payment...</div>
+    </div>
+
+    <script>
+        const bankCode = "MBBank";
+        const accountNumber = "9704229258177489";
+        const accountName = "LE NGUYEN HOANG THIEN";
+        const amount = 2000;
+        const description = "naptien52";
+        const template = "TEMPLATE";
+
+        // Generate VietQR URL
+        const vietQRUrl = `https://img.vietqr.io/image/${bankCode}-${accountNumber}-${template}.png?amount=${amount}&addInfo=${encodeURIComponent(description)}&accountName=${encodeURIComponent(accountName)}`;
+
+        // Render QR Code
+        const qrCodeElement = document.getElementById("qr-code");
+        const qrImage = document.createElement("img");
+        qrImage.src = vietQRUrl;
+        qrImage.alt = "QR Code";
+        qrImage.style.width = "250px";
+        qrImage.style.height = "250px";
+        qrCodeElement.appendChild(qrImage);
+
+        // Check payment status
+        document.getElementById("check-status").addEventListener("click", async () => {
+            const statusElement = document.getElementById("status");
+
+            try {
+                const response = await fetch("http://localhost:8080/check-transactions", {
+                    method: "GET",
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch transaction status");
+                }
+
+                const data = await response.json();
+
+                // Check if there are any updated orders and if they are marked as paid
+                if (data.updatedOrders && data.updatedOrders.some(order => order.status === 'paid')) {
+                    statusElement.className = "status paid";
+                    statusElement.innerText = "Payment Completed!";
+                } else {
+                    statusElement.className = "status pending";
+                    statusElement.innerText = "Waiting for payment...";
+                }
+            } catch (error) {
+                console.error(error);
+                statusElement.className = "status pending";
+                statusElement.innerText = "Error checking payment status.";
+            }
+        });
+    </script>
+</body>
+
+</html>

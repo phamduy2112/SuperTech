@@ -1,0 +1,29 @@
+// /get-week-order-sales
+
+import { axiosWithAuth } from "../axios.config";
+
+export const getOrderWeekSales = () => {
+    return axiosWithAuth(`/get-week-order-sales`, {
+      method: "get",
+	
+    });
+  };
+export const getUserOrderCount = () => {
+    return axiosWithAuth(`/get-user-order-count`, {
+      method: "get",
+	
+    });
+  };
+export const getTopFiveProduct = ({period}:string) => {
+    return axiosWithAuth(`/get-product-top-five?period=${period}`, {
+      method: "get",
+	
+    });
+  };
+export const getOrderRevenue=({ startDate, endDate, period })=>{
+  return axiosWithAuth(`/get-order-revenue?startDate=${startDate}&endDate=${endDate}&period=${period}`,{
+    method:"get",
+
+
+  })
+}

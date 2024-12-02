@@ -1,0 +1,470 @@
+import sequelize from "../models/connect.js";
+import { responseSend } from "../config/response.js";
+import initModels from "../models/init-models.js";
+import order from "../models/order.js";
+import { startOfWeek,endOfWeek } from "date-fns";
+import { col, fn, literal, Op, Sequelize } from "sequelize";
+
+let models = initModels(sequelize); 
+let orders = models.order; 
+
+const getorder = async (req, res) => {
+    try {
+        let data = await order.findAll({
+            include: [
+                {
+                    model: models.order_status,
+                    as: "order_statuses",
+                    where: {
+                        order_status_id: sequelize.literal(`(
+                          SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
+                        )`),
+                      },
+                },
+                {
+                    model: models.discount,
+                    as: "discount_discount",
+                },
+            ],
+        });
+        responseSend(res, data, "Thành công!", 200);
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+
+
+
+const getRevenueBetweenDates = async (req, res) => {
+  try {
+    const { startDate, endDate, period } = req.query;
+
+    if (!startDate || !endDate || !period) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cần truyền đủ ngày bắt đầu, ngày kết thúc và loại thời gian (days, week, month).',
+      });
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999); // Đảm bảo ngày kết thúc là 23:59:59
+
+    let groupBy = [];
+    let dateAlias = "";
+
+    // Xác định nhóm theo `period`
+    switch (period) {
+      case 'days':
+        groupBy = [fn('DATE', col('order_date'))];
+        dateAlias = 'date';
+        break;
+      case 'week':
+        groupBy = [fn('YEARWEEK', col('order_date'))];
+        dateAlias = 'week';
+        break;
+      case 'month':
+        groupBy = [fn('MONTH', col('order_date'))];
+        dateAlias = 'month';
+        break;
+      default:
+        return res.status(400).json({
+          success: false,
+          message: 'Tham số period không hợp lệ. Hãy chọn "days", "week", hoặc "month".',
+        });
+    }
+
+    // Query dữ liệu từ database
+    const results = await models.order.findAll({
+      attributes: [
+        [fn('SUM', col('order_total')), 'total_revenue'],
+        [fn('DATE', col('order_date')), 'date'],
+        [fn('YEARWEEK', col('order_date')), 'week'],
+        [fn('MONTH', col('order_date')), 'month'],
+      ],
+      where: {
+        order_date: {
+          [Op.between]: [start, end],
+        },
+      },
+      group: groupBy,
+    });
+
+    // Xử lý kết quả dựa trên `period`
+    const formattedResults = results.map((result) => {
+      const totalRevenue = result.dataValues.total_revenue || 0;
+      const dateValue = result.dataValues[dateAlias];
+
+      // Nếu group theo ngày
+      if (period === 'days') {
+        return {
+          date: dateValue || 'Invalid Date',
+          totalRevenue,
+        };
+      }
+
+      // Nếu group theo tuần
+      if (period === 'week') {
+        const startOfWeek = new Date(startDate);
+        const daysInWeek = [];
+
+        for (let i = 0; i < 7; i++) {
+          const day = new Date(startOfWeek);
+          day.setDate(day.getDate() + i);
+          daysInWeek.push({
+            date: day.toISOString().split('T')[0],
+            revenue: totalRevenue,
+          });
+        }
+        return {
+          week: dateValue,
+          days: daysInWeek,
+        };
+      }
+
+      // Nếu group theo tháng
+      if (period === 'month') {
+        const startOfMonth = new Date(startDate);
+        startOfMonth.setMonth(dateValue - 1);
+
+        const weeksInMonth = [];
+        for (let week = 0; week < 4; week++) {
+          const startOfWeek = new Date(startOfMonth);
+          startOfWeek.setDate(startOfWeek.getDate() + week * 7);
+
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+          weeksInMonth.push({
+            week: `Week ${week + 1}`,
+            startDate: startOfWeek.toISOString().split('T')[0],
+            endDate: endOfWeek.toISOString().split('T')[0],
+            totalRevenue,
+          });
+        }
+        return {
+          month: dateValue,
+          weeks: weeksInMonth,
+        };
+      }
+
+      return null; // Trường hợp không hợp lệ
+    });
+
+    res.status(200).json({
+      success: true,
+      data: formattedResults,
+    });
+  } catch (error) {
+    console.error('Error fetching revenue between dates:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Có lỗi xảy ra khi lấy tổng doanh thu trong khoảng thời gian.',
+    });
+  }
+};
+const getOrderUserTop = async (req, res) => {
+  try {
+    const data = await order.findAll({
+      attributes: [
+        'user_id',
+        [Sequelize.fn('SUM', Sequelize.col('order_total')), 'totalSpent'], // Tính tổng số tiền
+        [Sequelize.fn('COUNT', Sequelize.col('order_id')), 'totalOrders'], // Đếm số lượng đơn hàng
+      ],
+      include: [
+        {
+          model: models.user,
+          as: 'user',
+          attributes: ['user_name', 'user_email'], // Chỉ lấy các thông tin cần thiết của user
+        },
+      ],
+      group: ['user_id'], // Nhóm theo user_id để tính tổng
+      order: [[Sequelize.literal('totalSpent'), 'DESC']], // Sắp xếp theo tổng tiền giảm dần
+      limit: 5, // Lấy Top 5 user
+    });
+
+    if (data) {
+      responseSend(res, data, 'Thành công!', 200);
+    } else {
+      responseSend(res, '', 'Không tồn tại!', 404);
+    }
+  } catch (e) {
+    console.error('Error:', e);
+    responseSend(res, '', 'Server Error!', 500);
+  }
+}
+
+const getOrderById = async (req, res) => {
+    
+    try {
+    const user_id=req.id;
+    
+        let data = await order.findAll({
+            where:{
+                user_id,
+
+            },
+            include:[
+                {
+                    model:models.order_status,
+                    as:"order_statuses",
+                    where: {
+                        order_status_id: sequelize.literal(`(
+                          SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
+                        )`),
+                      },
+                     
+                     
+                }
+            ]
+        });
+        
+        if (data) {
+            responseSend(res, data, "Thành công!", 200);
+        } else {
+            responseSend(res, "", "không tồn tại !", 404);
+        }
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+const getMonthlyRevenue = async (req, res) => {
+    try {
+      // Lấy ngày đầu tháng và cuối tháng hiện tại
+      const today = new Date();
+      const startDate = startOfMonth(today);
+      const endDate = endOfMonth(today);
+  
+      // Query dữ liệu doanh thu
+      const results = await models.order.findAll({
+        attributes: [
+          [fn('SUM', col('order_total')), 'total_revenue'], // Tính tổng doanh thu
+        ],
+        where: {
+          order_date: {
+            [Op.between]: [startDate, endDate], // Lọc đơn hàng trong tháng hiện tại
+          },
+        },
+      });
+  
+      // Trả về kết quả
+      res.status(200).json({
+        success: true,
+        data: results,
+      });
+    } catch (error) {
+      console.error('Error fetching monthly revenue:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Có lỗi xảy ra khi lấy tổng doanh thu hàng tháng.',
+      });
+    }
+  };
+
+
+const changeStatusOrder = async (req, res) => {
+    try {
+        const idUser=req.id;
+      const order_id = req.params.id;  // Lấy ID đơn hàng từ params
+      const { order_status, order_status_text_cancel } = req.body;  // Lấy trạng thái và lý do hủy (nếu có)
+      const order = await orders.findByPk(order_id);
+        console.log(order_id);
+        
+    
+      
+
+      order.order_status = order_status;
+      await order.save();
+
+
+      // Tạo một bản ghi mới trong bảng order_status
+      const newOrderStatus = await models.order_status.create({
+        order_id: order_id,  // Liên kết với order_id
+        order_status: order_status,  // Trạng thái của đơn hàng
+        order_status_text_cancel: order_status_text_cancel || null,  // Lý do hủy nếu có
+        created_at: new Date(),  // Thời gian tạo
+      });
+      if (order_status ==6) {
+        // Lấy danh sách sản phẩm liên quan đến đơn hàng
+        const orderItems = await models.detail_order.findAll({
+          where: { order_id },
+          attributes: ['product_id'], // Chỉ lấy product_id
+        });
+  
+        const productIds = orderItems.map((item) => item.product_id);
+        
+        console.log(productIds);
+        
+        // Cập nhật cờ isPurchase = true cho các bình luận liên quan đến các sản phẩm trong đơn hàng
+        await models.comment_product.update(
+          { isPurchase: true },
+          { where: { product_id: productIds, user_id:idUser }, }
+        );
+      }
+      // Trả về phản hồi thành công với dữ liệu đã tạo
+      return res.status(201).json({
+        message: 'Đã tạo mới trạng thái đơn hàng thành công!',
+        data: newOrderStatus,
+      });
+    } catch (error) {
+      // Nếu có lỗi, trả về lỗi cho người dùng
+      console.error('Error creating order status:', error);
+      console.log(error);
+      
+      return res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau.' });
+    }
+  };
+  
+const createorder = async (req, res) => {
+    try {
+        const {
+            order_total,
+            order_total_quatity,
+            order_status,
+            pay_id,
+            discount,
+            address,
+            phone_number
+        } = req.body;
+
+        const user_id = req.id;
+        // const pay_id = req.id;
+        // const discount = req.id;
+        let date = new Date();
+        const neworder = await order.create({
+            order_date: date,
+            order_total,
+            order_total_quatity,
+            order_status,
+            pay_id:null,
+            discount,
+            user_id,
+            address,
+            phone_number
+            // discount
+        });
+        // order_statis
+        const newOrderStatus=await models.order_status.create({
+            order_id:neworder.order_id,
+            order_status,
+            created_at:date
+        })
+        
+        responseSend(res, neworder, "Thêm Thành công!", 201);
+    } catch (error) {       
+        console.log(error);
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+const getSuccessEmailOrder = async (req, res) => {
+  try {
+    const { email, orderDetails } = req.body; // Giả sử thông tin đơn hàng được gửi qua body
+
+  //   ${orderDetails
+  //     .map(
+  //       (item) => `
+  //     <li>
+  //       <b>Sản phẩm:</b> ${item.name} <br>
+  //       <b>Số lượng:</b> ${item.quantity} <br>
+  //       <b>Giá:</b> ${item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+  //     </li>
+  //   `
+  //     )
+  //     .join('')}
+  // 
+  // <p>Tổng thanh toán: <b>${orderDetails
+  //   .reduce((total, item) => total + item.quantity * item.price, 0)
+  //   .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></p>
+    // Tạo nội dung HTML cho email
+    const htmlContent = `
+      <h1 style="color: green;">Đơn hàng của bạn đã được đặt thành công!</h1>
+      <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.</p>
+      <h3>Chi tiết đơn hàng:</h3>
+      <ul>
+      <li>HEHE</li>
+       </ul>
+      <p>Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.</p>
+      <br>
+      <p>Trân trọng,<br>Đội ngũ hỗ trợ</p>
+    `;
+
+    // Gửi email
+    const emailResult = await sendMail(
+      email, // Địa chỉ email người nhận
+      'Xác nhận đơn hàng thành công', // Tiêu đề email
+      htmlContent // Nội dung email
+    );
+
+    if (emailResult) {
+      return res.status(200).json({ message: 'Email xác nhận đơn hàng đã được gửi thành công.' });
+    } else {
+      return res.status(500).json({ message: 'Không thể gửi email xác nhận đơn hàng.' });
+    }
+  } catch (e) {
+    console.error('Lỗi khi gửi email xác nhận:', e);
+    console.log(e);
+    
+    return res.status(500).json({ message: 'Đã xảy ra lỗi khi gửi email.' });
+  }
+};
+
+const updateorder = async (req, res) => {
+    try {
+        const order_id = req.params.id;
+        const {
+            order_date,
+            order_total,
+            order_total_quatity,
+            order_status,
+        } = req.body;
+        const pay_id =  req.id;
+        const user_id = req.id;
+        const discount = req.id;
+        const order = await orders.findByPk(order_id);
+        if (!order) {
+            responseSend(res, "", "Đơn hàng không tồn tại!", 404);
+            return;
+        }
+        order.order_date = order_date;
+        order.order_total = order_total;
+        order.order_total_quatity = order_total_quatity;
+        order.order_status = order_status;
+        order.pay_id = pay_id;
+        order.user_id = user_id;
+        order.discount = discount;
+        await order.save();
+        responseSend(res, order, "Đã Cập Nhật Thành Công!", 200);
+    } catch (error) {
+        console.error("Error updating order:", error);
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    }
+};
+
+const deleteorder = async (req, res) => {
+    try {
+        const deleted = await order.destroy({
+            where: { order_id: req.params.id }
+        });
+        if (deleted) {
+            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+        } else {
+            responseSend(res, "", "Không tìm thấy đơn hàng!", 404);
+        }
+    } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra khi xóa đơn hàng!", 500);
+    }
+};
+
+export {
+    getorder,
+    getOrderById,
+    createorder,
+    updateorder,
+    deleteorder,
+    changeStatusOrder,
+    getMonthlyRevenue,
+    // getOrdersForToday,
+    getOrderUserTop,
+    getRevenueBetweenDates ,
+    getSuccessEmailOrder
+};
