@@ -6,8 +6,8 @@ import Selected from './Selected';
 import OptionSelected from './OptionSelected';
 import { ObjFilterTypeinterface } from './DataFilter';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate từ React Router
-import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate từ React Router
+import { setDatafilterSlice } from '../../../redux/product/product.slice';
 
 
 
@@ -16,6 +16,7 @@ function Filter(data: any) {
 
     const Navigate = useNavigate();
 
+    const AppDispatch = useAppDispatch();
 
 
 
@@ -34,8 +35,10 @@ function Filter(data: any) {
     });
     useEffect(() => {
         const Company: string = data.data.catelogries.find((item: any) => item.category_id == data.data.dataCate.category);
-        console.log('Company',Company);
-    }, [data.data.catelogries])
+        if (Company != undefined) {
+            setObjFilter(prevState => ({ ...prevState, company: Company.category_name }));
+        }
+    }, [data.data.catelogries, data.data.dataCate.category])
 
 
 
@@ -109,6 +112,7 @@ function Filter(data: any) {
     };
 
     const [Datafilter, setDatafilter] = useState([]);
+
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -17,6 +17,10 @@ function ListProduct() {
   const category_dad = Number(searchParams.get('category_dad'));  // Get 'category_dad' directly
 
   const listProduct = useAppSelector((state) => state.product.listProduct);
+  const DatafilterSlice = useAppSelector((state) => state.product);
+  console.log('DatafilterSlice', DatafilterSlice)
+
+
   const catelogries = useAppSelector((state) => state.category.AlllistCatelories as Category[]);
 
   const dispatch = useAppDispatch();
