@@ -7,7 +7,6 @@ import OptionSelected from './OptionSelected';
 import { ObjFilterTypeinterface } from './DataFilter';
 import { useAppSelector } from '../../../redux/hooks';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate từ React Router
-import { setDatafilterSlice } from '../../../redux/product/product.slice';
 
 
 
@@ -59,6 +58,7 @@ function Filter(data: any) {
         rearCamera: [],
     });
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const Company: string = data.data.catelogries.find((item: any) => item.category_id == data.data.dataCate.category);
         if (Company != undefined) {
             setObjFilter(prevState => ({ ...prevState, company: Company.category_name }));
@@ -68,6 +68,7 @@ function Filter(data: any) {
 
 
     const handleChangeProduct = (company: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const CategoryId: any = data.data.catelogries.find((item: any) => item.category_name.toLowerCase() === company.toLowerCase());
         if (CategoryId) {
             setObjFilter(prevState => ({ ...prevState, company: CategoryId.category_name }));
