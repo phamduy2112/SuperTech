@@ -5,8 +5,9 @@ import { CiFilter } from 'react-icons/ci';
 import Selected from './Selected';
 import OptionSelected from './OptionSelected';
 import { ObjFilterTypeinterface } from './DataFilter';
-import { useAppSelector } from '../../../redux/hooks';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate từ React Router
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { setDatafilterSlice } from '../../../redux/product/product.slice';
 
 
 
@@ -14,6 +15,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate từ React
 function Filter(data: any) {
 
     const Navigate = useNavigate();
+    const AppDispatch = useAppDispatch();
+
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -138,6 +141,13 @@ function Filter(data: any) {
     };
 
     const [Datafilter, setDatafilter] = useState([]);
+
+    useEffect(() => {
+        AppDispatch(setDatafilterSlice(Datafilter))
+    }, [AppDispatch, Datafilter])
+    const SSSSDatafilter = useAppSelector((state) => state.product.Datafilter);
+    console.log('SSSSDatafilter', SSSSDatafilter)
+
 
 
     useEffect(() => {

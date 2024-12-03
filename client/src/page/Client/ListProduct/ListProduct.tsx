@@ -1,78 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import ProductItem from '../../../components/product/ProductItem';
 import { Breadcrumb, Checkbox, Form, Select } from 'antd';
-import { MdFilterAlt } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getCatelogryDadThunk, getCatelogryThunkAll } from '../../../redux/catelogry/catelogry.slice';
-import { getProductByCateloriesDad } from '../../../redux/product/product.slice';
+import { getCatelogryThunkAll } from '../../../redux/catelogry/catelogry.slice';
+import { } from '../../../redux/product/product.slice';
 import { useLocation } from 'react-router-dom';
-import { data } from '../DetailProduct/data';
 import Filter from './Filter';
 
 function ListProduct() {
 
   const location = useLocation();
 
-  const searchParams = new URLSearchParams(location.search);
-  const category_dad = Number(searchParams.get('category_dad'));  // Get 'category_dad' directly
+
+
 
   const listProduct = useAppSelector((state) => state.product.listProduct);
-  const DatafilterSlice = useAppSelector((state) => state.product);
-  console.log('DatafilterSlice', DatafilterSlice)
 
 
-  const catelogries = useAppSelector((state) => state.category.AlllistCatelories as Category[]);
+  const catelogries = useAppSelector((state) => state.category.AlllistCatelories as []);
 
   const dispatch = useAppDispatch();
 
-  const [isDiscounted, setIsDiscounted] = useState(false); // State cho checkbox giảm giá
   const [dataCate, setDataCate] = useState({})
-
   useEffect(() => {
     try {
-      dispatch(getCatelogryThunkAll())
+      dispatch(getCatelogryThunkAll());
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch])
-
+  }, [dispatch]);
 
   useEffect(() => {
-
-
-
-
-    // Lấy category_dad và category từ URL mới
+    const searchParams = new URLSearchParams(location.search);
     const category_dad = searchParams.get('category_dad');
     const category = searchParams.get('category');
-
-    // Cập nhật `dataCate` dựa vào URL mới
     setDataCate({
       category_dad,
       category,
     });
+  }, [location.search]);
 
-    // Gọi API hoặc các thao tác khác cần thiết khi `dataCate` thay đổi
-    // dispatch(getProductByCategories(dataCate));  // Ví dụ gọi hàm dispatch
-  }, [location]);  // Lắng nghe thay đổi của `location`
-  useEffect(() => {
-    dispatch(getProductByCateloriesDad(dataCate))
-  }, [dataCate, dispatch])
-  // Lọc sản phẩm theo trạng thái checkbox
-  const filteredProducts = isDiscounted
-    ? listProduct.filter(item => item.product_discount > 0) // Giả định rằng sản phẩm có thuộc tính 'isDiscounted'
-    : listProduct;
-  console.log('date', dataCate);
 
-  // const handleCheckboxChangeSale = (e: { target: { checked: boolean; }; }) => {
-  //   if (e.target.checked === true) {
-  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //     const sortedProducts = [...Products].sort((a: any, b: any) => b.product_discount - a.product_discount);
-  //     setProducts(sortedProducts)
-  //   } else {
-  //     setProducts(ProductsByIdComponent)
-  //   }
-  // }
+
+
+
   return (
     <div className='w-[80%] m-auto'>
       <Breadcrumb
@@ -86,7 +57,7 @@ function ListProduct() {
         ]}
       />
       <div>
-        <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm: {category_dad}</h3>
+        <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm:</h3>
         <div className='flex gap-4'>
           <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex w-[9rem]'>
             <Filter data={{ catelogries: catelogries, listProduct: listProduct, dataCate: dataCate }} />
@@ -121,7 +92,7 @@ function ListProduct() {
         </div>
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
-        {filteredProducts?.map((item) => (
+        {listProduct?.map((item) => (
           <ProductItem key={item.id} product={item} /> // Đảm bảo sử dụng key cho mỗi sản phẩm
         ))}
       </div>

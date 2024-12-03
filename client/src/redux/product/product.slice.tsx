@@ -119,6 +119,7 @@ const initialState = {
   productDetail: {},
   productColors: [],
   listProductStorage: [],
+  Datafilter:[],
 
 };
 
@@ -126,7 +127,9 @@ const ProductSlice = createSlice({
   name: "ProductSlice",
   initialState,
   reducers: {
-  
+    setDatafilterSlice: (state, { payload }) => {
+      state.Datafilter = payload;
+    },
     setProduct: (state, { payload }) => {
       state.listProduct = payload;
     },

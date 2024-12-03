@@ -22,7 +22,6 @@ import { AiOutlineLike } from "react-icons/ai";
 import { IMG_BACKEND } from "../../constants";
 import { getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
 function ProductItem(props: any) {
-  console.log('props', props);
 
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
@@ -84,7 +83,6 @@ function ProductItem(props: any) {
   //     toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
   //   }
   // };
-  console.log(props);
 
   return (
     <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col h-full">

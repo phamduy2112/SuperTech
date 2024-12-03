@@ -301,7 +301,7 @@ function AdminCreateAccount() {
                 <div className='flex- items-center flex justify-center'>
                     <ImgCrop rotationSlider>
                         <Upload.Dragger
-                            action="https://test-api-nodejs-440616.appspot.com/uploadimguser"
+                            action="https://dichvumang86.cloud/uploadimguser"
                             listType='picture'
                             fileList={fileList}
                             onChange={onChange}

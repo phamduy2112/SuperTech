@@ -1,25 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../../redux/hooks";
-import { getCatelogryThunkAll } from "../../../../../../redux/catelogry/catelogry.slice";
+import React from "react";
 import { Link } from "react-router-dom";
 
-interface Category {
-  category_id: number;
-  category_name: string | null;
-  category_image: string | null;
-  category_dad: number | null;
-  category_date_task: string;
-  category_task: boolean;
-}
-
-function TaskProduct() {
+function TaskProduct(props: any) {
   // Đảm bảo kiểu dữ liệu đúng
-  const catelogries = useAppSelector((state) => state.category.AlllistCatelories as Category[]);
-  const AppDispatch = useAppDispatch();
 
-  useEffect(() => {
-    AppDispatch(getCatelogryThunkAll());
-  }, [AppDispatch]);
 
   console.log('catelogries', catelogries)
   // Ánh xạ các giá trị category_dad với tên mục cha
@@ -30,7 +14,7 @@ function TaskProduct() {
     4: "Tai nghe"
   };
 
-  // Nhóm các mục theo category_dad, đảm bảo catelogries không phải là null hoặc undefined
+
   const groupedCategories = catelogries?.reduce<{ [key: number]: Category[] }>((acc, item) => {
     const categoryDad = item?.category_dad;
     if (categoryDad !== null) {
@@ -43,6 +27,7 @@ function TaskProduct() {
   }, {});
 
   return (
+   
     <div className="absolute z-50 left-0 top-full mt-2 bg-white p-4 shadow-lg rounded-lg">
       <div className="w-auto py-[1.5rem] px-[1.6rem]">
         <ul className="space-y-6">
