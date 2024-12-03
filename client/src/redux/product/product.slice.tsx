@@ -119,7 +119,7 @@ const initialState = {
   productDetail: {},
   productColors: [],
   listProductStorage: [],
-  Datafilter: [],
+  Datafilter: null,
 
 };
 

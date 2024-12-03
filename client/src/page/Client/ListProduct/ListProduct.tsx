@@ -18,7 +18,7 @@ function ListProduct() {
 
   const [ShowProduct, setShowProduct] = useState([]);
   useEffect(() => {
-    if (Datafilter.length > 0) {
+    if (Datafilter != null) {
       setShowProduct(Datafilter)
     }
     else {
@@ -106,9 +106,13 @@ function ListProduct() {
         </div>
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
-        {ShowProduct?.map((item) => (
-          <ProductItem key={item.id} product={item} /> // Đảm bảo sử dụng key cho mỗi sản phẩm
-        ))}
+        {
+          ShowProduct.length > 0 ? ShowProduct?.map((item) => (
+            <ProductItem key={item.id} product={item} /> 
+          )) : <div className='col-span-6 text-[30px] font-bold flex items-center justify-center h-[80vh]'>
+            <span>Không tìm thấy sản phẩm mà bạn yêu cầu</span>
+          </div>
+        }
       </div>
     </div>
   );
