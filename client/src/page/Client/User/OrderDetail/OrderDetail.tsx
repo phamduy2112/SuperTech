@@ -8,19 +8,12 @@ import { formatCurrencyVND } from '../../../../utils';
 import { Container } from '../../../../components/Style/Container';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import StepOrderDetai from './component/StepOrderDetai';
+import { colorText } from '../../../../constants';
 
 function OrderDetail() {
   const { id } = useParams(); // Lấy id từ URL
   const idOrder=Number(id)
-  const colorText = [
-    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
-  { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
-  { status: 2, color: "#ff9100", text: "Đã chuẩn bị hàng" }, 
-  { status: 3, color: "#008000", text: "Đang giao hàng" }, 
-  { status: 4, color: "#800080", text: "Thành công" }, 
-  { status: 5, color: "#111111", text: "Không nhận hàng" }, 
-  { status: 6, color: "#0000FF", text: "Hủy hàng" },        // Màu tím
-  ];
+ 
   
   const columns = [
     {
@@ -115,6 +108,12 @@ const [user,setUser]=useState({});
 
 const [order,setOrder]=useState({})
 const [listProduct,setListProduct]=useState([]);
+
+const cancelReason = order?.order_statuses?.find(
+  (status) => status.order_status == 6
+)?.order_status_text_cancel;
+
+console.log(cancelReason); // Output: "Đơn hàng bị hủy do khách yêu cầu"
 useEffect(() => {
   const fetchApi = async () => {
     try {
@@ -147,12 +146,16 @@ useEffect(() => {
 }, [idOrder]);
 
 
-const statusIndex = detailOrder[0]?.order?.order_status; // Giá trị để chỉ định trạng thái (ví dụ 0 là 'Đang chờ duyệt')
-const currentStatus = colorText.find(item => item.status === statusIndex); // Tìm trạng thái tương ứng
+const statusIndex = detailOrder[0]?.order?.order_status; 
+const currentStatus = colorText.find(item => item.status === statusIndex); 
 
-const statusText = currentStatus  // Lấy text của trạng thái
+const statusText = currentStatus  
+// const cancelReason = order?.order_statuses?.find(
+//   (status) => status.order_status == 6
+// )?.order_status_text_cancel;
 
-console.log(statusText); //
+// console.log(cancelReason);
+
 
   
 return (
@@ -179,7 +182,7 @@ return (
           <p className='text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
           <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>
             
-            {formatCurrencyVND(detailOrder[0]?.order?.order_total)}</span></p>
+            {formatCurrencyVND(detailOrder[0]?.order?.order_total+30000)}</span></p>
         </div>
         <div className='flex justify-between'>
           <div className='w-[49%]'>
@@ -193,7 +196,7 @@ return (
             <div className='mt-[1.5rem]'>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
             <div className='h-[5rem] shadow-md p-[2rem]'>
-            <p className='text-[1.6rem] font-semibold'>Thanh toán: <span>Thanh toán qua MoMo</span></p>
+            <p className='text-[1.6rem] font-semibold'>Thanh toán: <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span></p>
             </div>
             </div>
             <div className='mt-[1.5rem]'>
@@ -220,14 +223,27 @@ return (
           </h3>
       <StepOrderDetai order={detailOrder[0]?.order}/>
         </div>
+        {order?.order_status == 6 
+        
+        
+        
+        ? (  <div className="w-[100%] bg-white shadow-md rounded-lg p-8 mt-[3rem]">
+          <h3 className="text-[1.8rem] font-semibold text-gray-800 mb-6">
+            Lý do hủy đơn hàng
+            
+          </h3>
+          {order?.order_status == 6 ? <p className='text-[1.6rem]'>{cancelReason}</p>  : ''}
+        </div>) : ''}
+        
           </div>
         </div>
         <div className='mt-[3rem] table-detail-order'>
         
         </div>
-        <div className='rounded-lg mt-[1rem]'>
+        {order?.order_status < 2 ?   <div className='rounded-lg mt-[1rem]'>
           <button className='bg-yellow-400 text-[1.5rem] p-[1rem] rounded-lg'>Huỷ đơn hàng</button>
-        </div>
+        </div>: "" }
+      
       </div>
     </Container>
   )

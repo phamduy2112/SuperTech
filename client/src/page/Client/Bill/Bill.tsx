@@ -108,8 +108,7 @@ function Bill(props) {
                     Đặt hàng thành công
                   </h2>
                   <p className="text-[1.5rem] text-gray-700 mt-1">
-                    Đơn hàng đã thiết lập thành công. Chúng tôi sẽ liên lạc trực
-                    tiếp với quý khách để xác nhận.
+                   {detailOrder[0]?.order?.order_pay==0 ? 'Thanh toán tại nhà' :'Đã thanh toán'}
                   </p>
                 </div>
               </div>

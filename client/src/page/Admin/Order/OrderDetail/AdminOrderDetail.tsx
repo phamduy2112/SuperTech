@@ -1,28 +1,17 @@
-import { Button, Table, Timeline } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { FiPhone } from 'react-icons/fi'
-import { IoCloudDownloadOutline } from 'react-icons/io5'
-import { MdOutlineMail } from 'react-icons/md'
-import { TbPlaylistAdd } from 'react-icons/tb'
+import {  Table } from 'antd'
+import  { useEffect, useState } from 'react'
+
 import './OrderDetail.css';
-import { Link, useParams } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks'
-import { changeStatusOrderThunk, getOrderDetail } from '../../../../redux/order/Order.slice'
+import {  useParams } from 'react-router-dom'
+import { useAppDispatch } from '../../../../redux/hooks'
 import { getDetailOrder } from '../../../../service/order/order.service'
 import { formatCurrencyVND } from '../../../../utils'
 import ButtonOrder from './Componnent/ButtonOrder'
+import { colorText } from '../../../../constants'
 
 function AdminOrderDetail() {
   const { id } = useParams();
-  const colorText = [
-    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
-    { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
-    { status: 2, color: "#FFFF00", text: "Đã chuẩn bị hàng" }, 
-    { status: 3, color: "#008000", text: "Đang giao hàng" }, 
-    { status: 4, color: "#800080", text: "Thành công" }, 
-    { status: 5, color: "#000000", text: "Không nhận hàng" }, 
-    { status: 6, color: "#000000", text: "Hủy hàng" }, 
-  ];
+
   
   
   const [order,setOrder]=useState({})
@@ -147,7 +136,7 @@ const [listProduct,setListProduct]=useState([]);
     console.log('params', pagination, filters, sorter, extra);
   };
 const orderId = id; // The order ID from the URL params
-console.log(detailOrder);
+
 
   return (
     <div >

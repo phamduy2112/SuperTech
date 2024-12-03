@@ -20,6 +20,12 @@ export const getTopFiveProduct = ({period}:string) => {
 	
     });
   };
+export const getOrderById = (id:number) => {
+    return axiosWithAuth(`/get-order-by-id/${id}`, {
+      method: "get",
+	
+    });
+  };
 export const getOrderRevenue=({ startDate, endDate, period })=>{
   return axiosWithAuth(`/get-order-revenue?startDate=${startDate}&endDate=${endDate}&period=${period}`,{
     method:"get",

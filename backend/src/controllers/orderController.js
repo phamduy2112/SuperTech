@@ -4,6 +4,7 @@ import initModels from "../models/init-models.js";
 import order from "../models/order.js";
 import { startOfWeek,endOfWeek } from "date-fns";
 import { col, fn, literal, Op, Sequelize } from "sequelize";
+import { sendMail } from "../config/mail.js";
 
 let models = initModels(sequelize); 
 let orders = models.order; 
@@ -320,8 +321,8 @@ const createorder = async (req, res) => {
         const {
             order_total,
             order_total_quatity,
-            order_status,
-            pay_id,
+       
+            email,
             discount,
             address,
             phone_number
@@ -335,7 +336,7 @@ const createorder = async (req, res) => {
             order_date: date,
             order_total,
             order_total_quatity,
-            order_status,
+            order_status:0,
             pay_id:null,
             discount,
             user_id,
@@ -344,12 +345,12 @@ const createorder = async (req, res) => {
             // discount
         });
         // order_statis
+        
         const newOrderStatus=await models.order_status.create({
             order_id:neworder.order_id,
-            order_status,
+            order_status:0,
             created_at:date
         })
-        
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {       
         console.log(error);
@@ -358,31 +359,40 @@ const createorder = async (req, res) => {
 };
 const getSuccessEmailOrder = async (req, res) => {
   try {
-    const { email, orderDetails } = req.body; // Giả sử thông tin đơn hàng được gửi qua body
+    const { email, orderDetails } = req.body;
 
-  //   ${orderDetails
-  //     .map(
-  //       (item) => `
-  //     <li>
-  //       <b>Sản phẩm:</b> ${item.name} <br>
-  //       <b>Số lượng:</b> ${item.quantity} <br>
-  //       <b>Giá:</b> ${item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-  //     </li>
-  //   `
-  //     )
-  //     .join('')}
-  // 
-  // <p>Tổng thanh toán: <b>${orderDetails
-  //   .reduce((total, item) => total + item.quantity * item.price, 0)
-  //   .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></p>
+    // Kiểm tra dữ liệu đầu vào
+    if (!email || !orderDetails || !Array.isArray(orderDetails)) {
+      return res.status(400).json({ message: 'Thông tin không hợp lệ.' });
+    }
+
+    // Tạo danh sách sản phẩm từ orderDetails
+    const productList = orderDetails
+      .map(
+        (item) => `
+        <li>
+          <b>Sản phẩm:</b> ${item.name} <br>
+          <b>Số lượng:</b> ${item.quantity} <br>
+          <b>Giá:</b> ${Number(item.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+        </li>
+      `
+      )
+      .join('');
+
+    // Tính tổng thanh toán
+    const totalAmount = orderDetails
+      .reduce((total, item) => total + item.quantity * item.price, 0)
+      .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
     // Tạo nội dung HTML cho email
     const htmlContent = `
       <h1 style="color: green;">Đơn hàng của bạn đã được đặt thành công!</h1>
       <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.</p>
       <h3>Chi tiết đơn hàng:</h3>
       <ul>
-      <li>HEHE</li>
-       </ul>
+        ${productList}
+      </ul>
+      <p>Tổng thanh toán: <b>${totalAmount}</b></p>
       <p>Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.</p>
       <br>
       <p>Trân trọng,<br>Đội ngũ hỗ trợ</p>
@@ -400,10 +410,8 @@ const getSuccessEmailOrder = async (req, res) => {
     } else {
       return res.status(500).json({ message: 'Không thể gửi email xác nhận đơn hàng.' });
     }
-  } catch (e) {
-    console.error('Lỗi khi gửi email xác nhận:', e);
-    console.log(e);
-    
+  } catch (error) {
+    console.error('Lỗi khi gửi email xác nhận:', error);
     return res.status(500).json({ message: 'Đã xảy ra lỗi khi gửi email.' });
   }
 };
@@ -454,10 +462,44 @@ const deleteorder = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra khi xóa đơn hàng!", 500);
     }
 };
+const getOrderId= async (req, res) => {
+  try {
+      const orderId = await order.findOne({
+          where: { order_id: req.params.id }
+      });
+      if (orderId) {
+          responseSend(res, orderId, "Thành Công!", 200);
+      } else {
+          responseSend(res, "", "Không tìm thấy đơn hàng!", 404);
+      }
+      
+  } catch (error) {
+      responseSend(res, "", "Có lỗi xảy ra khi xóa đơn hàng!", 500);
+      console.log(error);
+      
+  }
+};
+export const checkInventory = async ( quality_id, color_id, storage_id, quantity) => {
+  const inventory = await  models.product_quality.findOne({
+    where: { quality_id, color_id, storage_id },
+  });
 
+  if (!inventory) {
+    responseSend(res, "", "Không tìm thấy số lượng trong sản phẩm!", 404);
+    
+  }
+
+  if (inventory.quantity < quantity) {
+    responseSend(res, "", "Số lượng sản phẩm không đủ!", 404);
+    io.emit("low_stock_warning","Sản phẩm sắp hết sớ lượng")
+  }
+
+  return inventory; // Trả về nếu kiểm tra thành công
+};
 export {
     getorder,
     getOrderById,
+    getOrderId,
     createorder,
     updateorder,
     deleteorder,

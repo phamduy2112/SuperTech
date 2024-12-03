@@ -53,6 +53,11 @@ export default class user extends Model {
     user_time: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    is_verified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
     }
   }, {
     sequelize,

@@ -18,9 +18,7 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
 import cookieParser from 'cookie-parser';
-import path from "path"
-import http from 'http';
-import { Server } from 'socket.io';
+
 import cors from 'cors';
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
@@ -29,7 +27,8 @@ import product_storageRouter from './routers/product_storage.js';
 import autobankrouter from './routers/bankAutoRouter.js';
 import settingRouter from './routers/settingRouter.js';
 import getCatelories from './routers/exportFile.js';
-const app = express();
+import { app, server } from './socker/socker.js';
+// const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
@@ -74,4 +73,6 @@ app.use(payRouter);
 app.use(searchRouter);
 app.use (uploadImgUserRouter)
 app.use (getCatelories)
-app.listen(8080);
+server.listen(8080, () => {
+  console.log("Server and Socket.IO are running on port 8080");
+});

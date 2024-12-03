@@ -4,6 +4,7 @@ import initModels from "../models/init-models.js";
 import { col, fn, literal, Op, Sequelize } from "sequelize";
 import { io } from "../socker/socker.js";
 import moment from "moment";
+import { checkInventory } from "./orderController.js";
 let models = initModels(sequelize); 
 let detailorder = models.detail_order; 
 
@@ -71,86 +72,14 @@ const createdetailorder = async (req, res) => {
 
       const newOrders = await Promise.all(
           detailOrders.map(async (order) => {
-              // Kiểm tra sản phẩm trong `product_storage`
-              const storageRecord = await models.product_storage.findOne({
-                  where: { product_id: order.product_id },
-              });
-
-              if (storageRecord) {
-                  // Nếu tồn tại trong `product_storage`, kiểm tra số lượng
-                  if (storageRecord.product_quantity < order.detail_order_quality) {
-                      // throw new Error(
-                      //     `Sản phẩm với ID: ${order.product_id} không đủ số lượng trong product_storage (Còn ${storageRecord.product_quantity}, cần ${order.detail_order_quality})`
-                      // );
-                            responseSend(res, '', `Sản phẩm với ID: ${order.product_id} không đủ số lượng`, 200); // Trả về kết quả
-
-                  }
-
-                  // Trừ số lượng từ `product_storage`
-                  await models.product_storage.update(
-                      {
-                          product_quantity: sequelize.literal(
-                              `product_quantity - ${order.detail_order_quality}`
-                          ),
-                      },
-                      {
-                          where: { product_id: order.product_id },
-                      }
-                  );
-
-                  // Kiểm tra nếu số lượng sau khi trừ nhỏ hơn 10
-                  const updatedStorage = await models.product_storage.findOne({
-                      where: { product_id: order.product_id },
-                  });
-
-                  if (updatedStorage.product_quantity < 10) {
-                      io.emit(
-                          "low_stock_warning",
-                          `Sản phẩm với ID: ${order.product_id} sắp hết hàng (Chỉ còn ${updatedStorage.product_quantity})`
-                      );
-                  }
-              } else {
-                  // Nếu không tồn tại trong `product_storage`, kiểm tra `product_colors`
-                  const colorRecord = await models.product_colors.findOne({
-                      where: { product_id: order.product_id },
-                  });
-
-                  if (!colorRecord) {
-                      throw new Error(
-                          `Sản phẩm với ID: ${order.product_id} không tồn tại trong product_colors`
-                      );
-                  }
-
-                  if (colorRecord.product_quantity < order.detail_order_quality) {
-                      throw new Error(
-                          `Sản phẩm với ID: ${order.product_id} không đủ số lượng trong product_colors (Còn ${colorRecord.product_quantity}, cần ${order.detail_order_quality})`
-                      );
-                  }
-
-                  // Trừ số lượng từ `product_colors`
-                  await models.product_colors.update(
-                      {
-                          product_quantity: sequelize.literal(
-                              `product_quantity - ${order.detail_order_quality}`
-                          ),
-                      },
-                      {
-                          where: { product_id: order.product_id },
-                      }
-                  );
-
-                  // Kiểm tra nếu số lượng sau khi trừ nhỏ hơn 10
-                  const updatedColor = await models.product_colors.findOne({
-                      where: { product_id: order.product_id },
-                  });
-
-                  if (updatedColor.product_quantity < 10) {
-                      io.emit(
-                          "low_stock_warning",
-                          `Sản phẩm với ID: ${order.product_id} sắp hết hàng (Chỉ còn ${updatedColor.product_quantity})`
-                      );
-                  }
-              }
+            await checkInventory( 2, 3, order.detail_order_quality);
+  
+            // Trừ tồn kho sau khi kiểm tra thành công
+            await models.product_quality.decrement("quantity", {
+              by: quantity,
+              where: { product_id, color_id, storage_id },
+            });
+      
 
               // Tạo detailOrder sau khi trừ kho thành công
               const createdOrder = await detailorder.create(order);

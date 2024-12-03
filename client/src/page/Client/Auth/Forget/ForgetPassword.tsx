@@ -1,20 +1,18 @@
 import { Button, Form, Input } from 'antd';
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import dienThoai from '../asset/dienthoaisign.png'
 import bgdienThoai from '../asset/dienthoai.png'
 import { useFormik } from 'formik';
 import * as Yup from "yup";
-import CountdownTimer from './components/CountDown';
 import CodeInput from './components/CodeInput';
 import ChangePassword from './components/ChangePassword';
 import { checkEmail } from '../../../../service/user/user.service';
 
 function ForgetPassword() {
-  const navigate = useNavigate();
   const [number,setNumber]=useState(1);
-  const [emailUser,setEmailUser]=useState<any>(null);
+  const [emailUser,setEmailUser]=useState<string>('');
   
   const updateNumber = (newNumber: number) => {
     setNumber(newNumber);
@@ -47,7 +45,6 @@ function ForgetPassword() {
 
 
   });
-  const targetTime = new Date().getTime() + 3900000;
 
     return (
 <div className="">

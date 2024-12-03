@@ -26,11 +26,12 @@ const CommentForm = (props: any) => {
     userImage: user?.user_image ? `${IMG_BACKEND_USER}/${user.user_image}` : null,
     userName: user?.user_name,
   });
-
+  console.log(commentList);
+  
   useEffect(() => {
     if (socket) {
       socket.on("new_comment", (newComment: any) => {
-        dispatch(setCommentReducer([newComment, ...commentList]));
+        dispatch(setCommentReducer([...commentList, newComment]));
       });
     }
 
@@ -66,8 +67,8 @@ const CommentForm = (props: any) => {
     try {
       const resultAction = await dispatch(createCommentByIdProductThunk(newComment));
       if (createCommentByIdProductThunk.fulfilled.match(resultAction)) {
-        const createdComment = resultAction.payload;
-        dispatch(setCommentReducer([createdComment, ...commentList]));
+        // const createdComment = resultAction.payload;
+        // dispatch(setCommentReducer([...commentList, ...createdComment]));
         toast.success("Bình luận thành công!");
         setComment("");
         setRating(0);

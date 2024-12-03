@@ -28,7 +28,7 @@ const CancelOrderModal: React.FC<CancelOrderModalProps> = ({ orderId }) => {
     const reason = selectedReason === 'other' ? customReason : selectedReason;
     const cancelOrder={
       order_id:orderId,
-      order_status:3,
+      order_status:6,
       order_status_text_cancel:reason
     }
     console.log(cancelOrder);

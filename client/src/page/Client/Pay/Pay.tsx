@@ -5,7 +5,7 @@ import { Container } from '../../../components/Style/Container';
 import axios from 'axios';
 import { getUserThunk } from '../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { createDetailOrder, createOrder } from '../../../service/order/order.service';
+import { createDetailOrder, createOrder, getSuccessEmailOrder } from '../../../service/order/order.service';
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
@@ -175,7 +175,13 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   const handleFormSubmit = async () => {
     try {
       // Gọi API tạo đơn hàng và nhận phản hồi (resp)
-      const resp = await createOrder(formData); // Giả sử createOrder là hàm tạo đơn hàng
+      const dataOrder={
+    ...formData,
+    order_total:totalPrice,
+    order_total_quatity:totalItem,
+
+      }
+      const resp = await createOrder(dataOrder); // Giả sử createOrder là hàm tạo đơn hàng
       
       // Mở modal và lưu thông tin đơn hàng nếu phương thức thanh toán là 'bank'
       if (formData.paymentMethod === 'bank') {
@@ -199,8 +205,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   
         // Gọi API tạo đơn hàng chi tiết
         const response = await createDetailOrder(detailOrders);
-  
-
+        
+        
         if (response) {
           setTimeout(() => {
             navigate("/xuất-hóa-đơn");
@@ -220,12 +226,20 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
           detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
           discount_product: item.product_discount,
         }));
+        
+        const dataEmail={
+          email:formData.email,
+          orderDetails:detailOrders
+        }
+        console.log(dataEmail);
+        
   
         // Gọi API tạo đơn hàng chi tiết
         const response = await createDetailOrder(detailOrders);
-  
+        
         // Nếu thành công, chuyển trang ngay lập tức
         if (response) {
+          await getSuccessEmailOrder(dataEmail)
           navigate("/xuất-hóa-đơn");
           dispatch(setOrderId(resp.data.content.order_id)); // Lưu order_id vào Redux nếu cần
           dispatch(removeAllCart()); // Xóa giỏ hàng

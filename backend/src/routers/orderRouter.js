@@ -2,7 +2,7 @@
 import express from 'express';
 import isAuthenticated from '../config/auth.js';
 import { middleToken } from '../config/jwt.js';
-import { getorder, getOrderById, createorder, updateorder, deleteorder, changeStatusOrder, getSuccessEmailOrder, getRevenueBetweenDates, getOrderUserTop} from '../controllers/orderController.js';
+import { getorder, getOrderById, createorder, updateorder, deleteorder, changeStatusOrder, getSuccessEmailOrder, getRevenueBetweenDates, getOrderUserTop, getOrderId} from '../controllers/orderController.js';
 import { getTop5BestSellingProducts } from '../controllers/detailorderController.js';
 const orderRouter = express.Router();
 
@@ -15,6 +15,8 @@ orderRouter.delete('/order-delete/:id',middleToken, deleteorder);
 orderRouter.post('/success-order', getSuccessEmailOrder);
 orderRouter.get('/order-by-id-user',middleToken, getOrderById);
 orderRouter.get('/get-order-revenue', getRevenueBetweenDates);
+orderRouter.get('/get-order-by-id/:id', getOrderId);
+
 // orderRouter.post('/get-order-sales', getWeeklySales);
 orderRouter.get('/get-user-order-count', getOrderUserTop);
 // orderRouter.get('/get-order-today',middleToken, getOrdersForToday);

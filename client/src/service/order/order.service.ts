@@ -23,6 +23,14 @@ export const createDetailOrder = (data:any) => {
  
   );
   };
+export const getSuccessEmailOrder = (data:any) => {
+    return axiosWithAuth(`/success-order`, {
+      method: "post",
+      data
+    }
+ 
+  );
+  };
 export const getOrderByIdUser=()=>{
   return axiosWithAuth(`/order-by-id-user`,{
     method:"get",
@@ -56,5 +64,11 @@ export const getAutoBank=()=>{
 export const getTransactions=()=>{
   return axiosWithAuth(`/check-transactions`,{
     method:"get"
+  })
+}
+export const updateOrderPayment=(orderId:number,data:number)=>{
+  return axiosWithAuth(`/update-order-pay/${orderId}`,{
+    method:"put",
+    data
   })
 }

@@ -40,7 +40,8 @@ function DetailProduct() {
   const handleAddOrder=(product:any)=>{
     const productToCart = {
       ...product,
-      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+      selectedColor: objectColor,
+      selectedStorage:objectStorage
     };
     dispatch(addItemToOrder(productToCart))
     navigate("/thanh-toan")

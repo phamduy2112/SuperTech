@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.URL, // Cần chắc chắn rằng URL chính xác
+    origin: '*', // Cần chắc chắn rằng URL chính xác
     methods: ["GET", "POST"],
   },
 });
@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
 
   // Log danh sách người dùng online
   console.log("Online Users:", Array.from(userSocketMap.keys()));
-  // io.emit("low_stock_warning","Đã có người vào")
+
   // Emit danh sách userId online
   io.emit("getOnlineUsers", Array.from(userSocketMap.keys()));
 

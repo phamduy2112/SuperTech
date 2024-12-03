@@ -58,6 +58,10 @@ export default class order extends Model {
       type: DataTypes.STRING(15),
       allowNull: true
     },
+    email_user: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
     order_pay: {
       type: DataTypes.INTEGER,
       allowNull: true
