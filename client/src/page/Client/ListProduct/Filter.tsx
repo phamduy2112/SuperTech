@@ -15,7 +15,6 @@ import { setDatafilterSlice } from '../../../redux/product/product.slice';
 function Filter(data: any) {
 
     const Navigate = useNavigate();
-    const AppDispatch = useAppDispatch();
 
 
     useEffect(() => {
@@ -141,12 +140,17 @@ function Filter(data: any) {
     };
 
     const [Datafilter, setDatafilter] = useState([]);
+    const AppDispatch = useAppDispatch();
 
-    useEffect(() => {
-        AppDispatch(setDatafilterSlice(Datafilter))
-    }, [AppDispatch, Datafilter])
-    const SSSSDatafilter = useAppSelector((state) => state.product.Datafilter);
-    console.log('SSSSDatafilter', SSSSDatafilter)
+    const HandClick = (boolean: boolean) => {
+        if (boolean == true) {
+            AppDispatch(setDatafilterSlice(Datafilter))
+            handleVisibleChange(false);
+        }
+    }
+    const RemoveClick = (boolean: boolean) => {
+        handleVisibleChange(false);
+    }
 
 
 
@@ -218,6 +222,8 @@ function Filter(data: any) {
                 handleSelectRom={handleSelectRom}
                 handleFrontCameras={handleFrontCameras}
                 handleRearCameras={handleRearCameras}
+                HandClick={HandClick}
+                RemoveClick={RemoveClick}
 
             />
 

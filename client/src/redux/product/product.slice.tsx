@@ -5,7 +5,7 @@ export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
   async (name: any) => {
     try {
-      console.log(name.category);
+      console.log(name.category, name.category_dad);
       const resp = await getProductCateloriesByDad(name.category_dad, name.category);
       return resp.data.content;
 
@@ -119,7 +119,7 @@ const initialState = {
   productDetail: {},
   productColors: [],
   listProductStorage: [],
-  Datafilter:[],
+  Datafilter: [],
 
 };
 

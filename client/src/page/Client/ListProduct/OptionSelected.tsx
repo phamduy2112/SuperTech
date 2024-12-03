@@ -11,6 +11,8 @@ interface OptionSelectedProps {
     handleSelectRom: (rom: string) => void;
     handleFrontCameras: (front: string) => void;
     handleRearCameras: (rear: string) => void;
+    HandClick: (boolean: boolean) => void;
+    RemoveClick: (boolean: boolean) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Datafilter: any[];
 
@@ -25,6 +27,8 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
     handleFrontCameras,
     handleRearCameras,
     Datafilter,
+    HandClick,
+    RemoveClick
 }) => {
     const [priceclick, setPriceClick] = useState(false);
     const [priceRange, setPriceRange] = useState([0, 70000000]);
@@ -174,10 +178,10 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                     </div>
                 </div>
                 <div className="flex border-t-[1px] pt-6 flex-row justify-center items-center gap-[5px] col-span-3 mt-4">
-                    <Button color='danger' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
+                    <Button color='danger' onClick={() => RemoveClick(false)} className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
                         <span>Bỏ chọn</span>
                     </Button>
-                    <Button color='primary' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="solid">
+                    <Button onClick={() => HandClick(true)} color='primary' className="min-w-[200px] h-[50px] flex justify-center items-center" variant="solid">
                         {
                             Datafilter.length != 0 ? <span>Xem thêm {Datafilter.length} kết quả</span>
                                 : <span>Không có kết quả</span>

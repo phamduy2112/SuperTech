@@ -3,18 +3,30 @@ import ProductItem from '../../../components/product/ProductItem';
 import { Breadcrumb, Checkbox, Form, Select } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getCatelogryThunkAll } from '../../../redux/catelogry/catelogry.slice';
-import { } from '../../../redux/product/product.slice';
+import { getProductByCateloriesDad } from '../../../redux/product/product.slice';
 import { useLocation } from 'react-router-dom';
 import Filter from './Filter';
 
 function ListProduct() {
 
   const location = useLocation();
-
-
-
-
+  const AppDispatch = useAppDispatch();
+  const Datafilter = useAppSelector((state) => state.product.Datafilter);
   const listProduct = useAppSelector((state) => state.product.listProduct);
+
+  console.log('List Product', Datafilter);
+
+  const [ShowProduct, setShowProduct] = useState([]);
+  useEffect(() => {
+    if (Datafilter.length > 0) {
+      setShowProduct(Datafilter)
+    }
+    else {
+      setShowProduct(listProduct)
+    }
+  }, [listProduct, Datafilter]);
+
+
 
 
   const catelogries = useAppSelector((state) => state.category.AlllistCatelories as []);
@@ -41,7 +53,9 @@ function ListProduct() {
   }, [location.search]);
 
 
-
+  useEffect(() => {
+    AppDispatch(getProductByCateloriesDad(dataCate));
+  }, [AppDispatch, dataCate]);
 
 
   return (
@@ -92,7 +106,7 @@ function ListProduct() {
         </div>
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
-        {listProduct?.map((item) => (
+        {ShowProduct?.map((item) => (
           <ProductItem key={item.id} product={item} /> // Đảm bảo sử dụng key cho mỗi sản phẩm
         ))}
       </div>

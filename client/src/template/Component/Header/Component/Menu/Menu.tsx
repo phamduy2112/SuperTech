@@ -61,7 +61,7 @@ function Menu() {
           onMouseLeave={handleMouseLeave}
           onClick={handleClick} // Toggle click state
         >
-          <div className="text-[1.8re1m] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative">
+          <div className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative">
             Sản phẩm
           </div>
           {/* Display TaskProduct when hovered or clicked */}
