@@ -1,4 +1,5 @@
 import express, { urlencoded } from 'express';
+import schedule from 'node-schedule';
 import cron from "node-cron";
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
@@ -28,6 +29,7 @@ import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
 import product_storageRouter from './routers/product_storage.js';
 import autobankrouter from './routers/bankAutoRouter.js';
 import settingRouter from './routers/settingRouter.js';
+import { checkTransactionStatus } from './controllers/bankAutoController.js';
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -36,9 +38,16 @@ app.use(urlencoded({extended:true}))
 app.use(express.static("."))
 
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120','https://api.dichvumang86.me',],
+  origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
+
+// cron.schedule("*/30 * * * * *", async () => {
+//   console.log("Chạy auto-update trạng thái đơn hàng...");
+//   const results = await processTransactions();
+//   console.log(results);
+// });
+
 // cron.schedule("*/1 * * * *", async () => {
 //   console.log("Chạy auto-update trạng thái đơn hàng...");
 //   await checkTransactionStatus();
