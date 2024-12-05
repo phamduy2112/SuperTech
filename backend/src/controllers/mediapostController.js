@@ -47,7 +47,7 @@ const createmediapost = async (req, res) => {
             const result = await new Promise((resolve, reject) => {
                 cloudinary.uploader.upload_stream(
                     {
-                        folder: 'Media',
+                        folder: 'Blog',
                         resource_type: 'image',
                         public_id: originalName
                     },
