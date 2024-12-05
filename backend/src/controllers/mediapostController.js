@@ -58,8 +58,10 @@ const createmediapost = async (req, res) => {
                 ).end(file.buffer);
             });
             const imageName = result.public_id.split('/').pop();
+            let postId = req.body.post_id;
             let newMediaPost = await mediapost.create({
                 media_url: imageName,
+                post_id: postId,
             });
             responseSend(res, newMediaPost, "Đăng Tải Hình Ảnh Thành Công!", 201);
         } catch (error) {
