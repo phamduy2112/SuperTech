@@ -14,6 +14,7 @@ import { useState } from "react";
 import ModalDiscount from "./Component/ModalDiscount";
 import { message, Modal, Popconfirm } from "antd";
 import toast from "react-hot-toast";
+import { Paths } from "../../../router/component/RouterValues";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -278,7 +279,7 @@ export default function Cart() {
                     onClick={() => {
                       if((listCart.length>0)){
       
-                        navigate("/thanh-toan");
+                        navigate(`${Paths.Checkout}`);
                      
                       }else{
                         toast.success("Bạn cần thêm sản phẩm")

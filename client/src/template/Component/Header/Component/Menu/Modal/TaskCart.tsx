@@ -9,6 +9,7 @@ import { decreaseItemQuantity, inCreaseItemQuantity, removeItemFromCart } from '
 import { formatCurrencyVND, truncateText } from '../../../../../../utils';
 import img from '../../../../../../assets/pngwing.com 1.png'
 import toast from 'react-hot-toast';
+import { Paths } from '../../../../../../router/component/RouterValues';
 interface TaskCart {
   onClose: () => void;
 }
@@ -133,7 +134,7 @@ function TaskCart({ onClose }: TaskCart) {
              </div>
         
              <div className='w-[100%] bg-[#7500CF] py-[1rem] px-[1rem] cursor-pointer'>
-               <div className='text-[1.5rem] text-white text-center' onClick={() => navigate('/giỏ-hàng')}>
+               <div className='text-[1.5rem] text-white text-center' onClick={() => navigate(`${Paths.Cart}`)}>
                  Xem Giỏ Hàng
                </div>
              </div>

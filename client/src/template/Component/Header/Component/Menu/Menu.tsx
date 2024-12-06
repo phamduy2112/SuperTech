@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import TaskProduct from "./Modal/TaskProduct";
+import { Paths } from "../../../../../router/component/RouterValues";
 
 function Menu() {
   const [isProductHovered, setIsProductHovered] = useState(false);
@@ -23,7 +24,7 @@ function Menu() {
       <ul className="flex items-center">
         <li className="relative md:mr-6">
           <NavLink
-            to="/"
+            to={Paths.Home}
             className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
           >
             Trang chủ
@@ -31,7 +32,7 @@ function Menu() {
         </li>
         <li className="relative md:mr-6">
           <NavLink
-            to="/"
+            to={Paths.Introduce}
             className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
           >
             Giới thiệu
@@ -52,6 +53,15 @@ function Menu() {
               <TaskProduct />
             </div>
           )}
+        </li>
+
+        <li className="relative md:mr-6">
+          <NavLink
+            to={Paths.Contact}
+            className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
+          >
+           Lien he
+          </NavLink>
         </li>
       </ul>
     </div>

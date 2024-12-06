@@ -8,7 +8,7 @@ import { IMG_BACKEND, IMG_BACKEND_USER } from '../../../../constants';
 import toast from 'react-hot-toast';
 import { RouterLogin } from '../../../../router/router.config';
 import { useAvatar } from '../../../../hooks/UseAvatar.hook';
-import { Paths } from '../../../../router/component/RouterValues';
+import { PathAdmin, Paths } from '../../../../router/component/RouterValues';
 
 function DropdownUser() {
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ function DropdownUser() {
     {
       key: "1",
       label: login ? (
-        <NavLink to={"/người-dùng"}>Trang cá nhân</NavLink>
+        <NavLink to={`${Paths.Profile}`}>Trang cá nhân</NavLink>
       ) : (
         <NavLink to={`${Paths.Login}`}>Đăng nhập</NavLink>
       ),
@@ -46,11 +46,11 @@ function DropdownUser() {
       label: login ? (
         <button onClick={()=>{logout()}}>Đăng xuất</button>
       ) : (
-        <NavLink to={"/đăng-kí"}>Đăng Kí</NavLink>
+        <NavLink to={`${Paths.Register}`}>Đăng Kí</NavLink>
       ),
     },
     user?.role === "ADMIN"
-      ? { key: "3", label: <NavLink to={"/admin/dashboard"}>Quản trị</NavLink> }
+      ? { key: "3", label: <NavLink to={`${PathAdmin.PathsAdmin}/${PathAdmin.Dashboard}`}>Quản trị</NavLink> }
       : null,
   ].filter(Boolean); // Remove null entries from items array
 

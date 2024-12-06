@@ -69,30 +69,30 @@ export const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "/san-pham-yeu-thich",
+        path: Paths.FavoriteProducts,
         element: <FavoriteProduct />,
       },
 
       {
-        path: "/list-sản-phẩm",
+        path: Paths.ListProducts,
         element: <ListProduct />,
       },
       {
-        path: "/san-pham-chi-tiet/:id",
+        path: Paths.ProductDetail,
         element: <DetailProduct />,
       },
       // Blog
       {
-        path: "/bài-viết",
+        path: Paths.Blogs,
         element: <ListBlog />,
       },
       {
-        path: "/bài-viết-chi-tiết/:id",
+        path: Paths.BlogDetail,
         element: <DetailBlog />,
       },
       // user
       {
-        path: "/don-hang-chi-tiet-cua-ban/:id",
+        path: Paths.UserOrderDetail,
         element: (
           <PrivateRoute element={  <OrderDetail />}/>
         
@@ -110,29 +110,29 @@ children:[
     element:     <PrivateRoute element={  <UserDetail />}/>,
   },
   {
-    path: "/người-dùng/doi-mat-khau",
+    path: Paths.ChangePassword,
     
     element:     <PrivateRoute element={  <ChangePasswordUser />}/>,
   },
   {
-    path: "/don-hang-cua-ban",
+    path:Paths.UserOrders,
     element: <PrivateRoute element={  <Order />}/>,
   },
 
 ]
 },
       {
-        path:"/giam-gia",
+        path:Paths.Voucher,
         element:<CouponSection/>
       },
       // Mua hàng
       {
-        path: "/giỏ-hàng",
+        path: Paths.Cart,
         element: <Cart />,
       },
 
       {
-        path: "/thanh-toan",
+        path: Paths.Checkout,
         element: (
           // <PrivateRoute element={  <Pay />}/>
           <Pay />
@@ -141,7 +141,7 @@ children:[
       },
       
       {
-        path: "/xuất-hóa-đơn",
+        path: Paths.Bill,
         element: (
           // <PrivateRoute element={  <Bill />}/>
           <Bill />
@@ -151,20 +151,20 @@ children:[
       },
       // các trang khác
       {
-        path: "/giới-thiệu",
+        path: Paths.Introduce,
         element: <Introduce />,
       },
       {
-        path: "/liên-hệ",
+        path: Paths.Contact,
         element: <Contact />,
       },
       {
-        path: "chăm-sóc-khách-hàng",
+        path: Paths.CustomerCare,
         element: <CustomerCare />,
       },
 
       {
-        path: "/hỏi-đáp",
+        path: Paths.QuestionAnswer,
         element: <QuestionAnswer />,
       },
     ],
@@ -178,99 +178,93 @@ children:[
         element: <AuthRoute element={<Login/>} />,
       },
       {
-        path: "/đăng-kí",
+        path: Paths.Register,
         element:  <AuthRoute element={<Resigter/>} />,
       },
       {
-        path: "/quen-mat-khau",
+        path: Paths.ForgetPassword,
         element: <AuthRoute element={<ForgetPassword/>} />,
       },
     ]
 
   },
   {
-    path: '/admin',
+    path:Paths.Admin.PathsAdmin,
     element: <AdminTemplate />,
     children: [
       {
-        path: 'trang-chủ',
+        path: Paths.Admin.Dashboard,
         element: <AdminHome />
       },
       // Loại sản phẩm
       {
-        path: 'quản-lí-loại/danh-mục-sản-phẩm',
+        path: Paths.Admin.Categories,
         element: <AdminCatelogry />
       },
       // sản phẩm
       {
-        path: 'quản-lí-sản-phẩm',
+        path: Paths.Admin.Products,
         element: <AdminProduct />
       },
       {
-        path: 'quan-li-san-pham-chi-tiet/:id',
+        path: Paths.Admin.ProductDetail,
         element: <AdminProductDetail />
       },
       {
-        path: 'quản-lí-sản-phẩm/tạo-sản-phẩm-mới',
+        path: Paths.Admin.AddProduct,
         element: <AdminAddProduct />
       }, {
-        path: 'quản-lí-sản-phẩm/sửa-sản-phẩm/:id',
+        path: Paths.Admin.EditProduct,
         element: <AdminEditProduct />
       },
 
 
       {
-        path: "quản-lí-sản-phẩm/quản-lí-bình-luận",
+        path: Paths.Admin.ProductComments,
         element: <AdminCommentProduct />
       },
       // Blog
       {
-        path: "quản-lí-bài-viết",
+        path: Paths.Admin.Blogs,
         element: <AdminBlog />
       },
       {
-        path: "quản-lí-bài-viết/thêm-bài-viết-mới",
+        path: Paths.Admin.AddBlog,
         element: <AdminAddBlog />
       },
       {
 
-        path: 'quản-lí-bài-viết/sửa-bài-viết/:id',
+        path: Paths.Admin.EditBlog,
         element: <AdminEditBlog />
       },
       {
-        path: 'quản-lí-bài-viết/quản-lí-bình-luận-bài-viết',
+        path: Paths.Admin.BlogComments,
         element: <AdminCommentPost />
       },
 
       // Khách hàng
       {
-        path: 'quản-lí-khách-hàng',
+        path: Paths.Admin.Customers,
         element: <AdminUser />
       },
       {
-        path: 'quản-lí-nhân-viên',
+        path: Paths.Admin.Staff,
         element: <AdminStaff />
       }, {
-        path: 'quản-lí-nhân-viên/tạo-nhân-viên-mới',
+        path: Paths.Admin.AddStaff,
         element: <AdminCreateAccount />
       },
-      {
-        path: 'quản-lí-khách-hàng/tạo-khách-hàng-mới',
-        element: <AdminCreateAccount />
-      },
+   
 
       {
-        path: 'quản-lí-nhân-viên/sửa-nhân-viên/:id',
+        path: Paths.Admin.EditStaff,
         element: <AdminCustomerEdit />
       },
-      {
-        path: 'quản-lí-khách-hàng/sửa-khách-hàng/:id',
-        element: <AdminCustomerEdit />
-      },
+     
 
       // đơn hàng
       {
-        path: 'quản-lí-đơn-hàng', // Không có dấu "/"
+        path: Paths.Admin.Orders, // Không có dấu "/"
         element: <AdminOrder />,
         children: [
           {
@@ -278,27 +272,21 @@ children:[
             element: <PrivateRoute element={<ListOrder />} />,
           },
           {
-            path: 'quản-lí-đơn-hàng-chi-tiết/:id', // Đường dẫn tương đối
+            path: Paths.Admin.OrderDetail, // Đường dẫn tương đối
             element: <PrivateRoute element={<AdminOrderDetail />} />,
           },
         ],
       },
      
-      {
-        path: 'quản-lí-đơn-hàng/tạo-đơn-hàng',
-        element: <AdminOrderCreate />
-      },
-      {
-        path: 'quản-lí-đơn-hàng/sửa-đơn-hàng/:id',
-        element: <AdminOrderEdit />
-      },
+   
+    
 
       {
-        path: 'quản-lí-tin-nhắn',
+        path: Paths.Admin.Chat,
         element: <ChatAdmin />
       },
       {
-        path: 'quản-lí-trang-web',
+        path: Paths.Admin.Settings,
         element: <AdminSetting />
       }
     ]

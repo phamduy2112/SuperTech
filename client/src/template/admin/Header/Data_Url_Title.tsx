@@ -8,6 +8,7 @@ import { IoCellularOutline, IoHome, IoSettingsOutline } from "react-icons/io5";
 import { LiaUsersCogSolid } from "react-icons/lia";
 import { MdBarChart, MdOutlineCategory } from "react-icons/md";
 import { PiMessengerLogo, PiUsersThreeThin } from "react-icons/pi";
+import { PathAdmin } from "../../../router/component/RouterValues";
 
 export interface Child {
   id_child: number;
@@ -43,7 +44,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Bảng Điều Khiển',
         icon: <IoHome />,
         iconChevronRight: null,
-        url: '/admin/trang-chủ',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Dashboard}`,
         child: [],
       }
     ]
@@ -57,12 +58,12 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Danh Mục',
         icon: <MdOutlineCategory />,
         iconChevronRight: <FaChevronRight />,
-        url: '/admin/quản-lí-loại/danh-mục-sản-phẩm',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Categories}`,
         child: [
           {
             id_child: 1,
             title_child: 'Danh Mục Sản Phẩm',
-            url_child: '/admin/quản-lí-loại/danh-mục-sản-phẩm',
+            url_child: '${PathAdmin.PathsAdmin}/quản-lí-loại/danh-mục-sản-phẩm',
             icon_child: <FaRegEye />,
 
           },
@@ -79,18 +80,18 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Sản Phẩm',
         icon: <MdBarChart />,
         iconChevronRight: <FaChevronRight />,
-        url: '/admin/quản-lí-sản-phẩm',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Products}`,
         child: [
           {
             id_child: 1,
             title_child: 'Xem Sản Phẩm',
-            url_child: '/admin/quản-lí-sản-phẩm',
+            url_child: `${PathAdmin.PathsAdmin}/${PathAdmin.ProductComments}`,
             icon_child: <FaRegEye />,
           },
           {
             id_child: 2,
             title_child: 'Quản Lí Bình Luận',
-            url_child: '/admin/quản-lí-sản-phẩm/quản-lí-bình-luận',
+            url_child: `${PathAdmin.PathsAdmin}/${PathAdmin.Products}`,
             icon_child: <HiMiniPencilSquare />,
           }
         ]
@@ -106,7 +107,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Đơn Hàng',
         icon: <BsBoxes />,
         iconChevronRight: null,
-        url: '/admin/quản-lí-đơn-hàng',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Orders}`,
         child: [],
       }
     ]
@@ -120,19 +121,19 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Quản Lí Tài Khoản',
         icon: <FaRegUserCircle />,
         iconChevronRight: <FaChevronRight />,
-        url: '/admin/quản-lí-khách-hàng',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Customers}`,
         child: [
           {
             id_child: 1,
             title_child: 'Khách Hàng',
-            url_child: '/admin/quản-lí-khách-hàng',
+            url_child: `${PathAdmin.PathsAdmin}/${PathAdmin.Customers}`,
             icon_child: <PiUsersThreeThin />
             ,
           },
           {
             id_child: 2,
             title_child: 'Nhân Viên',
-            url_child: '/admin/quản-lí-nhân-viên',
+            url_child: `${PathAdmin.PathsAdmin}/${PathAdmin.Staff}`,
             icon_child: <LiaUsersCogSolid />,
           }
         ],
@@ -148,7 +149,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Tin Nhắn hỗ Trợ',
         icon: <PiMessengerLogo />,
         iconChevronRight: null,
-        url: '/admin/quản-lí-tin-nhắn',
+        url: '${PathAdmin.PathsAdmin}/quản-lí-tin-nhắn',
         child: [],
       },
       {
@@ -156,7 +157,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Bài Viết',
         icon: <BiBookAlt />,
         iconChevronRight: null,
-        url: '/admin/quản-lí-bài-viết',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Blogs}`,
         child: [],
       },
       {
@@ -177,7 +178,7 @@ export const DataSideBar: SidebarItem[] = [
         box_title: 'Cài Đặt Website',
         icon: <IoSettingsOutline />,
         iconChevronRight: null,
-        url: '/admin/quản-lí-trang-web',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Settings}`,
         child: [],
       },
       {
