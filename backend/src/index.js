@@ -1,4 +1,5 @@
 import express, { urlencoded } from 'express';
+import schedule from 'node-schedule';
 import cron from "node-cron";
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
@@ -40,10 +41,17 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
-cron.schedule("*/1 * * * *", async () => {
-  console.log("Chạy auto-update trạng thái đơn hàng...");
-  await checkTransactionStatus();
-});
+
+// cron.schedule("*/30 * * * * *", async () => {
+//   console.log("Chạy auto-update trạng thái đơn hàng...");
+//   const results = await processTransactions();
+//   console.log(results);
+// });
+
+// cron.schedule("*/1 * * * *", async () => {
+//   console.log("Chạy auto-update trạng thái đơn hàng...");
+//   await checkTransactionStatus();
+// });
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
