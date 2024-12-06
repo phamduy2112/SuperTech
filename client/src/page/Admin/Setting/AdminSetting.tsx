@@ -1,9 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Popover, Button, Row, Col } from 'antd';
+import { Input, Popover, Button, Row, Col, Modal } from 'antd';
 import { SketchPicker } from 'react-color';
 import { getsetting, updatesettingId } from '../../../service/setting/setting.service';
 
 function AdminSetting() {
+    const [isTokenVisible, setIsTokenVisible] = useState(false);
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+
+
+
+    const fetchPasswordToken = async () => {
+        setIsLoading(true);
+        try {
+            const response = await getsetting();
+            const settingsMap = {};
+            response.data.content.forEach(setting => {
+                settingsMap[setting.id] = setting.value;
+            });
+            setIsLoading(false);
+            return settingsMap[11].trim();
+        } catch (error) {
+            console.error('Failed to fetch password token:', error);
+            setIsLoading(false);
+            return null;
+        }
+    };
+    
+    const handlePasswordSubmit = async (inputPassword) => {
+        setIsLoading(true);
+        try {
+            const correctPassword = await fetchPasswordToken();
+            if (inputPassword === correctPassword) {
+                setIsTokenVisible(true);
+                Modal.destroyAll();
+            } else {
+                alert('Mật khẩu không chính xác!');
+            }
+        } catch (error) {
+            console.error('Error fetching password:', error);
+            alert('Lỗi khi tải dữ liệu!');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const showPasswordModal = () => {
+        let tempPassword;
+        Modal.confirm({
+            title: 'Nhập mật khẩu để xem token',
+            content: (
+                <Input
+                    type="password"
+                    onChange={(e) => tempPassword = e.target.value} 
+                    onPressEnter={() => handlePasswordSubmit(tempPassword)}
+                />
+            ),
+            onOk: () => handlePasswordSubmit(tempPassword),
+            onCancel: () => { Modal.destroyAll(); }
+        });
+    };
     const [settings, setSettings] = useState({
         title: '',
         description: '',
@@ -23,14 +79,18 @@ function AdminSetting() {
             setSettings({
                 title: settingsMap[1],
                 description: settingsMap[2],
+                color: settingsMap[3],
                 author: settingsMap[4],
-                color: settingsMap[3]
+                logo: settingsMap[5],
+                favicon: settingsMap[6],
+                popup: settingsMap[7],
+                contentAutobank: settingsMap[8],
+                token: settingsMap[9],
+                rechargeNotice: settingsMap[10],
+                tokenpass: settingsMap[11]
             });
-            setOriginalSettings({
-                title: settingsMap[1],
-                description: settingsMap[2],
-                author: settingsMap[4],
-                color: settingsMap[3]
+           setOriginalSettings({
+                ...settingsMap
             });
         } catch (error) {
             console.error('Failed to fetch settings:', error);
@@ -50,14 +110,50 @@ function AdminSetting() {
             const updates = [];
             Object.keys(settings).forEach(key => {
                 if (settings[key] !== originalSettings[key]) {
-                    const id = key === 'title' ? 1 : key === 'description' ? 2 : key === 'color' ? 3 : 4;
+                    let id;
+                    switch (key) {
+                        case 'title':
+                            id = 1;
+                            break;
+                        case 'description':
+                            id = 2;
+                            break;
+                        case 'color':
+                            id = 3;
+                            break;
+                        case 'author':
+                            id = 4;
+                            break;
+                        case 'logo':
+                            id = 5;
+                            break;
+                        case 'favicon':
+                            id = 6;
+                            break;
+                        case 'popup':
+                            id = 7;
+                            break;
+                        case 'contentAutobank':
+                            id = 8;
+                            break;
+                        case 'token':
+                            id = 9;
+                            break;
+                        case 'rechargeNotice':
+                            id = 10;
+                            break;
+                        default:
+                            console.error('Unknown setting key:', key);
+                            return;
+                    }
                     updates.push(updatesettingId(id, settings[key]));
                 }
             });
             await Promise.all(updates);
             alert('Cập nhật cài đặt thành công!');
+            window.location.reload();
         } catch (error) {
-            console.error('lỗi cập nhật cài đặt:', error);
+            console.error('Lỗi cập nhật cài đặt:', error);
         }
     };
 
@@ -71,6 +167,7 @@ function AdminSetting() {
                 <Col span={24}>
                     <h2 className="text-[2.2rem] pb-[20px]">Cài Đặt Website: {settings.title}</h2>
                 </Col>
+                {/* tên website */}
                 <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Title Website:</h4>
                     <Input
@@ -79,6 +176,7 @@ function AdminSetting() {
                         onChange={(e) => handleValueChange('title', e.target.value)}
                     />
                 </Col>
+                {/* description_website */}
                 <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Description Website:</h4>
                     <Input
@@ -87,6 +185,7 @@ function AdminSetting() {
                         onChange={(e) => handleValueChange('description', e.target.value)}
                     />
                 </Col>
+                {/* color website */}
                 <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Color Website:</h4>
                     <Popover
@@ -102,14 +201,74 @@ function AdminSetting() {
                         />
                     </Popover>
                 </Col>
+                {/* Chủ website */}
                 <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Author Website:</h4>
+                    <h4 className='text-[1.6rem]'>Chủ Quản Website:</h4>
                     <Input
                         value={settings.author}
                         placeholder="Author Website..."
                         onChange={(e) => handleValueChange('author', e.target.value)}
                     />
                 </Col>
+                {/* logo website */}
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <h4 className='text-[1.6rem]'>Logo Website:</h4>
+                    <Input
+                        value={settings.logo}
+                        placeholder="Logo Website..."
+                        onChange={(e) => handleValueChange('logo', e.target.value)}
+                    />
+                </Col> 
+                {/* favicon_website */}
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <h4 className='text-[1.6rem]'>Favicon Website:</h4>
+                    <Input
+                        value={settings.favicon}
+                        placeholder="Favicon Website..."
+                        onChange={(e) => handleValueChange('favicon', e.target.value)}
+                    />
+                </Col>
+                {/* popup_website */}
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <h4 className='text-[1.6rem]'>Popup Website:</h4>
+                    <Input
+                        value={settings.popup}
+                        placeholder="Popup Website..."
+                        onChange={(e) => handleValueChange('popup', e.target.value)}
+                    />
+                </Col>
+                {/* content_autobank */}
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <h4 className='text-[1.6rem]'>Content Autobank:</h4>
+                    <Input
+                        value={settings.contentAutobank}
+                        placeholder="Content Autobank..."
+                        onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
+                    />
+                </Col>
+                {/* Nội dung nạp tiền */}
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <h4 className='text-[1.6rem]'>Nội Dung Nạp Tiền:</h4>
+                    <Input
+                        value={settings.rechargeNotice}
+                        placeholder="Nội Dung Nạp Tiền..."
+                        onChange={(e) => handleValueChange('rechargeNotice', e.target.value)}
+                    />
+                </Col>
+
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <h4 className='text-[1.6rem]'>Token Bank:</h4>
+                        <Input
+                            type={isTokenVisible ? "text" : "password"}
+                            value={isTokenVisible ? settings.token : "********"}
+                            placeholder="Click to show token"
+                            onClick={!isTokenVisible ? showPasswordModal : undefined}
+                            onChange={(e) => handleValueChange('token', e.target.value)}
+                            readOnly={!isTokenVisible}
+                        />
+                </Col>
+
+             {/* Nút Submit =)) */}
                 <Col span={24}>
                     <Button type="primary" onClick={handleSubmit} style={{ marginTop: 20 }}>
                         Lưu Ngay
