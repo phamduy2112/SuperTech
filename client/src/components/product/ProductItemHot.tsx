@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import image from '../../assets/new.png';
 import oficie from '../../assets/oficie.png';
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
@@ -10,9 +10,17 @@ import { IoEyeOutline } from "react-icons/io5";
 import { useSpring,animated } from "react-spring";
 import './product.css'
 import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
 function ProductItemHot() {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
+//   const listFavourite: any = useAppSelector((state) => state.favourite.listFavourite) || [];
+//   const dispatch = useAppDispatch();
 
+//   useEffect(() => {
+//     console.log("Fetching favourite products...");
+//     dispatch(getFavouriteProductThunk());
+// }, [dispatch]);
   const slideInAnimationTaskProduct = useSpring({
     transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isvisibleProduct ? 1 : 0,

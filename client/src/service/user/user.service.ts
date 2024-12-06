@@ -31,11 +31,11 @@ export const changePassword = (password: string) => {
   });
 };
 export const uploadImage = (file:string) => {
-  return axiosWithAuth("/user-upload-image", {
+  return axiosWithAuth("/uploadimguser", {
     headers: {
       "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng loại dữ liệu
     },
-    method: "put",
+    method: "post",
     data: file,
   });
 };

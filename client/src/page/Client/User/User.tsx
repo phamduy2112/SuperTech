@@ -6,12 +6,12 @@ import { CiHeart, CiUser } from "react-icons/ci";
 import { IoMdExit } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
 import { useAppSelector } from '../../../redux/hooks';
-import { IMG_BACKEND } from '../../../constants';
+import { IMG_BACKEND, IMG_BACKEND_USER } from '../../../constants';
 
 function User() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user: any = useAppSelector((state) => state.user.user);
+  const user: any = useAppSelector((state:any) => state.user.user);
 
   // Điều hướng mặc định
   useEffect(() => {
@@ -43,7 +43,7 @@ function User() {
                 <div
                   className={`flex text-[2.5rem] h-[7rem] w-full items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
                   style={{
-                    backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
+                    backgroundImage: user?.user_image ? `url(${IMG_BACKEND_USER}/${user.user_image})` : "none",
                   }}
                 >
                   {(user?.user_image == null || user?.user_image == '' && user?.user_name) ? user?.user_name[0].toUpperCase() : null}
@@ -51,7 +51,7 @@ function User() {
               </div>
             </div>
             <div className="mt-[.5rem]">
-              <h3 className="text-[2rem]">Phạm Ngọc Duy</h3>
+              <h3 className="text-[2rem]">{user?.user_name}</h3>
               <div className="flex text-[1.8rem] py-[.6rem] text-customColor">
                 <FaEdit />
                 <p>Chỉnh sửa</p>

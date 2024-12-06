@@ -24,13 +24,6 @@ function Search() {
 
 
   function OptionSelected() {
-    const [priceclick, setPriceClick] = useState(false);
-    const [priceRange, setPriceRange] = useState([0, 70000000]);
-
-    const handleChange = (value) => {
-      setPriceRange(value);
-    };
-
     return (
       <div className="grid border-t grid-cols-3 gap-4 p-6 bg-white rounded-lg">
         {/* Các phần bộ lọc khác */}

@@ -5,7 +5,7 @@ const settingRouter = express.Router();
 
 settingRouter.get('/setting',getSetting);
 settingRouter.get('/setting/:id', getSettingById);
-settingRouter.get('/setting-edit', updateSetting);
+settingRouter.put('/settingedit/:id', updateSetting);
 
 
 export default settingRouter;

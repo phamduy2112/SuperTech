@@ -1,16 +1,14 @@
 import { Breadcrumb, Checkbox, Form, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
-import ProductItem from '../../../components/product/ProductItem';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getFavouriteByIdProductThunk } from '../../../redux/favourite/favourite.slice';
+import { getFavouriteProductThunk } from '../../../redux/favourite/Favourite.slice';
+import useFavouriteProducts from '../../../hooks/FavouriteProduct';
 
 function FavoriteProduct() {
-  // const dispatch=useAppDispatch()
-  // useEffect(() => {
-  //  dispatch(getFavouriteByIdProductThunk())
-  // }, []);
-  // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
+  const { listFavourite } = useFavouriteProducts();
+console.log(listFavourite);
+
 
   return (
     <div className='w-[80%] m-auto'>
@@ -61,16 +59,33 @@ function FavoriteProduct() {
         </div>
       </div>
 
-      <div className='grid grid-cols-6 gap-y-3'>
-        {/* {favouriteProduct.length > 0 ? (
+      {/* <div className='grid grid-cols-6 gap-y-3'>
+        {favouriteProduct.length > 0 ? (
           favouriteProduct.map((item) => {
             console.log(item);
             return <ProductItem key={item.product_id} product={item.product} />;
           })
         ) : (
+          <div className="leading-10 col-span-6 flex flex-col items-center justify-center text-center py-20">
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/009/417/132/original/ecommerce-icon-empty-yellow-shopping-cart-3d-illustration-free-png.png" 
+            alt="Không tìm thấy sản phẩm"
+            className="w-[15rem] h-[15rem] mb-4"
+          />
+          <h2 className="text-3xl font-semibold text-gray-800">          <p>Không có sản phẩm yêu thích</p>
+          </h2>
+          <p className="text-gray-500 mt-2">
           <p>Không có sản phẩm yêu thích</p>
-        )} */}
-      </div>
+          </p>
+          <button
+            onClick={() => window.location.href = '/'} // Đổi thành URL bạn muốn
+            className="mt-6 px-10 py-3 font-medium bg-customColor text-white rounded-xl hover:bg-indigo-800"
+          >
+            Trở về trang chủ
+          </button>
+        </div>
+        )}
+      </div> */}
     </div>
   );
 }

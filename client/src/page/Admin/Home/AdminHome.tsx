@@ -14,6 +14,7 @@ import BarChart from './Component/chart/BarChart';
 import TableChiTieu from './Component/chart/TableChiTieu';
 import PieChart from './Component/chart/PieChart';
 import { getNewCustomerThisWeek } from '../../../service/user/user.service';
+import BoxItem from './Component/box/BoxItem';
 
 
 Chart.register(...registerables);
@@ -138,23 +139,7 @@ useEffect(()=>{
 
   return (
     <div className=' flex flex-col gap-6 bg-[#f2edf3] p-12'>
-      <div className='w-full h-[full] grid grid-cols-1 auto-rows-auto gap-[16px] md:grid-cols-2 items-start lg:gap-[12px] lg:grid-cols-3'>
-       
-          <Box
-        id_box_page_home={1}
-        title_box_page_home="Khách hàng và admin Online"
-        total_box_page_home={onlineCount}
-        icon_box_page_home={<TbChartBubbleFilled />}
-        symbol=""
-      />
-          <Box
-        id_box_page_home={2}
-        title_box_page_home="Khách hàng và admin Online"
-        total_box_page_home={getNewCustomer}
-        icon_box_page_home={<TbChartBubbleFilled />}
-        symbol=""
-      />
-      </div>
+     <BoxItem />
 
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-3 w-full auto-cols-auto justify-center items-center'>
         <div className='bg-[white] h-full w-full flex flex-col gap-7 p-12 box-border shadow-lg rounded-xl text-[13px] font-medium'>
@@ -165,30 +150,14 @@ useEffect(()=>{
             </div>
             <div className='text-[35px] text-[#FFD700]'><MdBarChart /></div>
           </div>
-          <div className='w-full box-border h-full gap-7 flex flex-col xl:flex-row'>
-            <div className='w-full xl:w-[250px] box-border h-[300px] flex flex-col leading-[40px]'>
-              <div className='text-[15px] text-[#7c7c7c62]'>Tổng Doanh Thu</div>
-              <div className='text-[30px] text-[#FFD700]'>300.000 VNĐ</div>
-              <div className='flex-1 flex justify-center items-center'>
-                <div className='flex gap-5 font-light text-[#24b124] w-[100px] shadow-[#6df3a093] shadow-md h-[100px] bg-[#92f59225] rounded-full items-center justify-center text-[15px]'>
-                  <span className='rotate-[-90deg]'><TbPlayerTrackNextFilled /></span>
-                  <span>4.5%</span>
-                </div>
-              </div>
-            </div>
-
-<LineChart/>
-          </div>
+     
+     <LineChart/>
         </div>
 
         <div className='bg-[white] h-full w-full flex flex-col gap-7 p-12 box-border shadow-lg rounded-xl text-[13px] font-medium'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center text-[white] linear-gradient1 rounded-lg p-[15px] gap-[7px] justify-center'>
-              <span><MdCalendarMonth /></span>
-              <span>Tuần Này</span>
+          <div className='flex items-center justify-center'>
+      <h3 className='text-center text-[2rem]'>Top 5 sản phẩm bán chạy</h3>          
             </div>
-            <div className='text-[35px] text-[#FFD700]'><MdBarChart /></div>
-          </div>
           <div className='w-full box-border h-full gap-7 flex flex-col xl:flex-row'>
             <div className='flex-1 box-border h-[300px]'>
       <BarChart></BarChart>

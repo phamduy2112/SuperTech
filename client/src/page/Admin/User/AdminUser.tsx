@@ -1,24 +1,232 @@
-import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useState } from 'react';
-import Swal from 'sweetalert2'; // Import SweetAlert2
-import { AiOutlineUserAdd } from 'react-icons/ai';
-import { FiFilter } from 'react-icons/fi';
-import { GoSearch } from 'react-icons/go';
-import { IoCloudDownloadOutline } from 'react-icons/io5';
-import { BiSolidEdit } from 'react-icons/bi';
-import { CiBookmarkRemove } from 'react-icons/ci';
-import { Link, useNavigate } from 'react-router-dom';
+import { Button, Checkbox, Popover, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2"; // Import SweetAlert2
+import { AiOutlineUserAdd } from "react-icons/ai";
+import { FiFilter } from "react-icons/fi";
+import { GoSearch } from "react-icons/go";
+import { IoCloudDownloadOutline } from "react-icons/io5";
+import { BiSolidEdit } from "react-icons/bi";
+import { CiBookmarkRemove } from "react-icons/ci";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { getAllUserThunk } from "../../../redux/user/user.slice";
 
 function AdminUser() {
-  const [selectedCheckbox, setSelectedCheckbox] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Alluser: any = useAppSelector((state) => state.user.Alluser);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [DataAlluser, setDataAlluser] = useState<any[]>([]);
+  const AppDispatch = useAppDispatch();
+  const [userKeys, setuserKeys] = useState<string[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [columns, setColumns] = useState<any[]>([]);
+  const [valueInputSearch, setvalueInputSearch] = useState(``);
+
+  useEffect(() => {
+    AppDispatch(getAllUserThunk());
+    setDataAlluser(Alluser);
+  }, [AppDispatch]);
+
+  useEffect(() => {
+    if (Alluser && Alluser.length > 0) {
+      const keys = Alluser.map((staff: string) => Object.keys(staff));
+      keys.push("tacvu");
+
+      setuserKeys([...new Set(keys.flat())] as string[]);
+    }
+  }, [Alluser]);
+
+  useEffect(() => {
+    const ColumnStaffs = userKeys
+      .map((user) => {
+        switch (user) {
+          case "user_id":
+            return {
+              title: "ID",
+              dataIndex: user,
+              key: user,
+            };
+
+          case "user_image":
+            return {
+              title: "Hình",
+              dataIndex: user,
+              key: user,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              render: (src: any) => (
+                <>
+                  {src == "" || src == null || src == undefined ? (
+                    <img
+                      className="rounded-full object-cover"
+                      src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"
+                      alt=""
+                      style={{ width: 50, height: 50 }}
+                    />
+                  ) : (
+                    <img
+                      className="rounded-full object-cover"
+                      src={src}
+                      alt=""
+                      style={{ width: 50, height: 50 }}
+                    />
+                  )}
+                </>
+              ),
+            };
+          case "user_name":
+            return {
+              title: "Tên",
+              dataIndex: user,
+              key: user,
+            };
+
+          case "user_birth":
+            return {
+              title: "Tuổi",
+              dataIndex: user,
+              key: user,
+            };
+          case "user_phone":
+            return {
+              title: "Số điện thoại",
+              dataIndex: user,
+              key: user,
+            };
+
+          case "user_email":
+            return {
+              title: "Email",
+              dataIndex: user,
+              key: user,
+            };
+
+          case "user_address":
+            return {
+              title: "Địa Chỉ",
+              dataIndex: user,
+              key: user,
+            };
+          case "user_role":
+            return {
+              title: "Vai trò",
+              dataIndex: user,
+              key: user,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  <div
+                    className={`w-[10px] rounded-full h-[10px] ${
+                      text == 2 ? "bg-[#2af52a]" : ""
+                    } ${text == 1 ? "bg-[#ffd000]" : ""} ${
+                      text == 0 ? "bg-[red]" : ""
+                    }`}
+                  ></div>
+                </div>
+              ),
+            };
+          case "level":
+            return {
+              title: "Thăng hạng",
+              dataIndex: user,
+              key: user,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {text == 4 ? "Đồng" : ""} {text == 3 ? "Bạc" : ""}{" "}
+                  {text == 2 ? "Vàng" : ""} {text == 1 ? "Kim Cương" : ""}{" "}
+                  {text == 0 ? "Tối Thượng" : ""}
+                </div>
+              ),
+            };
+
+          case "tacvu": {
+            return {
+              title: "Tác Vụ",
+              key: "tacvu",
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              render: (record: any) => (
+                <div className="flex text-[24px] box-border gap-1 items-center">
+                  <BiSolidEdit
+                    className="cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]"
+                    onClick={() => handleEdit(record.user_id)}
+                  />
+                  <CiBookmarkRemove
+                    className="cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]"
+                    onClick={() => handleDelete(record.user_id)}
+                  />
+                </div>
+              ),
+            };
+          }
+
+          default:
+            return null;
+        }
+      })
+      .filter((col) => col !== null);
+    setColumns(ColumnStaffs);
+  }, [userKeys]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setvalueInputSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    if (valueInputSearch.trim() === "") {
+      setDataAlluser(Alluser);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sanitizedSearchTerm = valueInputSearch
+        .replace(/\s+/g, "")
+        .toLowerCase();
+
+      const filteredData = Alluser.filter((item: any) => {
+        const userName = item?.user_name;
+        const userEmail = item?.user_email;
+        const userPhone = item?.user_phone;
+
+        const userNameString =
+          typeof userName === "string" || userName instanceof String
+            ? userName
+            : String(userName || "");
+        const userEmailString =
+          typeof userEmail === "string" || userEmail instanceof String
+            ? userEmail
+            : String(userEmail || "");
+        const userPhoneString =
+          typeof userPhone === "string" || userPhone instanceof String
+            ? userPhone
+            : String(userPhone || "");
+
+        return (
+          userNameString
+            .replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(sanitizedSearchTerm) ||
+          userEmailString
+            .replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(sanitizedSearchTerm) ||
+          userPhoneString
+            .replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(sanitizedSearchTerm)
+        );
+      });
+
+      setDataAlluser(filteredData);
+    }
+  }, [valueInputSearch, Alluser]);
+
+  const [selectedCheckbox, setSelectedCheckbox] = useState("");
   const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
     Swal.fire({
-      icon: 'info',
+      icon: "info",
       text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
-      confirmButtonText: 'OK',
+      confirmButtonText: "OK",
     }).then((result) => {
       if (result.isConfirmed) {
         navigate(`/admin/quản-lí-khách-hàng/sửa-khách-hàng/${key}`);
@@ -29,199 +237,28 @@ function AdminUser() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {
     Swal.fire({
-      icon: 'warning',
+      icon: "warning",
       showDenyButton: true,
       title: `Bạn Chọn Người Dùng Có ID ${key}`,
       text: `Bạn có chắc muốn xóa ?`,
-      confirmButtonText: 'Xóa',
-      denyButtonText: 'Hủy',
+      confirmButtonText: "Xóa",
+      denyButtonText: "Hủy",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          icon: 'success',
-          title: 'Đã Xóa',
+          icon: "success",
+          title: "Đã Xóa",
           text: `Bạn đã Xóa ${key}`,
         });
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Đã Hủy',
-          text: 'Bạn đã hủy thao tác xóa.',
+          icon: "error",
+          title: "Đã Hủy",
+          text: "Bạn đã hủy thao tác xóa.",
         });
       }
     });
   };
-
-
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'key',
-      key: 'key',
-    },
-    {
-      title: 'Hình',
-      dataIndex: 'image',
-      key: 'image',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (src: any) => (
-        <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-      ),
-    },
-    {
-      title: 'Tên',
-      dataIndex: 'name',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (text: any) => <a>{text}</a>,
-    },
-    {
-      title: 'Tuổi',
-      dataIndex: 'age',
-    },
-    {
-      title: 'Đối Tượng',
-      dataIndex: 'obj',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (text: any) => (
-        <div className="flex-1 flex items-center gap-3">
-          <div className={`w-[10px] rounded-full h-[10px] ${text === 'Người Dùng' ? 'bg-[#2af52a]' : ''} ${text === 'Nhân viên' ? 'bg-[#ffd000]' : ''} ${text === 'Admin' ? 'bg-[red]' : ''}`}></div>
-          {text}
-        </div>
-      ),
-    },
-    {
-      title: 'Điện Thoại',
-      dataIndex: 'phone',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-    },
-    {
-      title: 'Địa Chỉ',
-      dataIndex: 'address',
-    }, {
-      title: 'Tác Vụ',
-      key: 'key',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (record: any) => (
-        <div className='flex text-[24px] box-border gap-1 items-center'>
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(record.key)}
-          />
-          <CiBookmarkRemove
-            className='cursor-pointer text-red-300 transition-all duration-700  hover:text-[red]'
-            onClick={() => handleDelete(record.key)}
-          />
-
-
-        </div>
-      ),
-    },
-  ];
-
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'New York No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'London No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'Sydney No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '4',
-      name: 'Disabled User',
-      age: 99,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'Sydney No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '5',
-      name: 'John Brown',
-      age: 32,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'New York No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '6',
-      name: 'Jim Green',
-      age: 42,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'London No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '7',
-      name: 'Joe Black',
-      age: 32,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'Sydney No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '8',
-      name: 'Disabled User',
-      age: 99,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'Sydney No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '9',
-      name: 'Joe Black',
-      age: 32,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'Sydney No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-    {
-      key: '10',
-      name: 'Disabled User',
-      age: 99,
-      obj: 'Người Dùng',
-      phone: '0123 456 789',
-      email: 'nguyen.van.a@example.com',
-      address: 'Sydney No. 1 Lake Park',
-      image: 'https://suckhoedoisong.qltns.mediacdn.vn/Images/phamquynh/2021/05/09/Ong%20hoang%20nhac%20Viet%20co%20suc%20hut%20khung%20khiep%20khi%20chuyen%20sang%20nghe%20ban%20hang%20online.jpg',
-    },
-  ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSelectChange = (selectedRowKeys: any) => {
@@ -235,13 +272,13 @@ function AdminUser() {
     Swal.fire({
       icon: "info",
       title: `Bạn Vừa Chọn ${count} Người dùng`,
-      text: 'Bạn có muốn tiếp tục?',
+      text: "Bạn có muốn tiếp tục?",
       showDenyButton: true,
-      denyButtonText: 'Xóa',
-      confirmButtonText: 'Sửa',
+      denyButtonText: "Xóa",
+      confirmButtonText: "Sửa",
       customClass: {
-        confirmButton: 'bg-green-700 text-white',
-        denyButton: 'bg-red-500 text-white',
+        confirmButton: "bg-green-700 text-white",
+        denyButton: "bg-red-500 text-white",
       },
       backdrop: true,
       allowOutsideClick: false,
@@ -251,98 +288,113 @@ function AdminUser() {
           icon: "warning",
           title: `Bạn có chắc chắn muốn xóa ${count} người dùng?`,
           showCancelButton: true,
-          confirmButtonText: 'Xóa',
-          cancelButtonText: 'Hủy',
+          confirmButtonText: "Xóa",
+          cancelButtonText: "Hủy",
           customClass: {
-            confirmButton: 'bg-red-500 text-white',
-            cancelButton: 'bg-gray-500 text-white',
+            confirmButton: "bg-red-500 text-white",
+            cancelButton: "bg-gray-500 text-white",
           },
         }).then((kq) => {
           if (kq.isConfirmed) {
-            Swal.fire('Đã xóa!', '', 'success');
+            Swal.fire("Đã xóa!", "", "success");
           } else {
             Swal.fire({
-              icon: 'error',
-              title: 'Đã Hủy',
-              text: 'Bạn đã hủy thao tác xóa.',
+              icon: "error",
+              title: "Đã Hủy",
+              text: "Bạn đã hủy thao tác xóa.",
             });
           }
         });
       } else if (result.isConfirmed) {
         Swal.fire({
-          icon: 'info',
+          icon: "info",
           text: `Đã mở trang sửa cho ${count} tài khoản`,
-          confirmButtonText: 'OK',
+          confirmButtonText: "OK",
         });
       }
     });
   };
-
-
-
 
   const rowSelection = {
     onChange: onSelectChange,
   };
 
   return (
-    <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
-      <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
-        <div className='flex items-center justify-between box-border p-[24px]'>
-          <span className='text-[30px] text-[#FFD700] font-bold'>Khách Hàng</span>
-          <div className='flex gap-3'>
-            <Button className='p-10'>
-              <IoCloudDownloadOutline className='text-[18px]' />
+    <div className="flex flex-col p-12 gap-5 bg-[#f2edf3]">
+      <div className="flex-1 bg-white flex flex-col rounded-xl shadow-lg">
+        <div className="flex items-center justify-between box-border p-[24px]">
+          <span className="text-[30px] text-[#FFD700] font-bold">
+            Khách Hàng
+          </span>
+          <div className="flex gap-3">
+            <Button className="p-10">
+              <IoCloudDownloadOutline className="text-[18px]" />
               Tải về PDF
             </Button>
-            <Link to={'/admin/quản-lí-khách-hàng/tạo-khách-hàng-mới'}>
-              <Button className='p-10' type="primary">
-                <AiOutlineUserAdd className='text-[18px]' />
+            <Link to={"/admin/quản-lí-khách-hàng/tạo-khách-hàng-mới"}>
+              <Button className="p-10" type="primary">
+                <AiOutlineUserAdd className="text-[18px]" />
                 Thêm Người Mới
               </Button>
             </Link>
-
           </div>
         </div>
 
-        <div className='flex p-[24px] items-center justify-between gap-3'>
-          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm người dùng...' />
-            <GoSearch className='text-[18px]' />
+        <div className="flex p-[24px] items-center justify-between gap-3">
+          <div className="flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]">
+            <input
+              type="text"
+              className="flex-1 text-[15px] outline-none bg-transparent"
+              onChange={handleSearch}
+              placeholder="Tìm kiếm người dùng..."
+            />
+            <GoSearch className="text-[18px]" />
           </div>
 
           <Popover
-            content={<div className='flex flex-col'>
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Mới nhất</label>
-                <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
+            content={
+              <div className="flex flex-col">
+                <div className="flex justify-between p-[12px] w-[200px] gap-2">
+                  <label className="text-[14px]">Mới nhất</label>
+                  <Checkbox
+                    checked={selectedCheckbox === "new"}
+                    onChange={() => setSelectedCheckbox("new")}
+                  ></Checkbox>
+                </div>
+                <div className="flex gap-2 justify-between p-[12px]">
+                  <label className="text-[14px]">Cũ nhất</label>
+                  <Checkbox
+                    checked={selectedCheckbox === "old"}
+                    onChange={() => setSelectedCheckbox("old")}
+                  ></Checkbox>
+                </div>
               </div>
-              <div className='flex gap-2 justify-between p-[12px]'>
-                <label className='text-[14px]'>Cũ nhất</label>
-                <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
-              </div>
-            </div>}
+            }
             title="Lọc"
             trigger="click"
             placement="bottomRight"
           >
-            <Button className='p-10'>
-              <FiFilter className='text-[18px]' />
+            <Button className="p-10">
+              <FiFilter className="text-[18px]" />
               Lọc
             </Button>
           </Popover>
         </div>
 
-        <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+        <div className="p-[24px] relative overflow-x-auto h-[1000px] flex flex-col">
           <Table
-            className='flex-1'
+            className="flex-1"
             rowSelection={{
-              type: 'checkbox',
+              type: "checkbox",
               ...rowSelection,
             }}
-            columns={columns}
-            dataSource={data}
-            size='large'
+            columns={columns || []}
+            dataSource={
+              Array.isArray(DataAlluser)
+                ? DataAlluser.filter((user) => user.user_role == 2)
+                : []
+            }
+            size="large"
             pagination={{ pageSize: 10 }}
           />
         </div>

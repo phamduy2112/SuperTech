@@ -40,7 +40,8 @@ function DetailProduct() {
   const handleAddOrder=(product:any)=>{
     const productToCart = {
       ...product,
-      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
+      selectedColor: objectColor,
+      selectedStorage:objectStorage
     };
     dispatch(addItemToOrder(productToCart))
     navigate("/thanh-toan")
@@ -202,7 +203,7 @@ console.log(objectStorage);
               </div>
                 : 
                 <p className="text-red-500 font-semibold text-[2rem] py-6">
-                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                    {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
                     </p>
 
                     // Hehe

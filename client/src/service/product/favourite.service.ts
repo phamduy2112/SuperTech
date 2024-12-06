@@ -9,14 +9,6 @@ export const getFavouriteProducts = () => {
  
   );
   };
-export const checkFavouriteProducts = (id:number) => {
-    return axiosWithAuth(`/favorite-product/${id}`, {
-      method: "get",
-      
-    }
- 
-  );
-  };
 
 export const createFavouriteProduct=(dataCreate:any)=>{
     // console.log(dataCreate);

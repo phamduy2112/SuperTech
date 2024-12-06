@@ -23,6 +23,7 @@ export const getsettingIdThunk = createAsyncThunk (
       }
   },
 );
+
 const initialState = {
     getsetting: null,
     getsettingId: null,

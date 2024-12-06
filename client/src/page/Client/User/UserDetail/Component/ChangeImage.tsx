@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../redux/hooks";
 import { changeUploadImage } from "../../../../../redux/user/user.slice";
-import { IMG_BACKEND } from "../../../../../constants";
+import { IMG_BACKEND, IMG_BACKEND_USER } from "../../../../../constants";
 import useSweetAlert from "../../../../../hooks/Notification.hook";
 
 function ImageUploader() {
@@ -27,7 +27,7 @@ function ImageUploader() {
   // Handle image upload
   const uploadImage = async (file: File) => {
     const formData = new FormData();
-    formData.append("image", file); // Append the image file to FormData
+    formData.append("user_image", file); // Append the image file to FormData
 
     try {
       // Dispatch the thunk action to upload the image
@@ -52,7 +52,7 @@ function ImageUploader() {
                         {  <div
                 className={`flex text-[3rem] h-[15rem] w-full items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
                 style={{
-                  backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
+                  backgroundImage: user?.user_image ? `url(${IMG_BACKEND_USER}/${user.user_image})` : "none",
                 }}
               >
                               {(user?.user_image==null||user?.user_image=='' && user?.user_name) ? user.user_name[0].toUpperCase() : null}

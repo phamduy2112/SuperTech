@@ -1,19 +1,37 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createCommentByIdProduct, deleteCommentByIdProduct, getCommentByIdProduct, putCommentByIdProduct } from "../../service/comment/comment.service";
+import { createCommentByIdProduct, createLike, deleteCommentByIdProduct, getCommentByIdProduct, putCommentByIdProduct } from "../../service/comment/comment.service";
 import { createCommentRepliesByIdProduct, deleteCommentRepliesByIdProduct, putCommentRepliesByIdProduct } from "../../service/comment/commentReply.service";
 
 
 
 export const getCommentByIdProductThunk = createAsyncThunk(
   "getCommentByIdThunk",
-  async (id:number) => {      
+  async (id: number) => {
     try {
       const resp = await getCommentByIdProduct(id);
-      return resp.data.content;
+      
+      // Lấy dữ liệu bình luận
+      const comments = resp.data.content;
+      
+      // Kiểm tra xem có phải là mảng không và sắp xếp theo `comment_date`
+      if (Array.isArray(comments)) {
+        // Giả sử comment_date là chuỗi kiểu ISO 8601 hoặc timestamp
+        comments.sort((a: any, b: any) => {
+          const dateA = new Date(a.comment_date); // Chuyển thành đối tượng Date
+          const dateB = new Date(b.comment_date); // Chuyển thành đối tượng Date
+          
+          // Sắp xếp từ mới nhất đến cũ nhất
+          return dateB.getTime() - dateA.getTime();
+        });
+      }
+
+      // Trả về danh sách bình luận đã sắp xếp
+      return comments;
     } catch (e) {
       console.log(e);
+      return []; // Trả về mảng trống nếu có lỗi
     }
-  },
+  }
 );
 export const createCommentByIdProductThunk = createAsyncThunk(
   "createCommentByIdProductThunk",
@@ -21,7 +39,7 @@ export const createCommentByIdProductThunk = createAsyncThunk(
     try {
       const resp = await createCommentByIdProduct(data);
       const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content;
+      return listComment.data.content.reverse();
     } catch (e) {
       console.log(e);
     }
@@ -29,11 +47,12 @@ export const createCommentByIdProductThunk = createAsyncThunk(
 );
 export const createCommentRepliesByIdProductThunk = createAsyncThunk(
   "createCommentRepliesByIdProductThunk",
-  async (data) => {      
+  async (data,{dispatch}) => {      
     try {
       const resp = await createCommentRepliesByIdProduct(data);
-      const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content;
+      const response = await dispatch(getCommentByIdProductThunk(data.product_id));
+
+      return response.payload;
     } catch (e) {
       console.log(e);
     }
@@ -45,7 +64,7 @@ export const deleteCommentByIdThunk = createAsyncThunk(
     try {
       const resp = await deleteCommentByIdProduct(data.comment_id);
       const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content;
+      return listComment.data.content.reverse();
     } catch (e) {
       console.log(e);
     }
@@ -57,7 +76,7 @@ export const deleteCommentRepliesByIdThunk = createAsyncThunk(
     try {
       const resp = await deleteCommentRepliesByIdProduct(data.id);
       const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content;
+      return listComment.data.content.reverse();
     } catch (e) {
       console.log(e);
     }
@@ -69,15 +88,16 @@ export const editCommentByIdThunk = createAsyncThunk(
     console.log("Data received in thunk:", data); // Kiểm tra dữ liệu nhận được trong thunk
    console.log(data.comment_id);
    
-      const resp = await putCommentRepliesByIdProduct(data.comment_id,data);
+      const resp = await putCommentByIdProduct(data.comment_id,data);
    
       
       const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content;
+      return listComment.data.content.reverse();
 
     
   },
 );
+
 export const editCommentRepliesByIdThunk = createAsyncThunk(
   "editCommentRepliesByIdThunk",
   async (data:any) => {      
@@ -86,7 +106,21 @@ export const editCommentRepliesByIdThunk = createAsyncThunk(
    
       
       const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content;
+      return listComment.data.content.reverse();
+
+    
+  },
+);
+export const createLikeCommentThunk = createAsyncThunk(
+  "createLikeCommentThunk",
+  async (data:any,{dispatch}) => {      
+
+      const resp = await createLike(data.id);
+   
+      
+      const response = await dispatch(getCommentByIdProductThunk(data.product_id));
+
+      return response.payload;
 
     
   },
@@ -101,7 +135,11 @@ const commentSlice = createSlice({
   initialState,
   reducers: {
     setCommentReducer: (state, { payload }) => {
-      state.listComment = payload;
+      state.listComment = payload.filter(comment => comment != null);
+      
+    },
+    appendComment: (state, {payload}) => {
+      state.listComment = [payload, ...state.listComment];
     },
   },
   extraReducers: (builder) => {
@@ -140,6 +178,6 @@ const commentSlice = createSlice({
 
 });
 
-export const { setCommentReducer } = commentSlice.actions;
+export const { setCommentReducer,appendComment } = commentSlice.actions;
 
 export const commentReducer = commentSlice.reducer;

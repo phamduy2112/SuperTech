@@ -23,6 +23,14 @@ export const createDetailOrder = (data:any) => {
  
   );
   };
+export const getSuccessEmailOrder = (data:any) => {
+    return axiosWithAuth(`/success-order`, {
+      method: "post",
+      data
+    }
+ 
+  );
+  };
 export const getOrderByIdUser=()=>{
   return axiosWithAuth(`/order-by-id-user`,{
     method:"get",
@@ -40,6 +48,12 @@ export const getDetailOrder=(id:number)=>{
 
   })
 }
+export const getOrderById=(id:number)=>{
+  return axiosWithAuth(`/get-order-by-id/${id}`,{
+    method:"get",
+
+  })
+}
 export const getDistrictsCity=(cityCode:string)=>{
   return axios.get(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${cityCode}&limit=-1`);
 
@@ -47,4 +61,20 @@ export const getDistrictsCity=(cityCode:string)=>{
 export const getAllCity=()=>{
   return axios.get(`https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1`
   )
+}
+export const getAutoBank=()=>{
+  return axiosWithAuth(`/autobank`,{
+    method:"get"
+  })
+}
+export const getTransactions=()=>{
+  return axiosWithAuth(`/check-transactions`,{
+    method:"get"
+  })
+}
+export const updateOrderPayment=(orderId:number,data:number)=>{
+  return axiosWithAuth(`/update-order-pay/${orderId}`,{
+    method:"put",
+    data
+  })
 }

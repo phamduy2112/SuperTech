@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch } from "../../../../../redux/hooks";
 import { changeStatusOrderAdminThunk } from "../../../../../redux/order/Order.slice";
+import { colorText } from "../../../../../constants";
 
 interface OrderStatus {
   order_status_id: number;
@@ -14,16 +15,6 @@ interface ButtonOrderProps {
   orderStatuses: OrderStatus[];
   orderId: number;
 }
-
-const colorText = [
-  { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
-  { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
-  { status: 2, color: "#FFFF00", text: "Đã chuẩn bị hàng" }, 
-  { status: 3, color: "#008000", text: "Đang giao hàng" }, 
-  { status: 4, color: "#800080", text: "Thành công" }, 
-  { status: 5, color: "#000000", text: "Không nhận hàng" }, 
-  { status: 6, color: "#000000", text: "Hủy hàng" }, 
-];
 
 function ButtonOrder({ orderStatuses, orderId }: ButtonOrderProps) {
   const dispatch = useAppDispatch();

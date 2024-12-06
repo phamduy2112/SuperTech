@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Header from '../Component/Header/Header'
 import Footer from '../Component/Footer/Footer'
 
+import { Suspense } from 'react'
 
 
 
@@ -18,7 +19,10 @@ function UserTemplate() {
 
          <div className=''>
         <Header/>
-      <Outlet />
+        <Suspense >
+  <Outlet />
+</Suspense>
+
       <Footer />
     </div>
     </div>

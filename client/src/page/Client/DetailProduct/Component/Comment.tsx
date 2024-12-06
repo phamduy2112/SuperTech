@@ -5,7 +5,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 import { IoIosReturnRight, IoMdSend } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
-import { createCommentRepliesByIdProductThunk, deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
+import { createCommentRepliesByIdProductThunk, createLikeCommentThunk, deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
 import { createLike } from '../../../../service/comment/comment.service';
@@ -14,23 +14,32 @@ import { BiSolidLike } from 'react-icons/bi';
 import { StarRating } from '../../../../components/star/Star';
 import CommentComponent from './RelyComment';
 import ReplyComment from './RelyComment';
+import { formatDate, formatTimeAgo } from '../../../../utils';
+import toast from 'react-hot-toast';
+import { IMG_BACKEND_USER } from '../../../../constants';
+import { useAvatar } from '../../../../hooks/UseAvatar.hook';
+import { useNavigate } from 'react-router-dom';
 
 function Comment(props: any) {
   const user: any = useAppSelector((state) => state.user.user);
-
+  const login:any=useAppSelector((state)=>state.user.login)
   const [expandedComments, setExpandedComments] = useState<boolean[]>(new Array(props.reviews?.length).fill(false));
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [activeAction, setActiveAction] = useState<{ action: 'edit' | 'reply' | null, index: number | null }>({ action: null, index: null });
-  
+  const { avatarStyle, avatarText } = useAvatar({
+    userImage: user?.user_image ? `${IMG_BACKEND_USER}/${user.user_image}` : null,
+    userName: user?.user_name,
+  });
   const handleActionToggle = (index: number, action: 'edit' | 'reply') => {
     // Nếu nhấn cùng một hành động thì tắt nó đi, còn không thì bật hành động mới
     setActiveAction((prevState) => prevState.index === index && prevState.action === action
       ? { action: null, index: null }
       : { action, index });
   };
-  
+  const navigate=useNavigate();
   const dispatch=useDispatch();
   const handleDelete=(data:any)=>{
+    
     setActiveDropdown(null);
 
       dispatch(deleteCommentByIdThunk(data));
@@ -47,8 +56,16 @@ function Comment(props: any) {
 
 
 const handleLike=async(id:number,idProduct:number)=>{
-  const resp=await createLike(id)
-  dispatch(getCommentByIdProductThunk(idProduct))
+  if (!login) {
+    toast.error("Bạn cần đăng nhập!");
+    navigate("/đăng-nhập");
+    return;
+  }
+  let resp = {
+    id: id,
+    product_id: idProduct
+};
+  dispatch(createLikeCommentThunk(resp))
   console.log(resp);
   
 }
@@ -56,7 +73,7 @@ const handleLike=async(id:number,idProduct:number)=>{
     commentText: Yup.string().required('Nội dung bình luận không được để trống').min(5, 'Nội dung phải có ít nhất 5 ký tự'),
   });
   
-// Rely comment
+
 
 
   return (
@@ -84,13 +101,15 @@ const handleLike=async(id:number,idProduct:number)=>{
           {props.reviews?.map((review, index) => {
             return (
               <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
-              
-                <img
-                  src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                  alt="Avatar"
-                  className="w-[5rem] h-[5rem] rounded-full"
-                />
 
+  <div
+                  className={`flex text-[2.5rem] w-[5rem] h-[5rem] items-center justify-center rounded-full ${review?.user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
+                  style={{
+                    backgroundImage: review?.user?.user_image ? `url(${IMG_BACKEND_USER}/${review?.user.user_image})` : "none",
+                  }}
+                >
+                  {(review?.user?.user_image == null || review?.user?.user_image == '' && review?.user?.user_name) ? review?.user?.user_name[0].toUpperCase() : null}
+                </div>
                 <div className="flex w-[100%] justify-between">
                   
                   <div className="w-[100%]">
@@ -98,7 +117,7 @@ const handleLike=async(id:number,idProduct:number)=>{
                       <div>
                         <h3 className="font-bold text-[2rem]">{review.user?.user_name} || {review?.isPurchase ? "Đã mua hàng" : ""}</h3>
                         <div className="flex items-center text-[1.5rem]">
-                          <div className="ml-2 text-[1.5rem] text-gray-500">4/5/2025</div>
+                          <div className="ml-2 text-[1.5rem] text-gray-500">{formatDate(review.comment_date)}</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
   {[...Array(5)].map((_, index) => (
     index < Number(review?.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
@@ -116,12 +135,11 @@ const handleLike=async(id:number,idProduct:number)=>{
                     comment_content: values.commentText,
                   };
               
-                  console.log(updatedComment);
-                  // dispatch(editCommentByIdThunk(updatedComment));  // Gọi API chỉnh sửa bình luận
+                  dispatch(editCommentByIdThunk(updatedComment));  // Gọi API chỉnh sửa bình luận
               
                   // Reset form và đóng action
-                  // resetForm();
-                  // setActiveAction({ action: null, index: null });
+                  resetForm();
+                  setActiveAction({ action: null, index: null });
                 }}
                 >
                   {({ errors, touched }) => (
@@ -154,12 +172,23 @@ const handleLike=async(id:number,idProduct:number)=>{
 
                       <div className="flex justify-between items-center flex-col text-[1.8rem] text-gray-500 mt-2 space-x-3">
                         <div className="flex gap-[.5rem] ">
-                          <span>2h trước</span>
+                          <span>{formatTimeAgo(review?.comment_date)}</span>
                           <div className="relative">
-  <BsThreeDots
-    className="cursor-pointer"
-    onClick={() => handleDropdownToggle(index)}
-  />
+                          {
+                              login ? (
+                                <BsThreeDots
+                                className="cursor-pointer"
+                                onClick={() => handleDropdownToggle(index)}
+                              />
+                            
+                              ) : (
+                              <div>
+                          
+                              </div>
+                              )
+                            }
+
+
   {activeDropdown === index && (
     <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
       <div className="flex flex-col space-y-2">
@@ -225,16 +254,26 @@ const handleLike=async(id:number,idProduct:number)=>{
     initialValues={{ commentText: '' }} // Giá trị ban đầu từ review.comment_content
     validationSchema={CommentSchema}
     onSubmit={(values, { resetForm }) => {
+      if (!login) {
+        toast.error("Bạn cần đăng nhập!");
+        navigate("/đăng-nhập");
+        return;
+      }
+      if(values.commentText.length <5){
+        toast.error("Bạn cần nhập 5 kí tự trở lên")
+        
+        
+      };
       const newComment = {
         comment_id: review.comment_id,
         product_id: review.product_id,
         comment: values.commentText, // Gửi giá trị commentText
-        repiles_date:new Date()
       };
 
-      console.log(newComment);
+      
 dispatch(createCommentRepliesByIdProductThunk(newComment))
-      // Reset form (nếu cần thiết)
+    
+      toast.success("Phản hồi thành công")
       resetForm();
 
       // Đóng dropdown hoặc hành động sau khi submit (nếu có)
@@ -265,7 +304,7 @@ dispatch(createCommentRepliesByIdProductThunk(newComment))
           </div>
           {expandedComments[index] && (
             <div className="pl-8">
-              <ReplyComment replies={review?.repliesToComment} productId={review?.product_id} />
+              <ReplyComment replies={review?.replies_comment_products} productId={review?.product_id} />
             </div>
           )}          
                   </div>

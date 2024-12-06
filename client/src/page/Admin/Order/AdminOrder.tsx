@@ -7,18 +7,10 @@ import Swal from 'sweetalert2'; // Import SweetAlert2
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getOrderAllThunk } from '../../../redux/order/Order.slice';
+import { colorText } from '../../../constants';
 
 function AdminOrder() {
-  const colorText = [
-    { status: 0, color: "#FF0000", text: "Đang chờ duyệt" },
-    { status: 1, color: "#FFA500", text: "Đang chuẩn bị hàng" },
-    { status: 2, color: "#FFFF00", text: "Đã chuẩn bị hàng" }, 
-    { status: 3, color: "#008000", text: "Đang giao hàng" }, 
-    { status: 4, color: "#800080", text: "Thành công" }, 
-    { status: 5, color: "#111111", text: "Không nhận hàng" }, 
-    { status: 6, color: "#000000", text: "Hủy hàng" }, 
-  ];
-  
+
   const navigate = useNavigate();
   const [activeOrder, setActiveOrder] = useState(null); // Lưu trữ ID đơn hàng được active
 

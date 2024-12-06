@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../page/Client/Home/Home";
+import { lazy } from "react";
 import UserTemplate from "../template/user/UserTemplate";
 import Search from "../page/Client/Search/Search";
 import ListBlog from "../page/Client/Blog/ListBlog/ListBlog";
@@ -47,10 +47,15 @@ import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
 import CouponSection from "../page/Client/Voucher/Voucher";
 import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
+// import  RouterLogin from "./component/RouterValues";
 import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
-import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
-// import PrivateRoute from "./component/RouterPrivate";
 
+import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
+import { Paths } from "./component/RouterValues";
+// import PrivateRoute from "./component/RouterPrivate";
+const Home = lazy(
+  () => import("../page/Client/Home/Home"),
+);
 export const router = createBrowserRouter([
   {
     element: <UserTemplate />,
@@ -169,7 +174,7 @@ children:[
     element: <AuthTemplate />,
     children: [
       {
-        path: "/đăng-nhập",
+        path: Paths.Login,
         element: <AuthRoute element={<Login/>} />,
       },
       {

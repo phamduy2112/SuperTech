@@ -1,51 +1,57 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
+import { getAutoBank } from '../../../../service/order/order.service';
+import CountdownTimer from './CountimePay';
 
-function ModalPay(props) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+function ModalPay(props:any) {
+  const [data, setData] = useState(null); // Initialize with null to represent loading state.
 
-    const showModal = () => {
-      setIsModalOpen(true);
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const response = await getAutoBank(); // Ensure this API returns valid data.
+        if (response?.data?.content) {
+          setData(response.data.content); // Set the data if it's valid.
+        } else {
+          console.error("No content found in response.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error); // Handle error if API fails.
+      }
     };
 
-    const handleCancel = () => {
-      setIsModalOpen(false);
-    };
+    fetchApi();
+  }, []);
 
-    const sotien = 'totalorder';
-    const noidung = 'supertech';
-    const accountnganhang = 'Fetch api của table của bank xuống rồi show ra'
-    const tennganhang = 'tương tự cũng table của bank xuống rồi show ra'
-    const stk = 'tương tự cũng table của bank xuống rồi show ra'
-  
-    return (
-      <>
-           <div onClick={showModal} className="p-4 rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
-               
-                  <div className="flex-shrink-0">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="bank"
-                      onChange={props.handlePaymentChange}
-                      className="w-10 h-6 text-customColor]"
-                    />
-                  </div>
-                  <div className="ml-5">
-                    <h4 className="text-[1.8rem] font-semibold">Thanh toán ngân hàng</h4>
-                    <p className="text-[1.7rem] text-[#969696] font-medium mt-2">
-                      Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi...
-                    </p>
-                  </div>
-                </div>
-        <Modal title="Quét Mã QR Tại Đây" open={isModalOpen}  onCancel={handleCancel} footer="" >
-            <div>
-               
-            <img src={`https://img.vietqr.io/image/${tennganhang}-${stk}-compact2.jpg?amount=${sotien}&addInfo=${noidung}&accountName=${accountnganhang}`} />
-            </div>
-        </Modal>
-      </>
-    );
+  const totalOrder = props?.data?.order_total;
+  const textOrder = 'supertech' + props?.data?.order_id;
+
+  // Ensure that data is not null and is an array with at least one element before rendering the image
+  const isDataReady = Array.isArray(data) && data.length > 0;
+
+  return (
+    <>
+    
+      <Modal title={props.order_total} open={props.isModalOpen} onOk={props.handleOk} onCancel={props.handleCancel}>
+        <div>
+          {/* Check if data is available and render the image */}
+          {isDataReady ? (
+            <div> <img
+              src={`https://img.vietqr.io/image/${data[0]?.short_name}-${data[0]?.accountNumber}-compact.jpg?amount=${totalOrder}&addInfo=${textOrder}&accountName=${data[0]?.accountName}`}
+              alt="QR Code"
+            />
+            <CountdownTimer/>
+            {props.order_total}
+              </div>
+           
+            
+          ) : (
+            <p>Loading...</p> // Show loading or fallback content while data is being fetched
+          )}
+        </div>
+      </Modal>
+    </>
+  );
 }
 
-export default ModalPay
+export default ModalPay;

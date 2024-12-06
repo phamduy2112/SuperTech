@@ -14,6 +14,7 @@ import * as Yup from "yup";
 import ImageUploader from "./Component/ChangeImage";
 import useSweetAlert from "../../../../hooks/Notification.hook";
 import { NavLink } from "react-router-dom";
+import ProgressBar from "./Component/ProgessBar";
 
 // Yup schema validation
 const validationSchema = Yup.object().shape({
@@ -63,7 +64,8 @@ function UserDetail() {
 
   // Add a ref to the Formik component
   const formikRef = useRef<any>(null);
-
+  const [currentAmount, setCurrentAmount] = useState(750000); // Giá trị hiện tại
+  const targetAmount = 1500000; // Mục tiêu
   return (
     <div className="pt-[1rem]">
       <div className=" ">
@@ -93,6 +95,12 @@ function UserDetail() {
                 Tham gia vào ngày:
                 <p className="mt-[.3rem] font-semibold">10:43 10/03/2024</p>
               </div>
+              <div className="">
+      <h1 className="text-2xl font-bold mb-4">Tiến độ mua hàng</h1>
+      <ProgressBar currentAmount={currentAmount} targetAmount={targetAmount} />
+
+     
+    </div>
             </div>
 
             <div className="p-[2rem] w-[100%] ">

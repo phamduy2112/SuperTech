@@ -4,14 +4,20 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Button, Dropdown } from 'antd';
 import { FaBars, FaUserCircle } from 'react-icons/fa';
 import { getUserThunk, setLogin, setToken } from '../../../../redux/user/user.slice';
-import { IMG_BACKEND } from '../../../../constants';
+import { IMG_BACKEND, IMG_BACKEND_USER } from '../../../../constants';
 import toast from 'react-hot-toast';
+import { RouterLogin } from '../../../../router/router.config';
+import { useAvatar } from '../../../../hooks/UseAvatar.hook';
+import { Paths } from '../../../../router/component/RouterValues';
 
 function DropdownUser() {
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
   const login: any = useAppSelector((state) => state.user.login);
-  
+  const { avatarStyle, avatarText } = useAvatar({
+    userImage: user?.user_image ? `${IMG_BACKEND_USER}/${user.user_image}` : null,
+    userName: user?.user_name,
+  });
   const navigate=useNavigate()
   useEffect(() => {
     dispatch(getUserThunk());
@@ -32,7 +38,7 @@ function DropdownUser() {
       label: login ? (
         <NavLink to={"/người-dùng"}>Trang cá nhân</NavLink>
       ) : (
-        <NavLink to={"/đăng-nhập"}>Đăng nhập</NavLink>
+        <NavLink to={`${Paths.Login}`}>Đăng nhập</NavLink>
       ),
     },
     {
@@ -63,19 +69,21 @@ function DropdownUser() {
         >
           <FaBars />
           <div className="xl:text-[25px] md:text-[2rem]">
-            {login ? (
-              <div
-                className={`flex h-12 w-12 items-center justify-center rounded-full ${user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
-                style={{
-                  backgroundImage: user?.user_image ? `url(${IMG_BACKEND}/${user.user_image})` : "none",
-                }}
-              >
-                              {(user?.user_image==null||user?.user_image=='' && user?.user_name) ? user?.user_name[0].toUpperCase() : null}
-                              </div>
-            ) : (
-              <FaUserCircle />
-            )}
-          </div>
+         
+          {login ? (
+  <div
+    className="flex h-12 w-12 items-center justify-center rounded-full"
+    style={avatarStyle}
+  >
+    <div className="text-[1.7rem] leading-none text-center">
+      {avatarText}
+    </div>
+  </div>
+) : (
+  <FaUserCircle />
+)}
+    </div>
+
         </Button>
       </Dropdown>
     </div>

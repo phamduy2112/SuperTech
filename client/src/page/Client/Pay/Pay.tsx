@@ -5,7 +5,7 @@ import { Container } from '../../../components/Style/Container';
 import axios from 'axios';
 import { getUserThunk } from '../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { createDetailOrder, createOrder } from '../../../service/order/order.service';
+import { createDetailOrder, createOrder, getOrderById, getSuccessEmailOrder } from '../../../service/order/order.service';
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
@@ -13,6 +13,7 @@ import { setOrderId } from '../../../redux/order/Order.slice';
 import toast from 'react-hot-toast';
 import { getAllCityThunk, getDistrictsCityThunk } from '../../../redux/order/City.slice';
 import ModalPay from './component/ModalPay';
+import CountdownTimer from './component/CountimePay';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
@@ -110,8 +111,7 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   const listDataCity=useAppSelector((state:any)=>state.city.listDataCity);
  
   const [selectedPayment, setSelectedPayment] = useState('');
-
-
+ 
   useEffect(()=>{
     dispatch(getAllCityThunk())
   },[])
@@ -140,6 +140,8 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
     fetchDistricts(option.key); // Gọi API để lấy quận
    
   };
+  const [dataOrder,setDataOrder]=useState(null);
+
   const handleDistrictsChange = (value, option) => {
     setFormData({ ...formData, district: value });
     setDistricts(option.key); // Lưu mã tỉnh đã chọn
@@ -157,52 +159,97 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   const handlePaymentChange = (e) => {
     setFormData({ ...formData, paymentMethod: e.target.value }); // Cập nhật phương thức thanh toán
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleFormSubmit = async() => {
-    // Xử lý logic khi ấn nút Đặt hàng
-
-    const dataOrder={
-      order_total:totalPrice,
-      order_total_quatity:+totalItem,
-      order_status:0,
-
-      user_id:user.user_id,
-      discount:getDiscountId ==0 ? null : getDiscountId,
-      phone_number:formData.sdt,
-      email:user.user_email,
-      address: formData.diaChi + ' ' + formData.huyen+ " " + formData.district +" "+ formData.tinhThanhPho
-    }
-
-  
-    const resp=await createOrder(dataOrder)
-   
-
-    const detailOrders = listCart.map(item => ({
-      product_name:item.product_name,
-      product_id: item.product_id,
-      order_id:resp.data.content.order_id,
-      detail_order_quality:item.quantity,
-      product_color:item?.selectedColor?.color,
-      product_storage:item?.selectedStorage?.storage,
-      detail_order_price:item.product_price + Number(item?.selectedStorage?.storage_price || 0),
-      discount_product:item.product_discount,
-
-    }));
-
-    const responve=await createDetailOrder(detailOrders)
-    dispatch(setOrderId(resp.data.content.order_id))
-    navigate("/xuất-hóa-đơn")
-    if(responve){
-    
-      dispatch(setOrderId(resp.data.content.order_id))
-      navigate("/xuất-hóa-đơn")
-      dispatch(removeAllCart())
-    }
-  
-    
-   
-    
+  const showModal = () => {
+    setIsModalOpen(true);
   };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleFormSubmit = async () => {
+    try {
+      // Chuẩn bị dữ liệu đơn hàng
+      const dataOrder = {
+        ...formData,
+        order_total: totalPrice,
+        order_total_quatity: totalItem,
+      };
+  
+      // Gọi API tạo đơn hàng
+      const resp = await createOrder(dataOrder);
+  
+      // Chuẩn bị danh sách chi tiết đơn hàng
+      const detailOrders = listCart.map(item => ({
+        product_name: item.product_name,
+        product_id: item.product_id,
+        order_id: resp.data.content.order_id,
+        detail_order_quality: item.quantity,
+        product_color: item?.selectedColor?.color,
+        product_storage: item?.selectedStorage?.storage,
+        detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
+        discount_product: item.product_discount,
+      }));
+  
+      if (formData.paymentMethod === 'bank') {
+        setIsModalOpen(true);
+        setDataOrder({
+          order_id: resp.data.content.order_id,
+          user_id: user.user_id,
+          order_total:dataOrder.order_total
+        });
+  
+        // Gọi API kiểm tra trạng thái thanh toán
+        const responseDt = await getOrderById(resp.data.content.order_id);
+  
+        if (responseDt.data.content.order_pay == 1) {
+          // Thanh toán thành công, chuyển trang ngay lập tức
+          const response = await createDetailOrder(detailOrders);
+          if (response) {
+            navigate("/xuất-hóa-đơn");
+            dispatch(setOrderId(resp.data.content.order_id));
+            dispatch(removeAllCart());
+          }
+        } else {
+          // Đợi 5 phút trước khi chuyển trang
+          setTimeout(async () => {
+            const response = await createDetailOrder(detailOrders);
+            if (response) {
+              navigate("/xuất-hóa-đơn");
+              dispatch(setOrderId(resp.data.content.order_id));
+              dispatch(removeAllCart());
+            }
+          }, 300000);
+        }
+      } else {
+        // Thanh toán không qua ngân hàng, xử lý thông thường
+        const dataEmail = {
+          email: formData.email,
+          orderDetails: detailOrders,
+        };
+  
+        // Gọi API tạo chi tiết đơn hàng
+        const response = await createDetailOrder(detailOrders);
+  
+        if (response) {
+          await getSuccessEmailOrder(dataEmail);
+          navigate("/xuất-hóa-đơn");
+          dispatch(setOrderId(resp.data.content.order_id));
+          dispatch(removeAllCart());
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi khi tạo đơn hàng:", error);
+    }
+  };
+
+  
   return (
 
     <Container>
@@ -506,36 +553,51 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
               <h3 className="text-[1.8rem] py-4">Phương thức thanh toán</h3>
               <div className="space-y-10">
                 {/* Payment method 1 */}
-                <ModalPay handlePaymentChange={handlePaymentChange}/>
-
-                {/* Payment method 2 */}
-                <div
-                 onClick={() => handleDivClick('cash')}  // Khi click vào div này, sẽ chọn phương thức 'cash'
-                 style={{ 
-                   padding: '10px', 
-                   cursor: 'pointer', 
-                   backgroundColor: paymentMethod === 'cash' ? '#e0e0e0' : '#fff' 
-                 }}
-                className="p-4  rounded-lg relative flex items-center bg-white py-5 shadow space-y-1">
-                  <div className="flex-shrink-0" >
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="cash"
-                      onChange={handlePaymentChange}
-                     
-                      className="w-10 h-6 text-customColor]" // Adjust size if needed
-                    />
-                  </div>
-                  <div className="ml-5">
-                    <h4 className="text-[1.8rem] font-semibold">Trả tiền mặt</h4>
-                    <p className="text-[1.7rem] text-[#969696] font-medium mt-2">
-                      Trả tiền mặt sau khi giao hàng
-                    </p>
-                  </div>
-                </div>
+                <div className='border-customColor border py-[1rem] px-[1.5rem] relative'>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="bank"
+                onChange={handlePaymentChange}
+                className="absolute top-5"
+              />
+              <div className='ml-[2rem]'>
+                 <h4 className='text-[1.7rem] font-semibold'>Chuyển hướng qua ngân hàng</h4>
+              <p className='text-[1.6rem] text-[#969696] mt-[.5rem]'>
+                Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần phương thức thanh toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.
+              </p>
               </div>
+             
+            </div>
+            <div className='border-[#7500CF] border py-[1rem] px-[1.5rem] mt-[1rem] relative'>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="cash"
+                onChange={handlePaymentChange}
+                className="absolute top-5"
 
+              />
+              <div className='ml-[2rem]'>
+                <h4  className='text-[1.7rem] font-semibold'>Trả tiền mặt</h4>
+                <p className='text-[1.6rem] text-[#969696] mt-[.5rem]'>
+                  Trả tiền mặt sau khi giao hàng
+                </p>
+              </div>
+             
+            </div>
+              </div>
+              {formData.paymentMethod === 'bank' && (
+      <ModalPay 
+      isModalOpen={isModalOpen}
+       showModal={setIsModalOpen} 
+       handleOk={handleOk} 
+       handleCancel={handleCancel}
+       data={dataOrder}
+
+        />
+    )}
+    
 
               {/* Submit Button */}
               <div className="mt-5">
@@ -547,7 +609,7 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
               </div>
             </div>
           </div>
-
+     
     </div>
     </div>
   </Container>

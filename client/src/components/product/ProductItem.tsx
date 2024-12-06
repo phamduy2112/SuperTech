@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
-import image from '../../assets/new.png';
-import oficie from '../../assets/oficie.png';
+
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
 import { IoIosStar } from "react-icons/io";
 import { FaHeart, FaTruck } from "react-icons/fa";
-import { CiHeart } from "react-icons/ci";
-import { Tooltip } from "antd";
-import { IoEyeOutline } from "react-icons/io5";
+
 import './product.css';
-import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
-import { useSpring, animated } from "react-spring";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addItemToCart } from "../../redux/cart/cart.slice";
-import { NavLink } from "react-router-dom";
-import useSweetAlert from "../../hooks/Notification.hook";
+
 import { formatCurrencyVND } from "../../utils";
 import toast from "react-hot-toast";
 // import { checkFavouriteProducts, createFavouriteProduct, getFavouriteProducts } from "../../service/product/favourite.service";
-import { BiSolidLike } from "react-icons/bi";
-import { AiOutlineLike } from "react-icons/ai";
+
 import { IMG_BACKEND } from "../../constants";
-import { getFavouriteByIdProductThunk } from "../../redux/favourite/favourite.slice";
+import { NavLink } from "react-router-dom";
+import { Tooltip } from "antd";
+import { CiHeart } from "react-icons/ci";
+import { getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
+import useFavouriteProducts from "../../hooks/FavouriteProduct";
 function ProductItem(props:any) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
-  const { showAlert } = useSweetAlert();
   const user: any = useAppSelector((state) => state.user.user);
   const token: any = useAppSelector(state => state.user.token);
-  const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
+  // const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
 
+  
   // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
   const totalStars = props?.product?.comment_products?.reduce((total: number, item: any) => {
     // Kiểm tra nếu item.comment_start là một số hợp lệ
@@ -38,12 +35,15 @@ function ProductItem(props:any) {
     }
     return total;
   }, 0);
-  // const favouriteProduct=useAppSelector((store)=>store.listFavourite.listFavouriteProduct);
-  // console.log(favouriteProduct);
-  
-  useEffect(() => {
-   dispatch(getFavouriteByIdProductThunk())
-  }, []);
+
+//   useEffect(() => {
+//     if (!listFavourite.length) {
+//         dispatch(getFavouriteProductThunk());
+//     }
+// }, [dispatch, listFavourite.length]);
+
+
+
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
     const productToCart = {
@@ -56,10 +56,10 @@ function ProductItem(props:any) {
     toast.success('Đây là thông báo thành công!');
   };
 
-  const slideInAnimationTaskProduct = useSpring({
-    transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
-    opacity: isvisibleProduct ? 1 : 0,
-  });
+  // const slideInAnimationTaskProduct = useSpring({
+  //   transform: isvisibleProduct ? 'translateX(0%)' : 'translateX(100%)',
+  //   opacity: isvisibleProduct ? 1 : 0,
+  // });
 
   // const handleFavouriteProduct = async (id: number) => {
   //   try {
@@ -67,12 +67,12 @@ function ProductItem(props:any) {
 
   //     if (isFavourited) {
   //       // Nếu sản phẩm đã được yêu thích, hủy yêu thích
-  //       // await dispatch(createfavouriteByIdProductThunk(product))
+  //       await dispatch(createFavouriteProductThunk(product))
   //       setIsFavourited(false); // Cập nhật trạng thái yêu thích
   //       toast.success('Đã bỏ yêu thích sản phẩm!');
   //     } else {
   //       // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
-  //       // await dispatch(createfavouriteByIdProductThunk(product))
+  //       await dispatch(createFavouriteProductThunk(product))
   //       setIsFavourited(true); // Cập nhật trạng thái yêu thích
   //       toast.success('Đã thêm vào yêu thích!');
   //     }
@@ -89,13 +89,13 @@ console.log(props);
       <div className="absolute top-4 right-4 flex flex-col gap-3">
         {/* Icon yêu thích */}
         <div className="bg-black p-2 text-[1.5rem] rounded-full text-white cursor-pointer hover:bg-gray-800">
-          {/* <Tooltip title="Thêm yêu thích">
-            {
+          <Tooltip title="Thêm yêu thích">
+            {/* {
               Array.isArray(favouriteProduct) && favouriteProduct.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
                 ? <FaHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
                 : <CiHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
-            }
-          </Tooltip> */}
+            } */}
+          </Tooltip>
         </div>
       </div>
 
@@ -169,13 +169,7 @@ console.log(props);
       </div>
 
       {/* Popup khi xem tóm tắt sản phẩm */}
-      {isvisibleProduct && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-50">
-          <animated.div style={slideInAnimationTaskProduct}>
-            <TaskEyes onClose={() => setisvisibleProduct(false)} />
-          </animated.div>
-        </div>
-      )}
+
     </div>
   );
 }

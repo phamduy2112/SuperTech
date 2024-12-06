@@ -20,8 +20,7 @@ import { socketReducer } from './socket/socker.slice';
 import { cityReducer } from './order/City.slice';
 import { nofiReducer } from './admin/component/Nofi';
 import { searchReducer } from './search/Search.slice';
-import  {FavouriteReducer}  from './favourite/favourite.slice';
-import { settingReducer } from './admin/component/Setting';
+import { FavouriteReducer } from './favourite/Favourite.slice';
 
 const persistConfig = {
   key: 'root',
@@ -33,7 +32,6 @@ const persistConfig = {
 const rootReducer = combineReducers({
   category: categoryReducer,
   socket: socketReducer,
-  // listFavourite:FavouriteReducer,
   toggleSidebar: toggleSidebarReducer,
   user: userReducer,
   product: productReducer,
@@ -43,7 +41,8 @@ const rootReducer = combineReducers({
   city:cityReducer,
   nofi:nofiReducer,
   search:searchReducer,
-  setting: settingReducer,
+  favourite:FavouriteReducer,
+
 },
 
 )

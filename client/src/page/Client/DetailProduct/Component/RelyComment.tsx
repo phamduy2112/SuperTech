@@ -5,12 +5,16 @@ import { Formik, Field, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { deleteCommentRepliesByIdThunk, editCommentRepliesByIdThunk } from '../../../../redux/comment/comment.slice';
+import { formatDate } from '../../../../utils';
+import toast from 'react-hot-toast';
 
 const CommentSchema = Yup.object().shape({
   commentText: Yup.string().required('Nội dung không được để trống.'),
 });
 
 const ReplyComment = ({ replies, productId }) => {
+
+  
   const dispatch = useAppDispatch();
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -24,7 +28,9 @@ const ReplyComment = ({ replies, productId }) => {
     setActiveDropdown(null);
   };
   const user: any = useAppSelector((state) => state.user.user);
+  const login:any=useAppSelector((state)=>state.user.login)
 
+  
 
   const handleEditSubmit = (values, commentId) => {
     const data = {
@@ -32,9 +38,9 @@ const ReplyComment = ({ replies, productId }) => {
       comment: values.commentText,
       id: commentId,
     };
-    console.log(data);
+   
     dispatch(editCommentRepliesByIdThunk(data))
-    // dispatch(editCommentByIdThunk(data));
+    toast.success("Chỉnh sửa bình luận thành công")
     setEditingIndex(null);
   };
 
@@ -45,7 +51,7 @@ const ReplyComment = ({ replies, productId }) => {
       id: commentId,
     };
     dispatch(deleteCommentRepliesByIdThunk(data));
-
+    toast.success("Xóa bình luận thành công")
     setActiveDropdown(null);
   };
 
@@ -68,7 +74,7 @@ const ReplyComment = ({ replies, productId }) => {
             />
             <div className="flex-1">
               <h3 className="font-bold text-[2rem]">Phạm Ngọc Duy</h3>
-              <div className="text-[1.5rem] text-gray-500">4/5/2025</div>
+              <div className="text-[1.5rem] text-gray-500">{formatDate(review?.repiles_date)}</div>
 
               {/* Bình luận hoặc form chỉnh sửa */}
               {editingIndex === index ? (
@@ -107,10 +113,19 @@ const ReplyComment = ({ replies, productId }) => {
 
             {/* Dropdown menu */}
             <div className="relative">
-              <BsThreeDots
-                className="cursor-pointer text-gray-500 hover:text-gray-700"
-                onClick={() => handleDropdownToggle(index)}
-              />
+            {
+                              login ? (
+                                <BsThreeDots
+                                className="cursor-pointer"
+                                onClick={() => handleDropdownToggle(index)}
+                              />
+                            
+                              ) : (
+                              <div>
+                          
+                              </div>
+                              )
+                            }
               
               {activeDropdown === index && (
     <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
