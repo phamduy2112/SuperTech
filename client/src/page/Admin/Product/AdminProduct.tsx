@@ -1,21 +1,25 @@
-import { Button, Drawer, Select, Table } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2';
-import { BiSolidEdit } from 'react-icons/bi';
-import { CiBookmarkRemove } from 'react-icons/ci';
-import { FiFilter } from 'react-icons/fi';
-import { GoSearch } from 'react-icons/go';
-import { IoCloudDownloadOutline, IoEyeSharp } from 'react-icons/io5';
-import { TbPlaylistAdd } from 'react-icons/tb';
-import { Link, useNavigate } from 'react-router-dom';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { deleteProductAdminThunk, getProductsAdminThunk } from '../../../redux/product/product.slice';
-import { getCatelogryThunk } from '../../../redux/catelogry/catelogry.slice';
-import AdminFilterProduct from './Component/AdminFilterProduct';
-import { formatCurrencyVND } from '../../../utils';
-import { handleExport, handleExportPdf } from '../../../components/exportFile/exportFile';
+import { Button, Checkbox, Popover } from "antd";
+import { Table } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { deleteCategoryThunk, getCatelogryThunk } from "../../../redux/catelogry/catelogry.slice";
+import { handleExport, handleExportPdf } from "../../../components/exportFile/exportFile";
+import { FiFilter } from "react-icons/fi";
+import { GoSearch } from "react-icons/go";
+import { IoCloudDownloadOutline, IoEyeSharp } from "react-icons/io5";
+
+import toast from "react-hot-toast";
+import { CiBookmarkRemove } from "react-icons/ci";
+import { deleteProductAdminThunk, getProductsAdminThunk } from "../../../redux/product/product.slice";
+import { formatCurrencyVND } from "../../../utils";
+import { BiSolidEdit } from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
+import { TbPlaylistAdd } from "react-icons/tb";
+import AdminFilterProduct from "./Component/AdminFilterProduct";
+import { PathAdmin } from "../../../router/component/RouterValues";
+import AdminAddProduct from "./Component/AdminAddProduct";
+
 // Define the Category interface
 interface Category {
   category_id: number; // Assuming this is the unique identifier for each category
@@ -31,35 +35,32 @@ interface CategoryWithKey extends Category {
 
 
 
-// AdminCatelogry component
-const AdminCatelogry: React.FC = () => {
+// AdminProduct component
+const AdminProduct: React.FC = () => {
   const navigate = useNavigate();
 
-  const dispatch=useAppDispatch();
+  const dispatch = useAppDispatch();
+  const dataCategories = useAppSelector(state => state.category.listCatelories as Category[]);
+  const DataCategory = [
+    { label: 'Điện thoại', value: 1 },
+    { label: 'Laptop', value: 2 },
+    { label: 'Table', value: 3 },
+  ];
   const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
-  const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
-  const [products, setProducts] = useState([]); // Dữ liệu gốc của sản phẩm
-
+  const handleEdit = (key: any) => {
+    
+    navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
+  };
+  const getCategoryNameById = (id) => {
+    const category = dataCategories?.find((cat) => cat.category_id == id);
+    return category ? category.category_name : 'Unknown'; // 'Unknown' là giá trị mặc định nếu không tìm thấy id
+  };
   const handleDeteleProduct=async (id:number)=>{
     dispatch(deleteProductAdminThunk(id))
   }
-  useEffect(()=>{
-    dispatch(getProductsAdminThunk(''));
-    dispatch(getCatelogryThunk(""));
-
-  },[dispatch])
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  useEffect(()=>{
-    setProducts(listProducts);
-  },[listProducts])
   const handleEye=(id:string|number)=>{
     navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
   }
-  const getCategoryNameById = (id) => {
-    const category = listCatelogry?.find((cat) => cat.category_id == id);
-    return category ? category.category_name : 'Unknown'; // 'Unknown' là giá trị mặc định nếu không tìm thấy id
-  };
   const [selectedCheckbox, setSelectedCheckbox] = useState(''); // Lọc theo ngày
 
   // Column definition for the table
@@ -120,9 +121,9 @@ const AdminCatelogry: React.FC = () => {
         <div className='flex text-[24px] gap-1'>
 
 
-          {/* <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             onClick={() => handleEdit(+record.product_id)}
-          /> */}
+          />
           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
             onClick={()=>{handleEye(+record.product_id)}}
@@ -136,12 +137,13 @@ const AdminCatelogry: React.FC = () => {
     },
   ];
 
-
   useEffect(() => {
+    dispatch(getProductsAdminThunk(''));
     dispatch(getCatelogryThunk(''));
   }, [dispatch]);
 
   // Add a state for row selection
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
 
   const start = () => {
@@ -153,32 +155,32 @@ const AdminCatelogry: React.FC = () => {
     }, 1000);
   };
 
-
-
-  
-// const handleDelete = (key: any) => {
-//   dispatch(deleteCategoryThunk(key));
-//   toast.success("Xóa loại thành công");
-// };
-  const onExportClick = () => {
-    handleExport(sortedData); 
-  };
-
-  const onPDFClick = () => {
-    handleExportPdf(sortedData); 
-  };
-
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
-  
+
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-    const userRef = useRef<any>(null);
-  
+
+  const hasSelected = selectedRowKeys.length > 0;
+
+  // Map over dataCategories and add the 'key' property with conditional check
+  const updatedDataProducts = (listProducts || []).map((item) => ({
+    ...item, // Spread the item (make sure it's an object)
+    key: item.product_id, // Add key from the category_id
+  }));
+ // Sắp xếp lại danh mục theo "Ngày Mới Nhất" hoặc "Cũ Nhất"
+
+const handleDelete = (key: any) => {
+  dispatch(deleteCategoryThunk(key));
+  toast.success("Xóa loại thành công");
+};
+
+  const userRef = useRef<any>(null);
+
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
     <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
@@ -189,12 +191,13 @@ const AdminCatelogry: React.FC = () => {
             <IoCloudDownloadOutline className='text-[18px]' />
             Tải về PDF
           </Button>
-          <Link to={`/admin/quản-lí-sản-phẩm/tạo-sản-phẩm-mới`}>
+          {/* <Link to={`${PathAdmin.PathsAdmin}/${PathAdmin.AddProduct}`}>
             <Button className='p-10' type="primary">
               <TbPlaylistAdd className='text-[18px]' />
               Thêm Sản Phẩm Mới
             </Button>
-          </Link>
+          </Link> */}
+          <AdminAddProduct/>
 
         </div>
       </div>
@@ -220,18 +223,18 @@ const AdminCatelogry: React.FC = () => {
       </div>
 
       <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
-      <Table
-            className='flex-1'
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={listProducts}
-            size='large'
-            pagination={{ pageSize: 10 }}
-          />
+        <Table
+          className='flex-1'
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={updatedDataProducts}
+          size='large'
+          pagination={{ pageSize: 10 }}
+        />
       </div>
     </div>
   </div>
   );
 };
 
-export default AdminCatelogry;
+export default AdminProduct;
