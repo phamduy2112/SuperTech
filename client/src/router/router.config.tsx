@@ -65,7 +65,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/tim-kiem",
+        path: Paths.Search,
         element: <Search />,
       },
       {
