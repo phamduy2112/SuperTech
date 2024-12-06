@@ -1,120 +1,121 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Popover } from 'antd';
+import { Input, Popover, Button, Row, Col } from 'antd';
 import { SketchPicker } from 'react-color';
-import { useDispatch, useSelector } from 'react-redux';
-import { getsettingIdThunk } from '../../../redux/admin/component/Setting';
+import { getsetting, updatesettingId } from '../../../service/setting/setting.service';
 
 function AdminSetting() {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [author, setAuthor] = useState('');
-    const [color, setColor] = useState('#fff'); // Default color
-    const [visible, setVisible] = useState(false); // State to control visibility of the color picker popover
-    const dispatch = useDispatch();
-    const setting = useSelector(state => state.setting.getsettingId);
+    const [settings, setSettings] = useState({
+        title: '',
+        description: '',
+        author: '',
+        color: '#fff'
+    });
+    const [originalSettings, setOriginalSettings] = useState({});
+    const [visible, setVisible] = useState(false);
 
-    useEffect(() => {
-        dispatch(getsettingIdThunk(1)); // Fetch title
-        dispatch(getsettingIdThunk(2)); // Fetch description
-        dispatch(getsettingIdThunk(3)); // Fetch author
-        dispatch(getsettingIdThunk(4)); // Fetch color
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (setting) {
-            if (setting.id === 1) {
-                setTitle(setting.value);
-            }
-            if (setting.id === 2) {
-                setDescription(setting.value);
-            }
-            if (setting.id === 3) {
-                setColor(setting.value);
-            }
-            if (setting.id === 4) {
-                setAuthor(setting.value); // Set color from the fetched setting
-            }
+    const fetchSettings = async () => {
+        try {
+            const response = await getsetting();
+            const settingsMap = {};
+            response.data.content.forEach(setting => {
+                settingsMap[setting.id] = setting.value;
+            });
+            setSettings({
+                title: settingsMap[1],
+                description: settingsMap[2],
+                author: settingsMap[4],
+                color: settingsMap[3]
+            });
+            setOriginalSettings({
+                title: settingsMap[1],
+                description: settingsMap[2],
+                author: settingsMap[4],
+                color: settingsMap[3]
+            });
+        } catch (error) {
+            console.error('Failed to fetch settings:', error);
         }
-    }, [setting]);
-
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
     };
 
-    const handleDescriptionChange = (event) => {
-        setDescription(event.target.value);
+    useEffect(() => {
+        fetchSettings();
+    }, []);
+
+    const handleValueChange = (field, value) => {
+        setSettings(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleAuthorChange = (event) => {
-        setAuthor(event.target.value);
-    };
-
-    const handleColorChange = (color) => {
-        setColor(color.hex); 
-        setVisible(false); 
-    };
-
-    const handleVisibleChange = (visible) => {
-        setVisible(visible);
+    const handleSubmit = async () => {
+        try {
+            const updates = [];
+            Object.keys(settings).forEach(key => {
+                if (settings[key] !== originalSettings[key]) {
+                    const id = key === 'title' ? 1 : key === 'description' ? 2 : key === 'color' ? 3 : 4;
+                    updates.push(updatesettingId(id, settings[key]));
+                }
+            });
+            await Promise.all(updates);
+            alert('Cập nhật cài đặt thành công!');
+        } catch (error) {
+            console.error('lỗi cập nhật cài đặt:', error);
+        }
     };
 
     const colorPicker = (
-        <SketchPicker color={color} onChangeComplete={handleColorChange} />
+        <SketchPicker color={settings.color} onChangeComplete={(color) => handleValueChange('color', color.hex)} />
     );
 
     return (
         <div className="min-h-screen p-6 bg-gray-100">
-            <div className="row container">
-                <h2 className="text-[2.2rem] pb-[20px]">Cài Đặt Website {title}</h2>
-            </div>
-            <div className="flex">
-                <div className="container max-w-screen-lg flex-auto">
+            <Row gutter={[16, 16]}>
+                <Col span={24}>
+                    <h2 className="text-[2.2rem] pb-[20px]">Cài Đặt Website: {settings.title}</h2>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Title Website:</h4>
                     <Input
-                        className="w-[300px]"
-                        value={title}
+                        value={settings.title}
                         placeholder="Title Website..."
-                        onChange={handleTitleChange}
+                        onChange={(e) => handleValueChange('title', e.target.value)}
                     />
-                </div>
-                <div className="container max-w-screen-lg flex-auto">
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Description Website:</h4>
                     <Input
-                        className="w-[300px]"
-                        value={description}
+                        value={settings.description}
                         placeholder="Description Website..."
-                        onChange={handleDescriptionChange}
+                        onChange={(e) => handleValueChange('description', e.target.value)}
                     />
-                </div>
-                <div className="container max-w-screen-lg flex-auto">
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Color Website:</h4>
-                    <div className="flex items-center">
-                        <Popover
-                            content={colorPicker}
-                            trigger="click"
-                            open={visible}
-                            onOpenChange={handleVisibleChange}
-                        >
-                            <Input
-                                className="w-[265px]"
-                                value={color}
-                                placeholder="Click to select color..."
-                                readOnly
-                            />
-                        </Popover>
-                        <div className="rounded-[9px]" style={{ width: 35, height: 35, backgroundColor: color, marginLeft: 10 }} />
-                    </div>
-                </div>
-                <div className="container max-w-screen-lg flex-auto">
+                    <Popover
+                        content={colorPicker}
+                        trigger="click"
+                        open={visible}
+                        onOpenChange={setVisible}
+                    >
+                        <Input
+                            value={settings.color}
+                            placeholder="Click to select color..."
+                            readOnly
+                        />
+                    </Popover>
+                </Col>
+                <Col xs={24} sm={12} md={12} lg={6}>
                     <h4 className='text-[1.6rem]'>Author Website:</h4>
                     <Input
-                        className="w-[300px]"
-                        value={author}
+                        value={settings.author}
                         placeholder="Author Website..."
-                        onChange={handleAuthorChange}
+                        onChange={(e) => handleValueChange('author', e.target.value)}
                     />
-                </div>
-            </div>
+                </Col>
+                <Col span={24}>
+                    <Button type="primary" onClick={handleSubmit} style={{ marginTop: 20 }}>
+                        Lưu Ngay
+                    </Button>
+                </Col>
+            </Row>
         </div>
     );
 }

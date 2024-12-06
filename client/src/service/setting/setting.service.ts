@@ -11,8 +11,14 @@ export const getsettingId = (id:number) => {
         method: "GET",
     });
 };
-export const updatesettingId = (id:number) => {
-    return axiosWithAuth(`/setting/${id}`, {
-        method: "POST",
+export const updatesettingId = (id:number, value:string) => {
+    return axiosWithAuth(`/settingedit/${id}`, {
+        method: "PUT",
+        data: {
+            value: value
+        },
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
 };
