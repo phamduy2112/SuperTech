@@ -72,12 +72,12 @@ const createdetailorder = async (req, res) => {
 
       const newOrders = await Promise.all(
           detailOrders.map(async (order) => {
-            await checkInventory( 2, 3, order.detail_order_quality);
+            await checkInventory(3, 1, 1, 1,res);
   
             // Trừ tồn kho sau khi kiểm tra thành công
-            await models.product_quality.decrement("quantity", {
-              by: quantity,
-              where: { product_id, color_id, storage_id },
+            await models.product_quality.decrement("quality_product", {
+              by: 1,
+              where: { product_id:3, color_id:1, storage_id:1 },
             });
       
 
@@ -88,10 +88,9 @@ const createdetailorder = async (req, res) => {
       );
 
       // Emit dữ liệu gộp lên tất cả các client
-      io.emit("list_order", newOrders);
+   
       responseSend(res, newOrders, "Thêm thành công!", 201);
   } catch (error) {
-      responseSend(res, "", `Có lỗi xảy ra: ${error.message}`, 500);
       console.error(error);
   }
 };

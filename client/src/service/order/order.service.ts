@@ -48,6 +48,12 @@ export const getDetailOrder=(id:number)=>{
 
   })
 }
+export const getOrderById=(id:number)=>{
+  return axiosWithAuth(`/get-order-by-id/${id}`,{
+    method:"get",
+
+  })
+}
 export const getDistrictsCity=(cityCode:string)=>{
   return axios.get(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${cityCode}&limit=-1`);
 

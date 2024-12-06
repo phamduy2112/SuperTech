@@ -29,7 +29,7 @@ function Home() {
       {/* <Catelogry/> */}
       {/* <Category> */}
       
-      <ProductSale/>
+      {/* <ProductSale/> */}
       {/* <ProductsNew/> */}
 
 

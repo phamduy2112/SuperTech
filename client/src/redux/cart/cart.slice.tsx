@@ -68,28 +68,41 @@ const cartSlice = createSlice({
     decreaseItemQuantity: (state, action: PayloadAction<{ product_id: string }>) => {
       const existingItem = state.listCart.find(item => item.product_id === action.payload.product_id);
       if (existingItem && existingItem.quantity > 1) {
+        // Giảm số lượng sản phẩm khi số lượng > 1
         existingItem.quantity -= 1;
       } else {
-  
+        // Xóa sản phẩm khi số lượng = 1
         state.listCart = state.listCart.filter(item => item.product_id !== action.payload.product_id);
+        toast.success("Sản phẩm đã xóa khỏi giỏ hàng");
       }
+    
       // Cập nhật tổng số lượng sản phẩm
-  
       state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
-     // Cập nhật tổng tiền
-  state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    
+      // Cập nhật tổng tiền
+      state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
     inCreaseItemQuantity: (state, action: PayloadAction<{ product_id: string }>) => {
       if (state.listCart) {
         const existingItem = state.listCart.find(item => item.product_id === action.payload.product_id);
- 
-        console.log(existingItem);
-        existingItem.quantity += 1;
+    
+        if (existingItem) {
+          // Kiểm tra nếu số lượng trong giỏ nhỏ hơn tồn kho
+          if (existingItem.quantity < existingItem.selectedQuantity) {
+            // Tăng số lượng nếu còn đủ tồn kho
+            existingItem.quantity += 1;
+          } else {
+            // Hiển thị thông báo lỗi nếu vượt quá tồn kho
+            toast.error("Số lượng sản phẩm không đủ");
+          }
+        }
       }
+    
+      // Cập nhật tổng số lượng
       state.totalItems = state.listCart.reduce((total, item) => total + item.quantity, 0);
+    
       // Cập nhật tổng tiền
- state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
-   
+      state.totalAmount = state.listCart.reduce((total, item) => total + (item.price * item.quantity), 0);
     },
       
 

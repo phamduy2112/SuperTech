@@ -13,7 +13,7 @@ orderRouter.post('/create-order', middleToken,createorder);
 orderRouter.put('/order-edit/:id',middleToken, updateorder);
 orderRouter.delete('/order-delete/:id',middleToken, deleteorder);
 orderRouter.post('/success-order', getSuccessEmailOrder);
-orderRouter.get('/order-by-id-user',middleToken, getOrderById);
+// orderRouter.get('/order-by-id',middleToken, getOrderId);
 orderRouter.get('/get-order-revenue', getRevenueBetweenDates);
 orderRouter.get('/get-order-by-id/:id', getOrderId);
 

@@ -75,8 +75,6 @@ export default function initModels(sequelize) {
   order.hasMany(history_bank, { as: "history_banks", foreignKey: "order_id"});
   order_status.belongsTo(order, { as: "order", foreignKey: "order_id"});
   order.hasMany(order_status, { as: "order_statuses", foreignKey: "order_id"});
-
-
   likes.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(likes, { as: "likes", foreignKey: "post_id"});
   media_post.belongsTo(posts, { as: "post", foreignKey: "post_id"});
@@ -95,6 +93,8 @@ export default function initModels(sequelize) {
   products.hasMany(favorite_product, { as: "favorite_products", foreignKey: "product_id"});
   product_colors.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_colors, { as: "product_colors", foreignKey: "product_id"});
+  product_quality.belongsTo(products, { as: "product", foreignKey: "product_id"});
+  products.hasMany(product_quality, { as: "product_qualities", foreignKey: "product_id"});
   product_storage.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_storage, { as: "product_storages", foreignKey: "product_id"});
   likes.belongsTo(replies_comment_product, { as: "reply", foreignKey: "replies_id"});

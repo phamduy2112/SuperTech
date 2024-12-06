@@ -51,11 +51,11 @@ import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
 import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
 
 import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
+import { Paths } from "./component/RouterValues";
 // import PrivateRoute from "./component/RouterPrivate";
 const Home = lazy(
   () => import("../page/Client/Home/Home"),
 );
-export const RouterLogin='/dang-nhap'
 export const router = createBrowserRouter([
   {
     element: <UserTemplate />,
@@ -105,7 +105,7 @@ export const router = createBrowserRouter([
 element:<User/>,
 children:[
   {
-    path: "/người-dùng",
+    path: Paths.Profile,
     
     element:     <PrivateRoute element={  <UserDetail />}/>,
   },
@@ -174,7 +174,7 @@ children:[
     element: <AuthTemplate />,
     children: [
       {
-        path: RouterLogin,
+        path: Paths.Login,
         element: <AuthRoute element={<Login/>} />,
       },
       {

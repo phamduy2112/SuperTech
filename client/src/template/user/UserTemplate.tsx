@@ -19,10 +19,9 @@ function UserTemplate() {
 
          <div className=''>
         <Header/>
-                 <Suspense>
-
-                 <Outlet />
-                 </Suspense>
+        <Suspense >
+  <Outlet />
+</Suspense>
 
       <Footer />
     </div>

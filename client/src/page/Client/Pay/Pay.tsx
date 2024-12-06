@@ -5,7 +5,7 @@ import { Container } from '../../../components/Style/Container';
 import axios from 'axios';
 import { getUserThunk } from '../../../redux/user/user.slice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { createDetailOrder, createOrder, getSuccessEmailOrder } from '../../../service/order/order.service';
+import { createDetailOrder, createOrder, getOrderById, getSuccessEmailOrder } from '../../../service/order/order.service';
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
@@ -63,9 +63,9 @@ function Pay() {
     // Cộng dồn vào tổng giá
     return total + itemTotalPrice;
   }, 0);
-  const getDiscount=useAppSelector(state=>state.cart.discount);
   const getShip=useAppSelector(state=>state.cart.ship);
-   
+  const getDiscount=useAppSelector(state=>state.vourher.discount);
+
   const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
   const [formData, setFormData] = useState({
@@ -84,7 +84,6 @@ function Pay() {
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
-const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   useEffect(() => {
     if(!(listCart.length>0)){
       
@@ -172,83 +171,84 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const handleFormSubmit = async () => {
     try {
-      // Gọi API tạo đơn hàng và nhận phản hồi (resp)
-      const dataOrder={
-    ...formData,
-    order_total:totalPrice,
-    order_total_quatity:totalItem,
-
-      }
-      const resp = await createOrder(dataOrder); // Giả sử createOrder là hàm tạo đơn hàng
-      
-      // Mở modal và lưu thông tin đơn hàng nếu phương thức thanh toán là 'bank'
+      // Chuẩn bị dữ liệu đơn hàng
+      const dataOrder = {
+        ...formData,
+        order_total: totalPrice,
+        order_total_quatity: totalItem,
+      };
+  
+      // Gọi API tạo đơn hàng
+      const resp = await createOrder(dataOrder);
+  
+      // Chuẩn bị danh sách chi tiết đơn hàng
+      const detailOrders = listCart.map(item => ({
+        product_name: item.product_name,
+        product_id: item.product_id,
+        order_id: resp.data.content.order_id,
+        detail_order_quality: item.quantity,
+        product_color: item?.selectedColor?.color,
+        product_storage: item?.selectedStorage?.storage,
+        detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
+        discount_product: item.product_discount,
+      }));
+  
       if (formData.paymentMethod === 'bank') {
         setIsModalOpen(true);
         setDataOrder({
           order_id: resp.data.content.order_id,
           user_id: user.user_id,
+          order_total:dataOrder.order_total
         });
   
-        // Tạo đơn hàng chi tiết từ giỏ hàng
-        const detailOrders = listCart.map(item => ({
-          product_name: item.product_name,
-          product_id: item.product_id,
-          order_id: resp.data.content.order_id,
-          detail_order_quality: item.quantity,
-          product_color: item?.selectedColor?.color,
-          product_storage: item?.selectedStorage?.storage,
-          detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
-          discount_product: item.product_discount,
-        }));
+        // Gọi API kiểm tra trạng thái thanh toán
+        const responseDt = await getOrderById(resp.data.content.order_id);
   
-        // Gọi API tạo đơn hàng chi tiết
-        const response = await createDetailOrder(detailOrders);
-        
-        
-        if (response) {
-          setTimeout(() => {
+        if (responseDt.data.content.order_pay == 1) {
+          // Thanh toán thành công, chuyển trang ngay lập tức
+          const response = await createDetailOrder(detailOrders);
+          if (response) {
             navigate("/xuất-hóa-đơn");
-            dispatch(setOrderId(resp.data.content.order_id)); 
-            dispatch(removeAllCart()); 
-          }, 300000); 
+            dispatch(setOrderId(resp.data.content.order_id));
+            dispatch(removeAllCart());
+          }
+        } else {
+          // Đợi 5 phút trước khi chuyển trang
+          setTimeout(async () => {
+            const response = await createDetailOrder(detailOrders);
+            if (response) {
+              navigate("/xuất-hóa-đơn");
+              dispatch(setOrderId(resp.data.content.order_id));
+              dispatch(removeAllCart());
+            }
+          }, 300000);
         }
       } else {
-        // Nếu phương thức thanh toán không phải là 'bank', chuyển trang ngay lập tức
-        const detailOrders = listCart.map(item => ({
-          product_name: item.product_name,
-          product_id: item.product_id,
-          order_id: resp.data.content.order_id,
-          detail_order_quality: item.quantity,
-          product_color: item?.selectedColor?.color,
-          product_storage: item?.selectedStorage?.storage,
-          detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
-          discount_product: item.product_discount,
-        }));
-        
-        const dataEmail={
-          email:formData.email,
-          orderDetails:detailOrders
-        }
-        console.log(dataEmail);
-        
+        // Thanh toán không qua ngân hàng, xử lý thông thường
+        const dataEmail = {
+          email: formData.email,
+          orderDetails: detailOrders,
+        };
   
-        // Gọi API tạo đơn hàng chi tiết
+        // Gọi API tạo chi tiết đơn hàng
         const response = await createDetailOrder(detailOrders);
-        
-        // Nếu thành công, chuyển trang ngay lập tức
+  
         if (response) {
-          await getSuccessEmailOrder(dataEmail)
-          navigate("/xuất-hóa-đơn");
-          dispatch(setOrderId(resp.data.content.order_id)); // Lưu order_id vào Redux nếu cần
-          dispatch(removeAllCart()); // Xóa giỏ hàng
+          await getSuccessEmailOrder(dataEmail);
+          // navigate("/xuất-hóa-đơn");
+          // dispatch(setOrderId(resp.data.content.order_id));
+          // dispatch(removeAllCart());
         }
       }
     } catch (error) {
       console.error("Lỗi khi tạo đơn hàng:", error);
     }
   };
+
+  
   return (
 
     <Container>

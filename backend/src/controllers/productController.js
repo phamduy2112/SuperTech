@@ -10,48 +10,59 @@ let Products = models.products;
 
 const getProducts = async (req, res) => {
     try {
-        let data = await Products.findAll( 
-        {
+      let data = await Products.findAll({
+        include: [
+          {
+            model: models.comment_product,
+            as: 'comment_products',
             include: [
-            {
-                model: models.comment_product,
-                as:'comment_products',
-                include: [
-                        {
-                            model: models.user,
-                            as: 'user',
-                            attributes: { exclude: ['user_password', 'user_phone'] }
-                        }
-                ]
-            },
-            {
-                model: models.infor_product,
-                    as:'infor_product_infor_product'
-            },
-            {
-                model: models.product_colors,
-                    as:'product_colors',
-                    include:[
-                        {
-                            model: models.image_product,
-                                as:'image'
-                        },
-                        {
-                            model: models.product_storage,
-                                as:'product_storages',
-                                required: false
-                        },
-                    ]
-            },
-        ]
-            }
-        );
-        responseSend(res, data, "Thành công!", 200);
+              {
+                model: models.user,
+                as: 'user',
+                attributes: { exclude: ['user_password', 'user_phone'] },
+              },
+            ],
+          },
+          {
+            model: models.infor_product,
+            as: 'infor_product_infor_product',
+          },
+          {
+            model: models.product_quality,
+            as: 'product_qualities',
+            required: true, // Sản phẩm phải có ít nhất một chất lượng
+          },
+          {
+            model: models.product_colors,
+            as: 'product_colors',
+            include: [
+              {
+                model: models.image_product,
+                as: 'image',
+              },
+              {
+                model: models.product_storage,
+                as: 'product_storages',
+                required: true,  // Sản phẩm phải có ít nhất một kho chứa
+              },
+            ],
+            required: true, // Sản phẩm phải có màu sắc
+          },
+        ],
+      });
+  
+      // Lọc các sản phẩm có màu sắc, kho chứa và chất lượng
+    //   const filteredData = data.filter(product => {
+    //     return product.product_qualities.quality_product> 0; // Kiểm tra có chất lượng
+    //   });
+  
+      responseSend(res, data, "Thành công!", 200);
     } catch (error) {
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
-        console.log(error);
+      responseSend(res, "", "Có lỗi xảy ra!", 500);
+      console.log(error);
     }
-};
+  };
+  
 const getProductsByCategoryId = async (req, res) => {
     try {
         const categoryId = req.params.categoryId;

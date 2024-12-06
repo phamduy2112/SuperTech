@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {  getFavouriteProducts } from "../../service/product/favourite.service";
+import {  createFavouriteProduct, getFavouriteProducts } from "../../service/product/favourite.service";
 
 
 export const getFavouriteProductThunk = createAsyncThunk(
@@ -13,7 +13,19 @@ export const getFavouriteProductThunk = createAsyncThunk(
     }
   },
 );
+export const createFavouriteProductThunk = createAsyncThunk(
+  "createFavouriteProductThunk",
+  async (data,{dispatch}) => {      
+    try {
+      const resp = await createFavouriteProduct(data);
+      const response = await dispatch(getFavouriteProductThunk());
 
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 const initialState = {
   listFavourite: [],
 };

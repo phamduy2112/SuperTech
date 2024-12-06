@@ -102,6 +102,15 @@ const deletecategories = async (req, res) => {
                 category_id: categoryIds
             }
         });
+        const resp=await models.products.findAll({
+            where:{
+                category_id: categoryIds
+            }
+        })
+        if(resp.length>0){
+            return responseSend(res, deleted, "Bạn cần xóa sản phảm trước khi xóa loại!", 200);
+
+        }
 
         if (deleted) {
             responseSend(res, deleted, "Đã Xóa Thành Công!", 200);

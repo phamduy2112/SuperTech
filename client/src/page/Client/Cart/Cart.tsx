@@ -12,22 +12,45 @@ import { useNavigate } from "react-router-dom";
 import { formatCurrencyVND, truncateText } from "../../../utils";
 import { useState } from "react";
 import ModalDiscount from "./Component/ModalDiscount";
+import { message, Modal, Popconfirm } from "antd";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
   const listCart = useAppSelector((state) => state.cart.listCart);
   const totalItem = useAppSelector((state) => state.cart.totalItems);
-  const getDiscount=useAppSelector(state=>state.cart.discount);
+  const getDiscount=useAppSelector(state=>state.vourher.discount);
   const getShip=useAppSelector(state=>state.cart.ship);
-   
-    
 
+    
+  const showModal = () => {
+    Modal.info({
+      title: "Bạn có chắc muốn xóa tất cả sản phẩm?",
+      content: (
+        <div>
+          <p>Bạn sẽ không thể phục hồi lại các sản phẩm đã xóa.</p>
+        </div>
+      ),
+      onOk: removeAllItem,
+      okText: "Có",
+      cancelText: "Không",
+      maskClosable: true,  // Close modal when clicking outside
+    });
+  };
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
   };
   const navigate = useNavigate();
-  const decreaseItem = (product_id: any) => {
-    dispatch(decreaseItemQuantity({ product_id }));
+  const handleDecrease = (productId: string, quantity: number) => {
+    if (quantity > 1) {
+      dispatch(decreaseItemQuantity({ product_id: productId })); // Decrease quantity if more than 1
+    } else {
+      // Show confirmation when quantity is 1
+      Popconfirm.confirm({
+        title: "Bạn có chắc muốn xóa sản phẩm này?",
+        onConfirm: () => dispatch(removeItemFromCart({ product_id: productId })), // Remove item if confirmed
+      });
+    }
   };
   const inCreaseItem = (product_id: any) => {
     dispatch(inCreaseItemQuantity({ product_id }));
@@ -53,7 +76,8 @@ export default function Cart() {
       // Cộng dồn vào tổng giá
       return total + itemTotalPrice;
     }, 0);
-  const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
+    const getShipPrice = listCart.length > 0 ?  getShip: 0
+  const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShipPrice;
 
   // 10000 - (10000 * 10 / 100); mã khuyết mãi
   
@@ -131,15 +155,25 @@ export default function Cart() {
                       </div>
                     </div>
                     <div className="flex space-x-6 items-center w-[20%]">
-                      <button
-                        onClick={() => {
-                          decreaseItem(item.product_id);
-                        }}
-                        className="px-4 py-2 border border-gray-300 rounded-lg"
-                      >
-                        -
-                      </button>
-                      <span className="font-semibold">{item.quantity}</span>
+                    <div className="flex items-center">
+  <Popconfirm
+    title="Bạn có chắc muốn xóa sản phẩm này?"
+    onConfirm={() => handleDecrease(item.product_id, item.quantity)}
+    okText="Có"
+    cancelText="Không"
+  >
+    <button
+      onClick={() => handleDecrease(item.product_id, item.quantity)}
+      className="px-4 py-2 border border-gray-300 rounded-lg"
+    >
+      -
+    </button>
+  </Popconfirm>
+</div>
+                      <span className="font-semibold"
+                      
+                      
+                      >{item.quantity}</span>
                       <button
                         onClick={() => {
                           inCreaseItem(item.product_id);
@@ -157,16 +191,18 @@ export default function Cart() {
                               )}
                       </span>
                     </div>
-                    <button
-                      onClick={() => {
-                        handleRemoveItem(item.product_id);
-                      }}
-                      className="text-gray-500 hover:text-red-600 mx-[10rem] w-[5%]"
-                    >
-                      <i className="fas fa-trash-alt text-customColor">
-                        <FaTrash />
-                      </i>
-                    </button>
+                    <button className="text-gray-500 hover:text-red-600 mx-[10rem] w-[5%]">
+  <Popconfirm
+    title="Bạn có chắc muốn xóa sản phẩm này?"
+    onConfirm={() => handleRemoveItem(item.product_id)}  // Call the remove function on confirmation
+    okText="Có"
+    cancelText="Không"
+  >
+    <i className="fas fa-trash-alt text-customColor">
+      <FaTrash />
+    </i>
+  </Popconfirm>
+</button>
                   </div>
                 </div>
               ))}
@@ -175,13 +211,11 @@ export default function Cart() {
                   Tiếp tục mua sắm
                 </button>
                 <button
-                  onClick={() => {
-                    removeAllCart();
-                  }}
-                  className="px-10 py-5 rounded-2xl text-white bg-customColor font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300"
-                >
-                  Xóa tất cả
-                </button>
+  onClick={showModal}
+  className="px-10 py-5 rounded-2xl text-white bg-customColor font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300"
+>
+  Xóa tất cả
+  </button>
               </div>
             </div>
             <div className="w-1/3 h-[550px] sticky top-[10%] bg-white rounded-lg shadow-xl">
@@ -220,13 +254,19 @@ export default function Cart() {
                     </span>
                   </div>
                   <div className="flex justify-between pb-5">
+                 
                     <span>Phí vận chuyển</span>
-                    <span className="text-green-600 font-medium">{formatCurrencyVND(getShip)}</span>
+                    {
+                      listCart.length > 0  ?  (<span className="text-green-600 font-medium">{formatCurrencyVND(getShip)}</span>)
+                      : (                    <span className="text-green-600 font-medium">0</span>
+                    )
+                    }
                   </div>
                   <div className="border-t pt-5 flex justify-between font-semibold text-[2rem]">
                     <span>Cần thanh toán</span>
                     <span className="text-red-600 font-semibold text-[2.2rem]">
                       {formatCurrencyVND(totalPriceWithVoucher)}
+                      
                     </span>
                   </div>
                   <div className="flex justify-end items-center text-gray-500 text-[1.4rem]">
@@ -236,7 +276,15 @@ export default function Cart() {
                 <div>
                   <button
                     onClick={() => {
-                      navigate("/thanh-toan");
+                      if((listCart.length>0)){
+      
+                        navigate("/thanh-toan");
+                     
+                      }else{
+                        toast.success("Bạn cần thêm sản phẩm")
+                        navigate("/")
+
+                      }
                     }}
                     className="w-full bg-customColor text-white py-[0.4rem] text-[1.7rem] rounded-[1.7rem] font-medium"
                   >

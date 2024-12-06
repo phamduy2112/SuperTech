@@ -5,6 +5,7 @@ import order from "../models/order.js";
 import { startOfWeek,endOfWeek } from "date-fns";
 import { col, fn, literal, Op, Sequelize } from "sequelize";
 import { sendMail } from "../config/mail.js";
+import { io } from "../socker/socker.js";
 
 let models = initModels(sequelize); 
 let orders = models.order; 
@@ -337,15 +338,16 @@ const createorder = async (req, res) => {
             order_total,
             order_total_quatity,
             order_status:0,
-            pay_id:null,
             discount,
             user_id,
             address,
-            phone_number
+            phone_number,
+            
+            
             // discount
         });
         // order_statis
-        
+    
         const newOrderStatus=await models.order_status.create({
             order_id:neworder.order_id,
             order_status:0,
@@ -360,29 +362,49 @@ const createorder = async (req, res) => {
 const getSuccessEmailOrder = async (req, res) => {
   try {
     const { email, orderDetails } = req.body;
-
-    // Kiểm tra dữ liệu đầu vào
+    console.log(orderDetails);
+    
+    // Kiểm tra thông tin đầu vào
     if (!email || !orderDetails || !Array.isArray(orderDetails)) {
       return res.status(400).json({ message: 'Thông tin không hợp lệ.' });
     }
 
+    // Kiểm tra từng phần tử trong orderDetails
+    const invalidItems = orderDetails.filter(
+      (item) =>
+        !item.name || // Tên sản phẩm không tồn tại
+        typeof item.quantity !== 'number' || // Số lượng không phải là số
+        typeof item.price !== 'number' // Giá không phải là số
+    );
+
+    // if (invalidItems.length > 0) {
+    //   return res.status(400).json({
+    //     message: 'Một số sản phẩm trong danh sách không hợp lệ.',
+    //     invalidItems,
+    //   });
+    // }
+
     // Tạo danh sách sản phẩm từ orderDetails
     const productList = orderDetails
-      .map(
-        (item) => `
-        <li>
-          <b>Sản phẩm:</b> ${item.name} <br>
-          <b>Số lượng:</b> ${item.quantity} <br>
-          <b>Giá:</b> ${Number(item.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-        </li>
-      `
-      )
+      .map((item) => {
+        const priceAfterDiscount = item.detail_order_price - (item.discount_product || 0);
+
+        return `
+          <li>
+            <b>Sản phẩm:</b> ${item.product_name} <br>
+            <b>Số lượng:</b> ${item.detail_order_quality} <br>
+            <b>Giá:</b> ${priceAfterDiscount}
+          </li>
+        `;
+      })
       .join('');
 
     // Tính tổng thanh toán
     const totalAmount = orderDetails
-      .reduce((total, item) => total + item.quantity * item.price, 0)
-      .toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    .reduce((total, item) => {
+      const priceAfterDiscount = item.detail_order_price - (item.discount_product || 0);
+      return total + (item.detail_order_quality * priceAfterDiscount) + 30000;
+    }, 0)
 
     // Tạo nội dung HTML cho email
     const htmlContent = `
@@ -392,6 +414,7 @@ const getSuccessEmailOrder = async (req, res) => {
       <ul>
         ${productList}
       </ul>
+      <p>Tiền ship: 30.000đ</p>
       <p>Tổng thanh toán: <b>${totalAmount}</b></p>
       <p>Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.</p>
       <br>
@@ -399,19 +422,15 @@ const getSuccessEmailOrder = async (req, res) => {
     `;
 
     // Gửi email
-    const emailResult = await sendMail(
-      email, // Địa chỉ email người nhận
-      'Xác nhận đơn hàng thành công', // Tiêu đề email
-      htmlContent // Nội dung email
-    );
+    const emailResult = await sendMail(email, 'Xác nhận đơn hàng thành công', '', htmlContent);
 
     if (emailResult) {
-      return res.status(200).json({ message: 'Email xác nhận đơn hàng đã được gửi thành công.' });
+      return res.status(200).json({ message: 'Email xác nhận đã được gửi!' });
     } else {
-      return res.status(500).json({ message: 'Không thể gửi email xác nhận đơn hàng.' });
+      return res.status(500).json({ message: 'Gửi email không thành công.' });
     }
   } catch (error) {
-    console.error('Lỗi khi gửi email xác nhận:', error);
+    console.error('Lỗi khi gửi email:', error);
     return res.status(500).json({ message: 'Đã xảy ra lỗi khi gửi email.' });
   }
 };
@@ -465,10 +484,14 @@ const deleteorder = async (req, res) => {
 const getOrderId= async (req, res) => {
   try {
       const orderId = await order.findOne({
-          where: { order_id: req.params.id }
+          where: { order_id: req.params.id },
+          
       });
       if (orderId) {
+        io.emit('pay_order',orderId.order_pay);
+        // console.log('Đã emit sự kiện pay_order với giá trị2:',orderId.order_pay);
           responseSend(res, orderId, "Thành Công!", 200);
+          
       } else {
           responseSend(res, "", "Không tìm thấy đơn hàng!", 404);
       }
@@ -479,19 +502,28 @@ const getOrderId= async (req, res) => {
       
   }
 };
-export const checkInventory = async ( quality_id, color_id, storage_id, quantity) => {
+export const checkInventory = async (product_id, color_id, storage_id, quantity,res) => {
   const inventory = await  models.product_quality.findOne({
-    where: { quality_id, color_id, storage_id },
+    where: {  product_id,color_id, storage_id },
   });
-
+  const product=await models.products.findOne({
+    where: {  product_id },
+  })
   if (!inventory) {
-    responseSend(res, "", "Không tìm thấy số lượng trong sản phẩm!", 404);
+    responseSend(res, "", "Không tìm thấy số lượng trong sản phẩm!", 200);
     
   }
+  if (inventory.quality_product < 10) {
+    // Gửi thông báo khi sản phẩm gần hết hàng
+    io.emit("low_stock_warning", {
+      title: "Thông báo nhập hàng",
+      description: `Sản phẩm ${product.product_name} sắp hết số lượng. Vui lòng kiểm tra và bổ sung!`,
+    });
+  }
+  if (inventory.quality_product < quantity) {
+    responseSend(res, "", "Số lượng sản phẩm không đủ!", 200);
 
-  if (inventory.quantity < quantity) {
-    responseSend(res, "", "Số lượng sản phẩm không đủ!", 404);
-    io.emit("low_stock_warning","Sản phẩm sắp hết sớ lượng")
+    
   }
 
   return inventory; // Trả về nếu kiểm tra thành công

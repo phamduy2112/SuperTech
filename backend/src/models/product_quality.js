@@ -29,6 +29,14 @@ export default class product_quality extends Model {
         model: 'product_storage',
         key: 'id_storage'
       }
+    },
+    product_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'products',
+        key: 'product_id'
+      }
     }
   }, {
     sequelize,
@@ -55,6 +63,13 @@ export default class product_quality extends Model {
         using: "BTREE",
         fields: [
           { name: "storage_id" },
+        ]
+      },
+      {
+        name: "fk_quality_product_id_idx",
+        using: "BTREE",
+        fields: [
+          { name: "product_id" },
         ]
       },
     ]

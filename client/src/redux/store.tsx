@@ -21,6 +21,7 @@ import { cityReducer } from './order/City.slice';
 import { nofiReducer } from './admin/component/Nofi';
 import { searchReducer } from './search/Search.slice';
 import { FavouriteReducer } from './favourite/Favourite.slice';
+import { voucherReducer } from './cart/voucher.slice';
 
 const persistConfig = {
   key: 'root',
@@ -41,7 +42,8 @@ const rootReducer = combineReducers({
   city:cityReducer,
   nofi:nofiReducer,
   search:searchReducer,
-  favourite:FavouriteReducer,
+  vourher:voucherReducer,
+  listProductFavorites:FavouriteReducer,
 
 },
 

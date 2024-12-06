@@ -23,7 +23,7 @@ function ModalPay(props:any) {
     fetchApi();
   }, []);
 
-  const totalOrder = 3000;
+  const totalOrder = props?.data?.order_total;
   const textOrder = 'supertech' + props?.data?.order_id;
 
   // Ensure that data is not null and is an array with at least one element before rendering the image
@@ -32,7 +32,7 @@ function ModalPay(props:any) {
   return (
     <>
     
-      <Modal title="Basic Modal" open={props.isModalOpen} onOk={props.handleOk} onCancel={props.handleCancel}>
+      <Modal title={props.order_total} open={props.isModalOpen} onOk={props.handleOk} onCancel={props.handleCancel}>
         <div>
           {/* Check if data is available and render the image */}
           {isDataReady ? (
@@ -41,6 +41,7 @@ function ModalPay(props:any) {
               alt="QR Code"
             />
             <CountdownTimer/>
+            {props.order_total}
               </div>
            
             

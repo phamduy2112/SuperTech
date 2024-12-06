@@ -8,6 +8,7 @@ import { IMG_BACKEND, IMG_BACKEND_USER } from '../../../../constants';
 import toast from 'react-hot-toast';
 import { RouterLogin } from '../../../../router/router.config';
 import { useAvatar } from '../../../../hooks/UseAvatar.hook';
+import { Paths } from '../../../../router/component/RouterValues';
 
 function DropdownUser() {
   const dispatch = useAppDispatch();
@@ -37,7 +38,7 @@ function DropdownUser() {
       label: login ? (
         <NavLink to={"/người-dùng"}>Trang cá nhân</NavLink>
       ) : (
-        <NavLink to={`${RouterLogin}`}>Đăng nhập</NavLink>
+        <NavLink to={`${Paths.Login}`}>Đăng nhập</NavLink>
       ),
     },
     {
@@ -54,7 +55,7 @@ function DropdownUser() {
   ].filter(Boolean); // Remove null entries from items array
 
   return (
-    <div>
+    <div className='dropUserCustom'>
       <Dropdown
         menu={{
           items,
