@@ -16,11 +16,11 @@ import { getCatelogryThunk } from '../../../redux/catelogry/catelogry.slice';
 import AdminFilterProduct from './Component/AdminFilterProduct';
 function AdminProduct() {
   const navigate = useNavigate();
-  const listProductColor=useAppSelector(state=>state.product.productColors)
+  const listProductColor = useAppSelector(state => state.product.productColors)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (key: any) => {
-    
+
     navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
   };
 
@@ -64,22 +64,22 @@ function AdminProduct() {
       showModal(selectedRowKeys.length);
     }
   };
-  const dispatch=useAppDispatch();
-  const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
-  const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
-  const handleDeteleProduct=async (id:number)=>{
+  const dispatch = useAppDispatch();
+  const listProducts = useAppSelector((state) => state.product.listAdminProducts)
+  const listCatelogry = useAppSelector((state) => state.category.listCatelories)
+  const handleDeteleProduct = async (id: number) => {
     dispatch(deleteProductAdminThunk(id))
   }
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getProductsAdminThunk(''));
     dispatch(getCatelogryThunk(""));
 
-  },[dispatch])
-  useEffect(()=>{
+  }, [dispatch])
+  useEffect(() => {
     setProducts(listProducts);
     setFilteredProducts(listProducts); // Mặc định hiển thị tất cả sản phẩm
-  },[listProducts])
-  const handleEye=()=>{
+  }, [listProducts])
+  const handleEye = () => {
     navigate("/")
   }
   const getCategoryNameById = (id) => {
@@ -100,8 +100,8 @@ function AdminProduct() {
       title: 'Hình Ảnh',
       dataIndex: 'image',
       render: (src: string) => (
-        <img className='rounded-md' 
-        src="https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg" alt="" style={{ width: 50, height: 50 }} />
+        <img className='rounded-md'
+          src="https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg" alt="" style={{ width: 50, height: 50 }} />
       ),
     },
     {
@@ -127,7 +127,7 @@ function AdminProduct() {
         return <span>{record}%</span>;
       },
     },
-  
+
     {
       title: 'Tác Vụ',
       key: 'action',
@@ -139,8 +139,8 @@ function AdminProduct() {
           <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             onClick={() => handleEdit(+record.product_id)}
           />
-          <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            // onClick={() => handleEdit(record.key)}
+          <IoEyeSharp className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+          // onClick={() => handleEdit(record.key)}
           />
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
@@ -206,13 +206,12 @@ function AdminProduct() {
     });
   };
 
-   const [priceRange, setPriceRange] = useState([0, 30000000]); // Set initial range values
+  const [priceRange, setPriceRange] = useState([0, 30000000]); // Set initial range values
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChange = (value: any) => {
     setPriceRange(value);
   };
-  console.log(filteredProducts);
-  
+
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
       <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
@@ -235,17 +234,17 @@ function AdminProduct() {
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
           <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" 
-             onChange={async (e) => {
-              if (userRef.current) {
-                clearTimeout(userRef.current);
-              }
-              userRef.current = setTimeout(async () => {
-                console.log(e.target.value);
-                dispatch(getProductsAdminThunk(e.target.value));
-              }, 400);
-            }}
-            className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm sản phẩm...' />
+            <input type="text"
+              onChange={async (e) => {
+                if (userRef.current) {
+                  clearTimeout(userRef.current);
+                }
+                userRef.current = setTimeout(async () => {
+                  console.log(e.target.value);
+                  dispatch(getProductsAdminThunk(e.target.value));
+                }, 400);
+              }}
+              className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm sản phẩm...' />
             <GoSearch className='text-[18px]' />
           </div>
 

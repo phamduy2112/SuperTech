@@ -1,7 +1,7 @@
 
 
 import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
@@ -10,8 +10,50 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import AdminCommentProductEdit from './AdminCommentProductEdit';
 import AdminCommentProductAdd from './AdminCommentProductAdd';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { setCommentReducer } from '../../../../redux/comment/comment.slice';
 
 function AdminCommentProduct() {
+  const token = useAppSelector((state) => state.user.token)
+
+  const Product = useAppSelector(state => state);
+  
+
+  const commentList = useAppSelector(state => state.listComment.listComment);
+
+  const dispatch = useAppDispatch();
+
+  const socket = useAppSelector((state: any) => state.socket.socket); // Get socket from Redux store
+
+
+  useEffect(()=>{
+    
+  })
+
+
+  useEffect(() => {
+    if (socket != null) {
+      console.log("No socket", socket);
+      socket.on('new_comment', (post: any) => {
+        const commentListNew = [post, ...commentList]
+        dispatch(setCommentReducer(commentListNew))
+      });
+
+
+    } else {
+      console.log("socket", socket);
+      console.log("token", token)
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('newPost');
+      }
+    };
+
+  }, [socket, dispatch, token, commentList]);
+
+
   const [selectedCheckbox, setSelectedCheckbox] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [key, setKey] = useState(0);
@@ -21,6 +63,7 @@ function AdminCommentProduct() {
     setKey(key)
 
   };
+
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {
@@ -300,73 +343,76 @@ function AdminCommentProduct() {
   };
 
   return (
-    <div className='flex  flex-col p-12 gap-5 bg-[#f2edf3]'>
-      <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
-        <div className='flex items-center justify-between box-border p-[24px]'>
-          <span className='text-[30px] font-medium text-[#ffd700]'>Bình Luận Sản Phẩm</span>
-          <div className='flex gap-3'>
-            <Button className='p-10'>
-              <IoCloudDownloadOutline className='text-[18px]' />
-              Tải về PDF
-            </Button>
-            <AdminCommentProductAdd/>
-           
-          </div>
-        </div>
+    <>
+      <div className=' flex flex-col p-12 gap-5'>
+        <div className=' flex flex-col rounded-xl shadow-lg'>
+          <div className='flex items-center justify-between box-border p-[24px]'>
+            <span className='text-[30px] font-medium text-[#ffd700]'>Bình Luận Sản Phẩm</span>
+            <div className='flex gap-3'>
+              <Button className='p-10'>
+                <IoCloudDownloadOutline className='text-[18px]' />
+                Tải về PDF
+              </Button>
+              <AdminCommentProductAdd />
 
-        <div className='flex p-[24px] items-center justify-between gap-3'>
-          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm bình luận sản phẩm...' />
-            <GoSearch className='text-[18px]' />
+            </div>
           </div>
 
-          <Popover
-            content={<div className='flex flex-col'>
+          <div className='flex p-[24px] items-center justify-between gap-3'>
+            <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+              <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm bình luận sản phẩm...' />
+              <GoSearch className='text-[18px]' />
+            </div>
+
+            <Popover
+              content={<div className='flex flex-col'>
 
 
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Mới nhất</label>
-                <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
-              </div>
-              <div className='flex gap-2 justify-between p-[12px]'>
-                <label className='text-[14px]'>Cũ nhất</label>
-                <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
-              </div>
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Sản Phẩm Bình Luận Nhiều Nhất</label>
-                <Checkbox checked={selectedCheckbox === 'productmax'} onChange={() => setSelectedCheckbox('productmax')}></Checkbox>
-              </div>
+                <div className='flex justify-between p-[12px] w-[200px] gap-2'>
+                  <label className='text-[14px]'>Mới nhất</label>
+                  <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
+                </div>
+                <div className='flex gap-2 justify-between p-[12px]'>
+                  <label className='text-[14px]'>Cũ nhất</label>
+                  <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
+                </div>
+                <div className='flex justify-between p-[12px] w-[200px] gap-2'>
+                  <label className='text-[14px]'>Sản Phẩm Bình Luận Nhiều Nhất</label>
+                  <Checkbox checked={selectedCheckbox === 'productmax'} onChange={() => setSelectedCheckbox('productmax')}></Checkbox>
+                </div>
 
-            </div>}
-            title="Lọc"
-            trigger="click"
-            placement="bottomRight"
-          >
-            <Button className='p-10'>
-              <FiFilter className='text-[18px]' />
-              Lọc
-            </Button>
-          </Popover>
-        </div>
-
-        <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
-          <Table
-            className='flex-1'
-            rowSelection={{
-              type: 'checkbox',
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={data}
-            size='large'
-            pagination={{ pageSize: 10 }}
-          />
+              </div>}
+              title="Lọc"
+              trigger="click"
+              placement="bottomRight"
+            >
+              <Button className='p-10'>
+                <FiFilter className='text-[18px]' />
+                Lọc
+              </Button>
+            </Popover>
+          </div>
+          <div className='relative  overflow-x-auto h-[1000px] flex flex-col'>
+            <Table
+              className='flex-1 '
+              rowSelection={{
+                type: 'checkbox',
+                ...rowSelection,
+              }}
+              columns={columns}
+              dataSource={data}
+              size='large'
+              pagination={{ pageSize: 10 }}
+            />
             {
-            key != 0 ? <AdminCommentProductEdit props={key} /> : ''
-          }
+              key != 0 ? <AdminCommentProductEdit props={key} /> : ''
+            }
+          </div>
+
+
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

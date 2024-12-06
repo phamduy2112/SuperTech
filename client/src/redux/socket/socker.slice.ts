@@ -1,6 +1,6 @@
 // socket.slice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Socket } from 'socket.io-client';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Socket } from "socket.io-client";
 
 // Định nghĩa kiểu dữ liệu cho socket
 interface SocketState {
@@ -12,7 +12,7 @@ const initialState: SocketState = {
 };
 
 const socketSlice = createSlice({
-  name: 'socket',
+  name: "socket",
   initialState,
   reducers: {
     setSocket(state, action: PayloadAction<Socket | null>) {
@@ -23,4 +23,4 @@ const socketSlice = createSlice({
 
 export const { setSocket } = socketSlice.actions;
 
-export const socketReducer =socketSlice.reducer;
+export const socketReducer = socketSlice.reducer;
