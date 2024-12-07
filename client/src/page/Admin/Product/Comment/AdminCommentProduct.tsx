@@ -1,5 +1,5 @@
 
-
+import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Popover, Table } from 'antd';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
@@ -10,8 +10,18 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import AdminCommentProductEdit from './AdminCommentProductEdit';
 import AdminCommentProductAdd from './AdminCommentProductAdd';
+import { useNavigate, useParams } from "react-router-dom";
+
 
 function AdminCommentProduct() {
+
+  const { id } = useParams();
+  
+  useEffect(() => {
+    console.log('id', id);
+  }, [id]);
+
+
   const [selectedCheckbox, setSelectedCheckbox] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [key, setKey] = useState(0);
@@ -21,6 +31,7 @@ function AdminCommentProduct() {
     setKey(key)
 
   };
+
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {

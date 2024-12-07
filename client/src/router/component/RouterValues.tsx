@@ -29,7 +29,7 @@ export const Paths = {
       ProductDetail: "quan-li-san-pham-chi-tiet/:id",
       AddProduct: "quan-li-san-pham/tao-san-pham-moi",
       EditProduct: "quan-li-san-pham/sua-san-pham/:id",
-      ProductComments: "quan-li-san-pham/quan-li-binh-luan",
+      ProductComments: "quan-li-san-pham/:id/quan-li-binh-luan",
       Blogs: "quan-li-bai-viet",
       AddBlog: "quan-li-bai-viet/them-bai-viet-moi",
       EditBlog: "quan-li-bai-viet/sua-bai-viet/:id",
