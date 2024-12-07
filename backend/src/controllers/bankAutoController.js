@@ -2,67 +2,78 @@ import axios from "axios";
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
-// import { Server as SocketIOServer } from 'socket.io';
+import { io } from '../socker/socker.js';
 const models = initModels(sequelize);
 const { order, history_bank, bankauto } = models;
-// const io = new SocketIOServer(httpServer);
-const checkTransactionStatus = async (req, res) => {
-    try {
-        const response = await axios.get("https://api.sieuthicode.net/historyapimbbankv2/8ae40d79209943b0807b5a762469e4ff");
-        const { transactions } = response.data;
-        const recentTransactions = transactions.slice(0, 5);
-        let processedTransactions = [];
-        let updatePromises = [];
 
-        for (const transaction of recentTransactions) {
-            const { description, amount, transactionID } = transaction;
+// const checkTransactionStatus = async (req, res) => {
+//     try {
+//         const response = await axios.get("https://api.sieuthicode.net/historyapimbbankv2/8ae40d79209943b0807b5a762469e4ff");
+//         const { transactions } = response.data;
 
-            const existingTransaction = await history_bank.findOne({
-                where: { transactionId: transactionID }
-            });
+//         const recentTransactions = transactions.slice(0, 10);
+//         console.log("Recent Transactions: ", recentTransactions);
 
-            if (existingTransaction) {
-                // console.log(`Transaction ${transactionID} already processed.`);
-                continue;
-            }
+//         let processedTransactions = [];
+//         let updatePromises = [];
 
-            if (description.includes("supertech")) {
-                const orderIdMatch = description.match(/supertech(\d+)/);
-                if (orderIdMatch) {
-                    const orderId = orderIdMatch[1];
-                    // console.log(`Extracted order_id: ${orderId} from description: ${description}`);
+//         for (const transaction of recentTransactions) {
+//             const { description, amount, transactionID } = transaction;
+
+//             const existingTransaction = await history_bank.findOne({
+//                 where: { transactionId: transactionID }
+//             });
+
+//             if (existingTransaction) {
+//                 console.log(`Transaction ${transactionID} already processed.`);
+//                 continue;
+//             }
+
+//             if (description.includes("supertech")) {
+//                 const orderIdMatch = description.match(/supertech(\d+)/);
+//                 if (orderIdMatch) {
+//                     const orderId = orderIdMatch[1];
+//                     console.log(`Extracted order_id: ${orderId} from description: ${description}`);
         
-                    const matchedOrder = await order.findOne({
-                        where: { order_id: orderId }
-                    });
+//                     const matchedOrder = await order.findOne({
+//                         where: { order_id: orderId }
+//                     });
         
-                    if (matchedOrder) {
-                        await history_bank.create({
-                            transactionId: transactionID,
-                            description: description,
-                            orderId: orderId,
-                            amount: amount
-                        });
+//                     if (matchedOrder) {
+//                         console.log(`Thanh Toán Thành Công !:`, matchedOrder.dataValues);
+//                         await history_bank.create({
+//                             transactionId: transactionID,
+//                             description: description,
+//                             orderId: orderId,
+//                             amount: amount
+//                         });
+//                         console.log("Transaction saved to history_bank.");
+//                         processedTransactions.push({transactionID, description, amount, status: "Processed"});
+//                         updatePromises.push(order.update({ order_pay: 1 }, { where: { order_id: orderId } }));
+//                         io.emit('orderStatusUpdated', { orderId, order_pay: 1 });
+//                     } else {
+//                         console.log(`No matching order found for order_id: ${orderId}`);
+//                         processedTransactions.push({transactionID, description, amount, status: "No matching order"});
+//                     }
+//                 } else {
+//                     console.log("No valid order_id found in description.");
+//                     processedTransactions.push({transactionID, description, amount, status: "Invalid order_id"});
+//                 }
+//             } else {
+//                 console.log("Description does not include 'supertech'.");
+//                 processedTransactions.push({transactionID, description, amount, status: "Invalid description"});
+//             }
+//         }
 
-                        processedTransactions.push({transactionID, description, amount, status: "Processed"});
-                        updatePromises.push(order.update({ order_pay: 1 }, { where: { order_id: orderId } }));
-                        
-                    } else {
-                        processedTransactions.push({transactionID, description, amount, status: "No matching order"});
-                    }
-                } else {
-                    processedTransactions.push({transactionID, description, amount, status: "Invalid order_id"});
-                }
-            } else {
-                processedTransactions.push({transactionID, description, amount, status: "Invalid description"});
-            }
-        }
-        await Promise.all(updatePromises);
-        responseSend(res, processedTransactions, "5 giao dịch gần nhất đã được xử lý thành công.", 200);
-    } catch (error) {
-        responseSend(res, error.message, "Error checking transactions.", 500);
-    }
-};
+       
+
+//         await Promise.all(updatePromises);
+//         responseSend(res, processedTransactions, "5 giao dịch gần nhất đã được xử lý thành công.", 200);
+//     } catch (error) {
+//         console.error("Error checking transactions:", error);
+//         responseSend(res, error.message, "Error checking transactions.", 500);
+//     }
+// };
 
 const updateOrderPay = async (req, res) => {
     const { orderId } = req.params;
@@ -103,4 +114,4 @@ const getautobank = async (req, res) => {
         responseSend( res, "","Có lỗi xảy ra", 500)
     }
 };
-export { checkTransactionStatus, getautobank };
+export {  getautobank };

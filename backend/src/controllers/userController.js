@@ -9,6 +9,7 @@ import path from"path"
 import nodemailer from 'nodemailer';
 import { Op } from "sequelize";
 import { startOfWeek,endOfWeek } from "date-fns";
+import jwt from 'jsonwebtoken'
 
 
 
@@ -70,13 +71,15 @@ const register = async (req, res) => {
             return responseSend(res,{success:false},"Email đã tồn tại",200)
         }
         const hashedPassword=await bcrypt.hash(user_password,10)
-        await User.create({
+       const newUser= await User.create({
             user_name,
             user_email,
             user_password:hashedPassword,
             user_role:0,
             user_time
         })
+        await sendVerificationEmail(newUser.user_email, newUser.user_id);
+
         responseSend(res,{
             success: true
         },"Đăng kí thành công!",201)
@@ -89,49 +92,60 @@ const register = async (req, res) => {
 }
 const login = async (req, res) => {
   try {
-      const { email, password } = req.body;
+    const { email, password } = req.body;
 
- 
-
-      const user = await User.findOne({ where: { user_email: email.trim() } }); // Sử dụng trim() để loại bỏ khoảng trắng
-      if (!user) {
-          console.log("No user found with that email");
-          return res.status(200).json({
-              message: "Sai email hoặc mật khẩu",
-              success: false,
-          });
-      }
-
-
-      const isPasswordMatch = await bcrypt.compare(password, user.user_password);
-
-      if (!isPasswordMatch) {
-          return res.status(200).json({
-            message: "Sai email hoặc mật khẩu",
-            success: false,
-          });
-      }
-
-      const userDetail = {
-          user_id: user.user_id,
-          user_role:user.user_role
-      };
-      const token = createToken(userDetail);
-      const tokenRef = createTokenRef(userDetail);
-
-      return responseSend(res, {
-          token: token,
-          refreshToken: tokenRef,
-          success: true,
-      }, "Thành công!", 200);
-  } catch (e) {
-      console.error("Error in login:", e);
-      return res.status(500).json({
-          message: "Internal Server Error",
-          success: false,
+    // Tìm người dùng với email đã cung cấp
+    const user = await User.findOne({ where: { user_email: email.trim() } }); // Sử dụng trim() để loại bỏ khoảng trắng
+    if (!user) {
+      console.log("No user found with that email");
+      return res.status(200).json({
+        message: "Sai email hoặc mật khẩu",
+        success: false,
       });
+    }
+
+    // Kiểm tra xem email đã được xác thực chưa
+    if (!user.is_verified) {
+      await sendVerificationEmail(user.user_email, user.user_id);
+
+      return res.status(200).json({
+        message: "Vui lòng xác thực email trước khi đăng nhập.",
+        success: false,
+      });
+    }
+
+    // Kiểm tra mật khẩu
+    const isPasswordMatch = await bcrypt.compare(password, user.user_password);
+
+    if (!isPasswordMatch) {
+      
+      return res.status(200).json({
+        message: "Sai email hoặc mật khẩu",
+        success: false,
+      });
+    }
+
+    // Tạo thông tin người dùng và token
+    const userDetail = {
+      user_id: user.user_id,
+      user_role: user.user_role
+    };
+    const token = createToken(userDetail);
+    const tokenRef = createTokenRef(userDetail);
+
+    return responseSend(res, {
+      token: token,
+      refreshToken: tokenRef,
+      success: true,
+    }, "Thành công!", 200);
+  } catch (e) {
+    console.error("Error in login:", e);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
   }
-}
+};
 const resetToken = async (req, res) => {
     try {
         let {token}=req.body;
@@ -176,6 +190,7 @@ const resetToken = async (req, res) => {
     }
     
 };
+
 
 
 
@@ -262,21 +277,24 @@ const updateUser = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-const deleteEmployee=async(req,res)=>{
-  try{
+const deleteEmployee = async (req, res) => {
+  console.log(req.params.id);
 
+  try {
     let deleted = await User.destroy({
-      where: { user_id: req.params.id }
-  });
-  if (deleted) {
-      responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
-  } else {
+      where: { user_id: req.params.id },
+    });
+    if (deleted) {
+      let data = await User.findAll();
+      responseSend(res, data, "Thành công!", 200);
+    } else {
       responseSend(res, "", "không tìm thấy !", 404);
+    }
+  } catch (e) {
+    console.error("Error deleting user:", e);
+    responseSend(res, "", "Có loii xảy ra!", 500);
   }
-  }catch(e){
-
-  }
-}
+};
 const updateImage=async(req,res)=>{
     try{
         const user_id=req.id;
@@ -517,6 +535,165 @@ function generateRandomString(length) {
       return responseSend(res, "", "Internal server error", 500);
     }
   };
+
+  // 
+
+const sendVerificationEmail = async (userEmail, userId) => {
+  try {
+    // Tạo token xác thực với userId
+    const token = jwt.sign({ userId }, "BI_MAT", { expiresIn: '1h' }); // Token có thời hạn 1 giờ
+
+    // Tạo URL xác thực
+    const verificationUrl = `http://localhost:8080/verify-email?token=${token}`;
+
+    // Nội dung email
+    const htmlContent = `
+      <h1>Xác thực tài khoản của bạn</h1>
+      <p>Chào bạn,</p>
+      <p>Vui lòng bấm vào liên kết dưới đây để xác thực tài khoản của bạn:</p>
+      <a href="${verificationUrl}">Xác thực tài khoản</a>
+    `;
+
+    // Gửi email
+    const emailResult = await sendMail(userEmail, "Xác thực tài khoản", "Vui lòng xác thực tài khoản của bạn", htmlContent);
+    
+    if (emailResult) {
+      console.log('Email xác thực đã được gửi');
+    }
+  } catch (error) {
+    console.error("Lỗi khi gửi email xác thực:", error);
+  }
+};
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query; // Lấy token từ query params
+
+    // Xác minh token
+    jwt.verify(token, "BI_MAT", async (err, decoded) => {
+      if (err) {
+        return res.status(400).send("Token xác thực không hợp lệ hoặc đã hết hạn.");
+      }
+
+      // Nếu token hợp lệ, bạn có thể cập nhật trạng thái xác thực của người dùng trong DB
+      const { userId } = decoded;
+      console.log(userId);
+      
+      // Ví dụ: cập nhật userIsVerified thành true
+      await models.user.update({ is_verified: true }, { where: { user_id: userId } });
+
+      res.status(200).send("Xác thực thành công! Bạn có thể đăng nhập.");
+    });
+  } catch (error) {
+    console.error("Lỗi xác thực email:", error);
+    res.status(500).send("Có lỗi xảy ra khi xác thực email.");
+  }
+};
+const createUser = async (req, res) => {
+  try {
+    const {
+      user_name,
+      user_email,
+      user_password,
+      user_address,
+      user_phone,
+      user_role,
+      level,
+      user_gender,
+      user_birth,
+      user_time,
+      user_image,
+    } = req.body;
+
+    const user = await User.findOne({ where: { user_email } });
+    if (user) {
+      return responseSend(res, { success: false }, "Email đã tồn tại", 201);
+    }
+    const hashedPassword = await bcrypt.hash(user_password, 10);
+    await User.create({
+      user_name,
+      user_email,
+      user_password: hashedPassword,
+      user_address,
+      user_phone,
+      user_role,
+      level,
+      user_gender,
+      user_birth,
+      user_time,
+      user_image,
+    });
+    responseSend(
+      res,
+      {
+        success: true,
+      },
+      "Thêm thành thành công!",
+      200
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+const Checkuserdetailadmin = async (req, res) => {
+  const user_id = req.params.id;
+
+  const user = await User.findByPk(user_id, {
+    attributes: { exclude: ["user_password"] },
+  });
+  console.log("user", user);
+
+  const token = createToken(user);
+  const tokenRef = createTokenRef(user);
+
+  return responseSend(
+    res,
+    {
+      token: token,
+      refreshToken: tokenRef,
+      success: true,
+    },
+    "Thành công!",
+    200
+  );
+};
+const UpdateUsersAdmin = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+
+    const user = await User.findByPk(user_id);
+    req.body;
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+    Object.entries(req.body).forEach(([key, value]) => {
+      user[key] = value;
+    });
+    console.log(user);
+
+    await user.save();
+    const userDB = await User.findByPk(user_id);
+    console.log(userDB);
+
+    const token = createToken(userDB);
+    const tokenRef = createTokenRef(userDB);
+    return responseSend(
+      res,
+      {
+        token: token,
+        refreshToken: tokenRef,
+        success: true,
+      },
+      "Cập Nhật Thành Công!",
+      200
+    );
+  } catch (error) {
+    console.error("Error updating user:", error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
+  }
+};
 export {
     getUser,
     register,
@@ -533,6 +710,10 @@ export {
     forgetCheckCode,
     resetPasswordNoToken,
     deleteEmployee,
-    getNewCustomersThisWeek
+    getNewCustomersThisWeek,
+    verifyEmail,
+    createUser,
+    Checkuserdetailadmin,
+    UpdateUsersAdmin
 };
 

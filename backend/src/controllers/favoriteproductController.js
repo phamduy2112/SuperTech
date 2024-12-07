@@ -7,24 +7,56 @@ let favoriteproduct = models.favorite_product;
 
 const getfavoriteproduct = async (req, res) => {
     try {
-        const user_id=req.id;
+        const user_id = req.id;
 
         let data = await favoriteproduct.findAll({
-            where:{
+            where: {
                 user_id
             },
-            include:[
+            include: [
                 {
-                    model:models.products,
-                    as:"product",
+                    model: models.products,
+                    as: "product",
+                    include: [
+                        {
+                            model: models.comment_product,
+                            as: 'comment_products',
+                            include: [
+                                {
+                                    model: models.user,
+                                    as: 'user',
+                                    attributes: { exclude: ['user_password', 'user_phone'] }
+                                }
+                            ]
+                        },
+                        {
+                            model: models.infor_product,
+                            as: 'infor_product_infor_product'
+                        },
+                        {
+                            model: models.product_colors,
+                            as: 'product_colors',
+                            include: [
+                                {
+                                    model: models.image_product,
+                                    as: 'image'
+                                },
+                                {
+                                    model: models.product_storage,
+                                    as: 'product_storages',
+                                    required: false
+                                },
+                            ]
+                        },
+                    ]
                 }
             ]
         });
+
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
         console.log(error);
-        
     }
 };
 

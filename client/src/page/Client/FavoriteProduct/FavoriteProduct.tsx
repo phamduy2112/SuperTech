@@ -2,14 +2,17 @@ import { Breadcrumb, Checkbox, Form, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { MdFilterAlt } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import ProductItem from '../../../components/product/ProductItem';
+import { useDispatch } from 'react-redux';
 import { getFavouriteProductThunk } from '../../../redux/favourite/Favourite.slice';
-import useFavouriteProducts from '../../../hooks/FavouriteProduct';
 
 function FavoriteProduct() {
-  const { listFavourite } = useFavouriteProducts();
-console.log(listFavourite);
 
-
+  const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(getFavouriteProductThunk())
+  },[dispatch])
   return (
     <div className='w-[80%] m-auto'>
       <Breadcrumb
@@ -59,9 +62,9 @@ console.log(listFavourite);
         </div>
       </div>
 
-      {/* <div className='grid grid-cols-6 gap-y-3'>
-        {favouriteProduct.length > 0 ? (
-          favouriteProduct.map((item) => {
+      <div className='grid grid-cols-6 gap-y-3'>
+        {listProductFavourites.length > 0 ? (
+          listProductFavourites.map((item) => {
             console.log(item);
             return <ProductItem key={item.product_id} product={item.product} />;
           })
@@ -85,7 +88,7 @@ console.log(listFavourite);
           </button>
         </div>
         )}
-      </div> */}
+      </div>
     </div>
   );
 }

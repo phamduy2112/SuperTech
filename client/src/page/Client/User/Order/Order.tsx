@@ -1,4 +1,4 @@
-import { Space, Table, Tag, Tooltip } from 'antd';
+import { Button, Space, Table, Tag, Tooltip } from 'antd';
 import Search from 'antd/es/input/Search'
 import React, { useEffect, useRef, useState } from 'react'
 import './css/TableEdit.css'
@@ -87,20 +87,20 @@ function Order() {
       render: (text, record) => {
         return (
           <div className='flex gap-[.5rem]'>
-          <NavLink to={`/don-hang-chi-tiet-cua-ban/${record.order_id}`} className="py-[0.2rem] px-[.5rem] border text-[1.3rem]">Xem</NavLink>
-          {record.order_status<=2 ?
+<Button 
+  type="primary"
+
+>
+  <NavLink to={`/don-hang-chi-tiet-cua-ban/${record.order_id}`}>
+    Xem
+  </NavLink>
+</Button>          {record.order_status<=2 ?
           (     
              <CancelOrderModal orderId={record.order_id} />
              
           ) 
           : null}
-            {
-              record.order_status==4 ?(
-                <button className='py-[0.2rem] px-[.5rem] border text-[1.3rem]'>
-                  Bình luận ngay
-                </button>
-              ) :null
-            }
+            
       
         </div>
         )
@@ -118,19 +118,7 @@ function Order() {
       </h3>
       <div className='py-[1rem] flex gap-[1rem]'>
       <div className='flex gap-[1.5rem]'> {/* Adjust gap and layout as needed */}
-      {/* {colorText.map(({ color, text },index) => (
-        <button key={text}
-        onClick={() => {
-            console.log(`Button clicked: ${text} with index: ${index}`); // Debugging
-            setOrderStatus(index); // Update the order status
-          }}
-        className='flex text-[1.5rem] items-center gap-2'> 
-          <div className={`bg-[${color}] w-6 h-6 rounded-full`}></div>
-          <div className={`text-[${color}] font-semibold`}>
-            {text}
-          </div>
-        </button>
-      ))} */}
+
        <button 
         onClick={() => {
             setOrderStatus(0); // Update the order status

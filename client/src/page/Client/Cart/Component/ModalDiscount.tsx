@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { RiCoupon3Fill } from 'react-icons/ri';
 import { getDiscountAll } from '../../../../service/vourcher/voucher.service';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { setDiscoutCart, setDiscoutId } from '../../../../redux/cart/cart.slice';
+import { setDiscoutCart, setDiscoutId } from '../../../../redux/cart/voucher.slice';
 
 function ModalDiscount() {
   const [isModalOpen, setIsModalOpen] = useState(false);

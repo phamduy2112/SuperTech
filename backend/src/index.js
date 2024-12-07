@@ -1,6 +1,4 @@
 import express, { urlencoded } from 'express';
-import schedule from 'node-schedule';
-import cron from "node-cron";
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import product_colorsRouter from './routers/product_colorsRouter.js';
@@ -19,18 +17,16 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
 import cookieParser from 'cookie-parser';
-import path from "path"
-import http from 'http';
-import { Server } from 'socket.io';
+import cron from 'node-cron';
 import cors from 'cors';
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
-import product_storageRouter from './routers/product_storage.js';
-import autobankrouter from './routers/bankAutoRouter.js';
+import { app, server } from './socker/socker.js';
 import settingRouter from './routers/settingRouter.js';
-import { checkTransactionStatus } from './controllers/bankAutoController.js';
-const app = express();
+import autobankrouter from './routers/bankAutoRouter.js';
+import transactionsrouter from './routers/transactionRouter.js';
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -41,24 +37,19 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
-
-// cron.schedule("*/30 * * * * *", async () => {
-//   console.log("Chạy auto-update trạng thái đơn hàng...");
-//   const results = await processTransactions();
-//   console.log(results);
+// cron.schedule('* * * * *', () => {
+//   console.log('Bất Đầu Chạy Check Lịch Sử Giao Dịch Api Từ Phía Ngân Hàng!!!');
+//   transactionsrouter();
 // });
 
-// cron.schedule("*/1 * * * *", async () => {
-//   console.log("Chạy auto-update trạng thái đơn hàng...");
-//   await checkTransactionStatus();
-// });
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
 });
 
 app.use(settingRouter);
-app.use(product_storageRouter);
+app.use(transactionsrouter);
+app.use(product_colorsRouter);
 app.use(autobankrouter);
 app.use(userRouter);
 app.use(uploadRouter)
@@ -81,4 +72,6 @@ app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
 app.use (uploadImgUserRouter)
-app.listen(8080);
+server.listen(8080, () => {
+  console.log('Server running on http://localhost:8080');
+});

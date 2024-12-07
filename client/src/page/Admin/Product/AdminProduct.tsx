@@ -1,98 +1,74 @@
-import { Button, Drawer, Select, Table } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2';
-import { BiSolidEdit } from 'react-icons/bi';
-import { CiBookmarkRemove } from 'react-icons/ci';
-import { FiFilter } from 'react-icons/fi';
-import { GoSearch } from 'react-icons/go';
-import { IoCloudDownloadOutline, IoEyeSharp } from 'react-icons/io5';
-import { TbPlaylistAdd } from 'react-icons/tb';
-import { Link, useNavigate } from 'react-router-dom';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { deleteProductAdminThunk, getProductsAdminThunk } from '../../../redux/product/product.slice';
-import { getCatelogryThunk } from '../../../redux/catelogry/catelogry.slice';
-import AdminFilterProduct from './Component/AdminFilterProduct';
-import { formatCurrencyVND } from '../../../utils';
-function AdminProduct() {
-  const navigate = useNavigate();
-  const listProductColor=useAppSelector(state=>state.product.productColors)
+import { Button, Checkbox, Popover } from "antd";
+import { Table } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { deleteCategoryThunk, getCatelogryThunk } from "../../../redux/catelogry/catelogry.slice";
+import { handleExport, handleExportPdf } from "../../../components/exportFile/exportFile";
+import { FiFilter } from "react-icons/fi";
+import { GoSearch } from "react-icons/go";
+import { IoCloudDownloadOutline, IoEyeSharp } from "react-icons/io5";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+import toast from "react-hot-toast";
+import { CiBookmarkRemove } from "react-icons/ci";
+import { deleteProductAdminThunk, getProductsAdminThunk } from "../../../redux/product/product.slice";
+import { formatCurrencyVND } from "../../../utils";
+import { BiSolidEdit } from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
+import { TbPlaylistAdd } from "react-icons/tb";
+import AdminFilterProduct from "./Component/AdminFilterProduct";
+import { PathAdmin } from "../../../router/component/RouterValues";
+import AdminAddProduct from "./Component/AdminAddProduct";
+
+// Define the Category interface
+interface Category {
+  category_id: number; // Assuming this is the unique identifier for each category
+  category_name: string;
+  category_date_task: string;
+  // other fields you may have...
+}
+
+// Define a CategoryWithKey interface that adds the 'key' property
+interface CategoryWithKey extends Category {
+  key: number; // Add key property for use with Ant Design's Table component
+}
+
+
+
+// AdminProduct component
+const AdminProduct: React.FC = () => {
+  const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
+  const dataCategories = useAppSelector(state => state.category.listCatelories as Category[]);
+  const DataCategory = [
+    { label: 'Điện thoại', value: 1 },
+    { label: 'Laptop', value: 2 },
+    { label: 'Table', value: 3 },
+  ];
+  const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
   const handleEdit = (key: any) => {
     
     navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
   };
-
-  const [filteredProducts, setFilteredProducts] = useState([]); // Dữ liệu đã lọc
-
-  // Hàm để xử lý sản phẩm đã lọc từ component con
-  const handleFilterProducts = (filteredData) => {
-    setFilteredProducts(filteredData);
+  const getCategoryNameById = (id) => {
+    const category = dataCategories?.find((cat) => cat.category_id == id);
+    return category ? category.category_name : 'Unknown'; // 'Unknown' là giá trị mặc định nếu không tìm thấy id
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDelete = (key: any) => {
-    Swal.fire({
-      icon: 'warning',
-      showDenyButton: true,
-      title: `Bạn Chọn Sản Phẩm Có ID ${key}`,
-      text: `Bạn có chắc muốn xóa?`,
-      confirmButtonText: 'Xóa',
-      denyButtonText: 'Hủy',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Đã Xóa',
-          text: `Bạn đã xóa sản phẩm với ID ${key}`,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Đã Hủy',
-          text: 'Bạn đã hủy thao tác xóa.',
-        });
-      }
-    });
-  };
-  const [products, setProducts] = useState([]); // Dữ liệu gốc của sản phẩm
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSelectChange = (selectedRowKeys: any) => {
-    if (selectedRowKeys.length > 0) {
-      showModal(selectedRowKeys.length);
-    }
-  };
-  const dispatch=useAppDispatch();
-  const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
-  const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
   const handleDeteleProduct=async (id:number)=>{
     dispatch(deleteProductAdminThunk(id))
   }
-  useEffect(()=>{
-    dispatch(getProductsAdminThunk(''));
-    dispatch(getCatelogryThunk(""));
-
-  },[dispatch])
-
-  useEffect(()=>{
-    setProducts(listProducts);
-    setFilteredProducts(listProducts); // Mặc định hiển thị tất cả sản phẩm
-  },[listProducts])
   const handleEye=(id:string|number)=>{
     navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
   }
-  const getCategoryNameById = (id) => {
-    const category = listCatelogry?.find((cat) => cat.category_id == id);
-    return category ? category.category_name : 'Unknown'; // 'Unknown' là giá trị mặc định nếu không tìm thấy id
-  };
+  const [selectedCheckbox, setSelectedCheckbox] = useState(''); // Lọc theo ngày
+
+  // Column definition for the table
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'product_id',
-      key: 'product_id',
+      title: 'STT',
+      render: (_, __, index: number) => index + 1,
+      key: 'stt',
     },
     {
       title: 'Tên Sản Phẩm',
@@ -161,125 +137,104 @@ function AdminProduct() {
     },
   ];
 
+  useEffect(() => {
+    dispatch(getProductsAdminThunk(''));
+    dispatch(getCatelogryThunk(''));
+  }, [dispatch]);
 
-console.log(listProducts);
+  // Add a state for row selection
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const start = () => {
+    setLoading(true);
+    // Simulate AJAX request after completing
+    setTimeout(() => {
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 1000);
+  };
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
 
   const rowSelection = {
+    selectedRowKeys,
     onChange: onSelectChange,
   };
+
+  const hasSelected = selectedRowKeys.length > 0;
+
+  // Map over dataCategories and add the 'key' property with conditional check
+  const updatedDataProducts = (listProducts || []).map((item) => ({
+    ...item, // Spread the item (make sure it's an object)
+    key: item.product_id, // Add key from the category_id
+  }));
+ // Sắp xếp lại danh mục theo "Ngày Mới Nhất" hoặc "Cũ Nhất"
+
+const handleDelete = (key: any) => {
+  dispatch(deleteCategoryThunk(key));
+  toast.success("Xóa loại thành công");
+};
+
   const userRef = useRef<any>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const showModal = (count: any) => {
-    Swal.fire({
-      icon: "info",
-      title: `Bạn Vừa Chọn ${count} Sản Phẩm`,
-      text: 'Bạn có muốn tiếp tục?',
-      showDenyButton: true,
-      denyButtonText: 'Xóa',
-      confirmButtonText: 'Sửa',
-      customClass: {
-        confirmButton: 'bg-green-700 text-white',
-        denyButton: 'bg-red-500 text-white',
-      },
-      backdrop: true,
-      allowOutsideClick: false,
-    }).then((result) => {
-      if (result.isDenied) {
-        Swal.fire({
-          icon: "warning",
-          title: `Bạn có chắc chắn muốn xóa ${count} Sản Phẩm này?`,
-          showCancelButton: true,
-          confirmButtonText: 'Xóa',
-          cancelButtonText: 'Hủy',
-          customClass: {
-            confirmButton: 'bg-red-500 text-white',
-            cancelButton: 'bg-gray-500 text-white',
-          },
-        }).then((kq) => {
-          if (kq.isConfirmed) {
-            Swal.fire('Đã xóa!', '', 'success');
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Đã Hủy',
-              text: 'Bạn đã hủy thao tác xóa.',
-            });
-          }
-        });
-      } else if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'info',
-          text: `Đã mở trang sửa cho ${count} Sản Phẩm`,
-          confirmButtonText: 'OK',
-        });
-      }
-    });
-  };
-
-   const [priceRange, setPriceRange] = useState([0, 30000000]); // Set initial range values
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onChange = (value: any) => {
-    setPriceRange(value);
-  };
-  console.log(filteredProducts);
-  
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
-      <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
-        <div className='flex items-center justify-between box-border p-[24px]'>
-          <span className='text-[30px] font-medium text-[#ffd700]'>Sản Phẩm</span>
-          <div className='flex gap-3'>
-            <Button className='p-10'>
-              <IoCloudDownloadOutline className='text-[18px]' />
-              Tải về PDF
+    <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
+      <div className='flex items-center justify-between box-border p-[24px]'>
+        <span className='text-[30px] font-medium text-[#ffd700]'>Sản Phẩm</span>
+        <div className='flex gap-3'>
+          <Button className='p-10'>
+            <IoCloudDownloadOutline className='text-[18px]' />
+            Tải về PDF
+          </Button>
+          {/* <Link to={`${PathAdmin.PathsAdmin}/${PathAdmin.AddProduct}`}>
+            <Button className='p-10' type="primary">
+              <TbPlaylistAdd className='text-[18px]' />
+              Thêm Sản Phẩm Mới
             </Button>
-            <Link to={`/admin/quản-lí-sản-phẩm/tạo-sản-phẩm-mới`}>
-              <Button className='p-10' type="primary">
-                <TbPlaylistAdd className='text-[18px]' />
-                Thêm Sản Phẩm Mới
-              </Button>
-            </Link>
+          </Link> */}
+          <AdminAddProduct/>
 
-          </div>
-        </div>
-
-        <div className='flex p-[24px] items-center justify-between gap-3'>
-          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" 
-             onChange={async (e) => {
-              if (userRef.current) {
-                clearTimeout(userRef.current);
-              }
-              userRef.current = setTimeout(async () => {
-                console.log(e.target.value);
-                dispatch(getProductsAdminThunk(e.target.value));
-              }, 400);
-            }}
-            className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm sản phẩm...' />
-            <GoSearch className='text-[18px]' />
-          </div>
-
-          <AdminFilterProduct product={listProducts} onFilter={handleFilterProducts} />
-
-        </div>
-
-        <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
-          <Table
-            className='flex-1'
-            rowSelection={{
-              type: 'checkbox',
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={filteredProducts}
-            size='large'
-            pagination={{ pageSize: 10 }}
-          />
         </div>
       </div>
+
+      <div className='flex p-[24px] items-center justify-between gap-3'>
+        <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+          <input type="text" 
+           onChange={async (e) => {
+            if (userRef.current) {
+              clearTimeout(userRef.current);
+            }
+            userRef.current = setTimeout(async () => {
+              console.log(e.target.value);
+              dispatch(getProductsAdminThunk(e.target.value));
+            }, 400);
+          }}
+          className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm sản phẩm...' />
+          <GoSearch className='text-[18px]' />
+        </div>
+
+        {/* <AdminFilterProduct product={listProducts} onFilter={handleFilterProducts} /> */}
+
+      </div>
+
+      <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+        <Table
+          className='flex-1'
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={updatedDataProducts}
+          size='large'
+          pagination={{ pageSize: 10 }}
+        />
+      </div>
     </div>
+  </div>
   );
-}
+};
 
 export default AdminProduct;

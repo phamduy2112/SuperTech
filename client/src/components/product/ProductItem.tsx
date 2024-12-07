@@ -16,15 +16,14 @@ import { IMG_BACKEND } from "../../constants";
 import { NavLink } from "react-router-dom";
 import { Tooltip } from "antd";
 import { CiHeart } from "react-icons/ci";
-import { getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
-import useFavouriteProducts from "../../hooks/FavouriteProduct";
+import { createFavouriteProductThunk, getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
 function ProductItem(props:any) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
   const token: any = useAppSelector(state => state.user.token);
-  // const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
-
+  const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
+  const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
   
   // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
   const totalStars = props?.product?.comment_products?.reduce((total: number, item: any) => {
@@ -42,14 +41,17 @@ function ProductItem(props:any) {
 //     }
 // }, [dispatch, listFavourite.length]);
 
-
+useEffect(()=>{
+  dispatch(getFavouriteProductThunk())
+},[dispatch])
 
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
     const productToCart = {
       ...product,
       selectedColor: props.product?.product_colors[0],
-      selectedStorage: props.product?.product_colors[0]?.product_storages[0]
+      selectedStorage: props.product?.product_colors[0]?.product_storages[0],
+      selectedQuantity: props.product?.product_qualities[0]?.quality_product
     };
     dispatch(addItemToCart(productToCart));
 
@@ -61,27 +63,27 @@ function ProductItem(props:any) {
   //   opacity: isvisibleProduct ? 1 : 0,
   // });
 
-  // const handleFavouriteProduct = async (id: number) => {
-  //   try {
-  //     const product = { product_id: id };
+  const handleFavouriteProduct = async (id: number) => {
+    try {
+      const product = { product_id: id };
 
-  //     if (isFavourited) {
-  //       // Nếu sản phẩm đã được yêu thích, hủy yêu thích
-  //       await dispatch(createFavouriteProductThunk(product))
-  //       setIsFavourited(false); // Cập nhật trạng thái yêu thích
-  //       toast.success('Đã bỏ yêu thích sản phẩm!');
-  //     } else {
-  //       // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
-  //       await dispatch(createFavouriteProductThunk(product))
-  //       setIsFavourited(true); // Cập nhật trạng thái yêu thích
-  //       toast.success('Đã thêm vào yêu thích!');
-  //     }
+      if (isFavourited) {
+        // Nếu sản phẩm đã được yêu thích, hủy yêu thích
+        await dispatch(createFavouriteProductThunk(product))
+        setIsFavourited(false); // Cập nhật trạng thái yêu thích
+        toast.success('Đã bỏ yêu thích sản phẩm!');
+      } else {
+        // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
+        await dispatch(createFavouriteProductThunk(product))
+        setIsFavourited(true); // Cập nhật trạng thái yêu thích
+        toast.success('Đã thêm vào yêu thích!');
+      }
 
       
-  //   } catch (error) {
-  //     toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
-  //   }
-  // };
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
+    }
+  };
 console.log(props);
 
   return (
@@ -90,11 +92,11 @@ console.log(props);
         {/* Icon yêu thích */}
         <div className="bg-black p-2 text-[1.5rem] rounded-full text-white cursor-pointer hover:bg-gray-800">
           <Tooltip title="Thêm yêu thích">
-            {/* {
-              Array.isArray(favouriteProduct) && favouriteProduct.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
+            {
+              Array.isArray(listProductFavourites) && listProductFavourites.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
                 ? <FaHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
                 : <CiHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
-            } */}
+            }
           </Tooltip>
         </div>
       </div>
@@ -152,10 +154,19 @@ console.log(props);
               <IoIosStar className="text-xl" />
               <span className="text-gray-400">({props?.product?.comment_products?.length})</span>
             </div>
-            <div className="flex items-center text-green-600 font-semibold gap-1">
+            {props.product?.product_qualities?.[0]?.quality_product > 10 ? (
+
+<div className="flex items-center text-green-600 font-semibold gap-1">
+<FaTruck />
+<span>Còn hàng</span>
+</div>
+            ) : (
+              <div className="flex items-center text-yellow-500 font-semibold gap-1">
               <FaTruck />
-              <span>Còn hàng</span>
+              <span>Sắp hết hàng</span>
             </div>
+            )}
+         
           </div>
         </NavLink>
 

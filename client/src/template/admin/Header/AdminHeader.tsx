@@ -53,7 +53,7 @@ function AdminHeader() {
           >
             <List.Item.Meta
               title={<span className="font-medium text-[14px]">{item.title || 'Thông báo'}</span>}
-              description={<span className="text-[12px] text-gray-500">{item.message || 'Nội dung thông báo'}</span>}
+              description={<span className="text-[12px] text-gray-500">{item.description || 'Nội dung thông báo'}</span>}
             />
           </List.Item>
         )}

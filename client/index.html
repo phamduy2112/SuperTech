@@ -18,6 +18,20 @@
   <script type="module" src="/src/main.tsx"></script>
 </body>
 <script>
+  fetch('https://dichvumang86.cloud/setting/2')
+    .then(response => response.json())
+    .then(data => {
+      const metaDescription = document.querySelector("meta[name='description']");
+      if (!metaDescription) {
+        const newMetaDescription = document.createElement('meta');
+        newMetaDescription.name = 'description';
+        newMetaDescription.content = data.content.value;
+        document.head.appendChild(newMetaDescription);
+      } else {
+        metaDescription.content = data.content.value;
+      }
+    })
+    .catch(error => console.error('Failed to fetch description:', error));
   // note lại để mốt còn bảo trì fetch api theo id vì ở đây chỉ hiển thị mỗi id này, dùng js thuần để call api và show vào document.title
   fetch('https://dichvumang86.cloud/setting/1')
     .then(response => response.json())

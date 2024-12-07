@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { FiMinus } from 'react-icons/fi';
 import { GoPlus } from 'react-icons/go';
 import { IoMdClose } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../../redux/hooks';
 import { decreaseItemQuantity, inCreaseItemQuantity, removeItemFromCart } from '../../../../../../redux/cart/cart.slice';
 import { formatCurrencyVND, truncateText } from '../../../../../../utils';
 import img from '../../../../../../assets/pngwing.com 1.png'
 import toast from 'react-hot-toast';
+import { Paths } from '../../../../../../router/component/RouterValues';
 interface TaskCart {
   onClose: () => void;
 }
@@ -17,9 +18,9 @@ function TaskCart({ onClose }: TaskCart) {
   const dispatch = useAppDispatch();
 
   const listCart = useAppSelector((state) => state.cart.listCart);
-  console.log(listCart);
   
   const totalItem = useAppSelector((state) => state.cart.totalItems);
+  const location = useLocation();  // Lấy thông tin location (địa chỉ URL hiện tại)
 
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
@@ -37,6 +38,7 @@ function TaskCart({ onClose }: TaskCart) {
     dispatch(inCreaseItemQuantity({ product_id }));
 
   };
+ 
   const totalPrice = listCart.reduce((total: number, item) => {
     // Tính giá sản phẩm ban đầu cộng thêm giá storage
     const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
@@ -132,7 +134,7 @@ function TaskCart({ onClose }: TaskCart) {
              </div>
         
              <div className='w-[100%] bg-[#7500CF] py-[1rem] px-[1rem] cursor-pointer'>
-               <div className='text-[1.5rem] text-white text-center' onClick={() => navigate('/giỏ-hàng')}>
+               <div className='text-[1.5rem] text-white text-center' onClick={() => navigate(`${Paths.Cart}`)}>
                  Xem Giỏ Hàng
                </div>
              </div>

@@ -7,20 +7,61 @@ let Products = models.products;
 const searchProducts = async (req, res) => {
     try {
         const { tukhoa } = req.query;
+
+        // Kiểm tra từ khóa hợp lệ
+        if (!tukhoa || tukhoa.trim() === "") {
+            return responseSend(res, "", "Từ khóa tìm kiếm không hợp lệ!", 400);
+        }
+
         let products = await Products.findAll({
             where: sequelize.where(
                 sequelize.fn('LOWER', sequelize.fn('TRIM', sequelize.col('product_name'))),
                 'LIKE',
                 '%' + tukhoa.trim().toLowerCase() + '%'
-            )
+            ),
+            include: [
+                {
+                    model: models.comment_product,
+                    as: 'comment_products',
+                    include: [
+                        {
+                            model: models.user,
+                            as: 'user',
+                            attributes: { exclude: ['user_password', 'user_phone'] }
+                        }
+                    ]
+                },
+                {
+                    model: models.infor_product,
+                    as: 'infor_product_infor_product'
+                },
+                {
+                    model: models.product_colors,
+                    as: 'product_colors',
+                    include: [
+                        {
+                            model: models.image_product,
+                            as: 'image'
+                        },
+                        {
+                            model: models.product_storage,
+                            as: 'product_storages',
+                            required: false
+                        }
+                    ]
+                }
+            ]
         });
+
         if (products.length > 0) {
             responseSend(res, products, "Thành công!", 200);
         } else {
-            responseSend(res, "", "không tồn tại !", 404);
+            responseSend(res, "", "Không tồn tại sản phẩm nào!", 404);
         }
     } catch (error) {
+        console.error(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+
 export { searchProducts };

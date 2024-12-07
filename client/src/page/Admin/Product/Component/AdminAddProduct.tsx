@@ -1,46 +1,36 @@
-import { GetProp, Select, Upload, UploadFile } from 'antd';
+import { Modal, Select, Upload, UploadFile } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import ModalAdminProduct from './ModalAdminProduct';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
-import { createInforProductAdminThunk, createProductAdminThunk, deleteProductAdminThunk } from '../../../../redux/product/product.slice';
+import { createProductAdminThunk } from '../../../../redux/product/product.slice';
 import { IoMdClose } from 'react-icons/io';
 import { getImageProductByImage } from '../../../../service/product/product.service';
 import { IMG_BACKEND } from '../../../../constants';
-
-
+import ModalAdminProduct from './ModalAdminProduct';
+import FormikProductInforForm from './AdminInforProduct';
 
 function AdminAddProduct() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
-  const listProductColor=useAppSelector(state=>state.product.productColors)
-  const [image,setImage]=useState("");
-  
-  const handleCategoryChange = (category_dad) => {
-    setSelectedCategory(category_dad);
-   
-    
-  };
-  const dispatch=useAppDispatch();
+  const [image, setImage] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);  // State for modal visibility
+  const listCatelogry = useAppSelector(state => state.category.listCatelories);
+  const listProductColor = useAppSelector(state => state.product.productColors);
 
-  useEffect(()=>{
-   
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
     dispatch(getCatelogryThunk(""));
+  }, [dispatch]);
 
-  },[dispatch])
   const formattedCategories = listCatelogry?.map(category => ({
-    value: category.category_id,   // Make sure category.id is available
-    label: category.category_name, // Make sure category.name is available
-    category_dad:category.category_dad
+    value: category.category_id,
+    label: category.category_name,
+    category_dad: category.category_dad
   }));
-
-  
-
   const Datahe = [
     {
       value: '1',
@@ -56,46 +46,6 @@ function AdminAddProduct() {
     },
   ];
 
-  
-
-
- // Initial values của form
-const initialValues = {
-  category: '',
-  price: '',
-  discount:0,
-  product_name:"",
-  hot:0,
-  quantity:0,
-  infor_screen:"",
-  infor_system:"",
-  infor_cpu:"",
-  infor_ram:"",
-  moTa:"",
-};
-  const Datagiamgia = [
-    {
-      value: 0,
-      label: '0%',
-    },
-    {
-      value: 10,
-      label: '10%',
-    },
-   
-    {
-      value: 5,
-      label: '5%',
-    },
-    
-
-  ]
-  const validationSchema = Yup.object({
-    category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
-    price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
-    // Thêm các validation cho các trường khác nếu cần
-  });
-  const [value, setValue] = useState('')
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -116,64 +66,103 @@ const initialValues = {
 
     ['clean']
   ];
-  useEffect(()=>{
-    const fetchApi=async()=>{
-      const responive=await getImageProductByImage(listProductColor[0].image_id)
-      setImage(responive.data.content.image_one)
-    } 
-    fetchApi()
-  },[])
+  const initialValues = {
+    category: '',
+    price: '',
+    discount: 0,
+    product_name: "",
+    hot: 0,
+    quantity: 0,
+    infor_screen: "",
+    infor_system: "",
+    infor_cpu: "",
+    infor_ram: "",
+    moTa: "",
+  };
+  const Datagiamgia = [
+    {
+      value: 0,
+      label: '0%',
+    },
+    {
+      value: 10,
+      label: '10%',
+    },
+   
+    {
+      value: 5,
+      label: '5%',
+    },
+    
 
+  ]
+  const validationSchema = Yup.object({
+    category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
+    price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
+  });
+
+  const handleCategoryChange = (category_dad) => {
+    setSelectedCategory(category_dad);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalVisible(true);  // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);  // Close the modal
+  };
+
+  const handleSubmit = (values) => {
+    const dataInforProduct = {
+      infor_screen: values.infor_screen,
+      infor_system: values.infor_system,
+      infor_cpu: values.infor_cpu,
+      infor_ram: values.infor_ram,
+      infor_more: values.moTa,
+      product_name: values.product_name,
+      product_price: values.price,
+      product_hot: values.hot,
+      product_quantity: values.quantity,
+      product_discount: values.discount,
+      category_id: values.category,
+      listProductColor: listProductColor,
+    };
+    dispatch(createProductAdminThunk(dataInforProduct));
+  };
 
   return (
-    <div className="flex-1 bg-[#f2edf3] grid xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]">
-    <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
-      <span className="text-[20px] font-semibold">Tạo Sản Phẩm Mới</span>
-      <Formik
-  initialValues={initialValues}
-  validationSchema={validationSchema}
-  onSubmit={(values) => {
-  
-    
-const dataInforProduct={
-  infor_screen:values.infor_screen,
-  infor_system:values.infor_system,
-  infor_cpu:values.infor_cpu,
-  infor_ram:values.infor_ram,
-  infor_more:values.moTa,
+    <div className="flex-1 bg-[#f2edf3] p-[24px]">
+      <button
+        onClick={handleOpenModal}
+        className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+      >
+        Tạo Sản Phẩm Mới
+      </button>
 
-  product_name:values.product_name,
-  product_price:values.price,
-  product_hot:values.hot,
-  product_quantity:values.quantity,
-  product_discount:values.discount,
-  category_id:values.category,
-
-  listProductColor:listProductColor,
-  // listProductStorage
-  
-}
-
-
-
-dispatch(createProductAdminThunk(dataInforProduct))
-// console.log(listProductColor);
-
-
-
-
-}}
->
-  {({ setFieldValue, values }) => (
+      <Modal
+        title="Tạo Sản Phẩm Mới"
+        visible={isModalVisible}
+        onCancel={handleCloseModal}
+        footer={null}
+        width={800}
+      >
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+           {({ setFieldValue, values }) => (
     <Form className="flex flex-col gap-4">
       {/* Chọn loại sản phẩm */}
       <div className="flex gap-[1%]">
-        <div className="flex w-[33%] h-auto flex-col gap-4">
+        <div className="flex w-[49%] h-auto flex-col gap-4">
           <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
           <Select
             value={values.category}  // bind value to Formik state
+            defaultValue = 'Mời bạn chọn'
+
             onChange={(value,category_dad) => 
-              
             {
               setFieldValue('category', value);
               handleCategoryChange(category_dad.category_dad)
@@ -185,7 +174,7 @@ dispatch(createProductAdminThunk(dataInforProduct))
           />
         </div>
         {/* Nhập giá sản phẩm */}
-        <div className="flex w-[33%] h-auto flex-col gap-4">
+        <div className="flex w-[49%] h-auto flex-col gap-4">
           <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
           <Field
             type="number"
@@ -195,16 +184,7 @@ dispatch(createProductAdminThunk(dataInforProduct))
           />
           <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" />
         </div>
-        {/* Chọn mức giảm giá */}
-        <div className="flex w-[33%] h-auto flex-col gap-4">
-          <label htmlFor="discount" className="text-[13px] text-[#81818177] font-medium">Giảm giá</label>
-          <Select
-            value={values.discount}  // bind value to Formik state
-            onChange={(value) => setFieldValue('discount', value)}  // update Formik state when changed
-            options={Datagiamgia}
-            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-          />
-        </div>
+     
       </div>
        <div className="flex w-[100%] h-auto flex-col gap-4">
           <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Tên sản phẩm</label>
@@ -216,7 +196,7 @@ dispatch(createProductAdminThunk(dataInforProduct))
           />
           <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" />
         </div>
-        <div className='flex'>
+        <div className='flex gap-[1%]'>
         <div className="flex w-[49%] h-auto flex-col gap-4">
           <label htmlFor="hot" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Hot</label>
           <Field
@@ -227,71 +207,20 @@ dispatch(createProductAdminThunk(dataInforProduct))
           />
           <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" />
         </div>
-        <div className="flex w-[49%] h-auto flex-col gap-4">
-          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Số lượng</label>
-          <Field
-            type="text"
-            name="quantity"
-            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-            placeholder="Nhập tên sản phẩm"
+          {/* Chọn mức giảm giá */}
+          <div className="flex w-[49%] h-auto flex-col gap-4">
+          <label htmlFor="hot" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giảm giá</label>
+          <Select
+            value={values.discount}  // bind value to Formik state
+            onChange={(value) => setFieldValue('discount', value)}  // update Formik state when changed
+            options={Datagiamgia}
+            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
           />
-          <ErrorMessage name="quantity" component="div" className="text-[1.5rem] text-red-500" />
         </div>
         </div>
 
         {(selectedCategory == '1' || selectedCategory == '2') && (
-          <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
-            <span className="text-[20px] font-semibold">Tạo thuộc tính</span>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_screen" className="text-[13px] font-medium">Màn hình</label>
-                      <Field
-                        type="number"
-                        name="infor_screen"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-             
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_cpu" className="text-[13px] font-medium">Cpu</label>
-                      <Field
-                        type="number"
-                        name="infor_cpu"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_ram" className="text-[13px] font-medium">Ram</label>
-                      <Field
-                        type="number"
-                        name="infor_ram"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-            
-              <div className="flex h-auto flex-col gap-4">
-                <label htmlFor="os" className="text-[13px] text-[#81818177] font-medium">Hệ điều hành</label>
-                <Select
-                 value={values.infor_system}  // bind value to Formik state
-                 onChange={(value,category_dad) => 
-                   
-                 {
-                   setFieldValue('infor_system', value);
-               
-                 }  
-                }
-                  placeholder="Vui lòng chọn hệ điều hành"
-                
-                  options={Datahe}
-                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-                />
-              </div>
-              
-            </div>
-          </div>
+          <FormikProductInforForm/>
         )}
 
 <ModalAdminProduct/>
@@ -342,8 +271,8 @@ dispatch(createProductAdminThunk(dataInforProduct))
     </Form>
   )}
 </Formik>
+      </Modal>
     </div>
-  </div>
   );
 }
 

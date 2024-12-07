@@ -124,9 +124,9 @@ function ModalAdminProduct() {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Thêm màu sắc
-      </Button>
+      <div className='cursor-pointer text-customColor' onClick={showModal} style={{ whiteSpace: 'normal' }}>
+  Thêm màu sắc
+</div>
       <Modal
         title="Basic Modal"
         open={isModalOpen}

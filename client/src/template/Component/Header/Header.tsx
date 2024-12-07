@@ -4,21 +4,21 @@ import "./Header.css";
 import { Badge, Button, Dropdown } from "antd";
 import { FaBars, FaRegHeart, FaUserCircle } from "react-icons/fa";
 import { MdLanguage, MdOutlineShoppingBag } from "react-icons/md";
-import { AiOutlineShopping } from "react-icons/ai";
 import { NavLink, useNavigate } from "react-router-dom";
 import Menu from "./Component/Menu/Menu";
 import { CiLocationOn } from 'react-icons/ci'
 import { FaRegUser } from 'react-icons/fa'
 import { IoIosSearch } from "react-icons/io";
 import TaskCart from "./Component/Menu/Modal/TaskCart";
-import TaskEyes from "./Component/Menu/Modal/TaskEyes";
 import TaskCatelogry from "./Component/Menu/Modal/TaskCatelogry";
 import TaskHeaderMb from "./Component/Menu/Modal/TasKHeaderMb";
-import { useSpring,animated, useTransition } from "react-spring";
+import { useSpring,animated } from "react-spring";
 import { getLocalStorage } from "../../../utils";
 import DropdownUser from "./Component/DropdownUser";
 import { useAppSelector } from "../../../redux/hooks";
-import LoadingHeader from "./Component/Loading/LoadingHeader";
+import { getFavouriteProductThunk } from "../../../redux/favourite/Favourite.slice";
+import { useDispatch } from "react-redux";
+import './modalUserCustom.css'
 function Header() {
 
   const navigate = useNavigate();
@@ -56,8 +56,12 @@ function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => {window.removeEventListener("scroll", handleScroll)};
   }, []);
-  const [isProductHovered, setIsProductHovered] = useState(false);
+  const dispatch=useDispatch();
+  const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
 
+  useEffect(()=>{
+    dispatch(getFavouriteProductThunk())
+  },[dispatch])
   // hieu ung 
   const [isvisibleHeaderMB, setisvisibleHeaderMB] = useState(false);
   const [isvisibleCart, setisvisibleCart] = useState(false);
@@ -87,9 +91,10 @@ const handleMouseLeave = (itemName: string) => {
   if (itemName === "Sản phẩm") {
     setIsProductHovered(false);
   }
+
 };
+
 const listCart=useAppSelector((state)=>state.cart.listCart)
-const listFavourite=useAppSelector(state=>state.product.listFavouriteProduct)
 const token=getLocalStorage('token')
 console.log(token);
 
@@ -140,15 +145,16 @@ console.log(token);
           <div className="flex gap-[1rem]">
             <div>
 
-                <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" />
    
             </div>
             <div>
-              <Badge count={0} showZero>
+            <NavLink to={"/san-pham-yeu-thich"} >
+              <Badge count={listProductFavourites?.length||0} showZero>
                 <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
+            </NavLink>
             </div>
-            <div>
+            <div className="cursor-pointer">
               <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
@@ -214,15 +220,15 @@ console.log(token);
                 <div className="flex gap-[1rem]">
             <div>
 
-                <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" />
+                {/* <FaRegHeart className="xl:text-[2.5rem] md:text-[2rem] xl:block sm:hidden text-[#7500CF]" /> */}
    
             </div>
-            <NavLink to={"/san-pham-yeu-thich"}>
-              <Badge count={listFavourite?.length||0} showZero>
+            <NavLink to={"/san-pham-yeu-thich"} >
+              <Badge count={listProductFavourites?.length||0} showZero>
                 <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>
             </NavLink>
-            <div>
+            <div className="cursor-pointer">
               <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
                 <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
               </Badge>

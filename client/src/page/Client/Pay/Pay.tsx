@@ -63,9 +63,9 @@ function Pay() {
     // Cộng dồn vào tổng giá
     return total + itemTotalPrice;
   }, 0);
-  const getDiscount=useAppSelector(state=>state.cart.discount);
   const getShip=useAppSelector(state=>state.cart.ship);
-   
+  const getDiscount=useAppSelector(state=>state.vourher.discount);
+
   const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
   const [formData, setFormData] = useState({
@@ -84,7 +84,6 @@ function Pay() {
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
-const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   useEffect(() => {
     if(!(listCart.length>0)){
       
@@ -239,9 +238,9 @@ const getDiscountId = useAppSelector((state) => state.cart.discount) || 0;
   
         if (response) {
           await getSuccessEmailOrder(dataEmail);
-          navigate("/xuất-hóa-đơn");
-          dispatch(setOrderId(resp.data.content.order_id));
-          dispatch(removeAllCart());
+          // navigate("/xuất-hóa-đơn");
+          // dispatch(setOrderId(resp.data.content.order_id));
+          // dispatch(removeAllCart());
         }
       }
     } catch (error) {

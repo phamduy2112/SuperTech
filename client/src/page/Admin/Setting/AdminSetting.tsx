@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Popover, Button, Row, Col, Modal } from 'antd';
+import { Input, Popover, Button, Row, Col, Modal, Tabs } from 'antd';
 import { SketchPicker } from 'react-color';
 import { getsetting, updatesettingId } from '../../../service/setting/setting.service';
 
 function AdminSetting() {
+    const { TabPane } = Tabs; 
     const [isTokenVisible, setIsTokenVisible] = useState(false);
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -163,115 +164,127 @@ function AdminSetting() {
 
     return (
         <div className="min-h-screen p-6 bg-gray-100">
-            <Row gutter={[16, 16]}>
-                <Col span={24}>
-                    <h2 className="text-[2.2rem] pb-[20px]">Cài Đặt Website: {settings.title}</h2>
-                </Col>
-                {/* tên website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Title Website:</h4>
-                    <Input
-                        value={settings.title}
-                        placeholder="Title Website..."
-                        onChange={(e) => handleValueChange('title', e.target.value)}
-                    />
-                </Col>
-                {/* description_website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Description Website:</h4>
-                    <Input
-                        value={settings.description}
-                        placeholder="Description Website..."
-                        onChange={(e) => handleValueChange('description', e.target.value)}
-                    />
-                </Col>
-                {/* color website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Color Website:</h4>
-                    <Popover
-                        content={colorPicker}
-                        trigger="click"
-                        open={visible}
-                        onOpenChange={setVisible}
-                    >
-                        <Input
-                            value={settings.color}
-                            placeholder="Click to select color..."
-                            readOnly
-                        />
-                    </Popover>
-                </Col>
-                {/* Chủ website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Chủ Quản Website:</h4>
-                    <Input
-                        value={settings.author}
-                        placeholder="Author Website..."
-                        onChange={(e) => handleValueChange('author', e.target.value)}
-                    />
-                </Col>
-                {/* logo website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Logo Website:</h4>
-                    <Input
-                        value={settings.logo}
-                        placeholder="Logo Website..."
-                        onChange={(e) => handleValueChange('logo', e.target.value)}
-                    />
-                </Col> 
-                {/* favicon_website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Favicon Website:</h4>
-                    <Input
-                        value={settings.favicon}
-                        placeholder="Favicon Website..."
-                        onChange={(e) => handleValueChange('favicon', e.target.value)}
-                    />
-                </Col>
-                {/* popup_website */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Popup Website:</h4>
-                    <Input
-                        value={settings.popup}
-                        placeholder="Popup Website..."
-                        onChange={(e) => handleValueChange('popup', e.target.value)}
-                    />
-                </Col>
-                {/* content_autobank */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Content Autobank:</h4>
-                    <Input
-                        value={settings.contentAutobank}
-                        placeholder="Content Autobank..."
-                        onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
-                    />
-                </Col>
-                {/* Nội dung nạp tiền */}
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Nội Dung Nạp Tiền:</h4>
-                    <Input
-                        value={settings.rechargeNotice}
-                        placeholder="Nội Dung Nạp Tiền..."
-                        onChange={(e) => handleValueChange('rechargeNotice', e.target.value)}
-                    />
-                </Col>
-
-                <Col xs={24} sm={12} md={12} lg={6}>
-                    <h4 className='text-[1.6rem]'>Token Bank:</h4>
-                        <Input
-                            type={isTokenVisible ? "text" : "password"}
-                            value={isTokenVisible ? settings.token : "********"}
-                            placeholder="Click to show token"
-                            onClick={!isTokenVisible ? showPasswordModal : undefined}
-                            onChange={(e) => handleValueChange('token', e.target.value)}
-                            readOnly={!isTokenVisible}
-                        />
-                </Col>
-
-             {/* Nút Submit =)) */}
-                <Col span={24}>
-                    <Button type="primary" onClick={handleSubmit} style={{ marginTop: 20 }}>
-                        Lưu Ngay
+            <h2 className="text-[2.2rem] pb-[20px] ">Cài Đặt Website: <b className='text-[#184eff]' >{settings.title}</b></h2>
+            <Tabs defaultActiveKey="1">
+                <TabPane tab="Cài Đặt Chung" key="1">
+                    {/* Nội dung cho General Settings */}
+                    <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Title Website:</h4>
+                            <Input
+                                value={settings.title}
+                                placeholder="Title Website..."
+                                onChange={(e) => handleValueChange('title', e.target.value)}
+                            />
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Description Website:</h4>
+                            <Input
+                                value={settings.description}
+                                placeholder="Description Website..."
+                                onChange={(e) => handleValueChange('description', e.target.value)}
+                            />
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Chủ Quản Website:</h4>
+                            <Input
+                                value={settings.author}
+                                placeholder="Author Website..."
+                                onChange={(e) => handleValueChange('author', e.target.value)}
+                            />
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Popup Website:</h4>
+                            <Input
+                                value={settings.popup}
+                                placeholder="Popup Website..."
+                                onChange={(e) => handleValueChange('popup', e.target.value)}
+                            />
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane tab="Cài Đặt Giao Diện" key="2">
+                    {/* Nội dung cho UI Settings */}
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Color Website:</h4>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Popover
+                                    content={colorPicker}
+                                    trigger="click"
+                                    open={visible}
+                                    onOpenChange={setVisible}
+                                >
+                                    <Input
+                                        value={settings.color}
+                                        placeholder="Click to select color..."
+                                        readOnly
+                                    />
+                                </Popover>
+                                <div style={{ width: '40px', height: '35px', backgroundColor: settings.color, marginLeft: 10, borderRadius: '20px' }}></div>
+                            </div>
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Logo Website:</h4>
+                            <Input
+                                value={settings.logo}
+                                placeholder="Logo Website..."
+                                onChange={(e) => handleValueChange('logo', e.target.value)}
+                            />
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Favicon Website:</h4>
+                            <Input
+                                value={settings.favicon}
+                                placeholder="Favicon Website..."
+                                onChange={(e) => handleValueChange('favicon', e.target.value)}
+                            />
+                        </Col>
+                    </Row>
+                </TabPane>
+                <TabPane tab="Ngân Hàng" key="3">
+                    {/* Nội dung cho Advanced Settings */}
+                    <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                            <h4>Token Autobank:</h4>
+                            {isTokenVisible ? (
+                                <Input
+                                    value={settings.token}
+                                    onChange={(e) => handleValueChange('token', e.target.value)}
+                                    placeholder="Enter token..."
+                                />
+                            ) : (
+                                <Button onClick={showPasswordModal}>Xem Token</Button>
+                            )}
+                        </Col>
+                    
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Content Autobank:</h4>
+                            <Input
+                                value={settings.contentAutobank}
+                                placeholder="Content Autobank..."
+                                onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
+                            />
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Nội Dung Nạp Tiền:</h4>
+                            <Input
+                                value={settings.rechargeNotice}
+                                placeholder="Nội Dung Nạp Tiền..."
+                                onChange={(e) => handleValueChange('rechargeNotice', e.target.value)}
+                            />
+                        </Col>
+                    </Row>
+                </TabPane>
+                
+            </Tabs>
+            <Row>
+                <Col span={24} style={{ marginTop: '40px' }}>
+                    <Button type="primary" onClick={handleSubmit} size="middle">
+                        Lưu Cài Đặt
                     </Button>
                 </Col>
             </Row>
