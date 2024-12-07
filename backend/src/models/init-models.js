@@ -19,6 +19,7 @@ import _order from  "./order.js";
 import _order_status from  "./order_status.js";
 import _posts from  "./posts.js";
 import _product_colors from  "./product_colors.js";
+import _product_quality from  "./product_quality.js";
 import _product_storage from  "./product_storage.js";
 import _products from  "./products.js";
 import _replies_comment_product from  "./replies_comment_product.js";
@@ -46,6 +47,7 @@ export default function initModels(sequelize) {
   const order_status = _order_status.init(sequelize, DataTypes);
   const posts = _posts.init(sequelize, DataTypes);
   const product_colors = _product_colors.init(sequelize, DataTypes);
+  const product_quality = _product_quality.init(sequelize, DataTypes);
   const product_storage = _product_storage.init(sequelize, DataTypes);
   const products = _products.init(sequelize, DataTypes);
   const replies_comment_product = _replies_comment_product.init(sequelize, DataTypes);
@@ -73,12 +75,17 @@ export default function initModels(sequelize) {
   order.hasMany(history_bank, { as: "history_banks", foreignKey: "order_id"});
   order_status.belongsTo(order, { as: "order", foreignKey: "order_id"});
   order.hasMany(order_status, { as: "order_statuses", foreignKey: "order_id"});
+  
   likes.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(likes, { as: "likes", foreignKey: "post_id"});
   media_post.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(media_post, { as: "media_posts", foreignKey: "post_id"});
+  product_quality.belongsTo(product_colors, { as: "color", foreignKey: "color_id"});
+  product_colors.hasMany(product_quality, { as: "product_qualities", foreignKey: "color_id"});
   product_storage.belongsTo(product_colors, { as: "color", foreignKey: "color_id"});
   product_colors.hasMany(product_storage, { as: "product_storages", foreignKey: "color_id"});
+  product_quality.belongsTo(product_storage, { as: "storage", foreignKey: "storage_id"});
+  product_storage.hasMany(product_quality, { as: "product_qualities", foreignKey: "storage_id"});
   comment_product.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(comment_product, { as: "comment_products", foreignKey: "product_id"});
   detail_order.belongsTo(products, { as: "product", foreignKey: "product_id"});
@@ -87,6 +94,8 @@ export default function initModels(sequelize) {
   products.hasMany(favorite_product, { as: "favorite_products", foreignKey: "product_id"});
   product_colors.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_colors, { as: "product_colors", foreignKey: "product_id"});
+  product_quality.belongsTo(products, { as: "product", foreignKey: "product_id"});
+  products.hasMany(product_quality, { as: "product_qualities", foreignKey: "product_id"});
   product_storage.belongsTo(products, { as: "product", foreignKey: "product_id"});
   products.hasMany(product_storage, { as: "product_storages", foreignKey: "product_id"});
   likes.belongsTo(replies_comment_product, { as: "reply", foreignKey: "replies_id"});
@@ -132,6 +141,7 @@ export default function initModels(sequelize) {
     order_status,
     posts,
     product_colors,
+    product_quality,
     product_storage,
     products,
     replies_comment_product,

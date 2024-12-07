@@ -3,7 +3,9 @@ import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
 import order from "../models/order.js";
 import { startOfWeek,endOfWeek } from "date-fns";
-import { fn } from "sequelize";
+import { col, fn, literal, Op, Sequelize } from "sequelize";
+import { sendMail } from "../config/mail.js";
+import { io } from "../socker/socker.js";
 
 let models = initModels(sequelize); 
 let orders = models.order; 
@@ -33,38 +35,167 @@ const getorder = async (req, res) => {
     }
 };
 
-const getOrdersForToday = async (req, res) => {
-    try {
-      const today = new Date();
-      const startOfToday = new Date(today.setHours(0, 0, 0, 0)); // 00:00:00 hôm nay
-      const endOfToday = new Date(today.setHours(23, 59, 59, 999)); // 23:59:59 hôm nay
-  
-      // Truy vấn tổng số tiền đơn hàng trong ngày hôm nay
-      const totalRevenue = await order.findAll({
-        attributes: [
-          [fn('SUM', col('order_amount')), 'total_revenue'], // Tính tổng doanh thu của ngày
-        ],
-        where: {
-          order_date: {
-            [Op.between]: [startOfToday, endOfToday], // Lọc đơn hàng trong ngày hôm nay
-          },
-        },
+
+
+const getRevenueBetweenDates = async (req, res) => {
+  try {
+    const { startDate, endDate, period } = req.query;
+
+    if (!startDate || !endDate || !period) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cần truyền đủ ngày bắt đầu, ngày kết thúc và loại thời gian (days, week, month).',
       });
-  
-      // Kiểm tra nếu không có dữ liệu
-      if (!totalRevenue || totalRevenue.length === 0) {
-        return res.status(404).json({ message: 'No orders found for today' });
-      }
-  
-      // Trả về tổng doanh thu
-      return res.status(200).json({
-        total_revenue: totalRevenue[0].total_revenue, // Trả giá trị tổng doanh thu
-      });
-    } catch (error) {
-      console.error('Error fetching orders for today:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
     }
-  };
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999); // Đảm bảo ngày kết thúc là 23:59:59
+
+    let groupBy = [];
+    let dateAlias = "";
+
+    // Xác định nhóm theo `period`
+    switch (period) {
+      case 'days':
+        groupBy = [fn('DATE', col('order_date'))];
+        dateAlias = 'date';
+        break;
+      case 'week':
+        groupBy = [fn('YEARWEEK', col('order_date'))];
+        dateAlias = 'week';
+        break;
+      case 'month':
+        groupBy = [fn('MONTH', col('order_date'))];
+        dateAlias = 'month';
+        break;
+      default:
+        return res.status(400).json({
+          success: false,
+          message: 'Tham số period không hợp lệ. Hãy chọn "days", "week", hoặc "month".',
+        });
+    }
+
+    // Query dữ liệu từ database
+    const results = await models.order.findAll({
+      attributes: [
+        [fn('SUM', col('order_total')), 'total_revenue'],
+        [fn('DATE', col('order_date')), 'date'],
+        [fn('YEARWEEK', col('order_date')), 'week'],
+        [fn('MONTH', col('order_date')), 'month'],
+      ],
+      where: {
+        order_date: {
+          [Op.between]: [start, end],
+        },
+      },
+      group: groupBy,
+    });
+
+    // Xử lý kết quả dựa trên `period`
+    const formattedResults = results.map((result) => {
+      const totalRevenue = result.dataValues.total_revenue || 0;
+      const dateValue = result.dataValues[dateAlias];
+
+      // Nếu group theo ngày
+      if (period === 'days') {
+        return {
+          date: dateValue || 'Invalid Date',
+          totalRevenue,
+        };
+      }
+
+      // Nếu group theo tuần
+      if (period === 'week') {
+        const startOfWeek = new Date(startDate);
+        const daysInWeek = [];
+
+        for (let i = 0; i < 7; i++) {
+          const day = new Date(startOfWeek);
+          day.setDate(day.getDate() + i);
+          daysInWeek.push({
+            date: day.toISOString().split('T')[0],
+            revenue: totalRevenue,
+          });
+        }
+        return {
+          week: dateValue,
+          days: daysInWeek,
+        };
+      }
+
+      // Nếu group theo tháng
+      if (period === 'month') {
+        const startOfMonth = new Date(startDate);
+        startOfMonth.setMonth(dateValue - 1);
+
+        const weeksInMonth = [];
+        for (let week = 0; week < 4; week++) {
+          const startOfWeek = new Date(startOfMonth);
+          startOfWeek.setDate(startOfWeek.getDate() + week * 7);
+
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+          weeksInMonth.push({
+            week: `Week ${week + 1}`,
+            startDate: startOfWeek.toISOString().split('T')[0],
+            endDate: endOfWeek.toISOString().split('T')[0],
+            totalRevenue,
+          });
+        }
+        return {
+          month: dateValue,
+          weeks: weeksInMonth,
+        };
+      }
+
+      return null; // Trường hợp không hợp lệ
+    });
+
+    res.status(200).json({
+      success: true,
+      data: formattedResults,
+    });
+  } catch (error) {
+    console.error('Error fetching revenue between dates:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Có lỗi xảy ra khi lấy tổng doanh thu trong khoảng thời gian.',
+    });
+  }
+};
+const getOrderUserTop = async (req, res) => {
+  try {
+    const data = await order.findAll({
+      attributes: [
+        'user_id',
+        [Sequelize.fn('SUM', Sequelize.col('order_total')), 'totalSpent'], // Tính tổng số tiền
+        [Sequelize.fn('COUNT', Sequelize.col('order_id')), 'totalOrders'], // Đếm số lượng đơn hàng
+      ],
+      include: [
+        {
+          model: models.user,
+          as: 'user',
+          attributes: ['user_name', 'user_email'], // Chỉ lấy các thông tin cần thiết của user
+        },
+      ],
+      group: ['user_id'], // Nhóm theo user_id để tính tổng
+      order: [[Sequelize.literal('totalSpent'), 'DESC']], // Sắp xếp theo tổng tiền giảm dần
+      limit: 5, // Lấy Top 5 user
+    });
+
+    if (data) {
+      responseSend(res, data, 'Thành công!', 200);
+    } else {
+      responseSend(res, '', 'Không tồn tại!', 404);
+    }
+  } catch (e) {
+    console.error('Error:', e);
+    responseSend(res, '', 'Server Error!', 500);
+  }
+}
+
 const getOrderById = async (req, res) => {
     
     try {
@@ -109,10 +240,10 @@ const getMonthlyRevenue = async (req, res) => {
       // Query dữ liệu doanh thu
       const results = await models.order.findAll({
         attributes: [
-          [fn('SUM', col('total_price')), 'total_revenue'], // Tính tổng doanh thu
+          [fn('SUM', col('order_total')), 'total_revenue'], // Tính tổng doanh thu
         ],
         where: {
-          createdAt: {
+          order_date: {
             [Op.between]: [startDate, endDate], // Lọc đơn hàng trong tháng hiện tại
           },
         },
@@ -191,8 +322,8 @@ const createorder = async (req, res) => {
         const {
             order_total,
             order_total_quatity,
-            order_status,
-            pay_id,
+       
+            email,
             discount,
             address,
             phone_number
@@ -206,27 +337,104 @@ const createorder = async (req, res) => {
             order_date: date,
             order_total,
             order_total_quatity,
-            order_status,
-            pay_id:null,
+            order_status:0,
             discount,
             user_id,
             address,
-            phone_number
+            phone_number,
+            
+            
             // discount
         });
         // order_statis
+    
         const newOrderStatus=await models.order_status.create({
             order_id:neworder.order_id,
-            order_status,
+            order_status:0,
             created_at:date
         })
-        
         responseSend(res, neworder, "Thêm Thành công!", 201);
     } catch (error) {       
         console.log(error);
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+const getSuccessEmailOrder = async (req, res) => {
+  try {
+    const { email, orderDetails } = req.body;
+    console.log(orderDetails);
+    
+    // Kiểm tra thông tin đầu vào
+    if (!email || !orderDetails || !Array.isArray(orderDetails)) {
+      return res.status(400).json({ message: 'Thông tin không hợp lệ.' });
+    }
+
+    // Kiểm tra từng phần tử trong orderDetails
+    const invalidItems = orderDetails.filter(
+      (item) =>
+        !item.name || // Tên sản phẩm không tồn tại
+        typeof item.quantity !== 'number' || // Số lượng không phải là số
+        typeof item.price !== 'number' // Giá không phải là số
+    );
+
+    // if (invalidItems.length > 0) {
+    //   return res.status(400).json({
+    //     message: 'Một số sản phẩm trong danh sách không hợp lệ.',
+    //     invalidItems,
+    //   });
+    // }
+
+    // Tạo danh sách sản phẩm từ orderDetails
+    const productList = orderDetails
+      .map((item) => {
+        const priceAfterDiscount = item.detail_order_price - (item.discount_product || 0);
+
+        return `
+          <li>
+            <b>Sản phẩm:</b> ${item.product_name} <br>
+            <b>Số lượng:</b> ${item.detail_order_quality} <br>
+            <b>Giá:</b> ${priceAfterDiscount}
+          </li>
+        `;
+      })
+      .join('');
+
+    // Tính tổng thanh toán
+    const totalAmount = orderDetails
+    .reduce((total, item) => {
+      const priceAfterDiscount = item.detail_order_price - (item.discount_product || 0);
+      return total + (item.detail_order_quality * priceAfterDiscount) + 30000;
+    }, 0)
+
+    // Tạo nội dung HTML cho email
+    const htmlContent = `
+      <h1 style="color: green;">Đơn hàng của bạn đã được đặt thành công!</h1>
+      <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.</p>
+      <h3>Chi tiết đơn hàng:</h3>
+      <ul>
+        ${productList}
+      </ul>
+      <p>Tiền ship: 30.000đ</p>
+      <p>Tổng thanh toán: <b>${totalAmount}</b></p>
+      <p>Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.</p>
+      <br>
+      <p>Trân trọng,<br>Đội ngũ hỗ trợ</p>
+    `;
+
+    // Gửi email
+    const emailResult = await sendMail(email, 'Xác nhận đơn hàng thành công', '', htmlContent);
+
+    if (emailResult) {
+      return res.status(200).json({ message: 'Email xác nhận đã được gửi!' });
+    } else {
+      return res.status(500).json({ message: 'Gửi email không thành công.' });
+    }
+  } catch (error) {
+    console.error('Lỗi khi gửi email:', error);
+    return res.status(500).json({ message: 'Đã xảy ra lỗi khi gửi email.' });
+  }
+};
+
 const updateorder = async (req, res) => {
     try {
         const order_id = req.params.id;
@@ -273,14 +481,64 @@ const deleteorder = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra khi xóa đơn hàng!", 500);
     }
 };
+const getOrderId= async (req, res) => {
+  try {
+      const orderId = await order.findOne({
+          where: { order_id: req.params.id },
+          
+      });
+      if (orderId) {
+        io.emit('pay_order',orderId.order_pay);
+        // console.log('Đã emit sự kiện pay_order với giá trị2:',orderId.order_pay);
+          responseSend(res, orderId, "Thành Công!", 200);
+          
+      } else {
+          responseSend(res, "", "Không tìm thấy đơn hàng!", 404);
+      }
+      
+  } catch (error) {
+      responseSend(res, "", "Có lỗi xảy ra khi xóa đơn hàng!", 500);
+      console.log(error);
+      
+  }
+};
+export const checkInventory = async (product_id, color_id, storage_id, quantity,res) => {
+  const inventory = await  models.product_quality.findOne({
+    where: {  product_id,color_id, storage_id },
+  });
+  const product=await models.products.findOne({
+    where: {  product_id },
+  })
+  if (!inventory) {
+    responseSend(res, "", "Không tìm thấy số lượng trong sản phẩm!", 200);
+    
+  }
+  if (inventory.quality_product < 10) {
+    // Gửi thông báo khi sản phẩm gần hết hàng
+    io.emit("low_stock_warning", {
+      title: "Thông báo nhập hàng",
+      description: `Sản phẩm ${product.product_name} sắp hết số lượng. Vui lòng kiểm tra và bổ sung!`,
+    });
+  }
+  if (inventory.quality_product < quantity) {
+    responseSend(res, "", "Số lượng sản phẩm không đủ!", 200);
 
+    
+  }
+
+  return inventory; // Trả về nếu kiểm tra thành công
+};
 export {
     getorder,
     getOrderById,
+    getOrderId,
     createorder,
     updateorder,
     deleteorder,
     changeStatusOrder,
     getMonthlyRevenue,
-    getOrdersForToday
+    // getOrdersForToday,
+    getOrderUserTop,
+    getRevenueBetweenDates ,
+    getSuccessEmailOrder
 };
