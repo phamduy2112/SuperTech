@@ -27,7 +27,7 @@ function TaskProduct() {
               .map((item) => (
                 <li key={item.id} className="py-2 hover:bg-gray-100 rounded-lg">
                   <NavLink
-to={`/list-sản-phẩm?category_dad=${item.category_dad}&category=${item.category_id}`}
+to={`/list-san-pham?category_dad=${item.category_dad}&category=${item.category_id}`}
 className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
                   >
                     {item.category_name}

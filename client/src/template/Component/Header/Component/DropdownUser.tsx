@@ -28,7 +28,7 @@ function DropdownUser() {
   const logout=()=>{
     dispatch(setToken(null))
     toast.success('Đăng xuất thành công!');
-    navigate("/đăng-nhập")
+    navigate(`${Paths.Login}`)
     dispatch(setLogin(false))
 
   }

@@ -68,25 +68,30 @@ function ListProduct() {
           </div>
         </div>
         <div className='mt-[.5rem] w-[100%]'>
-          <div className='flex justify-between items-center'>
-            <div className='flex gap-[1rem]'>
-              <h4 className='text-[1.8rem] mt-[.5rem] font-semibold'>10 Điện thoại iPhone (Apple)</h4>
-              <div className='flex items-center justify-center'>
-                <Form.Item valuePropName="checked">
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+            {/* Cột 1: Tiêu đề và Checkbox */}
+            <div className='space-y-4'>
+              <h4 className='text-[1.8rem] sm:text-[1.5rem] font-semibold'>
+                10 Điện thoại iPhone (Apple)
+              </h4>
+              <div className='flex flex-wrap gap-4'>
+                <Form.Item valuePropName="checked" className='mb-0'>
                   <Checkbox 
-                    onChange={(e) => setIsDiscounted(e.target.checked)} // Cập nhật trạng thái checkbox
+                    onChange={(e) => setIsDiscounted(e.target.checked)}
                   >
                     Giảm giá
                   </Checkbox>
                 </Form.Item>
-                <Form.Item valuePropName="checked">
+                <Form.Item valuePropName="checked" className='mb-0'>
                   <Checkbox>Mới</Checkbox>
                 </Form.Item>
               </div>
             </div>
-            <div className='w-[200px]'>
-              <Form.Item label="Sắp xếp theo">
-                <Select defaultValue="demo">
+
+            {/* Cột 2: Select Box */}
+            <div className='lg:justify-self-end'>
+              <Form.Item label="Sắp xếp theo" className='mb-0'>
+                <Select defaultValue="demo" style={{ width: '200px' }}>
                   <Select.Option value="demo">Demo</Select.Option>
                 </Select>
               </Form.Item>
@@ -94,9 +99,9 @@ function ListProduct() {
           </div>
         </div>
       </div>
-      <div className='grid grid-cols-6 gap-y-3'>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-6">
         {filteredProducts.map((item) => (
-          <ProductItem key={item.id} product={item} /> // Đảm bảo sử dụng key cho mỗi sản phẩm
+          <ProductItem key={item.id} product={item} />
         ))}
       </div>
     </div>

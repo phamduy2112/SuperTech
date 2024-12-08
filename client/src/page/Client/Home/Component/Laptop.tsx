@@ -71,30 +71,35 @@ function LaptopComponent() {
     responsive: [
       {
         breakpoint: 1600,
-        settings: { 
-          slidesToShow: 4, 
+        settings: {
+          slidesToShow: 4,
           slidesToScroll: 1,
+          infinite: true,
         }
       },
       {
         breakpoint: 1200,
-        settings: { 
-          slidesToShow: 3, 
+        settings: {
+          slidesToShow: 3,
           slidesToScroll: 1,
+          infinite: true,
         }
       },
       {
         breakpoint: 992,
-        settings: { 
-          slidesToShow: 2, 
+        settings: {
+          slidesToShow: 2,
           slidesToScroll: 1,
+          infinite: true,
         }
       },
       {
-        breakpoint: 768,
-        settings: { 
-          slidesToShow: 1, 
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
           slidesToScroll: 1,
+          infinite: true,
+          arrows: false,
         }
       }
     ]
@@ -103,7 +108,7 @@ function LaptopComponent() {
   return (
     <div className="w-full m-auto py-20">
       <div className="flex flex-col gap-6">
-        <div className="w-full px-20">
+        <div className="w-full px-4 md:px-20">
           <div className="pb-5">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <h4 className="text-[2rem] sm:text-[2.5rem] font-semibold">Laptop</h4>
@@ -126,7 +131,7 @@ function LaptopComponent() {
           <div className="relative">
             <Slider {...settings}>
               {productLaptop.map((product) => (
-                <div key={product.id} className="px-2">
+                <div key={product.id} className="px-2 h-full">
                   <ProductItem product={product} />
                 </div>
               ))}

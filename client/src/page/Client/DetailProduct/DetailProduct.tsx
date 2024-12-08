@@ -40,8 +40,7 @@ function DetailProduct() {
   const handleAddOrder=(product:any)=>{
     const productToCart = {
       ...product,
-      selectedColor: objectColor,
-      selectedStorage:objectStorage
+      selectedColor: objectColor // hoặc selectedColor, tùy vào thông tin bạn muốn lưu
     };
     dispatch(addItemToOrder(productToCart))
     navigate("/thanh-toan")
@@ -136,9 +135,10 @@ console.log(objectStorage);
 
             {/* Main Content */}
             <div className="flex flex-col md:flex-row gap-8 bg-white rounded-lg p-[1rem]">
-              {/* Left Column */}
-              <div className="w-full md:w-[55%] p-6">
-                <div className="w-[80%] mx-auto">
+              {/* Left Column - Product Images */}
+              <div className="w-full md:w-[55%] p-6 order-1">
+                {/* Main Image Container */}
+                <div className="w-[80%] mx-auto order-1">
                   <img 
                     className="w-full my-8 max-w-[300px] mx-auto" 
                     src={`${IMG_BACKEND}/${objectColor?.image?.image_one}`} 
@@ -147,7 +147,7 @@ console.log(objectStorage);
                 </div>
 
                 {/* Thumbnail Images */}
-                <div className="flex items-center justify-center my-8 space-x-4">
+                <div className="flex items-center justify-center my-8 space-x-4 order-2">
                   {[...Array(4)].map((_, index) => (
                     <div key={index} className="w-[10%]">
                       <img 
@@ -159,56 +159,65 @@ console.log(objectStorage);
                   ))}
                 </div>
 
-                {/* Product Info */}
-                <div>
-                  <h4 className="text-[1.9rem] font-semibold">Thông tin sản phẩm</h4>
-                  <div className="pb-5">
-                    <h5 className="text-[1.7rem] font-semibold py-5">Mô tả sản phẩm</h5>
-                    <p className="text-[1.6rem]">
-                      Sau nhiều thế hệ điện thoại của Apple thì cái tên “Plus”
-                      cũng đã chính thức trở lại vào năm 2022 và xuất hiện trên
-                      chiếc iPhone 15 Plus 256GB, nổi trội với ngoại hình bắt
-                      trend cùng màn hình kích thước lớn để đem đến không gian
-                      hiển thị tốt hơn cùng cấu hình mạnh mẽ không đổi so với bản
-                      tiêu chuẩn. Thân hình thanh mảnh cùng ngoại hình góc cạnh
-                    </p>
+                  {/* Product Info - Thêm class order-3 và hidden/block */}
+                  <div className="hidden md:block md:order-3">
+                    <h4 className="text-[1.9rem] font-semibold">Thông tin sản phẩm</h4>
+                    <div className="pb-5">
+                      <h5 className="text-[1.7rem] font-semibold py-5">Mô tả sản phẩm</h5>
+                      <p className="text-[1.6rem]">
+                        Sau nhiều thế hệ điện thoại của Apple thì cái tên "Plus"
+                        cũng đã chính thức trở lại vào năm 2022 và xuất hiện trên
+                        chiếc iPhone 15 Plus 256GB, nổi trội với ngoại hình bắt
+                        trend cùng màn hình kích thước lớn để đem đến không gian
+                        hiển thị tốt hơn cùng cấu hình mạnh mẽ không đổi so với bản
+                        tiêu chuẩn. Thân hình thanh mảnh cùng ngoại hình góc cạnh
+                      </p>
+                    </div>
+                    <div>
+                    <img
+                      src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
+                      alt=""
+                    />
                   </div>
-                  <div>
-                  <img
-                    src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                    alt=""
-                  />
-                </div>
-                <div className="flex justify-center items-center mt-[1rem]">
-                  <button className="p-[1rem] border text-[1.7rem]">
-                    Xem thêm
-                  </button>
+                  <div className="flex justify-center items-center mt-[1rem]">
+                    <button className="p-[1rem] border text-[1.7rem]">
+                      Xem thêm
+                    </button>
+                  </div>
+
+                  </div>
                 </div>
 
-                </div>
-              </div>
+              {/* Right Column - Product Details */}
+              <div className="w-full md:w-[45%] mx-auto text-xl order-2">
+                <h3 className="text-[1.6rem] sm:text-[2rem] md:text-[2.5rem] font-semibold pt-[1rem] md:pt-[1.3rem] leading-tight break-words">
+                  {productDetail?.product_name}
+                </h3>
 
-              {/* Right Column */}
-              <div className="w-full md:w-[45%] mx-auto text-xl ">
-                <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
-                {/* Price Section */}
-                {productDetail?.product_discount > 0 ?
-                <div className="flex items-center gap-4 py-4">
-            
-                <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}</p>
-                <p className="text-xl text-gray-500 line-through">              
-                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
-                </p>
-                <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
-              </div>
-                : 
-                <p className="text-red-500 font-semibold text-[2rem] py-6">
-                    {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex items-center">
+                    <Rate disabled defaultValue={4} className="text-[1.4rem]" />
+                    <span className="text-[1.4rem] text-gray-500 ml-2">(50 đánh giá)</span>
+                  </div>
+                </div>
+
+                {productDetail?.product_discount > 0 ? (
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 py-2 sm:py-4">
+                    <p className="text-red-500 font-semibold text-[1.6rem] sm:text-[1.8rem] md:text-[2rem]">
+                      {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100))))}
                     </p>
-
-                    // Hehe
-                }
-                
+                    <p className="text-[1.4rem] sm:text-xl text-gray-500 line-through">              
+                      {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                    </p>
+                    <span className="text-[1.4rem] sm:text-xl px-2 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded">
+                      -{productDetail?.product_discount}%
+                    </span>
+                  </div>
+                ) : (
+                  <p className="text-red-500 font-semibold text-[1.6rem] sm:text-[1.8rem] md:text-[2rem] py-2 sm:py-4">
+                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                  </p>
+                )}
 
                 {/* Storage Variant Buttons */}
                 <div className="flex gap-4 mb-6">
@@ -300,6 +309,33 @@ console.log(objectStorage);
                   </ul>
                 </div>
 
+                {/* Product Info - Mobile Version */}
+                <div className="md:hidden mb-6">
+                  <h4 className="text-[1.9rem] font-semibold">Thông tin sản phẩm</h4>
+                  <div className="pb-5">
+                    <h5 className="text-[1.7rem] font-semibold py-5">Mô tả sản phẩm</h5>
+                    <p className="text-[1.6rem]">
+                      Sau nhiều thế hệ điện thoại của Apple thì cái tên "Plus"
+                      cũng đã chính thức trở lại vào năm 2022 và xuất hiện trên
+                      chiếc iPhone 15 Plus 256GB, nổi trội với ngoại hình bắt
+                      trend cùng màn hình kích thước lớn để đem đến không gian
+                      hiển thị tốt hơn cùng cấu hình mạnh mẽ không đổi so với bản
+                      tiêu chuẩn. Thân hình thanh mảnh cùng ngoại hình góc cạnh
+                    </p>
+                  </div>
+                  <div>
+                    <img
+                      src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
+                      alt=""
+                    />
+                  </div>
+                  <div className="flex justify-center items-center mt-[1rem]">
+                    <button className="p-[1rem] border text-[1.7rem]">
+                      Xem thêm
+                    </button>
+                  </div>
+                </div>
+
                 {/* Technical Specifications */}
                 <div className="flex justify-between">
                   <div className="w-[100%] mt-10">
@@ -350,4 +386,3 @@ console.log(objectStorage);
 }
 
 export default DetailProduct;
-// test

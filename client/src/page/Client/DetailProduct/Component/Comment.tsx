@@ -80,18 +80,20 @@ const handleLike=async(id:number,idProduct:number)=>{
     <div>
       <div className="w-full p-4 bg-white mt-[1rem]">
         <div className="flex justify-between items-center">
-          <h2 className="text-[2rem] font-bold">Đánh giá Điện Thoại Iphone 15 Pro Max 256GB</h2>
+          <h2 className="text-[1.6rem] md:text-[2rem] font-bold">
+            Đánh giá Điện Thoại Iphone 15 Pro Max 256GB
+          </h2>
         </div>
         <StarRating comments={props.reviews}/>
       </div>
-      <div className="py-4 px-[2rem] bg-white">
+      <div className="py-4 px-[1rem] md:px-[2rem] bg-white">
         <div>
-          <h4 className="py-[1rem] text-[2rem] font-semibold ">Lọc theo</h4>
-          <div className="flex gap-[1rem] ">
-            <div className="cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[7rem] ">
+          <h4 className="py-[1rem] text-[1.6rem] md:text-[2rem] font-semibold">Lọc theo</h4>
+          <div className="flex gap-[.5rem] md:gap-[1rem]">
+            <div className="cursor-pointer rounded-[3rem] text-[1.4rem] md:text-[1.8rem] justify-center items-center gap-[.3rem] h-[3rem] md:h-[3.5rem] flex border border-gray-600 w-[6rem] md:w-[7rem]">
               <span>Tất cả</span>
             </div>
-            <div className="cursor-pointer text-[1.8rem] rounded-[3rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[12rem]">
+            <div className="cursor-pointer text-[1.4rem] md:text-[1.8rem] rounded-[3rem] justify-center items-center gap-[.3rem] h-[3rem] md:h-[3.5rem] flex border border-gray-600 w-[10rem] md:w-[12rem]">
               <span>Đã mua hàng</span>
             </div>
           </div>
@@ -100,22 +102,22 @@ const handleLike=async(id:number,idProduct:number)=>{
         <div className="flex justify-between flex-wrap">
           {props.reviews?.map((review, index) => {
             return (
-              <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
+              <div className="flex items-start space-x-4 mt-[1rem] w-full md:w-[48%]" key={index}>
 
   <div
-                  className={`flex text-[2.5rem] w-[5rem] h-[5rem] items-center justify-center rounded-full ${review?.user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
+                  className={`flex text-[2rem] md:text-[2.5rem] w-[4rem] md:w-[5rem] h-[4rem] md:h-[5rem] items-center justify-center rounded-full ${review?.user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-white" } `}
                   style={{
-                    backgroundImage: review?.user?.user_image ? `url(${IMG_BACKEND_USER}/${review?.user.user_image})` : "none",
+                    backgroundImage: review?.user?.user_image ? `url(${IMG_BACKEND_USER}/${review.user.user_image})` : "none",
                   }}
                 >
-                  {(review?.user?.user_image == null || review?.user?.user_image == '' && review?.user?.user_name) ? review?.user?.user_name[0].toUpperCase() : null}
+                  {!review?.user?.user_image && review?.user?.user_name ? review.user.user_name[0].toUpperCase() : null}
                 </div>
                 <div className="flex w-[100%] justify-between">
                   
                   <div className="w-[100%]">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-bold text-[2rem]">{review.user?.user_name} || {review?.isPurchase ? "Đã mua hàng" : ""}</h3>
+                        <h3 className="font-bold text-[1.6rem] md:text-[2rem]">{review.user?.user_name} || {review?.isPurchase ? "Đã mua hàng" : ""}</h3>
                         <div className="flex items-center text-[1.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">{formatDate(review.comment_date)}</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
@@ -256,7 +258,7 @@ const handleLike=async(id:number,idProduct:number)=>{
     onSubmit={(values, { resetForm }) => {
       if (!login) {
         toast.error("Bạn cần đăng nhập!");
-        navigate("/đăng-nhập");
+        navigate("/login");
         return;
       }
       if(values.commentText.length <5){

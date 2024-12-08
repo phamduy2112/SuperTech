@@ -18,7 +18,7 @@ const Catelory2: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
         {categories.map((category, index) => (
             <NavLink 
-            to={`/list-sản-phẩm?category_dad=${category.idDad}`}
+            to={`/list-san-pham?category_dad=${category.idDad}`}
             key={index}
             className={`flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md transition-all duration-200 ${
                 category.rowSpan === 2 ? 'row-span-2 hover:scale-105 hover:shadow-lg' : 'hover:scale-105 hover:shadow-lg'
