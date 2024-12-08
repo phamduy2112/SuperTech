@@ -15,7 +15,7 @@ const categories = [
 const Catelory2: React.FC = () => {
   return (
     <div className="py-10 rounded-lg">
-      <div className="grid grid-cols-5 gap-7">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
         {categories.map((category, index) => (
             <NavLink 
             to={`/list-sản-phẩm?category_dad=${category.idDad}`}
@@ -24,7 +24,7 @@ const Catelory2: React.FC = () => {
                 category.rowSpan === 2 ? 'row-span-2 hover:scale-105 hover:shadow-lg' : 'hover:scale-105 hover:shadow-lg'
             }`}
             >
-            <p className="justify-left font-medium my-5 text-3xl">{category.name}</p>
+            <p className="justify-left font-medium my-5 text-xl sm:text-2xl md:text-3xl">{category.name}</p>
             <img 
               src={category.image} 
               alt={category.name} 
