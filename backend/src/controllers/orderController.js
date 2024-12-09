@@ -286,7 +286,7 @@ const changeStatusOrder = async (req, res) => {
         order_status_text_cancel: order_status_text_cancel || null,  // Lý do hủy nếu có
         created_at: new Date(),  // Thời gian tạo
       });
-      if (order_status ==6) {
+      if (order_status ==4) {
         // Lấy danh sách sản phẩm liên quan đến đơn hàng
         const orderItems = await models.detail_order.findAll({
           where: { order_id },

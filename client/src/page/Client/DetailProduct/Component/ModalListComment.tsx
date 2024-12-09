@@ -1,27 +1,51 @@
-import { Button, Form, Input } from 'antd';
-import React, { useState } from 'react';
-import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
-import { BsThreeDots } from 'react-icons/bs';
-import { FaCheckCircle, FaRegStar, FaStar } from 'react-icons/fa';
-import { IoIosReturnRight, IoMdSend } from 'react-icons/io';
-import { useDispatch } from 'react-redux';
-import { createCommentRepliesByIdProductThunk, createLikeCommentThunk, deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
+import React, { useState } from "react";
+import { Modal, Button, List, Pagination } from "antd";
+import ReplyComment from "./RelyComment";
+import toast from "react-hot-toast";
+import { createCommentRepliesByIdProductThunk, createLikeCommentThunk, deleteCommentByIdThunk, editCommentByIdThunk } from "../../../../redux/comment/comment.slice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { FaCheckCircle, FaRegStar, FaStar } from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
+import { BiSolidLike } from "react-icons/bi";
+import { AiOutlineLike } from "react-icons/ai";
+import { IoIosReturnRight } from "react-icons/io";
 import { Formik, Form as FormikForm, Field } from 'formik';
 import * as Yup from 'yup';
-import { createLike } from '../../../../service/comment/comment.service';
-import { useAppSelector } from '../../../../redux/hooks';
-import { BiSolidLike } from 'react-icons/bi';
-import { StarRating } from '../../../../components/star/Star';
-import CommentComponent from './RelyComment';
-import ReplyComment from './RelyComment';
-import { formatDate, formatTimeAgo } from '../../../../utils';
-import toast from 'react-hot-toast';
-import { IMG_BACKEND_USER } from '../../../../constants';
-import { useAvatar } from '../../../../hooks/UseAvatar.hook';
-import { useNavigate } from 'react-router-dom';
-import ProductModalWithPagination from './ModalListComment';
+import { useAppSelector } from "../../../../redux/hooks";
+import { useAvatar } from "../../../../hooks/UseAvatar.hook";
+import { IMG_BACKEND_USER } from "../../../../constants";
+import { formatDate, formatTimeAgo } from "../../../../utils";
+const ProductModalWithPagination = (props) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6); // Số sản phẩm mỗi trang
 
-function Comment(props: any) {
+  // Dữ liệu mẫu
+  const products = Array.from({ length: 50 }, (_, i) => ({
+    id: i + 1,
+    name: `Product ${i + 1}`,
+    description: `Description of product ${i + 1}`,
+  }));
+
+  // Lấy danh sách sản phẩm cho trang hiện tại
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentProducts = products.slice(startIndex, endIndex);
+
+  // Mở Modal
+  const handleOpenModal = () => setIsModalVisible(true);
+
+  // Đóng Modal
+  const handleCloseModal = () => setIsModalVisible(false);
+
+  // Thay đổi trang
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+  const currentReviews = props.reviews?.slice(startIndex, endIndex);
+
   const user: any = useAppSelector((state) => state.user.user);
   const login:any=useAppSelector((state)=>state.user.login)
   const [expandedComments, setExpandedComments] = useState<boolean[]>(new Array(props.reviews?.length).fill(false));
@@ -56,6 +80,15 @@ function Comment(props: any) {
   };
 
 
+  
+
+    // Tính toán chỉ số bắt đầu và kết thúc cho mỗi trang
+
+
+
+    // Tính tổng số trang
+    const totalReviews = props.reviews?.length || 0;
+    const totalPages = Math.ceil(totalReviews / pageSize);
 const handleLike=async(id:number,idProduct:number)=>{
   if (!login) {
     toast.error("Bạn cần đăng nhập!");
@@ -74,54 +107,34 @@ const handleLike=async(id:number,idProduct:number)=>{
     commentText: Yup.string().required('Nội dung bình luận không được để trống').min(5, 'Nội dung phải có ít nhất 5 ký tự'),
   });
   
-  const [selectedTab, setSelectedTab] = useState('all');
-  const [filteredComments, setFilteredComments] = useState(props.reviews);
-  const handleClick = (selection:string) => {
-    setSelectedTab(selection);
-    if (selection === "all") {
-      setFilteredComments(props.reviews); // Hiển thị tất cả các bình luận
-    } else {
-      setFilteredComments(
-        props.reviews.filter((comment) => comment.isPurchase === true)
-      ); // Hiển thị chỉ các bình luận có isPurchase là true
-    }
-  };
-
-
   return (
-    <div>
-      <div className="w-full p-4 bg-white mt-[1rem]">
-        <div className="flex justify-between items-center">
-          <h2 className="text-[2rem] font-bold">Đánh giá Điện Thoại Iphone 15 Pro Max 256GB</h2>
-        </div>
-        <StarRating comments={props.reviews}/>
-      </div>
-      <div className="py-4 px-[2rem] bg-white">
-        <div>
-          <h4 className="py-[1rem] text-[2rem] font-semibold ">Lọc theo</h4>
-          <div className="flex gap-[1rem]">
-      {/* Nút "Tất cả" */}
-      <div
-        className={`cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border ${selectedTab === "all" ? "bg-blue-500 text-white" : "border-gray-600"} w-[7rem]`}
-        onClick={() => handleClick("all")}
+    <div style={{ padding: "20px" }}>
+      <Button type="primary" onClick={handleOpenModal}>
+        Xem thêm
+      </Button>
+
+      <Modal
+        title="Danh sách bình luận"
+        visible={isModalVisible}
+        onCancel={handleCloseModal}
+        footer={[
+          <Button key="close" onClick={handleCloseModal}>
+            Close
+          </Button>,
+        ]}
+        width={1200}
+        style={{
+            maxHeight: '600px', // Đặt chiều cao tối đa cho modal
+            overflowY: 'auto', // Cho phép cuộn khi nội dung vượt quá chiều cao
+          }}
       >
-        <span>Tất cả</span>
-      </div>
-      
-      {/* Nút "Đã mua hàng" */}
-      <div
-        className={`cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border ${selectedTab === "purchased" ? "bg-blue-500 text-white" : "border-gray-600"} w-[12rem]`}
-        onClick={() => handleClick("purchased")}
-      >
-        <span>Đã mua hàng</span>
-      </div>
-    </div>
-        </div>
-       <div>
-      <div className="flex justify-between flex-wrap">
-          {filteredComments.slice(0, 6)?.map((review, index) => {
+        {/* Danh sách sản phẩm */}
+    
+       
+        <div className="flex justify-between flex-wrap h-[450px] ">
+          {currentReviews?.map((review, index) => {
             return (
-              <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
+              <div className="flex  items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
 
   <div
                   className={`flex text-[2.5rem] w-[5rem] h-[5rem] items-center justify-center rounded-full ${review?.user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
@@ -136,13 +149,14 @@ const handleLike=async(id:number,idProduct:number)=>{
                   <div className="w-[100%]">
                     <div className="flex justify-between">
                       <div>
-                      <h3 className="font-bold text-[2rem] flex  gap-[1rem] items-center">{review.user?.user_name} 
+                        <h3 className="font-bold text-[2rem] flex  gap-[1rem] items-center">{review.user?.user_name} 
                             
-                            {review?.isPurchase ?                              <FaCheckCircle className="text-[green]"/>
+                             {review?.isPurchase ?                              <FaCheckCircle className="text-[green]"/>
 : ""}
-                   
-                            
-                            </h3>                        <div className="flex items-center text-[1.5rem]">
+                    
+                             
+                             </h3>
+                        <div className="flex items-center text-[1.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">{formatDate(review.comment_date)}</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
   {[...Array(5)].map((_, index) => (
@@ -339,19 +353,21 @@ dispatch(createCommentRepliesByIdProductThunk(newComment))
             );
           })}
         </div>
-       {filteredComments.length == 0 ? '' : <ProductModalWithPagination reviews={props.reviews}/>}
-    </div>
-        
-        {selectedTab === "purchased" && filteredComments.length == 0 && (
-        <div className="text-center text-[1.5rem] text-gray-500 mt-4">
-          Chưa có người dùng mua hàng
-        </div>
-      )}
-    
-        
-      </div>
+
+        {/* Phân trang */}
+        <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={totalReviews}
+                onChange={(page) => setCurrentPage(page)}
+                pageSizeOptions={[6]} // Giới hạn số lượng bình luận mỗi trang
+                showSizeChanger={false} // Ẩn tùy chọn thay đổi số trang
+                showQuickJumper={false} // Ẩn tùy chọn nhảy nhanh giữa các trang
+                disabled={totalReviews <= pageSize} // Tắt phân trang khi không đủ bình luận
+            />
+      </Modal>
     </div>
   );
-}
+};
 
-export default Comment;
+export default ProductModalWithPagination;

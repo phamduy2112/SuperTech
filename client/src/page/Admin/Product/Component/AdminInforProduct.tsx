@@ -17,10 +17,9 @@ const validationSchema = Yup.object().shape({
   infor_more: Yup.string().required('Thông tin thêm không được để trống'),
 });
 
-const FormikProductInforForm = () => {
-  const handleSubmit = (values: any) => {
-    console.log(values);
-    // Handle form submission logic here
+const FormikProductInforForm = ({ onSubmit }: { onSubmit: (values: any) => void }) => {
+  const handleInputChange = (field, value) => {
+    setFieldValue(field, value);
   };
 
   return (
@@ -40,10 +39,12 @@ const FormikProductInforForm = () => {
         infor_more: '',
       }}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={(values) => {
+        onSubmit(values); // Gửi dữ liệu lên component cha
+      }}
     >
-      {({ values, errors, touched, handleChange, handleBlur }) => (
-        <Form>
+      {({ values, errors, touched, handleChange, handleBlur,handleSubmit }) => (
+        <Form onFinish={handleSubmit}>
         <div className="grid grid-cols-3 gap-4">
               <div className="flex h-auto flex-col gap-4">
               <label htmlFor="infor_screen" className="text-[13px] font-medium">Thông tin màn hình</label>
@@ -63,35 +64,7 @@ const FormikProductInforForm = () => {
               </div>
              
               <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_cpu" className="text-[13px] font-medium">Cpu</label>
-                      <Field
-                        type="number"
-                        name="infor_cpu"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_ram" className="text-[13px] font-medium">Ram</label>
-                      <Field
-                        type="number"
-                        name="infor_ram"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-            
-              <div className="flex h-auto flex-col gap-4">
-                <label htmlFor="os" className="text-[13px] text-[#81818177] font-medium">Hệ điều hành</label>
-              
-              </div>
-              
-            </div>
-        
-
-
-          <div className="form-group">
-            <label htmlFor="infor_system">Thông tin hệ điều hành</label>
+                <label htmlFor="os" className="text-[13px] font-medium">Hệ điều hành</label>
             <Field
               name="infor_system"
               type="text"
@@ -99,55 +72,46 @@ const FormikProductInforForm = () => {
               value={values.infor_system}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              placehorder="Hệ điều hành"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_system && touched.infor_system && <div>{errors.infor_system}</div>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="infor_cpu">Thông tin CPU</label>
-            <Field
+              </div>
+              <div className="flex h-auto flex-col gap-4">
+              <label htmlFor="infor_ram" className="text-[13px] font-medium">Thông tin CPU</label>
+              <Field
               name="infor_cpu"
               type="text"
               as={Input}
               value={values.infor_cpu}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_cpu && touched.infor_cpu && <div>{errors.infor_cpu}</div>}
-          </div>
+              </div>
+            
+           
+              
+            </div>
+      
 
-          <div className="form-group">
-            <label htmlFor="infor_ram">Số RAM</label>
-            <Field
+
+          <div className='grid grid-cols-2 gap-4'>
+        <div className="flex h-auto flex-col gap-4">
+              <label htmlFor="infor_screen" className="text-[13px] font-medium">Số RAM</label>
+                  
+              <Field
               name="infor_ram"
               type="number"
               as={Input}
               value={values.infor_ram}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_ram && touched.infor_ram && <div>{errors.infor_ram}</div>}
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="infor_compan">Thông tin công ty</label>
-            <Field
-              name="infor_compan"
-              type="text"
-              as={Input}
-              value={values.infor_compan}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="input-field"
-            />
-            {errors.infor_compan && touched.infor_compan && <div>{errors.infor_compan}</div>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="infor_rom">Bộ nhớ trong</label>
+              </div>
+        <div className="flex h-auto flex-col gap-4">
+        <label htmlFor="infor_rom" className="text-[13px] font-medium">Bộ nhớ trong</label>
             <Field
               name="infor_rom"
               type="number"
@@ -155,13 +119,15 @@ const FormikProductInforForm = () => {
               value={values.infor_rom}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_rom && touched.infor_rom && <div>{errors.infor_rom}</div>}
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="infor_frontCamera">Thông tin camera trước</label>
+              </div>
+        </div>
+
+        <div className='grid grid-cols-2 gap-4'>
+        <div className="flex h-auto flex-col gap-4">
+        <label htmlFor="infor_frontCamera">Thông tin camera trước</label>
             <Field
               name="infor_frontCamera"
               type="text"
@@ -169,13 +135,12 @@ const FormikProductInforForm = () => {
               value={values.infor_frontCamera}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_frontCamera && touched.infor_frontCamera && <div>{errors.infor_frontCamera}</div>}
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="infor_rearCamera">Thông tin camera sau</label>
+              </div>
+        <div className="flex h-auto flex-col gap-4">
+        <label htmlFor="infor_rearCamera">Thông tin camera sau</label>
             <Field
               name="infor_rearCamera"
               type="text"
@@ -183,13 +148,13 @@ const FormikProductInforForm = () => {
               value={values.infor_rearCamera}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_rearCamera && touched.infor_rearCamera && <div>{errors.infor_rearCamera}</div>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="infor_scanning_frequency">Tần số quét</label>
+              </div>
+        </div>
+        <div className='grid grid-cols-2 gap-4'>
+        <div className="flex h-auto flex-col gap-4">
+        <label htmlFor="infor_scanning_frequency">Thông tin chip và pin</label>
             <Field
               name="infor_scanning_frequency"
               type="text"
@@ -197,13 +162,11 @@ const FormikProductInforForm = () => {
               value={values.infor_scanning_frequency}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_scanning_frequency && touched.infor_scanning_frequency && <div>{errors.infor_scanning_frequency}</div>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="infor_chip_battery">Thông tin chip và pin</label>
+              </div>
+        <div className="flex h-auto flex-col gap-4">
+        <label htmlFor="infor_chip_battery">Thông tin chip và pin</label>
             <Field
               name="infor_chip_battery"
               type="text"
@@ -211,26 +174,20 @@ const FormikProductInforForm = () => {
               value={values.infor_chip_battery}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="input-field"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             />
-            {errors.infor_chip_battery && touched.infor_chip_battery && <div>{errors.infor_chip_battery}</div>}
-          </div>
+              </div>
+   
+        </div>
 
-          <div className="form-group">
-            <label htmlFor="infor_more">Thông tin thêm</label>
-            <Field
-              name="infor_more"
-              type="text"
-              as={Input}
-              value={values.infor_more}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="input-field"
-            />
-            {errors.infor_more && touched.infor_more && <div>{errors.infor_more}</div>}
-          </div>
+      
 
-          <Button type="primary" htmlType="submit">Lưu sản phẩm</Button>
+
+          
+
+     
+       
+
         </Form>
       )}
     </Formik>

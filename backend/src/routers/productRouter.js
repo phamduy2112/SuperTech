@@ -3,6 +3,7 @@ import express from 'express';
 import isAuthenticated from '../config/auth.js';
 import { middleToken } from '../config/jwt.js';
 import { getProducts,getProductsByCategoryId, getProductById, createProduct, updateProduct, deleteProduct, getProductByIdCatelogryDad } from '../controllers/productController.js';
+import { deleteProduct_colors } from '../controllers/product_colorsController.js';
 const productRouter = express.Router();
 
 productRouter.get('/products',getProducts);

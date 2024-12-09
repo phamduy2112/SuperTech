@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createInforProduct, createProduct, deleteProduct, getProductCateloriesByDad, getProductDetail, getProducts, putProductById } from "../../service/product/product.service";
 
 export const getProductByCateloriesDad = createAsyncThunk(
@@ -119,7 +119,8 @@ const initialState = {
   productDetail:{},
   productColors:[],
   listProductStorage:[],
-  
+
+
 };
 
 const ProductSlice = createSlice({
@@ -132,7 +133,17 @@ const ProductSlice = createSlice({
     setProductColors:(state,{payload})=>{
       state.productColors.push(payload);    },
       setProductStorage:(state,{payload})=>{
-        state.listProductStorage.push(payload);    }
+        state.listProductStorage.push(payload);    },
+        removeProductsFromColors: (state, { payload }) => {
+          // Lọc và loại bỏ object có image_id bằng với payload
+          state.productColors = state.productColors.filter(
+            (item) => item.image_id !== payload
+          );
+        },
+        removeAllProductColors: (state)=>{
+          state.productColors=[];
+        }
+     
   },
   extraReducers: (builder) => {
     builder
@@ -166,6 +177,6 @@ const ProductSlice = createSlice({
   },
 });
 
-export const { setProduct,setProductColors,setProductStorage } = ProductSlice.actions;
+export const { setProduct,setProductColors,removeAllProductColors,setProductStorage,removeProductsFromColors } = ProductSlice.actions;
 
 export const productReducer = ProductSlice.reducer;

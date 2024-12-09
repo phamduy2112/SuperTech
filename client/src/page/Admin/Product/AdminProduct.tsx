@@ -19,6 +19,7 @@ import { TbPlaylistAdd } from "react-icons/tb";
 import AdminFilterProduct from "./Component/AdminFilterProduct";
 import { PathAdmin } from "../../../router/component/RouterValues";
 import AdminAddProduct from "./Component/AdminAddProduct";
+import AdminEditProduct from "./Component/AdminEditProduct";
 
 // Define the Category interface
 interface Category {
@@ -48,8 +49,7 @@ const AdminProduct: React.FC = () => {
   ];
   const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
   const handleEdit = (key: any) => {
-    
-    navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
+    // AdminEditProduct    
   };
   const getCategoryNameById = (id) => {
     const category = dataCategories?.find((cat) => cat.category_id == id);
@@ -117,13 +117,10 @@ const AdminProduct: React.FC = () => {
     {
       title: 'Tác Vụ',
       key: 'action',
-      render: (record: any) => (
+      render: (_,record: any) => (
         <div className='flex text-[24px] gap-1'>
 
-
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(+record.product_id)}
-          />
+<AdminEditProduct product={record}/>
           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
             onClick={()=>{handleEye(+record.product_id)}}

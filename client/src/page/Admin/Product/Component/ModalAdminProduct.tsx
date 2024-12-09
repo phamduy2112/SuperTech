@@ -128,7 +128,7 @@ function ModalAdminProduct() {
   Thêm màu sắc
 </div>
       <Modal
-        title="Basic Modal"
+        title="Thêm màu sắc và hình ảnh"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}

@@ -36,8 +36,7 @@ import AdminAddProduct from "../page/Admin/Product/Component/AdminAddProduct";
 import AdminEditProduct from "../page/Admin/Product/Component/AdminEditProduct";
 import AdminCreateAccount from "../page/Admin/User/Component/AdminCreateAccount";
 import AdminCustomerEdit from "../page/Admin/User/Component/AdminCustomerEdit";
-import AdminOrderCreate from "../page/Admin/Order/Component/AdminOrderCreate";
-import AdminOrderEdit from "../page/Admin/Order/Component/AdminOrderEdit";
+
 import AdminCommentPost from "../page/Admin/Blog/Comment/AdminComment";
 import AdminBlog from "../page/Admin/Blog/AdminBlog";
 import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
