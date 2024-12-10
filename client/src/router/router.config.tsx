@@ -52,6 +52,7 @@ import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
 
 import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
 import { Paths } from "./component/RouterValues";
+import AdminCommentDetail from "../page/Admin/Product/Comment/AdminCommentDetail";
 // import PrivateRoute from "./component/RouterPrivate";
 const Home = lazy(
   () => import("../page/Client/Home/Home"),
@@ -94,36 +95,36 @@ export const router = createBrowserRouter([
       {
         path: Paths.UserOrderDetail,
         element: (
-          <PrivateRoute element={  <OrderDetail />}/>
-        
+          <PrivateRoute element={<OrderDetail />} />
+
         ),
-       
+
       },
-    
-{
 
-element:<User/>,
-children:[
-  {
-    path: Paths.Profile,
-    
-    element:     <PrivateRoute element={  <UserDetail />}/>,
-  },
-  {
-    path: Paths.ChangePassword,
-    
-    element:     <PrivateRoute element={  <ChangePasswordUser />}/>,
-  },
-  {
-    path:Paths.UserOrders,
-    element: <PrivateRoute element={  <Order />}/>,
-  },
-
-]
-},
       {
-        path:Paths.Voucher,
-        element:<CouponSection/>
+
+        element: <User />,
+        children: [
+          {
+            path: Paths.Profile,
+
+            element: <PrivateRoute element={<UserDetail />} />,
+          },
+          {
+            path: Paths.ChangePassword,
+
+            element: <PrivateRoute element={<ChangePasswordUser />} />,
+          },
+          {
+            path: Paths.UserOrders,
+            element: <PrivateRoute element={<Order />} />,
+          },
+
+        ]
+      },
+      {
+        path: Paths.Voucher,
+        element: <CouponSection />
       },
       // Mua hàng
       {
@@ -136,18 +137,18 @@ children:[
         element: (
           // <PrivateRoute element={  <Pay />}/>
           <Pay />
-        
+
         ),
       },
-      
+
       {
         path: Paths.Bill,
         element: (
           // <PrivateRoute element={  <Bill />}/>
           <Bill />
-        
+
         ),
-        
+
       },
       // các trang khác
       {
@@ -175,21 +176,21 @@ children:[
     children: [
       {
         path: Paths.Login,
-        element: <AuthRoute element={<Login/>} />,
+        element: <AuthRoute element={<Login />} />,
       },
       {
         path: Paths.Register,
-        element:  <AuthRoute element={<Resigter/>} />,
+        element: <AuthRoute element={<Resigter />} />,
       },
       {
         path: Paths.ForgetPassword,
-        element: <AuthRoute element={<ForgetPassword/>} />,
+        element: <AuthRoute element={<ForgetPassword />} />,
       },
     ]
 
   },
   {
-    path:Paths.Admin.PathsAdmin,
+    path: Paths.Admin.PathsAdmin,
     element: <AdminTemplate />,
     children: [
       {
@@ -223,6 +224,10 @@ children:[
         path: Paths.Admin.ProductComments,
         element: <AdminCommentProduct />
       },
+      {
+        path: Paths.Admin.ProductCommentsDetail,
+        element: <AdminCommentDetail />
+      },
       // Blog
       {
         path: Paths.Admin.Blogs,
@@ -254,13 +259,13 @@ children:[
         path: Paths.Admin.AddStaff,
         element: <AdminCreateAccount />
       },
-   
+
 
       {
         path: Paths.Admin.EditStaff,
         element: <AdminCustomerEdit />
       },
-     
+
 
       // đơn hàng
       {
@@ -277,9 +282,9 @@ children:[
           },
         ],
       },
-     
-   
-    
+
+
+
 
       {
         path: Paths.Admin.Chat,

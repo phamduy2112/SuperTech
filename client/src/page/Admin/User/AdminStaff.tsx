@@ -43,7 +43,6 @@ function AdminStaff() {
     useEffect(() => {
 
 
-        console.log(staffKeys);
 
         const ColumnStaffs = staffKeys.map((staff) => {
 
@@ -171,6 +170,7 @@ function AdminStaff() {
         setColumns(ColumnStaffs);
     }, [staffKeys]);
 
+
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setvalueInputSearch(e.target.value);
     }
@@ -179,7 +179,6 @@ function AdminStaff() {
         if (valueInputSearch.trim() === "") {
             setDataAllstaffs(Allstaffs);
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
 
             const filteredData = Allstaffs.filter((item: any) => {
