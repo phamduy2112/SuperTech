@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
 import { BsThreeDots } from 'react-icons/bs';
 import { FaCheckCircle, FaRegStar, FaStar } from 'react-icons/fa';
@@ -75,7 +75,12 @@ const handleLike=async(id:number,idProduct:number)=>{
   });
   
   const [selectedTab, setSelectedTab] = useState('all');
-  const [filteredComments, setFilteredComments] = useState(props.reviews);
+  
+  const [filteredComments, setFilteredComments] = useState([]);
+  useEffect(()=>{
+    setFilteredComments(props.reviews);
+    setSelectedTab('all');
+  },[props.reviews])
   const handleClick = (selection:string) => {
     setSelectedTab(selection);
     if (selection === "all") {

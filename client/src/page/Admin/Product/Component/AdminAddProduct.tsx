@@ -118,7 +118,7 @@ function AdminAddProduct() {
       fetchApi();
       prevIdsRef.current = imageIds; // Lưu giá trị imageIds hiện tại vào ref
     }
-  }, [imageIds]); // Chỉ theo dõi imageIds
+  }, [imageIds]);
 
 
   
@@ -127,7 +127,7 @@ function AdminAddProduct() {
       <Button onClick={showModal} className="p-10" type="primary">
         <TbPlaylistAdd className="text-[18px]" /> Danh Mục Sản Phẩm Mới
       </Button>
-      
+       
       <Modal
         title="Danh mục sản phẩm mới"
         open={isModalOpen}

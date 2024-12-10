@@ -119,8 +119,10 @@ const AdminProduct: React.FC = () => {
       key: 'action',
       render: (_,record: any) => (
         <div className='flex text-[24px] gap-1'>
-
-<AdminEditProduct product={record}/>
+          {/* <div onClick={()=>{
+            console.log(record);
+            
+          }}>Xem</div> */}
           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
             onClick={()=>{handleEye(+record.product_id)}}

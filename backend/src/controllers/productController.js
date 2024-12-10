@@ -527,7 +527,43 @@ const deleteProduct = async (req, res) => {
         responseSend(res, null, 'Có lỗi xảy ra khi xóa sản phẩm!', 500);
     }
 };
+const deleteProductColor=async(req,res)=>{
+    const productIdColor=req.params.id;
+    await models.product_quality.destroy({
+        where: { color_id: productIdColor },
+    });
 
+    // Xóa tất cả product_storage liên quan đến sản phẩm
+    await models.product_storage.destroy({
+        where: { color_id: productIdColor },
+    });
+
+    // Xóa tất cả product_colors liên quan đến sản phẩm
+    await models.product_colors.destroy({
+        where: { color_id: productIdColor },
+    });
+    
+      // Xóa hình ảnh từ Cloudinary (nếu có)
+    //   const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
+    //   for (const productColor of product.product_colors) {
+    //       for (const field of imageFields) {
+    //           const imageId = productColor[field];
+    //           if (imageId) {
+    //               // Xóa hình ảnh từ Cloudinary
+    //               await cloudinary.uploader.destroy(imageId);
+    //           }
+    //       }
+
+    //       // Xóa bản ghi hình ảnh (image_id) từ cơ sở dữ liệu nếu có
+    //       if (productColor.image_id) {
+    //           await models.image_product.destroy({
+    //               where: { image_id: productColor.image_id }
+    //           });
+    //       }
+    //   }
+    responseSend(res, '', 'Xóa sản phẩm thành công!', 200);
+
+}
 
 export {
     getProducts,
@@ -536,5 +572,6 @@ export {
     updateProduct,
     deleteProduct,
     getProductsByCategoryId,
-    getProductByIdCatelogryDad
+    getProductByIdCatelogryDad,
+    deleteProductColor
 };

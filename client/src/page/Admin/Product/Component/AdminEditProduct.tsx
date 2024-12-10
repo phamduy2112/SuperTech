@@ -10,47 +10,46 @@ import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import ModalAdminProduct from './ModalAdminProduct';
 import { Input } from '../../../../template/Component/Input/Input';
-import { createProductAdminThunk, putInforProductAdminThunk, removeAllProductColors, removeProductsFromColors } from '../../../../redux/product/product.slice';
+import { createProductAdminThunk, getProductByIdThunk, putInforProductAdminThunk, removeAllProductColors, removeProductsFromColors, setProductColors } from '../../../../redux/product/product.slice';
 import { IMG_BACKEND } from '../../../../constants';
 import { IoMdClose } from 'react-icons/io';
-import { getImageProductById, putProductById } from '../../../../service/product/product.service';
+import { deleteColorsProduct, getImageProductById, putProductById } from '../../../../service/product/product.service';
 import { BiSolidEdit } from 'react-icons/bi';
+import { useParams } from 'react-router-dom';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-function AdminEditProduct(props) {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+function AdminEditProduct() {
+  const { id } = useParams(); // Lấy id từ URL
+  const numericId = Number(id); // Ép chuỗi id thành số
   const listProductColor = useAppSelector(state => state.product.productColors);
   const [img,setImg]=useState([]);
-  const [inforProduct,setInforProduct]=useState({});
 
-  const DataCategory = [
-    { label: 'Điện thoại', value: 1 },
-    { label: 'Laptop', value: 2 },
-    // Add more categories as needed
-  ];
+  const productDetail=useAppSelector((state)=>state.product.productDetail)
+
   const dispatch=useAppDispatch()
-  console.log(props);
-  
-  const showModal = () => setIsModalOpen(true);
-  const handleCancel = () => setIsModalOpen(false);
-  const prevIdsRef = useRef(); // Khai báo useRef để lưu giá trị ids trước đó
-  const listCatelogry = useAppSelector(state => state.category.listCatelories);
-  
-
-  useEffect(() => {
-    dispatch(getCatelogryThunk(""));
-  }, [dispatch]);
+  // console.log(props);
   useEffect(()=>{
-    setInforProduct(props.product.infor_product_infor_product
-    )
-  },[props])
-  const formattedCategories = listCatelogry?.map(category => ({
-    value: category.category_id,
-    label: category.category_name,
-    category_dad: category.category_dad
-  }));
+    if (!isNaN(numericId)) {
+      dispatch(getProductByIdThunk(numericId));
+    }
+ 
+  },[numericId,dispatch])
+
+console.log(productDetail.product_name);
+
+  // useEffect(() => {
+  //   dispatch(getCatelogryThunk(""));
+  // }, [dispatch]);
+  // useEffect(()=>{
+  //   setInforProduct(props.product.infor_product_infor_product
+  //   )
+  // },[props])
+  // const formattedCategories = listCatelogry?.map(category => ({
+  //   value: category.category_id,
+  //   label: category.category_name,
+  //   category_dad: category.category_dad
+  // }));
   const Datahe = [
     {
       value: '1',
@@ -83,7 +82,8 @@ function AdminEditProduct(props) {
     
 
   ]
- 
+  const prevIdsRef = useRef(); // Khai báo useRef để lưu giá trị ids trước đó
+
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -111,65 +111,85 @@ function AdminEditProduct(props) {
   };
 
   // const ids = [714, 715]; // Các ID cần lấy
-  const imageIds = listProductColor.map((item) => item.image_id);
-
-  useEffect(() => {
-    const fetchApi = async () => {
-      const responsive = await getImageProductById(imageIds); // Gọi API với imageIds
-      if (responsive.status === 200) {
-        setImg(responsive.data.content);
-      }
-    };
-
-    // Chỉ gọi API nếu imageIds thay đổi
-    if (JSON.stringify(imageIds) !== JSON.stringify(prevIdsRef.current)) {
-      fetchApi();
-      prevIdsRef.current = imageIds; // Lưu giá trị imageIds hiện tại vào ref
-    }
-  }, [imageIds]); // Chỉ theo dõi imageIds
-  useEffect(() => {
-    const matchingCategory = formattedCategories?.find(
-      (category) => category.value === props.product.category_id
-    );
-    if (matchingCategory) {
-      setSelectedCategory(matchingCategory.category_dad);
-    } else {
-      // setSelectedCategory("Không tìm thấy");
-    }
-  }, [formattedCategories, props.product.category_id]);
-
   
-  return (
-    <>
+//   useEffect(() => {
+//     const matchingCategory = formattedCategories?.find(
+//       (category) => category.value === props.product.category_id
+//     );
+//     if (matchingCategory) {
+//       setSelectedCategory(matchingCategory.category_dad);
+//     } else {
+//        // setSelectedCategory("Không tìm thấy");
+//     }
+//  }, [formattedCategories, props.product.category_id]);
+console.log(productDetail);
+const imageIds = listProductColor.map((item) => item.image_id);
+useEffect(() => {
+  const fetchApi = async () => {
+    const responsive = await getImageProductById(imageIds); // Gọi API với imageIds
+    if (responsive.status === 200) {
+      setImg(responsive.data.content);
+    }
+  };
+
+  // Chỉ gọi API nếu imageIds thay đổi
+  if (JSON.stringify(imageIds) !== JSON.stringify(prevIdsRef.current)) {
+    fetchApi();
+    prevIdsRef.current = imageIds; // Lưu giá trị imageIds hiện tại vào ref
+  }
+}, [imageIds]);
+
+
+useEffect(()=>{
+  productDetail.product_colors?.map((item)=>{
+    dispatch(setProductColors({
+      color_id:item.color_id,
+      color: item.color,
+      // quantity: values.quantity,
+      image_id: item.image_id      , // Include image_id here
+      // productStorage: [
+      //   {
+      //     storage: values.capacity,
+      //     storage_price: values.additionalPrice,
+      //   }
+      // ]
+    })
+  );
+  })
+  
+},[dispatch, productDetail])
+  const productColorDelete=async (item:object,id:number)=>{
+    const resp=await deleteColorsProduct(id);
+  
+    console.log(id);
     
-      <BiSolidEdit onClick={showModal} className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-/>
-      <Modal
-        title="Danh mục sản phẩm mới"
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-        width={800}
-      >
+    dispatch(removeProductsFromColors(item.image_id))
+  }
+  return (
+    <div className='w-[80%] m-auto'>
+    
+  
         <Formik
-          initialValues={{
-            category: props.product.category_id,
-            price: props.product.product_price,
-            discount: props.product.product_discount,
-            product_name: props.product.product_name,
-            hot: props.product.product_hot,
-            moTa: inforProduct.moTa,
-            infor_screen:inforProduct.infor_screen,
-                infor_system:inforProduct.infor_system,
-                infor_cpu: inforProduct.infor_cpu,
-                infor_ram: inforProduct.infor_ram,
-                infor_compan: inforProduct.infor_compan,
-                infor_rom:inforProduct.infor_rom,
-                infor_frontCamera: inforProduct.infor_frontCamera,
-                infor_rearCamera: inforProduct.infor_rearCamera,
-                infor_scanning_frequency: inforProduct.infor_scanning_frequency,
-                infor_chip_battery: inforProduct.infor_chip_battery,
-          }}
+          enableReinitialize={true}
+
+      initialValues={{
+        category: productDetail.category_id || "",
+        price: productDetail.product_price || 123,
+        discount: productDetail.product_discount || 0,
+        product_name: productDetail.product_name || "",
+        hot: productDetail.product_hot || 0,
+        moTa: productDetail.infor_more || "",
+        infor_screen: productDetail.infor_screen || "",
+        infor_system: productDetail.infor_system || "",
+        infor_cpu: productDetail.infor_cpu || "",
+        infor_ram: productDetail.infor_ram || "",
+        infor_rom: productDetail.infor_rom || "",
+        infor_frontCamera: productDetail.infor_frontCamera || "",
+        infor_rearCamera: productDetail.infor_rearCamera || "",
+        infor_scanning_frequency: productDetail.infor_scanning_frequency || "",
+        infor_chip_battery: productDetail.infor_chip_battery || "",
+      }}
+      
           onSubmit={(values, { resetForm }) => {
             const dataInforProduct = {
               infor_screen: values.infor_screen,
@@ -184,17 +204,19 @@ function AdminEditProduct(props) {
               product_discount: values.discount,
               category_id: values.category,
               listProductColor: listProductColor,
-              product_id:props.product.product_id
+              product_id:productDetail.product_id
             };
         console.log(dataInforProduct);
         dispatch(putInforProductAdminThunk(dataInforProduct))
         resetForm();
-        handleCancel(); // Đóng modal
+            console.log(values);
+            
         dispatch(removeAllProductColors())
 
 
           }}
         >
+
              {({ setFieldValue, values,handleChange,handleBlur,resetForm }) => (
     <Form className="flex flex-col gap-1">
       {/* Chọn loại sản phẩm */}
@@ -203,11 +225,11 @@ function AdminEditProduct(props) {
   <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
   <Select
     value={values.category || null}  // Set initial value to null or undefined
-    onChange={(value, category_dad) => {
-      setFieldValue('category', value);
-      handleCategoryChange(category_dad.category_dad);
-    }}  // Update Formik state when changed
-    options={formattedCategories}
+    // onChange={(value, category_dad) => {
+    //   setFieldValue('category', value);
+    //   handleCategoryChange(category_dad.category_dad);
+    // }}  // Update Formik state when changed
+    // options={formattedCategories}
     placeholder="Mời bạn chọn"  // Set the placeholder text
     className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
   />
@@ -412,11 +434,11 @@ function AdminEditProduct(props) {
               <div
                   key={item.color}
               
-                  className={`relative flex w-[25%] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
+                  className={`relative flex w-[200px] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
               >
                 <div className='absolute right-0 top-0 text-[1.5rem] cursor-pointer'
                 onClick={(()=>{
-                  dispatch(removeProductsFromColors(item.image_id))
+                  productColorDelete(item,item.color_id)
                 })}
                 >
                   <IoMdClose />
@@ -428,9 +450,10 @@ function AdminEditProduct(props) {
                   />
                   <div>
                       <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
-                      <p className="text-red-500 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
+                      <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
                         return item.storage
                       })}</p>
+                      <p className="text-red-500 font-semibold text-[1.2rem]">Số lượng: 3</p>
                   </div>
               </div>
           ))}
@@ -459,7 +482,6 @@ function AdminEditProduct(props) {
                   onClick={() => {
                     dispatch(removeAllProductColors())
                     resetForm(); // Reset form
-                    handleCancel(); // Đóng modal
                   }}
                   className="h-[48px]  text-blac rounded-lg"
                 >
@@ -471,8 +493,8 @@ function AdminEditProduct(props) {
     </Form>
   )}
         </Formik>
-      </Modal>
-    </>
+  
+    </div>
   );
 }
 

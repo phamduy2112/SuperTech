@@ -78,4 +78,10 @@ export const deleteImageColors = (id: FormData) => {
   });
 };
 
-
+export const deleteColorsProduct= (id: FormData) => {
+  return axiosWithAuth.delete(`/product-color-delete/${id}`, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}

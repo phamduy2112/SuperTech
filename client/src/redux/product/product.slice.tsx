@@ -119,6 +119,7 @@ const initialState = {
   productDetail:{},
   productColors:[],
   listProductStorage:[],
+  listProductsColors:[],
 
 
 };
@@ -131,7 +132,13 @@ const ProductSlice = createSlice({
       state.listProduct = payload;
     },
     setProductColors:(state,{payload})=>{
-      state.productColors.push(payload);    },
+      state.productColors.push(payload);
+    
+    },
+    setListProductColors: (state,{payload})=>{
+      state.listProductsColors = payload; // Thay thế mảng hiện tại bằng mảng mới
+
+    },
       setProductStorage:(state,{payload})=>{
         state.listProductStorage.push(payload);    },
         removeProductsFromColors: (state, { payload }) => {
@@ -140,8 +147,10 @@ const ProductSlice = createSlice({
             (item) => item.image_id !== payload
           );
         },
+      
         removeAllProductColors: (state)=>{
           state.productColors=[];
+          state.listProductsColors=[]
         }
      
   },
@@ -177,6 +186,6 @@ const ProductSlice = createSlice({
   },
 });
 
-export const { setProduct,setProductColors,removeAllProductColors,setProductStorage,removeProductsFromColors } = ProductSlice.actions;
+export const { setProduct,setProductColors,setListProductColors,removeAllProductColors,setProductStorage,removeProductsFromColors } = ProductSlice.actions;
 
 export const productReducer = ProductSlice.reducer;

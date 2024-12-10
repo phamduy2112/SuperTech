@@ -8,7 +8,7 @@ function ProductColor(props) {
       props.setSelectedColor(firstColor?.color);
       props.onColorChange(firstColor?.color); // Gọi hàm để cập nhật màu cho component cha
     }
-  }, [props.listProduct, props.onColorChange]);
+  }, [props, props.listProduct, props.onColorChange]);
 
   const handleColorChange = (color: string) => {
     const newColor = props.listProduct.product_colors.find((item) => item.color === color);

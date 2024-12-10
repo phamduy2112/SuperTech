@@ -1,354 +1,327 @@
-
-
-
-import { GetProp, Select, Upload, UploadFile } from 'antd';
-import React, { useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import ModalAdminProduct from './ModalAdminProduct';
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
-import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
-import { createInforProductAdminThunk, createProductAdminThunk, deleteProductAdminThunk } from '../../../../redux/product/product.slice';
-import { IoMdClose } from 'react-icons/io';
-import { getImageProductByImage } from '../../../../service/product/product.service';
-import { IMG_BACKEND } from '../../../../constants';
-
-
-
-function AdminAddProduct() {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
-  const listProductColor=useAppSelector(state=>state.product.productColors)
-  const [image,setImage]=useState("");
-  
-  const handleCategoryChange = (category_dad) => {
-    setSelectedCategory(category_dad);
-   
-    
-  };
-  const dispatch=useAppDispatch();
-
-  useEffect(()=>{
-   
-    dispatch(getCatelogryThunk(""));
-
-  },[dispatch])
-  const formattedCategories = listCatelogry?.map(category => ({
-    value: category.category_id,   // Make sure category.id is available
-    label: category.category_name, // Make sure category.name is available
-    category_dad:category.category_dad
-  }));
-
-  
-
-  const Datahe = [
-    {
-      value: '1',
-      label: 'Ios',
+{
+    "product_id": 3,
+    "product_name": "Điện thoại Samsung Galaxy A16",
+    "product_price": 2000,
+    "product_star": 5,
+    "product_discount": 5,
+    "product_hot": 1,
+    "product_date": "2024-11-05",
+    "infor_product": 1,
+    "category_id": 2,
+    "comment_products": [
+        {
+            "comment_id": 5499,
+            "comment_date": "2024-11-23T08:09:18.000Z",
+            "comment_content": "Xinchao",
+            "comment_star": null,
+            "product_id": 3,
+            "user_id": 137,
+            "isPurchase": false,
+            "user": {
+                "user_id": 137,
+                "user_name": "Nguyễn Thanh Tùng",
+                "user_email": "tung123@gmail.com",
+                "user_address": null,
+                "user_image": "hinh-nen-gai-xinh-cute-toc-dai",
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": false
+            }
+        },
+        {
+            "comment_id": 5541,
+            "comment_date": "2024-12-06T05:33:34.000Z",
+            "comment_content": "xinafh",
+            "comment_star": 0,
+            "product_id": 3,
+            "user_id": 124,
+            "isPurchase": false,
+            "user": {
+                "user_id": 124,
+                "user_name": "vinh1234444",
+                "user_email": "bactv816@gmail.com",
+                "user_address": null,
+                "user_image": "ai-generated-9114368_1920",
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5542,
+            "comment_date": "2024-12-06T05:35:23.000Z",
+            "comment_content": "xinafh",
+            "comment_star": 0,
+            "product_id": 3,
+            "user_id": 124,
+            "isPurchase": false,
+            "user": {
+                "user_id": 124,
+                "user_name": "vinh1234444",
+                "user_email": "bactv816@gmail.com",
+                "user_address": null,
+                "user_image": "ai-generated-9114368_1920",
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5543,
+            "comment_date": "2024-12-06T06:02:29.000Z",
+            "comment_content": "s",
+            "comment_star": 0,
+            "product_id": 3,
+            "user_id": 124,
+            "isPurchase": false,
+            "user": {
+                "user_id": 124,
+                "user_name": "vinh1234444",
+                "user_email": "bactv816@gmail.com",
+                "user_address": null,
+                "user_image": "ai-generated-9114368_1920",
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5544,
+            "comment_date": "2024-12-06T06:02:56.000Z",
+            "comment_content": "Xin chào",
+            "comment_star": 0,
+            "product_id": 3,
+            "user_id": 124,
+            "isPurchase": false,
+            "user": {
+                "user_id": 124,
+                "user_name": "vinh1234444",
+                "user_email": "bactv816@gmail.com",
+                "user_address": null,
+                "user_image": "ai-generated-9114368_1920",
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5545,
+            "comment_date": "2024-12-07T16:26:39.000Z",
+            "comment_content": "ddd",
+            "comment_star": 4,
+            "product_id": 3,
+            "user_id": 164,
+            "isPurchase": false,
+            "user": {
+                "user_id": 164,
+                "user_name": "duyp7454",
+                "user_email": "duyp7484@gmail.com",
+                "user_address": null,
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": "2024-12-04T09:19:31.000Z",
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5546,
+            "comment_date": "2024-12-08T19:01:47.000Z",
+            "comment_content": "abv",
+            "comment_star": 4,
+            "product_id": 3,
+            "user_id": 164,
+            "isPurchase": false,
+            "user": {
+                "user_id": 164,
+                "user_name": "duyp7454",
+                "user_email": "duyp7484@gmail.com",
+                "user_address": null,
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": "2024-12-04T09:19:31.000Z",
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5547,
+            "comment_date": "2024-12-08T19:03:15.000Z",
+            "comment_content": "aa",
+            "comment_star": 4,
+            "product_id": 3,
+            "user_id": 138,
+            "isPurchase": false,
+            "user": {
+                "user_id": 138,
+                "user_name": "Vinh",
+                "user_email": "duyp7454@gmail.com",
+                "user_address": "Chưa cập nhận",
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5548,
+            "comment_date": "2024-12-08T19:03:30.000Z",
+            "comment_content": "abc",
+            "comment_star": 3,
+            "product_id": 3,
+            "user_id": 138,
+            "isPurchase": false,
+            "user": {
+                "user_id": 138,
+                "user_name": "Vinh",
+                "user_email": "duyp7454@gmail.com",
+                "user_address": "Chưa cập nhận",
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5549,
+            "comment_date": "2024-12-08T19:03:37.000Z",
+            "comment_content": "ab",
+            "comment_star": 3,
+            "product_id": 3,
+            "user_id": 164,
+            "isPurchase": false,
+            "user": {
+                "user_id": 164,
+                "user_name": "duyp7454",
+                "user_email": "duyp7484@gmail.com",
+                "user_address": null,
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": "2024-12-04T09:19:31.000Z",
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5551,
+            "comment_date": "2024-12-08T19:08:14.000Z",
+            "comment_content": "abcdu",
+            "comment_star": 3,
+            "product_id": 3,
+            "user_id": 138,
+            "isPurchase": false,
+            "user": {
+                "user_id": 138,
+                "user_name": "Vinh",
+                "user_email": "duyp7454@gmail.com",
+                "user_address": "Chưa cập nhận",
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": null,
+                "is_verified": true
+            }
+        },
+        {
+            "comment_id": 5552,
+            "comment_date": "2024-12-08T19:08:54.000Z",
+            "comment_content": "bcv",
+            "comment_star": 3,
+            "product_id": 3,
+            "user_id": 164,
+            "isPurchase": false,
+            "user": {
+                "user_id": 164,
+                "user_name": "duyp7454",
+                "user_email": "duyp7484@gmail.com",
+                "user_address": null,
+                "user_image": null,
+                "user_role": 0,
+                "level": null,
+                "user_gender": null,
+                "user_birth": null,
+                "user_time": "2024-12-04T09:19:31.000Z",
+                "is_verified": true
+            }
+        }
+    ],
+    "infor_product_infor_product": {
+        "infor_product": 1,
+        "infor_screen": "7.0 inches+",
+        "infor_system": "Android",
+        "infor_cpu": "2000",
+        "infor_ram": "2000",
+        "infor_compan": "samsung",
+        "infor_rom": "256GB",
+        "infor_frontCamera": "5 MP",
+        "infor_rearCamera": "48 MP",
+        "infor_scanning_frequency": "90HZ",
+        "infor_chip_battery": "4000 mAh 18W",
+        "infor_more": "<p>Chống nước và bụi IP68</p>"
     },
-    {
-      value: '2',
-      label: 'Android',
-    },
-    {
-      value: '3',
-      label: 'HDD Level 3',
-    },
-  ];
-
-  
-
-
- // Initial values của form
-const initialValues = {
-  category: '',
-  price: '',
-  discount:0,
-  product_name:"",
-  hot:0,
-  quantity:0,
-  infor_screen:"",
-  infor_system:"",
-  infor_cpu:"",
-  infor_ram:"",
-  moTa:"",
-};
-  const Datagiamgia = [
-    {
-      value: 0,
-      label: '0%',
-    },
-    {
-      value: 10,
-      label: '10%',
-    },
-   
-    {
-      value: 5,
-      label: '5%',
-    },
-    
-
-  ]
-  const validationSchema = Yup.object({
-    category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
-    price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
-    // Thêm các validation cho các trường khác nếu cần
-  });
-  const [value, setValue] = useState('')
-  const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-    ['blockquote', 'code-block'],
-    ['link', 'image', 'video', 'formula'],
-
-    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-    [{ 'direction': 'rtl' }],                         // text direction
-
-    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-    [{ 'font': [] }],
-    [{ 'align': [] }],
-
-    ['clean']
-  ];
-  useEffect(()=>{
-    const fetchApi=async()=>{
-      const responive=await getImageProductByImage(listProductColor[0].image_id)
-      setImage(responive.data.content.image_one)
-    } 
-    fetchApi()
-  },[])
-
-
-  return (
-    <div className="flex-1 bg-[#f2edf3] grid xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]">
-    <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
-      <span className="text-[20px] font-semibold">Tạo Sản Phẩm Mới</span>
-      <Formik
-  initialValues={initialValues}
-  validationSchema={validationSchema}
-  onSubmit={(values) => {
-  
-    
-const dataInforProduct={
-  infor_screen:values.infor_screen,
-  infor_system:values.infor_system,
-  infor_cpu:values.infor_cpu,
-  infor_ram:values.infor_ram,
-  infor_more:values.moTa,
-
-  product_name:values.product_name,
-  product_price:values.price,
-  product_hot:values.hot,
-  product_quantity:values.quantity,
-  product_discount:values.discount,
-  category_id:values.category,
-
-  listProductColor:listProductColor,
-  // listProductStorage
-  
-}
-
-
-
-dispatch(createProductAdminThunk(dataInforProduct))
-// console.log(listProductColor);
-
-
-
-
-}}
->
-  {({ setFieldValue, values }) => (
-    <Form className="flex flex-col gap-4">
-      {/* Chọn loại sản phẩm */}
-      <div className="flex gap-[1%]">
-        <div className="flex w-[33%] h-auto flex-col gap-4">
-          <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
-          <Select
-            value={values.category}  // bind value to Formik state
-            onChange={(value,category_dad) => 
-              
-            {
-              setFieldValue('category', value);
-              handleCategoryChange(category_dad.category_dad)
-            }  
-            
-            } // update Formik state when changed
-            options={formattedCategories}
-            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-          />
-        </div>
-        {/* Nhập giá sản phẩm */}
-        <div className="flex w-[33%] h-auto flex-col gap-4">
-          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
-          <Field
-            type="number"
-            name="price"
-            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-            placeholder="Nhập giá sản phẩm"
-          />
-          <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" />
-        </div>
-        {/* Chọn mức giảm giá */}
-        <div className="flex w-[33%] h-auto flex-col gap-4">
-          <label htmlFor="discount" className="text-[13px] text-[#81818177] font-medium">Giảm giá</label>
-          <Select
-            value={values.discount}  // bind value to Formik state
-            onChange={(value) => setFieldValue('discount', value)}  // update Formik state when changed
-            options={Datagiamgia}
-            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-          />
-        </div>
-      </div>
-       <div className="flex w-[100%] h-auto flex-col gap-4">
-          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Tên sản phẩm</label>
-          <Field
-            type="text"
-            name="product_name"
-            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-            placeholder="Nhập tên sản phẩm"
-          />
-          <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" />
-        </div>
-        <div className='flex'>
-        <div className="flex w-[49%] h-auto flex-col gap-4">
-          <label htmlFor="hot" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Hot</label>
-          <Field
-            type="text"
-            name="hot"
-            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-            placeholder="Nhập tên sản phẩm"
-          />
-          <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" />
-        </div>
-        <div className="flex w-[49%] h-auto flex-col gap-4">
-          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Số lượng</label>
-          <Field
-            type="text"
-            name="quantity"
-            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-            placeholder="Nhập tên sản phẩm"
-          />
-          <ErrorMessage name="quantity" component="div" className="text-[1.5rem] text-red-500" />
-        </div>
-        </div>
-
-        {(selectedCategory == '1' || selectedCategory == '2') && (
-          <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
-            <span className="text-[20px] font-semibold">Tạo thuộc tính</span>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_screen" className="text-[13px] font-medium">Màn hình</label>
-                      <Field
-                        type="number"
-                        name="infor_screen"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-             
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_cpu" className="text-[13px] font-medium">Cpu</label>
-                      <Field
-                        type="number"
-                        name="infor_cpu"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_ram" className="text-[13px] font-medium">Ram</label>
-                      <Field
-                        type="number"
-                        name="infor_ram"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
-              </div>
-            
-              <div className="flex h-auto flex-col gap-4">
-                <label htmlFor="os" className="text-[13px] text-[#81818177] font-medium">Hệ điều hành</label>
-                <Select
-                 value={values.infor_system}  // bind value to Formik state
-                 onChange={(value,category_dad) => 
-                   
-                 {
-                   setFieldValue('infor_system', value);
-               
-                 }  
+    "product_qualities": [
+        {
+            "quality_id": 1,
+            "quality_product": -60,
+            "color_id": 1,
+            "storage_id": 1,
+            "product_id": 3
+        }
+    ],
+    "product_colors": [
+        {
+            "color_id": 1,
+            "color": "Tím",
+            "quality": 5,
+            "image_id": 1,
+            "product_id": 3,
+            "image": {
+                "image_id": 1,
+                "image_one": "oswsbrpihzpiruyr6mal",
+                "image_two": "wtagy458saffcstgynoa",
+                "image_three": "aq9rewyaqgjghsllpyiy",
+                "image_four": "wsis4wsc1tdjxuzwa77q"
+            },
+            "product_storages": [
+                {
+                    "id_storage": 1,
+                    "storage": 388,
+                    "storage_quatity": 5,
+                    "storage_price": 1000,
+                    "product_id": 3,
+                    "color_id": 1
                 }
-                  placeholder="Vui lòng chọn hệ điều hành"
-                
-                  options={Datahe}
-                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-                />
-              </div>
-              
-            </div>
-          </div>
-        )}
-
-<ModalAdminProduct/>
-<div>
-{listProductColor?.map((item) => (
-              <div
-                  key={item.color}
-              
-                  className={`relative flex w-[25%] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
-              >
-                <div className='absolute right-0 top-0 text-[1.5rem]'>
-                  <IoMdClose />
-                </div>
-                  <img 
-                      src={`${IMG_BACKEND}/${image}`}
-                      alt={item.color} 
-                      className="w-20 rounded-md"
-                  />
-                  <div>
-                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
-                      <p className="text-red-500 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
-                        return item.storage
-                      })}</p>
-                  </div>
-              </div>
-          ))}
-</div>
-        <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
-          <div className="col-span-3 flex h-[400px] overflow-y-hidden flex-col gap-4">
-            <label htmlFor="moTa" className="text-[13px] text-[#81818177] font-medium">Mô tả</label>
-            <ReactQuill
-              theme="snow"
-              value={values.moTa}
-            onChange={(value) => setFieldValue('moTa', value)}  // update Formik state when changed
-              modules={{
-                toolbar: toolbarOptions,
-              }}
-              className="h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
-            />
-          </div>
-        </div>
-
-      {/* Submit Button */}
-        <button type="submit" className="text-center bg-[#1A73E8] text-white text-[1.5rem] py-2 px-6 rounded-lg">
-          Thêm sản phẩm
-        </button>
-      
-    </Form>
-  )}
-</Formik>
-    </div>
-  </div>
-  );
+            ]
+        }
+    ],
+    "key": 3
 }
-
-export default AdminAddProduct;
-

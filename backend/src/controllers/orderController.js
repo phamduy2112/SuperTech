@@ -303,19 +303,69 @@ const changeStatusOrder = async (req, res) => {
           { where: { product_id: productIds, user_id:idUser }, }
         );
       }
+      if ( order_status == 6) {
+        
+        // Tăng lại số lượng sản phẩm trong kho
+        const orderItems = await models.detail_order.findAll({
+          where: { order_id },
+          attributes: ["product_color", "product_storage",'product_id','detail_order_quality'], // Truy xuất màu và dung lượng
+        });
+        console.log('313: ',orderItems);
+        
+        await Promise.all(
+          orderItems.map(async (item) => {
+            const colorMapping = await models.product_colors.findOne({
+              where: {
+                color: {
+                  [Op.like]: `%${item.product_color}%`, // Tìm kiếm chứa chuỗi
+                },
+                product_id: item.product_id
+                
+              },
+            });
+            
+            const storageMapping = await models.product_storage.findOne({
+              where: {
+                storage: {
+                  [Op.like]: `%${item.product_storage}%`, // Tìm kiếm chứa chuỗi
+                },
+                product_id: item.product_id
+
+              },
+            });
+            
+        console.log("111",item.detail_order_quality);
+        
+            if (colorMapping && storageMapping) {
+             const res= await models.product_quality.increment("quality_product", {
+                by: item.detail_order_quality,
+                where: {
+                  product_id: item.product_id,
+                  color_id: colorMapping.color_id,
+                  storage_id: storageMapping.id_storage,
+                },
+              });
+              console.log(res);
+            }
+          })
+       
+          
+        );
       // Trả về phản hồi thành công với dữ liệu đã tạo
       return res.status(201).json({
         message: 'Đã tạo mới trạng thái đơn hàng thành công!',
         data: newOrderStatus,
       });
-    } catch (error) {
-      // Nếu có lỗi, trả về lỗi cho người dùng
-      console.error('Error creating order status:', error);
-      console.log(error);
-      
-      return res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau.' });
-    }
-  };
+    } 
+}catch (error) {
+  // Nếu có lỗi, trả về lỗi cho người dùng
+  console.error('Error creating order status:', error);
+  console.log(error);
+  
+  return res.status(500).json({ message: 'Lỗi hệ thống, vui lòng thử lại sau.' });
+
+};
+}
   
 const createorder = async (req, res) => {
     try {

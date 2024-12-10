@@ -99,7 +99,8 @@ function ModalAdminProduct() {
             storage_price: values.additionalPrice,
           }
         ]
-      }));
+      })
+    );
   
       console.log('Product color saved successfully:', {
         color: values.color,
