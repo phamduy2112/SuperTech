@@ -371,7 +371,7 @@ function AdminCommentDetail() {
         } else {
             const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
 
-            const filterComment = DetailComment.filter((item: any) => {
+            const filterComment = DetailComment?.filter((item: any) => {
                 const IdcommentFilter = item?.id;
                 const ContentcommentFilter = item?.comment;
                 const userNamefilter = item?.user.user_name;
