@@ -277,24 +277,21 @@ const updateUser = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-const deleteEmployee = async (req, res) => {
-  console.log(req.params.id);
+const deleteEmployee=async(req,res)=>{
+  try{
 
-  try {
     let deleted = await User.destroy({
-      where: { user_id: req.params.id },
-    });
-    if (deleted) {
-      let data = await User.findAll();
-      responseSend(res, data, "Thành công!", 200);
-    } else {
+      where: { user_id: req.params.id }
+  });
+  if (deleted) {
+      responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+  } else {
       responseSend(res, "", "không tìm thấy !", 404);
-    }
-  } catch (e) {
-    console.error("Error deleting user:", e);
-    responseSend(res, "", "Có loii xảy ra!", 500);
   }
-};
+  }catch(e){
+
+  }
+}
 const updateImage=async(req,res)=>{
     try{
         const user_id=req.id;
@@ -588,112 +585,6 @@ const verifyEmail = async (req, res) => {
     res.status(500).send("Có lỗi xảy ra khi xác thực email.");
   }
 };
-const createUser = async (req, res) => {
-  try {
-    const {
-      user_name,
-      user_email,
-      user_password,
-      user_address,
-      user_phone,
-      user_role,
-      level,
-      user_gender,
-      user_birth,
-      user_time,
-      user_image,
-    } = req.body;
-
-    const user = await User.findOne({ where: { user_email } });
-    if (user) {
-      return responseSend(res, { success: false }, "Email đã tồn tại", 201);
-    }
-    const hashedPassword = await bcrypt.hash(user_password, 10);
-    await User.create({
-      user_name,
-      user_email,
-      user_password: hashedPassword,
-      user_address,
-      user_phone,
-      user_role,
-      level,
-      user_gender,
-      user_birth,
-      user_time,
-      user_image,
-    });
-    responseSend(
-      res,
-      {
-        success: true,
-      },
-      "Thêm thành thành công!",
-      200
-    );
-  } catch (e) {
-    console.log(e);
-  }
-};
-const Checkuserdetailadmin = async (req, res) => {
-  const user_id = req.params.id;
-
-  const user = await User.findByPk(user_id, {
-    attributes: { exclude: ["user_password"] },
-  });
-  console.log("user", user);
-
-  const token = createToken(user);
-  const tokenRef = createTokenRef(user);
-
-  return responseSend(
-    res,
-    {
-      token: token,
-      refreshToken: tokenRef,
-      success: true,
-    },
-    "Thành công!",
-    200
-  );
-};
-const UpdateUsersAdmin = async (req, res) => {
-  try {
-    const user_id = req.params.id;
-
-    const user = await User.findByPk(user_id);
-    req.body;
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-        success: false,
-      });
-    }
-    Object.entries(req.body).forEach(([key, value]) => {
-      user[key] = value;
-    });
-    console.log(user);
-
-    await user.save();
-    const userDB = await User.findByPk(user_id);
-    console.log(userDB);
-
-    const token = createToken(userDB);
-    const tokenRef = createTokenRef(userDB);
-    return responseSend(
-      res,
-      {
-        token: token,
-        refreshToken: tokenRef,
-        success: true,
-      },
-      "Cập Nhật Thành Công!",
-      200
-    );
-  } catch (error) {
-    console.error("Error updating user:", error);
-    responseSend(res, "", "Có lỗi xảy ra!", 500);
-  }
-};
 export {
     getUser,
     register,
@@ -711,9 +602,6 @@ export {
     resetPasswordNoToken,
     deleteEmployee,
     getNewCustomersThisWeek,
-    verifyEmail,
-    createUser,
-    Checkuserdetailadmin,
-    UpdateUsersAdmin
+    verifyEmail
 };
 

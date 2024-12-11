@@ -14,10 +14,6 @@ export default class categories extends Model {
       type: DataTypes.STRING(50),
       allowNull: true
     },
-    category_image: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    },
     category_dad: {
       type: DataTypes.INTEGER,
       allowNull: true

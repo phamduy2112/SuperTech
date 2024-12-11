@@ -27,11 +27,11 @@ const getProducts = async (req, res) => {
             model: models.infor_product,
             as: 'infor_product_infor_product',
           },
-          {
-            model: models.product_quality,
-            as: 'product_qualities',
-            required: true, // Sản phẩm phải có ít nhất một chất lượng
-          },
+        //   {
+        //     model: models.product_quality,
+        //     as: 'product_qualities',
+        //     required: true, // Sản phẩm phải có ít nhất một chất lượng
+        //   },
           {
             model: models.product_colors,
             as: 'product_colors',
@@ -43,7 +43,11 @@ const getProducts = async (req, res) => {
               {
                 model: models.product_storage,
                 as: 'product_storages',
-                required: true,  // Sản phẩm phải có ít nhất một kho chứa
+              },
+              {
+                model: models.product_quality,
+                as: 'product_qualities',
+                required: true, // Sản phẩm phải có ít nhất một chất lượng
               },
             ],
             required: true, // Sản phẩm phải có màu sắc
@@ -62,7 +66,59 @@ const getProducts = async (req, res) => {
       console.log(error);
     }
   };
-  
+  const getProductsAdmin=async(req,res)=>{
+    try {
+        let data = await Products.findAll({
+          include: [
+            {
+              model: models.comment_product,
+              as: 'comment_products',
+              include: [
+                {
+                  model: models.user,
+                  as: 'user',
+                  attributes: { exclude: ['user_password', 'user_phone'] },
+                },
+              ],
+            },
+            {
+              model: models.infor_product,
+              as: 'infor_product_infor_product',
+            },
+      
+            {
+              model: models.product_colors,
+              as: 'product_colors',
+              include: [
+                {
+                  model: models.image_product,
+                  as: 'image',
+                },
+                {
+                  model: models.product_storage,
+                  as: 'product_storages',
+                },
+                {
+                  model: models.product_quality,
+                  as: 'product_qualities',
+                },
+              ],
+              required: true, // Sản phẩm phải có màu sắc
+            },
+          ],
+        });
+    
+        // Lọc các sản phẩm có màu sắc, kho chứa và chất lượng
+      //   const filteredData = data.filter(product => {
+      //     return product.product_qualities.quality_product> 0; // Kiểm tra có chất lượng
+      //   });
+    
+        responseSend(res, data, "Thành công!", 200);
+      } catch (error) {
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.log(error);
+      }
+  }
 const getProductsByCategoryId = async (req, res) => {
     try {
         const categoryId = req.params.categoryId;
@@ -228,14 +284,20 @@ const createProduct = async (req, res) => {
             product_price,
             product_discount,
             product_hot,
-            product_quantity,
-            image_id,
+        
             category_id,
+        
+            moTa,
             infor_screen,
             infor_system,
             infor_cpu,
             infor_ram,
-            infor_more,
+            infor_compan,
+            image_id,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
             listProductColor = [],
         } = req.body;
 
@@ -246,7 +308,13 @@ const createProduct = async (req, res) => {
             infor_system,
             infor_cpu,
             infor_ram,
-            infor_more
+            infor_more: moTa,
+            infor_compan,
+         
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
         });
 
         // Create `products` entry
@@ -260,8 +328,6 @@ const createProduct = async (req, res) => {
             infor_product: newinforproduct.infor_product,
             category_id,
         });
-        // uploadFields();
-        // const rep=uploadImages()
 
         // Create entries in `product_colors` and `product_storage`
         if (listProductColor.length > 0) {
@@ -269,20 +335,31 @@ const createProduct = async (req, res) => {
                 // Create `product_colors` entry
                 const createColors = await models.product_colors.create({
                     color: order.color,
-                    quality: order.quality,
+                    quality: 0,
                     product_id: newProduct.product_id,
+                    image_id:order.image_id
                 });
 
                 // Check if `productStorage` exists within `order` and create `product_storage` entries
                 if (order.productStorage && order.productStorage.length > 0) {
                     await Promise.all(order.productStorage.map(async (storage) => {
-                        return await models.product_storage.create({
+                        const newProductStorage = await models.product_storage.create({
                             color_id: createColors.color_id, 
-                            storage: storage.storage,       // Link to `product_colors` entry
-                            storage_quality: storage.quality, // Replace with actual storage quality field
-                            storage_price: storage.storage_price,      // Replace with actual storage price field
+                            storage: storage.storage, // Link to `product_colors` entry
+                            storage_quality: 0, // Replace with actual storage quality field
+                            storage_price: storage.storage_price, // Replace with actual storage price field
                             product_id: newProduct.product_id,
+                        });
 
+                        // You can now access `storage_id` from the `newProductStorage`
+                        const storage_id = newProductStorage.id_storage; // This is the storage_id that you wanted to get
+
+                        // quality_id, quality_product, color_id, storage_id, product_id
+                        await models.product_quality.create({
+                            quality_product:order.quantity ,
+                            color_id: createColors.color_id, 
+                            storage_id: storage_id, // Pass the storage_id here
+                            product_id: newProduct.product_id,
                         });
                     }));
                 }
@@ -297,179 +374,321 @@ const createProduct = async (req, res) => {
 };
 
 
+
 const updateProduct = async (req, res) => {
     try {
-        const product_id = req.params.id;
         const {
             product_name,
             product_price,
             product_discount,
             product_hot,
-            product_quantity,
             category_id,
+            moTa,
             infor_screen,
             infor_system,
             infor_cpu,
             infor_ram,
-            infor_more,
-            listProductColor = [], // Default to empty array if undefined
+            infor_compan,
+            image_id,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
+            listProductColor = [],
         } = req.body;
 
-        // Tìm sản phẩm
-        const product = await Products.findByPk(product_id, {
+        const productId = req.params.id;
+
+        // Tìm sản phẩm cần cập nhật
+        const product = await Products.findOne({
+            where: { product_id: productId },
             include: [
                 {
                     model: models.infor_product,
-                    as: 'infor_product_infor_product', // Alias được định nghĩa trong quan hệ
+                    as: 'infor_product_infor_product',
                 },
                 {
                     model: models.product_colors,
                     as: 'product_colors',
+                    include: [
+                        { model: models.product_storage, as: 'product_storages' },
+                        { model: models.product_quality, as: 'product_qualities' },
+                    ],
                 },
             ],
         });
 
         if (!product) {
-            return res.status(404).json({
-                message: "Product not found",
-                success: false,
-            });
+            return responseSend(res, null, 'Sản phẩm không tồn tại!', 404);
         }
 
-        // Cập nhật thông tin cơ bản của sản phẩm
-        product.product_name = product_name || product.product_name;
-        product.product_price = product_price || product.product_price;
-        product.product_discount = product_discount || product.product_discount;
-        product.product_hot = product_hot || product.product_hot;
-        product.product_quantity = product_quantity || product.product_quantity;
-        product.category_id = category_id || product.category_id;
-        product.product_date = new Date();
+        // Cập nhật thông tin sản phẩm
+        await product.update({
+            product_name,
+            product_price,
+            product_discount,
+            product_hot,
+            category_id,
+        });
 
-        // Cập nhật thông tin sản phẩm (infor_product)
-        if (product.infor_product_infor_product) {
-            const inforProduct = product.infor_product_infor_product;
-            inforProduct.infor_screen = infor_screen || inforProduct.infor_screen;
-            inforProduct.infor_system = infor_system || inforProduct.infor_system;
-            inforProduct.infor_cpu = infor_cpu || inforProduct.infor_cpu;
-            inforProduct.infor_ram = infor_ram || inforProduct.infor_ram;
-            inforProduct.infor_more = infor_more || inforProduct.infor_more;
-            await inforProduct.save();
-        }
+        // Cập nhật thông tin liên quan đến sản phẩm
+        const productInfo = product.infor_product_infor_product;
+        await models.infor_product.update({
+            infor_screen,
+            infor_system,
+            infor_cpu,
+            infor_ram,
+            infor_more: moTa,
+            infor_compan,
+            infor_frontCamera,
+            infor_rearCamera,
+            infor_scanning_frequency,
+            infor_chip_battery,
+        });
 
-        // Xử lý màu sắc và dung lượng (product_colors, product_storage)
+        // Cập nhật hoặc xóa màu sắc và lưu trữ cũ nếu có
         if (listProductColor.length > 0) {
-            // Xóa các màu sắc cũ và liên kết dung lượng (nếu cần)
-            await Promise.all(
-                product.product_colors.map(async (color) => {
-                    await models.product_storage.destroy({ where: { color_id: color.color_id } });
-                    await color.destroy();
-                })
-            );
+            await Promise.all(listProductColor.map(async (order) => {
+                // Kiểm tra và cập nhật màu sắc sản phẩm
+                let color = await models.product_colors.findOne({
+                    where: { product_id: productId, color: order.color },
+                });
 
-            // Thêm các màu sắc mới
-            await Promise.all(
-                listProductColor.map(async (color) => {
+                if (color) {
+                    // Nếu có thay đổi image_id, xóa ảnh cũ trên Cloudinary
+                    if (color.image_id && color.image_id !== order.image_id) {
+                        await cloudinary.uploader.destroy(color.image_id);
+                    }
+                    
+                    // Cập nhật image_id mới
+                    await color.update({
+                        image_id: order.image_id,  // Cập nhật image_id mới
+                    });
+                } else {
+                    // Tạo màu sắc mới nếu không tìm thấy
                     const newColor = await models.product_colors.create({
-                        color: color.color,
-                        quality: color.quality,
-                        product_id: product_id,
-                        image_id: color.image_id,
+                        color: order.color,
+                        product_id: productId,
+                        image_id: order.image_id,
                     });
 
-                    // Thêm các dung lượng mới nếu có
-                    if (color.productStorage && color.productStorage.length > 0) {
-                        await Promise.all(
-                            color.productStorage.map(async (storage) => {
-                                await models.product_storage.create({
-                                    color_id: newColor.color_id,
-                                    storage: storage.storage,
-                                    storage_quality: storage.quality,
-                                    storage_price: storage.storage_price,
-                                    product_id: product_id,
-                                });
-                            })
-                        );
+                    // Tạo các bản ghi lưu trữ và chất lượng liên quan
+                    if (order.productStorage && order.productStorage.length > 0) {
+                        await Promise.all(order.productStorage.map(async (storage) => {
+                            const newProductStorage = await models.product_storage.create({
+                                color_id: newColor.color_id,
+                                storage: storage.storage,
+                                storage_quality: 0, // Replace with actual value
+                                storage_price: storage.storage_price,
+                                product_id: productId,
+                            });
+
+                            await models.product_quality.create({
+                                quality_product: storage.quantity,
+                                color_id: newColor.color_id,
+                                storage_id: newProductStorage.id_storage,
+                                product_id: productId,
+                            });
+                        }));
                     }
-                })
-            );
+                }
+            }));
         }
 
-        // Lưu thay đổi của sản phẩm
-        await product.save();
-
-        responseSend(res, product, "Đã Cập Nhật Thành Công!", 200);
+        responseSend(res, product, "Cập nhật sản phẩm thành công!", 200);
     } catch (error) {
-        console.error("Error updating product:", error);
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.error('Lỗi khi cập nhật sản phẩm:', error);
+        responseSend(res, null, 'Có lỗi xảy ra khi cập nhật sản phẩm!', 500);
     }
 };
 
 
 const deleteProduct = async (req, res) => {
     try {
+        const productId = req.params.id;
+
         // Tìm sản phẩm với ID từ tham số URL và bao gồm thông tin chi tiết liên quan
         const product = await Products.findOne({
-            where: {
-                product_id: req.params.id
-            },
+            where: { product_id: productId },
             include: [
                 {
                     model: models.infor_product, // Quan hệ với infor_product
-                    as: 'infor_product_infor_product' // Alias của quan hệ trong mô hình Sequelize
+                    as: 'infor_product_infor_product'
                 },
                 {
-                    model: models.product_colors, // Quan hệ với product_colors
-                    as: 'product_colors' // Alias của quan hệ với bảng product_colors
-                }
+                    model: models.product_colors,
+                    as: 'product_colors',
+                    include: [
+                        { model: models.product_storage, as: 'product_storages' },
+                        { model: models.product_quality, as: 'product_qualities' },
+                    ],
+                },
             ]
         });
 
-        if (product) {
-            // Xóa các bản ghi `product_storage` liên quan đến các màu sắc của sản phẩm
-            if (product.product_colors && product.product_colors.length > 0) {
-                await Promise.all(
-                    product.product_colors.map(async (color) => {
-                        // Xóa các bản ghi `product_storage` liên quan đến `product_colors`
-                        await models.product_storage.destroy({
-                            where: {
-                                color_id: color.color_id,
-                                product_id: product.product_id
-                            }
-                        });
-                    })
-                );
-                
-                // Xóa các bản ghi `product_colors`
-                await models.product_colors.destroy({
-                    where: {
-                        product_id: product.product_id
-                    }
-                });
+        if (!product) {
+            return responseSend(res, null, 'Sản phẩm không tồn tại!', 404);
+        }
+
+        // Bắt đầu xóa các dữ liệu liên quan đến sản phẩm
+        // Xóa tất cả product_quality liên quan đến sản phẩm
+        await models.product_quality.destroy({
+            where: { product_id: productId },
+        });
+
+        // Xóa tất cả product_storage liên quan đến sản phẩm
+        await models.product_storage.destroy({
+            where: { product_id: productId },
+        });
+
+        // Xóa tất cả product_colors liên quan đến sản phẩm
+        await models.product_colors.destroy({
+            where: { product_id: productId },
+        });
+
+        // Xóa infor_product liên quan đến sản phẩm
+        if (product.infor_product_infor_product) {
+            await models.infor_product.destroy({
+                where: { infor_product: product.infor_product_infor_product.infor_product },
+            });
+        }
+
+        // Xóa hình ảnh từ Cloudinary (nếu có)
+        const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
+        for (const productColor of product.product_colors) {
+            for (const field of imageFields) {
+                const imageId = productColor[field];
+                if (imageId) {
+                    // Xóa hình ảnh từ Cloudinary
+                    await cloudinary.uploader.destroy(imageId);
+                }
             }
 
-            // Xóa bản ghi `infor_product` nếu có
-            if (product.infor_product) {
-                await models.infor_product.destroy({
-                    where: {
-                        infor_product: product.infor_product
-                    }
+            // Xóa bản ghi hình ảnh (image_id) từ cơ sở dữ liệu nếu có
+            if (productColor.image_id) {
+                await models.image_product.destroy({
+                    where: { image_id: productColor.image_id }
                 });
             }
+        }
 
-            // Xóa bản ghi `product` (sản phẩm)
-            const deleted = await Products.destroy({
-                where: { product_id: req.params.id }
+        // Cuối cùng xóa sản phẩm chính
+        await Products.destroy({
+            where: { product_id: productId },
+        });
+
+        responseSend(res, product, 'Xóa sản phẩm thành công!', 200);
+    } catch (error) {
+        console.error('Lỗi khi xóa sản phẩm:', error);
+        responseSend(res, null, 'Có lỗi xảy ra khi xóa sản phẩm!', 500);
+    }
+};
+const deleteProductColor=async(req,res)=>{
+    const productIdColor=req.params.id;
+    await models.product_quality.destroy({
+        where: { color_id: productIdColor },
+    });
+
+    // Xóa tất cả product_storage liên quan đến sản phẩm
+    await models.product_storage.destroy({
+        where: { color_id: productIdColor },
+    });
+
+    // Xóa tất cả product_colors liên quan đến sản phẩm
+    await models.product_colors.destroy({
+        where: { color_id: productIdColor },
+    });
+    
+      // Xóa hình ảnh từ Cloudinary (nếu có)
+    //   const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
+    //   for (const productColor of product.product_colors) {
+    //       for (const field of imageFields) {
+    //           const imageId = productColor[field];
+    //           if (imageId) {
+    //               // Xóa hình ảnh từ Cloudinary
+    //               await cloudinary.uploader.destroy(imageId);
+    //           }
+    //       }
+
+    //       // Xóa bản ghi hình ảnh (image_id) từ cơ sở dữ liệu nếu có
+    //       if (productColor.image_id) {
+    //           await models.image_product.destroy({
+    //               where: { image_id: productColor.image_id }
+    //           });
+    //       }
+    //   }
+    responseSend(res, '', 'Xóa sản phẩm thành công!', 200);
+
+}
+const updateQualityProduct = async (req, res) => {
+    try {
+        const productColorId = req.params.id;
+        const { data } = req.body;
+
+        console.log('Product Color ID:', productColorId);
+
+        // Tìm sản phẩm trong cơ sở dữ liệu
+        const product = await models.product_quality.findOne({
+            where: { color_id: productColorId },
+        });
+
+        const productColor = await models.product_colors.findOne({
+            where: { color_id: productColorId },
+            include: {
+                model: models.product_storage,
+                as: 'product_storages',
+            },
+        });
+
+        if (!productColor) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy thông tin sản phẩm!",
+            });
+        }
+
+        // Kiểm tra nếu product_storages không rỗng
+        if (!productColor.product_storages || productColor.product_storages.length === 0) {
+            console.log("Không tìm thấy kho. Đang tạo kho mới...");
+
+            // Tự động thêm một kho mới
+            const newStorage = await models.product_storage.create({
+                product_id: productColor.product_id,
+                storage_name: `Kho mặc định cho color_id ${productColorId}`,
             });
 
-            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
-        } else {
-            responseSend(res, "", "Không tìm thấy sản phẩm hoặc thông tin sản phẩm!", 404);
+            // Gán kho mới vào productColor.product_storages
+            productColor.product_storages = [newStorage];
         }
-    } catch (error) {
-        console.error("Lỗi Khi Xóa Sản Phẩm - KIỂU LỖI:", error);
-        console.log(error);
-        
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+
+        if (product) {
+            // Nếu sản phẩm tồn tại, thực hiện cập nhật
+            await product.update({
+                quality_product: data.quality_product,
+            });
+            res.status(200).json({
+                success: true,
+                message: "Cập nhật sản phẩm thành công!",
+            });
+        } else {
+            // Nếu sản phẩm không tồn tại, tạo mới
+            await models.product_quality.create({
+                color_id: productColorId,
+                storage_id: productColor.product_storages[0].id_storage, // Đảm bảo có kho hợp lệ
+                product_id: productColor.product_id,
+                quality_product: data.quality_product || 1,
+            });
+            res.status(201).json({
+                success: true,
+                message: "Tạo mới sản phẩm thành công!",
+            });
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            success: false,
+            message: "Có lỗi xảy ra khi cập nhật sản phẩm!",
+        });
     }
 };
 
@@ -480,5 +699,8 @@ export {
     updateProduct,
     deleteProduct,
     getProductsByCategoryId,
-    getProductByIdCatelogryDad
+    getProductByIdCatelogryDad,
+    deleteProductColor,
+    getProductsAdmin,
+    updateQualityProduct
 };

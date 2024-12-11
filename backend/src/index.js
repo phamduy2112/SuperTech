@@ -17,15 +17,16 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
 import cookieParser from 'cookie-parser';
-
+import cron from 'node-cron';
 import cors from 'cors';
+import axios from 'axios';
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
 import { app, server } from './socker/socker.js';
 import settingRouter from './routers/settingRouter.js';
 import autobankrouter from './routers/bankAutoRouter.js';
-
+import  transactionsrouter from './routers/transactionRouter.js';
 
 app.use(express.json());
 app.use(cookieParser());
@@ -37,6 +38,15 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
+cron.schedule('* * * * *', async () => {
+  console.log('Bắt đầu chạy Check Lịch Sử Giao Dịch Api Từ Phía Ngân Hàng!!!');
+  try {
+    const response = await axios.get('http://localhost:8080/check-transactions');
+    console.log('Kết quả:', response.data);
+  } catch (error) {
+    console.error('Lỗi khi gọi API:', error.message);
+  }
+});
 
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
@@ -44,6 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(settingRouter);
+app.use(transactionsrouter);
 app.use(product_colorsRouter);
 app.use(autobankrouter);
 app.use(userRouter);
