@@ -101,7 +101,7 @@ console.log(token);
   return (
     <div className="bg-white">
 <div className="flex flex-col relative">
-    <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
+    <div className='w-[100%] h-[35px] color-custom text-white flex justify-center items-center'>
       <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
             <h3 className='text-[1.5rem] font-medium sm:text-center'>Chào mừng đến với cửa hàng SuperTech</h3>
             <div className="gap-[1.2rem] sm:hidden md:flex">

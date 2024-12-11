@@ -35,11 +35,12 @@ export const getCommentByIdProductThunk = createAsyncThunk(
 );
 export const createCommentByIdProductThunk = createAsyncThunk(
   "createCommentByIdProductThunk",
-  async (data) => {      
+  async (data,{dispatch}) => {      
     try {
       const resp = await createCommentByIdProduct(data);
-      const listComment=await getCommentByIdProduct(data.product_id)
-      return listComment.data.content.reverse();
+      const response = await dispatch(getCommentByIdProductThunk(data.product_id));
+
+      return response.payload;
     } catch (e) {
       console.log(e);
     }
@@ -139,7 +140,7 @@ const commentSlice = createSlice({
       
     },
     appendComment: (state, {payload}) => {
-      state.listComment = [payload, ...state.listComment];
+      state.listComment = [...state.listComment,payload];
     },
   },
   extraReducers: (builder) => {

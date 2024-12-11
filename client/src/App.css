@@ -1,0 +1,11 @@
+:root {
+    --custom-color:blue; /* Giá trị mặc định */
+  }
+  
+  /* Sử dụng biến trong Tailwind */
+  .color-custom {
+    background-color: var(--custom-color);
+  }
+  .text-custom{
+  
+  }

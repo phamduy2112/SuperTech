@@ -8,6 +8,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getOrderAllThunk } from '../../../redux/order/Order.slice';
 import { colorText } from '../../../constants';
+import { PathAdmin } from '../../../router/component/RouterValues';
 
 function AdminOrder() {
 
@@ -16,7 +17,8 @@ function AdminOrder() {
 
   const handleActive = (orderId) => {
     setActiveOrder(orderId); // Cập nhật đơn hàng được chọn
-    navigate(`/admin/quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/${orderId}`);
+    // navigate(`/admin/quản-lí-đơn-hàng/quản-lí-đơn-hàng-chi-tiết/${orderId}`);
+    navigate(`/admin/${PathAdmin.Orders}/${PathAdmin.OrderDetail.replace(':id', orderId)}`);
 
   };
   

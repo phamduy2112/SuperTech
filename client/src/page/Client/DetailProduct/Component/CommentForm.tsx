@@ -31,7 +31,7 @@ const CommentForm = (props: any) => {
   useEffect(() => {
     if (socket) {
       socket.on("new_comment", (newComment: any) => {
-        dispatch(setCommentReducer([...commentList, newComment]));
+        dispatch(setCommentReducer([newComment, ...commentList])); // Thêm bình luận mới vào đầu danh sách
       });
     }
 
@@ -68,7 +68,7 @@ const CommentForm = (props: any) => {
       const resultAction = await dispatch(createCommentByIdProductThunk(newComment));
       if (createCommentByIdProductThunk.fulfilled.match(resultAction)) {
         // const createdComment = resultAction.payload;
-        // dispatch(setCommentReducer([...commentList, ...createdComment]));
+        // dispatch(setCommentReducer([...commentList, resultAction]));
         toast.success("Bình luận thành công!");
         setComment("");
         setRating(0);

@@ -1,13 +1,12 @@
 
 import express from 'express';
-import {  changePassword, Checkuserdetailadmin, createUser, deleteEmployee, forgetCheckCode, forgetCheckMail, getNewCustomersThisWeek, getUser,login,loginFacebook,logout,register, resetPasswordNoToken, resetToken, updateImage, updateUser, UpdateUsersAdmin, userDetail, verifyEmail, verifyOldPassword } from '../controllers/userController.js';
+import {  changePassword, deleteEmployee, forgetCheckCode, forgetCheckMail, getNewCustomersThisWeek, getUser,login,loginFacebook,logout,register, resetPasswordNoToken, resetToken, updateImage, updateUser, userDetail, verifyEmail, verifyOldPassword } from '../controllers/userController.js';
 import isAuthenticated from '../config/auth.js';
 import { middleToken } from '../config/jwt.js';
 const userRouter = express.Router();
 
 userRouter.post('/register', register);
 userRouter.post('/login', login);
-userRouter.post("/create-users", createUser);
 userRouter.post('/reset-token', resetToken);
 userRouter.post('/login-facebook', loginFacebook);
 userRouter.get("/logout",logout)
@@ -16,14 +15,13 @@ userRouter.get('/user-detail',middleToken, userDetail);
 userRouter.put("/user-update",middleToken,updateUser)
 userRouter.post ("/verify-password",middleToken,verifyOldPassword)
 userRouter.put ("/change-password",middleToken,changePassword)
-userRouter.delete("/remove-employee/:id",middleToken,deleteEmployee)
+userRouter.delete("/remove-employee",middleToken,deleteEmployee)
 userRouter.post("/forget-check-mail", forgetCheckMail);
 userRouter.post("/forget-check-code", forgetCheckCode);
 userRouter.get("/verify-email", verifyEmail);
 userRouter.put("/forget-reset-password", resetPasswordNoToken);
-userRouter.get("/user_detail_admin/:id", Checkuserdetailadmin);
+
 userRouter.get("/get-new-customer-this-week",middleToken,getNewCustomersThisWeek)
-userRouter.put("/update-users-admin/:id", UpdateUsersAdmin);
 
 
 

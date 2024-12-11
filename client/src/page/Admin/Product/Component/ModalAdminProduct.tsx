@@ -99,7 +99,8 @@ function ModalAdminProduct() {
             storage_price: values.additionalPrice,
           }
         ]
-      }));
+      })
+    );
   
       console.log('Product color saved successfully:', {
         color: values.color,
@@ -128,7 +129,7 @@ function ModalAdminProduct() {
   Thêm màu sắc
 </div>
       <Modal
-        title="Basic Modal"
+        title="Thêm màu sắc và hình ảnh"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
