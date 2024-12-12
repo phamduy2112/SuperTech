@@ -25,6 +25,10 @@ export default class categories extends Model {
     category_task: {
       type: DataTypes.BOOLEAN,
       allowNull: true
+    },
+    category_image: {
+      type: DataTypes.STRING(90),
+      allowNull: true
     }
   }, {
     sequelize,
