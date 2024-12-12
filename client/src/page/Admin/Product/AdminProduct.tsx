@@ -20,6 +20,7 @@ import AdminFilterProduct from "./Component/AdminFilterProduct";
 import { PathAdmin } from "../../../router/component/RouterValues";
 import AdminAddProduct from "./Component/AdminAddProduct";
 import AdminEditProduct from "./Component/AdminEditProduct";
+import AdminModalUpdateQualityProduct from "./Component/UpdateQualityProduct";
 
 // Define the Category interface
 interface Category {
@@ -62,7 +63,6 @@ const AdminProduct: React.FC = () => {
     navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
   }
   const [selectedCheckbox, setSelectedCheckbox] = useState(''); // Lọc theo ngày
-
   // Column definition for the table
   const columns = [
     {
@@ -89,6 +89,34 @@ const AdminProduct: React.FC = () => {
 
     },
     {
+      title: "Màu sắc",
+      dataIndex: "product_colors",
+      key: "product_colors",
+      render: (colors) =>
+        colors.map((color, index) => (
+          <div key={index}>
+            <strong>{color.color}</strong>
+          </div>
+        )),
+    },
+
+    {
+      title: "Số lượng",
+      dataIndex: "product_colors",
+      key: "product_qualities",
+      render: (colors) =>
+        colors.map((color, index) => (
+          <div key={index}>
+            {color.product_qualities.length === 0
+              ? "Không có số lượng"
+              : color.product_qualities.map((quality, idx) => (
+                  <span key={idx}>{quality.quality_product}</span>
+                ))}
+          </div>
+        )),
+    },
+  
+    {
       title: 'Giá Gốc',
       dataIndex: 'product_price',
       render: (price: number,recoil:any) => (
@@ -114,6 +142,7 @@ const AdminProduct: React.FC = () => {
           } </span>
       ),
     },
+    
     {
       title: 'Tác Vụ',
       key: 'action',
@@ -130,6 +159,11 @@ const AdminProduct: React.FC = () => {
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
             onClick={() => handleDeteleProduct(+record.product_id)}
+          />
+          <AdminModalUpdateQualityProduct product={record}/>
+          <BiSolidEdit
+            className='cursor-pointer text-[#4078f2] transition-all duration-700 hover:text-[#4078f2]'
+            onClick={() => navigate(`/admin/quan-li-san-pham/sua-san-pham/${record.product_id}`)}
           />
         </div>
       ),
@@ -172,13 +206,30 @@ const AdminProduct: React.FC = () => {
     key: item.product_id, // Add key from the category_id
   }));
  // Sắp xếp lại danh mục theo "Ngày Mới Nhất" hoặc "Cũ Nhất"
+ const [showInStock, setShowInStock] = useState(true);
 
 const handleDelete = (key: any) => {
   dispatch(deleteCategoryThunk(key));
   toast.success("Xóa loại thành công");
 };
+console.log(updatedDataProducts[0]);
 
   const userRef = useRef<any>(null);
+  const filteredProducts = listProducts.filter((product) => {
+    if (showInStock) {
+      // Sản phẩm có hàng: ít nhất một color có `quality > 0`
+      return product?.product_colors?.some(color => color.quality > 0);
+    } else {
+      // Sản phẩm hết hàng: tất cả các color có `quality === 0` hoặc không có
+      return (
+        !product.product_colors ||
+        product?.product_colors.every(color => !color.quality || color.quality === 0)
+      );
+    }
+  });
+
+  console.log()
+
 
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
@@ -197,6 +248,18 @@ const handleDelete = (key: any) => {
             </Button>
           </Link> */}
           <AdminAddProduct/>
+          <button
+        onClick={() => setShowInStock(true)}
+        className={`btn ${showInStock ? "active" : ""}`}
+      >
+        Có hàng
+      </button>
+      <button
+        onClick={() => setShowInStock(false)}
+        className={`btn ${!showInStock ? "active" : ""}`}
+      >
+        Hết hàng
+      </button>
 
         </div>
       </div>

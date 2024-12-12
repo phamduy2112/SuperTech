@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createInforProduct, createProduct, deleteProduct, getProductCateloriesByDad, getProductDetail, getProducts, putProductById } from "../../service/product/product.service";
+import { createInforProduct, createProduct, deleteProduct, getProductAdmin, getProductCateloriesByDad, getProductDetail, getProducts, putProductById, updateQualityColors } from "../../service/product/product.service";
 
 export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
@@ -33,7 +33,7 @@ export const getProductsAdminThunk = createAsyncThunk(
   async (searchKey:string) => {
     try {
       
-      const resp = await getProducts();
+      const resp = await getProductAdmin();
       const result = resp.data.content;
       if (searchKey.trim()) {
         const filteredResults = result.filter((item:any) =>
@@ -80,6 +80,19 @@ export const putInforProductAdminThunk = createAsyncThunk(
   async (dataCreate:any,{dispatch}) => {
     try {
       await putProductById(dataCreate,dataCreate.product_id);
+      const response = await dispatch(getProductsAdminThunk(''));
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const updateQualityProductAdminThunk = createAsyncThunk(
+  "updateQualityProductAdminThunk",
+  async (dataCreate:any,{dispatch}) => {
+    try {
+  
+      await updateQualityColors(dataCreate.color_id,dataCreate);
       const response = await dispatch(getProductsAdminThunk(''));
       return response.payload;
     } catch (e) {
@@ -138,6 +151,9 @@ const ProductSlice = createSlice({
     setListProductColors: (state,{payload})=>{
       state.listProductsColors = payload; // Thay thế mảng hiện tại bằng mảng mới
 
+    },
+    clearProductColors: (state) => {
+      state.productColors = []; // Reset danh sách
     },
       setProductStorage:(state,{payload})=>{
         state.listProductStorage.push(payload);    },

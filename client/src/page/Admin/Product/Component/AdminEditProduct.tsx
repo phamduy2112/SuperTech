@@ -15,7 +15,7 @@ import { IMG_BACKEND } from '../../../../constants';
 import { IoMdClose } from 'react-icons/io';
 import { deleteColorsProduct, getImageProductById, putProductById } from '../../../../service/product/product.service';
 import { BiSolidEdit } from 'react-icons/bi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -24,6 +24,7 @@ function AdminEditProduct() {
   const numericId = Number(id); // Ép chuỗi id thành số
   const listProductColor = useAppSelector(state => state.product.productColors);
   const [img,setImg]=useState([]);
+  const listCatelogry = useAppSelector(state => state.category.listCatelories);
 
   const productDetail=useAppSelector((state)=>state.product.productDetail)
 
@@ -38,18 +39,15 @@ function AdminEditProduct() {
 
 console.log(productDetail.product_name);
 
-  // useEffect(() => {
-  //   dispatch(getCatelogryThunk(""));
-  // }, [dispatch]);
-  // useEffect(()=>{
-  //   setInforProduct(props.product.infor_product_infor_product
-  //   )
-  // },[props])
-  // const formattedCategories = listCatelogry?.map(category => ({
-  //   value: category.category_id,
-  //   label: category.category_name,
-  //   category_dad: category.category_dad
-  // }));
+  useEffect(() => {
+    dispatch(getCatelogryThunk(""));
+  }, [dispatch]);
+
+  const formattedCategories = listCatelogry?.map(category => ({
+    value: category.category_id,
+    label: category.category_name,
+    category_dad: category.category_dad
+  }));
   const Datahe = [
     {
       value: '1',
@@ -112,16 +110,16 @@ console.log(productDetail.product_name);
 
   // const ids = [714, 715]; // Các ID cần lấy
   
-//   useEffect(() => {
-//     const matchingCategory = formattedCategories?.find(
-//       (category) => category.value === props.product.category_id
-//     );
-//     if (matchingCategory) {
-//       setSelectedCategory(matchingCategory.category_dad);
-//     } else {
-//        // setSelectedCategory("Không tìm thấy");
-//     }
-//  }, [formattedCategories, props.product.category_id]);
+  useEffect(() => {
+    const matchingCategory = formattedCategories?.find(
+      (category) => category.value === productDetail.category_id
+    );
+    if (matchingCategory) {
+      setSelectedCategory(matchingCategory.category_dad);
+    } else {
+       // setSelectedCategory("Không tìm thấy");
+    }
+ }, [formattedCategories, productDetail.category_id]);
 console.log(productDetail);
 const imageIds = listProductColor.map((item) => item.image_id);
 useEffect(() => {
@@ -139,23 +137,27 @@ useEffect(() => {
   }
 }, [imageIds]);
 
-
+const navigate=useNavigate();
 useEffect(()=>{
-  productDetail.product_colors?.map((item)=>{
-    dispatch(setProductColors({
-      color_id:item.color_id,
-      color: item.color,
-      // quantity: values.quantity,
-      image_id: item.image_id      , // Include image_id here
-      // productStorage: [
-      //   {
-      //     storage: values.capacity,
-      //     storage_price: values.additionalPrice,
-      //   }
-      // ]
+  if( productDetail.product_colors){
+    dispatch(removeAllProductColors());
+    productDetail.product_colors?.map((item)=>{
+      dispatch(setProductColors({
+        color_id:item.color_id,
+        color: item.color,
+        // quantity: values.quantity,
+        image_id: item.image_id      , // Include image_id here
+        // productStorage: [
+        //   {
+        //     storage: values.capacity,
+        //     storage_price: values.additionalPrice,
+        //   }
+        // ]
+      })
+    );
     })
-  );
-  })
+  }
+ 
   
 },[dispatch, productDetail])
   const productColorDelete=async (item:object,id:number)=>{
@@ -165,6 +167,8 @@ useEffect(()=>{
     
     dispatch(removeProductsFromColors(item.image_id))
   }
+  console.log(listCatelogry);
+  
   return (
     <div className='w-[80%] m-auto'>
     
@@ -210,9 +214,9 @@ useEffect(()=>{
         dispatch(putInforProductAdminThunk(dataInforProduct))
         resetForm();
             console.log(values);
-            
+          
         dispatch(removeAllProductColors())
-
+navigate("/admin/quan-li-san-pham")
 
           }}
         >
@@ -225,11 +229,11 @@ useEffect(()=>{
   <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
   <Select
     value={values.category || null}  // Set initial value to null or undefined
-    // onChange={(value, category_dad) => {
-    //   setFieldValue('category', value);
-    //   handleCategoryChange(category_dad.category_dad);
-    // }}  // Update Formik state when changed
-    // options={formattedCategories}
+    onChange={(value, category_dad) => {
+      setFieldValue('category', value);
+      handleCategoryChange(category_dad.category_dad);
+    }}  // Update Formik state when changed
+    options={formattedCategories}
     placeholder="Mời bạn chọn"  // Set the placeholder text
     className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
   />
@@ -364,7 +368,7 @@ useEffect(()=>{
 
         <div className='grid grid-cols-2 gap-1 py-4'>
         <div className="flex h-auto flex-col gap-1">
-        <label htmlFor="infor_frontCamera">Thông tin camera trước</label>
+        <label htmlFor="infor_frontCamera " className='text-[13px] font-medium'>Thông tin camera trước</label>
             <Field
               name="infor_frontCamera"
               type="text"
@@ -377,7 +381,7 @@ useEffect(()=>{
 
               </div>
         <div className="flex h-auto flex-col gap-1">
-        <label htmlFor="infor_rearCamera">Thông tin camera sau</label>
+        <label htmlFor="infor_rearCamera " className='text-[13px] font-medium'>Thông tin camera sau</label>
             <Field
               name="infor_rearCamera"
               type="text"
@@ -391,7 +395,7 @@ useEffect(()=>{
         </div>
         <div className='grid grid-cols-2 gap-1 py-4'>
         <div className="flex h-auto flex-col gap-1">
-        <label htmlFor="infor_scanning_frequency">Thông tin chip và pin</label>
+        <label htmlFor="infor_scanning_frequency " className='text-[13px] font-medium'>Thông tin chip và pin</label>
             <Field
               name="infor_scanning_frequency"
               type="text"
@@ -403,7 +407,7 @@ useEffect(()=>{
             />
               </div>
         <div className="flex h-auto flex-col gap-1">
-        <label htmlFor="infor_chip_battery">Thông tin chip và pin</label>
+        <label htmlFor="infor_chip_battery" className='text-[13px] font-medium'>Thông tin chip và pin</label>
             <Field
               name="infor_chip_battery"
               type="text"

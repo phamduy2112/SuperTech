@@ -11,6 +11,8 @@ const getcategories = async (req, res) => {
         let data = await categoriesModel.findAll();
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
+        console.log(error);
+        
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };

@@ -61,6 +61,12 @@ export const putProductById=(data:any,id:number)=>{
     data
   })
 }
+export const getProductAdmin=()=>{
+  return axiosWithAuth(`/get-products-admin`,{
+    method:"get",
+    
+  })
+}
 
 
 export const createImage = (data: FormData) => {
@@ -75,6 +81,11 @@ export const deleteImageColors = (id: FormData) => {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+  });
+};
+export const updateQualityColors = (id: number,data:any) => {
+  return axiosWithAuth.put(`/update-quality-product/${id}`, {
+   data
   });
 };
 

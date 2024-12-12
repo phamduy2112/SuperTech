@@ -51,7 +51,7 @@ useEffect(()=>{
       ...product,
       selectedColor: props.product?.product_colors[0],
       selectedStorage: props.product?.product_colors[0]?.product_storages[0],
-      selectedQuantity: props.product?.product_qualities[0]?.quality_product
+      selectedQuantity: props.product?.product_colors[0].product_qualities[0]?.quality_product
     };
     dispatch(addItemToCart(productToCart));
 
