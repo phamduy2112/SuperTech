@@ -1,6 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCatelogry } from "../../service/catelogry/catelogry.service";
 import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser } from '../../service/user/user.service';
+import { TpayloadUser } from "../../service/user/user.type";
+interface UserState {
+  Alluser: TpayloadUser | object | null;  
+  user: TpayloadUser  | null;  
+  token: string | null;
+  login: boolean;
+  thongBao: string;
+  imgUser: string;
+}
 
 export const getAllUserThunk = createAsyncThunk(
   "getAllUserThunk",
@@ -30,7 +38,7 @@ export const getUserThunk = createAsyncThunk(
 
 export const updateUserDetailThunk = createAsyncThunk(
   "updateUserThunk",
-  async (payload) => {
+  async (payload:TpayloadUser) => {
     try {
       const resp = await updateUserDetail(payload);
       return resp.data.content;
@@ -41,7 +49,7 @@ export const updateUserDetailThunk = createAsyncThunk(
 );
 export const verifyPasswordDetail = createAsyncThunk(
   "verifyPasswordThunk",
-  async (payload:any) => {
+  async (payload:string) => {
     try {
       const resp = await verifyPassword(payload);
       console.log(resp.data);
@@ -54,7 +62,7 @@ export const verifyPasswordDetail = createAsyncThunk(
 );
 export const changePasswordDetail = createAsyncThunk(
   "changePasswordDetail",
-  async (payload:any) => {
+  async (payload:string) => {
     try {
       const resp = await changePassword(payload);
       return resp.data;
@@ -65,10 +73,11 @@ export const changePasswordDetail = createAsyncThunk(
 );
 export const changeUploadImage = createAsyncThunk(
   "changeUploadImage",
-  async (payload) => {
+  async (payload:string,{dispatch}) => {
     try {
-      const resp = await uploadImage(payload);
-      return resp.data.content.user_image;
+      await uploadImage(payload);
+    const response = await dispatch(getUserThunk());
+        return response.payload;
     } catch (e) {
       console.log(e);
     }
@@ -77,17 +86,17 @@ export const changeUploadImage = createAsyncThunk(
 
 
 
-const initialState = {
+const initialState:UserState = {
   Alluser: {},
-  user: {},
+  user: null,
   token: null,
   login:false,
   thongBao: "",
   imgUser: ""
 };
 
-const UserSlice = createSlice({
-  name: "UserSlice",
+const userSlice = createSlice({
+  name: "userSlice",
   initialState,
   reducers: {
     setAllUser: (state, { payload }) => {
@@ -127,12 +136,13 @@ const UserSlice = createSlice({
       })
     builder
       .addCase(changeUploadImage.fulfilled, (state, { payload }) => {
-        state.user.user_image = payload;
+        const user = state.user as TpayloadUser;  // Cast to TpayloadUser type
+       user.user_image = payload;
       })
 
   },
 });
 
-export const { setAllUser, setUserDetail, setToken,setLogin } = UserSlice.actions;
+export const { setAllUser, setUserDetail, setToken,setLogin } = userSlice.actions;
 
-export const userReducer = UserSlice.reducer;
+export const userReducer = userSlice.reducer;

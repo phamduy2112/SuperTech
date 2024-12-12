@@ -14,12 +14,11 @@ import { CiBookmarkRemove } from "react-icons/ci";
 import { deleteProductAdminThunk, getProductsAdminThunk } from "../../../redux/product/product.slice";
 import { formatCurrencyVND } from "../../../utils";
 import { BiSolidEdit } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
-import { TbPlaylistAdd } from "react-icons/tb";
-import AdminFilterProduct from "./Component/AdminFilterProduct";
-import { PathAdmin } from "../../../router/component/RouterValues";
+import {  useNavigate } from "react-router-dom";
+
+
 import AdminAddProduct from "./Component/AdminAddProduct";
-import AdminEditProduct from "./Component/AdminEditProduct";
+
 import AdminModalUpdateQualityProduct from "./Component/UpdateQualityProduct";
 
 // Define the Category interface
@@ -215,21 +214,9 @@ const handleDelete = (key: any) => {
 console.log(updatedDataProducts[0]);
 
   const userRef = useRef<any>(null);
-  const filteredProducts = listProducts.filter((product) => {
-    if (showInStock) {
-      // Sản phẩm có hàng: ít nhất một color có `quality > 0`
-      return product?.product_colors?.some(color => color.quality > 0);
-    } else {
-      // Sản phẩm hết hàng: tất cả các color có `quality === 0` hoặc không có
-      return (
-        !product.product_colors ||
-        product?.product_colors.every(color => !color.quality || color.quality === 0)
-      );
-    }
-  });
 
-  console.log()
 
+ 
 
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
@@ -241,25 +228,9 @@ console.log(updatedDataProducts[0]);
             <IoCloudDownloadOutline className='text-[18px]' />
             Tải về PDF
           </Button>
-          {/* <Link to={`${PathAdmin.PathsAdmin}/${PathAdmin.AddProduct}`}>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Thêm Sản Phẩm Mới
-            </Button>
-          </Link> */}
+   
           <AdminAddProduct/>
-          <button
-        onClick={() => setShowInStock(true)}
-        className={`btn ${showInStock ? "active" : ""}`}
-      >
-        Có hàng
-      </button>
-      <button
-        onClick={() => setShowInStock(false)}
-        className={`btn ${!showInStock ? "active" : ""}`}
-      >
-        Hết hàng
-      </button>
+   
 
         </div>
       </div>

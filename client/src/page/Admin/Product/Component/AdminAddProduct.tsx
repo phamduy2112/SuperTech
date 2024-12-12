@@ -36,6 +36,8 @@ function AdminAddProduct() {
   
 
   useEffect(() => {
+        dispatch(removeAllProductColors());
+    
     dispatch(getCatelogryThunk(""));
   }, [dispatch]);
 

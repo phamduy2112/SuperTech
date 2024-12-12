@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const CountdownTimer = () => {
+const CountdownTimer = ({ reset }) => {
   const [seconds, setSeconds] = useState(180); // Thời gian bắt đầu là 180 giây
+
+  useEffect(() => {
+    if (reset) {
+      setSeconds(180); // Reset time when reset is triggered
+    }
+  }, [reset]);
 
   useEffect(() => {
     if (seconds > 0) {
@@ -19,7 +25,6 @@ const CountdownTimer = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">Countdown Timer</h1>
       <div className="flex">
         {formatTime(seconds).map((digit, index) => (
           <div

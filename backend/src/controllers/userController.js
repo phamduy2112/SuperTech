@@ -251,7 +251,7 @@ const userDetail=async(req,res)=>{
 const updateUser = async (req, res) => {
     try {
         const user_id=req.id;
-        const {user_name, user_address, user_phone}=req.body
+        const {user_name, user_address, user_phone,gender,date}=req.body
         const user = await User.findByPk(user_id);
         if (!user) {
             return res.status(404).json({
@@ -264,6 +264,8 @@ const updateUser = async (req, res) => {
         user.user_name =user_name;
         user.user_address =user_address;
         user.user_phone =user_phone;
+        user.user_gender =gender;
+        user.user_birth =date;
         
    
         // Lưu thay đổi vào database
@@ -506,7 +508,7 @@ function generateRandomString(length) {
   };
   const resetPasswordNoToken = async (req, res) => {
     try {
-      let { email, newPassword,confirmNewPassword } = req.body;
+      let { email, newPassword } = req.body;
   
       // Check if the email exists
       let checkEmail = await User.findOne({

@@ -8,17 +8,17 @@ import { checkCode, checkEmail } from '../../../../../service/user/user.service'
 import useSweetAlert from '../../../../../hooks/Notification.hook';
 import CountdownTimer from '../../../Auth/Forget/components/CountDown';
 import { useAppSelector } from '../../../../../redux/hooks';
+
 interface ChildComponentProps {
     updateNumber: (newNumber: number) => void;
-  }
-function CodeInputUser(    {updateNumber}
-) {
+}
+
+function CodeInputUser({ updateNumber }: ChildComponentProps) {
     const navigate = useNavigate();
     const { showAlert } = useSweetAlert();
     const user = useAppSelector((state) => state.user.user);
     const [isCodeSent, setIsCodeSent] = useState(false); // Trạng thái để hiển thị mã xác thực
     const [code, setCode] = useState<string[]>(Array(6).fill("")); // Mảng để lưu mã xác thực
-    console.log(user?.user_email);
     
     const formik = useFormik({
         initialValues: {
@@ -31,7 +31,7 @@ function CodeInputUser(    {updateNumber}
             const response = await checkCode(values);
             if (response.data.message === "Code hợp lệ") {
                 showAlert("success", "Xác thực thành công");
-                updateNumber(4)
+                updateNumber(4);
             } else {
                 showAlert("error", response.data.message);
             }
@@ -57,32 +57,37 @@ function CodeInputUser(    {updateNumber}
         email: user?.user_email
     };
 
-    useEffect(() => {
-        const sendOTP = async () => {
-            if (isCodeSent) return; // Prevent sending OTP multiple times
+    const sendOTP = async () => {
+        // Chỉ gửi mã OTP khi chưa gửi và không gửi lại khi người dùng đang nhập mã
+        if (isCodeSent || !user?.user_email) return; // Prevent sending OTP if already sent or no email
 
-            try {
-                const response = await checkEmail(values);
-                if (response.data.message === "Code sent successfully") {
-                    showAlert("success", "Mã OTP đã được gửi đến email của bạn");
-                    setIsCodeSent(true); // Set flag to true to prevent sending OTP again
-                } else {
-                    showAlert("error", response.data.message);
-                }
-            } catch (error) {
-                showAlert("error", "Có lỗi xảy ra khi gửi mã OTP");
+        try {
+            const response = await checkEmail(values);
+            if (response.data.message === "Code sent successfully") {
+                showAlert("success", "Mã OTP đã được gửi đến email của bạn");
+                setIsCodeSent(true); // Set flag to true to prevent sending OTP again
+            } else {
+                showAlert("error", response.data.message);
             }
-        };
-
-        if (user?.user_email && !isCodeSent) {
-            sendOTP();
+        } catch (error) {
+            showAlert("error", "Có lỗi xảy ra khi gửi mã OTP");
         }
-    }, [user, showAlert, isCodeSent]);
+    };
+
+    useEffect(() => {
+        sendOTP(); // Gọi hàm sendOTP khi lần đầu vào màn hình
+    }, [user, isCodeSent]);
+
+    const handleResendOTP = () => {
+        setIsCodeSent(false); // Reset lại trạng thái gửi mã OTP
+        setCode(Array(6).fill("")); // Reset lại mã OTP đã nhập
+        sendOTP(); // Gửi lại mã OTP
+    };
 
     return (
         <Form layout="vertical" className="sign-edit" onFinish={formik.handleSubmit}>
             <>
-                <CountdownTimer/>
+                <CountdownTimer />
                 <div className="mb-[1rem]">
                     <label className="block mb-[0.5rem] text-[1.2rem] text-gray-700">Mã xác thực</label>
                     <div className="flex gap-2 justify-center">
@@ -109,6 +114,16 @@ function CodeInputUser(    {updateNumber}
             <div className="button-edit">
                 <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">
                     Gửi mã xác nhận
+                </Button>
+            </div>
+            {/* Thêm nút gửi lại mã OTP */}
+            <div className="mt-[1rem] text-center">
+                <Button
+                    type="link"
+                    onClick={handleResendOTP}
+                    className="text-blue-500 text-[1.2rem]"
+                >
+                    Gửi lại mã OTP
                 </Button>
             </div>
         </Form>
