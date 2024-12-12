@@ -48,62 +48,46 @@ function LaptopComponent() {
       activeTab === tabName ? 'text-[#7500CF] border-b-2 border-[#7500CF]' : ''
     }`;
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    prevArrow: (
-      <div className="absolute top-[45%] -left-16 transform z-10 translate-y-[-50%]">
-        <div className="w-[3.2rem] h-[3.2rem] rounded-full bg-black flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer">
-          <IoIosArrowBack className="text-[2rem] text-white" />
+    const settings = {
+      dots: false,
+      infinite: true, 
+      speed: 500,
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      prevArrow: (
+        <div className="absolute top-[45%] left-[0] transform translate-x-[50%] z-10 translate-y-[-50%]">
+          <div className="w-[3.2rem] h-[3.2rem] rounded-full bg-black flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer">
+            <IoIosArrowBack className="text-[2rem] text-white" />
+          </div>
         </div>
-      </div>
-    ),
-    nextArrow: (
-      <div className="absolute top-[45%] -right-16 transform z-10 translate-y-[-50%]">
-        <div className="w-[3.2rem] h-[3.2rem] rounded-full bg-black flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer">
-          <IoIosArrowForward className="text-[2rem] text-white" />
+      ),
+      nextArrow: (
+        <div className="absolute top-[45%] right-[0] transform translate-x-[-50%] z-10 translate-y-[-50%]">
+          <div className="w-[3.2rem] h-[3.2rem] rounded-full bg-black flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer">
+            <IoIosArrowForward className="text-[2rem] text-white" />
+          </div>
         </div>
-      </div>
-    ),
-    responsive: [
-      {
-        breakpoint: 1600,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: true,
+      ),
+      responsive: [
+        {
+          breakpoint: 1600,
+          settings: { slidesToShow: 4, slidesToScroll: 1 }
+        },
+        {
+          breakpoint: 1200,
+          settings: { slidesToShow: 3, slidesToScroll: 1 }
+        },
+        {
+          breakpoint: 992,
+          settings: { slidesToShow: 2, slidesToScroll: 1 }
+        },
+        {
+          breakpoint: 490,
+          settings: { slidesToShow: 1, slidesToScroll: 1 }
         }
-      },
-      {
-        breakpoint: 1200,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: true,
-        }
-      },
-      {
-        breakpoint: 992,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-        }
-      },
-      {
-        breakpoint: 576,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: true,
-          arrows: false,
-        }
-      }
-    ]
-  };
+      ]
+    };
+  
 
   return (
     <div className="w-full m-auto py-20">
@@ -128,10 +112,10 @@ function LaptopComponent() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative mx-10">
             <Slider {...settings}>
               {productLaptop.map((product) => (
-                <div key={product.id} className="px-2 h-full">
+                <div key={product.id} className="px-5 h-full">
                   <ProductItem product={product} />
                 </div>
               ))}

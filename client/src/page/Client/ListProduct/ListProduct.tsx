@@ -45,7 +45,7 @@ function ListProduct() {
     : listProduct;
     console.log(dataCate);
   return (
-    <div className='w-[80%] m-auto'>
+    <div className='w-[95%] md:w-[90%] lg:w-[80%] m-auto'>
       <Breadcrumb
         items={[
           {
@@ -58,48 +58,44 @@ function ListProduct() {
       />
       <div>
         <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm: {category_dad}</h3>
-        <div className='flex gap-4'>
-          <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[9rem]'>
+        <div className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
+          <div className='cursor-pointer text-[1.6rem] sm:text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-full sm:w-[9rem]'>
             <MdFilterAlt />
             <span>Bộ lọc</span>
           </div>
-          <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[6rem]'>
+          <div className='cursor-pointer text-[1.6rem] sm:text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-full sm:w-[6rem]'>
             <span>Giá</span>
           </div>
         </div>
         <div className='mt-[.5rem] w-[100%]'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-            {/* Cột 1: Tiêu đề và Checkbox */}
-            <div className='space-y-4'>
-              <h4 className='text-[1.8rem] sm:text-[1.5rem] font-semibold'>
-                10 Điện thoại iPhone (Apple)
-              </h4>
-              <div className='flex flex-wrap gap-4'>
-                <Form.Item valuePropName="checked" className='mb-0'>
-                  <Checkbox 
-                    onChange={(e) => setIsDiscounted(e.target.checked)}
-                  >
-                    Giảm giá
-                  </Checkbox>
-                </Form.Item>
-                <Form.Item valuePropName="checked" className='mb-0'>
-                  <Checkbox>Mới</Checkbox>
-                </Form.Item>
-              </div>
+          <div className='flex flex-wrap items-center gap-4'>
+            <div className='w-full min-[426px]:w-auto'>
+              <h4 className='text-[1.6rem] font-semibold'>10 Điện thoại iPhone (Apple)</h4>
             </div>
-
-            {/* Cột 2: Select Box */}
-            <div className='lg:justify-self-end'>
-              <Form.Item label="Sắp xếp theo" className='mb-0'>
-                <Select defaultValue="demo" style={{ width: '200px' }}>
-                  <Select.Option value="demo">Demo</Select.Option>
-                </Select>
+            <div className='flex items-center gap-4'>
+              <Form.Item className='mb-0' valuePropName="checked">
+                <Checkbox onChange={(e) => setIsDiscounted(e.target.checked)}>
+                  Giảm giá
+                </Checkbox>
               </Form.Item>
+              <Form.Item className='mb-0' valuePropName="checked">
+                <Checkbox>Mới</Checkbox>
+              </Form.Item>
+            </div>
+            <div className='flex items-center gap-2 ml-auto'>
+              <span className='text-[1.4rem]'>Sắp xếp theo:</span>
+              <Select 
+                defaultValue="demo" 
+                className='w-[120px]'
+                size="large"
+              >
+                <Select.Option value="demo">Demo</Select.Option>
+              </Select>
             </div>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-6">
+      <div className="grid grid-cols-1 min-[426px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-6">
         {filteredProducts.map((item) => (
           <ProductItem key={item.id} product={item} />
         ))}

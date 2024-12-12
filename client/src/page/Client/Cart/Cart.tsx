@@ -73,107 +73,103 @@ export default function Cart() {
       {/* Responsive Container */}
       <div className="flex flex-col-reverse lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
         {/* Cart Items */}
-        <div className="flex-1 space-y-6">
-          <div className="bg-white py-5 rounded-lg shadow space-y-1">
-            <div className="flex items-center px-5 py-5">
-              <div className="w-[50%] lg:w-[45%]">
-                <h2 className="text-[1.7rem] font-semibold text-center">Sản phẩm</h2>
+        <div className="flex-1 space-y-4 md:space-y-6">
+          {/* Header */}
+          <div className="bg-white py-3 md:py-5 rounded-lg shadow">
+            <div className="flex items-center px-3 md:px-5 py-3 md:py-5">
+              <div className="w-[45%] md:w-[50%] lg:w-[45%]">
+                <h2 className="text-[1.4rem] md:text-[1.7rem] font-semibold text-center">Sản phẩm</h2>
               </div>
-              <div className="w-[25%] lg:w-[20%]">
-                <h2 className="text-[1.7rem] font-semibold text-center">Số lượng</h2>
+              <div className="w-[25%] md:w-[25%] lg:w-[20%]">
+                <h2 className="text-[1.4rem] md:text-[1.7rem] font-semibold text-center">Số lượng</h2>
               </div>
-              <div className="w-[20%] lg:w-[25%]">
-                <h2 className="text-[1.7rem] font-semibold text-center">Tổng giá</h2>
+              <div className="w-[25%] md:w-[20%] lg:w-[25%]">
+                <h2 className="text-[1.4rem] md:text-[1.7rem] font-semibold text-center">Tổng giá</h2>
               </div>
-              <div className="w-[5%] lg:w-[10%]">
-                <h2 className="text-[1.7rem] font-semibold"></h2>
-              </div>
+              <div className="w-[5%] md:w-[5%] lg:w-[10%]"></div>
             </div>
           </div>
 
-          {/* Cart Item List */}
+          {/* Cart Items */}
           {listCart.map((item) => (
-            <div key={item.product_id} className="bg-white py-5 rounded-lg shadow">
-              <div className="flex items-center px-5 py-5">
-                <div className="flex gap-4 w-[50%] lg:w-[45%] items-center">
+            <div key={item.product_id} className="bg-white py-3 md:py-5 rounded-lg shadow">
+              <div className="flex items-center px-3 md:px-5 py-3 md:py-5">
+                <div className="flex gap-2 md:gap-4 w-[45%] md:w-[50%] lg:w-[45%] items-center">
                   <img
                     src="https://th.bing.com/th/id/OIP.hZOYBxk1erwCHpTFUkIHygHaEa?rs=1&pid=ImgDetMain"
                     alt="Product"
-                    className="w-[8rem] lg:w-[12rem] h-[6rem] lg:h-[7rem] object-cover rounded-lg"
+                    className="w-[6rem] md:w-[8rem] lg:w-[12rem] h-[4rem] md:h-[6rem] lg:h-[7rem] object-cover rounded-lg"
                   />
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-[1.5rem] lg:text-[1.7rem] font-semibold line-clamp-2">
+                    <h2 className="text-[1.3rem] md:text-[1.5rem] lg:text-[1.7rem] font-semibold line-clamp-2">
                       {truncateText(item?.product_name, 25)}
                     </h2>
-                    <p className="text-gray-500 text-[1.3rem]">
-                      {item?.selectedStorage
-                        ? `${item?.selectedStorage?.storage_price} MB/`
-                        : ""}
+                    <p className="text-gray-500 text-[1.1rem] md:text-[1.3rem]">
+                      {item?.selectedStorage ? `${item?.selectedStorage?.storage_price} MB/` : ""}
                       {item?.selectedColor ? `${item?.selectedColor?.color}` : ""}
                     </p>
-                    <div className="flex flex-col leading-normal text-lg ">
+                    <div className="flex flex-col leading-normal">
                       {item?.product_discount > 0 ? (
-                        <span className="text-customColor text-[1.6rem] font-medium">
+                        <span className="text-customColor text-[1.3rem] md:text-[1.6rem] font-medium">
                           {formatCurrencyVND(
-                            (Number(item?.product_price) +
-                              Number(item?.selectedStorage?.storage_price || 0)) *
-                              (1 - Number(item?.product_discount / 100))
+                            (Number(item?.product_price) + Number(item?.selectedStorage?.storage_price || 0)) *
+                            (1 - Number(item?.product_discount / 100))
                           )}
-                          <span className="text-gray-400 line-through text-[1.5rem] px-[1rem] font-normal">
-                            {formatCurrencyVND(
-                              item?.product_price +
-                                item?.selectedStorage?.storage_price || 0
-                            )}
+                          <span className="text-gray-400 line-through text-[1.2rem] md:text-[1.5rem] px-[0.5rem] md:px-[1rem] font-normal">
+                            {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price || 0)}
                           </span>
                         </span>
                       ) : (
-                        <span className="text-customColor text-[1.6rem] font-medium">
-                          {formatCurrencyVND(
-                            item?.product_price +
-                              item?.selectedStorage?.storage_price || 0
-                          )}
+                        <span className="text-customColor text-[1.3rem] md:text-[1.6rem] font-medium">
+                          {formatCurrencyVND(item?.product_price + item?.selectedStorage?.storage_price || 0)}
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-center w-[25%] lg:w-[20%]">
-                  <button onClick={() => decreaseItem(item.product_id)} className="px-2 lg:px-4 py-2 border border-gray-300 rounded-lg">
+
+                {/* Quantity Controls */}
+                <div className="flex items-center justify-center w-[25%] md:w-[25%] lg:w-[20%]">
+                  <button onClick={() => decreaseItem(item.product_id)} 
+                    className="px-1 md:px-2 lg:px-4 py-1 md:py-2 border border-gray-300 rounded-lg text-[1.2rem] md:text-[1.4rem]">
                     -
                   </button>
-                  <span className="mx-2 lg:mx-4 font-semibold">{item.quantity}</span>
-                  <button onClick={() => inCreaseItem(item.product_id)} className="px-2 lg:px-4 py-2 border border-gray-300 rounded-lg">
+                  <span className="mx-1 md:mx-2 lg:mx-4 font-semibold text-[1.2rem] md:text-[1.4rem]">{item.quantity}</span>
+                  <button onClick={() => inCreaseItem(item.product_id)} 
+                    className="px-1 md:px-2 lg:px-4 py-1 md:py-2 border border-gray-300 rounded-lg text-[1.2rem] md:text-[1.4rem]">
                     +
                   </button>
                 </div>
-                <div className="w-[20%] lg:w-[25%] text-center">
-                  <span className="text-customColor text-[1.5rem] lg:text-[1.7rem] font-semibold">
+
+                {/* Total Price */}
+                <div className="w-[25%] md:w-[20%] lg:w-[25%] text-center">
+                  <span className="text-customColor text-[1.3rem] md:text-[1.5rem] lg:text-[1.7rem] font-semibold">
                     {formatCurrencyVND(
-                      (Number(item?.product_price) +
-                        Number(item?.selectedStorage?.storage_price || 0)) *
-                        Number(item?.quantity) *
-                        (1 - Number(item?.product_discount / 100))
+                      (Number(item?.product_price) + Number(item?.selectedStorage?.storage_price || 0)) *
+                      Number(item?.quantity) *
+                      (1 - Number(item?.product_discount / 100))
                     )}
                   </span>
                 </div>
-                <div className="w-[5%] lg:w-[10%] text-center">
-                  <button onClick={() => handleRemoveItem(item.product_id)} className="text-gray-500 hover:text-red-600">
+
+                {/* Delete Button */}
+                <div className="w-[5%] md:w-[5%] lg:w-[10%] text-center">
+                  <button onClick={() => handleRemoveItem(item.product_id)} 
+                    className="text-gray-500 hover:text-red-600 text-[1.2rem] md:text-[1.4rem]">
                     <FaTrash />
                   </button>
                 </div>
               </div>
             </div>
           ))}
-          <div className="flex justify-between">
-            <button className="px-10 py-5 rounded-2xl text-white bg-customColor font-medium hover:bg-yellow-500 hover:shadow-md hover:text-black transition duration-300">
+
+          {/* Action Buttons */}
+          <div className="flex justify-between mt-4">
+            <button className="px-4 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl text-white bg-customColor font-medium hover:bg-yellow-500 hover:shadow-md hover:text-black transition duration-300 text-[1.3rem] md:text-[1.5rem]">
               Tiếp tục mua sắm
             </button>
-            <button
-              onClick={() => {
-                removeAllCart();
-              }}
-              className="px-10 py-5 rounded-2xl text-white bg-customColor font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300"
-            >
+            <button onClick={() => removeAllCart()}
+              className="px-4 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl text-white bg-customColor font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300 text-[1.3rem] md:text-[1.5rem]">
               Xóa tất cả
             </button>
           </div>

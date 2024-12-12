@@ -160,90 +160,93 @@ const statusText = currentStatus
   
 return (
     <Container>
-      <div className='w-[100%] shadow-lg py-[4rem] px-[3rem] bg-white'>
-        <div className='flex justify-between items-center border-b pb-[1rem]'>
-          <div className='text-[2rem] flex justify-center items-center gap-[1rem]'>
-          <MdArrowBackIosNew />
-          <div className='text-[1.7rem]'>
-            Trở lại
+      <div className='w-[100%] shadow-lg py-[1.5rem] sm:py-[4rem] px-[1rem] sm:px-[3rem] bg-white'>
+        <div className='flex flex-col sm:flex-row justify-between items-center border-b pb-[1rem] gap-[.8rem]'>
+          <div className='text-[1.3rem] sm:text-[2rem] flex justify-center items-center gap-[.8rem]'>
+            <MdArrowBackIosNew />
+            <div className='text-[1.2rem] sm:text-[1.7rem]'>Trở lại</div>
           </div>
+          <div className='flex flex-col sm:flex-row gap-[.8rem] justify-center items-center'>
+            <h3 className='text-[1.3rem] sm:text-[1.7rem] font-semibold sm:border-r sm:px-1'>
+              Mã đơn hàng <span className='text-[#0084FF]'>#{detailOrder[0]?.order?.order_id}</span>
+            </h3>
+            <p className='text-[1.2rem] sm:text-[1.7rem] font-semibold text-center sm:text-left'>
+              Trạng thái vận chuyển: <span className={`text-[${statusText?.color}]`}>{statusText?.text}</span>
+            </p>
           </div>
-          <div className='flex gap-[1rem] justify-center items-center'>
-          <h3 className='text-[2rem] font-semibold border-r px-4'>Mã đơn hàng <span className='text-[#0084FF]'>#{detailOrder[0]?.order?.order_id}</span></h3>
-          <p className={`text-[1.7rem] font-semibold`}>Trạng thái vận chuyển: <span className={`text-[${statusText?.color}]`}>
-          {statusText?.text}
-
-            </span></p>
-          </div>
-        
         </div>
-        <div className='flex gap-[1rem] py-[1rem]'>
-          <p className='text-[1.4rem] font-semibold'>Khuyến mãi: <span>0</span></p>
-          <p className='text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
-          <p className='text-[1.4rem] font-semibold'>Tổng tiền: <span className='text-[red]'>
-            
-            {formatCurrencyVND(detailOrder[0]?.order?.order_total+30000)}</span></p>
+        <div className='flex flex-col sm:flex-row gap-[.8rem] py-[.8rem] text-center sm:text-left'>
+          <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold'>Khuyến mãi: <span>0</span></p>
+          <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
+          <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold'>
+            Tổng tiền: <span className='text-[red]'>{formatCurrencyVND(detailOrder[0]?.order?.order_total+30000)}</span>
+          </p>
         </div>
-        <div className='flex justify-between'>
-          <div className='w-[49%]'>
+        <div className='flex flex-col lg:flex-row justify-between gap-[2rem]'>
+          <div className='w-full lg:w-[49%]'>
+            <div className='mb-[1.5rem]'>
+              <h4 className='font-semibold text-[1.5rem] sm:text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
+              <div className='shadow-md p-[1.5rem] sm:p-[2rem]'>
+                <p className='text-[1.4rem] sm:text-[1.6rem] font-semibold'>
+                  Địa chỉ: <span>{detailOrder[0]?.order?.address}</span>
+                </p>
+                <p className='text-[1.4rem] sm:text-[1.6rem] mt-[1rem] font-semibold'>
+                  Số điện thoại: <span>0334491141</span>
+                </p>
+              </div>
+            </div>
+            <div className='mb-[1.5rem]'>
+              <h4 className='font-semibold text-[1.5rem] sm:text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
+              <div className='shadow-md p-[1.5rem] sm:p-[2rem]'>
+                <p className='text-[1.4rem] sm:text-[1.6rem] font-semibold'>
+                  Thanh toán: <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span>
+                </p>
+              </div>
+            </div>
             <div>
-            <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
-            <div className='h-[8rem] shadow-md p-[2rem]'>
-            <p className='text-[1.6rem] font-semibold'>Địa chỉ: <span>{detailOrder[0]?.order?.address}</span></p>
-            <p className='text-[1.6rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0334491141</span></p>
-            </div>
-            </div>
-            <div className='mt-[1.5rem]'>
-            <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
-            <div className='h-[5rem] shadow-md p-[2rem]'>
-            <p className='text-[1.6rem] font-semibold'>Thanh toán: <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span></p>
-            </div>
-            </div>
-            <div className='mt-[1.5rem]'>
-            <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Tổng thanh toán</h4>
-            <div className='h-[100%] shadow-md p-[2rem]'>
-            <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền hàng: <span className='font-semibold'>{formatCurrencyVND(detailOrder[0]?.order?.order_total)}</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền ship: <span className='font-semibold'>30.000</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Giảm giá: <span className='font-semibold'>{order?.discount_discount?.discount_percent || 0}%</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Thành tiền: <span className='font-semibold'>{formatCurrencyVND(Number(order?.order_total) * (1 - Number(order?.discount_discount?.discount_percent / 100 ||0)) + 30000)}</span></p>
-        
-            </div>
+              <h4 className='font-semibold text-[1.5rem] sm:text-[1.7rem] mb-[1rem]'>Tổng thanh toán</h4>
+              <div className='shadow-md p-[1.5rem] sm:p-[2rem]'>
+                <p className='text-[1.5rem] sm:text-[1.7rem] py-[1rem]'>
+                  Tổng tiền hàng: <span className='font-semibold'>{formatCurrencyVND(detailOrder[0]?.order?.order_total)}</span>
+                </p>
+                <p className='text-[1.5rem] sm:text-[1.7rem] py-[1rem]'>
+                  Tổng tiền ship: <span className='font-semibold'>30.000</span>
+                </p>
+                <p className='text-[1.5rem] sm:text-[1.7rem] py-[1rem]'>
+                  Giảm giá: <span className='font-semibold'>{order?.discount_discount?.discount_percent || 0}%</span>
+                </p>
+                <p className='text-[1.5rem] sm:text-[1.7rem] py-[1rem]'>
+                  Thành tiền: <span className='font-semibold'>
+                    {formatCurrencyVND(Number(order?.order_total) * (1 - Number(order?.discount_discount?.discount_percent / 100 ||0)) + 30000)}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
-          {/* <div className='w-[49%]'>
-            <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
-            <div className='h-[8rem] shadow-md p-[2rem]'>
-            <p className='text-[1.5rem] font-semibold'>Thanh toán: <span>Thanh toán qua MoMo</span></p>
+          <div className='w-full lg:w-[49%]'>
+            <div className="w-[100%] bg-white shadow-md rounded-lg p-4 sm:p-8">
+              <h3 className="text-[1.6rem] sm:text-[1.8rem] font-semibold text-gray-800 mb-6">
+                Trình trạng đơn hàng
+              </h3>
+              <StepOrderDetai order={detailOrder[0]?.order}/>
             </div>
-          </div> */}
-          <div className='w-[49%]'>
-          <div className="w-[100%] bg-white shadow-md rounded-lg p-8">
-          <h3 className="text-[1.8rem] font-semibold text-gray-800 mb-6">
-            Trình trạng đơn hàng
-          </h3>
-      <StepOrderDetai order={detailOrder[0]?.order}/>
-        </div>
-        {order?.order_status == 6 
-        
-        
-        
-        ? (  <div className="w-[100%] bg-white shadow-md rounded-lg p-8 mt-[3rem]">
-          <h3 className="text-[1.8rem] font-semibold text-gray-800 mb-6">
-            Lý do hủy đơn hàng
-            
-          </h3>
-          {order?.order_status == 6 ? <p className='text-[1.6rem]'>{cancelReason}</p>  : ''}
-        </div>) : ''}
-        
+            {order?.order_status == 6 && (
+              <div className="w-[100%] bg-white shadow-md rounded-lg p-4 sm:p-8 mt-[3rem]">
+                <h3 className="text-[1.6rem] sm:text-[1.8rem] font-semibold text-gray-800 mb-6">
+                  Lý do hủy đơn hàng
+                </h3>
+                <p className='text-[1.4rem] sm:text-[1.6rem]'>{cancelReason}</p>
+              </div>
+            )}
           </div>
         </div>
-        <div className='mt-[3rem] table-detail-order'>
-        
-        </div>
-        {order?.order_status < 2 ?   <div className='rounded-lg mt-[1rem]'>
-          <button className='bg-yellow-400 text-[1.5rem] p-[1rem] rounded-lg'>Huỷ đơn hàng</button>
-        </div>: "" }
-      
+        {order?.order_status < 2 && (
+          <div className='rounded-lg mt-[1rem]'>
+            <button className='bg-yellow-400 text-[1.4rem] sm:text-[1.5rem] p-[.8rem] sm:p-[1rem] rounded-lg'>
+              Huỷ đơn hàng
+            </button>
+          </div>
+        )}
       </div>
     </Container>
   )

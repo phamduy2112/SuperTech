@@ -223,11 +223,13 @@ console.log(objectStorage);
                 <div className="flex gap-4 mb-6">
               
                 {objectColor?.product_storages?.map((variant, index) => (
-  <button key={index}                
-  onClick={()=>{handleStorageChange(variant)}}
-  className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
->
-
+  <button 
+    key={index}                
+    onClick={() => handleStorageChange(variant.storage)}
+    className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${
+      selectetStorage?.storage === variant.storage ? 'bg-slate-50' : ''
+    }`}
+  >
     {variant?.storage} MB
   </button>
 ))}
@@ -338,26 +340,25 @@ console.log(objectStorage);
 
                 {/* Technical Specifications */}
                 <div className="flex justify-between">
-                  <div className="w-[100%] mt-10">
-                    <h3 className="text-red-500 font-semibold text-3xl mb-4">Thông số kĩ thuật</h3>
-                    <div className="border rounded-lg p-6">
-                      <table className="w-full border-collapse text-2xl leading-[3rem]">
-                        <tbody>
-                          <tr className="border-b">
-                            <td className="font-semibold py-5 w-1/2">Công nghệ màn hình</td>
-                            <td className="py-2 w-1/2">OLED</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="font-semibold py-5 w-1/2">Độ phân giải</td>
-                            <td className="py-2 w-1/2">2532 × 1170 pixels</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <button className="w-full text-xl font-semibold py-4 border mt-4">Xem chi tiết cấu hình</button>
-                  </div>
-                </div>
-
+  <div className="w-[100%] mt-10">
+    <h3 className="text-red-500 font-semibold text-3xl mb-4">Thông số kĩ thuật</h3>
+    <div className="border rounded-lg p-6">
+      <table className="w-full text-2xl leading-[3rem]">
+        <tbody>
+          <tr className="md:border-b">
+            <td className="font-semibold py-5 w-1/2">Công nghệ màn hình</td>
+            <td className="py-2 w-1/2">OLED</td>
+          </tr>
+          <tr className="md:border-b">
+            <td className="font-semibold py-5 w-1/2">Độ phân giải</td>
+            <td className="py-2 w-1/2">2532 × 1170 pixels</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <button className="w-full text-xl font-semibold py-4 border mt-4">Xem chi tiết cấu hình</button>
+  </div>
+</div>
                 {/* Cart and Buy Now Buttons */}
                 <div className="flex gap-4 mt-4">
                   <button 

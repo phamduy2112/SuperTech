@@ -67,12 +67,12 @@ function Resigter() {
             <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng kí</p>
 
             {/* Social Buttons */}
-            <div className="flex gap-3 2xl:gap-4 mb-6 w-full 2xl:w-[70%] mx-auto">
-              <button className="w-1/2 py-3 2xl:py-5 border text-[1.4rem] 2xl:text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg">
-                <FaFacebookF className="mr-[.5rem]"/>
+            <div className="flex gap-2 sm:gap-3 xl:gap-4 mb-4 sm:mb-6 w-full sm:w-[90%] 2xl:w-[70%] mx-auto">
+            <button className="w-1/2 py-2 sm:py-3 xl:py-5 border text-[1.2rem] sm:text-[1.4rem] 2xl:text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg">
+            <FaFacebookF className="mr-[.5rem]"/>
                 <span className="hidden sm:inline">Facebook</span>
               </button>
-              <button className="w-1/2 py-3 2xl:py-5 border text-[1.4rem] 2xl:text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg">
+              <button className="w-1/2 py-2 sm:py-3 xl:py-5  border text-[1.4rem] 2xl:text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg">
                 <FaGoogle className="mr-[.5rem]"/>
                 <span className="hidden sm:inline">Google</span>
               </button>
@@ -180,8 +180,7 @@ function Resigter() {
         {/* Right Section - Advertisement */}
         <div className="hidden lg:block lg:w-[55%] xl:w-[60%] relative overflow-hidden">
           <div className="absolute inset-0 bg-customColor clip-diagonal" />
-          
-          <div className="relative top-[40%] left-[65%] translate-x-[-50%] translate-y-[-50%] z-10 text-white p-8 flex flex-col items-center hidden 2xl:flex">
+          <div className="relative top-[40%] left-[65%] translate-x-[-50%] translate-y-[-50%] z-10 text-white p-8 flex flex-col items-center 2xl:flex">
             <div className="mb-8">
               <h1 className="text-[5rem] xl:text-[6rem] font-bold mb-4 text-center drop-shadow-lg">SuperTech</h1>
               <div className="w-32 h-1 bg-white/60 mx-auto rounded-full mb-6"></div>
@@ -192,15 +191,17 @@ function Resigter() {
           </div>
 
           {/* Phone Image */}
-          <div className="absolute left-[-6%] top-[20%] z-10 animate-float">
-            <div className="relative">
+          <div className="absolute left-[-9%] top-[20%] z-10 animate-float hidden 2xl:block">
+          <div className="relative">
               <div className="absolute inset-5 bg-gradient-to-b from-purple-400/20 to-transparent rounded-[3rem] blur-2xl"></div>
               <img src={dienThoai} alt="iPhone" className="w-[450px] xl:w-[500px] object-contain relative z-10" />
             </div>
           </div>
 
           <div className="absolute bottom-[-10%] right-0 opacity-20">
-            <img src={bgdienThoai} className="w-[800px]" alt="" />
+            <img src={bgdienThoai} 
+          className="w-[400px] md:w-[420px] lg:w-[400px] xl:w-[600px] transition-all duration-300" 
+          alt="" />
           </div>
         </div>
       </div>

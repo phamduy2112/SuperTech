@@ -34,7 +34,7 @@ function ProductHome() {
       Những sản phẩm dành cho bạn
     </h3>       
       </div>
-        <div className="grid grid-cols-1 min-[500px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 min-[395px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
      {randomProducts.map((item)=>{
       return <ProductItem key={item.id} product={item}/>
      })}
