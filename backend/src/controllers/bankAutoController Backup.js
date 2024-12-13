@@ -48,4 +48,5 @@ const checkTransactionStatus = async (req, res) => {
         responseSend(res, error.message, "Error checking transactions.", 500);
     }
 };
+
 export { checkTransactionStatus };
