@@ -7,6 +7,7 @@ import { fogetCheckPassword } from '../../../../../service/user/user.service';
 import useSweetAlert from '../../../../../hooks/Notification.hook';
 import { TPayloadRegister } from '../../../../../service/auth/auth.type';
 
+// Định nghĩa kiểu dữ liệu cho props
 interface ChangePasswordProps {
   email: string;
 }
@@ -15,6 +16,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ email }) => {
   const navigate = useNavigate();
   const { showAlert } = useSweetAlert();
 
+  // Formik sử dụng TypeScript cho kiểu dữ liệu của các giá trị trong form
   const formik = useFormik({
     initialValues: {
       newPassword: '',
@@ -54,54 +56,45 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ email }) => {
   });
 
   return (
-    <div className="w-full">
-     
-      <Form layout="vertical" className="sign-edit" onFinish={formik.handleSubmit}>
-        <Form.Item
-          label={<span className="text-[1.3rem] sm:text-[1.5rem]">Mật khẩu mới</span>}
-          validateStatus={formik.touched.newPassword && formik.errors.newPassword ? 'error' : ''}
-          help={formik.touched.newPassword && formik.errors.newPassword ? formik.errors.newPassword : null}
-          className="mb-[1rem]"
-        >
-          <Input.Password
-            id="newPassword"
-            name="newPassword"
-            placeholder="Nhập mật khẩu mới"
-            value={formik.values.newPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="py-[1.8rem] sm:py-[2.1rem] text-[1.3rem] sm:text-[1.5rem]"
-          />
-        </Form.Item>
+    <Form layout="vertical" className="sign-edit" onFinish={formik.handleSubmit}>
+      <Form.Item
+        label="Mật khẩu"
+        validateStatus={formik.touched.newPassword && formik.errors.newPassword ? 'error' : ''}
+        help={formik.touched.newPassword && formik.errors.newPassword ? formik.errors.newPassword : null}
+        className="mb-[.5rem]"
+      >
+        <Input.Password
+          id="newPassword"
+          name="newPassword"
+          placeholder="Nhập mật khẩu"
+          value={formik.values.newPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={<span className="text-[1.3rem] sm:text-[1.5rem]">Xác nhận mật khẩu</span>}
-          validateStatus={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? 'error' : ''}
-          help={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? formik.errors.confirmNewPassword : null}
-          className="mb-[1rem]"
-        >
-          <Input.Password
-            id="confirmNewPassword"
-            name="confirmNewPassword"
-            placeholder="Xác nhận mật khẩu mới"
-            value={formik.values.confirmNewPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="py-[1.8rem] sm:py-[2.1rem] text-[1.3rem] sm:text-[1.5rem]"
-          />
-        </Form.Item>
+      <Form.Item
+        label="Mật khẩu"
+        validateStatus={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? 'error' : ''}
+        help={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? formik.errors.confirmNewPassword : null}
+        className="mb-[.5rem]"
+      >
+        <Input.Password
+          id="confirmNewPassword"
+          name="confirmNewPassword"
+          placeholder="Nhập mật khẩu"
+          value={formik.values.confirmNewPassword}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+      </Form.Item>
 
-        <div className="button-edit mt-4">
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            className="w-[100%] h-[4rem] text-[1.5rem] sm:text-[1.7rem]"
-          >
-            Đặt lại mật khẩu
-          </Button>
-        </div>
-      </Form>
-    </div>
+      <div className="button-edit">
+        <Button type="primary" htmlType="submit" className="w-[100%] h-[4rem] text-[1.7rem]">
+          Đặt lại mật khẩu
+        </Button>
+      </div>
+    </Form>
   );
 };
 

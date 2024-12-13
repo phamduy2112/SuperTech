@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const CountdownTimer = () => {
-  const [seconds, setSeconds] = useState(1); // Thời gian bắt đầu là 180 giây
+  const [seconds, setSeconds] = useState(180); // Thời gian bắt đầu là 180 giây
 
   useEffect(() => {
     if (seconds > 0) {
