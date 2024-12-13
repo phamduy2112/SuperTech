@@ -194,8 +194,6 @@ function Pay() {
         product_storage: item?.selectedStorage?.storage,
         detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
         discount_product: item.product_discount,
-        color_id:item?.selectedColor?.color_id,
-        id_storage:item?.selectedStorage?.id_storage
       }));
   
       if (formData.paymentMethod === 'bank') {
@@ -213,7 +211,7 @@ function Pay() {
           // Thanh toán thành công, chuyển trang ngay lập tức
           const response = await createDetailOrder(detailOrders);
           if (response) {
-            navigate("/xuất-hóa-đơn");
+            navigate("/");
             dispatch(setOrderId(resp.data.content.order_id));
             dispatch(removeAllCart());
           }
@@ -222,7 +220,7 @@ function Pay() {
           setTimeout(async () => {
             const response = await createDetailOrder(detailOrders);
             if (response) {
-              navigate("/xuất-hóa-đơn");
+              navigate("/");
               dispatch(setOrderId(resp.data.content.order_id));
               dispatch(removeAllCart());
             }

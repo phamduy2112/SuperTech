@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Popover, Button, Row, Col, Modal, Tabs } from 'antd';
+import { Input, Popover, Button, Row, Col, Modal, Tabs, Divider } from 'antd';
+import { FaExclamationTriangle, FaPlus,FaBookmark,FaUserAlt,FaBell,FaCubes,FaImage } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
 import { getsetting, updatesettingId } from '../../../service/setting/setting.service';
 
@@ -84,7 +85,7 @@ function AdminSetting() {
                 author: settingsMap[4],
                 logo: settingsMap[5],
                 favicon: settingsMap[6],
-                popup: settingsMap[7],
+                noti_website: settingsMap[7],
                 contentAutobank: settingsMap[8],
                 token: settingsMap[9],
                 rechargeNotice: settingsMap[10],
@@ -131,7 +132,7 @@ function AdminSetting() {
                         case 'favicon':
                             id = 6;
                             break;
-                        case 'popup':
+                        case 'noti_website':
                             id = 7;
                             break;
                         case 'contentAutobank':
@@ -169,11 +170,16 @@ function AdminSetting() {
                 <TabPane tab="Cài Đặt Chung" key="1">
                     {/* Nội dung cho General Settings */}
                     <Row gutter={[16, 16]}>
+                    <Divider orientation="center">Thông Tin Chung</Divider>
                         <Col span={24}>
                             
                         </Col>
                         <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Title Website:</h4>
+                            <h4 className='text-[1.6rem] flex items-center'> <FaPlus className='mr-1'  /> Title Website: </h4>
+                            <span className='text-[12px] text-[#646464] flex items-center'>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là input nhập tên website !
+                            </span>
                             <Input
                                 value={settings.title}
                                 placeholder="Title Website..."
@@ -181,7 +187,11 @@ function AdminSetting() {
                             />
                         </Col>
                         <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Description Website:</h4>
+                            <h4 className='text-[1.6rem] flex items-center'> <FaBookmark className='mr-1' /> Description Website:</h4>
+                            <span className='text-[12px] text-[#646464] flex items-center '>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là input nhập giới thiệu ngắn ở chân website !
+                            </span>
                             <Input
                                 value={settings.description}
                                 placeholder="Description Website..."
@@ -189,7 +199,11 @@ function AdminSetting() {
                             />
                         </Col>
                         <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Chủ Quản Website:</h4>
+                            <h4 className='text-[1.6rem] flex items-center'> <FaUserAlt className='mr-1' /> Chủ Quản Website:</h4>
+                            <span className='text-[12px] text-[#646464] flex items-center  '>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là input nhập chủ của website !
+                            </span>
                             <Input
                                 value={settings.author}
                                 placeholder="Author Website..."
@@ -197,11 +211,15 @@ function AdminSetting() {
                             />
                         </Col>
                         <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Popup Website:</h4>
+                            <h4 className='text-[1.6rem] flex items-center'><FaBell className='mr-1' /> Thông Báo Website:</h4>
+                            <span className='text-[12px] text-[#646464] flex items-center '>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là input thông báo ở đầu trang website !
+                            </span>
                             <Input
-                                value={settings.popup}
-                                placeholder="Popup Website..."
-                                onChange={(e) => handleValueChange('popup', e.target.value)}
+                                value={settings.noti_website}
+                                placeholder="SuperTech..."
+                                onChange={(e) => handleValueChange('noti_website', e.target.value)}
                             />
                         </Col>
                     </Row>
@@ -209,8 +227,9 @@ function AdminSetting() {
                 <TabPane tab="Cài Đặt Giao Diện" key="2">
                     {/* Nội dung cho UI Settings */}
                     <Row gutter={[16, 16]}>
+                        
                         <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Color Website:</h4>
+                            <h4 className='text-[1.6rem] flex items-center'><FaCubes className='mr-1' /> Color Website:</h4>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Popover
                                     content={colorPicker}
@@ -227,16 +246,16 @@ function AdminSetting() {
                                 <div style={{ width: '40px', height: '35px', backgroundColor: settings.color, marginLeft: 10, borderRadius: '20px' }}></div>
                             </div>
                         </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
+                        {/* <Col xs={24} sm={12} md={12} lg={6}>
                             <h4 className='text-[1.6rem]'>Logo Website:</h4>
                             <Input
                                 value={settings.logo}
                                 placeholder="Logo Website..."
                                 onChange={(e) => handleValueChange('logo', e.target.value)}
                             />
-                        </Col>
+                        </Col> */}
                         <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Favicon Website:</h4>
+                            <h4 className='text-[1.6rem] flex items-center'><FaImage className='mr-1' /> Favicon Website:</h4>
                             <Input
                                 value={settings.favicon}
                                 placeholder="Favicon Website..."
@@ -248,8 +267,13 @@ function AdminSetting() {
                 <TabPane tab="Ngân Hàng" key="3">
                     {/* Nội dung cho Advanced Settings */}
                     <Row gutter={[16, 16]}>
+                    <Divider orientation="center">Token Ngân Hàng</Divider>
                     <Col span={24}>
                             <h4>Token Autobank:</h4>
+                            <span className='text-[12px] text-[#646464] flex items-center '>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là nơi lưu token api phía ngân hàng.
+                            </span>
                             {isTokenVisible ? (
                                 <Input
                                     value={settings.token}
@@ -260,7 +284,39 @@ function AdminSetting() {
                                 <Button onClick={showPasswordModal}>Xem Token</Button>
                             )}
                         </Col>
-                    
+                        <Divider orientation="center">Thông Tin Ngân Hàng</Divider>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Ngân Hàng:</h4>
+                            <Input
+                                value={settings.contentAutobank}
+                                placeholder="Content Autobank..."
+                                onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
+                            />
+                        </Col>
+                        {/* <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Logo Ngân Hàng:</h4>
+                            <Input
+                                value={settings.contentAutobank}
+                                placeholder="Content Autobank..."
+                                onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
+                            />
+                        </Col> */}
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Tên Tài Khoản:</h4>
+                            <Input
+                                value={settings.contentAutobank}
+                                placeholder="Content Autobank..."
+                                onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
+                            />
+                        </Col>
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]'>Số Tài Khoản:</h4>
+                            <Input
+                                value={settings.contentAutobank}
+                                placeholder="Content Autobank..."
+                                onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
+                            />
+                        </Col>
                         <Col xs={24} sm={12} md={12} lg={6}>
                             <h4 className='text-[1.6rem]'>Content Autobank:</h4>
                             <Input

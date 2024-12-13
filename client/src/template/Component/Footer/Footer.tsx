@@ -4,7 +4,45 @@ import { RiHeadphoneFill } from 'react-icons/ri'
 import nganHang from "../../../assets/nganhang.png"
 import { Container } from '../../../components/Style/Container'
 import LoadingFooter from './Component/Loading/LoadingFooter'
+import { getsetting, } from '../../../service/setting/setting.service';
 function Footer() {
+  const [settings, setSettings] = useState({
+    title: '',
+    description: '',
+    author: '',
+    color: '#fff'
+  });
+      const fetchSettings = async () => {
+          try {
+              const response = await getsetting();
+              const settingsMap = {};
+              response.data.content.forEach(setting => {
+                  settingsMap[setting.id] = setting.value;
+              });
+              setSettings({
+                title: settingsMap[1],
+                description: settingsMap[2],
+                color: settingsMap[3],
+                author: settingsMap[4],
+                logo: settingsMap[5],
+                favicon: settingsMap[6],
+                noti_website: settingsMap[7],
+                contentAutobank: settingsMap[8],
+                token: settingsMap[9],
+                rechargeNotice: settingsMap[10],
+                tokenpass: settingsMap[11]
+              });
+              setOriginalSettings({
+                  ...settingsMap
+              });
+          } catch (error) {
+              console.error('Failed to fetch settings:', error);
+          }
+      };
+  
+      useEffect(() => {
+          fetchSettings();
+      }, []);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -93,7 +131,7 @@ function Footer() {
         </div>
         <div className='w-[100%] bg-[#E5E5E5] sm:h-[100%] p-[1rem] h-[4rem] flex flex-col justify-center items-center'>
           <div className='xl:w-[80%]  xmd:w-[90%] sm:w-[95%] m-auto md:flex justify-between items-center'>
-          <p className='md:text-[1.5rem] xl:text-[1.8rem] text-[#34005C] sm:hidden md:block'>SuperTech - Cửa Hàng Chuyên Các Mặt Hàng Công Nghệ.</p>
+          <p className='md:text-[1.5rem] xl:text-[1.8rem] text-[#34005C] sm:hidden md:block'> {settings.description || 'SuperTech - Cửa Hàng Chuyên Các Mặt Hàng Công Nghệ'}</p>
           <img src={nganHang} alt="" className='md:w-[25rem] flex justify-center items-center' />
           </div>
         </div>

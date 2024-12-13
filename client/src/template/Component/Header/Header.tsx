@@ -19,6 +19,7 @@ import { useAppSelector } from "../../../redux/hooks";
 import { getFavouriteProductThunk } from "../../../redux/favourite/Favourite.slice";
 import { useDispatch } from "react-redux";
 import './modalUserCustom.css'
+import { getsetting, } from '../../../service/setting/setting.service';
 function Header() {
 
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ function Header() {
     }
     
   };
+
   const items = [
     {
       key: "1",
@@ -93,6 +95,44 @@ const handleMouseLeave = (itemName: string) => {
   }
 
 };
+const [settings, setSettings] = useState({
+  title: '',
+  description: '',
+  author: '',
+  color: '#fff'
+});
+    const fetchSettings = async () => {
+        try {
+            const response = await getsetting();
+            const settingsMap = {};
+            response.data.content.forEach(setting => {
+                settingsMap[setting.id] = setting.value;
+            });
+            setSettings({
+              title: settingsMap[1],
+              description: settingsMap[2],
+              color: settingsMap[3],
+              author: settingsMap[4],
+              logo: settingsMap[5],
+              favicon: settingsMap[6],
+              noti_website: settingsMap[7],
+              contentAutobank: settingsMap[8],
+              token: settingsMap[9],
+              rechargeNotice: settingsMap[10],
+              tokenpass: settingsMap[11]
+            });
+            setOriginalSettings({
+                ...settingsMap
+            });
+        } catch (error) {
+            console.error('Failed to fetch settings:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSettings();
+    }, []);
+
 
 const listCart=useAppSelector((state)=>state.cart.listCart)
 const token=getLocalStorage('token')
@@ -103,7 +143,7 @@ console.log(token);
 <div className="flex flex-col relative">
     <div className='w-[100%] h-[35px] color-custom text-white flex justify-center items-center'>
       <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
-            <h3 className='text-[1.5rem] font-medium sm:text-center'>Chào mừng đến với cửa hàng SuperTech</h3>
+            <h3 className='text-[1.5rem] font-medium sm:text-center'>{settings.noti_website || 'Chào mừng đến với cửa hàng SuperTech'}</h3>
             <div className="gap-[1.2rem] sm:hidden md:flex">
               <div className='flex justify-center items-center gap-[.5rem] text-[1.4rem]'>
               <CiLocationOn  className='text-[1.4rem]'/>
@@ -127,10 +167,10 @@ console.log(token);
       <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto sm:hidden md:block" >
   
         <div className="flex justify-between items-center w-[100%] md:h-[5rem] lg:h-[75px]">
-          <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">SuperTech
+          <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">{settings.title || 'SuperTech'}
 
 
-            
+        
           </div>
           <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
           <form className="w-[100%] h-[38px]">
@@ -268,7 +308,7 @@ console.log(token);
                   <div className="text-[2rem]" onClick={()=>setisvisibleHeaderMB(!isvisibleHeaderMB)}>
                  <FaBars />
               </div>
-              <h3 className="text-[2.5rem]">SuperTech</h3>
+              <h3 className="text-[2.5rem]">{settings.title || 'SuperTech'}</h3>
               <div className="text-[2.5rem] flex">
                 <IoIosSearch />
                 <Badge count={0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
