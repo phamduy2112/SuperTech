@@ -14,10 +14,6 @@ export default class bankauto extends Model {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    image: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
     accountName: {
       type: DataTypes.TEXT,
       allowNull: true

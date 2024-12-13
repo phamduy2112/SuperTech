@@ -47,15 +47,16 @@ const getautobank = async (req, res) => {
 };
 
 const updateBankAuto = async (req, res) => {
-    const { id_bank, short_name, accountName, accountNumber, on_off } = req.body;
+    const { short_name, accountName, accountNumber, on_off } = req.body;
+    const { id } = req.params; 
 
-    if (id_bank === undefined) {
-        return responseSend(res, "", "id_bank is required", 400);
+    if (!id) {
+        return responseSend(res, "", "id is required", 400);  
     }
 
     try {
         const bankToUpdate = await bankauto.findOne({
-            where: { id_bank }
+            where: { id_bank: id } 
         });
 
         if (!bankToUpdate) {
@@ -63,10 +64,10 @@ const updateBankAuto = async (req, res) => {
         }
 
         await bankauto.update({ short_name, accountName, accountNumber, on_off }, {
-            where: { id_bank }
+            where: { id_bank: id } 
         });
 
-        responseSend(res, { id_bank, short_name, accountName, accountNumber, on_off }, "Bank updated successfully", 200);
+        responseSend(res, { id, short_name, accountName, accountNumber, on_off }, "Bank updated successfully", 200);
     } catch (error) {
         console.error("Error updating bank:", error);
         responseSend(res, error.message, "Error updating bank", 500);
