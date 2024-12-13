@@ -1,56 +1,62 @@
-import { GetProp, Select, Upload, UploadFile } from 'antd';
-import React, { useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'
-import ImgCrop from 'antd-img-crop';
+import { message, Select, Upload, UploadFile, Button, Modal, Switch, GetProp } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { TbPlaylistAdd } from 'react-icons/tb';
 import { UploadProps } from 'antd/lib';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../../../redux/hooks';
-import { getProductByIdThunk, putInforProductAdminThunk } from '../../../../redux/product/product.slice';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import ModalAdminProduct from './ModalAdminProduct';
-import { getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
+import ImgCrop from 'antd-img-crop';
+import { Formik, Form, Field } from 'formik';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { createCategoryThunk, getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
 import toast from 'react-hot-toast';
+import ReactQuill from 'react-quill';
+import ModalAdminProduct from './ModalAdminProduct';
+import { Input } from '../../../../template/Component/Input/Input';
+import { createProductAdminThunk, getProductByIdThunk, putInforProductAdminThunk, removeAllProductColors, removeProductsFromColors, setProductColors } from '../../../../redux/product/product.slice';
+import { IMG_BACKEND } from '../../../../constants';
+import { IoMdClose } from 'react-icons/io';
+import { deleteColorsProduct, getImageProductById, putProductById } from '../../../../service/product/product.service';
+import { BiSolidEdit } from 'react-icons/bi';
+import { useNavigate, useParams } from 'react-router-dom';
+
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-
-function AdminEditProduct(props) {
-  const [showForm, setShowForm] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const { id } = useParams();
+function AdminEditProduct() {
+  const { id } = useParams(); // Lấy id từ URL
   const numericId = Number(id); // Ép chuỗi id thành số
-const dispatch=useDispatch()
-const productDetail=useAppSelector((state)=>state.product.productDetail)
-console.log(productDetail);
-const listCatelogry=useAppSelector((state)=>state.category.listCatelories)
+  const listProductColor = useAppSelector(state => state.product.productColors);
+  const [img,setImg]=useState([]);
+  const listCatelogry = useAppSelector(state => state.category.listCatelories);
 
-const formattedCategories = listCatelogry?.map(category => ({
-  value: category.category_id,   // Make sure category.id is available
-  label: category.category_name, // Make sure category.name is available
-  category_dad:category.category_dad
-}));
-useEffect(()=>{
-  if (!isNaN(numericId)) {
-    dispatch(getProductByIdThunk(numericId));
-
-  }
-  dispatch(getCatelogryThunk(""));
-
-},[numericId,dispatch])
+  const productDetail=useAppSelector((state)=>state.product.productDetail)
+  const [productColors,setProductColor] = useState([]);
+  
+  const dispatch=useAppDispatch()
+  // console.log(props);
+  useEffect(()=>{
+    if (!isNaN(numericId)) {
+      dispatch(getProductByIdThunk(numericId));
+    }
  
+  },[numericId,dispatch])
 
+console.log(productDetail.product_name);
 
+  useEffect(() => {
+    dispatch(getCatelogryThunk(""));
+  }, [dispatch]);
+
+  const formattedCategories = listCatelogry?.map(category => ({
+    value: category.category_id,
+    label: category.category_name,
+    category_dad: category.category_dad
+  }));
   const Datahe = [
     {
       value: '1',
-      label: 'HDD Level 1',
+      label: 'Ios',
     },
     {
       value: '2',
-      label: 'HDD Level 2',
+      label: 'Android',
     },
     {
       value: '3',
@@ -60,21 +66,23 @@ useEffect(()=>{
 
   const Datagiamgia = [
     {
-      value: '10%',
+      value: 0,
+      label: '0%',
+    },
+    {
+      value: 10,
       label: '10%',
     },
+   
     {
-      value: '75%',
-      label: '75%',
+      value: 5,
+      label: '5%',
     },
-    {
-      value: '100%',
-      label: '100%',
-    },
+    
 
   ]
-  const navigate=useNavigate();
-  const [value, setValue] = useState('')
+  const prevIdsRef = useRef(); // Khai báo useRef để lưu giá trị ids trước đó
+
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -95,97 +103,166 @@ useEffect(()=>{
 
     ['clean']
   ];
- 
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
- // Initial values của form
-const [initialValues,setInitialValues]=useState({});
+  const handleCategoryChange = (category_dad) => {
+    setSelectedCategory(category_dad);
+  };
+
+  // const ids = [714, 715]; // Các ID cần lấy
+
+  useEffect(() => {
+    const matchingCategory = formattedCategories?.find(
+      (category) => category.value === productDetail.category_id
+    );
+    if (matchingCategory) {
+      setSelectedCategory(matchingCategory.category_dad);
+    } else {
+       // setSelectedCategory("Không tìm thấy");
+    }
+ }, [formattedCategories, productDetail.category_id]);
+console.log(productDetail);
+const imageIds = listProductColor.map((item) => item.image_id);
+console.log(imageIds);
+
 useEffect(() => {
-  if (productDetail) {
-    setInitialValues({
-      category: productDetail.category_id || '',
-      price: productDetail.product_price || '',
-      discount: productDetail.product_discount || 0,
-      product_name: productDetail.product_name || '',
-      hot: productDetail.product_hot || 0,
-      quantity: productDetail.product_quantity || 0,
-      infor_screen: productDetail.infor_screen || '',
-      infor_system: productDetail.infor_system || '',
-      infor_cpu: productDetail.infor_cpu || '',
-      infor_ram: productDetail.infor_ram || '',
-      moTa: productDetail.infor_more || '',
-    });
+  const fetchApi = async () => {
+    const responsive = await getImageProductById(imageIds); // Gọi API với imageIds
+    if (responsive.status === 200) {
+      setImg(responsive.data.content);
+    }
+  };
+
+  // Chỉ gọi API nếu imageIds thay đổi
+  if (JSON.stringify(imageIds) !== JSON.stringify(prevIdsRef.current)) {
+    fetchApi();
+    prevIdsRef.current = imageIds; // Lưu giá trị imageIds hiện tại vào ref
   }
-}, [productDetail]);
-const validationSchema = Yup.object({
-  // category: Yup.string().required('Danh mục sản phẩm là bắt buộc'),
-  // price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá phải là số dương'),
-  // Thêm các validation cho các trường khác nếu cần
-});
+}, [imageIds]);
 
-  return (
-    <div className='flex-1 bg-[#f2edf3]  grid xl:grid-cols-2 gap-3 auto-rows-[minmax(50px,_auto)] p-[24px]'>
-      <div className='bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col '>
-        <span className='text-[20px] font-semibold'>Sửa Sản Phẩm {id} </span>
-        <Formik
-        enableReinitialize
-  initialValues={initialValues}
-  validationSchema={validationSchema}
-  onSubmit={(values) => {
-  
-
-const dataInforProduct={
-  infor_screen:values.infor_screen,
-  infor_system:values.infor_system,
-  infor_cpu:values.infor_cpu,
-  infor_ram:values.infor_ram,
-  infor_more:values.moTa,
-
-  product_name:values.product_name,
-  product_price:values.price,
-  product_hot:values.hot,
-  product_quantity:values.quantity,
-  product_discount:values.discount,
-  category_id:values.category,
-  product_id:numericId
+const navigate=useNavigate();
+useEffect(()=>{
+  if( productDetail.product_colors){
+    dispatch(removeAllProductColors());
+    productDetail.product_colors?.map((item)=>{
+      // console.log(item.);
+      
+      dispatch(setProductColors({
+        color_id:item.color_id,
+        color: item.color,
+        // quantity: values.quantity,
+        image_id: item.image.image_id      , // Include image_id here
+        // productStorage: [
+        //   {
+        //     storage: values.capacity,
+        //     storage_price: values.additionalPrice,
+        //   }
+        // ]
+      })
+    );
+    })
+  }
  
   
+},[dispatch, productDetail])
+console.log(productColors);
+
+  const productColorDelete=async (item:object,id:number)=>{
+    const resp=await deleteColorsProduct(id);
   
-}
-dispatch(putInforProductAdminThunk(dataInforProduct))
-navigate("/admin/quản-lí-sản-phẩm")
-toast.success("Sửa sản phẩm thành công")
+    
+    dispatch(removeProductsFromColors(item.image_id))
+  }
+  
 
+  useEffect(() => {
+      
 
+    // Kết hợp thông tin màu sắc và hình ảnh
+    const combinedList = listProductColor.map(colorItem => {
+        const imageItem = img.find(img => img.image_id == colorItem.image_id);
+        return {
+            ...colorItem,
+            image_one: imageItem ? imageItem.image_one : null,
+        };
+    });
 
-console.log(dataInforProduct);
+    // Cập nhật vào state
+    setProductColor(combinedList);
 
+}, [img, listProductColor]); // Dependency array rỗng, chỉ chạy khi component mount
+  
+  return (
+    <div className='w-[80%] m-auto'>
+    
+  
+        <Formik
+          enableReinitialize={true}
 
+      initialValues={{
+        category: productDetail.category_id || "",
+        price: productDetail.product_price || 123,
+        discount: productDetail.product_discount || 0,
+        product_name: productDetail.product_name || "",
+        hot: productDetail.product_hot || 0,
+        moTa: productDetail?.infor_product_infor_product?.infor_more || "",
+        infor_screen: productDetail?.infor_product_infor_product?.infor_screen || "",
+        infor_system: productDetail?.infor_product_infor_product?.infor_system || "",
+        infor_cpu: productDetail?.infor_product_infor_product?.infor_cpu || "",
+        infor_ram: productDetail?.infor_product_infor_product?.infor_ram || "",
+        infor_rom: productDetail?.infor_product_infor_product?.infor_rom || "",
+        infor_frontCamera: productDetail?.infor_product_infor_product?.infor_frontCamera || "",
+        infor_rearCamera: productDetail?.infor_product_infor_product?.infor_rearCamera || "",
+        infor_scanning_frequency: productDetail?.infor_product_infor_product?.infor_scanning_frequency || "",
+        infor_chip_battery: productDetail?.infor_product_infor_product?.infor_chip_battery || "",
+      }}
+      
+          onSubmit={(values, { resetForm }) => {
+            const dataInforProduct = {
+              infor_screen: values.infor_screen,
+              infor_system: values.infor_system,
+              infor_cpu: values.infor_cpu,
+              infor_ram: values.infor_ram,
+              infor_more: values.moTa,
+              product_name: values.product_name,
+              product_price: values.price,
+              product_hot: values.hot,
+           
+              product_discount: values.discount,
+              category_id: values.category,
+              listProductColor: listProductColor,
+              product_id:productDetail.product_id
+            };
+        console.log(dataInforProduct.infor_screen);
+        dispatch(putInforProductAdminThunk(dataInforProduct))
+        // resetForm();
+            console.log(values.infor_screen);
+          
+        dispatch(removeAllProductColors())
+// navigate("/admin/quan-li-san-pham")
 
+          }}
+        >
 
-}}
->
-  {({ setFieldValue, values }) => (
-    <Form className="flex flex-col gap-4">
+             {({ setFieldValue, values,handleChange,handleBlur,resetForm }) => (
+    <Form className="flex flex-col gap-1">
       {/* Chọn loại sản phẩm */}
-      <div className="flex gap-[1%]">
-        <div className="flex w-[33%] h-auto flex-col gap-4">
-          <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
-          <Select
-            value={values.category}  // bind value to Formik state
-            onChange={(value,category_dad) => 
-              
-            {
-              setFieldValue('category', value);
-              handleCategoryChange(category_dad.category_dad)
-            }  
-            
-            } // update Formik state when changed
-            options={formattedCategories}
-            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-          />
-        </div>
+      <div className="flex gap-[1%] py-4">
+      <div className="flex w-[49%] h-auto flex-col gap-1">
+  <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
+  <Select
+    value={values.category || null}  // Set initial value to null or undefined
+    onChange={(value, category_dad) => {
+      setFieldValue('category', value);
+      handleCategoryChange(category_dad.category_dad);
+    }}  // Update Formik state when changed
+    options={formattedCategories}
+    placeholder="Mời bạn chọn"  // Set the placeholder text
+    className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+  />
+</div>
         {/* Nhập giá sản phẩm */}
-        <div className="flex w-[33%] h-auto flex-col gap-4">
+        <div className="flex w-[49%] h-auto flex-col gap-1">
           <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
           <Field
             type="number"
@@ -193,20 +270,11 @@ console.log(dataInforProduct);
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập giá sản phẩm"
           />
-          <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" />
+          {/* <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" /> */}
         </div>
-        {/* Chọn mức giảm giá */}
-        <div className="flex w-[33%] h-auto flex-col gap-4">
-          <label htmlFor="discount" className="text-[13px] text-[#81818177] font-medium">Giảm giá</label>
-          <Select
-            value={values.discount}  // bind value to Formik state
-            onChange={(value) => setFieldValue('discount', value)}  // update Formik state when changed
-            options={Datagiamgia}
-            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-          />
-        </div>
+     
       </div>
-       <div className="flex w-[100%] h-auto flex-col gap-4">
+       <div className="flex w-[100%] h-auto flex-col gap-1 py-4">
           <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Tên sản phẩm</label>
           <Field
             type="text"
@@ -214,10 +282,10 @@ console.log(dataInforProduct);
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập tên sản phẩm"
           />
-          <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" />
+          {/* <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" /> */}
         </div>
-        <div className='flex'>
-        <div className="flex w-[49%] h-auto flex-col gap-4">
+        <div className='flex gap-[1%] py-4'>
+        <div className="flex w-[49%] h-auto flex-col gap-1">
           <label htmlFor="hot" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Hot</label>
           <Field
             type="text"
@@ -225,130 +293,236 @@ console.log(dataInforProduct);
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập tên sản phẩm"
           />
-          <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" />
+          {/* <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" /> */}
         </div>
-        <div className="flex w-[49%] h-auto flex-col gap-4">
-          <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Số lượng</label>
-          <Field
-            type="text"
-            name="quantity"
-            className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-            placeholder="Nhập tên sản phẩm"
+          {/* Chọn mức giảm giá */}
+          <div className="flex w-[49%] h-auto flex-col gap-1">
+          <label htmlFor="hot" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giảm giá</label>
+          <Select
+            value={values.discount}  // bind value to Formik state
+            onChange={(value) => setFieldValue('discount', value)}  // update Formik state when changed
+            options={Datagiamgia}
+            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
           />
-          <ErrorMessage name="quantity" component="div" className="text-[1.5rem] text-red-500" />
         </div>
         </div>
 
         {(selectedCategory == '1' || selectedCategory == '2') && (
-          <div className="bg-white shadow-lg rounded-xl row-span-2 p-[12px] gap-3 flex flex-col">
-            <span className="text-[20px] font-semibold">Tạo thuộc tính</span>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_screen" className="text-[13px] font-medium">Màn hình</label>
-                      <Field
-                        type="number"
-                        name="infor_screen"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
+        <div>
+        <div className="grid grid-cols-3 gap-1 py-4">
+              <div className="flex h-auto flex-col gap-1">
+              <label htmlFor="infor_screen" className="text-[14px] font-medium">Thông tin màn hình</label>
+                  
+                        <Field
+              name="infor_screen"
+              type="text"
+       
+              value={values.infor_screen}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Kích thước màn hình"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:z-30 focus:scale-105 focus:border-[#4A90E2]"
+              />
+                        {/* <ErrorMessage name="infor_screen" component="div" className="text-[1.5rem] text-red-500" /> */}
+
               </div>
              
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_cpu" className="text-[13px] font-medium">Cpu</label>
-                      <Field
-                        type="number"
-                        name="infor_cpu"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
+              <div className="flex h-auto flex-col gap-1">
+                <label htmlFor="os" className="text-[13px] font-medium">Hệ điều hành</label>
+            <Field
+              name="infor_system"
+              type="text"
+       
+              value={values.infor_system}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placehorder="Hệ điều hành"
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
               </div>
-              <div className="flex h-auto flex-col gap-4">
-              <label htmlFor="infor_ram" className="text-[13px] font-medium">Ram</label>
-                      <Field
-                        type="number"
-                        name="infor_ram"
-                        placeholder="Kích thước màn hình"
-                        className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
-                        />
+              <div className="flex h-auto flex-col gap-1">
+              <label htmlFor="infor_ram" className="text-[13px] font-medium">Thông tin CPU</label>
+              <Field
+              name="infor_cpu"
+              type="text"
+       
+              value={values.infor_cpu}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
               </div>
             
-              <div className="flex h-auto flex-col gap-4">
-                <label htmlFor="os" className="text-[13px] text-[#81818177] font-medium">Hệ điều hành</label>
-                <Select
-                 value={values.infor_system}  // bind value to Formik state
-                 onChange={(value,category_dad) => 
-                   
-                 {
-                   setFieldValue('infor_system', value);
-               
-                 }  
-                }
-                  placeholder="Vui lòng chọn hệ điều hành"
-                
-                  options={Datahe}
-                  className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-                />
-              </div>
+           
               
             </div>
-          </div>
-        )}
+      
 
-{/* <ModalAdminProduct/> */}
-<div>
-{/* {listProductColor?.map((item) => (
+
+          <div className='grid grid-cols-2 gap-1 py-4'>
+        <div className="flex h-auto flex-col gap-1">
+              <label htmlFor="infor_screen" className="text-[13px] font-medium">Số RAM</label>
+                  
+              <Field
+              name="infor_ram"
+              type="number"
+       
+              value={values.infor_ram}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
+
+              </div>
+        <div className="flex h-auto flex-col gap-1">
+        <label htmlFor="infor_rom" className="text-[13px] font-medium">Bộ nhớ trong</label>
+            <Field
+              name="infor_rom"
+              type="number"
+       
+              value={values.infor_rom}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
+
+              </div>
+        </div>
+
+        <div className='grid grid-cols-2 gap-1 py-4'>
+        <div className="flex h-auto flex-col gap-1">
+        <label htmlFor="infor_frontCamera " className='text-[13px] font-medium'>Thông tin camera trước</label>
+            <Field
+              name="infor_frontCamera"
+              type="text"
+       
+              value={values.infor_frontCamera}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
+
+              </div>
+        <div className="flex h-auto flex-col gap-1">
+        <label htmlFor="infor_rearCamera " className='text-[13px] font-medium'>Thông tin camera sau</label>
+            <Field
+              name="infor_rearCamera"
+              type="text"
+       
+              value={values.infor_rearCamera}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
+              </div>
+        </div>
+        <div className='grid grid-cols-2 gap-1 py-4'>
+        <div className="flex h-auto flex-col gap-1">
+        <label htmlFor="infor_scanning_frequency " className='text-[13px] font-medium'>Thông tin chip và pin</label>
+            <Field
+              name="infor_scanning_frequency"
+              type="text"
+       
+              value={values.infor_scanning_frequency}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
+              </div>
+        <div className="flex h-auto flex-col gap-1">
+        <label htmlFor="infor_chip_battery" className='text-[13px] font-medium'>Thông tin chip và pin</label>
+            <Field
+              name="infor_chip_battery"
+              type="text"
+       
+              value={values.infor_chip_battery}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+            />
+              </div>
+   
+        </div>
+
+      
+
+
+          
+
+     
+       
+
+        </div>
+   )}
+
+<ModalAdminProduct/>
+<div className='flex gap-[1rem]'>
+{productColors?.map((item) => (
               <div
                   key={item.color}
               
-                  className={`relative flex w-[25%] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
+                  className={`relative flex w-[200px] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
               >
-                <div className='absolute right-0 top-0 text-[1.5rem]'>
+                <div className='absolute right-0 top-0 text-[1.5rem] cursor-pointer'
+                onClick={(()=>{
+                  productColorDelete(item,item.color_id)
+                })}
+                >
                   <IoMdClose />
                 </div>
                   <img 
-                      src='https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg'
-                      alt={item.color} 
+                      src={`${IMG_BACKEND}/${item.image_one}`}
+                      alt={item?.color} 
                       className="w-20 rounded-md"
                   />
                   <div>
-                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item.color}</h4>
-                      <p className="text-red-500 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage.map((item)=>{
+                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
+                      <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
                         return item.storage
                       })}</p>
+                      <p className="text-red-500 font-semibold text-[1.2rem]">Số lượng: 3</p>
                   </div>
               </div>
-          ))} */}
+          ))}
 </div>
-        <div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col">
-          <div className="col-span-3 flex h-[400px] overflow-y-hidden flex-col gap-4">
-            <label htmlFor="moTa" className="text-[13px] text-[#81818177] font-medium">Mô tả</label>
-            <ReactQuill
-              theme="snow"
-              value={values.moTa}
-            onChange={(value) => setFieldValue('moTa', value)}  // update Formik state when changed
-              modules={{
-                toolbar: toolbarOptions,
-              }}
-              className="h-[100%] bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
-            />
-          </div>
-        </div>
+<div className="bg-white shadow-lg rounded-xl p-[12px] gap-3 flex flex-col py-4">
+  <div className="col-span-3 flex flex-col gap-1">
+    <label htmlFor="moTa" className="text-[13px] text-[#81818177] font-medium">Mô tả</label>
+    <ReactQuill
+      theme="snow"
+      value={values.moTa}
+      onChange={(value) => setFieldValue('moTa', value)}  // update Formik state when changed
+      modules={{
+        toolbar: toolbarOptions,
+      }}
+      className="bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2 h-[500px] overflow-y-auto" // Set height to 500px and keep border-radius
+    />
+  </div>
+</div>
 
       {/* Submit Button */}
-        <button type="submit" className="text-center bg-[#1A73E8] text-white text-[1.5rem] py-2 px-6 rounded-lg">
-          Thêm sản phẩm
-        </button>
+      <div>
+      <Button type="primary" htmlType="submit" className="mt-4">Lưu sản phẩm</Button>
+
+      <Button
+                  type="dashed"
+                  onClick={() => {
+                    dispatch(removeAllProductColors())
+                    resetForm(); // Reset form
+                  }}
+                  className="h-[48px]  text-blac rounded-lg"
+                >
+                  Cancel
+                </Button>
+      </div>
+
       
     </Form>
   )}
-</Formik>
-      
-
-
-    </div >
+        </Formik>
+  
     </div>
   );
 }
 
 export default AdminEditProduct;
-

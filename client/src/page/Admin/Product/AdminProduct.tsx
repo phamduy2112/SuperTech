@@ -14,12 +14,13 @@ import { CiBookmarkRemove } from "react-icons/ci";
 import { deleteProductAdminThunk, getProductsAdminThunk } from "../../../redux/product/product.slice";
 import { formatCurrencyVND } from "../../../utils";
 import { BiSolidEdit } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
-import { TbPlaylistAdd } from "react-icons/tb";
-import AdminFilterProduct from "./Component/AdminFilterProduct";
-import { PathAdmin } from "../../../router/component/RouterValues";
+import {  useNavigate } from "react-router-dom";
+
+
 import AdminAddProduct from "./Component/AdminAddProduct";
 import { GoCommentDiscussion } from "react-icons/go";
+
+import AdminModalUpdateQualityProduct from "./Component/UpdateQualityProduct";
 
 // Define the Category interface
 interface Category {
@@ -49,8 +50,7 @@ const AdminProduct: React.FC = () => {
   ];
   const listProducts = useAppSelector((state) => state.product.listAdminProducts)
   const handleEdit = (key: any) => {
-
-    navigate(`/admin/quản-lí-sản-phẩm/sửa-sản-phẩm/${key}`);
+    // AdminEditProduct    
   };
   const handleViewCommentProduct = (key: any) => {
     navigate(`/admin/quan-li-san-pham/${key}/quan-li-binh-luan`);
@@ -66,7 +66,6 @@ const AdminProduct: React.FC = () => {
     navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
   }
   const [selectedCheckbox, setSelectedCheckbox] = useState(''); // Lọc theo ngày
-
   // Column definition for the table
   const columns = [
     {
@@ -93,6 +92,34 @@ const AdminProduct: React.FC = () => {
 
     },
     {
+      title: "Màu sắc",
+      dataIndex: "product_colors",
+      key: "product_colors",
+      render: (colors) =>
+        colors.map((color, index) => (
+          <div key={index}>
+            <strong>{color.color}</strong>
+          </div>
+        )),
+    },
+
+    {
+      title: "Số lượng",
+      dataIndex: "product_colors",
+      key: "product_qualities",
+      render: (colors) =>
+        colors.map((color, index) => (
+          <div key={index}>
+            {color.product_qualities.length === 0
+              ? "Không có số lượng"
+              : color.product_qualities.map((quality, idx) => (
+                  <span key={idx}>{quality.quality_product}</span>
+                ))}
+          </div>
+        )),
+    },
+  
+    {
       title: 'Giá Gốc',
       dataIndex: 'product_price',
       render: (price: number, recoil: any) => (
@@ -118,17 +145,17 @@ const AdminProduct: React.FC = () => {
         } </span>
       ),
     },
+    
     {
       title: 'Tác Vụ',
       key: 'action',
-      render: (record: any) => (
+      render: (_,record: any) => (
         <div className='flex text-[24px] gap-1'>
-
-        
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(+record.product_id)}
-          />
-          <IoEyeSharp className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+          {/* <div onClick={()=>{
+            console.log(record);
+            
+          }}>Xem</div> */}
+          <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
             onClick={() => { handleEye(+record.product_id) }}
           />
@@ -138,6 +165,11 @@ const AdminProduct: React.FC = () => {
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
             onClick={() => handleDeteleProduct(+record.product_id)}
+          />
+          <AdminModalUpdateQualityProduct product={record}/>
+          <BiSolidEdit
+            className='cursor-pointer text-[#4078f2] transition-all duration-700 hover:text-[#4078f2]'
+            onClick={() => navigate(`/admin/quan-li-san-pham/sua-san-pham/${record.product_id}`)}
           />
         </div>
       ),
@@ -179,32 +211,33 @@ const AdminProduct: React.FC = () => {
     ...item, // Spread the item (make sure it's an object)
     key: item.product_id, // Add key from the category_id
   }));
-  // Sắp xếp lại danh mục theo "Ngày Mới Nhất" hoặc "Cũ Nhất"
+ // Sắp xếp lại danh mục theo "Ngày Mới Nhất" hoặc "Cũ Nhất"
+ const [showInStock, setShowInStock] = useState(true);
 
-  const handleDelete = (key: any) => {
-    dispatch(deleteCategoryThunk(key));
-    toast.success("Xóa loại thành công");
-  };
+const handleDelete = (key: any) => {
+  dispatch(deleteCategoryThunk(key));
+  toast.success("Xóa loại thành công");
+};
+console.log(updatedDataProducts[0]);
 
   const userRef = useRef<any>(null);
 
+
+ 
+
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
-      <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
-        <div className='flex items-center justify-between box-border p-[24px]'>
-          <span className='text-[30px] font-medium text-[#ffd700]'>Sản Phẩm</span>
-          <div className='flex gap-3'>
-            <Button className='p-10'>
-              <IoCloudDownloadOutline className='text-[18px]' />
-              Tải về PDF
-            </Button>
-            {/* <Link to={`${PathAdmin.PathsAdmin}/${PathAdmin.AddProduct}`}>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Thêm Sản Phẩm Mới
-            </Button>
-          </Link> */}
-            <AdminAddProduct />
+    <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
+      <div className='flex items-center justify-between box-border p-[24px]'>
+        <span className='text-[30px] font-medium text-[#ffd700]'>Sản Phẩm</span>
+        <div className='flex gap-3'>
+          <Button className='p-10'>
+            <IoCloudDownloadOutline className='text-[18px]' />
+            Tải về PDF
+          </Button>
+   
+          <AdminAddProduct/>
+   
 
           </div>
         </div>

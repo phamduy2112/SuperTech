@@ -30,14 +30,14 @@ function AdminCommentProductDetailAdd(PropsDetail: any) {
     useEffect(() => {
         if (socket) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            socket.on("new_comment", (newComment: any) => {
+            socket.on("new_replies", (newComment: any) => {
                 AppDispatch(setCommentReducer([...commentList, newComment]));
             });
         }
 
         return () => {
             if (socket) {
-                socket.off("new_comment");
+                socket.off("new_replies");
             }
         };
     }, [socket, commentList, AppDispatch]);

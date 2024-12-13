@@ -18,17 +18,16 @@ const getSetting  = async (req, res) => {
 }
 const getSettingById = async (req, res) => {
     try {
-        const settingId = req.params.id; // Lấy ID từ tham số đường dẫn
-        const data = await setting.findByPk(settingId); // Tìm setting bằng primary key
+        const settingId = req.params.id; 
+        const data = await setting.findByPk(settingId); 
 
         if (data) {
-            responseSend(res, data, "Thành công!", 200); // Trả về dữ liệu nếu tìm thấy
-        } else {
-            responseSend(res, "", "Không tồn tại!", 404); // Trả về lỗi nếu không tìm thấy
+            responseSend(res, data, "Thành công!", 200); 
+            responseSend(res, "", "Không tồn tại!", 404); 
         }
     } catch (error) {
-        console.error("Error fetching setting by ID:", error); // Ghi log lỗi
-        responseSend(res, "", "Có lỗi xảy ra!", 500); // Trả về lỗi server
+        console.error("Error fetching setting by ID:", error); 
+        responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 }
 const updateSetting = async (req, res) => {

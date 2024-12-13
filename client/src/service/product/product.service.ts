@@ -48,16 +48,23 @@ export const deleteProduct=(id:number)=>{
   
   })
 }
-export const getImageProductByImage=(id:number)=>{
-  return axiosWithAuth(`/image-product/${id}`,{
-    method:"get",
-  
-  })
+export const getImageProductById=(ids:number[])=>{
+  const idsString = JSON.stringify(ids);
+
+  return axiosWithAuth(`/image-product?ids=${encodeURIComponent(idsString)}`, {
+      method: "get",
+  });
 }
 export const putProductById=(data:any,id:number)=>{
   return axiosWithAuth(`/products-edit/${id}`,{
     method:"put",
     data
+  })
+}
+export const getProductAdmin=()=>{
+  return axiosWithAuth(`/get-products-admin`,{
+    method:"get",
+    
   })
 }
 
@@ -69,3 +76,23 @@ export const createImage = (data: FormData) => {
     },
   });
 };
+export const deleteImageColors = (id: FormData) => {
+  return axiosWithAuth.delete(`/product_colors_delete/${id}`, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+export const updateQualityColors = (id: number,data:any) => {
+  return axiosWithAuth.put(`/update-quality-product/${id}`, {
+   data
+  });
+};
+
+export const deleteColorsProduct= (id: FormData) => {
+  return axiosWithAuth.delete(`/product-color-delete/${id}`, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}

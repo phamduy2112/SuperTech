@@ -14,19 +14,32 @@ const getimageproduct = async (req, res) => {
     }
 };
 
-const getimageproductById = async (req, res) => {
+const getimageproductByIds = async (req, res) => {
     try {
-        let data = await imageproduct.findByPk(req.params.id);
-        if (data) {
-            responseSend(res, data, "Thành công!", 200);
+        // Lấy danh sách ID từ query string và chuyển thành mảng
+        const ids = req.query.ids ? JSON.parse(decodeURIComponent(req.query.ids)) : [];
+
+        if (ids.length === 0) {
+            return responseSend(res, [], "Vui lòng cung cấp ID!", 400);
+        }
+
+        // Lấy tất cả hình ảnh có id thuộc danh sách ids
+        const images = await imageproduct.findAll({
+            where: {
+                image_id: ids, // Lọc các bản ghi có id thuộc danh sách
+            },
+        });
+
+        if (images.length > 0) {
+            responseSend(res, images, "Thành công!", 200); // Trả về mảng hình ảnh
         } else {
-            responseSend(res, "", "không tồn tại !", 404);
+            responseSend(res, [], "Không có hình ảnh nào với các ID này!", 404); // Trả về mảng rỗng
         }
     } catch (error) {
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.error("Error:", error);
+        responseSend(res, [], "Có lỗi xảy ra!", 500);
     }
 };
-
 const createimageproduct = async (req, res) => {
     try {
         let newimageproduct = await imageproduct.create(req.body);
@@ -69,7 +82,7 @@ const deleteimageproduct = async (req, res) => {
 
 export {
     getimageproduct,
-    getimageproductById,
+    getimageproductByIds,
     createimageproduct,
     updateimageproduct,
     deleteimageproduct

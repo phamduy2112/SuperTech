@@ -19,6 +19,8 @@ import { useAppSelector } from "../../../redux/hooks";
 import { getFavouriteProductThunk } from "../../../redux/favourite/Favourite.slice";
 import { useDispatch } from "react-redux";
 import './modalUserCustom.css'
+import { Input } from "../Input/Input";
+import HeaderMobile from "./Component/Mobile/HeaderMB";
 function Header() {
 
   const navigate = useNavigate();
@@ -58,7 +60,11 @@ function Header() {
   }, []);
   const dispatch=useDispatch();
   const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
+  const [isInputVisible, setInputVisible] = useState(false);
 
+  const handleIconClick = () => {
+    setInputVisible(!isInputVisible);
+  };
   useEffect(()=>{
     dispatch(getFavouriteProductThunk())
   },[dispatch])
@@ -101,7 +107,7 @@ console.log(token);
   return (
     <div className="bg-white">
 <div className="flex flex-col relative">
-    <div className='w-[100%] h-[35px] bg-[#7500CF] text-white flex justify-center items-center'>
+    <div className='w-[100%] h-[35px] color-custom text-white flex justify-center items-center'>
       <div className='w-[80%] m-auto flex md:justify-between sm:justify-center items-center'>
             <h3 className='text-[1.5rem] font-medium sm:text-center'>Chào mừng đến với cửa hàng SuperTech</h3>
             <div className="gap-[1.2rem] sm:hidden md:flex">
@@ -262,27 +268,8 @@ console.log(token);
       
       
       {/* mobile */}
-      <div className="md:hidden sm:shadow-xl flex justify-center items-center ">
-            <div className=" w-[95%] m-auto">
-              <div className="flex items-center justify-between bg-white py-[1rem]">
-                  <div className="text-[2rem]" onClick={()=>setisvisibleHeaderMB(!isvisibleHeaderMB)}>
-                 <FaBars />
-              </div>
-              <h3 className="text-[2.5rem]">SuperTech</h3>
-              <div className="text-[2.5rem] flex">
-                <IoIosSearch />
-                <Badge count={0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
-                <MdOutlineShoppingBag className="text-[2.5rem] text-[#7500CF]" />
-              </Badge>
-              </div>
-              </div>
-            
-              <div>
-
-              </div>
-            </div>
-      </div>
-      {isvisibleCart && (
+    <HeaderMobile/>
+      {/* {isvisibleCart && (
   <div className="fixed inset-0 z-30">
     <div 
       className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
@@ -296,23 +283,12 @@ console.log(token);
       </animated.div>
     </div>
   </div>
-)}
+)} */}
 
 
  
     
-      {isvisibleHeaderMB && (
-        <div className="fixed inset-0 z-30">
-          <div 
-            className="w-full h-full bg-[rgba(0,0,0,0.5)]" 
-            onClick={() => setisvisibleHeaderMB(false)}
-          > <animated.div style={slideInAnimation}>
-          <TaskHeaderMb onClose={() => setisvisibleHeaderMB(false)} />
-        </animated.div></div>
-         
-        </div>
-      )}
-      
+        
     </div>
 
     </div>

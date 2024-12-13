@@ -18,7 +18,6 @@ import { Tooltip } from "antd";
 import { CiHeart } from "react-icons/ci";
 import { createFavouriteProductThunk, getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
 function ProductItem(props:any) {
-  const [isvisibleProduct, setisvisibleProduct] = useState(false);
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
   const token: any = useAppSelector(state => state.user.token);
@@ -51,7 +50,7 @@ useEffect(()=>{
       ...product,
       selectedColor: props.product?.product_colors[0],
       selectedStorage: props.product?.product_colors[0]?.product_storages[0],
-      selectedQuantity: props.product?.product_qualities[0]?.quality_product
+      selectedQuantity: props.product?.product_colors[0].product_qualities[0]?.quality_product
     };
     dispatch(addItemToCart(productToCart));
 

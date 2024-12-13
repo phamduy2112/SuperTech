@@ -27,7 +27,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['user','cart','product','listOrder','socket','nofi'], // Chỉ persist `user` và `cart`
+  whitelist: ['user','cart','listOrder','socket','nofi'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
@@ -61,6 +61,8 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+    devTools: process.env.NODE_ENV !== 'production', // Enable dev tools in non-production environments
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;

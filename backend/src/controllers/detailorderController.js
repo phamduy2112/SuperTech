@@ -72,12 +72,13 @@ const createdetailorder = async (req, res) => {
 
       const newOrders = await Promise.all(
           detailOrders.map(async (order) => {
-            await checkInventory(3, 1, 1, 1,res);
-  
+            
+            await checkInventory(order.product_id,order.color_id,order.id_storage, 1,res);
+            
             // Trừ tồn kho sau khi kiểm tra thành công
             await models.product_quality.decrement("quality_product", {
-              by: 1,
-              where: { product_id:3, color_id:1, storage_id:1 },
+              by: order.detail_order_quality,
+              where: { product_id:order.product_id, color_id:order.color_id, storage_id:order.id_storage },
             });
       
 
@@ -88,7 +89,9 @@ const createdetailorder = async (req, res) => {
       );
 
       // Emit dữ liệu gộp lên tất cả các client
-   
+      // console.log(detailOrders.product_name);
+      // console.log();
+      
       responseSend(res, newOrders, "Thêm thành công!", 201);
   } catch (error) {
       console.error(error);

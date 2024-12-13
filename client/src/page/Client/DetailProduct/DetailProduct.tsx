@@ -14,7 +14,7 @@ import { getProductByIdThunk } from "../../../redux/product/product.slice";
 import { getCommentByIdProductThunk, setcomment } from "../../../redux/comment/comment.slice";
 import CommentForm from "./Component/CommentForm";
 import ProductColor from "./Component/ProductColor";
-import { IMG_BACKEND } from "../../../constants";
+import { IMG_BACKEND, URL_BACKEND } from "../../../constants";
 import { addItemToCart, addItemToOrder } from "../../../redux/cart/cart.slice";
 import { formatCurrencyVND } from "../../../utils";
 
@@ -58,7 +58,7 @@ function DetailProduct() {
  const [objectColor,setOjectColor]=useState<any>(null)
 const [objectStorage,setObjectStorage]=useState<any>(null)
 console.log(objectColor);
-
+const [arrayImage,setArrayImage]=useState<any>({})
 
   
   useEffect(()=>{
@@ -119,10 +119,25 @@ const handleStorageChange = (storage: string) => {
     setSelectedStorage(null);
   }
 };
-console.log(objectStorage);
 
+useEffect(() => {
+  // Làm gì đó với objectColor.image, ví dụ chỉ hiển thị nó
+  if (objectColor?.image) {
+    console.log("Image:", objectColor.image);
+  setArrayImage(objectColor.image);
+    // Bạn có thể thực hiện các tác vụ khác với objectColor.image
+  }
+}, [objectColor]);
+ console.log(arrayImage);
  
+ const [activeImage, setActiveImage] = useState(objectColor?.image?.image_one);
 
+ useEffect(() => {
+   // Set the default image to be the first one
+   if (objectColor?.image?.image_one) {
+     setActiveImage(objectColor?.image?.image_one);
+   }
+ }, [objectColor]);
 
   return (
         <Container>
@@ -141,23 +156,58 @@ console.log(objectStorage);
                 <div className="w-[80%] mx-auto">
                   <img 
                     className="w-full my-8 max-w-[300px] mx-auto" 
-                    src={`${IMG_BACKEND}/${objectColor?.image?.image_one}`} 
+                    src={`${IMG_BACKEND}/${activeImage}`} 
                     alt="product image" 
                   />
                 </div>
 
                 {/* Thumbnail Images */}
-                <div className="flex items-center justify-center my-8 space-x-4">
-                  {[...Array(4)].map((_, index) => (
-                    <div key={index} className="w-[10%]">
-                      <img 
-                        className="w-full" 
-                        src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_9_13_638302298834482205_apw-s9-gps-41-dayvai-vang-1.jpg" 
-                        alt={`thumbnail ${index + 1}`} 
-                      />
-                    </div>
-                  ))}
+            <div>
+            <div className="flex items-center justify-center my-8 space-x-4">
+           
+         {/* Image 1 */}
+         {objectColor?.image?.image_one && (
+          <div 
+            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_one ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_one)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_one}`} alt="Image 1" />
+          </div>
+        )}
+
+        {/* Image 2 */}
+        {objectColor?.image?.image_two && (
+          <div 
+            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_two ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_two)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_two}`} alt="Image 2" />
+          </div>
+        )}
+
+        {/* Image 3 */}
+        {objectColor?.image?.image_three && (
+          <div 
+            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_three ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_three)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_three}`} alt="Image 3" />
+          </div>
+        )}
+
+        {/* Image 4 */}
+        {objectColor?.image?.image_four && (
+          <div 
+            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_four ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_four)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_four}`} alt="Image 4" />
+          </div>
+        )}
+        
                 </div>
+
+            </div>
 
                 {/* Product Info */}
                 <div>

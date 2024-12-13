@@ -8,11 +8,12 @@ import { FiMessageSquare } from "react-icons/fi";
 import { useAppSelector } from '../../../redux/hooks';
 import { IMG_BACKEND_USER } from '../../../constants';
 import { Paths } from '../../../router/component/RouterValues';
+import { TpayloadUser } from '../../../service/user/user.type';
 
 function User() {
   const navigate = useNavigate();
   const location = useLocation();
-  const user: any = useAppSelector((state: any) => state.user.user);
+  const user: TpayloadUser  | null = useAppSelector((state) => state.user.user);
 
   // Điều hướng mặc định về trang Tài khoản
   useEffect(() => {

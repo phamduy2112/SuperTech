@@ -1,8 +1,8 @@
 import { Button, Form, Input } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineDislike, AiOutlineLike } from 'react-icons/ai';
 import { BsThreeDots } from 'react-icons/bs';
-import { FaRegStar, FaStar } from 'react-icons/fa';
+import { FaCheckCircle, FaRegStar, FaStar } from 'react-icons/fa';
 import { IoIosReturnRight, IoMdSend } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
 import { createCommentRepliesByIdProductThunk, createLikeCommentThunk, deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
@@ -19,6 +19,7 @@ import toast from 'react-hot-toast';
 import { IMG_BACKEND_USER } from '../../../../constants';
 import { useAvatar } from '../../../../hooks/UseAvatar.hook';
 import { useNavigate } from 'react-router-dom';
+import ProductModalWithPagination from './ModalListComment';
 
 function Comment(props: any) {
   const user: any = useAppSelector((state) => state.user.user);
@@ -70,8 +71,24 @@ function Comment(props: any) {
   const CommentSchema = Yup.object().shape({
     commentText: Yup.string().required('Nội dung bình luận không được để trống').min(5, 'Nội dung phải có ít nhất 5 ký tự'),
   });
-
-
+  
+  const [selectedTab, setSelectedTab] = useState('all');
+  
+  const [filteredComments, setFilteredComments] = useState([]);
+  useEffect(()=>{
+    setFilteredComments(props.reviews);
+    setSelectedTab('all');
+  },[props.reviews])
+  const handleClick = (selection:string) => {
+    setSelectedTab(selection);
+    if (selection === "all") {
+      setFilteredComments(props.reviews); // Hiển thị tất cả các bình luận
+    } else {
+      setFilteredComments(
+        props.reviews.filter((comment) => comment.isPurchase === true)
+      ); // Hiển thị chỉ các bình luận có isPurchase là true
+    }
+  };
 
 
   return (
@@ -85,18 +102,27 @@ function Comment(props: any) {
       <div className="py-4 px-[2rem] bg-white">
         <div>
           <h4 className="py-[1rem] text-[2rem] font-semibold ">Lọc theo</h4>
-          <div className="flex gap-[1rem] ">
-            <div className="cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[7rem] ">
-              <span>Tất cả</span>
-            </div>
-            <div className="cursor-pointer text-[1.8rem] rounded-[3rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[12rem]">
-              <span>Đã mua hàng</span>
-            </div>
-          </div>
+          <div className="flex gap-[1rem]">
+      {/* Nút "Tất cả" */}
+      <div
+        className={`cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border ${selectedTab === "all" ? "bg-blue-500 text-white" : "border-gray-600"} w-[7rem]`}
+        onClick={() => handleClick("all")}
+      >
+        <span>Tất cả</span>
+      </div>
+      
+      {/* Nút "Đã mua hàng" */}
+      <div
+        className={`cursor-pointer rounded-[3rem] text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border ${selectedTab === "purchased" ? "bg-blue-500 text-white" : "border-gray-600"} w-[12rem]`}
+        onClick={() => handleClick("purchased")}
+      >
+        <span>Đã mua hàng</span>
+      </div>
+    </div>
         </div>
-
-        <div className="flex justify-between flex-wrap">
-          {props.reviews?.map((review, index) => {
+       <div>
+      <div className="flex justify-between flex-wrap">
+          {filteredComments.slice(0, 6)?.map((review, index) => {
             return (
               <div className="flex items-start space-x-4 mt-[1rem] w-[48%]" key={index}>
 
@@ -113,8 +139,13 @@ function Comment(props: any) {
                   <div className="w-[100%]">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-bold text-[2rem]">{review.user?.user_name} || {review?.isPurchase ? "Đã mua hàng" : ""}</h3>
-                        <div className="flex items-center text-[1.5rem]">
+                      <h3 className="font-bold text-[2rem] flex  gap-[1rem] items-center">{review.user?.user_name} 
+                            
+                            {review?.isPurchase ?                              <FaCheckCircle className="text-[green]"/>
+: ""}
+                   
+                            
+                            </h3>                        <div className="flex items-center text-[1.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">{formatDate(review.comment_date)}</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
                             {[...Array(5)].map((_, index) => (
@@ -311,6 +342,16 @@ function Comment(props: any) {
             );
           })}
         </div>
+       {filteredComments.length == 0 ? '' : <ProductModalWithPagination reviews={props.reviews}/>}
+    </div>
+        
+        {selectedTab === "purchased" && filteredComments.length == 0 && (
+        <div className="text-center text-[1.5rem] text-gray-500 mt-4">
+          Chưa có người dùng mua hàng
+        </div>
+      )}
+    
+        
       </div>
     </div>
   );

@@ -77,6 +77,10 @@ function AdminCatelogry() {
             className="cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]"
             onClick={() => handleDelete(record.category_id)}
           />
+          <CiBookmarkRemove
+            className="cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]"
+            onClick={() => handleDelete(record.category_id)}
+          />
         </div>
       ),
     },

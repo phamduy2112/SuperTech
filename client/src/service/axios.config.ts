@@ -1,6 +1,5 @@
 import axios from "axios";
 import { URL_BACKEND } from "../constants";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setToken } from "../redux/user/user.slice";
 import store from "../redux/store";
 
