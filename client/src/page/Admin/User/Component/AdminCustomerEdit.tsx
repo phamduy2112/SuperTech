@@ -1,31 +1,41 @@
 
 
-import { Calendar, ConfigProvider, Empty, Popover, Select, Upload, UploadFile } from 'antd';
+import { Calendar, ConfigProvider, Popover, Select, Upload, UploadFile } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
 import './AdminCreateAccout.css'
-import { datanganhang } from './Databank';
 import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface, UpdateStaffInterface } from './DataStaff';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import Swal from 'sweetalert2';
 import { useParams } from 'react-router-dom';
 import { IMG_USER_BACKEND } from '../../../../constants';
 import { IoMdCloudUpload } from 'react-icons/io';
-import { DeleteImgCloudThunk, UpdateStaffThunk } from '../../../../redux/user/user.slice';
+import { DeleteImgCloudThunk, getUserThunk, UpdateStaffThunk } from '../../../../redux/user/user.slice';
 
 
 
 function AdminCustomerEdit() {
     const AppDispatch = useAppDispatch();
-    const token = useAppSelector((state) => state.user.token);
+    const token: string = useAppSelector((state) => state.user.token);
 
-    const staffsData = useAppSelector((state) => state.user.Alluser);
+
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const staffsData: any = useAppSelector((state) => state.user.Alluser);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const UserDetail: any = useAppSelector((state) => state.user.user);
     const [staff, setStaff] = useState<StaffInterface>({});
     const { id } = useParams();
     const userId = Number(id);
+
+    useEffect(() => {
+        AppDispatch(getUserThunk())
+    }, [AppDispatch])
+
+
 
 
 
@@ -33,7 +43,9 @@ function AdminCustomerEdit() {
 
     useEffect(() => {
         if (userId) {
-            const newObj_staff = staffsData.find(staff => staff.user_id === userId);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const newObj_staff = staffsData.find((staff: any) => staff.user_id == userId);
+
             setStaff(newObj_staff);
         }
     }, [staffsData, userId]);
@@ -69,15 +81,15 @@ function AdminCustomerEdit() {
                 user_password: staff.user_password || '',
                 user_address: staff.user_address || '',
                 user_phone: staff.user_phone || '',
-                user_role: staff.user_role || null,
-                level: staff.level || null,
-                user_gender: staff.user_gender || null,
+                user_role: staff.user_role,
+                level: staff.level,
+                user_gender: staff.user_gender,
                 user_birth: staff.user_birth || '',
                 user_time: staff.user_time || '',
                 user_image: staff.user_image || '',
             });
         }
-    }, [staff]); // Chỉ phụ thuộc vào staff, không phụ thuộc vào staffData nữa
+    }, [staff]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -102,8 +114,6 @@ function AdminCustomerEdit() {
                 filteredData[key] = staffData[key];
             }
         });
-
-
         const DataStaff: DataStaffInterface = {
             staffData: filteredData,
             tokenStaff: tokenStaff,
@@ -199,21 +209,6 @@ function AdminCustomerEdit() {
         ['clean']
     ];
 
-    const options = datanganhang.map(item => ({
-        value: item.code,
-        label: (
-            <div className='' style={{ display: 'flex', alignItems: 'center' }}>
-                <img
-                    src={item?.logo}
-                    alt={item?.label}
-                    style={{ width: '50px', marginRight: '8px' }}
-                />
-                {item.label}
-            </div>
-
-        ),
-
-    }));
 
     const OptionsImageStaffLevel = imageStaffLevel.map(item => ({
         value: item.value,
@@ -249,17 +244,6 @@ function AdminCustomerEdit() {
         )
     }))
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [bank, setBank] = useState<any | null>(null); // Thay đổi từ {} thành null
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleBankChange = (value: any) => {
-        const codebank = datanganhang.find(data => data.code === value);
-        if (codebank) {
-            setBank(codebank);
-        }
-
-    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const valueBirthDate = (value: any) => {
@@ -426,22 +410,41 @@ function AdminCustomerEdit() {
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Level</label>
-                        <Select
-                            showSearch
-                            optionFilterProp="label"
-                            options={
-                                OptionsImageStaffLevel
-                            }
-                            value={staffData.level}
-                            placeholder={staffData.level == null ? 'Chưa có level' : ''}
 
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
-                            onChange={(value) => handleSelectOnChange(value, 'level')}
+                    {
+                        UserDetail.user_role === 0 ? <div className='flex h-auto flex-col gap-4'>
+                            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Level</label>
+                            <Select
+                                showSearch
+                                optionFilterProp="label"
+                                options={
+                                    OptionsImageStaffLevel
+                                }
+                                value={staffData.level}
+                                placeholder={staffData.level == null ? 'Chưa có level' : ''}
 
-                        />
-                    </div>
+                                className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+                                onChange={(value) => handleSelectOnChange(value, 'level')}
+
+                            />
+                        </div> : <div className='flex h-auto flex-col gap-4'>
+                            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Level</label>
+                            <Select
+                                showSearch
+                                optionFilterProp="label"
+                                options={
+                                    OptionsImageStaffLevel
+                                }
+                                value={staffData.level}
+                                placeholder={staffData.level == null ? 'Chưa có level' : ''}
+                                disabled
+                                className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
+                                onChange={(value) => handleSelectOnChange(value, 'level')}
+
+                            />
+                        </div>
+                    }
+
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Điện thoại</label>
                         <input
@@ -465,22 +468,42 @@ function AdminCustomerEdit() {
                             className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px]  outline-none  '
                         />
                     </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Vai trò</label>
-                        <Select
-                            showSearch
 
-                            optionFilterProp="label"
-                            placeholder={staffData.user_role == null ? 'Chưa có dữ liệu vai trò' : ''}
-                            value={staffData.user_role}
-                            options={
-                                OptionsStaffRole
-                            }
-                            onChange={(value) => handleSelectOnChange(value, 'user_role')}
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
-                        />
+                    {
+                        UserDetail.user_role === 0 ? <div className='flex h-auto flex-col gap-4'>
+                            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Vai trò</label>
+                            <Select
+                                showSearch
 
-                    </div>
+                                optionFilterProp="label"
+                                placeholder={staffData.user_role}
+                                value={staffData.user_role}
+                                options={
+                                    OptionsStaffRole
+                                }
+                                onChange={(value) => handleSelectOnChange(value, 'user_role')}
+                                className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                            />
+
+                        </div> : <div className='flex h-auto flex-col gap-4'>
+                            <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Vai trò</label>
+                            <Select
+                                showSearch
+
+                                optionFilterProp="label"
+                                placeholder={staffData.user_role}
+                                value={staffData.user_role}
+                                options={
+                                    OptionsStaffRole
+                                }
+                                disabled
+                                onChange={(value) => handleSelectOnChange(value, 'user_role')}
+                                className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
+                            />
+
+                        </div>
+                    }
+
 
                     <div className='flex h-auto flex-col gap-4 '>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Ngày sinh</label>
@@ -539,57 +562,6 @@ function AdminCustomerEdit() {
 
 
                 </div>
-            </div>
-            <div className='bg-white shadow-lg rounded-xl xl:col-span-3  p-[12px] gap-3 flex flex-col '>
-                <span className='text-[20px] font-semibold'> Thẻ </span>
-                <div className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
-                    <div className='flex h-full flex-col gap-4'>
-                        <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Mã thẻ</label>
-                        <input
-                            // onChange={handleInputChangePay}
-                            // name="accountNumber"
-                            // value={PayData.accountNumber}
-                            type='number' min={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-
-                    </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Ngày hết hạn</label>
-                        <input type='text' min={0} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-                    </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='hot' className='text-[13px] text-[#81818177] font-medium'>CVV</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-                    </div>
-                    <div className='flex-1 flex flex-col gap-4 col-span-1'>
-                        <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Ngân hàng</label>
-                        <Select
-                            showSearch
-                            placeholder="Vui lòng chọn ngân hàng"
-                            optionFilterProp="label"
-                            onChange={handleBankChange}
-                            options={
-                                options
-                            }
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
-                        />                    </div>
-                    <div className='flex-1 flex flex-col gap-4 col-span-2'>
-                        <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Tên chủ thẻ</label>
-                        <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-                    </div>
-                    <div className='flex-1 justify-center items-center p-[60px] flex flex-col gap-4 col-span-3'>
-                        <div className='w-[40%] h-full rounded-xl '>
-                            {
-                                bank?.logo ? <img
-                                    src={bank?.logo}
-                                    alt="Logo ngân hàng"
-                                    className={` object-contain transition-all duration-700 h-[350px] ${bank?.logo ? 'mt-[0px] opacity-100 ' : ' mt-[-30px] opacity-0'}`}
-                                /> : <Empty />
-                            }
-                        </div>
-
-                    </div>
-                </div>
-
             </div>
 
             <div className='bg-white shadow-lg xl:col-span-3 rounded-xl p-[12px] gap-3 flex flex-col '>

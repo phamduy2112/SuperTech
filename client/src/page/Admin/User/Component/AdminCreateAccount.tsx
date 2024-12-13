@@ -1,6 +1,6 @@
 
 
-import { Calendar, ConfigProvider, Empty, Popover, Select, Upload, UploadFile } from 'antd';
+import { Calendar, ConfigProvider, Popover, Select, Upload, UploadFile } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
@@ -8,7 +8,6 @@ import ImgCrop from 'antd-img-crop';
 import { UploadProps } from 'antd/lib';
 import './AdminCreateAccout.css'
 import { IoMdCloudUpload } from 'react-icons/io';
-import { datanganhang } from './Databank';
 import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface } from './DataStaff';
 import { createStaffThunk, DeleteImgCloudThunk } from '../../../../redux/user/user.slice';
 import { useAppDispatch } from '../../../../redux/hooks';
@@ -61,17 +60,7 @@ function AdminCreateAccount() {
             [title]: value,
         }));
     }
-    // const [PayData, setPayData] = useState({
-    //     accountName: '',
-    //     accountNumber: ''TokenStaffInterface
-    // })
-    // const handleInputChangePay = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     setPayData(prevState => ({
-    //         ...prevState,
-    //         [name]: value,
-    //     }));
-    // };
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let CheckValue = true;
@@ -181,21 +170,7 @@ function AdminCreateAccount() {
         ['clean']
     ];
 
-    const options = datanganhang.map(item => ({
-        value: item.code,
-        label: (
-            <div className='' style={{ display: 'flex', alignItems: 'center' }}>
-                <img
-                    src={item?.logo}
-                    alt={item?.label}
-                    style={{ width: '50px', marginRight: '8px' }}
-                />
-                {item.label}
-            </div>
 
-        ),
-
-    }));
 
     const OptionsImageStaffLevel = imageStaffLevel.map(item => ({
         value: item.value,
@@ -231,18 +206,7 @@ function AdminCreateAccount() {
         )
     }))
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [bank, setBank] = useState<any | null>(null); // Thay đổi từ {} thành null
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleBankChange = (value: any) => {
-        const codebank = datanganhang.find(data => data.code === value);
-        if (codebank) {
-            setBank(codebank);
-        }
-
-
-    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [Joindate, setJoinDate] = useState<any | null>(null); // Thay đổi từ {} thành null
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -513,57 +477,7 @@ function AdminCreateAccount() {
 
                 </div>
             </div>
-            <div className='bg-white shadow-lg rounded-xl xl:col-span-3  p-[12px] gap-3 flex flex-col '>
-                <span className='text-[20px] font-semibold'> Thẻ </span>
-                <div className='flex-1 grid grid-cols-3 auto-rows-[minmax(48px,_auto)] gap-4'>
-                    <div className='flex h-full flex-col gap-4'>
-                        <label htmlFor='color' className='text-[13px] text-[#81818177] font-medium'>Mã thẻ</label>
-                        <input
-                            // onChange={handleInputChangePay}
-                            // name="accountNumber"
-                            // value={PayData.accountNumber}
-                            type='number' min={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
 
-                    </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Ngày hết hạn</label>
-                        <input type='text' min={0} value={0} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-                    </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='hot' className='text-[13px] text-[#81818177] font-medium'>CVV</label>
-                        <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-                    </div>
-                    <div className='flex-1 flex flex-col gap-4 col-span-1'>
-                        <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Ngân hàng</label>
-                        <Select
-                            showSearch
-                            placeholder="Vui lòng chọn ngân hàng"
-                            optionFilterProp="label"
-                            onChange={handleBankChange}
-                            options={
-                                options
-                            }
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none'
-                        />                    </div>
-                    <div className='flex-1 flex flex-col gap-4 col-span-2'>
-                        <label htmlFor='favorite' className='text-[13px] text-[#81818177] font-medium'>Tên chủ thẻ</label>
-                        <input type='text' className='flex-1 bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' />
-                    </div>
-                    <div className='flex-1 justify-center items-center p-[60px] flex flex-col gap-4 col-span-3'>
-                        <div className='w-[40%] h-full rounded-xl '>
-                            {
-                                bank?.logo ? <img
-                                    src={bank?.logo}
-                                    alt="Logo ngân hàng"
-                                    className={` object-contain transition-all duration-700 h-[350px] ${bank?.logo ? 'mt-[0px] opacity-100 ' : ' mt-[-30px] opacity-0'}`}
-                                /> : <Empty />
-                            }
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
 
             <div className='bg-white shadow-lg xl:col-span-3 rounded-xl p-[12px] gap-3 flex flex-col '>
                 <button type='submit' className=' text-[16px] mt-4 h-[48px] rounded-lg linear-gradient text-white .box-shadow '>Thêm Tài Khoản</button>

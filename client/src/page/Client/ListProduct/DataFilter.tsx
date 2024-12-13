@@ -1,12 +1,17 @@
 export const trademark = [
     { id: 1, label: 'iphone', url: 'https://logo.clearbit.com/apple.com' },
-    { id: 2, label: 'oppo', url: 'https://logo.clearbit.com/oppo.com' },
-    { id: 3, label: 'samsung', url: 'https://i.pinimg.com/originals/49/55/f5/4955f570b6a593717a23b1bb20e38d98.jpg' },
-    { id: 4, label: 'realme', url: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Realme_logo.png' },
-    { id: 5, label: 'xiaomi', url: 'https://logos-world.net/wp-content/uploads/2020/05/Xiaomi-Logo.png' },
-    { id: 6, label: 'nokia', url: 'https://www.vanillaplus.com/wp-content/uploads/2023/02/Nokia-new-logo-transparent-background.png' },
-    { id: 7, label: 'asus', url: 'https://www.pngplay.com/wp-content/uploads/13/Asus-Logo-PNG-Clipart-Background.png' },
-    { id: 8, label: 'lumbia', url: 'https://m.media-amazon.com/images/S/aplus-media-library-service-media/29242b9e-4caa-4723-a7df-7053a4a08f16.__CR0,0,600,180_PT0_SX600_V1___.jpg' }
+    { id: 2, label: 'samsung', url: 'https://i.pinimg.com/originals/49/55/f5/4955f570b6a593717a23b1bb20e38d98.jpg' },
+    { id: 3, label: 'oppo', url: 'https://logo.clearbit.com/oppo.com' },
+    { id: 4, label: 'xiaomi', url: 'https://logos-world.net/wp-content/uploads/2020/05/Xiaomi-Logo.png' },
+    { id: 5, label: 'vivo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Vivo_New_Logo_2019.png/1200px-Vivo_New_Logo_2019.png' },
+    { id: 6, label: 'realme', url: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Realme_logo.png' },
+    { id: 7, label: 'honor', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/LOGO_Honor.svg/1200px-LOGO_Honor.svg.png' },
+    { id: 8, label: 'nokia', url: 'https://www.vanillaplus.com/wp-content/uploads/2023/02/Nokia-new-logo-transparent-background.png' },
+    { id: 9, label: 'tecno', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Tecno_Mobile_logo.svg/1024px-Tecno_Mobile_logo.svg.png' },
+    { id: 10, label: 'masstel', url: 'https://masscom.vn/wp-content/uploads/2019/05/logo-masstel-2-1.png' },
+    { id: 11, label: 'mobell', url: 'https://interbra.vn/public/DATA/2017/4-2017-26107.jpg' },
+    { id: 12, label: 'itel', url: 'https://image.pngaaa.com/482/2017482-middle.png' },
+
 ]
 
 export const priceList = [
@@ -87,7 +92,7 @@ export const frontCameras = [
 
 
 export interface ObjFilterTypeinterface {
-    company:string,
+    company: string,
     price: string[];
     size: string[];
     refreshRate: string[];

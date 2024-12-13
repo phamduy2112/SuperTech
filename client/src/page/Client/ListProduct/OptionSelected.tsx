@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Button, Slider } from 'antd';
-import { HiAdjustmentsHorizontal } from 'react-icons/hi2';
+import React, { } from 'react'
+import { Button } from 'antd';
 import { frontCameras, priceList, ramOptions, rearCameras, refreshRates, romOptions, screenSizes, trademark } from './DataFilter';
 interface OptionSelectedProps {
     handleChangeProduct: (company: string) => void;
@@ -30,21 +29,6 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
     HandClick,
     RemoveClick
 }) => {
-    const [priceclick, setPriceClick] = useState(false);
-    const [priceRange, setPriceRange] = useState([0, 70000000]);
-
-    const orPrice = () => {
-        setPriceClick(!priceclick);
-    };
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleChange = (value: any) => {
-        setPriceRange(value);
-    };
-
-    const searchParams = new URLSearchParams(location.search);
-
-    const category = searchParams.get('category');
 
     return (
         <>
@@ -75,22 +59,7 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                                 </Button>
                             ))
                         }
-                        <Button onClick={orPrice} className="col-span-3 min-w-[60px] text-[14px] border-0 bg-transparent h-[35px] flex justify-center items-center text-blue-500">
-                            <HiAdjustmentsHorizontal />
-                            <span>Hoặc chọn mức giá</span>
-                        </Button>
-                        <div className={`${priceclick != false ? 'block' : 'hidden'} col - span - 3`}>
-                            <Slider
-                                range
-                                min={0}
-                                max={70000000}
-                                onChange={handleChange}
-                                value={priceRange}
-                            />
-                            <div>
-                                Giá: {priceRange[0].toLocaleString()} - {priceRange[1].toLocaleString()} VNĐ
-                            </div>
-                        </div>
+
 
                     </div>
                 </div>

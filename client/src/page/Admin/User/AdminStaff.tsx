@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Checkbox, Popover, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
@@ -9,7 +10,7 @@ import { CiBookmarkRemove } from 'react-icons/ci';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
-import { checkRoleAndShowAlert, CheckUpdateUser, checkUpdateUser, Level } from './Component/DataStaff';
+import { checkRoleAndShowAlert, CheckUpdateUser, Level } from './Component/DataStaff';
 import { jwtDecode } from "jwt-decode";
 import { IMG_USER_BACKEND } from "../../../constants/index";
 
@@ -22,20 +23,16 @@ interface UserTokenClientInterface extends tokenDataClient {
 }
 
 function AdminStaff() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Allstaffs: any = useAppSelector((state) => state.user.Alluser);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [DataAllstaffs, setDataAllstaffs] = useState<any[]>([]);
     const AppDispatch = useAppDispatch();
     const [staffKeys, setStaffKeys] = useState<string[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [columns, setColumns] = useState<any[]>([]);
     const [valueInputSearch, setvalueInputSearch] = useState(``);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const TokenstaffsClient: any = useAppSelector((state) => state.user.token);
 
-    const [RoleStaff, setRoleStaff] = useState<number>();
-    const [IdStaff, setIdStaff] = useState<number>();
+    const [RoleStaff, setRoleStaff] = useState<number | undefined>();
+    const [IdStaff, setIdStaff] = useState<number | undefined>();
 
     useEffect(() => {
         if (TokenstaffsClient?.length > 0 || TokenstaffsClient != null) {
@@ -61,6 +58,8 @@ function AdminStaff() {
 
 
 
+
+
     useEffect(() => {
         if (Allstaffs && Allstaffs.length > 0) {
             const keys = Allstaffs.map((staff: string) => Object.keys(staff));
@@ -73,9 +72,22 @@ function AdminStaff() {
 
 
     const reverseDate = (dateString: string) => {
-        const [year, month, day] = dateString.split('-');
-        return `${day}-${month}-${year}`;
+        if (!dateString) {
+            console.error('Invalid date string');
+            return;
+        }
+
+        const [datePart, timePart] = dateString.split(' ');
+        const [year, month, day] = datePart.split('-');
+
+        const formattedDate = `${timePart} ${day}/${month}/${year}`;
+
+        return formattedDate;
+
+
     };
+
+
 
     useEffect(() => {
 
@@ -97,7 +109,6 @@ function AdminStaff() {
                         title: 'Hình',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (src: any) => (
 
                             <>
@@ -117,7 +128,6 @@ function AdminStaff() {
                         title: 'Tên',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
                             <>
                                 {
@@ -133,7 +143,6 @@ function AdminStaff() {
                         title: 'Ngày Sinh Nhật',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
                             <>
                                 {
@@ -150,7 +159,6 @@ function AdminStaff() {
                         title: 'Số điện thoại',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
                             <>
                                 {
@@ -166,7 +174,6 @@ function AdminStaff() {
                         title: 'Email',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
                             <>
                                 {
@@ -181,7 +188,7 @@ function AdminStaff() {
                         title: 'Địa Chỉ',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
                         render: (text: any) => (
                             <>
                                 {
@@ -198,7 +205,6 @@ function AdminStaff() {
                         title: 'Vai trò',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (text: any) => (
                             <div className={`w-[200px] text-white font-medium rounded-md p-2 flex items-center ${text == 11 ? 'bg-[#3aff2085]' : ''} ${text == 10 ? 'bg-[#77757575]' : ''} ${text == 9 ? 'bg-[#1a1c9685]' : ''} ${text == 8 ? 'bg-[#00000093]' : ''} ${text == 7 ? 'bg-[#7c164685]' : ''} ${text == 6 ? 'bg-[#dd741285]' : ''} ${text == 5 ? 'bg-[#ab2af585]' : ''} ${text == 4 ? 'bg-[#f52ac285]' : ''} ${text == 3 ? 'bg-[#3963f085]' : ''} ${text == 2 ? 'bg-[#0eb397d2]' : ''} ${text == 1 ? 'bg-[#b6b30eb7]' : ''} ${text == 0 ? 'bg-[#ff000085]' : ''} gap-4`}>
                                 <div className={`w-[10px] ml-4 rounded-full h-[10px] ${text == 11 ? 'bg-[#3aff20]' : ''} ${text == 10 ? 'bg-[#77777798]' : ''} ${text == 9 ? 'bg-[#1a1c96]' : ''} ${text == 8 ? 'bg-[#000000]' : ''} ${text == 7 ? 'bg-[#7c1646]' : ''} ${text == 6 ? 'bg-[#dd7412]' : ''} ${text == 5 ? 'bg-[#ab2af5]' : ''} ${text == 4 ? 'bg-[#f52ac2]' : ''} ${text == 3 ? 'bg-[#3963f0b2]' : ''} ${text == 2 ? 'bg-[#2af5d3]' : ''} ${text == 1 ? 'bg-[#ffd000]' : ''} ${text == 0 ? 'bg-[red]' : ''}`}></div>
@@ -214,7 +220,6 @@ function AdminStaff() {
                         title: 'Thăng hạng',
                         dataIndex: staff,
                         key: staff,
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (src: any) => (
                             <div className="flex-1 flex items-center gap-3">
                                 {Level(src)}
@@ -227,7 +232,6 @@ function AdminStaff() {
                     return {
                         title: 'Tác Vụ',
                         key: 'tacvu',
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         render: (record: any) => (
                             <div className='flex text-[24px] box-border gap-1 items-center'>
                                 <BiSolidEdit
@@ -265,7 +269,6 @@ function AdminStaff() {
         } else {
             const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const filteredData = Allstaffs.filter((item: any) => {
                 const userName = item?.user_name;
                 const userEmail = item?.user_email;
@@ -288,7 +291,7 @@ function AdminStaff() {
     const [selectedCheckbox, setSelectedCheckbox] = useState('');
     const navigate = useNavigate();
 
-    const handleEdit = (key: number, key_role: number, RoleStaff: number, IdStaff: number) => {
+    const handleEdit = (key: number, key_role: number, RoleStaff: number | undefined, IdStaff: number | undefined) => {
         if (RoleStaff == 0) {
             if (key == IdStaff && key_role == RoleStaff) {
                 Swal.fire({
@@ -322,7 +325,10 @@ function AdminStaff() {
             }
         } else {
             if (RoleStaff != key_role && key != IdStaff) {
-                CheckUpdateUser(RoleStaff, key_role)
+                if (RoleStaff != undefined) {
+                    CheckUpdateUser(RoleStaff, key_role)
+
+                }
             }
             if (RoleStaff == key_role && key == IdStaff) {
                 Swal.fire({
@@ -374,7 +380,7 @@ function AdminStaff() {
             }
         });
     }
-    const handleDelete = (key: number, key_role: number, RoleStaff: number, IdStaff: number) => {
+    const handleDelete = (key: number, key_role: number, RoleStaff: number | undefined, IdStaff: number | undefined) => {
         if (RoleStaff == 0) {
 
             if (key == IdStaff && key_role == RoleStaff) {
@@ -400,7 +406,9 @@ function AdminStaff() {
             }
         } else {
             if (RoleStaff != key_role && key != IdStaff) {
-                checkRoleAndShowAlert(RoleStaff, key_role)
+                if (RoleStaff != undefined) {
+                    checkRoleAndShowAlert(RoleStaff, key_role)
+                }
             }
             if (RoleStaff == key_role && key == IdStaff) {
                 return Swal.fire({
@@ -420,14 +428,12 @@ function AdminStaff() {
 
         }
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onSelectChange = (selectedRowKeys: any) => {
         setSelectedCheckbox(selectedRowKeys);
         if (selectedRowKeys.length > 0) {
             showModal(selectedRowKeys.length);
         }
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const showModal = (count: any) => {
         Swal.fire({
             icon: "info",
@@ -482,6 +488,45 @@ function AdminStaff() {
         onChange: onSelectChange,
     };
 
+    useEffect(() => {
+        console.log('selectedCheckbox', selectedCheckbox)
+        console.log(Allstaffs)
+        if (selectedCheckbox.toLowerCase() === 'all') {
+            setDataAllstaffs(Allstaffs)
+        }
+
+
+        if (selectedCheckbox.toLowerCase() === 'admin') {
+            const FilterArrayUserCheckBox = Allstaffs.filter((user: any) => user.user_role == 0)
+            console.log('FilterArrayUserCheckBox', FilterArrayUserCheckBox)
+            setDataAllstaffs(FilterArrayUserCheckBox)
+
+
+        }
+        if (selectedCheckbox.toLowerCase() === 'staff') {
+            const FilterArrayUserCheckBox = Allstaffs.filter((user: any) => user.user_role != 0 && user.user_role != 11)
+            console.log('FilterArrayUserCheckBox', FilterArrayUserCheckBox)
+            setDataAllstaffs(FilterArrayUserCheckBox)
+        }
+
+        if (selectedCheckbox.toLowerCase() === 'new' || selectedCheckbox.toLowerCase() === 'old') {
+            const arrangeArray = [...Allstaffs].sort((a: any, b: any) => {
+                if (selectedCheckbox === 'new') {
+                    return new Date(b.user_time).getTime() - new Date(a.user_time).getTime();
+                } else if (selectedCheckbox === 'old') {
+                    return new Date(a.user_time).getTime() - new Date(b.user_time).getTime();
+                }
+                return 0;
+            });
+            setDataAllstaffs(arrangeArray)
+
+        }
+
+
+
+    }, [Allstaffs, selectedCheckbox])
+
+
     return (
         <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
             <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
@@ -489,9 +534,7 @@ function AdminStaff() {
                     <span className='text-[30px] font-medium text-[#ffd700]'>Nhân Viên</span>
                     <div className='flex gap-3'>
 
-                        {/* <Button className='p-10'>
-                            
-                        </Button> */}
+
                         <Link to={`/admin/quản-lí-nhân-viên/tạo-nhân-viên-mới`}>
 
                             <Button className='p-10' type="primary">
@@ -511,6 +554,10 @@ function AdminStaff() {
 
                     <Popover
                         content={<div className='flex flex-col'>
+                            <div className='flex gap-2 justify-between p-[12px]'>
+                                <label className='text-[14px]'>Tất cả</label>
+                                <Checkbox checked={selectedCheckbox === 'all'} onChange={() => setSelectedCheckbox('all')}></Checkbox>
+                            </div>
                             <div className='flex gap-2 justify-between p-[12px]'>
                                 <label className='text-[14px]'>Admin</label>
                                 <Checkbox checked={selectedCheckbox === 'admin'} onChange={() => setSelectedCheckbox('admin')}></Checkbox>
@@ -550,7 +597,6 @@ function AdminStaff() {
                             ...rowSelection,
                         }}
                         columns={columns || []}
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 11).reverse() : []}
                         size='large'
                         pagination={{ pageSize: 10 }}
