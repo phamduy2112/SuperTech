@@ -7,13 +7,14 @@ import { useSpring, animated } from "react-spring";
 import TaskHeaderMb from "../Menu/Modal/TasKHeaderMb";
 import { useNavigate } from "react-router-dom";
 
-function HeaderMobile() {
+function HeaderMobile(props) {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isvisibleHeaderMB, setisvisibleHeaderMB] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   const navigate = useNavigate();
   const sidebarRef = useRef<HTMLDivElement | null>(null); // Reference for sidebar
+  const backdropRef = useRef<HTMLDivElement | null>(null); // Reference for backdrop
 
   const handleIconClick = () => {
     setInputVisible(prev => !prev); // Toggle input visibility
@@ -32,7 +33,8 @@ function HeaderMobile() {
   });
 
   const handleClickOutside = (e: React.MouseEvent) => {
-    if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+    // Close sidebar when clicking outside of the sidebar or the backdrop
+    if (backdropRef.current && !backdropRef.current.contains(e.target as Node) && sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
       setisvisibleHeaderMB(false); // Close sidebar if click is outside
     }
   };
@@ -63,7 +65,7 @@ function HeaderMobile() {
               {/* Show input when isInputVisible is true */}
               {isInputVisible && (
                 <div className="absolute top-full right-0 bg-white shadow-lg p-2 rounded-md">
-                  <form className="w-[] h-[38px]">
+                  <form className="w-[300px]] h-[38px]">
                     <Input.Search
                       placeholder="Tìm kiếm sản phẩm"
                       onSearch={onSearch}
@@ -90,8 +92,11 @@ function HeaderMobile() {
 
       {/* Sidebar Menu */}
       {isvisibleHeaderMB && (
-        <div className="fixed inset-0 z-30" onClick={handleClickOutside}>
-          <div className="w-full h-full bg-[rgba(0,0,0,0.5)]">
+        <div className={`absolute top-0 w-[100%] z-30`} onClick={handleClickOutside}>
+          <div
+            ref={backdropRef}
+            className="w-full h-full bg-[rgba(0,0,0,0.5)]"
+          >
             <animated.div style={slideInAnimation} ref={sidebarRef}>
               <TaskHeaderMb onClose={() => setisvisibleHeaderMB(false)} />
             </animated.div>

@@ -43,9 +43,9 @@ function User() {
 
   return (
     <Container className="pt-[1rem]">
-      <div className="flex justify-between">
+      <div className="flex flex-col lg:flex-row justify-between">
         {/* Sidebar */}
-        <div className="w-[25%] p-[2rem] bg-white h-[100%] shadow-md">
+        <div className="w-full lg:w-[25%] p-[2rem] bg-white h-[100%] shadow-md">
           <div className="flex gap-[1rem]">
             {/* Ảnh hoặc ký tự đầu của người dùng */}
             <div className="w-[7rem] h-[7rem] rounded-[50%] overflow-hidden">
@@ -66,8 +66,8 @@ function User() {
             </div>
             {/* Tên và nút chỉnh sửa */}
             <div className="mt-[.5rem]">
-              <h3 className="text-[2rem]">{user?.user_name}</h3>
-              <div className="flex text-[1.8rem] py-[.6rem] text-customColor">
+              <h3 className="text-[1.8rem] md:text-[2rem]">{user?.user_name}</h3>
+              <div className="flex text-[1.6rem] md:text-[1.8rem] py-[.6rem] text-customColor">
                 <FaEdit />
                 <p>Chỉnh sửa</p>
               </div>
@@ -78,7 +78,7 @@ function User() {
           <ul className="mt-[3rem]">
             <div
               onClick={() => handleNavigation(Paths.Profile)}
-              className={`flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border ${
+              className={`flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border rounded-lg ${
                 isActive(Paths.Profile)
                   ? 'border-customColor bg-customColor text-white'
                   : 'border-customColor'
@@ -89,7 +89,7 @@ function User() {
             </div>
             <div
               onClick={() => handleNavigation('/don-hang-cua-ban')}
-              className={`flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border ${
+              className={`flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border rounded-lg ${
                 isActive('/don-hang-cua-ban')
                   ? 'border-customColor bg-customColor text-white'
                   : 'border-customColor'
@@ -100,7 +100,7 @@ function User() {
             </div>
             <div
               onClick={() => handleNavigation('/tin-nhan')}
-              className={`flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border ${
+              className={`flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border rounded-lg ${
                 isActive('/tin-nhan')
                   ? 'border-customColor bg-customColor text-white'
                   : 'border-customColor'
@@ -111,7 +111,7 @@ function User() {
             </div>
             <div
               onClick={() => handleNavigation('/yeu-thich')}
-              className={`flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border ${
+              className={`flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border rounded-lg ${
                 isActive('/yeu-thich')
                   ? 'border-customColor bg-customColor text-white'
                   : 'border-customColor'
@@ -122,7 +122,7 @@ function User() {
             </div>
             <div
               onClick={() => handleNavigation('/thoat')}
-              className="flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border border-customColor"
+              className="flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border border-customColor rounded-lg"
             >
               <IoMdExit />
               <div>Thoát</div>
@@ -131,7 +131,7 @@ function User() {
         </div>
 
         {/* Nội dung chính */}
-        <div className="w-[70%] p-[2rem] bg-white h-[100%] shadow-md">
+        <div className="w-full lg:w-[70%] p-[1rem] md:p-[2rem] bg-white shadow-md">
           <Outlet />
         </div>
       </div>

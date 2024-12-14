@@ -12,7 +12,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
     return <>{element}</>;
   }
 
-  return <Navigate to="/đăng-nhập" replace />;
+  return <Navigate to="/dang-nhap" replace />;
 };
 
 const AuthRoute: React.FC<PrivateRouteProps> = ({ element }) => {

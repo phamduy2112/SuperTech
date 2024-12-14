@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
   user_phone: Yup.string().required("Vui lòng nhập số điện thoại"),
   email: Yup.string()
     .email("Email không hợp lệ")
-    .required("Vui lòng nhập email"),
+    .required("Vui lòng nhp email"),
   user_address: Yup.string().required("Vui lòng nhập địa chỉ"),
   gender: Yup.string().required("Vui lòng chọn giới tính"),
   date: Yup.string().required("Vui lòng nhập ngày sinh"),
@@ -55,31 +55,31 @@ function UserDetail() {
 
 
   return (
-    <div className="pt-[1rem]">
-      <div className=" ">
-        <div className="flex justify-between">
+    <div className="pt-[1rem] px-[1rem] md:px-[2rem]">
+      <div>
+        <div className="flex flex-col md:flex-row justify-between gap-[1rem] md:gap-0">
           <div>
-            <h4 className="text-[2.2rem] font-semibold">Hồ sơ của tôi</h4>
-            <p className="text-[1.8rem] pt-[.5rem]">
+            <h4 className="text-[1.8rem] md:text-[2.2rem] font-semibold">Hồ sơ của tôi</h4>
+            <p className="text-[1.6rem] md:text-[1.8rem] pt-[.5rem]">
               Quản lí hồ sơ để bảo mật tài khoản
             </p>
           </div>
           <button
-            onClick={() => formikRef.current.submitForm()} // Trigger submit externally
-            className="text-[1.7rem] flex gap-[.5rem] bg-customColor h-[3.5rem] justify-center items-center px-[1.3rem] text-white"
+            onClick={() => formikRef.current.submitForm()}
+            className="text-[1.5rem] md:text-[1.7rem] flex gap-[.5rem] bg-customColor h-[3.5rem] justify-center items-center px-[1.3rem] text-white"
           >
             <FaEdit />
             Sửa
           </button>
         </div>
 
-        <div className="border-t-customColor border border-transparent mt-[1.5rem] ">
-          <div className="flex">
-            <div className="border-r-customColor flex flex-col justify-between p-[1rem] pr-[3rem] border border-transparent">
+        <div className="border-t-customColor border border-transparent mt-[1.5rem]">
+          <div className="flex flex-col md:flex-row">
+            <div className="border-b-customColor md:border-b-transparent md:border-r-customColor flex flex-col justify-between p-[1rem] md:pr-[3rem] border border-transparent">
               <div className="flex flex-col items-center">
                 <ImageUploader />
               </div>
-              <div className="text-[1.7rem]">
+              <div className="text-[1.5rem] md:text-[1.7rem] text-center mt-[2rem] md:mt-0">
                 Tham gia vào ngày:
                 <p className="mt-[.3rem] font-semibold">10:43 10/03/2024</p>
               </div>

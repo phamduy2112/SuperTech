@@ -286,7 +286,7 @@ const changeStatusOrder = async (req, res) => {
         order_status_text_cancel: order_status_text_cancel || null,  // Lý do hủy nếu có
         created_at: new Date(),  // Thời gian tạo
       });
-      if (order_status ==4) {
+      if (order_status ==4 ) {
         // Lấy danh sách sản phẩm liên quan đến đơn hàng
         const orderItems = await models.detail_order.findAll({
           where: { order_id },
@@ -303,7 +303,7 @@ const changeStatusOrder = async (req, res) => {
           { where: { product_id: productIds, user_id:idUser }, }
         );
       }
-      if ( order_status == 6) {
+      if ( order_status == 6 || order_status ==5) {
         
         // Tăng lại số lượng sản phẩm trong kho
         const orderItems = await models.detail_order.findAll({
@@ -334,7 +334,6 @@ const changeStatusOrder = async (req, res) => {
               },
             });
             
-        console.log("111",item.detail_order_quality);
         
             if (colorMapping && storageMapping) {
              const res= await models.product_quality.increment("quality_product", {
@@ -351,12 +350,52 @@ const changeStatusOrder = async (req, res) => {
        
           
         );
+        let data = await models.detail_order.findAll({
+          where: {
+            order_id,
+           
+          },
+          include: [
+            {
+              model: models.products,
+              as: 'product', // Bao gồm thông tin sản phẩm liên quan
+            },
+            {
+              model: models.order,
+              as: 'order',
+              include: [
+                {
+                  model: models.user,
+                  as: 'user', // Bao gồm thông tin người dùng liên quan
+                },
+                {
+                  model: models.order_status,
+                  as: "order_statuses", // Bao gồm lịch sử trạng thái đơn hàng
+                },
+                {
+                  model: models.discount,
+                  as: "discount_discount", // Bao gồm thông tin giảm giá
+                },
+              ],
+            },
+          ],
+        });
+        console.log("data1",data);
+        
+      io.emit("change_order",data)
       // Trả về phản hồi thành công với dữ liệu đã tạo
       return res.status(201).json({
         message: 'Đã tạo mới trạng thái đơn hàng thành công!',
-        data: newOrderStatus,
+        data: data,
       });
     } 
+
+
+    return res.status(201).json({
+      message: 'Đã tạo mới trạng thái đơn hàng thành công!',
+      data: newOrderStatus,
+    });
+
 }catch (error) {
   // Nếu có lỗi, trả về lỗi cho người dùng
   console.error('Error creating order status:', error);
@@ -368,47 +407,70 @@ const changeStatusOrder = async (req, res) => {
 }
   
 const createorder = async (req, res) => {
-    try {
-        const {
-            order_total,
-            order_total_quatity,
-       
-            email,
-            discount,
-            address,
-            phone_number
-        } = req.body;
+  try {
+      const {
+          order_total,
+          order_total_quatity,
+          email,
+          discount,    // Ensure you're using 'discount' correctly if it's needed
+          address,
+          phone_number
+      } = req.body;
 
-        const user_id = req.id;
-        // const pay_id = req.id;
-        // const discount = req.id;
-        let date = new Date();
-        const neworder = await order.create({
-            order_date: date,
-            order_total,
-            order_total_quatity,
-            order_status:0,
-            discount,
-            user_id,
-            address,
-            phone_number,
-            
-            
-            // discount
-        });
-        // order_statis
-    
-        const newOrderStatus=await models.order_status.create({
-            order_id:neworder.order_id,
-            order_status:0,
-            created_at:date
-        })
-        responseSend(res, neworder, "Thêm Thành công!", 201);
-    } catch (error) {       
-        console.log(error);
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
-    }
+      const user_id = req.id;  // Make sure `req.id` is properly set (typically from authentication)
+      
+      let date = new Date();
+      
+      // Create a new order record
+      const neworder = await order.create({
+          order_date: date,
+          order_total,
+          order_total_quatity,
+          order_status: 0,  // Initial order status
+          discount,
+          user_id,
+          address,
+          phone_number,
+      });
+
+      // Create the order status entry (this might represent the initial status of the order)
+      const newOrderStatus = await models.order_status.create({
+          order_id: neworder.order_id,
+          order_status: 0,  
+          created_at: date
+      });
+      let newOrderData = await order.findOne({
+        where: { order_id: neworder.order_id },
+        include: [
+          {
+            model: models.order_status,
+            as: "order_statuses",
+            where: {
+              order_status_id: sequelize.literal(`(
+                SELECT MAX(order_status_id) FROM order_status os WHERE os.order_id = order.order_id
+              )`),
+            },
+          },
+          {
+            model: models.discount,
+            as: "discount_discount",
+          },
+        ],
+      });
+      
+      // Phát sự kiện socket với dữ liệu mới
+      io.emit('createOrder', newOrderData);
+      console.log(data);
+      
+
+      // Send the response back to the client
+      responseSend(res, neworder, "Thêm Thành công!", 201);
+  } catch (error) {
+      console.log(error);  // It's a good practice to log the error
+      responseSend(res, "", "Có lỗi xảy ra!", 500);  // Send a generic error message back
+  }
 };
+
 const getSuccessEmailOrder = async (req, res) => {
   try {
     const { email, orderDetails } = req.body;

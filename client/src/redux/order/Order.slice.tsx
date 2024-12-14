@@ -55,7 +55,7 @@ export const getOrderDetail = createAsyncThunk(
     try {
       const resp = await getDetailOrder(id);
 
-      return resp.data.content;
+      return resp.data.content.reverse();
     } catch (e) {
       console.log(e);
     }
@@ -78,7 +78,7 @@ export const getOrderAllThunk = createAsyncThunk(
       });
 
       console.log(`Filtered results based on search criteria:`, filteredResults);
-      return filteredResults.length > 0 ? filteredResults : []; // Return filtered results or an empty array if none found
+      return filteredResults.length > 0 ? filteredResults.reverse() : []; // Return filtered results or an empty array if none found
 
      
     } catch (e) {
@@ -119,6 +119,9 @@ const orderSlice = createSlice({
     setOrderId: (state, { payload }) => {
       state.orderId = payload;
     },
+    setOrder: (state, { payload }) => {
+      state.listOrder = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -149,6 +152,6 @@ const orderSlice = createSlice({
 
 });
 
-export const { setOrderId } = orderSlice.actions;
+export const { setOrderId,setOrder } = orderSlice.actions;
 
 export const orderReducer = orderSlice.reducer;

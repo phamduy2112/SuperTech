@@ -52,36 +52,34 @@ function Resigter() {
   });
 
   return (
-<div className="relative">
+    <div className="">
+      <div className="flex overflow-hidden relative min-h-[100vh] bg-gradient-to-br from-purple-50 to-white">
+        {/* Form Section - Left */}
+        <div className="w-full lg:w-[45%] xl:w-[40%] flex justify-center items-center p-6">
+          <div className="absolute top-8 left-8 z-20">
+            <NavLink to="/" className="bg-white/90 w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+              <FaArrowLeft className="text-2xl text-customColor"/>
+            </NavLink>
+          </div>
 
-  <div className="flex overflow-hidden relative h-[100vh]">
-  <div className="bg-white w-[4rem] shadow-md h-[4rem] rounded-[50%] absolute left-[12rem] top-[5%]">
-        <NavLink to={"/"}>
-          <FaArrowLeft  className="text-[2rem] text-customColor absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"/>
-        </NavLink>
-        
-      </div>
-    {/* Left Section: Registration Form */}
-    <div className="w-[40%] m-auto relative">
- 
-    <div className="w-[70%] m-auto p-8 flex flex-col justify-center z-10">
-      
-      <h2 className="text-[3rem] font-bold mb-4 text-center">Đăng kí</h2>
-      <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng nhập</p>
-      {/* Social Buttons */}
-      <div className="flex gap-4 mb-6 w-[70%] m-auto">
-        <button className="w-1/2 py-5  border text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg ">
-    <FaFacebookF className="mr-[.5rem]"/>
-          Facebook
-        </button>
-        <button className="w-1/2 py-5 border text-[1.6rem] border-customColor flex items-center justify-center rounded-lg text-customColor">
-<FaGoogle className="mr-[.5rem]" />
-          Google
-        </button>
-      </div>
-      {/* Form */}
-  {/* Formik Form */}
-  <Form
+          <div className="w-full max-w-[500px] p-4 2xl:p-8 flex flex-col justify-center z-10">
+            <h2 className="text-[2.5rem] 2xl:text-[3rem] font-bold mb-4 text-center">Đăng kí</h2>
+            <p className="mb-4 text-gray-600 text-center text-[1.5rem]">Bạn có thể đăng kí</p>
+
+            {/* Social Buttons */}
+            <div className="flex gap-2 sm:gap-3 xl:gap-4 mb-4 sm:mb-6 w-full sm:w-[90%] 2xl:w-[70%] mx-auto">
+            <button className="w-1/2 py-2 sm:py-3 xl:py-5 border text-[1.2rem] sm:text-[1.4rem] 2xl:text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg">
+            <FaFacebookF className="mr-[.5rem]"/>
+                <span className="hidden sm:inline">Facebook</span>
+              </button>
+              <button className="w-1/2 py-2 sm:py-3 xl:py-5  border text-[1.4rem] 2xl:text-[1.6rem] border-customColor text-customColor flex items-center justify-center rounded-lg">
+                <FaGoogle className="mr-[.5rem]"/>
+                <span className="hidden sm:inline">Google</span>
+              </button>
+            </div>
+
+            {/* Form giữ nguyên */}
+            <Form
               layout="vertical"
               onFinish={formik.handleSubmit}
               className="sign-edit"
@@ -91,6 +89,7 @@ function Resigter() {
                 label="Họ và tên"
                 validateStatus={formik.touched.fullName && formik.errors.fullName ? "error" : ""}
                 help={formik.touched.fullName && formik.errors.fullName ? formik.errors.fullName : null}
+                className="mb-[1rem]"
               >
                 <Input
                   id="fullName"
@@ -107,6 +106,7 @@ function Resigter() {
                 label="Email"
                 validateStatus={formik.touched.email && formik.errors.email ? "error" : ""}
                 help={formik.touched.email && formik.errors.email ? formik.errors.email : null}
+                className="mb-[1rem]"
               >
                 <Input
                   id="email"
@@ -124,6 +124,7 @@ function Resigter() {
                 label="Mật khẩu"
                 validateStatus={formik.touched.password && formik.errors.password ? "error" : ""}
                 help={formik.touched.password && formik.errors.password ? formik.errors.password : null}
+                className="mb-[1rem]"
               >
                 <Input.Password
                   id="password"
@@ -140,6 +141,7 @@ function Resigter() {
                 label="Xác nhận mật khẩu"
                 validateStatus={formik.touched.confirmPassword && formik.errors.confirmPassword ? "error" : ""}
                 help={formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : null}
+                className="mb-[1rem]"
               >
                 <Input.Password
                   id="confirmPassword"
@@ -153,7 +155,7 @@ function Resigter() {
 
               {/* Quên mật khẩu */}
               <div className="flex justify-end mb-4">
-                <NavLink to="#" className="text-[1.5rem] text-customColor font-semibold hover:text-purple-800">
+                <NavLink to="/quen-mat-khau" className="text-[1.5rem] text-customColor font-semibold hover:text-purple-800">
                   Quên mật khẩu
                 </NavLink>
               </div>
@@ -165,40 +167,60 @@ function Resigter() {
                 </Button>
               </Form.Item>
             </Form>
- 
-      {/* Link to Sign In */}
-      <p className="mt-4 text-gray-600 text-center text-[1.4rem]">
-        Bạn đã có tài khoản? <NavLink to="/đăng-nhập" className="text-purple-600 hover:text-purple-800">Đăng kí ngay</NavLink>
-      </p>
-    </div>
 
-    </div>
- <div className="w-[60%] relative  overflow-hidden">
-      {/* Diagonal Purple Background */}
-   
-      <div className="absolute inset-0 bg-customColor clip-diagonal" />
-     
-   <div className="absolute bottom-[-20%] right-0 opacity-30">
-        <img src={bgdienThoai} className="w-[800px]" alt="" />
-      </div>
-      <div className="relative top-[40%] left-[65%] translate-x-[-50%] translate-y-[-50%] z-10 text-white text-center p-8 flex flex-col items-center">
-        <h1 className="text-[6rem] font-bold mb-3">SuperTech</h1>
-        <p className="text-[1.8rem] w-[600px]">
-          SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi. Hãy đăng nhập để có trải nghiệm tốt nhất và đồng hành cùng chúng tôi.
-        </p>
-      </div>
-      {/* Image of iPhone */}
-      <div className="absolute left-[0%] top-[20%] z-10 ">
-        <img src={dienThoai} alt="iPhone" className="w-[500px] object-contain opacity-90" />
-      </div>
-    </div>
-    {/* Right Section: Advertisement */}
-   
-    
-  </div>
-</div>
+            <p className="mt-4 text-gray-600 text-center text-[1.2rem] 2xl:text-[1.4rem]">
+              Bạn đã có tài khoản? {" "}
+              <NavLink to="/dang-nhap" className="text-purple-600 hover:text-purple-800">
+                Đăng nhập ngay
+              </NavLink>
+            </p>
+          </div>
+        </div>
 
+        {/* Right Section - Advertisement */}
+        <div className="hidden lg:block lg:w-[55%] xl:w-[60%] relative overflow-hidden">
+          <div className="absolute inset-0 bg-customColor clip-diagonal" />
+          <div className="relative top-[40%] left-[65%] translate-x-[-50%] translate-y-[-50%] z-10 text-white p-8 flex flex-col items-center 2xl:flex">
+            <div className="mb-8">
+              <h1 className="text-[5rem] xl:text-[6rem] font-bold mb-4 text-center drop-shadow-lg">SuperTech</h1>
+              <div className="w-32 h-1 bg-white/60 mx-auto rounded-full mb-6"></div>
+              <p className="text-[1.8rem] w-[600px] text-center leading-relaxed text-white/90">
+                SuperTech là trang website mua sắm trực tuyến với nhiều ưu đãi và khuyến mãi...
+              </p>
+            </div>
+          </div>
 
+          {/* Phone Image */}
+          <div className="absolute left-[-9%] top-[20%] z-10 animate-float hidden 2xl:block">
+          <div className="relative">
+              <div className="absolute inset-5 bg-gradient-to-b from-purple-400/20 to-transparent rounded-[3rem] blur-2xl"></div>
+              <img src={dienThoai} alt="iPhone" className="w-[450px] xl:w-[500px] object-contain relative z-10" />
+            </div>
+          </div>
+
+          <div className="absolute bottom-[-10%] right-0 opacity-20">
+            <img src={bgdienThoai} 
+          className="w-[400px] md:w-[420px] lg:w-[400px] xl:w-[600px] transition-all duration-300" 
+          alt="" />
+          </div>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+          100% { transform: translateY(0px); }
+        }
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+        .clip-diagonal {
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 15% 100%);
+        }
+      `}</style>
+    </div>
   );
 }
+
 export default Resigter;

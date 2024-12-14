@@ -86,9 +86,9 @@ function TaskHeaderMb({ onClose }: TaskHeaderMbProps) {
         </ul>
         <div className="mt-6">
           <h4 className="text-[1.9rem] py-3">Bạn cần giúp?</h4>
-          <div className="text-[1.6rem] py-2">Address: 1234 Fashion Street, Suite 567, New York, NY 10001</div>
+          <div className="text-[1.6rem] py-2">Công Viên Phần Mềm Quang Trung, Tân Chánh Hiệp, Quận 12, Hồ ChÍ Minh, Việt Nam</div>
           <div className="text-[1.6rem] py-2">Email: <b>info@fashionshop.com</b></div>
-          <div className="text-[1.6rem] py-2">Phone: <b>(212) 555-1234</b></div>
+          <div className="text-[1.6rem] py-2">Phone: <b>1900 6969</b></div>
         </div>
       </div>
       {/* Login button at the bottom */}
