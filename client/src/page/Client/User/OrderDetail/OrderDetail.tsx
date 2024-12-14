@@ -196,9 +196,11 @@ return (
             <div className='mt-[1.5rem]'>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
             <div className='h-[5rem] shadow-md p-[2rem]'>
-            <p className='text-[1.6rem] font-semibold'>Thanh toán: <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span></p>
-            </div>
-            </div>
+            <p className='text-[1.6rem] font-semibold'>Thanh toán: <span>
+            {order?.order_pay == 0 ? "Thanh toán tại nhà" : 
+               order?.order_pay == 1 ? "Đã thanh toán" : 
+               ""}
+              </span></p> </div> </div>
             <div className='mt-[1.5rem]'>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Tổng thanh toán</h4>
             <div className='h-[100%] shadow-md p-[2rem]'>
@@ -240,11 +242,18 @@ return (
         <div className='mt-[3rem] table-detail-order'>
         
         </div>
+        <Table 
+          columns={columns} 
+          dataSource={listProduct} 
+          pagination={false} 
+          rowKey="name" // hoặc một thuộc tính duy nhất khác
+        />
         {order?.order_status < 2 ?   <div className='rounded-lg mt-[1rem]'>
           <button className='bg-yellow-400 text-[1.5rem] p-[1rem] rounded-lg'>Huỷ đơn hàng</button>
         </div>: "" }
       
       </div>
+      
     </Container>
   )
 }

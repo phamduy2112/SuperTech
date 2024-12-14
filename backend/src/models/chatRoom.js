@@ -5,6 +5,7 @@ export default class chatRoom extends Model {
   static init(sequelize, DataTypes) {
   return super.init({
     room_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -14,11 +15,11 @@ export default class chatRoom extends Model {
       allowNull: false
     },
     room_create_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     room_delete_date: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING(255),
       allowNull: true
     },
     id_user_join: {

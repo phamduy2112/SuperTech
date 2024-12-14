@@ -315,7 +315,7 @@ function AdminSetting() {
                                     trigger="click"
                                     open={visible}
                                     onOpenChange={setVisible}
-                                >
+                                    >
                                     <Input
                                         value={settings.color}
                                         placeholder="Click to select color..."

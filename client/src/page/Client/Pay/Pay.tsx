@@ -9,11 +9,12 @@ import { createDetailOrder, createOrder, getOrderById, getSuccessEmailOrder } fr
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
-import { setOrderId } from '../../../redux/order/Order.slice';
+import { changeStatusOrderThunk, setOrderId } from '../../../redux/order/Order.slice';
 import toast from 'react-hot-toast';
 import { getAllCityThunk, getDistrictsCityThunk } from '../../../redux/order/City.slice';
 import ModalPay from './component/ModalPay';
 import CountdownTimer from './component/CountimePay';
+import { Paths } from '../../../router/component/RouterValues';
 function Pay() {
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
@@ -81,6 +82,7 @@ function Pay() {
     totalItem
 
   });
+  const [reset, setReset] = useState(false); // Thêm state để quản lý reset
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
@@ -170,8 +172,16 @@ function Pay() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
+    setReset(true);
 
+   
+  };
+  const handleReset=() => {
+    setReset(false);
+  }
+  const handleResetTrue=() => {
+    setReset(true);
+  }
   const handleFormSubmit = async () => {
     try {
       // Chuẩn bị dữ liệu đơn hàng
@@ -195,52 +205,69 @@ function Pay() {
         detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
         discount_product: item.product_discount,
       }));
-  
+      const dataEmail = {
+        email: formData.email,
+        orderDetails: detailOrders,
+      };     
+      
+      // Nếu phương thức thanh toán là "bank"
       if (formData.paymentMethod === 'bank') {
+        const response = await createDetailOrder(detailOrders);
+
+        socket.on('orderStatusUpdated', async (updatedOrder:any) => {
+       
+        
+          // Kiểm tra xem thanh toán có thành công không
+          if (user.user_id == updatedOrder.user) {
+            if (response) {
+              await getSuccessEmailOrder(dataEmail);
+              navigate(`${Paths.Bill}`);
+              dispatch(setOrderId(resp.data.content.order_id));
+              dispatch(removeAllCart());
+            }
+          } else {
+            console.error("Thanh toán không thành công.");
+          }
+        });
+        
+        // Mở modal và lưu dữ liệu đơn hàng
         setIsModalOpen(true);
         setDataOrder({
           order_id: resp.data.content.order_id,
           user_id: user.user_id,
-          order_total:dataOrder.order_total
+          order_total: dataOrder.order_total
         });
-  
-        // Gọi API kiểm tra trạng thái thanh toán
-        const responseDt = await getOrderById(resp.data.content.order_id);
-  
-        if (responseDt.data.content.order_pay == 1) {
-          // Thanh toán thành công, chuyển trang ngay lập tức
-          const response = await createDetailOrder(detailOrders);
-          if (response) {
-            navigate("/");
-            dispatch(setOrderId(resp.data.content.order_id));
-            dispatch(removeAllCart());
-          }
-        } else {
-          // Đợi 5 phút trước khi chuyển trang
-          setTimeout(async () => {
-            const response = await createDetailOrder(detailOrders);
-            if (response) {
-              navigate("/");
-              dispatch(setOrderId(resp.data.content.order_id));
-              dispatch(removeAllCart());
-            }
-          }, 300000);
-        }
+
+        // Điều hướng về trang chủ sau 2 phút
+//         setTimeout(async () => {
+
+//           // Delay the toast notification
+//           navigate("/");  
+//           dispatch(removeAllCart());
+
+//           const cancelOrder = {
+//             order_id: resp.data.content.order_id,
+//             order_status: 6,
+//             order_status_text_cancel: 'Quá thời gian thanh toán',
+//           };
+//           await dispatch(changeStatusOrderThunk(cancelOrder)).unwrap();
+// setTimeout(() => {
+ 
+//   toast.error("Đơn hàng của bạn đã bị hủy");
+
+// }, 1000); // Delay navigation for 1 second after the toast
+        
+//       },3000); // 120000 milliseconds = 2 minutes
+
       } else {
-        // Thanh toán không qua ngân hàng, xử lý thông thường
-        const dataEmail = {
-          email: formData.email,
-          orderDetails: detailOrders,
-        };
-  
-        // Gọi API tạo chi tiết đơn hàng
+        // Gọi API tạo chi tiết đơn hàng cho phương thức thanh toán khác
         const response = await createDetailOrder(detailOrders);
   
         if (response) {
           await getSuccessEmailOrder(dataEmail);
-          // navigate("/xuất-hóa-đơn");
-          // dispatch(setOrderId(resp.data.content.order_id));
-          // dispatch(removeAllCart());
+          navigate(`${Paths.Bill}`);
+          dispatch(setOrderId(resp.data.content.order_id));
+          dispatch(removeAllCart());
         }
       }
     } catch (error) {
@@ -589,11 +616,13 @@ function Pay() {
               {formData.paymentMethod === 'bank' && (
       <ModalPay 
       isModalOpen={isModalOpen}
-       showModal={setIsModalOpen} 
+      open={showModal} // Gọi hàm để lấy giá trị boolean
        handleOk={handleOk} 
        handleCancel={handleCancel}
        data={dataOrder}
-
+       reset={reset}
+       handleReset={handleReset}
+                handleResetTrue={handleResetTrue}
         />
     )}
     
