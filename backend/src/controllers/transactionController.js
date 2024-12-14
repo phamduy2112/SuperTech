@@ -9,7 +9,10 @@ const models = initModels(sequelize);
 const { order, history_bank, bankauto } = models;
 const checkTransactionStatus = async (req, res) => {
     try {
-        const response = await axios.get("https://api.sieuthicode.net/historyapimbbankv2/8ae40d79209943b0807b5a762469e4ff");
+        //mb bank
+        // const response = await axios.get("https://api.sieuthicode.net/historyapimbbankv2/8ae40d79209943b0807b5a762469e4ff"); 
+        //vietcombank
+        const response = await axios.get("https://api.sieuthicode.net/historyapivcbv2/e5a36bf27929ed0411a791c49594f716");
         const { transactions } = response.data;
         if (!transactions || transactions.length === 0) {
             console.log("Không có giao dịch mới.");
