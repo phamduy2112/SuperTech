@@ -1,21 +1,20 @@
 import { axiosWithAuth } from '../axios.config';
 
 
-export const getsetting = () => {
+export const getbank = () => {
     return axiosWithAuth("/autobank", {
         method: "GET",
     });
 };
-export const getsettingId = (id:number) => {
-    return axiosWithAuth(`/setting/${id}`, {
-        method: "GET",
-    });
-};
-export const updatesettingId = (id:number, value:string) => {
+
+export const updatebank = (id:number, short_name:string, accountName:string, accountNumber:string,on_off:number ) => {
     return axiosWithAuth(`/autobank-update/${id}`, {
         method: "PUT",
-        data: {
-            value: value
+        data:  {
+            short_name ,
+            accountName,
+            accountNumber,
+            on_off
         },
         headers: {
             'Content-Type': 'application/json'
