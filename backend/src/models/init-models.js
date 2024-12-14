@@ -62,7 +62,7 @@ export default function initModels(sequelize) {
   likes.belongsTo(comment_product, { as: "comment", foreignKey: "comment_id"});
   comment_product.hasMany(likes, { as: "likes", foreignKey: "comment_id"});
   replies_comment_product.belongsTo(comment_product, { as: "parent_comment", foreignKey: "comment_id"});
-  comment_product.hasMany(replies_comment_product, { as: "replies_comment_products", foreignKey: "comment_id"}); 
+  comment_product.hasMany(replies_comment_product, { as: "replies_comment_products", foreignKey: "comment_id"});
   order.belongsTo(discount, { as: "discount_discount", foreignKey: "discount"});
   discount.hasMany(order, { as: "orders", foreignKey: "discount"});
   user_discounts.belongsTo(discount, { as: "discount", foreignKey: "discount_id"});
@@ -77,6 +77,7 @@ export default function initModels(sequelize) {
   order.hasMany(history_bank, { as: "history_banks", foreignKey: "order_id"});
   order_status.belongsTo(order, { as: "order", foreignKey: "order_id"});
   order.hasMany(order_status, { as: "order_statuses", foreignKey: "order_id"});
+  
   likes.belongsTo(posts, { as: "post", foreignKey: "post_id"});
   posts.hasMany(likes, { as: "likes", foreignKey: "post_id"});
   media_post.belongsTo(posts, { as: "post", foreignKey: "post_id"});

@@ -64,7 +64,7 @@ export const createBlogThunk = createAsyncThunk(
   }
 );
 const initialState = {
-  listBlog: [],
+  listBlog: null,
   mediaPosts: [],
   loading: false,
   error: null,

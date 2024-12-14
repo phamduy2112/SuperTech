@@ -10,50 +10,24 @@ import { GoSearch } from "react-icons/go";
 import "../responsive/Blog.css";
 
 function ListBlog() {
-  const ListBlogRedux = useAppSelector((state) => state.listBlogStore.listBlog);
-  const mediaPosts = useAppSelector((state) => state.listBlogStore.mediaPosts); // Sử dụng mediaPosts từ Redux store
-  const AppDispatch = useAppDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ListBlogRedux: any = useAppSelector((state) => state.blog.listBlog);
 
-  useEffect(() => {
-    AppDispatch(getAllBlogmediaThunk());
-  }, [AppDispatch]);
 
-  // const mergedPosts = ListBlog && mediaPosts ? mergeArrays(ListBlog, mediaPosts) : [];
+
   const [mergedPosts, setMergedPosts] = useState([]);
 
   useEffect(() => {
     setMergedPosts(ListBlogRedux);
+    
   }, [ListBlogRedux]);
-  // Tạo trạng thái cho phân trang và tìm kiếm
+  console.log(mergedPosts)
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState(""); // Trạng thái tìm kiếm
-  const pageSize = 6; // Số bài viết hiển thị trên mỗi trang
-  const totalPages = Math.ceil(mergedPosts.length / pageSize); // Số trang phụ thuộc vào tổng số bài viết
+  const pageSize = 6;
+  const totalPages = Math.ceil(mergedPosts?.length / pageSize);
 
-  // Lọc các bài viết theo từ khóa tìm kiếm
-  const filteredPosts = mergedPosts
-    .filter(
-      (item: any) =>
-        item.post_title?.toLowerCase().includes(searchQuery?.toLowerCase()) // Lọc theo từ khóa tìm kiếm
-    )
-    .sort((a: any, b: any) => {
-      const dateA = new Date(a.post_date);
-      const dateB = new Date(b.post_date);
-      return dateB - dateA;
-    });
 
-  // // Hàm lấy 5 bài viết mới nhất
-  // const getLatestPosts = (posts, count) => {
-  //   return posts
-  //     .slice() // Tạo bản sao của mảng để tránh thay đổi mảng gốc
-  //     .sort((a, b) => new Date(b.post_date) - new Date(a.post_date)) // Sắp xếp bài viết theo ngày (mới nhất lên đầu)
-  //     .slice(0, count); // Lấy 5 bài viết đầu tiên
-  // };
-
-  // const latestPosts = getLatestPosts(mergedPosts, 5);
-
-  // // Tính toán bài viết trên trang hiện tại
-  const currentPosts = filteredPosts.slice(
+  const currentPosts = mergedPosts?.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -76,7 +50,7 @@ function ListBlog() {
         <div>
           <h2 className="text-2xl font-bold text-slate-800">Bài viết mới</h2>
           <div className="h-px bg-purple-700 my-4" />
-          {currentPosts.map((post, index) => (
+          {currentPosts?.map((post, index) => (
             <Sidebar key={index} props={post} />
           ))}
         </div>
@@ -91,7 +65,7 @@ function ListBlog() {
           Chào mừng quý khách hàng
         </p>
         <div className="flex flex-wrap gap-5">
-          {currentPosts.map((post, index) => (
+          {currentPosts?.map((post, index) => (
             <BlogCard key={index} props={post} />
           ))}
         </div>

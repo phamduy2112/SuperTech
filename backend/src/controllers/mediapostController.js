@@ -18,8 +18,24 @@ const getmediapost = async (req, res) => {
 };
 const getBlog = async () => {
   try {
-    let kq = await posts.findAll();
-    return kq;
+    const [postsBlog, mediapostBlog] = await Promise.all([
+      posts.findAll(),
+      mediapost.findAll(),
+    ]);
+    const mergedData = postsBlog.map((post) => {
+      const media = mediapostBlog.find(
+        (media) => media.post_id == post.post_id
+      );
+      if (media) {
+        return {
+          ...post.dataValues, // Dữ liệu từ post
+          media_url: media.media_url, // Gắn thêm media_url từ mediapost
+        };
+      }
+
+      return post.dataValues;
+    });
+    return mergedData;
   } catch (error) {
     console.log(error);
   }
@@ -30,8 +46,24 @@ const deleteBlog = async (data) => {
     await posts.destroy({
       where: { post_id: data },
     });
-    let kq = await posts.findAll();
-    return kq;
+    const [postsBlog, mediapostBlog] = await Promise.all([
+      posts.findAll(),
+      mediapost.findAll(),
+    ]);
+    const mergedData = postsBlog.map((post) => {
+      const media = mediapostBlog.find(
+        (media) => media.post_id == post.post_id
+      );
+      if (media) {
+        return {
+          ...post.dataValues, // Dữ liệu từ post
+          media_url: media.media_url, // Gắn thêm media_url từ mediapost
+        };
+      }
+
+      return post.dataValues;
+    });
+    return mergedData;
   } catch (error) {
     console.log(error);
   }

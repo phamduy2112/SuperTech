@@ -45,7 +45,6 @@ io.on("connection", (socket) => {
     io.emit("GetAllBlog", kq);
   });
   socket.on("deleteBlog", (data) => {
-    console.log("data", data);
     deleteBlog(data).then((kq) => {
       io.emit("ClickGetAllBlog", kq);
     });
