@@ -41,15 +41,15 @@ const corsOptions = {
 // cron này chỉ chạy được trên server thôi, local tạm thời ẩn, tuyệt đối ko tắt để hạn chế tình trạng trùng lập cron giữa local
 // và server
 
-cron.schedule('* * * * *', async () => {
-  console.log('Bắt đầu chạy Check Lịch Sử Giao Dịch Api Từ Phía Ngân Hàng!!!');
-  try {
-    const response = await axios.get('http://localhost:8080/check-transactions');
-    console.log('Kết quả:', response.data);
-  } catch (error) {
-    console.error('Lỗi khi gọi API:', error.message);
-  }
-});
+// cron.schedule('* * * * *', async () => {
+//   console.log('Bắt đầu chạy Check Lịch Sử Giao Dịch Api Từ Phía Ngân Hàng!!!');
+//   try {
+//     const response = await axios.get('http://localhost:8080/check-transactions');
+//     console.log('Kết quả:', response.data);
+//   } catch (error) {
+//     console.error('Lỗi khi gọi API:', error.message);
+//   }
+// });
 
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
