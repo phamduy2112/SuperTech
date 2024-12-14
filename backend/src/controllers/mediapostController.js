@@ -46,6 +46,9 @@ const deleteBlog = async (data) => {
     await posts.destroy({
       where: { post_id: data },
     });
+    await mediapost.destroy({
+      where: { post_id: data },
+    });
     const [postsBlog, mediapostBlog] = await Promise.all([
       posts.findAll(),
       mediapost.findAll(),
@@ -56,8 +59,8 @@ const deleteBlog = async (data) => {
       );
       if (media) {
         return {
-          ...post.dataValues, // Dữ liệu từ post
-          media_url: media.media_url, // Gắn thêm media_url từ mediapost
+          ...post.dataValues, 
+          media_url: media.media_url, 
         };
       }
 
