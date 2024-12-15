@@ -173,7 +173,7 @@ console.log(token);
         
           </div>
           <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
-          <form className="w-[100%] h-[38px] bg-customColor">
+          <form className="w-[100%] h-[38px] bg-customColor rounded-[10px]">
               <Search
                 placeholder="Tìm kiếm sản phẩm"
                 onSearch={onSearch}
