@@ -63,7 +63,7 @@ function ImageUploader() {
       </div>
       <div className="mt-[.5rem] cursor-pointer flex justify-center items-center">
         <div
-          className="flex text-[1.8rem] mt-[1rem] py-[.6rem] border border-[#7500CF] w-[10rem] items-center justify-center rounded-[4rem]"
+          className="flex text-[1.8rem] mt-[1rem] py-[.6rem] border border-[var(--custom-color)] w-[10rem] items-center justify-center rounded-[4rem]"
           onClick={editProfileHandler}
         >
           Chỉnh sửa

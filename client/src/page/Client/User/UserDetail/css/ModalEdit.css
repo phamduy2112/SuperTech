@@ -1,5 +1,5 @@
 .button-edit :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed{
-    border:1px solid #7500CF;
+    border:1px solid var(--custom-color);
     color:#7500CF;
 }
 .button-edit :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover, :where(.css-dev-only-do-not-override-5wsri9).ant-btn-variant-dashed:not(:disabled):not(.ant-btn-disabled):hover {

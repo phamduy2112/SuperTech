@@ -103,7 +103,7 @@ console.log(props);
 
       {/* Giảm giá */}
       {props.product?.product_discount > 0 ?
-        <div className="absolute top-4 left-4 bg-[#7500CF] px-3 py-2 rounded-full text-white text-[1.4rem] font-semibold">
+        <div className="absolute top-4 left-4 bg-[var(--custom-color)] px-3 py-2 rounded-full text-white text-[1.4rem] font-semibold">
           -{props.product?.product_discount}%
         </div>
         : null}
@@ -172,7 +172,7 @@ console.log(props);
 
         {/* Nút thêm giỏ hàng */}
         <button
-          className="w-full mt-4 py-3 border border-[#7500CF] text-[#7500CF] text-[1.6rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
+          className="w-full mt-4 py-3 border border-[var(--custom-color)] text-[var(--custom-color)] text-[1.6rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
           onClick={() => { handleAddItem(props.product) }}
         >
           Thêm giỏ hàng

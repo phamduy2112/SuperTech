@@ -7,23 +7,23 @@ function Dis() {
     <div className=' m-auto py-[2rem]'>
         <div className='grid lg:grid-cols-4 xmd:grid-cols-2'>
             <div className='flex flex-col items-center justify-center'>
-            <FaTruckFast className='text-[5rem] text-[#7500CF]'/>
+            <FaTruckFast className='text-[5rem] text-[var(--custom-color)]'/>
             <h3 className='text-[2rem] font-semibold mt-[1rem]'>Miễn phí vận chuyển</h3>
             <p className='text-[1.6rem] mt-[.5rem]'>Miễn phí vận chuyển cho đơn hàng trên 25 triệu</p>
         </div>
             <div className='flex flex-col items-center justify-center'>
-            <FaGift  className='text-[5rem] text-[#7500CF]'/>
+            <FaGift  className='text-[5rem] text-[var(--custom-color)]'/>
             <h3 className='text-[2rem] font-semibold mt-[1rem]'>Tiết kiệm lớn</h3>
             <p className='text-[1.6rem] mt-[.5rem]'>24 giờ một ngày, 7 ngày một tuần</p>
 
         </div>
             <div className='flex flex-col items-center justify-center'>
-            <FaHeadphonesSimple  className='text-[5rem] text-[#7500CF]'/>
+            <FaHeadphonesSimple  className='text-[5rem] text-[var(--custom-color)]'/>
             <h3 className='text-[2rem] font-semibold mt-[1rem]'>24/07 Có người hộ trỡ</h3>
             <p className='text-[1.6rem] mt-[.5rem]'>24 giờ một ngày, 7 ngày một tuần</p>
         </div>
             <div className='flex flex-col items-center justify-center'>
-            <FaMoneyBill  className='text-[5rem] text-[#7500CF]'/>
+            <FaMoneyBill  className='text-[5rem] text-[var(--custom-color)]'/>
             <h3 className='text-[2rem] font-semibold mt-[1rem]'>Thanh toán linh hoạt</h3>
             <p className='text-[1.6rem] mt-[.5rem]'>Thanh toán đa dạng</p>
         </div>

@@ -69,7 +69,7 @@ function Footer() {
   ]
   return (
     <div className='w-[100%] m-auto mt-[1.5rem] bg-white'>
-      <div className=' bg-[#7500CF] sm:rounded-t-[2rem] md:rounded-none w-[100%] md:h-[6rem] sm:pt-[2rem] md:pt-[0] flex justify-center items-center'>
+      <div className=' bg-[var(--custom-color)] sm:rounded-t-[2rem] md:rounded-none w-[100%] md:h-[6rem] sm:pt-[2rem] md:pt-[0] flex justify-center items-center'>
         <Container className='relative md:flex items-center justify-between'>
         <h1 className='md:hidden text-[3rem] text-white text-center'>SuperTeach</h1>
           <div className="flex sm:text-[1.8rem] md:text-[2rem] text-white sm:gap-[1rem] md:gap-[2rem] items-center sm:justify-center sm:my-[1.5rem] md:my-[0rem]">
@@ -93,10 +93,10 @@ function Footer() {
               SuperTech
             </h3>
             <div className='flex gap-[2rem] mt-[1.5rem] mb-[2rem]'>
-              <RiHeadphoneFill className='md:text-[4rem] sm:text-[5rem] xl:text-[5rem] text-[#7500CF] font-semibold'/>
+              <RiHeadphoneFill className='md:text-[4rem] sm:text-[5rem] xl:text-[5rem] text-[var(--custom-color)] font-semibold'/>
               <div>
                 <p className='md:text-[1.5rem] sm:text-[1.6rem]'>Bạn có thắc mắc? Liên hệ ngay!</p>
-                <p className='md:text-[1.6rem] sm:text-[2rem] text-[#7500CF] font-semibold md: mt-[.5rem] sm:mt-[1rem]'>1900 6969</p>
+                <p className='md:text-[1.6rem] sm:text-[2rem] text-[var(--custom-color)] font-semibold md: mt-[.5rem] sm:mt-[1rem]'>1900 6969</p>
               </div>
               
             </div>

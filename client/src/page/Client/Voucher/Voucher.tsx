@@ -49,16 +49,16 @@ const CouponSection = () => {
               </div>
 
               {/* Voucher Value */}
-              <div className="flex items-baseline text-4xl font-extrabold text-[#7500CF]">
+              <div className="flex items-baseline text-4xl font-extrabold text-[var(--custom-color)]">
                 <h1>Giảm {_.discount_percent}%</h1>
                
               </div>
 
               {/* Coupon Footer with Copy Button */}
-              <div className="flex justify-between items-center mt-4 text-xl text-[#7500CF] font-medium">
+              <div className="flex justify-between items-center mt-4 text-xl text-[var(--custom-color)] font-medium">
                 <span>mã: {_.discount_name}</span>
                 <button 
-                  className="border border-[#7500CF] px-4 py-2 rounded-md hover:bg-[#7500CF] hover:text-white"
+                  className="border border-[#7500CF] px-4 py-2 rounded-md hover:bg-[var(--custom-color)] hover:text-white"
                   onClick={() => handleCopyCode('W50')}
                 >
                   Sao chép

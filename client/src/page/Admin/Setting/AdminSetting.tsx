@@ -218,15 +218,15 @@ function AdminSetting() {
             console.error('Failed to fetch bank details:', error);
         }
     };
-    const [bankList, setBankList] = useState([]); // State để lưu danh sách ngân hàng
+    const [bankList, setBankList] = useState([]);
 
     const fetchBankList = async () => {
         try {
-            const response = await fetch('https://api.vietqr.io/v2/banks'); // Gọi API để lấy danh sách ngân hàng
-            const data = await response.json(); // Chuyển đổi phản hồi thành JSON
+            const response = await fetch('https://api.vietqr.io/v2/banks');
+            const data = await response.json();
             if (data.code === "00" && data.data) {
-                const shortNames = data.data.map(bank => bank.short_name); // Lấy trường short_name từ mỗi ngân hàng
-                setBankList(shortNames); // Lưu danh sách shortName vào state
+                const shortNames = data.data.map(bank => bank.short_name);
+                setBankList(shortNames);
             }
         } catch (error) {
             console.error('Lỗi khi lấy danh sách ngân hàng:', error);
@@ -325,29 +325,47 @@ function AdminSetting() {
                                 <div style={{ width: '40px', height: '35px', backgroundColor: settings.color, marginLeft: 10, borderRadius: '20px' }}></div>
                             </div>
                         </Col>
+
                         <Col xs={24} sm={12} md={12} lg={6}>
-                <h4 className='text-[1.6rem] flex items-center'>
-                    <FaImage className='mr-1' /> Favicon Website:
-                    <Popover content={<img src={`${IMG_BACKEND_SETTING}/${settings.favicon}`} alt="Favicon" style={{ width: '100px' }} />} trigger="hover">
-                        <FaExclamationTriangle className='text-red-500 ml-1' />
-                    </Popover>
-                </h4>
-                <Upload
-                    accept="image/*"  
-                    showUploadList={false}  
-                    beforeUpload={(file) => {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            const faviconName = file.name;  
-                            setSettings(prev => ({ ...prev, favicon: faviconName }));  
-                        };
-                        reader.readAsDataURL(file); 
-                        return false; 
-                    }}
-                >
-                    <Button>Chọn Favicon</Button>
-                </Upload>
-            </Col>
+                            <h4 className='text-[1.6rem] flex items-center'>
+                            <FaImage className='mr-1' /> Favicon Website:
+                                <Popover content={"Chức năng này sẽ tự động lưu ảnh favicon của bạn không cần bấm lưu !"} trigger="hover">
+                                    <FaExclamationTriangle className='text-red-500 ml-1' />
+                                </Popover>
+                               
+                            </h4>
+                            <div className='mt-2 shadow-lg rounded p-3 w-64 flex items-center justify-center'> 
+                                <img src={`${IMG_BACKEND_SETTING}${settings.favicon}`} alt="Favicon" style={{ width: '100px' }} />
+                            </div>
+                            <Upload
+                            
+                                accept="image/*"  
+                                showUploadList={false}  
+                                beforeUpload={(file) => {
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        const faviconName = file.name;  
+                                        setSettings(prev => ({ ...prev, favicon: faviconName }));  
+                                    };
+                                    reader.readAsDataURL(file); 
+                                    updatesettingId(6, file) 
+                                        .then(() => {
+                                            
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 10); 
+                                        })
+                                        .catch(error => {
+                                            console.error('Lỗi khi upload favicon:', error);
+                                        });
+                                       
+                                    return false; 
+                                }}
+                            >
+                                <Button className='flex items-center justify-center' >Chọn Favicon</Button>
+                            </Upload>
+                        </Col>
+
                     </Row>
                 </TabPane>
                 <TabPane tab="Ngân Hàng" key="3">

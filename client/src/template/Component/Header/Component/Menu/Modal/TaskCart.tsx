@@ -73,7 +73,7 @@ function TaskCart({ onClose }: TaskCart) {
                
                {listCart.map((item) => {
                  return (
-                   <div key={item.product_id} className='flex py-[1rem] border border-b-[gray]'>
+                   <div key={item.product_id} className='flex py-[1rem] border border-[#cecdcd] rounded-[20px]'>
                      <div className='w-[90px]'>
                        <img
                          className='w-[100%]'
@@ -86,7 +86,7 @@ function TaskCart({ onClose }: TaskCart) {
                          {truncateText(item?.product_name,20)}
                          </h3>
                          <p className='text-[1.5rem] mt-[.5rem]'>
-                           {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
+                           {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} GB/` :''}
                            {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
                          </p>
                          <div className='py-[.5rem]'>
@@ -111,17 +111,17 @@ function TaskCart({ onClose }: TaskCart) {
                        {/* <p className='text-[#7500CF] font-semibold text-[1.6rem] py-[.5rem]'>30.000.000 đ
                          <span style={{ textDecoration: 'line-through' }} className='text-[1.5rem] text-[gray]'>28.000.000</span>
                        </p> */}
-                       <div className='text-[1.6rem] border border-[#7500CF] flex items-center w-[33%] justify-between'>
-                         <div className='border text-[1.7rem] border-r-[#7500CF] py-1 cursor-pointer'>
-                           <FiMinus onClick={() => decreaseItem(item.product_id)} />
-                         </div>
-                         <div>{item.quantity}</div>
-                         <div className='border text-[1.7rem] border-l-[#7500CF] py-1 cursor-pointer'>
-                           <GoPlus onClick={() => inCreaseItem(item.product_id)} />
-                         </div>
-                       </div>
+                       <div className='text-[1.6rem] border border-[var(--custom-color)] flex items-center w-[40%] justify-between rounded-lg shadow-md p-2 bg-white'>
+                          <div className='border text-[1.7rem] cursor-pointer hover:bg-[var(--custom-color)] hover:text-white transition duration-200 ease-in-out'>
+                              <FiMinus />
+                          </div>
+                          <div className='text-center font-semibold'>{item.quantity}</div>
+                          <div className='border text-[1.7rem] cursor-pointer hover:bg-[var(--custom-color)] hover:text-white transition duration-200 ease-in-out'>
+                              <GoPlus />
+                          </div>
+                      </div>
                      </div>
-                     <div className='text-[2rem] cursor-pointer text-[#7500CF]' onClick={() => handleRemoveItem(item.product_id)}>
+                     <div className='text-[2rem] cursor-pointer text-[var(--custom-color)]' onClick={() => handleRemoveItem(item.product_id)}>
                        <FaTrash />
                      </div>
                    </div>
@@ -129,11 +129,11 @@ function TaskCart({ onClose }: TaskCart) {
                })}
         
                <div className='flex justify-end pt-6'>
-                 <h4 className='text-[1.5rem] font-semibold'>Tổng đơn: <span>{formatCurrencyVND(totalPrice)}đ</span></h4>
+                 <h4 className='text-[1.5rem] font-semibold'>Tổng đơn: <span>{formatCurrencyVND(totalPrice)}</span></h4>
                </div>
              </div>
         
-             <div className='w-[100%] bg-[#7500CF] py-[1rem] px-[1rem] cursor-pointer'>
+             <div className='w-[100%] bg-[var(--custom-color)] py-[1rem] px-[1rem] cursor-pointer rounded-[20px]'>
                <div className='text-[1.5rem] text-white text-center' onClick={() => navigate(`${Paths.Cart}`)}>
                  Xem Giỏ Hàng
                </div>

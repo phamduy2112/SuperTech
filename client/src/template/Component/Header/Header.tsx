@@ -173,7 +173,7 @@ console.log(token);
         
           </div>
           <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">
-          <form className="w-[100%] h-[38px]">
+          <form className="w-[100%] h-[38px] bg-customColor">
               <Search
                 placeholder="Tìm kiếm sản phẩm"
                 onSearch={onSearch}
@@ -190,13 +190,13 @@ console.log(token);
             <div>
             <NavLink to={"/san-pham-yeu-thich"} >
               <Badge count={listProductFavourites?.length||0} showZero>
-                <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
+                <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[var(--custom-color)]" />
               </Badge>
             </NavLink>
             </div>
             <div className="cursor-pointer">
               <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
-                <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
+                <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[var(--custom-color)]" />
               </Badge>
               {isvisibleCart &&   <div className="fixed inset-0 z-30">
           <div 
@@ -209,7 +209,7 @@ console.log(token);
         </div>}
             </div>
             <div>
-              <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
+              <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[var(--custom-color)]" />
             </div>
           </div>
         <DropdownUser/>
@@ -265,12 +265,12 @@ console.log(token);
             </div>
             <NavLink to={"/san-pham-yeu-thich"} >
               <Badge count={listProductFavourites?.length||0} showZero>
-                <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
+                <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[var(--custom-color)]" />
               </Badge>
             </NavLink>
             <div className="cursor-pointer">
               <Badge count={listCart?.length||0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
-                <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
+                <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[var(--custom-color)]" />
               </Badge>
               {isvisibleCart &&   <div className="fixed inset-0 z-30">
           <div 
@@ -283,7 +283,7 @@ console.log(token);
         </div>}
             </div>
             <div>
-              <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
+              <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[var(--custom-color)]" />
             </div>
           </div>
        <DropdownUser/>
@@ -312,7 +312,7 @@ console.log(token);
               <div className="text-[2.5rem] flex">
                 <IoIosSearch />
                 <Badge count={0} showZero onClick={()=>setisvisibleCart(!isvisibleCart)}>
-                <MdOutlineShoppingBag className="text-[2.5rem] text-[#7500CF]" />
+                <MdOutlineShoppingBag className="text-[2.5rem] text-[var(--custom-color)]" />
               </Badge>
               </div>
               </div>

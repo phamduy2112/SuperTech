@@ -70,19 +70,19 @@ const dispatch=useAppDispatch()
 
               <div className="mb-3">
                 <div className="flex justify-between items-center mb-1">
-                  <h3 className="text-2xl font-bold text-[#7500CF]">VOUCHER</h3>
-                  <div className="text-[#7500CF] text-xl">{voucher.condition}</div>
+                  <h3 className="text-2xl font-bold text-[var(--custom-color)]">VOUCHER</h3>
+                  <div className="text-[var(--custom-color)] text-xl">{voucher.condition}</div>
                 </div>
               </div>
 
-              <div className="flex items-baseline text-4xl font-extrabold text-[#7500CF]">
+              <div className="flex items-baseline text-4xl font-extrabold text-[var(--custom-color)]">
                 <h1>Giảm {voucher.discount_percent}%</h1>
               </div>
 
-              <div className="flex justify-between items-center mt-4 text-xl text-[#7500CF] font-medium">
+              <div className="flex justify-between items-center mt-4 text-xl text-[var(--custom-color)] font-medium">
                 <span>mã: {voucher.discount_name}</span>
                 <button
-                  className="border border-[#7500CF] px-4 py-2 rounded-md hover:bg-[#7500CF] hover:text-white"
+                  className="border border-[var(--custom-color)] px-4 py-2 rounded-md hover:bg-[var(--custom-color)] hover:text-white"
                   onClick={() => handleApplyDiscount(voucher.discount_name, voucher.discount_percent,voucher.discount_id)}
                 >
                   Áp dụng
@@ -95,7 +95,7 @@ const dispatch=useAppDispatch()
 
       {/* Hiển thị phần trăm giảm giá nếu có */}
       {discount > 0 && (
-        <div className="mt-4 text-xl font-bold text-[#7500CF]">
+        <div className="mt-4 text-xl font-bold text-[var(--custom-color)]">
           Mã giảm giá đã áp dụng: {discount}% Giảm giá
         </div>
       )}
