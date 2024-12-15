@@ -43,6 +43,25 @@ const getBlog = async () => {
 
 const deleteBlog = async (data) => {
   try {
+    const Image_cloudinary = await mediapost.findOne({
+      where: { post_id: data },
+      attributes: ["media_url"],
+    });
+    
+    await new Promise((resolve, reject) => {
+      cloudinary.uploader.destroy(
+        `Blog/${Image_cloudinary?.media_url}`,
+        (error, result) => {
+          if (error) {
+            console.error(`Lỗi xóa ảnh ${media?.media_url}:`, error);
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+
     await posts.destroy({
       where: { post_id: data },
     });
@@ -59,8 +78,8 @@ const deleteBlog = async (data) => {
       );
       if (media) {
         return {
-          ...post.dataValues, 
-          media_url: media.media_url, 
+          ...post.dataValues,
+          media_url: media.media_url,
         };
       }
 

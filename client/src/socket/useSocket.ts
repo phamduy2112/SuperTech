@@ -27,6 +27,7 @@ const UseSocket = () => {
       AppDispatch(setListBlog(data));
     });
     socket.on("ClickGetAllBlog", (data) => {
+      console.log(data);
       AppDispatch(setListBlog(data));
     });
     // Dọn dẹp socket khi component unmount hoặc user thay đổi

@@ -12,6 +12,7 @@ import { useAppSelector } from '../../../redux/hooks';
 
 function AdminBlog() {
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ListBlog: any = useAppSelector((state) => state.blog.listBlog);
   const socket = useAppSelector((state) => state.socket.socket);
 
