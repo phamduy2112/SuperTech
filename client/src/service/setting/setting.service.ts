@@ -18,7 +18,8 @@ export const updatesettingId = (id:number, value:string) => {
             value: value
         },
         headers: {
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'multipart/form-data',
+          },
     });
+    
 };

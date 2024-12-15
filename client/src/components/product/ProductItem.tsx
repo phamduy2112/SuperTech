@@ -54,7 +54,7 @@ useEffect(()=>{
     };
     dispatch(addItemToCart(productToCart));
 
-    toast.success('Đây là thông báo thành công!');
+    toast.success('Thêm sản phẩm thành công')
   };
 
   // const slideInAnimationTaskProduct = useSpring({

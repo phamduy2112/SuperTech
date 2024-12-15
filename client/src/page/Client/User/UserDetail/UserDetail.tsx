@@ -16,6 +16,7 @@ import { NavLink } from "react-router-dom";
 import moment from "dayjs";
 import toast from "react-hot-toast";
 import ModalChangePassword from "./Component/ModalChangePassword";
+import { formatDate } from "../../../../utils";
 
 // Yup schema validation
 const validationSchema = Yup.object().shape({
@@ -81,7 +82,10 @@ function UserDetail() {
               </div>
               <div className="text-[1.5rem] md:text-[1.7rem] text-center mt-[2rem] md:mt-0">
                 Tham gia vào ngày:
-                <p className="mt-[.3rem] font-semibold">10:43 10/03/2024</p>
+                <p className="mt-[.3rem] font-semibold">
+      {formatDate(user.user_time)}
+
+                </p>
               </div>
            
             </div>

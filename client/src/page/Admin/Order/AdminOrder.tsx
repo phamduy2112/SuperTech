@@ -10,6 +10,7 @@ import { getOrderAllThunk, setOrder } from '../../../redux/order/Order.slice';
 import { colorText } from '../../../constants';
 import { PathAdmin } from '../../../router/component/RouterValues';
 import useSocketCreateOrder from '../../../hooks/CreateOrder.hook';
+import { formatCurrencyVND, formatTimeAgo } from '../../../utils';
 
 function AdminOrder() {
 
@@ -99,12 +100,13 @@ dispatch(getOrderAllThunk(status));
       <div className="w-[30%] rounded-sm h-[92vh] overflow-y-auto bg-gray-100 flex flex-col">
   <div className="p-3 rounded-lg flex-grow">
     {/* Header */}
-    <div className="flex text-[1.7rem] text-center justify-between bg-customColor py-[2rem] px-[2rem] text-white">
-      <span className="flex-1 text-center">Mã ĐH</span>
-      <span className="flex-1 text-center">Trạng thái</span>
-      <span className="flex-1 text-center">Tổng tiền</span>
-      <span className="flex-1 text-center">Thời gian</span>
-    </div>
+    <div className="flex text-[1.4rem] sm:text-[1.6rem] md:text-[1.7rem] justify-between bg-customColor py-[1rem] px-[1rem] text-white">
+  <span className="flex-1 text-center">Mã ĐH</span>
+  <span className="flex-1 text-center">Trạng thái</span>
+  <span className="flex-1 text-center">Tổng tiền</span>
+  <span className="flex-1 text-center">Thời gian</span>
+</div>
+
 
     {/* Order List */}
     {filteredOrders?.map((item) => {
@@ -129,7 +131,7 @@ dispatch(getOrderAllThunk(status));
     >
       <div className="flex justify-between items-center">
         <span className="flex-1 text-center">#{item.order_id}</span>
-        <span className="flex-1 text-center">
+        <span className="flex-1 text-cente flex justify-center items-center">
           <Tooltip
             title={
               latestStatus
@@ -145,8 +147,13 @@ dispatch(getOrderAllThunk(status));
             />
           </Tooltip>
         </span>
-        <span className="flex-1 text-green-500 text-center">3.000.000đ</span>
-        <span className="flex-1 text-gray-500 text-center">2 ngày trước</span>
+        <span className="flex-1 text-green-500 text-center">
+                        {formatCurrencyVND(Number(item?.order_total) * (1 - Number(item?.discount_discount?.discount_percent / 100 ||0)) + 30000)}
+          
+        </span>
+        <span className="flex-1 text-gray-500 text-center">{
+          formatTimeAgo(item?.order_date)
+          }</span>
       </div>
     </div>
   );
@@ -154,12 +161,7 @@ dispatch(getOrderAllThunk(status));
 
   </div>
 
-  {/* Button Section */}
-  <div className="flex mt-auto gap-[1%] p-3">
-    <button className="bg-white w-[33%] h-[5rem]">Tất cả thanh toán</button>
-    <button className="bg-white w-[33%]">Thanh toán tại nhà</button>
-    <button className="bg-white w-[33%]">Thanh toán Momo</button>
-  </div>
+ 
 </div>
       </div>
      

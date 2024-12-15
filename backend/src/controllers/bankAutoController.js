@@ -35,7 +35,6 @@ const updateOrderPay = async (req, res) => {
     }
 };
 
-export { updateOrderPay };
 
 const getautobank = async (req, res) => {
     try {
@@ -46,4 +45,33 @@ const getautobank = async (req, res) => {
         responseSend( res, "","Có lỗi xảy ra", 500)
     }
 };
-export {  getautobank };
+
+const updateBankAuto = async (req, res) => {
+    const { short_name, accountName, accountNumber, on_off } = req.body;
+    const { id } = req.params; 
+
+    if (!id) {
+        return responseSend(res, "", "id is required", 400);  
+    }
+
+    try {
+        const bankToUpdate = await bankauto.findOne({
+            where: { id_bank: id } 
+        });
+
+        if (!bankToUpdate) {
+            return responseSend(res, "", "Bank not found", 404);
+        }
+
+        await bankauto.update({ short_name, accountName, accountNumber, on_off }, {
+            where: { id_bank: id } 
+        });
+
+        responseSend(res, { id, short_name, accountName, accountNumber, on_off }, "Bank updated successfully", 200);
+    } catch (error) {
+        console.error("Error updating bank:", error);
+        responseSend(res, error.message, "Error updating bank", 500);
+    }
+};
+
+export {  getautobank, updateOrderPay, updateBankAuto };

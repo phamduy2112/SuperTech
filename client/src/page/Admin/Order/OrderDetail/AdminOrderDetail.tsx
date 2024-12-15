@@ -5,7 +5,7 @@ import './OrderDetail.css';
 import {  useParams } from 'react-router-dom'
 import { useAppDispatch } from '../../../../redux/hooks'
 import { getDetailOrder } from '../../../../service/order/order.service'
-import { formatCurrencyVND } from '../../../../utils'
+import { formatCurrencyVND, formatDate } from '../../../../utils'
 import ButtonOrder from './Componnent/ButtonOrder'
 import { colorText } from '../../../../constants'
 
@@ -31,8 +31,8 @@ const [listProduct,setListProduct]=useState([]);
           </div>
           <div>
            <div className='text-[1.5rem] font-semibold mb-[.2rem]'>{record.name}</div> 
-           <div>256GB/Titan xanh</div>
-           <div>Mã sản phẩm: ipmax-1s</div>
+           <div>{record.storage}GB/{record.color}</div>
+           <div>{formatCurrencyVND(record.product_price)}</div>
           </div>
           
         </div>
@@ -111,7 +111,8 @@ const [listProduct,setListProduct]=useState([]);
         if (details.length > 0) {
           setOrder(details[0]?.order); 
         }
-  
+        console.log(details);
+        
         const products = details.map(detail => ({
           quanlity: detail.detail_order_quality,
           name: detail.product.product_name,
@@ -120,6 +121,8 @@ const [listProduct,setListProduct]=useState([]);
           product_hot: detail.product.product_hot,
           image_id: detail.product.image_id,
           category_id: detail.product.category_id,
+          color: detail.product_color,
+          storage: detail.product_storage,
         }));
   
         setListProduct(products);
@@ -141,11 +144,10 @@ const orderId = id; // The order ID from the URL params
   return (
     <div >
     {/* Header */}
-    <header className="flex text-[1.6rem] justify-between items-center bg-purple-600 text-white p-4 rounded-lg">
+    <header className="flex justify-between items-center bg-purple-600 text-white p-4 rounded-lg">
       <div>
-        <h1 className="font-bold">Đơn hàng: {id}</h1>
-        <p className="">Ngày đặt: {order.order_date}</p>
-        <p className="">Nhân viên tư vấn: Nguyễn Tấn Thịnh - thinhntan@gmail.com</p>
+        <h1 className="font-bold pt-4 text-[1.7rem] ">Đơn hàng: {id}</h1>
+        <p className="py-4 text-[1.5rem] ">Ngày đặt: {formatDate(order.order_date)}</p>
       </div>
       <span
     className="px-4 py-2 rounded-full text-[1.5rem]"
@@ -158,20 +160,15 @@ const orderId = id; // The order ID from the URL params
   </span>    </header>
 
     {/* Customer & Receiver Information */}
-    <section className="grid grid-cols-2 gap-4 mt-4">
+    <section className="grid grid-cols-1 gap-4 mt-4">
       {/* Customer */}
-      <div className="bg-purple-100 p-4 rounded-lg">
-        <h2 className="font-bold text-purple-800">Khách hàng</h2>
-        <p>{order?.user?.user_name}</p>
-        <p>{order?.phone_number}</p>
+      <div className="bg-purple-100 p-4 rounded-lg py-4">
+        <h2 className="font-bold text-purple-800 text-[2rem]">Khách hàng</h2>
+        <p className='text-[1.7rem] py-3'>Tên: {order?.user?.user_name}</p>
+        <p className='text-[1.7rem]'>Số điện thoại: {order?.phone_number}</p>
+        <p className='text-[1.7rem] py-3'>Địa chỉ: {order?.address}</p>
       </div>
-      {/* Receiver */}
-      <div className="bg-purple-100 p-4 rounded-lg">
-        <h2 className="font-bold text-purple-800">Người nhận</h2>
-        <p>Nguyễn Tấn Thịnh</p>
-        <p>0355254984</p>
-        <p>140/93 Vườn Lài, An Phú Đông</p>
-      </div>
+    
     </section>
 
     {/* Product List */}
@@ -180,23 +177,25 @@ const orderId = id; // The order ID from the URL params
     <section className="mt-6 grid grid-cols-3 gap-4">
       <div className="col-span-2 bg-purple-100 p-4 rounded-lg">
         <h2 className="font-bold text-purple-800">Phương thức thanh toán</h2>
-        <p>Momo: 30.000.000đ</p>
-        <p>Tiền mặt: 258.000đ</p>
+        <p>
+
+        {order?.order_pay == 0 ? "Thanh toán tại nhà" : 
+               order?.order_pay == 1 ? "Đã thanh toán" : 
+               ""}    <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span>
+
+        </p>
+  
       </div>
       <div className="bg-purple-100 p-4 rounded-lg">
         <h2 className="font-bold text-purple-800">Chi tiết thanh toán</h2>
         <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền hàng: <span className='font-semibold'>{formatCurrencyVND(order?.order_total)}</span></p>
             <p className='text-[1.7rem]  py-[1rem]'>Tổng tiền ship: <span className='font-semibold'>30.000</span></p>
             <p className='text-[1.7rem]  py-[1rem]'>Giảm giá: <span className='font-semibold'>{order?.discount_discount?.discount_percent || 0}%</span></p>
-            <p className='text-[1.7rem]  py-[1rem]'>Thành tiền: <span className='font-semibold'>{formatCurrencyVND(Number(order?.order_total) * (1 - Number(order?.discount_discount?.discount_percent / 100 ||0)) + 30000)}</span></p>
-        <div className="mt-4 flex gap-2">
-          <button className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600">
-            Hủy đơn
-          </button>
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg shadow hover:bg-purple-700">
-            In hóa đơn
-          </button>
-        </div>
+            <p className='text-[1.7rem]  py-[1rem]'>Thành tiền: <span className='font-semibold'>
+              
+              {formatCurrencyVND(Number(order?.order_total) * (1 - Number(order?.discount_discount?.discount_percent / 100 ||0)) + 30000)}
+              </span></p>
+        
       </div>
     </section>
     <section className="mt-6">

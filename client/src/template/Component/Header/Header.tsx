@@ -21,6 +21,9 @@ import { useDispatch } from "react-redux";
 import "./modalUserCustom.css";
 import { Input } from "../Input/Input";
 import HeaderMobile from "./Component/Mobile/HeaderMB";
+import LoadingFooter from "../Footer/Component/Loading/LoadingFooter";
+import LoadingHeader from "./Component/Loading/LoadingHeader";
+import { timeLoading } from "../../../constants";
 function Header() {
   const navigate = useNavigate();
 
@@ -88,22 +91,22 @@ function Header() {
     opacity: isvisibleCart ? 1 : 0,
   });
   //
-  const handleMouseEnter = (itemName: string) => {
-    if (itemName === "Sản phẩm") {
-      setIsProductHovered(true);
-    }
-  };
 
-  const handleMouseLeave = (itemName: string) => {
-    if (itemName === "Sản phẩm") {
-      setIsProductHovered(false);
-    }
-  };
 
   const listCart = useAppSelector((state) => state.cart.listCart);
   const token = getLocalStorage("token");
   console.log(token);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), timeLoading)
+  }, []);
+
+  if (isLoading) {
+    return <LoadingHeader/> 
+  }
+  
+ 
   return (
     <div className="bg-white">
       <div className="flex flex-col relative">

@@ -4,6 +4,7 @@ import _bankauto from  "./bankauto.js";
 import _banner from  "./banner.js";
 import _categories from  "./categories.js";
 import _chat from  "./chat.js";
+import _chatRoom from  "./chatRoom.js";
 import _code from  "./code.js";
 import _comment_posts from  "./comment_posts.js";
 import _comment_product from  "./comment_product.js";
@@ -32,6 +33,7 @@ export default function initModels(sequelize) {
   const banner = _banner.init(sequelize, DataTypes);
   const categories = _categories.init(sequelize, DataTypes);
   const chat = _chat.init(sequelize, DataTypes);
+  const chatRoom = _chatRoom.init(sequelize, DataTypes);
   const code = _code.init(sequelize, DataTypes);
   const comment_posts = _comment_posts.init(sequelize, DataTypes);
   const comment_product = _comment_product.init(sequelize, DataTypes);
@@ -125,6 +127,7 @@ export default function initModels(sequelize) {
     banner,
     categories,
     chat,
+    chatRoom,
     code,
     comment_posts,
     comment_product,

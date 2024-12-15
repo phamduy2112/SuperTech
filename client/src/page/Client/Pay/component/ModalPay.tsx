@@ -5,7 +5,13 @@ import { CopyOutlined, DownOutlined } from '@ant-design/icons';
 import CountdownTimer from './CountimePay';
 function ModalPay(props:any) {
   const [data, setData] = useState(null); // Initialize with null to represent loading state.
-
+useEffect(()=>{
+  if(props.isModalOpen){
+    props.handleReset();
+  }else{
+    props.handleResetTrue()
+  }
+},[props.isModalOpen])  
   useEffect(() => {
     const fetchApi = async () => {
       try {
@@ -31,7 +37,13 @@ function ModalPay(props:any) {
 
   return (
     <>
-      <Modal title={props.order_total} open={props.isModalOpen} onOk={props.handleOk} onCancel={props.handleCancel}>
+      <Modal 
+      
+      
+      title={props.order_total}
+      
+      open={props.isModalOpen} 
+      onOk={props.handleOk} onCancel={props.handleCancel}>
         <div>
           {isDataReady ? (
             <div>
@@ -73,7 +85,8 @@ function ModalPay(props:any) {
                 src={`https://img.vietqr.io/image/${data[0]?.short_name}-${data[0]?.accountNumber}-compact.jpg?amount=${totalOrder}&addInfo=${textOrder}&accountName=${data[0]?.accountName}`}
                 alt="QR Code"
               />
-              <CountdownTimer/>
+              <CountdownTimer reset={props.reset} /> {/* Truyền thuộc tính reset vào CountdownTimer */}
+            
               {props.order_total}
               
             </div>

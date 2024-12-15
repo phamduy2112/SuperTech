@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import { getCatelogry } from '../../../../../../service/catelogry/catelogry.service';
+import LoadingCatelogry from '../../Loading/LoadingCatelogry';
 
 function TaskCatelogry() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,13 +10,6 @@ function TaskCatelogry() {
   const dropdownRef = useRef(null); // Sử dụng ref để tham chiếu đến dropdown
   const [cateloriesDad, setCatelories] = useState([]);
 
-  useEffect(() => {
-    const getCategoriesDad = async () => {
-      const resp = await getCatelogry();
-      setCatelories(resp.data.content);
-    };
-    getCategoriesDad();
-  }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -43,6 +37,7 @@ function TaskCatelogry() {
       document.removeEventListener('click', handleClickOutside); // Cleanup khi component unmount
     };
   }, [isOpen]);
+
 
   return (
     <div className='relative' ref={dropdownRef}>

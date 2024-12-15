@@ -60,7 +60,19 @@ export default class user extends Model {
       defaultValue: 0
     },
     user_status: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    user_call: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    user_time_connection: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    user_time_disconnection: {
+      type: DataTypes.STRING(255),
       allowNull: true
     }
   }, {

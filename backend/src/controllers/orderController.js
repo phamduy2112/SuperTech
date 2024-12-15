@@ -429,10 +429,11 @@ const createorder = async (req, res) => {
       const {
           order_total,
           order_total_quatity,
-          email,
+          email_user,
           discount,    // Ensure you're using 'discount' correctly if it's needed
           address,
-          phone_number
+          phone_number,
+          order_pay
       } = req.body;
 
       const user_id = req.id;  // Make sure `req.id` is properly set (typically from authentication)
@@ -449,6 +450,8 @@ const createorder = async (req, res) => {
           user_id,
           address,
           phone_number,
+          email_user,
+          order_pay
       });
 
       // Create the order status entry (this might represent the initial status of the order)
@@ -478,7 +481,6 @@ const createorder = async (req, res) => {
       
       // Phát sự kiện socket với dữ liệu mới
       io.emit('createOrder', newOrderData);
-      console.log(data);
       
 
       // Send the response back to the client
@@ -632,32 +634,45 @@ const getOrderId= async (req, res) => {
       
   }
 };
-export const checkInventory = async (product_id, color_id, storage_id, quantity,res) => {
-  const inventory = await  models.product_quality.findOne({
-    where: {  product_id,color_id, storage_id },
-  });
-  const product=await models.products.findOne({
-    where: {  product_id },
-  })
-  if (!inventory) {
-    responseSend(res, "", "Không tìm thấy số lượng trong sản phẩm!", 200);
-    
+export const checkInventory = async (product_id, color_id, storage_id, quantity, res) => {
+  // Build the condition object dynamically
+  let condition = { product_id, color_id };
+
+  // Only add storage_id to condition if it's provided
+  if (storage_id) {
+    condition.storage_id = storage_id;
   }
+
+  const inventory = await models.product_quality.findOne({
+    where: condition,  // Apply dynamic condition
+  });
+
+  if (!inventory) {
+    return responseSend(res, "", "Không tìm thấy số lượng trong sản phẩm!", 200);
+  }
+
+  const product = await models.products.findOne({
+    where: { product_id },
+  });
+
+  // Check if the stock is low
   if (inventory.quality_product < 10) {
-    // Gửi thông báo khi sản phẩm gần hết hàng
+    // Send notification if product is running low
     io.emit("low_stock_warning", {
       title: "Thông báo nhập hàng",
       description: `Sản phẩm ${product.product_name} sắp hết số lượng. Vui lòng kiểm tra và bổ sung!`,
     });
   }
-  if (inventory.quality_product < quantity) {
-    responseSend(res, "", "Số lượng sản phẩm không đủ!", 200);
 
-    
+  // Check if the requested quantity is available
+  if (inventory.quality_product < quantity) {
+    return responseSend(res, "", "Số lượng sản phẩm không đủ!", 200);
   }
 
-  return inventory; // Trả về nếu kiểm tra thành công
+  // Return inventory if checks pass
+  return inventory;
 };
+
 export {
     getorder,
     getOrderById,

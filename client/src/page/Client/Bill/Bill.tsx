@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getOrderDetail } from "../../../redux/order/Order.slice";
 import { getDetailOrder } from "../../../service/order/order.service";
 import StepOrderDetail from "../User/OrderDetail/component/StepOrderDetai";
-import { formatCurrencyVND } from "../../../utils";
+import { formatCurrencyVND, formatDate } from "../../../utils";
 
 function Bill(props) {
   const orderId:any=useAppSelector((state)=>state.listOrder.orderId)
@@ -125,12 +125,20 @@ function Bill(props) {
                 <h3 className="text-[1.8rem] font-semibold text-gray-800">
                 Mã đơn hàng: #{orderId}
                 </h3>
-                <p className="text-[1.5rem] text-gray-500 mt-[.5rem]">Thời gian đặt: 19:00 15/11/2023</p>
+                <p className="text-[1.5rem] text-gray-500 mt-[.5rem]">Thời gian đặt: 
+                  
+                  <span>
+
+                  {formatDate(detailOrder[0]?.order?.order_date)}
+                  </span>
+               
+                   
+                   </p>
               </div>
               <div className="text-right">
                 <h4 className="text-[1.8rem] font-semibold text-gray-800">Giao hàng đến</h4>
                 <p className="text-[1.5rem] text-gray-500 mt-[.5rem]">
-                  197 Nguyễn Thị Thập, Phường Bình Thuận, Quận 7
+                {detailOrder[0]?.order?.address}
                 </p>
                 <p className="text-[1.5rem] text-gray-500">Dự kiến giao hàng: 19:45</p>
               </div>

@@ -9,12 +9,29 @@ import { createDetailOrder, createOrder, getOrderById, getSuccessEmailOrder } fr
 import { removeAllCart } from '../../../redux/cart/cart.slice';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrencyVND, truncateText } from '../../../utils';
-import { setOrderId } from '../../../redux/order/Order.slice';
+import { changeStatusOrderThunk, setOrderId } from '../../../redux/order/Order.slice';
 import toast from 'react-hot-toast';
 import { getAllCityThunk, getDistrictsCityThunk } from '../../../redux/order/City.slice';
 import ModalPay from './component/ModalPay';
 import CountdownTimer from './component/CountimePay';
+import { Paths } from '../../../router/component/RouterValues';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+
+// Define the validation schema using Yup
+const validationSchema = Yup.object({
+  name: Yup.string().required('Họ và tên là bắt buộc'),
+  sdt: Yup.string()
+    .matches(/^[0-9]{10}$/, 'Số điện thoại phải có 10 chữ số')
+    .required('Số điện thoại là bắt buộc'),
+  email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
+  diaChi: Yup.string().required('Địa chỉ là bắt buộc'),
+  city: Yup.string().required('Tỉnh thành phố là bắt buộc'),
+  district: Yup.string().required('Quận là bắt buộc'),
+  xuathoadon: Yup.string().required('Vui lòng chọn xuất hoá đơn VAT'),
+});
 function Pay() {
+
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
   const user: any = useAppSelector((state) => state.user.user);
@@ -25,28 +42,22 @@ function Pay() {
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
-  // useEffect(() => {
-  //   // Lắng nghe sự kiện "order_updates" từ server
-  //   socket.on("order_updates", (allUpdates) => {
-    
-
-  //     const { newOrders, updatedOrder } = allUpdates;
-
-  //     // Xử lý dữ liệu newOrders và updatedOrder
-  //     console.log("Đơn hàng mới:", newOrders);
-  //     console.log("Đơn hàng đã cập nhật:", updatedOrder);
-
-  //     // Cập nhật UI hoặc state của bạn ở đây
-      
-  //     const orderList=[post,...commentList]
-  //     // dispatch(setCommentReducer(commentListNew))
-  //   });
-
-  //   return () => {
-  //     // Đảm bảo hủy lắng nghe khi component bị unmount
-  //     socket.off("order_updates");
-  //   };
-  // }, [dispatch]);
+  const formik = useFormik({
+    initialValues: {
+      name: user?.user_name || '',
+      sdt: user?.user_phone || '',
+      email: user?.user_email || '',
+      diaChi: user?.user_address || '',
+      city: '',
+      district: '',
+      xuathoadon: 'pear', // Default value for the radio button
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      // Handle form submission here
+      console.log(values);
+    },
+  });
   const totalPrice = listCart.reduce((total: number, item) => {
     // Tính giá sản phẩm ban đầu cộng thêm giá storage
     const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
@@ -81,6 +92,7 @@ function Pay() {
     totalItem
 
   });
+  const [reset, setReset] = useState(false); // Thêm state để quản lý reset
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
@@ -170,81 +182,115 @@ function Pay() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
+    setReset(true);
 
+   
+  };
+  const handleReset=() => {
+    setReset(false);
+  }
+  const handleResetTrue=() => {
+    setReset(true);
+  }
   const handleFormSubmit = async () => {
     try {
       // Chuẩn bị dữ liệu đơn hàng
       const dataOrder = {
         ...formData,
+        address:formData.diaChi,
         order_total: totalPrice,
         order_total_quatity: totalItem,
+        phone_number:formData.sdt,
+        email_user:formData.email,
+        order_pay:0
+
       };
-  
+      console.log(dataOrder);
+      
       // Gọi API tạo đơn hàng
       const resp = await createOrder(dataOrder);
   
       // Chuẩn bị danh sách chi tiết đơn hàng
-      const detailOrders = listCart.map(item => ({
-        product_name: item.product_name,
-        product_id: item.product_id,
-        order_id: resp.data.content.order_id,
-        detail_order_quality: item?.quantity,
-        product_color: item?.selectedColor?.color,
-        product_storage: item?.selectedStorage?.storage,
-        detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
-        discount_product: item.product_discount,
-        color_id:item?.selectedColor?.color_id,
-        id_storage:item?.selectedStorage?.id_storage
-      }));
-  
+      const detailOrders = listCart.map(item => {
+        // Add console log to check the data
+        console.log('Selected Color:', item.selectedColor);
+        console.log('Selected Storage:', item.selectedStorage);
+      
+        return {
+          product_name: item.product_name,
+          product_id: item.product_id,
+          order_id: resp.data.content.order_id,
+          detail_order_quality: item?.quantity,
+          product_color: item?.selectedColor?.color,
+          product_storage: item?.selectedStorage?.storage,
+          detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
+          discount_product: item.product_discount,
+          color_id: item?.selectedColor?.color_id,  // Check if color_id is properly populated
+          storage_id: item?.selectedStorage?.id_storage,  // Check if id_storage is properly populated
+        };
+      });
+      const dataEmail = {
+        email: formData.email,
+        orderDetails: detailOrders,
+      };     
+      console.log(detailOrders)
+      // Nếu phương thức thanh toán là "bank"
       if (formData.paymentMethod === 'bank') {
+        const response = await createDetailOrder(detailOrders);
+
+        socket.on('orderStatusUpdated', async (updatedOrder:any) => {
+       
+        
+          // Kiểm tra xem thanh toán có thành công không
+          if (user.user_id == updatedOrder.user) {
+            if (response) {
+              await getSuccessEmailOrder(dataEmail);
+              navigate(`${Paths.Bill}`);
+              dispatch(setOrderId(resp.data.content.order_id));
+              dispatch(removeAllCart());
+            }
+          } else {
+            console.error("Thanh toán không thành công.");
+          }
+        });
+        
+        // Mở modal và lưu dữ liệu đơn hàng
         setIsModalOpen(true);
         setDataOrder({
           order_id: resp.data.content.order_id,
           user_id: user.user_id,
-          order_total:dataOrder.order_total
+          order_total: dataOrder.order_total
         });
-        socket.emit('orderStatusUpdated',(order)=>{
-          console.log(order);
-          
-        })
-        // Gọi API kiểm tra trạng thái thanh toán
-        const responseDt = await getOrderById(resp.data.content.order_id);
-  
-        // if (responseDt.data.content.order_pay == 1) {
-        //   // Thanh toán thành công, chuyển trang ngay lập tức
-        //   const response = await createDetailOrder(detailOrders);
-        //   if (response) {
-        //     navigate("/");
-        //     dispatch(setOrderId(resp.data.content.order_id));
-        //     dispatch(removeAllCart());
-        //   }
-        // } 
-        // else {
-        //   // Đợi 5 phút trước khi chuyển trang
-        //   setTimeout(async () => {
-        //     const response = await createDetailOrder(detailOrders);
-        //     if (response) {
-        //       navigate("/");
-        //       dispatch(setOrderId(resp.data.content.order_id));
-        //       dispatch(removeAllCart());
-        //     }
-        //   }, 300000);
-        // }
+
+        // Điều hướng về trang chủ sau 2 phút
+//         setTimeout(async () => {
+
+//           // Delay the toast notification
+//           navigate("/");  
+//           dispatch(removeAllCart());
+
+//           const cancelOrder = {
+//             order_id: resp.data.content.order_id,
+//             order_status: 6,
+//             order_status_text_cancel: 'Quá thời gian thanh toán',
+//           };
+//           await dispatch(changeStatusOrderThunk(cancelOrder)).unwrap();
+// setTimeout(() => {
+ 
+//   toast.error("Đơn hàng của bạn đã bị hủy");
+
+// }, 1000); // Delay navigation for 1 second after the toast
+        
+//       },3000); // 120000 milliseconds = 2 minutes
+
       } else {
-        // Thanh toán không qua ngân hàng, xử lý thông thường
-        const dataEmail = {
-          email: formData.email,
-          orderDetails: detailOrders,
-        };
-  
-        // Gọi API tạo chi tiết đơn hàng
+        // Gọi API tạo chi tiết đơn hàng cho phương thức thanh toán khác
         const response = await createDetailOrder(detailOrders);
-  
+      
+        
         if (response) {
           await getSuccessEmailOrder(dataEmail);
-          navigate("/xuat-hoa-don");
+          navigate(`${Paths.Bill}`);
           dispatch(setOrderId(resp.data.content.order_id));
           dispatch(removeAllCart());
         }
@@ -384,18 +430,38 @@ function Pay() {
       <div className=' md:w-[50%] px-10 py-5 bg-white rounded-lg shadow-xl space-y-1'>
         <h3 className='lg:text-[2.5rem] md:text-[2.2rem] py-[1rem] sm:text-[1.8rem] sm:font-semibold'>Thông tin thanh toán</h3>
         <div>
-        <Form autoComplete='off' className='formEdit' onValuesChange={handleFormChange}>
-        <Form.Item name="name" label="Họ và tên" initialValue={user?.user_name}>
-  <Input
-             className='w-[100%] '
+        <Form
+        
+        autoComplete='off' className='formEdit' onValuesChange={handleFormChange}
+        
+        >
+        <Form.Item
+    name="name"
+    label="Họ và tên"
+    initialValue={user?.user_name}
+    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]} // Validation rule
+  >
+    <Input className="w-[100%]" />
+  </Form.Item>
 
-  />
-</Form.Item>
-        <Form.Item name="sdt" label="Số điện thoại"   initialValue={user?.user_phone||''}>
+        <Form.Item name="sdt" label="Số điện thoại" 
+    
+        rules={[
+          { 
+            required: true, 
+            message: 'Vui lòng nhập số điện thoại' 
+          },
+          { 
+            pattern: /^[0-9]{1,10}$/, 
+            message: 'Số điện thoại phải là số và có độ dài từ 1 đến 10' 
+          }
+        ]}
+        initialValue={user?.user_phone||''}>
         <Input
+        name='sdt'
          className='w-[100%] '
          placeholder="Nhập số điện thoại của bạn" // Placeholder hiển thị trong ô input
-
+         
         />
 
         </Form.Item>
@@ -455,7 +521,10 @@ function Pay() {
     )}
                 </Select>
               </Form.Item>
-        <Form.Item name="diaChi" label="Địa chỉ" initialValue={user?.user_address||''}>
+        <Form.Item name="diaChi" label="Địa chỉ" 
+        
+        rules={[{ required: true, message: 'Vui lòng nhập địa chỉ'}]}
+        initialValue={user?.user_address||''}>
           <Input placeholder='Mời bạn nhập địa chỉ'/>
         </Form.Item>
         <div>
@@ -595,11 +664,13 @@ function Pay() {
               {formData.paymentMethod === 'bank' && (
       <ModalPay 
       isModalOpen={isModalOpen}
-       showModal={setIsModalOpen} 
+      open={showModal} // Gọi hàm để lấy giá trị boolean
        handleOk={handleOk} 
        handleCancel={handleCancel}
        data={dataOrder}
-
+       reset={reset}
+       handleReset={handleReset}
+                handleResetTrue={handleResetTrue}
         />
     )}
     

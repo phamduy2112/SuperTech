@@ -1,7 +1,10 @@
-export const URL_BACKEND="https://dichvumang86.cloud/"
-// export const URL_BACKEND="http://localhost:8080/"
+// export const URL_BACKEND="https://dichvumang86.cloud/"
+export const URL_BACKEND="http://localhost:8080/"
 export const IMG_BACKEND="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1730647279/"
 export const IMG_BACKEND_USER="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732655979/User"
+export const IMG_BACKEND_SETTING="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1733480370/"
+export const timeLoading=2000
+
 
 export const colorText = [
     { status: 0, color: "#D32F2F", text: "Đang chờ duyệt" }, // Đỏ đậm

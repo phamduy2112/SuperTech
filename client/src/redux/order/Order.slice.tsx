@@ -78,7 +78,7 @@ export const getOrderAllThunk = createAsyncThunk(
       });
 
       console.log(`Filtered results based on search criteria:`, filteredResults);
-      return filteredResults.length > 0 ? filteredResults.reverse() : []; // Return filtered results or an empty array if none found
+      return filteredResults.length > 0 ? filteredResults : []; // Return filtered results or an empty array if none found
 
      
     } catch (e) {

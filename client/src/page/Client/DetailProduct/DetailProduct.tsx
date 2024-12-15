@@ -14,9 +14,10 @@ import { getProductByIdThunk } from "../../../redux/product/product.slice";
 import { getCommentByIdProductThunk, setcomment } from "../../../redux/comment/comment.slice";
 import CommentForm from "./Component/CommentForm";
 import ProductColor from "./Component/ProductColor";
-import { IMG_BACKEND, URL_BACKEND } from "../../../constants";
+import { IMG_BACKEND, timeLoading, URL_BACKEND } from "../../../constants";
 import { addItemToCart, addItemToOrder } from "../../../redux/cart/cart.slice";
 import { formatCurrencyVND } from "../../../utils";
+import LoadingDetailProduct from "./Component/Loading/ProductDetailLoading";
 
 
 
@@ -138,7 +139,16 @@ useEffect(() => {
      setActiveImage(objectColor?.image?.image_one);
    }
  }, [objectColor]);
+ const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), timeLoading)
+  }, []);
+
+  if (isLoading) {
+    return <LoadingDetailProduct/>
+  }
+  
   return (
         <Container>
           <div className="py-6 text-[1.5rem] leading-10">

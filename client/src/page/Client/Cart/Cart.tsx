@@ -10,8 +10,10 @@ import {
 } from "../../../redux/cart/cart.slice";
 import { useNavigate } from "react-router-dom";
 import { formatCurrencyVND, truncateText } from "../../../utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalDiscount from "./Component/ModalDiscount";
+import { Modal, Popconfirm } from "antd";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -20,7 +22,13 @@ export default function Cart() {
   const getDiscount=useAppSelector(state=>state.cart.discount);
   const getShip=useAppSelector(state=>state.cart.ship);
    
-    
+  useEffect(()=>{
+    if(listCart.length==0){
+      navigate("/"); 
+      toast.error("Bạn cần phải mua hàng");
+      
+    }
+  },[listCart.length])
 
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
@@ -35,6 +43,32 @@ export default function Cart() {
   const removeAllItem = () => {
     dispatch(removeAllCart());
   };
+  const handleDecrease = (productId: string, quantity: number) => {
+    if (quantity > 1) {
+      dispatch(decreaseItemQuantity({ product_id: productId })); // Decrease quantity if more than 1
+    } else {
+      // Show confirmation when quantity is 1
+      Popconfirm.confirm({
+        title: "Bạn có chắc muốn xóa sản phẩm này?",
+        onConfirm: () => dispatch(removeItemFromCart({ product_id: productId })), // Remove item if confirmed
+      });
+    }
+  };
+  const showModal = () => {
+    Modal.info({
+      title: "Bạn có chắc muốn xóa tất cả sản phẩm?",
+      content: (
+        <div>
+          <p>Bạn sẽ không thể phục hồi lại các sản phẩm đã xóa.</p>
+        </div>
+      ),
+      onOk: removeAllItem,
+      okText: "Có",
+      cancelText: "Không",
+      maskClosable: true,  // Close modal when clicking outside
+    });
+  };
+
     // Áp dụng mã giảm giá
   
     const totalPrice = listCart.reduce((total: number, item) => {
@@ -130,10 +164,20 @@ export default function Cart() {
 
                 {/* Quantity Controls */}
                 <div className="flex items-center justify-center w-[25%] md:w-[25%] lg:w-[20%]">
-                  <button onClick={() => decreaseItem(item.product_id)} 
-                    className="px-1 md:px-2 lg:px-4 py-1 md:py-2 border border-gray-300 rounded-lg text-[1.2rem] md:text-[1.4rem]">
-                    -
-                  </button>
+                <Popconfirm
+    title="Bạn có chắc muốn xóa sản phẩm này?"
+    onConfirm={() => handleDecrease(item.product_id, item.quantity)}
+    okText="Có"
+    cancelText="Không"
+  >
+    <button
+      onClick={() => handleDecrease(item.product_id, item.quantity)}
+      className="px-4 py-2 border border-gray-300 rounded-lg"
+    >
+      -
+    </button>
+  </Popconfirm>
+
                   <span className="mx-1 md:mx-2 lg:mx-4 font-semibold text-[1.2rem] md:text-[1.4rem]">{item.quantity}</span>
                   <button onClick={() => inCreaseItem(item.product_id)} 
                     className="px-1 md:px-2 lg:px-4 py-1 md:py-2 border border-gray-300 rounded-lg text-[1.2rem] md:text-[1.4rem]">
@@ -153,11 +197,20 @@ export default function Cart() {
                 </div>
 
                 {/* Delete Button */}
-                <div className="w-[5%] md:w-[5%] lg:w-[10%] text-center">
-                  <button onClick={() => handleRemoveItem(item.product_id)} 
-                    className="text-gray-500 hover:text-red-600 text-[1.2rem] md:text-[1.4rem]">
-                    <FaTrash />
-                  </button>
+                <div className=" md:w-[5%] lg:w-[10%] text-center    ">
+        
+ 
+    <Popconfirm
+    title="Bạn có chắc muốn xóa sản phẩm này?"
+    onConfirm={() => handleRemoveItem(item.product_id)}  // Call the remove function on confirmation
+    okText="Có"
+    cancelText="Không"
+    className="cursor-pointer"
+  >
+      <FaTrash />
+      </Popconfirm>
+
+
                 </div>
               </div>
             </div>
@@ -168,7 +221,9 @@ export default function Cart() {
             <button className="px-4 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl text-white bg-customColor font-medium hover:bg-yellow-500 hover:shadow-md hover:text-black transition duration-300 text-[1.3rem] md:text-[1.5rem]">
               Tiếp tục mua sắm
             </button>
-            <button onClick={() => removeAllCart()}
+            <button
+              onClick={showModal}
+
               className="px-4 md:px-10 py-3 md:py-5 rounded-xl md:rounded-2xl text-white bg-customColor font-medium hover:bg-red-500 hover:shadow-md hover:text-black transition duration-300 text-[1.3rem] md:text-[1.5rem]">
               Xóa tất cả
             </button>

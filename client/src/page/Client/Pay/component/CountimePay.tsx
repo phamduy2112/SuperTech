@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Row, Col } from 'antd';
-function CountdownTimer() {
+function CountdownTimer({reset}) {
   // Số giây ban đầu (5 phút = 300 giây)
   const [seconds, setSeconds] = useState(100);
-
+  useEffect(() => {
+    if (reset) {
+      setSeconds(180); // Reset time when reset is triggered
+    }
+  }, [reset]);
   useEffect(() => {
     // Nếu seconds > 0, thì bắt đầu đếm ngược
     if (seconds > 0) {
