@@ -68,14 +68,10 @@ const checkTransactionStatus = async (req, res) => {
                             user: matchedOrder.user_id,
                             order_pay: updateorder[0]
                         };
-                        console.log('====================================');
-                        console.log('3333333333');
-                        console.log('====================================');
+                       
                         console.log("Transaction saved to history_bank.", resp);
                         io.emit('orderStatusUpdated', resp);
-                        console.log('====================================');
-                        console.log('222222222');
-                        console.log('====================================');
+                     
                     } else {
                         processedTransactions.push({transactionID, description, amount, status: "No matching order"});
                     }
