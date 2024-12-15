@@ -98,31 +98,36 @@ const deletecategories = async (req, res) => {
             return responseSend(res, "", "Không có ID nào để xóa!", 400);
         }
 
-        // Xóa các danh mục với category_id trong mảng categoryIds
-        let deleted = await categoriesModel.destroy({
+        // Kiểm tra sản phẩm có liên kết với danh mục không
+        const products = await models.products.findAll({
             where: {
                 category_id: categoryIds
             }
         });
-        const resp=await models.products.findAll({
-            where:{
+
+        if (products.length > 0) {
+            // Nếu có sản phẩm, không cho phép xóa danh mục
+            return responseSend(res, "", "Bạn cần xóa sản phẩm trước khi xóa danh mục!", 201);
+        }
+
+        // Nếu không có sản phẩm liên quan, tiến hành xóa danh mục
+        const deleted = await models.categories.destroy({
+            where: {
                 category_id: categoryIds
             }
-        })
-        if(resp.length>0){
-            return responseSend(res, deleted, "Bạn cần xóa sản phảm trước khi xóa loại!", 200);
-
-        }
+        });
 
         if (deleted) {
-            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+            return responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {
-            responseSend(res, "", "Không tìm thấy danh mục nào!", 404);
+            return responseSend(res, "", "Không tìm thấy danh mục nào để xóa!", 404);
         }
     } catch (error) {
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.error(error);
+        return responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+
 
 export {
     getcategories,

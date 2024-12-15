@@ -3,30 +3,30 @@ import { Bar } from 'react-chartjs-2';
 import { getTopFiveProduct } from '../../../../../service/data/data.service';
 
 function BarChart() {
-  const [data, setData] = useState(null); // State để lưu trữ dữ liệu
-  const [period, setPeriod] = useState('day'); // State để lưu lựa chọn thời gian
+  const [data, setData] = useState(null); // State to store the chart data
+  const [period, setPeriod] = useState('day'); // State to store selected period
 
-  // Hàm fetch dữ liệu từ API
+  // Fetch data from the API
   const fetchApi = async (selectedPeriod) => {
     try {
-      const resp = await getTopFiveProduct({ period: selectedPeriod }); // Gọi API lấy dữ liệu
-      const productData = resp.data.content; // Dữ liệu lấy từ API
+      const resp = await getTopFiveProduct({ period: selectedPeriod }); // Call API to fetch data
+      const productData = resp.data.content; // Data received from the API
 
-      // Chuyển đổi dữ liệu thành định dạng phù hợp với biểu đồ
+      // Map the data to be displayed on the chart
       const labels = productData.map(item => 
         item.product.product_name.length > 20 
           ? item.product.product_name.substring(0, 20) + '...' 
           : item.product.product_name
-      ); // Tên sản phẩm, rút gọn nếu tên dài hơn 20 ký tự
+      ); // Truncate product name if it exceeds 20 characters
 
-      const totalQuantity = productData.map(item => parseInt(item.total_quantity)); // Tổng số lượng bán
+      const totalQuantity = productData.map(item => parseInt(item.total_quantity) || 0); // Total quantity sold, default to 0 if undefined or null
 
       setData({
         labels,
         datasets: [
           {
             label: 'Số lượng bán',
-            data: totalQuantity, // Dữ liệu tổng số lượng bán
+            data: totalQuantity, // Total quantity data
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
@@ -38,12 +38,12 @@ function BarChart() {
     }
   };
 
-  // Fetch dữ liệu khi component mount hoặc khi period thay đổi
+  // Fetch data when component mounts or when period changes
   useEffect(() => {
-    fetchApi(period); // Gọi lại API khi period thay đổi
+    fetchApi(period); // Re-fetch data when the period changes
   }, [period]);
 
-  // Nếu chưa có dữ liệu, hiển thị loading
+  // If data is not available, show loading message
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -69,10 +69,9 @@ function BarChart() {
     },
     tooltips: {
       callbacks: {
-        // This will display the full product name when hovering over the bar
+        // Display the full product name when hovering over the bar
         label: function (tooltipItem) {
-          const productData = data.labels[tooltipItem.index]; // Get the product name
-          const productNameFull = data.content[tooltipItem.index].product.product_name; // Get the full name from the API response
+          const productNameFull = data.content[tooltipItem.index]?.product?.product_name || 'Unknown Product';
           return `${productNameFull}: ${tooltipItem.raw}`;
         },
       },
@@ -81,7 +80,7 @@ function BarChart() {
 
   return (
     <div className="flex-1 box-border h-[300px]">
-      {/* Select dropdown để chọn thời gian */}
+      {/* Dropdown to select period */}
       <div className="mb-4">
         <label htmlFor="period" className="mr-2">Chọn thời gian: </label>
         <select 
@@ -96,7 +95,7 @@ function BarChart() {
         </select>
       </div>
 
-      {/* Biểu đồ Bar */}
+      {/* Bar chart */}
       <Bar data={data} options={BarOptions} />
     </div>
   );

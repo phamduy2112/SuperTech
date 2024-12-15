@@ -1,93 +1,106 @@
-import { message, Select, Upload, UploadFile, Button, Modal, Switch, GetProp } from 'antd';
 import React, { useState } from 'react';
-import { TbPlaylistAdd } from 'react-icons/tb';
-import { UploadProps } from 'antd/lib';
-import ImgCrop from 'antd-img-crop';
+import { message, Select, Button, Modal } from 'antd';
+import { AiOutlineNumber } from 'react-icons/ai';
 import { Formik, Form, Field } from 'formik';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { createCategoryThunk } from '../../../../redux/catelogry/catelogry.slice';
-import toast from 'react-hot-toast';
-import { AiOutlineNumber } from 'react-icons/ai';
 import { updateQualityProductAdminThunk } from '../../../../redux/product/product.slice';
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+import toast from 'react-hot-toast';
 
 function AdminModalUpdateQualityProduct(props) {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(
+    props.product?.product_colors[0]?.color_id
+  ); // Default to first color
+  const [quality, setQuality] = useState(
+    props.product.product_colors[0]?.product_qualities[0]?.quality_product || 0
+  ); // Default to first color's quality
 
-  const DataCategory = [
-    { label: 'Điện thoại', value: 1 },
-    { label: 'Laptop', value: 2 },
-    // Add more categories as needed
-  ];
+  const dispatch = useAppDispatch();
 
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
 
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    const updatedFileList = newFileList.map(file => {
-      if (file.originFileObj) {
-        file.url = URL.createObjectURL(file.originFileObj);
-      }
-      return file;
-    });
-    setFileList(updatedFileList);
-  };
+  const handleColorChange = (value) => {
+    setSelectedColor(value);
 
-//   updateQualityColors
-const dispatch=useAppDispatch()
-console.log(props.product.product_colors[0].color_id);
+    // Find quality for the selected color
+    const selectedQuality =
+      props.product.product_colors.find((color) => color.color_id === value)
+        ?.product_qualities[0]?.quality_product || 0;
+    setQuality(selectedQuality);
+  };
 
   return (
     <>
-      <AiOutlineNumber onClick={showModal} 
-              style={{ marginRight: "5px", color: "blue", fontSize: "18px" }}
-            />
-          
-      
+      <AiOutlineNumber
+        onClick={showModal}
+        style={{ marginRight: '5px', color: 'blue', fontSize: '18px' }}
+      />
+
       <Modal
-        title="Cập nhận số lượng"
+        title="Cập nhật số lượng"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
       >
         <Formik
           initialValues={{
-            quality_product:0,
-          
+            quality_product: quality,
           }}
+          enableReinitialize
           onSubmit={(values) => {
-            const data={
-            ...values,
-              color_id:props.product.product_colors[0].color_id,
-            }
-            // setIsModalOpen(false);
-           
-            dispatch(updateQualityProductAdminThunk(data))
-            toast.success("Thêm loại thành công")
+            const data = {
+              ...values,
+              color_id: selectedColor,
+            };
+            dispatch(updateQualityProductAdminThunk(data));
+            toast.success('Cập nhật thành công');
+            setIsModalOpen(false);
           }}
         >
           {({ values, setFieldValue }) => (
             <Form>
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-4">
                 <div className="flex w-full flex-col gap-4">
                   <label
-                    htmlFor="quality_product"
+                    htmlFor="color_id"
                     className="text-[13px] text-[#81818177] font-medium"
                   >
-    Số lượng
-                      </label>
-                  <Field
-                    type="number"
-                    name="quality_product"
-                    className="h-[48px] bg-[#f7f7f7] border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                    Chọn màu sắc
+                  </label>
+                  <Select
+                    className="w-full"
+                    placeholder="Chọn màu sắc"
+                    onChange={(value) => {
+                      handleColorChange(value);
+                      setFieldValue('quality_product', quality); // Update form value
+                    }}
+                    value={selectedColor}
+                    options={props.product.product_colors.map((color) => ({
+                      label: color.color,
+                      value: color.color_id,
+                    }))}
                   />
                 </div>
+
+                <label
+                  htmlFor="quality_product"
+                  className="text-[13px] text-[#81818177] font-medium"
+                >
+                  Số lượng
+                </label>
+                <Field
+                  type="number"
+                  name="quality_product"
+                  value={values.quality_product}
+                  onChange={(e) => setFieldValue('quality_product', e.target.value)}
+                  className="h-[48px] bg-[#f7f7f7] border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                />
               </div>
 
-
-              <Button type="primary" htmlType="submit" className="mt-4">Cập nhận</Button>
+              <Button type="primary" htmlType="submit" className="mt-4">
+                Cập nhật
+              </Button>
             </Form>
           )}
         </Formik>

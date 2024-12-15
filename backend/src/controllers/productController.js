@@ -154,6 +154,10 @@ const getProductsByCategoryId = async (req, res) => {
                                     as:'product_storages',
                                     required: false
                             },
+                            {
+                                model: models.product_quality,
+                                as: 'product_qualities',
+                              },
                         ]
                 },
             ]
@@ -200,6 +204,10 @@ const getProductById = async (req, res) => {
                                 as:'product_storages',
                                 required: false
                         },
+                        {
+                            model: models.product_quality,
+                            as: 'product_qualities',
+                          },
                     ]
             },
         ]
@@ -398,7 +406,8 @@ const updateProduct = async (req, res) => {
         } = req.body;
 
         const productId = req.params.id;
-
+        console.log(infor_chip_battery);
+        
         // Tìm sản phẩm cần cập nhật
         const product = await Products.findOne({
             where: { product_id: productId },
@@ -433,19 +442,23 @@ const updateProduct = async (req, res) => {
 
         // Cập nhật thông tin liên quan đến sản phẩm
         const productInfo = product.infor_product_infor_product;
-        await models.infor_product.update({
-            infor_screen,
-            infor_system,
-            infor_cpu,
-            infor_ram,
-            infor_more: moTa,
-            infor_compan,
-            infor_frontCamera,
-            infor_rearCamera,
-            infor_scanning_frequency,
-            infor_chip_battery,
-        });
-
+        if (productInfo) {
+         const createInfo=   await productInfo.update({
+                infor_screen,
+                infor_system,
+                infor_cpu,
+                infor_ram,
+                infor_more: moTa,
+                infor_compan,
+                infor_frontCamera,
+                infor_rearCamera,
+                infor_scanning_frequency,
+                infor_chip_battery,
+            });
+            console.log(createInfo);
+            
+        }
+        
         // Cập nhật hoặc xóa màu sắc và lưu trữ cũ nếu có
         if (listProductColor.length > 0) {
             await Promise.all(listProductColor.map(async (order) => {
@@ -497,7 +510,8 @@ const updateProduct = async (req, res) => {
 
         responseSend(res, product, "Cập nhật sản phẩm thành công!", 200);
     } catch (error) {
-        console.error('Lỗi khi cập nhật sản phẩm:', error);
+        console.log
+        ('Lỗi khi cập nhật sản phẩm:', error);
         responseSend(res, null, 'Có lỗi xảy ra khi cập nhật sản phẩm!', 500);
     }
 };

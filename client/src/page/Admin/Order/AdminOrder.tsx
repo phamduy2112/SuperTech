@@ -6,9 +6,10 @@ import Swal from 'sweetalert2'; // Import SweetAlert2
 
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getOrderAllThunk } from '../../../redux/order/Order.slice';
+import { getOrderAllThunk, setOrder } from '../../../redux/order/Order.slice';
 import { colorText } from '../../../constants';
 import { PathAdmin } from '../../../router/component/RouterValues';
+import useSocketCreateOrder from '../../../hooks/CreateOrder.hook';
 
 function AdminOrder() {
 
@@ -26,10 +27,28 @@ function AdminOrder() {
   const [detailOrder,setDetailOrder]=useState([]); 
 
   const dispatch=useAppDispatch();
-  const getOrderAll=useAppSelector((state)=>state.listOrder.listOrder);
-  useEffect(()=>{
+
+  const socket = useAppSelector((state: any) => state.socket.socket);  // Get socket from Redux store
+  const getOrderAll = useAppSelector((state) => state.listOrder.listOrder);  // Get all orders from Redux store
+ useEffect(()=>{
     dispatch(getOrderAllThunk(0))
   },[dispatch])
+  useEffect(() => {
+    if (socket) {
+      socket.on("createOrder", (newComment: any) => {
+        dispatch(setOrder([newComment, ...getOrderAll]));  // Add new order at the beginning
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("createOrder");
+      }
+    };
+  }, [socket, getOrderAll, dispatch]);
+
+  // Return getOrderAll so it can be used in the component
+  
   
   // Trạng thái đang được lọc
   const [filteredOrders, setFilteredOrders] = useState(getOrderAll);

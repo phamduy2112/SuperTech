@@ -14,13 +14,14 @@ import { CiBookmarkRemove } from "react-icons/ci";
 import { deleteProductAdminThunk, getProductsAdminThunk } from "../../../redux/product/product.slice";
 import { formatCurrencyVND } from "../../../utils";
 import { BiSolidEdit } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
-import { TbPlaylistAdd } from "react-icons/tb";
-import AdminFilterProduct from "./Component/AdminFilterProduct";
-import { PathAdmin } from "../../../router/component/RouterValues";
+import {  useNavigate } from "react-router-dom";
+
+
 import AdminAddProduct from "./Component/AdminAddProduct";
-import AdminEditProduct from "./Component/AdminEditProduct";
+import { GoCommentDiscussion } from "react-icons/go";
+
 import AdminModalUpdateQualityProduct from "./Component/UpdateQualityProduct";
+import { IMG_BACKEND } from "../../../constants";
 
 // Define the Category interface
 interface Category {
@@ -48,18 +49,23 @@ const AdminProduct: React.FC = () => {
     { label: 'Laptop', value: 2 },
     { label: 'Table', value: 3 },
   ];
-  const listProducts=useAppSelector((state)=>state.product.listAdminProducts)
+  const listProducts = useAppSelector((state) => state.product.listAdminProducts)
   const handleEdit = (key: any) => {
     // AdminEditProduct    
+  };
+  const handleViewCommentProduct = (key: any) => {
+    navigate(`/admin/quan-li-san-pham/${key}/quan-li-binh-luan`);
   };
   const getCategoryNameById = (id) => {
     const category = dataCategories?.find((cat) => cat.category_id == id);
     return category ? category.category_name : 'Unknown'; // 'Unknown' là giá trị mặc định nếu không tìm thấy id
   };
-  const handleDeteleProduct=async (id:number)=>{
+  const handleDeteleProduct = async (id: number) => {
     dispatch(deleteProductAdminThunk(id))
+    toast.success('Xóa sản phẩm thành công!');
+
   }
-  const handleEye=(id:string|number)=>{
+  const handleEye = (id: string | number) => {
     navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
   }
   const [selectedCheckbox, setSelectedCheckbox] = useState(''); // Lọc theo ngày
@@ -76,10 +82,17 @@ const AdminProduct: React.FC = () => {
     },
     {
       title: 'Hình Ảnh',
-      dataIndex: 'image',
-      render: (src: string) => (
-        <img className='rounded-md' 
-        src="https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg" alt="" style={{ width: 50, height: 50 }} />
+      dataIndex: 'product_colors',
+      render: (colors: any[]) => (
+        colors.map((color, index) => (
+          <img 
+            key={index} 
+            className='rounded-md' 
+            src={`${IMG_BACKEND}/${color.image.image_one}`} 
+            alt={`Màu ${color.color}`} 
+            style={{ width: 50, height: 50 }} 
+          />
+        ))
       ),
     },
     {
@@ -119,8 +132,8 @@ const AdminProduct: React.FC = () => {
     {
       title: 'Giá Gốc',
       dataIndex: 'product_price',
-      render: (price: number,recoil:any) => (
-        <span>{formatCurrencyVND(price+Number(recoil?.product_colors[0]?.product_storages[0]?.storage_price ||0))}</span>
+      render: (price: number, recoil: any) => (
+        <span>{formatCurrencyVND(price + Number(recoil?.product_colors[0]?.product_storages[0]?.storage_price || 0))}</span>
       ),
     },
     {
@@ -136,10 +149,10 @@ const AdminProduct: React.FC = () => {
     {
       title: 'Thành tiền',
       dataIndex: 'product_price',
-      render: (price: number,recoil:any) => (
+      render: (price: number, recoil: any) => (
         <span>{
-          formatCurrencyVND(((price + Number(recoil?.product_colors[0]?.product_storages[0]?.storage_price ||0)) *(1 - Number(recoil?.product_discount / 100) )))
-          } </span>
+          formatCurrencyVND(((price + Number(recoil?.product_colors[0]?.product_storages[0]?.storage_price || 0)) * (1 - Number(recoil?.product_discount / 100))))
+        } </span>
       ),
     },
     
@@ -154,7 +167,10 @@ const AdminProduct: React.FC = () => {
           }}>Xem</div> */}
           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
-            onClick={()=>{handleEye(+record.product_id)}}
+            onClick={() => { handleEye(+record.product_id) }}
+          />
+          <GoCommentDiscussion className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+            onClick={() => handleViewCommentProduct(+record.product_id)}
           />
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
@@ -231,6 +247,9 @@ console.log(updatedDataProducts[0]);
   console.log()
 
 
+
+ 
+
   return (
     <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
     <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
@@ -241,61 +260,45 @@ console.log(updatedDataProducts[0]);
             <IoCloudDownloadOutline className='text-[18px]' />
             Tải về PDF
           </Button>
-          {/* <Link to={`${PathAdmin.PathsAdmin}/${PathAdmin.AddProduct}`}>
-            <Button className='p-10' type="primary">
-              <TbPlaylistAdd className='text-[18px]' />
-              Thêm Sản Phẩm Mới
-            </Button>
-          </Link> */}
+   
           <AdminAddProduct/>
-          <button
-        onClick={() => setShowInStock(true)}
-        className={`btn ${showInStock ? "active" : ""}`}
-      >
-        Có hàng
-      </button>
-      <button
-        onClick={() => setShowInStock(false)}
-        className={`btn ${!showInStock ? "active" : ""}`}
-      >
-        Hết hàng
-      </button>
+   
 
-        </div>
-      </div>
-
-      <div className='flex p-[24px] items-center justify-between gap-3'>
-        <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-          <input type="text" 
-           onChange={async (e) => {
-            if (userRef.current) {
-              clearTimeout(userRef.current);
-            }
-            userRef.current = setTimeout(async () => {
-              console.log(e.target.value);
-              dispatch(getProductsAdminThunk(e.target.value));
-            }, 400);
-          }}
-          className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm sản phẩm...' />
-          <GoSearch className='text-[18px]' />
+          </div>
         </div>
 
-        {/* <AdminFilterProduct product={listProducts} onFilter={handleFilterProducts} /> */}
+        <div className='flex p-[24px] items-center justify-between gap-3'>
+          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+            <input type="text"
+              onChange={async (e) => {
+                if (userRef.current) {
+                  clearTimeout(userRef.current);
+                }
+                userRef.current = setTimeout(async () => {
+                  console.log(e.target.value);
+                  dispatch(getProductsAdminThunk(e.target.value));
+                }, 400);
+              }}
+              className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm sản phẩm...' />
+            <GoSearch className='text-[18px]' />
+          </div>
 
-      </div>
+          {/* <AdminFilterProduct product={listProducts} onFilter={handleFilterProducts} /> */}
 
-      <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
-        <Table
-          className='flex-1'
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={updatedDataProducts}
-          size='large'
-          pagination={{ pageSize: 10 }}
-        />
+        </div>
+
+        <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+          <Table
+            className='flex-1'
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={updatedDataProducts}
+            size='large'
+            pagination={{ pageSize: 10 }}
+          />
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 

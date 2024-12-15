@@ -56,8 +56,8 @@ function ProductSale() {
       </div> */}
 
       {/* Product Slider Section */}
-      <div className="bg-gradient-to-b from-[#fffccb] to-[#332600] pb-16 px-6">
-        <h1 className="text-[5rem] text-brown-300 font-medium p-[3.5rem]">Flash Sale hôm nay</h1>
+      <div className="bg-gradient-to-b from-[#fffccb] to-[#332600] pb-8 md:pb-12 lg:pb-16 px-3 sm:px-4 md:px-5 lg:px-6">
+      <h1 className="text-[5rem] sm:text-[3rem] md:text-[2rem] lg:text-[3rem] text-brown-300 font-medium p-4 sm:p-6 md:p-8 lg:p-[2.5rem]">Flash Sale hôm nay</h1>
         <Slider className="mx-10" {...settings}>
           {[...Array(6)].map((_, index) => (
             <ProductItemHot key={index} ></ProductItemHot>

@@ -10,6 +10,8 @@ import { CiBookmarkRemove } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { getAllUserThunk } from "../../../redux/user/user.slice";
+import { useAvatar } from "../../../hooks/UseAvatar.hook";
+import { IMG_BACKEND_USER, URL_BACKEND } from "../../../constants";
 
 function AdminUser() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,9 +26,14 @@ function AdminUser() {
 
   useEffect(() => {
     AppDispatch(getAllUserThunk());
+   
+  }, [ AppDispatch]);
+  useEffect(() => {
+    // Cập nhật `DataAlluser` khi `Alluser` thay đổi
     setDataAlluser(Alluser);
-  }, [AppDispatch]);
-
+  }, [Alluser]); // Theo dõi `Alluser` và chỉ cập nhật khi nó thay đổi.
+  console.log(DataAlluser);
+  
   useEffect(() => {
     if (Alluser && Alluser.length > 0) {
       const keys = Alluser.map((staff: string) => Object.keys(staff));
@@ -36,48 +43,61 @@ function AdminUser() {
     }
   }, [Alluser]);
 
+  
   useEffect(() => {
     const ColumnStaffs = userKeys
       .map((user) => {
         switch (user) {
-          case "user_id":
-            return {
-              title: "ID",
-              dataIndex: user,
-              key: user,
-            };
-
+          case "stt": // Thêm cột số thứ tự
+          return {
+            title: "STT",
+            key: "stt",
+            render: (_: any, __: any, index: number) => index + 1, // Hiển thị số thứ tự
+          };
           case "user_image":
             return {
               title: "Hình",
               dataIndex: user,
               key: user,
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              render: (src: any) => (
+              render: (src: any, record: any) => (
                 <>
-                  {src == "" || src == null || src == undefined ? (
+                  {src ? (
                     <img
                       className="rounded-full object-cover"
-                      src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"
-                      alt=""
+                      src={`${IMG_BACKEND_USER}/${src}`}
+                      alt={record.user_name} // Đảm bảo rằng alt chỉ là một chuỗi (tên người dùng)
                       style={{ width: 50, height: 50 }}
                     />
                   ) : (
-                    <img
-                      className="rounded-full object-cover"
-                      src={src}
-                      alt=""
-                      style={{ width: 50, height: 50 }}
-                    />
+                    <div
+                      className="rounded-full flex items-center justify-center"
+                      style={{
+                        width: 50,
+                        height: 50,
+                        backgroundColor: 'rgb(37 99 235 / var(--tw-bg-opacity))',
+                        color: 'white',
+                        fontSize: '20px',
+                      }}
+                    >
+                      {record.user_name ? record.user_name.charAt(0).toUpperCase() : '?'} {/* Hiển thị chữ cái đầu tiên từ tên người dùng */}
+                    </div>
                   )}
                 </>
               ),
+              
+              
             };
           case "user_name":
             return {
               title: "Tên",
               dataIndex: user,
               key: user,
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {text == null || text == undefined ? "Chưa có dữ liệu" : text}
+                </div>
+              ),
             };
 
           case "user_birth":
@@ -85,12 +105,35 @@ function AdminUser() {
               title: "Tuổi",
               dataIndex: user,
               key: user,
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {text == null || text == undefined ? "Chưa có dữ liệu" : text}
+                </div>
+              ),
             };
+          case "user_time":
+            return {
+              title: "Ngày tham gia",
+              dataIndex: user,
+              key: user,
+              render: (_,record) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {new Date(record.user_time).toLocaleDateString('vi-VN')}
+                </div>
+              ),
+            };
+
+
           case "user_phone":
             return {
               title: "Số điện thoại",
               dataIndex: user,
               key: user,
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {text == null || text == undefined ? "Chưa có dữ liệu" : text}
+                </div>
+              ),
             };
 
           case "user_email":
@@ -98,6 +141,11 @@ function AdminUser() {
               title: "Email",
               dataIndex: user,
               key: user,
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {text == null || text == undefined ? "Chưa có dữ liệu" : text}
+                </div>
+              ),
             };
 
           case "user_address":
@@ -105,6 +153,11 @@ function AdminUser() {
               title: "Địa Chỉ",
               dataIndex: user,
               key: user,
+              render: (text: any) => (
+                <div className="flex-1 flex items-center gap-3">
+                  {text == null || text == undefined ? "Chưa có dữ liệu" : text}
+                </div>
+              ),
             };
           case "user_role":
             return {
@@ -116,7 +169,7 @@ function AdminUser() {
                 <div className="flex-1 flex items-center gap-3">
                   <div
                     className={`w-[10px] rounded-full h-[10px] ${
-                      text == 2 ? "bg-[#2af52a]" : ""
+                      text == 11 ? "bg-[#2af52a]" : ""
                     } ${text == 1 ? "bg-[#ffd000]" : ""} ${
                       text == 0 ? "bg-[red]" : ""
                     }`}
@@ -135,6 +188,7 @@ function AdminUser() {
                   {text == 4 ? "Đồng" : ""} {text == 3 ? "Bạc" : ""}{" "}
                   {text == 2 ? "Vàng" : ""} {text == 1 ? "Kim Cương" : ""}{" "}
                   {text == 0 ? "Tối Thượng" : ""}
+                  {text == null || text == undefined ? "Chưa có dữ liệu" : ""}
                 </div>
               ),
             };
@@ -146,10 +200,6 @@ function AdminUser() {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               render: (record: any) => (
                 <div className="flex text-[24px] box-border gap-1 items-center">
-                  <BiSolidEdit
-                    className="cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]"
-                    onClick={() => handleEdit(record.user_id)}
-                  />
                   <CiBookmarkRemove
                     className="cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]"
                     onClick={() => handleDelete(record.user_id)}
@@ -164,7 +214,14 @@ function AdminUser() {
         }
       })
       .filter((col) => col !== null);
-    setColumns(ColumnStaffs);
+      setColumns([
+        {
+          title: "STT",
+          key: "stt",
+          render: (_: any, __: any, index: number) => index + 1,
+        },
+        ...ColumnStaffs,
+      ]);
   }, [userKeys]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,20 +276,6 @@ function AdminUser() {
   }, [valueInputSearch, Alluser]);
 
   const [selectedCheckbox, setSelectedCheckbox] = useState("");
-  const navigate = useNavigate();
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEdit = (key: any) => {
-    Swal.fire({
-      icon: "info",
-      text: `Đã mở trang sửa cho tài khoản có ID: ${key}`, // Nội dung
-      confirmButtonText: "OK",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`/admin/quản-lí-khách-hàng/sửa-khách-hàng/${key}`);
-      }
-    });
-  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDelete = (key: any) => {
@@ -240,85 +283,40 @@ function AdminUser() {
       icon: "warning",
       showDenyButton: true,
       title: `Bạn Chọn Người Dùng Có ID ${key}`,
-      text: `Bạn có chắc muốn xóa ?`,
-      confirmButtonText: "Xóa",
+      text: `Bạn có chắc muốn chặn ?`,
+      confirmButtonText: "Chặn",
       denyButtonText: "Hủy",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
           icon: "success",
-          title: "Đã Xóa",
-          text: `Bạn đã Xóa ${key}`,
+          title: "Đã chặn",
+          text: `Bạn đã chặn ${key}`,
         });
       } else {
         Swal.fire({
           icon: "error",
           title: "Đã Hủy",
-          text: "Bạn đã hủy thao tác xóa.",
+          text: "Bạn đã hủy thao tác chặn.",
         });
       }
     });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSelectChange = (selectedRowKeys: any) => {
-    setSelectedCheckbox(selectedRowKeys); // Chỉnh sửa hàm setSelectedCheckbox
-    if (selectedRowKeys.length > 0) {
-      showModal(selectedRowKeys.length);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+
+  const sortedData = [...DataAlluser].sort((a, b) => {
+    if (selectedCheckbox === 'new') {
+      return new Date(b.user_time).getTime() - new Date(a.user_time).getTime();
     }
-  };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const showModal = (count: any) => {
-    Swal.fire({
-      icon: "info",
-      title: `Bạn Vừa Chọn ${count} Người dùng`,
-      text: "Bạn có muốn tiếp tục?",
-      showDenyButton: true,
-      denyButtonText: "Xóa",
-      confirmButtonText: "Sửa",
-      customClass: {
-        confirmButton: "bg-green-700 text-white",
-        denyButton: "bg-red-500 text-white",
-      },
-      backdrop: true,
-      allowOutsideClick: false,
-    }).then((result) => {
-      if (result.isDenied) {
-        Swal.fire({
-          icon: "warning",
-          title: `Bạn có chắc chắn muốn xóa ${count} người dùng?`,
-          showCancelButton: true,
-          confirmButtonText: "Xóa",
-          cancelButtonText: "Hủy",
-          customClass: {
-            confirmButton: "bg-red-500 text-white",
-            cancelButton: "bg-gray-500 text-white",
-          },
-        }).then((kq) => {
-          if (kq.isConfirmed) {
-            Swal.fire("Đã xóa!", "", "success");
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Đã Hủy",
-              text: "Bạn đã hủy thao tác xóa.",
-            });
-          }
-        });
-      } else if (result.isConfirmed) {
-        Swal.fire({
-          icon: "info",
-          text: `Đã mở trang sửa cho ${count} tài khoản`,
-          confirmButtonText: "OK",
-        });
-      }
-    });
-  };
-
-  const rowSelection = {
-    onChange: onSelectChange,
-  };
-
+    if (selectedCheckbox === 'old') {
+      return new Date(a.user_time).getTime() - new Date(b.user_time).getTime();
+    }
+    return 0;
+  });
   return (
     <div className="flex flex-col p-12 gap-5 bg-[#f2edf3]">
       <div className="flex-1 bg-white flex flex-col rounded-xl shadow-lg">
@@ -384,14 +382,11 @@ function AdminUser() {
         <div className="p-[24px] relative overflow-x-auto h-[1000px] flex flex-col">
           <Table
             className="flex-1"
-            rowSelection={{
-              type: "checkbox",
-              ...rowSelection,
-            }}
+         
             columns={columns || []}
             dataSource={
-              Array.isArray(DataAlluser)
-                ? DataAlluser.filter((user) => user.user_role == 2)
+              Array.isArray(sortedData)
+                ? sortedData.filter((user) => user.user_role == 11)
                 : []
             }
             size="large"

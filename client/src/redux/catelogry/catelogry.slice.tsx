@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createCategory, deleteCategory, getCatelogry, getCatelogryDad, putCategory } from "../../service/catelogry/catelogry.service";
+import toast from "react-hot-toast";
 
 export const getCatelogryThunk = createAsyncThunk(
   "getCatelogryThunk",
@@ -37,9 +38,16 @@ export const deleteCategoryThunk=createAsyncThunk("deleteCategoryThunk",
   async(id:any[],{dispatch})=>{
     try{
       const resp = await deleteCategory(id);
-      const response = await dispatch(getCatelogryThunk(''));
+      if(resp.data?.message=='Đã Xóa Thành Công!'){
+        toast.success("Xóa loại thành công");
+        
+      }else{
+        toast.error(resp.data.message);
+        
+      }
+ const response = await dispatch(getCatelogryThunk(''));
 
-      return response.payload;
+        return response.payload;
    
     }catch(e){
       console.log(e);

@@ -189,7 +189,7 @@ function Pay() {
         product_name: item.product_name,
         product_id: item.product_id,
         order_id: resp.data.content.order_id,
-        detail_order_quality: item.quantity,
+        detail_order_quality: item?.quantity,
         product_color: item?.selectedColor?.color,
         product_storage: item?.selectedStorage?.storage,
         detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
@@ -205,29 +205,33 @@ function Pay() {
           user_id: user.user_id,
           order_total:dataOrder.order_total
         });
-  
+        socket.emit('orderStatusUpdated',(order)=>{
+          console.log(order);
+          
+        })
         // Gọi API kiểm tra trạng thái thanh toán
         const responseDt = await getOrderById(resp.data.content.order_id);
   
-        if (responseDt.data.content.order_pay == 1) {
-          // Thanh toán thành công, chuyển trang ngay lập tức
-          const response = await createDetailOrder(detailOrders);
-          if (response) {
-            navigate("/xuất-hóa-đơn");
-            dispatch(setOrderId(resp.data.content.order_id));
-            dispatch(removeAllCart());
-          }
-        } else {
-          // Đợi 5 phút trước khi chuyển trang
-          setTimeout(async () => {
-            const response = await createDetailOrder(detailOrders);
-            if (response) {
-              navigate("/xuất-hóa-đơn");
-              dispatch(setOrderId(resp.data.content.order_id));
-              dispatch(removeAllCart());
-            }
-          }, 300000);
-        }
+        // if (responseDt.data.content.order_pay == 1) {
+        //   // Thanh toán thành công, chuyển trang ngay lập tức
+        //   const response = await createDetailOrder(detailOrders);
+        //   if (response) {
+        //     navigate("/");
+        //     dispatch(setOrderId(resp.data.content.order_id));
+        //     dispatch(removeAllCart());
+        //   }
+        // } 
+        // else {
+        //   // Đợi 5 phút trước khi chuyển trang
+        //   setTimeout(async () => {
+        //     const response = await createDetailOrder(detailOrders);
+        //     if (response) {
+        //       navigate("/");
+        //       dispatch(setOrderId(resp.data.content.order_id));
+        //       dispatch(removeAllCart());
+        //     }
+        //   }, 300000);
+        // }
       } else {
         // Thanh toán không qua ngân hàng, xử lý thông thường
         const dataEmail = {
@@ -240,9 +244,9 @@ function Pay() {
   
         if (response) {
           await getSuccessEmailOrder(dataEmail);
-          // navigate("/xuất-hóa-đơn");
-          // dispatch(setOrderId(resp.data.content.order_id));
-          // dispatch(removeAllCart());
+          navigate("/xuat-hoa-don");
+          dispatch(setOrderId(resp.data.content.order_id));
+          dispatch(removeAllCart());
         }
       }
     } catch (error) {

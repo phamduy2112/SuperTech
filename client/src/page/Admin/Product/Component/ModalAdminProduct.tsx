@@ -8,6 +8,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { setProductColors } from '../../../../redux/product/product.slice';
 import { createImage } from '../../../../service/product/product.service';
+import toast from 'react-hot-toast';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -82,7 +83,9 @@ function ModalAdminProduct() {
   
       // Verify response path to `image_id`
       const image_id = response.data?.data?.image_id; // Adjust if necessary
-  
+      toast.success('Thêm hình sản phẩm thành công!');
+      handleCancel()
+
       if (!image_id) {
         console.error('Image ID not found in the response:', response);
         return;

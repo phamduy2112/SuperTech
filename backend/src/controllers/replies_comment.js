@@ -29,24 +29,45 @@ const getcommentpostById = async (req, res) => {
 
 const createRepliesComment = async (req, res) => {
     try {
-        const user_id = req.id;
-        const { comment,comment_id   } = req.body;
-
-       
-        // Tạo comment mới
-        const newComment = await repliesCommentProduct.create({
-          user_id,
-          comment_id,
-          comment,
-          repiles_date:new Date()
-        });
-        responseSend(res, newComment, "Thêm thành công!", 201);
-      } catch (error) {
-        console.error("Error creating comment:", error); // Log chi tiết lỗi
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+      const user_id = req.id; // Lấy user_id từ middleware
+      const { comment, comment_id } = req.body; // Lấy dữ liệu từ body
+  
+      // Tạo reply comment mới
+      const newComment = await repliesCommentProduct.create({
+        user_id,
+        comment_id,
+        comment,
+        repiles_date: new Date()
+      });
+  
+      // Lấy dữ liệu chi tiết của comment (nếu cần thiết)
+      const fullComment = await repliesCommentProduct.findOne({
+        where: { id: newComment.id }, // Hoặc khóa chính phù hợp
+        include: [
+          {
+            model: models.user, // Liên kết bảng User (nếu có)
+            attributes: ['id', 'username', 'avatar'], // Thuộc tính cần thiết
+          },
+          {
+            model: models.comment_product, // Liên kết bảng gốc Comment (nếu có)
+            attributes: ['id', 'content', 'comment_date']
+          }
+        ]
+      });
+  
+      // Emit sự kiện mới qua socket.io
+      if (io) {
+        io.emit('new_replies', fullComment); // Phát dữ liệu đầy đủ của reply
       }
-};
-
+  
+      // Phản hồi về client
+      responseSend(res, newComment, "Thêm thành công!", 201);
+    } catch (error) {
+      console.error("Error creating reply comment:", error); // Log chi tiết lỗi
+      responseSend(res, null, "Có lỗi xảy ra!", 500);
+    }
+  };
+  
 const updateCommentReply = async (req, res) => {
     try {
         const { comment   } = req.body;

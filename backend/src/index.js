@@ -1,5 +1,4 @@
 import express, { urlencoded } from 'express';
-import cron from "node-cron";
 import userRouter from './routers/userRouter.js';
 import productRouter from './routers/productRouter.js';
 import product_colorsRouter from './routers/product_colorsRouter.js';
@@ -18,17 +17,18 @@ import categoriesRouter from './routers/categoriesRouter.js';
 import bannerRouter from './routers/bannerRouter.js';
 import payRouter from './routers/payRouter.js';
 import cookieParser from 'cookie-parser';
-
+import cron from 'node-cron';
 import cors from 'cors';
+import axios from 'axios';
 import searchRouter from './routers/searchproductRouter.js';
 import uploadRouter from './routers/uploadRoutes.js';
 import uploadImgUserRouter from './routers/uploadImageUserRoutes.js';
-import product_storageRouter from './routers/product_storage.js';
-import autobankrouter from './routers/bankAutoRouter.js';
-import settingRouter from './routers/settingRouter.js';
-import getCatelories from './routers/exportFile.js';
 import { app, server } from './socker/socker.js';
-// const app = express();
+import settingRouter from './routers/settingRouter.js';
+import autobankrouter from './routers/bankAutoRouter.js';
+import  transactionsrouter from './routers/transactionRouter.js';
+import exportFiles from './routers/exportFile.js';
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -36,20 +36,30 @@ app.use(urlencoded({extended:true}))
 app.use(express.static("."))
 
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://127.0.0.1:62769'],
+  origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
-// cron.schedule("*/1 * * * *", async () => {
-//   console.log("Chạy auto-update trạng thái đơn hàng...");
-//   await checkTransactionStatus();
+// cron này chỉ chạy được trên server thôi, local tạm thời ẩn, tuyệt đối ko tắt để hạn chế tình trạng trùng lập cron giữa local
+// và server
+
+// cron.schedule('* * * * *', async () => {
+//   console.log('Bắt đầu chạy Check Lịch Sử Giao Dịch Api Từ Phía Ngân Hàng!!!');
+//   try {
+//     const response = await axios.get('http://localhost:8080/check-transactions');
+//     console.log('Kết quả:', response.data);
+//   } catch (error) {
+//     console.error('Lỗi khi gọi API:', error.message);
+//   }
 // });
+
 app.use(cors(corsOptions));
 app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
 });
 
 app.use(settingRouter);
-app.use(product_storageRouter);
+app.use(transactionsrouter);
+app.use(product_colorsRouter);
 app.use(autobankrouter);
 app.use(userRouter);
 app.use(uploadRouter)
@@ -71,8 +81,8 @@ app.use(categoriesRouter);
 app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
+app.use(exportFiles);
 app.use (uploadImgUserRouter)
-app.use (getCatelories)
 server.listen(8080, () => {
-  console.log("Server and Socket.IO are running on port 8080");
+  console.log('Server running on http://localhost:8080');
 });

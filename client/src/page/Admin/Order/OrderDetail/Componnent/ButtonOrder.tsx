@@ -42,7 +42,7 @@ function ButtonOrder({ orderStatuses, orderId }: ButtonOrderProps) {
     };
 
     try {
-      await dispatch(changeStatusOrderAdminThunk(data)).unwrap();
+      await dispatch(changeStatusOrderAdminThunk(data))
       setCurrentOrderStatus((prevStatus) =>
         prevStatus ? { ...prevStatus, order_status: nextStatus } : null
       );

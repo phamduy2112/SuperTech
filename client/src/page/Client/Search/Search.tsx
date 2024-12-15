@@ -32,7 +32,7 @@ function Search() {
   }
 
   return (
-    <div className='w-4/5 m-auto'>
+    <div className='w-[95%] md:w-[90%] lg:w-[80%] m-auto'>
       <Breadcrumb
         items={[
           { title: <a href=''>Trang chủ</a> },
@@ -40,39 +40,42 @@ function Search() {
         ]}
       />
       <div>
-        <h3 className='text-2xl mb-4'>
-          {/* Kết quả phù hợp với từ khóa: <span className='text-purple-700 font-semibold'>{query}</span> */}
+        <h3 className='text-[2rem] mb-[1rem] font-semibold'>
+          Kết quả phù hợp với từ khóa: <span className='text-[#7500CF]'>{query}</span>
         </h3>
-        <div className='flex gap-4'>
-          
+        <div className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
+          {/* Thêm các filter buttons nếu cần */}
         </div>
-        <div className='mt-2 w-full'>
-          <div className='flex justify-between items-center'>
-            <div className='flex gap-4'>
-              <h4 className='text-2xl font-semibold'>Kết quả tìm kiếm</h4>
-              <div className='flex items-center'>
-                <Form.Item valuePropName="checked">
-                  <Checkbox>Giảm giá</Checkbox>
-                </Form.Item>
-                <Form.Item valuePropName="checked">
-                  <Checkbox>Mới</Checkbox>
-                </Form.Item>
-              </div>
+        <div className='mt-[.5rem] w-[100%]'>
+          <div className='flex flex-wrap items-center gap-4'>
+            <div className='w-full min-[426px]:w-auto'>
+              <h4 className='text-[1.6rem] font-semibold'>Kết quả tìm kiếm</h4>
             </div>
-            <div className='w-52'>
-              <Form.Item label="Sắp xếp theo">
-                <Select defaultValue="Mới nhất">
-                  <Select.Option value="newest">Mới nhất</Select.Option>
-                  <Select.Option value="priceLow">Giá thấp</Select.Option>
-                  <Select.Option value="priceHigh">Giá cao</Select.Option>
-                </Select>
+            <div className='flex items-center gap-4'>
+              <Form.Item className='mb-0' valuePropName="checked">
+                <Checkbox>Giảm giá</Checkbox>
               </Form.Item>
+              <Form.Item className='mb-0' valuePropName="checked">
+                <Checkbox>Mới</Checkbox>
+              </Form.Item>
+            </div>
+            <div className='flex items-center gap-2 ml-auto'>
+              <span className='text-[1.4rem]'>Sắp xếp theo:</span>
+              <Select 
+                defaultValue="newest" 
+                className='w-[120px]'
+                size="large"
+              >
+                <Select.Option value="newest">Mới nhất</Select.Option>
+                <Select.Option value="priceLow">Giá thấp</Select.Option>
+                <Select.Option value="priceHigh">Giá cao</Select.Option>
+              </Select>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-6 gap-y-4 text-[1.6rem]">
+      <div className='grid grid-cols-1 min-[426px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4'>
         {getSearch ? (
           getSearch.map(product => (
             <ProductItem key={product.id} product={product} />

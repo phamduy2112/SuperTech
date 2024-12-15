@@ -40,7 +40,6 @@ const getimageproductByIds = async (req, res) => {
         responseSend(res, [], "Có lỗi xảy ra!", 500);
     }
 };
-
 const createimageproduct = async (req, res) => {
     try {
         let newimageproduct = await imageproduct.create(req.body);

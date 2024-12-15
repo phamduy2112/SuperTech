@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const CountdownTimer = () => {
+const CountdownTimer = ({ reset }) => {
   const [seconds, setSeconds] = useState(180); // Thời gian bắt đầu là 180 giây
+
+  useEffect(() => {
+    if (reset) {
+      setSeconds(180); // Reset time when reset is triggered
+    }
+  }, [reset]);
 
   useEffect(() => {
     if (seconds > 0) {
@@ -14,23 +20,39 @@ const CountdownTimer = () => {
   }, [seconds]);
 
   const formatTime = (time) => {
-    return String(time).padStart(3, '0').split(''); // Định dạng thời gian thành mảng ký tự
+    const minutes = Math.floor(time / 60);
+    const remainingSeconds = time % 60;
+    return [
+      String(minutes).padStart(2, '0'),
+      String(remainingSeconds).padStart(2, '0'),
+    ];
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">Countdown Timer</h1>
-      <div className="flex">
-        {formatTime(seconds).map((digit, index) => (
-          <div
-            key={index}
-            className="w-10 h-10 bg-blue-500 text-white flex items-center justify-center m-1 text-lg font-bold"
-          >
-            {digit}
-          </div>
-        ))}
-      </div>
-      {seconds === 0 && <h3 className="mt-4 text-red-500">Thời gian đã hết!</h3>}
+    <div className="my-10">
+      {/* Tiêu đề */}
+      <p className="text-[1.5rem] font-medium text-gray-700">
+        Thời gian hiệu lực: <span className="font-bold">{formatTime(seconds).join(":")}</span>
+      </p>
+
+      {/* Thông báo khi hết thời gian */}
+      {seconds === 0 && (
+        <>
+          <p className="text-red-500 mt-2 font-normal text-[1.5rem]">
+            OTP đã hết hạn. Vui lòng lấy lại mã OTP để tiếp tục.
+           
+            <button 
+              className="mt-2 px-6 py-2 bg-purple-600 text-white rounded-lg
+              text-[1.2rem] sm:text-[1.4rem] hover:opacity-90 "
+              onClick={() => setSeconds(180)}
+            >
+              Gửi lại mã
+            </button>
+         
+          </p>
+          
+        </>
+      )}
     </div>
   );
 };

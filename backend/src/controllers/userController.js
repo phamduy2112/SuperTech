@@ -251,7 +251,7 @@ const userDetail=async(req,res)=>{
 const updateUser = async (req, res) => {
     try {
         const user_id=req.id;
-        const {user_name, user_address, user_phone}=req.body
+        const {user_name, user_address, user_phone,gender,date}=req.body
         const user = await User.findByPk(user_id);
         if (!user) {
             return res.status(404).json({
@@ -264,6 +264,8 @@ const updateUser = async (req, res) => {
         user.user_name =user_name;
         user.user_address =user_address;
         user.user_phone =user_phone;
+        user.user_gender =gender;
+        user.user_birth =date;
         
    
         // Lưu thay đổi vào database
@@ -412,60 +414,38 @@ function generateRandomString(length) {
 
   const forgetCheckMail = async (req, res) => {
     try {
-      let { email } = req.body;
-  
-      // Check if email exists
-      let checkEmail = await User.findOne({
-        where: {
-          user_email: email
-        }
-      });
-  
-      if (!checkEmail) {
-        return responseSend(res, "", "Email không tồn tại", 404);
-      }
-  
-      let dnow = new Date();
-      let code = generateRandomString(6);
-  
-      // Create new code object with expiration
-      let newCode = {
-        code,
-        expired: dnow.setMinutes(dnow.getMinutes() + 10) // Set expiration 10 minutes from now
-      };
-  
-      // Save code to database (create or update)
-      await models.code.create({
-        user_id: checkEmail.user_id,  // Assuming user_id is in User model
-        code: newCode.code,
-        create_at: newCode.expired    // Save expiration time
-      });
-      console.log(checkEmail.user_id );
-      
-      // Send the reset code to the user's email
-      await sendMail(email, "Lấy lại mật khẩu", code);
-  
-      // Set a timeout to delete the code after 3 minutes (180000 milliseconds)
-      setTimeout(async () => {
-        try {
-          await models.code.destroy({
-            where: { user_id: checkEmail.user_id }
-          });
-          console.log("Reset code deleted after 3 minutes");
-        } catch (err) {
-          console.error("Error deleting reset code:", err);
-        }
-      }, 180000); // 3 minutes
-  
-      // Send success response
-      return responseSend(res, true, "Code sent successfully", 200);
-      
+        let { email } = req.body;
+
+        // Check if email exists
+        let user = await User.findOne({ where: { user_email: email } });
+        if (!user) return responseSend(res, "", "Email không tồn tại", 404);
+
+        let code = generateRandomString(6); // Generate OTP
+        let expirationTime = new Date();
+        expirationTime.setMinutes(expirationTime.getMinutes() + 10);
+
+        // Hash the code for security
+        const hashedCode = await bcrypt.hash(code, 10);
+
+        // Save code to database
+        await models.code.create({
+            user_id: user.user_id,
+            code: hashedCode,
+            create_at: new Date(),
+            expired: expirationTime
+        });
+
+        // Send email
+        await sendMail(email, "Lấy lại mật khẩu", code);
+
+        // Send success response
+        return responseSend(res, true, "Code sent successfully", 200);
     } catch (error) {
-      // Log error and send response
-      console.error("Error in forgetCheckMail:", error);
-      return responseSend(res, "", "Internal server error", 500);
+        console.error("Error in forgetCheckMail:", error);
+        return responseSend(res, "", "Internal server error", 500);
     }
-  };
+};
+
   const forgetCheckCode = async (req, res) => {
     try {
       // Lấy mã từ yêu cầu
@@ -506,7 +486,7 @@ function generateRandomString(length) {
   };
   const resetPasswordNoToken = async (req, res) => {
     try {
-      let { email, newPassword,confirmNewPassword } = req.body;
+      let { email, newPassword } = req.body;
   
       // Check if the email exists
       let checkEmail = await User.findOne({

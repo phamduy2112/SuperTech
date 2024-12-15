@@ -8,14 +8,20 @@ export const getOrderWeekSales = () => {
 	
     });
   };
-export const getUserOrderCount = () => {
-    return axiosWithAuth(`/get-user-order-count`, {
+export const getUserOrderCount = ({limit}) => {
+    return axiosWithAuth(`/get-user-order-count?limit=${limit}`, {
       method: "get",
 	
     });
   };
 export const getTopFiveProduct = ({period}:string) => {
     return axiosWithAuth(`/get-product-top-five?period=${period}`, {
+      method: "get",
+	
+    });
+  };
+export const getTopUserRegister = ({period}:string) => {
+    return axiosWithAuth(`/get-user-register?period=${period}`, {
       method: "get",
 	
     });

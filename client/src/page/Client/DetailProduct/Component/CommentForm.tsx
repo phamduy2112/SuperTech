@@ -84,31 +84,37 @@ const CommentForm = (props: any) => {
   const isDisabled = !comment.trim();
 
   return (
-    <div className="px-[2rem] bg-white">
-      <h3 className="text-[2rem]">Ý kiến của bạn</h3>
-      <div className="mt-[2rem] flex">
-        <div>
+    <div className="px-[1rem] md:px-[2rem] bg-white">
+      <h3 className="text-[1.6rem] md:text-[2rem]">Ý kiến của bạn</h3>
+      <div className="mt-[1rem] md:mt-[2rem] flex flex-col md:flex-row">
+        <div className="flex flex-col items-center md:items-start mb-4 md:mb-0">
           {login ? (
-            <div className="flex h-[110px] w-[110px] items-center justify-center rounded-full" style={avatarStyle}>
-              <div className="text-[1.7rem] leading-none text-center">{avatarText}</div>
+            <div className="flex h-[80px] md:h-[110px] w-[80px] md:w-[110px] items-center justify-center rounded-full" style={avatarStyle}>
+              <div className="text-[1.4rem] md:text-[1.7rem] leading-none text-center">{avatarText}</div>
             </div>
           ) : (
-            <div className="flex items-center justify-center w-[100px] h-[100px] bg-[#F0F0F0] rounded-full">
-              <span className="text-[2rem] text-[#555] font-bold">User</span>
+            <div className="flex items-center justify-center w-[80px] md:w-[100px] h-[80px] md:h-[100px] bg-[#F0F0F0] rounded-full">
+              <span className="text-[1.6rem] md:text-[2rem] text-[#555] font-bold">User</span>
             </div>
           )}
-          <Rate className="mt-4" onChange={setRating} value={rating} />
+          <Rate 
+            className="mt-2 md:mt-4 text-[1.4rem] md:text-[1.8rem]" 
+            onChange={setRating} 
+            value={rating}
+            style={{ fontSize: 'inherit' }}
+          />
         </div>
-        <div className="w-[90%]">
+        <div className="w-full md:w-[90%] md:ml-4">
           <TextArea
             rows={6}
             placeholder="Nhập ý kiến của bạn..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            className="text-[1.4rem] md:text-[1.6rem]"
           />
           <div className="flex justify-end">
             <button
-              className={`py-[1rem] px-[2rem] text-[1.9rem] mt-4 rounded-md ${
+              className={`py-[0.8rem] md:py-[1rem] px-[1.5rem] md:px-[2rem] text-[1.6rem] md:text-[1.9rem] mt-4 rounded-md ${
                 isDisabled ? "bg-gray-400 text-gray-200" : "bg-[#7500CF] text-white"
               }`}
               onClick={handleSubmit}

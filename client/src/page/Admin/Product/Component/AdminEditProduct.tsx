@@ -27,7 +27,8 @@ function AdminEditProduct() {
   const listCatelogry = useAppSelector(state => state.category.listCatelories);
 
   const productDetail=useAppSelector((state)=>state.product.productDetail)
-
+  const [productColors,setProductColor] = useState([]);
+  
   const dispatch=useAppDispatch()
   // console.log(props);
   useEffect(()=>{
@@ -109,7 +110,7 @@ console.log(productDetail.product_name);
   };
 
   // const ids = [714, 715]; // Các ID cần lấy
-  
+
   useEffect(() => {
     const matchingCategory = formattedCategories?.find(
       (category) => category.value === productDetail.category_id
@@ -122,6 +123,8 @@ console.log(productDetail.product_name);
  }, [formattedCategories, productDetail.category_id]);
 console.log(productDetail);
 const imageIds = listProductColor.map((item) => item.image_id);
+console.log(imageIds);
+
 useEffect(() => {
   const fetchApi = async () => {
     const responsive = await getImageProductById(imageIds); // Gọi API với imageIds
@@ -142,11 +145,13 @@ useEffect(()=>{
   if( productDetail.product_colors){
     dispatch(removeAllProductColors());
     productDetail.product_colors?.map((item)=>{
+      
       dispatch(setProductColors({
         color_id:item.color_id,
         color: item.color,
-        // quantity: values.quantity,
-        image_id: item.image_id      , // Include image_id here
+        quantity:     item?.product_qualities[0]?.quality_product || 0
+        ,
+        image_id: item.image.image_id      , // Include image_id here
         // productStorage: [
         //   {
         //     storage: values.capacity,
@@ -156,18 +161,40 @@ useEffect(()=>{
       })
     );
     })
+  
+    
   }
  
   
 },[dispatch, productDetail])
+// console.log(item.product_qualities?.quality_product);
+
   const productColorDelete=async (item:object,id:number)=>{
     const resp=await deleteColorsProduct(id);
-  
-    console.log(id);
+    toast.success('Xóa màu sắc thành công');
+
     
     dispatch(removeProductsFromColors(item.image_id))
   }
-  console.log(listCatelogry);
+console.log(productColors);
+
+
+  useEffect(() => {
+      
+
+    // Kết hợp thông tin màu sắc và hình ảnh
+    const combinedList = listProductColor.map(colorItem => {
+        const imageItem = img.find(img => img.image_id == colorItem.image_id);
+        return {
+            ...colorItem,
+            image_one: imageItem ? imageItem.image_one : null,
+        };
+    });
+
+    // Cập nhật vào state
+    setProductColor(combinedList);
+
+}, [img, listProductColor]); // Dependency array rỗng, chỉ chạy khi component mount
   
   return (
     <div className='w-[80%] m-auto'>
@@ -182,16 +209,16 @@ useEffect(()=>{
         discount: productDetail.product_discount || 0,
         product_name: productDetail.product_name || "",
         hot: productDetail.product_hot || 0,
-        moTa: productDetail.infor_more || "",
-        infor_screen: productDetail.infor_screen || "",
-        infor_system: productDetail.infor_system || "",
-        infor_cpu: productDetail.infor_cpu || "",
-        infor_ram: productDetail.infor_ram || "",
-        infor_rom: productDetail.infor_rom || "",
-        infor_frontCamera: productDetail.infor_frontCamera || "",
-        infor_rearCamera: productDetail.infor_rearCamera || "",
-        infor_scanning_frequency: productDetail.infor_scanning_frequency || "",
-        infor_chip_battery: productDetail.infor_chip_battery || "",
+        moTa: productDetail?.infor_product_infor_product?.infor_more || "",
+        infor_screen: productDetail?.infor_product_infor_product?.infor_screen || "",
+        infor_system: productDetail?.infor_product_infor_product?.infor_system || "",
+        infor_cpu: productDetail?.infor_product_infor_product?.infor_cpu || "",
+        infor_ram: productDetail?.infor_product_infor_product?.infor_ram || "",
+        infor_rom: productDetail?.infor_product_infor_product?.infor_rom || "",
+        infor_frontCamera: productDetail?.infor_product_infor_product?.infor_frontCamera || "",
+        infor_rearCamera: productDetail?.infor_product_infor_product?.infor_rearCamera || "",
+        infor_scanning_frequency: productDetail?.infor_product_infor_product?.infor_scanning_frequency || "",
+        infor_chip_battery: productDetail?.infor_product_infor_product?.infor_chip_battery || "",
       }}
       
           onSubmit={(values, { resetForm }) => {
@@ -210,11 +237,10 @@ useEffect(()=>{
               listProductColor: listProductColor,
               product_id:productDetail.product_id
             };
-        console.log(dataInforProduct);
         dispatch(putInforProductAdminThunk(dataInforProduct))
         resetForm();
-            console.log(values);
-          
+            toast.success('Sửa sản phẩm thành công!');
+
         dispatch(removeAllProductColors())
 navigate("/admin/quan-li-san-pham")
 
@@ -433,8 +459,8 @@ navigate("/admin/quan-li-san-pham")
    )}
 
 <ModalAdminProduct/>
-<div>
-{listProductColor?.map((item) => (
+<div className='flex gap-[1rem]'>
+{productColors?.map((item) => (
               <div
                   key={item.color}
               
@@ -448,16 +474,16 @@ navigate("/admin/quan-li-san-pham")
                   <IoMdClose />
                 </div>
                   <img 
-                      src={`${IMG_BACKEND}/${img[0]?.image_one}`}
+                      src={`${IMG_BACKEND}/${item.image_one}`}
                       alt={item?.color} 
                       className="w-20 rounded-md"
                   />
                   <div>
                       <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
-                      <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
+                      {/* <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
                         return item.storage
-                      })}</p>
-                      <p className="text-red-500 font-semibold text-[1.2rem]">Số lượng: 3</p>
+                      })}</p> */}
+                      <p className="text-red-500 font-semibold text-[1.2rem]">Số lượng: {item?.quantity}</p>
                   </div>
               </div>
           ))}

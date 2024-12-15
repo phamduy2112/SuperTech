@@ -61,6 +61,8 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+    devTools: process.env.NODE_ENV !== 'production', // Enable dev tools in non-production environments
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;

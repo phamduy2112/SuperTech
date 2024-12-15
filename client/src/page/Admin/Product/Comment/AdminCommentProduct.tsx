@@ -1,42 +1,126 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-
-import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
+import { Button, Checkbox, Modal, Popover, Table } from 'antd';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
 import { IoCloudDownloadOutline } from 'react-icons/io5';
-import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
-import AdminCommentProductEdit from './AdminCommentProductEdit';
 import AdminCommentProductAdd from './AdminCommentProductAdd';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { getProductByIdThunk } from "../../../../redux/product/product.slice";
+import { deleteCommentByIdThunk, editCommentByIdThunk, getCommentByIdProductThunk } from "../../../../redux/comment/comment.slice";
+import { IMG_BACKEND_USER } from "../../../../constants";
+import { FaUsers } from "react-icons/fa";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/vi';
+import toast from "react-hot-toast";
+import { BiSolidEdit } from "react-icons/bi";
+interface Comment {
+  [key: string]: any;
+}
+
 
 function AdminCommentProduct() {
-  const [selectedCheckbox, setSelectedCheckbox] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [key, setKey] = useState(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEdit = (key: any) => {
-    setKey(key)
+  const { id } = useParams();
+  const numericId = Number(id);
+  const AppDispatch = useAppDispatch();
+  const Navigate = useNavigate();
+  const productDetail: any = useAppSelector((state) => state.product.productDetail);
+  const getCommentById: any = useAppSelector((state) => state.listComment.listComment);
+  const [NewComment, NewsetComment] = useState<Comment[]>([]);
+  const user = useAppSelector((state) => state.user.user);
+  const login = useAppSelector((state) => state.user.login);
+  const [comment, setComment] = useState('');
+  const [oneComment, setOneComment] = useState<Comment>({} as Comment);
+  const [ModalState, setModalState] = useState(false);
 
+
+  dayjs.extend(relativeTime);
+  dayjs.locale('vi');
+  const customLocale = {
+    ...dayjs.Ls.vi,
+    relativeTime: {
+      future: 'trong %s',
+      past: '%s trước',
+      s: 'vài giây',
+      m: '1 phút',
+      mm: '%d phút',
+      h: '1 giờ',
+      hh: '%d giờ',
+      d: '1 ngày',
+      dd: '%d ngày',
+      M: '1 tháng',
+      MM: '%d tháng',
+      y: '1 năm',
+      yy: '%d năm'
+    }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDelete = (key: any) => {
+  dayjs.locale(customLocale);
+
+
+
+
+  useEffect(() => {
+    if (!isNaN(numericId)) {
+      AppDispatch(getProductByIdThunk(numericId));
+      AppDispatch(getCommentByIdProductThunk(numericId))
+    }
+
+  }, [numericId, AppDispatch])
+
+
+
+
+
+
+
+
+
+  const [selectedCheckbox, setSelectedCheckbox] = useState('');
+
+
+
+
+
+  const [staffKeys, setStaffKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (getCommentById && getCommentById?.length > 0) {
+      const keys = getCommentById.map((staff: string) => Object.keys(staff));
+      keys.push('tacvu');
+      setStaffKeys([...new Set(keys.flat())] as string[]);
+
+    }
+  }, [getCommentById])
+
+  const [ColumsComments, setColumsComments] = useState<any[]>([]);
+
+  const handlePage = useCallback((productId: any, commentId: any) => {
+    Navigate(`/admin/quan-li-san-pham/${productId}/quan-li-binh-luan/${commentId}`);
+  }, [Navigate]);
+
+  const Remove = useCallback((data: any) => {
     Swal.fire({
+      title: `Xác nhận xóa ${data.comment_id}`,
+      text: "Bạn có chắc chắn muốn xóa bình luận này?",
       icon: 'warning',
-      showDenyButton: true,
-      title: `Bạn Chọn Bình Luận Có ID ${key}`,
-      text: `Bạn có chắc muốn xóa ?`,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
       confirmButtonText: 'Xóa',
-      denyButtonText: 'Hủy',
     }).then((result) => {
       if (result.isConfirmed) {
+        AppDispatch(deleteCommentByIdThunk(data));
         Swal.fire({
           icon: 'success',
           title: 'Đã Xóa',
-          text: `Bạn đã Xóa ${key}`,
+          text: `Bạn đã Xóa ${data.comment_id}`,
         });
       } else {
         Swal.fire({
@@ -45,278 +129,339 @@ function AdminCommentProduct() {
           text: 'Bạn đã hủy thao tác xóa.',
         });
       }
-    });
-  };
 
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'key',
-      key: 'key',
-    },
-    {
-      title: 'Ngày',
-      dataIndex: 'date',
-    },
-    {
-      title: 'Nội Dung',
-      dataIndex: 'content',
-    },
-    {
-      title: 'Hình Sản Phẩm',
-      dataIndex: 'productImage',
-      render: (src: string) => (
-        <img className='rounded-md object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-      ),
-    },
-    {
-      title: 'Tên Sản Phẩm',
-      dataIndex: 'productName',
-    },
-    {
-      title: 'Hình Người Dùng',
-      dataIndex: 'userImage',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (src: any) => (
-        <img className='rounded-full object-cover' src={src} alt="" style={{ width: 50, height: 50 }} />
-      ),
-    },
-    {
-      title: 'Tên Người Dùng',
-      dataIndex: 'userName',
-    },
-    {
-      title: 'Vai Trò',
-      dataIndex: 'role',
-      render: (text: string) => (
-        <div className="flex-1 flex items-center gap-3">
-          <div className={`w-[10px] rounded-full h-[10px] ${text === 'Khách Hàng' ? 'bg-[#2af52a]' : ''} ${text === 'Nhân Viên' ? 'bg-[#ffd000]' : ''} ${text === 'Admin' ? 'bg-[red]' : ''}`}></div>
-          {text}
-        </div>
-      ),
-    },
-    {
-      title: 'Số Sao',
-      dataIndex: 'rating',
-      render: (rating: number) => (
-        <div>
-          {'⭐'.repeat(rating)} {/* Hiển thị số sao */}
-        </div>
-      ),
-    },
-    {
-      title: 'Tác Vụ',
-      key: 'key',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (record: any) => (
-        <div className='flex text-[24px] box-border gap-1 items-center'>
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(record.key)}
-          />
-          <CiBookmarkRemove
-            className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDelete(record.key)}
-          />
-        </div>
-      ),
-    },
-  ];
+    })
+  }, [AppDispatch])
 
-  const data = [
-    {
-      key: '1',
-      date: '2023-10-01',
-      content: 'Sản phẩm rất tốt, tôi rất hài lòng!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm A',
-      userImage: 'https://randomuser.me/api/portraits/men/1.jpg',
-      userName: 'Nguyễn Văn A',
-      role: 'Khách Hàng',
-      rating: 5,
-    },
-    {
-      key: '2',
-      date: '2023-10-02',
-      content: 'Chất lượng vượt xa mong đợi!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm B',
-      userImage: 'https://randomuser.me/api/portraits/men/2.jpg',
-      userName: 'Trần Văn B',
-      role: 'Admin',
-      rating: 4,
-    },
-    {
-      key: '3',
-      date: '2023-10-03',
-      content: 'Tôi không thích sản phẩm này.',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm C',
-      userImage: 'https://randomuser.me/api/portraits/women/1.jpg',
-      userName: 'Lê Thị C',
-      role: 'Nhân Viên',
-      rating: 2,
-    },
-    {
-      key: '4',
-      date: '2023-10-04',
-      content: 'Dịch vụ khách hàng rất tốt!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm D',
-      userImage: 'https://randomuser.me/api/portraits/men/3.jpg',
-      userName: 'Nguyễn Văn D',
-      role: 'Khách Hàng',
-      rating: 5,
-    },
-    {
-      key: '5',
-      date: '2023-10-05',
-      content: 'Tôi sẽ mua lại!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm E',
-      userImage: 'https://randomuser.me/api/portraits/women/2.jpg',
-      userName: 'Trần Thị E',
-      role: 'Khách Hàng',
-      rating: 4,
-    },
-    {
-      key: '6',
-      date: '2023-10-06',
-      content: 'Giá cả hợp lý cho chất lượng!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm F',
-      userImage: 'https://randomuser.me/api/portraits/men/4.jpg',
-      userName: 'Lê Văn F',
-      role: 'Nhân Viên',
-      rating: 5,
-    },
-    {
-      key: '7',
-      date: '2023-10-07',
-      content: 'Không đúng như quảng cáo.',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm G',
-      userImage: 'https://randomuser.me/api/portraits/women/3.jpg',
-      userName: 'Nguyễn Thị G',
-      role: 'Khách Hàng',
-      rating: 2,
-    },
-    {
-      key: '8',
-      date: '2023-10-08',
-      content: 'Rất đáng giá!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm H',
-      userImage: 'https://randomuser.me/api/portraits/men/5.jpg',
-      userName: 'Trần Văn H',
-      role: 'Nhân Viên',
-      rating: 5,
-    },
-    {
-      key: '9',
-      date: '2023-10-09',
-      content: 'Không thể hài lòng hơn.',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm I',
-      userImage: 'https://randomuser.me/api/portraits/women/4.jpg',
-      userName: 'Lê Thị I',
-      role: 'Nhân Viên',
-      rating: 4,
-    },
-    {
-      key: '10',
-      date: '2023-10-10',
-      content: 'Sản phẩm tuyệt vời!',
-      productImage: 'https://product.hstatic.net/1000406564/product/iphone11-tr_3064909d9a634a548fb3657c570f5c80_master.jpg',
-      productName: 'Sản Phẩm J',
-      userImage: 'https://randomuser.me/api/portraits/men/6.jpg',
-      userName: 'Nguyễn Văn J',
-      role: 'Khách Hàng',
-      rating: 5,
-    },
-  ];
+  const handleDelete = useCallback((data: any, user: any) => {
 
-
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSelectChange = (selectedRowKeys: any) => {
-    setSelectedCheckbox(selectedRowKeys);
-    if (selectedRowKeys.length > 0) {
-      showModal(selectedRowKeys.length);
-    }
-  };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const showModal = (count: any) => {
-    Swal.fire({
-      icon: "info",
-      title: `Bạn Vừa Chọn ${count} Bình Luận`,
-      text: 'Bạn có muốn tiếp tục?',
-      showDenyButton: true,
-      denyButtonText: 'Xóa',
-      confirmButtonText: 'Sửa',
-      customClass: {
-        confirmButton: 'bg-green-700 text-white',
-        denyButton: 'bg-red-500 text-white',
-      },
-      backdrop: true,
-      allowOutsideClick: false,
-    }).then((result) => {
-      if (result.isDenied) {
-        Swal.fire({
-          icon: "warning",
-          title: `Bạn có chắc chắn muốn xóa ${count} Bình Luận này?`,
-          showCancelButton: true,
-          confirmButtonText: 'Xóa',
-          cancelButtonText: 'Hủy',
-          customClass: {
-            confirmButton: 'bg-red-500 text-white',
-            cancelButton: 'bg-gray-500 text-white',
-          },
-        }).then((kq) => {
-          if (kq.isConfirmed) {
-            Swal.fire('Đã xóa!', '', 'success');
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Đã Hủy',
-              text: 'Bạn đã hủy thao tác xóa.',
-            });
-          }
-        });
-      } else if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'info',
-          text: `Đã mở trang sửa cho ${count} Bình Luận`,
-          confirmButtonText: 'OK',
-        });
+    if (user.user_role == data.user.user_role) {
+      if (user.user_id != data.user.user_id) {
+        toast.error("Bạn không thể xóa bình luận của người cùng cấp!");
+        return;
+      } else {
+        Remove(data)
       }
+    }
+
+    if (user.user_role != data.user.user_role) {
+      if (data.user.user_role == 0) {
+        toast.error("Bạn không thể xóa bình luận của Admin!");
+        return;
+      } else {
+
+        if (user.user_role == 0 || user.user_role == 2) {
+          Remove(data)
+        } else {
+          if (user.user_id != data.user.user_id) {
+            toast.error("Bạn không thể xóa bình luận của người khác!");
+            return;
+
+          }
+        }
+      }
+
+    }
+
+
+  }, [Remove]);
+  const Update = useCallback((ModalForm: boolean, data: any) => {
+    setOneComment(data);
+    setComment(data.comment);
+    setModalState(!ModalForm);
+  }, [])
+
+  const handleEdit = useCallback((ModalForm: boolean, data: any, user: any) => {
+    if (user.user_role == data.user.user_role) {
+      if (user.user_id != data.user.user_id) {
+        toast.error("Bạn không thể sửa bình luận của người cùng cấp!");
+        return;
+      } else {
+        Update(ModalForm, data)
+      }
+    }
+
+    if (user.user_role != data.user.user_role) {
+      if (data.user.user_role == 0) {
+        toast.error("Bạn không thể sửa bình luận của Admin!");
+        return;
+      } else {
+
+        if (user.user_role == 0 || user.user_role == 2) {
+          Update(ModalForm, data)
+        } else {
+          if (user.user_id != data.user.user_id) {
+            toast.error("Bạn không thể sửa bình luận của người khác!");
+            return;
+
+          }
+        }
+      }
+
+    }
+  }, [Update]);
+
+
+
+
+
+
+  useEffect(() => {
+    const Colums = staffKeys.map((comment) => {
+      switch (comment) {
+        case 'comment_id':
+          return {
+            title: 'ID',
+            dataIndex: comment,
+            key: comment,
+          };
+        case 'user':
+          return {
+            title: 'Người dùng',
+            key: comment,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (user: any) => (
+              <div className="flex items-center gap-5">
+                <img className='rounded-md object-cover' src={user.user.user_image === null || user.user.user_image === undefined ? 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' : IMG_BACKEND_USER + `/${user.user.user_image}`} alt="" style={{ width: 50, height: 50 }} />
+                <span>{user.user.user_name}</span>
+              </div>
+            )
+          };
+        case 'comment_date':
+          return {
+            title: 'Ngày bình luận',
+            key: comment,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (record: any) => {
+              const relativeTime = dayjs(record.comment_date).fromNow();
+              return <span>{relativeTime}</span>;
+            },
+          };
+        case 'comment_content':
+          return {
+            title: 'Nội dung bình luận',
+            key: comment,
+            dataIndex: comment,
+          };
+        case 'product_id':
+          return {
+            title: 'Sản Phẩm',
+            key: comment,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (record: any) => (
+              <span>{record.product_id === productDetail.product_id ? productDetail.product_name : ''}</span>
+            ),
+          };
+        case 'comment_star':
+          return {
+            title: 'Lượt đánh giá',
+            key: comment,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (rating: any) => (
+              <div>
+                {rating.comment_star === null || rating.comment_star === undefined || rating.comment_star === 0 ? 'Chưa có đánh giá sao' : '⭐'.repeat(rating.comment_star)}
+              </div>
+            ),
+          };
+        case 'isPurchase':
+          return {
+            title: 'Mua hàng',
+            key: comment,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (isPurchase: any) => (
+              <div>
+                {isPurchase.isPurchase == false ? 'Chưa mua hàng' : 'Đã mua hàng'}
+              </div>
+            ),
+          };
+        case 'likes':
+          return {
+            title: 'Likes',
+            key: comment,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (like: any) => (
+              <div>
+                {like?.likes?.length}
+              </div>
+            ),
+          };
+        case 'tacvu':
+          return {
+            title: 'Tác Vụ',
+            key: 'tacvu',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            render: (record: any) => (
+              <div className='flex text-[24px] box-border gap-1 items-center'>
+                <FaUsers
+                  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+                  onClick={() => handlePage(record.product_id, record.comment_id)}
+                />
+                <BiSolidEdit
+                  onClick={() => handleEdit(ModalState, record, user)}
+                  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+                />
+                <CiBookmarkRemove
+                  className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
+                  onClick={() => handleDelete(record, user)}
+                />
+              </div>
+            ),
+          };
+        default:
+          return null;
+      }
+    }).filter(column => column !== null);
+
+    setColumsComments(Colums);
+  }, [ModalState, handleDelete, handleEdit, handlePage, productDetail.product_id, productDetail.product_name, staffKeys, user]);
+
+  useEffect(() => {
+    const arrangeArray = [...getCommentById].sort((a: any, b: any) => {
+      if (selectedCheckbox === 'new') {
+        return new Date(b.comment_date).getTime() - new Date(a.comment_date).getTime();
+      } else if (selectedCheckbox === 'old') {
+        return new Date(a.comment_date).getTime() - new Date(b.comment_date).getTime();
+      }
+      return 0;
     });
+
+    NewsetComment(arrangeArray);
+  }, [getCommentById, selectedCheckbox]);
+
+  const [valueInputSearch, setvalueInputSearch] = useState('');
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setvalueInputSearch(e.target.value);
+  }
+
+  useEffect(() => {
+    if (valueInputSearch.trim() === "") {
+      NewsetComment(getCommentById);
+    } else {
+      const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
+
+      const filterComment = getCommentById.filter((item: any) => {
+        const IdcommentFilter = item?.comment_id;
+        const ContentcommentFilter = item?.comment_content;
+        const userNamefilter = item?.user?.user_name;
+
+        const userNameString = (typeof userNamefilter === 'string' || userNamefilter instanceof String) ? userNamefilter : String(userNamefilter || '');
+        const ContentcommentFilterString = (typeof ContentcommentFilter === 'string' || ContentcommentFilter instanceof String) ? ContentcommentFilter : String(ContentcommentFilter || '');
+        const IdcommentFilterString = (typeof IdcommentFilter === 'number' || IdcommentFilter instanceof Number) ? IdcommentFilter.toString() : String(IdcommentFilter || '');
+
+        return userNameString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm) ||
+          ContentcommentFilterString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm) ||
+          IdcommentFilterString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm);
+      });
+
+      NewsetComment(filterComment);
+
+
+    }
+  }, [getCommentById, valueInputSearch])
+
+  const handleCancel = () => {
+    setModalState(!ModalState);
+
+  };
+
+  const handleOk = async (e: any) => {
+    e.preventDefault();
+    if (!login) {
+      toast.error("Bạn cần đăng nhập!");
+      Navigate("/đăng-nhập");
+      return;
+    }
+    if (comment.length < 5) {
+      toast.error("Bạn cần nhập 5 kí tự trở lên")
+      return;
+    };
+    if (id != '' && oneComment.comment_id != '') {
+      const data = {
+        comment_id: oneComment.comment_id,
+        product_id: Number(id),
+        comment_content: comment,
+
+      };
+      AppDispatch(editCommentByIdThunk(data));
+      toast.success("Chỉnh sửa bình luận thành công");
+      setModalState(!ModalState);
+
+    }
+  }
+
+  console.log(oneComment)
+  const handleCommentChange = (e: any) => {
+    setComment(e.target.value);
+  };
+
+  const renderModal = (ModalForm: boolean) => {
+    return (
+      <Modal
+        title={`Sửa phản hồi ${oneComment.comment_id}`}
+        open={ModalForm}
+        onCancel={handleCancel}
+        onOk={handleOk}
+        okText="Sửa"
+        cancelText="Hủy bỏ"
+      >
+        <form onSubmit={handleOk} className='gap-3 flex flex-col'>
+          <div className='flex h-auto col-span-2 flex-col gap-4'>
+            <label htmlFor='comment' className='text-[13px] text-[#81818177] font-medium'>
+              Dữ liệu trả lời ban đầu
+            </label>
+
+            <input
+              type='text'
+              placeholder='Chưa nhập'
+              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none'
+              value={oneComment.comment_content}
+              required
+              disabled
+            />
+          </div>
+          <div className='flex h-auto col-span-2 flex-col gap-4'>
+            <label htmlFor='comment' className='text-[13px] text-[#81818177] font-medium'>
+              Sửa phản hồi của tôi
+            </label>
+
+            <input
+              type='text'
+              placeholder='Chưa nhập'
+              className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none'
+              id='comment'
+              name='comment'
+              value={comment}
+              onChange={handleCommentChange}
+              required
+            />
+          </div>
+          <button type="submit" style={{ display: 'none' }}></button>
+        </form>
+      </Modal>
+    );
   };
 
 
 
-
-  const rowSelection = {
-    onChange: onSelectChange,
-  };
 
   return (
     <div className='flex  flex-col p-12 gap-5 bg-[#f2edf3]'>
       <div className='flex-1 bg-white flex flex-col rounded-xl shadow-lg'>
         <div className='flex items-center justify-between box-border p-[24px]'>
-          <span className='text-[30px] font-medium text-[#ffd700]'>Bình Luận Sản Phẩm</span>
+          <span className='text-[30px] font-medium text-[#ffd700]'>Bình Luận Sản Phẩm {productDetail.product_name}</span>
           <div className='flex gap-3'>
             <Button className='p-10'>
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <AdminCommentProductAdd/>
-           
+            <AdminCommentProductAdd props={productDetail} />
+
           </div>
         </div>
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
           <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm bình luận sản phẩm...' />
+            <input onChange={handleSearch} type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm bình luận sản phẩm...' />
             <GoSearch className='text-[18px]' />
           </div>
 
@@ -331,10 +476,6 @@ function AdminCommentProduct() {
               <div className='flex gap-2 justify-between p-[12px]'>
                 <label className='text-[14px]'>Cũ nhất</label>
                 <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
-              </div>
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
-                <label className='text-[14px]'>Sản Phẩm Bình Luận Nhiều Nhất</label>
-                <Checkbox checked={selectedCheckbox === 'productmax'} onChange={() => setSelectedCheckbox('productmax')}></Checkbox>
               </div>
 
             </div>}
@@ -352,20 +493,15 @@ function AdminCommentProduct() {
         <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
           <Table
             className='flex-1'
-            rowSelection={{
-              type: 'checkbox',
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={data}
+            columns={ColumsComments || []}
+            dataSource={Array.isArray(NewComment) ? NewComment : []}
+
             size='large'
             pagination={{ pageSize: 10 }}
           />
-            {
-            key != 0 ? <AdminCommentProductEdit props={key} /> : ''
-          }
         </div>
       </div>
+      {ModalState && renderModal(ModalState)}
     </div>
   );
 }
