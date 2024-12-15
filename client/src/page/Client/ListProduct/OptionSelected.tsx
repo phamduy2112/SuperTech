@@ -66,137 +66,14 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
             setFilteredProducts(ArrayFilter);
         }
     }, [inforProduct, ListProduct]);
-    console.log('filteredProducts', filteredProducts)
 
 
 
 
-    const [ScreenValues, setScreenValues] = useState<string[]>([]);
-    const [Ram, setRam] = useState<string[]>([]);
-    const [Rom, setRom] = useState<string[]>([]);
-    const [ScanningFrequency, setscanning_frequency] = useState<string[]>([]);
-    const [FrontCameras, setscanning_frontCamera] = useState<string[]>([]);
-    const [RearCameras, setscanning_rearCamera] = useState<string[]>([]);
-    const [Scanningsystem, setscanning_system] = useState<string[]>([]);
-    const [Scanningcpu, setscanning_cpu] = useState<string[]>([]);
-    const [Scanningchip_battery, setscanning_chip_battery] = useState<string[]>([]);
-    const [Scanningmore, setscanning_more] = useState<string[]>([]);
 
 
 
-    useEffect(() => {
-        // Kiểm tra inforProduct trước khi thực hiện lọc
-        if (Array.isArray(inforProduct) && inforProduct.length > 0) {
-            const uniqueScreenValues = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_screen)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((screen: any) => screen && screen.trim() !== '')
-                )
-            ];
-            const uniqueRam = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_ram)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((ram: any) => ram && ram.trim() !== '')
-                )
-            ]
 
-
-            const uniqueRom = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_rom)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((rom: any) => rom && rom.trim() !== '')
-                )
-            ]
-
-            const unique_scanning_frequency = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_scanning_frequency)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-            const unique_frontCamera = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_frontCamera)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-            const unique_rearCamera = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_rearCamera)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-            const unique_system = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_system)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-            const unique_cpu = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_cpu)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-            const unique_chip_battery = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_chip_battery)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-            const unique_more = [
-                ...new Set(
-                    inforProduct
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any) => item.infor_more)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .filter((item: any) => item && item.trim() !== '')
-                )
-            ]
-
-
-
-            setScreenValues(uniqueScreenValues);
-            setRam(uniqueRam);
-            setRom(uniqueRom);
-            setscanning_frequency(unique_scanning_frequency);
-            setscanning_frontCamera(unique_frontCamera);
-            setscanning_rearCamera(unique_rearCamera);
-            setscanning_system(unique_system);
-            setscanning_cpu(unique_cpu);
-            setscanning_chip_battery(unique_chip_battery);
-            setscanning_more(unique_more)
-
-
-        }
-    }, [inforProduct]);
 
 
 
@@ -212,12 +89,11 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
 
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 
     return (
         <>
-            <div className="grid border-t-[1px] grid-cols-3 box-border gap-[15px] text-[14px] p-6 bg-white rounded-lg">
+            <div className="grid border-t-[1px] grid-cols-2 box-border gap-[15px] text-[14px] p-6 bg-white rounded-lg">
                 <div className="flex flex-col col-span-3">
                     <div className="font-bold">Các hãng {
                         categoryDadNames[dataId]
@@ -241,16 +117,29 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Hệ điều hành</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {
-                            filteredProducts.map((value, i) =>
-                                Scanningmore.map((item, index) =>
-                                    <span>
-                                        {item}
-                                    </span>
-                                )
-                            )
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_system, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) => typeof item.infor_product_infor_product.infor_system === 'string' && item.infor_product_infor_product.infor_system.trim() !== '')
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_system}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.system, item.infor_product_infor_product.infor_system) ? 'primary' : 'default'}
+                                    onClick={() => handlesystem(item.infor_product_infor_product.infor_system)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_system}</span>
+                                </Button>
+                            ))
                         }
                     </div>
+
+
+
+
                 </div>
 
                 <div className="flex flex-col">
@@ -271,99 +160,162 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Kích thước màn hình</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {
+                        {[
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            ScreenValues.map((item: any, index) => (
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_screen, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_screen &&
+                                typeof item.infor_product_infor_product.infor_screen === 'string' &&
+                                item.infor_product_infor_product.infor_screen.trim() !== ''
+                            )
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
                                 <Button
-                                    key={index}
+                                    key={item.infor_product_infor_product.infor_screen}
                                     className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                    type={isSelected(ObjFilter.size, item) ? 'primary' : 'default'}
-                                    onClick={() => handleSelectSize(item)}
+                                    type={isSelected(ObjFilter.size, item.infor_product_infor_product.infor_screen) ? 'primary' : 'default'}
+                                    onClick={() => handleSelectSize(item.infor_product_infor_product.infor_screen)}
                                 >
-                                    <span>{item}</span>
+                                    <span>{item.infor_product_infor_product.infor_screen}</span>
                                 </Button>
-                            ))}
-
-
-
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Tần số quét</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {ScanningFrequency.map((item, index) => (
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_scanning_frequency, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_scanning_frequency &&
+                                typeof item.infor_product_infor_product.infor_scanning_frequency === 'string' &&
+                                item.infor_product_infor_product.infor_scanning_frequency.trim() !== ''
+                            )
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_scanning_frequency}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.refreshRate, item.infor_product_infor_product.infor_scanning_frequency) ? 'primary' : 'default'}
+                                    onClick={() => handleSelectRate(item.infor_product_infor_product.infor_scanning_frequency)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_scanning_frequency}</span>
+                                </Button>
+                            ))
+                        }
 
-
-
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.refreshRate, item) ? 'primary' : 'default'}
-                                onClick={() => handleSelectRate(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
                     </div>
                 </div>
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">RAM</span>
-                    <div className="grid grid-cols-4 gap-3">
-                        {Ram.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.ram, item) ? 'primary' : 'default'}
-                                onClick={() => handleSelectRam(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
+                    <div className="grid grid-cols-3 gap-3">
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_ram, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_ram &&
+                                typeof item.infor_product_infor_product.infor_ram === 'string' &&
+                                item.infor_product_infor_product.infor_ram.trim() !== ''
+                            )
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_ram}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.ram, item.infor_product_infor_product.infor_ram) ? 'primary' : 'default'}
+                                    onClick={() => handleSelectRam(item.infor_product_infor_product.infor_ram)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_ram}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Bộ nhớ trong</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {Rom.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.rom, item) ? 'primary' : 'default'}
-                                onClick={() => handleSelectRom(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_rom, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_rom &&
+                                typeof item.infor_product_infor_product.infor_rom === 'string' &&
+                                item.infor_product_infor_product.infor_rom.trim() !== ''
+                            )
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_rom}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.rom, item.infor_product_infor_product.infor_rom) ? 'primary' : 'default'}
+                                    onClick={() => handleSelectRom(item.infor_product_infor_product.infor_rom)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_rom}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Chíp xử lý</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {Scanningcpu.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.cpu, item) ? 'primary' : 'default'}
-                                onClick={() => handlecpu(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_cpu, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_cpu &&
+                                typeof item.infor_product_infor_product.infor_cpu === 'string' &&
+                                item.infor_product_infor_product.infor_cpu.trim() !== ''
+                            )                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_cpu}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.cpu, item.infor_product_infor_product.infor_cpu) ? 'primary' : 'default'}
+                                    onClick={() => handlecpu(item.infor_product_infor_product.infor_cpu)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_cpu}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={`${dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`} >
                     <span className="font-bold mb-1">Dung lượng Pin</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {Scanningchip_battery.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.chip_battery, item) ? 'primary' : 'default'}
-                                onClick={() => handlechip_battery(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_chip_battery, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_chip_battery &&
+                                typeof item.infor_product_infor_product.infor_chip_battery === 'string' &&
+                                item.infor_product_infor_product.infor_chip_battery.trim() !== ''
+                            )                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_chip_battery}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.chip_battery, item.infor_product_infor_product.infor_chip_battery) ? 'primary' : 'default'}
+                                    onClick={() => handlechip_battery(item.infor_product_infor_product.infor_chip_battery)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_chip_battery}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
 
@@ -371,46 +323,79 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                 <div className={`${dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Camera trước</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {FrontCameras.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.frontCamera, item) ? 'primary' : 'default'}
-                                onClick={() => handleFrontCameras(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_frontCamera, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_frontCamera &&
+                                typeof item.infor_product_infor_product.infor_frontCamera === 'string' &&
+                                item.infor_product_infor_product.infor_frontCamera.trim() !== ''
+                            )                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_frontCamera}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.frontCamera, item.infor_product_infor_product.infor_frontCamera) ? 'primary' : 'default'}
+                                    onClick={() => handleFrontCameras(item.infor_product_infor_product.infor_frontCamera)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_frontCamera}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className={`${dataId != 2 && dataId != 3 && dataId != 4 && dataId != 5 && dataId != 6 && dataId != 7 ? 'visible' : 'hidden'} flex flex-col`}>
                     <span className="font-bold mb-1">Camera sau</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {RearCameras.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.rearCamera, item) ? 'primary' : 'default'}
-                                onClick={() => handleRearCameras(item)}
-                            >
-                                <span>{item}</span>
-                            </Button>
-                        ))}
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_rearCamera, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_rearCamera &&
+                                typeof item.infor_product_infor_product.infor_rearCamera === 'string' &&
+                                item.infor_product_infor_product.infor_rearCamera.trim() !== ''
+                            )                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_rearCamera}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.rearCamera, item.infor_product_infor_product.infor_rearCamera) ? 'primary' : 'default'}
+                                    onClick={() => handleRearCameras(item.infor_product_infor_product.infor_rearCamera)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_rearCamera}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className="flex flex-col">
                     <span className="font-bold mb-1">Thông tin thêm</span>
                     <div className="grid grid-cols-3 gap-3">
-                        {Scanningmore.map((item, index) => (
-                            <Button
-                                key={index}
-                                className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                type={isSelected(ObjFilter.more, item) ? 'primary' : 'default'}
-                                onClick={() => handlemore(item)}
-                            >
-                                <span>{item.replace(/<p>|<\/p>/g, '')}</span>
-                            </Button>
-                        ))}
+                        {[
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_more, item])).values()
+                        ]
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .filter((item: any) =>
+                                item.infor_product_infor_product.infor_more &&
+                                typeof item.infor_product_infor_product.infor_more === 'string' &&
+                                item.infor_product_infor_product.infor_more.trim() !== ''
+                            )                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            .map((item: any) => (
+                                <Button
+                                    key={item.infor_product_infor_product.infor_more}
+                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
+                                    type={isSelected(ObjFilter.more, item.infor_product_infor_product.infor_more) ? 'primary' : 'default'}
+                                    onClick={() => handlemore(item.infor_product_infor_product.infor_more)}
+                                >
+                                    <span>{item.infor_product_infor_product.infor_more.replace(/<p>|<\/p>/g, '')}</span>
+                                </Button>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className="flex border-t-[1px] pt-6 flex-row justify-center items-center gap-[5px] col-span-3 mt-4">

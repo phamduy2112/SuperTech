@@ -9,6 +9,7 @@ interface SelectedProps {
 }
 
 const Selected: React.FC<SelectedProps> = ({ Deletefilter, ObjFilter }) => {
+    console.log(ObjFilter)
 
     const ArrayFilter = (item: string[]) => {
         return item.map((filter, index) => (
@@ -17,7 +18,7 @@ const Selected: React.FC<SelectedProps> = ({ Deletefilter, ObjFilter }) => {
                 className='min-w-[70px] h-[40px] flex justify-center items-center'
                 variant="outlined"
             >
-                <span>{filter}</span>
+                <span>{filter.replace(/<p>|<\/p>/g, '')}</span>
                 <IoAddOutline
                     onClick={() => Deletefilter(index, filter)} // Đảm bảo `Deletefilter` xử lý đúng
                     className='transform transition-all duration-500 hover:text-[red] text-[25px] rotate-[45deg]'
