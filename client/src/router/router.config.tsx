@@ -53,6 +53,7 @@ import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
 import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
 import { Paths } from "./component/RouterValues";
 import AdminCommentDetail from "../page/Admin/Product/Comment/AdminCommentDetail";
+import AdminData from "../page/Admin/Data/AdminData";
 // import PrivateRoute from "./component/RouterPrivate";
 const Home = lazy(
   () => import("../page/Client/Home/Home"),
@@ -236,6 +237,10 @@ export const router = createBrowserRouter([
       {
         path: Paths.Admin.AddBlog,
         element: <AdminAddBlog />
+      },
+      {
+        path: Paths.Admin.Chart,
+        element: <AdminData />
       },
       {
 

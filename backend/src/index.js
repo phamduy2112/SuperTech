@@ -27,6 +27,7 @@ import { app, server } from './socker/socker.js';
 import settingRouter from './routers/settingRouter.js';
 import autobankrouter from './routers/bankAutoRouter.js';
 import  transactionsrouter from './routers/transactionRouter.js';
+import exportFiles from './routers/exportFile.js';
 
 app.use(express.json());
 app.use(cookieParser());
@@ -80,6 +81,7 @@ app.use(categoriesRouter);
 app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
+app.use(exportFiles);
 app.use (uploadImgUserRouter)
 server.listen(8080, () => {
   console.log('Server running on http://localhost:8080');

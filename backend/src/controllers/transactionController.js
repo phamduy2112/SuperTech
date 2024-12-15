@@ -61,7 +61,8 @@ const checkTransactionStatus = async (req, res) => {
                         order_pay: updateorder[0]
                     };
                     io.emit('orderStatusUpdated', resp);
-
+                    console.log(resp);
+                    
                 } else {
                     processedTransactions.push({transactionID, description, amount, status: "No matching order"});
                 }

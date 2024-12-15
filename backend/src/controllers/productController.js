@@ -154,6 +154,10 @@ const getProductsByCategoryId = async (req, res) => {
                                     as:'product_storages',
                                     required: false
                             },
+                            {
+                                model: models.product_quality,
+                                as: 'product_qualities',
+                              },
                         ]
                 },
             ]
@@ -200,6 +204,10 @@ const getProductById = async (req, res) => {
                                 as:'product_storages',
                                 required: false
                         },
+                        {
+                            model: models.product_quality,
+                            as: 'product_qualities',
+                          },
                     ]
             },
         ]

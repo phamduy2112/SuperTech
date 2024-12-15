@@ -21,6 +21,7 @@ import AdminAddProduct from "./Component/AdminAddProduct";
 import { GoCommentDiscussion } from "react-icons/go";
 
 import AdminModalUpdateQualityProduct from "./Component/UpdateQualityProduct";
+import { IMG_BACKEND } from "../../../constants";
 
 // Define the Category interface
 interface Category {
@@ -61,6 +62,8 @@ const AdminProduct: React.FC = () => {
   };
   const handleDeteleProduct = async (id: number) => {
     dispatch(deleteProductAdminThunk(id))
+    toast.success('Xóa sản phẩm thành công!');
+
   }
   const handleEye = (id: string | number) => {
     navigate(`/admin/quan-li-san-pham-chi-tiet/${id}`)
@@ -79,10 +82,17 @@ const AdminProduct: React.FC = () => {
     },
     {
       title: 'Hình Ảnh',
-      dataIndex: 'image',
-      render: (src: string) => (
-        <img className='rounded-md'
-          src="https://zshop.vn/images/detailed/129/iphone-15-pro-finish__5__cjwb-3i.jpg" alt="" style={{ width: 50, height: 50 }} />
+      dataIndex: 'product_colors',
+      render: (colors: any[]) => (
+        colors.map((color, index) => (
+          <img 
+            key={index} 
+            className='rounded-md' 
+            src={`${IMG_BACKEND}/${color.image.image_one}`} 
+            alt={`Màu ${color.color}`} 
+            style={{ width: 50, height: 50 }} 
+          />
+        ))
       ),
     },
     {

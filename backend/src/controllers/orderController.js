@@ -88,6 +88,7 @@ const getRevenueBetweenDates = async (req, res) => {
         order_date: {
           [Op.between]: [start, end],
         },
+        order_status: 6, // Thêm điều kiện order_status == 6
       },
       group: groupBy,
     });
@@ -110,14 +111,22 @@ const getRevenueBetweenDates = async (req, res) => {
         const startOfWeek = new Date(startDate);
         const daysInWeek = [];
 
+        // Fetch daily revenue for each day in the week
         for (let i = 0; i < 7; i++) {
           const day = new Date(startOfWeek);
           day.setDate(day.getDate() + i);
+
+          const dayRevenue = results.find((res) => {
+            const resultDate = new Date(res.dataValues.date);
+            return resultDate.toISOString().split('T')[0] === day.toISOString().split('T')[0];
+          })?.dataValues.total_revenue || 0; // Find the corresponding revenue for that day
+
           daysInWeek.push({
             date: day.toISOString().split('T')[0],
-            revenue: totalRevenue,
+            revenue: dayRevenue,
           });
         }
+
         return {
           week: dateValue,
           days: daysInWeek,
@@ -165,8 +174,13 @@ const getRevenueBetweenDates = async (req, res) => {
     });
   }
 };
+
 const getOrderUserTop = async (req, res) => {
   try {
+    // Lấy tham số limit từ query (số lượng người muốn lấy)
+    const { limit = 5 } = req.query; // Nếu không có limit trong query thì mặc định là 5
+
+    // Fetch top users với điều kiện order_status = 6 và tính tổng số đơn hàng và tổng tiền
     const data = await order.findAll({
       attributes: [
         'user_id',
@@ -180,21 +194,25 @@ const getOrderUserTop = async (req, res) => {
           attributes: ['user_name', 'user_email'], // Chỉ lấy các thông tin cần thiết của user
         },
       ],
+      where: {
+        order_status: 6, // Điều kiện order_status = 6
+      },
       group: ['user_id'], // Nhóm theo user_id để tính tổng
       order: [[Sequelize.literal('totalSpent'), 'DESC']], // Sắp xếp theo tổng tiền giảm dần
-      limit: 5, // Lấy Top 5 user
+      limit: parseInt(limit, 10), // Lấy số lượng user theo tham số limit
     });
 
-    if (data) {
+    if (data && data.length > 0) {
       responseSend(res, data, 'Thành công!', 200);
     } else {
-      responseSend(res, '', 'Không tồn tại!', 404);
+      responseSend(res, [], 'Không có dữ liệu!', 404);
     }
   } catch (e) {
     console.error('Error:', e);
     responseSend(res, '', 'Server Error!', 500);
   }
-}
+};
+
 
 const getOrderById = async (req, res) => {
     
@@ -467,7 +485,7 @@ const createorder = async (req, res) => {
       responseSend(res, neworder, "Thêm Thành công!", 201);
   } catch (error) {
       console.log(error);  // It's a good practice to log the error
-      responseSend(res, "", "Có lỗi xảy ra!", 500);  // Send a generic error message back
+      responseSend(res, error, "Có lỗi xảy ra!", 500);  // Send a generic error message back
   }
 };
 

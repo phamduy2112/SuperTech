@@ -8,6 +8,7 @@ import { changeStatusOrderThunk, getOrderByIdProductThunk } from '../../../../re
 import { formatCurrencyVND, truncateText } from '../../../../utils';
 import CancelOrderModal from './component/ModalCancer';
 import { colorText } from '../../../../constants';
+import dayjs from 'dayjs';
 function Order() {
 
   
@@ -40,6 +41,7 @@ function Order() {
       title: <div className="whitespace-nowrap">Ngày mua</div>,
       dataIndex: 'order_date',
       key: 'order_date',
+      render:(text)=> <div>{ dayjs(text).format('YYYY-MM-DD HH:mm:ss')}</div>
     },
     {
       title: <div className="whitespace-nowrap">Địa chỉ</div>,

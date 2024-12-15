@@ -9,10 +9,10 @@ import toast from 'react-hot-toast';
 function AdminModalUpdateQualityProduct(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(
-    props.product.product_colors[0].color_id
+    props.product?.product_colors[0]?.color_id
   ); // Default to first color
   const [quality, setQuality] = useState(
-    props.product.product_colors[0].product_qualities[0]?.quality_product || 0
+    props.product.product_colors[0]?.product_qualities[0]?.quality_product || 0
   ); // Default to first color's quality
 
   const dispatch = useAppDispatch();

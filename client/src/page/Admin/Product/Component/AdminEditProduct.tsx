@@ -145,12 +145,12 @@ useEffect(()=>{
   if( productDetail.product_colors){
     dispatch(removeAllProductColors());
     productDetail.product_colors?.map((item)=>{
-      // console.log(item.);
       
       dispatch(setProductColors({
         color_id:item.color_id,
         color: item.color,
-        // quantity: values.quantity,
+        quantity:     item?.product_qualities[0]?.quality_product || 0
+        ,
         image_id: item.image.image_id      , // Include image_id here
         // productStorage: [
         //   {
@@ -161,19 +161,23 @@ useEffect(()=>{
       })
     );
     })
+  
+    
   }
  
   
 },[dispatch, productDetail])
-console.log(productColors);
+// console.log(item.product_qualities?.quality_product);
 
   const productColorDelete=async (item:object,id:number)=>{
     const resp=await deleteColorsProduct(id);
-  
+    toast.success('Xóa màu sắc thành công');
+
     
     dispatch(removeProductsFromColors(item.image_id))
   }
-  
+console.log(productColors);
+
 
   useEffect(() => {
       
@@ -233,13 +237,12 @@ console.log(productColors);
               listProductColor: listProductColor,
               product_id:productDetail.product_id
             };
-        console.log(dataInforProduct.infor_screen);
         dispatch(putInforProductAdminThunk(dataInforProduct))
-        // resetForm();
-            console.log(values.infor_screen);
-          
+        resetForm();
+            toast.success('Sửa sản phẩm thành công!');
+
         dispatch(removeAllProductColors())
-// navigate("/admin/quan-li-san-pham")
+navigate("/admin/quan-li-san-pham")
 
           }}
         >
@@ -477,10 +480,10 @@ console.log(productColors);
                   />
                   <div>
                       <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
-                      <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
+                      {/* <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
                         return item.storage
-                      })}</p>
-                      <p className="text-red-500 font-semibold text-[1.2rem]">Số lượng: 3</p>
+                      })}</p> */}
+                      <p className="text-red-500 font-semibold text-[1.2rem]">Số lượng: {item?.quantity}</p>
                   </div>
               </div>
           ))}

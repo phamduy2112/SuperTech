@@ -175,6 +175,7 @@ function AdminAddProduct() {
             };
         console.log(dataInforProduct);
         dispatch(createProductAdminThunk(dataInforProduct))
+        toast.success('Thêm sản phẩm thành công!');
         resetForm();
         handleCancel(); // Đóng modal
         dispatch(removeAllProductColors())

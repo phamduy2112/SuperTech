@@ -44,6 +44,7 @@ export const Paths = {
     AddOrder: "quan-li-don-hang/tao-don-hang",
     EditOrder: "quan-li-don-hang/sua-don-hang/:id",
     Chat: "quan-li-tin-nhan",
+        Chart: "quan-li-bieu-do",
     Settings: "quan-li-trang-web",
   },
 };

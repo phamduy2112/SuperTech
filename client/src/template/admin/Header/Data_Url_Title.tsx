@@ -162,10 +162,10 @@ export const DataSideBar: SidebarItem[] = [
       },
       {
         box_id: 3,
-        box_title: 'Mã Giảm Giá',
+        box_title: 'Biểu đồ',
         icon: <IoCellularOutline />,
         iconChevronRight: null,
-        url: 'null',
+        url: `${PathAdmin.PathsAdmin}/${PathAdmin.Chart}`,
         child: [],
       },
     ]

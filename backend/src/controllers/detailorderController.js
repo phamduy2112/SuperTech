@@ -325,12 +325,129 @@ const getWeeklySales = async (req, res) => {
             res.status(500).send({ error: 'Internal Server Error' });
         }
     };
+
+const getTop5NewestUsers = async (req, res) => {
+  try {
+      // Retrieve the time range from the request query parameters
+      const { period } = req.query; // period can be 'day', 'week', or 'month'
+      
+      // Default to 'day' if no period is specified
+      const periodFilter = period || 'day';
+  
+      // Get the current date
+      const currentDate = moment();
+  
+      let dateCondition;
+  
+      // Define the date condition based on the selected period
+      switch (periodFilter) {
+          case 'week':
+              dateCondition = {
+                  [Op.gte]: currentDate.startOf('week').toDate(),
+                  [Op.lte]: currentDate.endOf('week').toDate(),
+              };
+              break;
+          case 'month':
+              dateCondition = {
+                  [Op.gte]: currentDate.startOf('month').toDate(),
+                  [Op.lte]: currentDate.endOf('month').toDate(),
+              };
+              break;
+          case 'day':
+          default:
+              dateCondition = {
+                  [Op.gte]: currentDate.startOf('day').toDate(),
+                  [Op.lte]: currentDate.endOf('day').toDate(),
+              };
+              break;
+      }
+  
+      // Fetch the 5 newest users who registered within the specified time period
+      const results = await models.user.findAll({
+          where: {
+              user_time: dateCondition, // Apply the date range filter on user_time (registration date)
+          },
+          order: [['user_time', 'DESC']], // Sort by registration time (user_time) in descending order to get the newest users
+          limit: 5, // Limit to top 5 newest users
+      });
+  
+      // Return the results
+      responseSend(res, results, '', 200); // Send the response with the results
+  } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Internal Server Error' });
+  }
+};
+const getUserStats = async (req, res) => {
+  try {
+      // Retrieve the time range from the request query parameters
+      const { period } = req.query; // period can be 'day', 'week', or 'month'
+      
+      // Default to 'day' if no period is specified
+      const periodFilter = period || 'day';
+  
+      // Get the current date
+      const currentDate = moment();
+  
+      let dateCondition;
+  
+      // Define the date condition based on the selected period
+      switch (periodFilter) {
+          case 'week':
+              dateCondition = {
+                  [Op.gte]: currentDate.startOf('week').toDate(),
+                  [Op.lte]: currentDate.endOf('week').toDate(),
+              };
+              break;
+          case 'month':
+              dateCondition = {
+                  [Op.gte]: currentDate.startOf('month').toDate(),
+                  [Op.lte]: currentDate.endOf('month').toDate(),
+              };
+              break;
+          case 'day':
+          default:
+              dateCondition = {
+                  [Op.gte]: currentDate.startOf('day').toDate(),
+                  [Op.lte]: currentDate.endOf('day').toDate(),
+              };
+              break;
+      }
+  
+      // Fetch the total number of users
+      const totalUsers = await models.user.count({
+          where: {
+              user_time: dateCondition, // Filter by registration date
+          },
+      });
+  
+      // Fetch the top 5 most recent users
+      const topUsers = await models.user.findAll({
+          where: {
+              user_time: dateCondition, // Filter by registration date
+          },
+          order: [['user_time', 'DESC']], // Sort by registration date in descending order
+          limit: 5, // Limit to 5 users
+          attributes: ['user_id', 'user_name', 'user_email', 'user_time'], // Select specific columns
+      });
+  
+      // Return the result
+      res.status(200).json({
+          totalUsers, // Total number of users
+          topUsers,   // Top 5 most recent users
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Internal Server Error' });
+  }
+};
 export {
     getdetailorder,
     getDetailOrderById,
     createdetailorder,
     updatedetailorder,
     deletedetailorder,
+    getUserStats,
     // getWeeklySales,
     // getUserOrderCounts,
     getTop5BestSellingProducts

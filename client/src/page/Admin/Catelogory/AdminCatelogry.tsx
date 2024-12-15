@@ -134,7 +134,6 @@ const AdminCatelogry: React.FC = () => {
 });
 const handleDelete = (key: any) => {
   dispatch(deleteCategoryThunk(key));
-  toast.success("Xóa loại thành công");
 };
   const onExportClick = () => {
     handleExport(sortedData); 
