@@ -157,7 +157,7 @@ function AdminBlog() {
                 Xem Bình Luận Bài Viết
               </Button>
             </Link>
-            <Link to={'/admin/quản-lí-bài-viết/thêm-bài-viết-mới'}>
+            <Link to={'/admin/quan-li-bai-viet/them-bai-viet-moi'}>
               <Button className='p-10' type="primary">
                 <TbPlaylistAdd className='text-[18px]' />
                 Bài Viết Mới

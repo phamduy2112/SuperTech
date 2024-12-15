@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getMedia_post } from '../../../../service/Blog/blog.service';
+import { getMedia_post } from "../../../../service/Blog/blog.service";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 function BlogCard(props) {
@@ -25,7 +25,9 @@ function BlogCard(props) {
             </div>
           </div>
           <div className="mt-3 text-[18px] font-bold text-neutral-900 px-10 leading-[1.2]">
-          {props.props.post_title.length > 70 ? `${props.props.post_title.substring(0, 70)}...` : props.props.post_title}
+            {props.props.post_title?.length > 70
+              ? `${props.props.post_title.substring(0, 70)}...`
+              : props.props.post_title}
           </div>
           <div className="mt-3 text-[14px] text-neutral-700 font-light line-clamp-3 px-10 leading-[1.3]">
             {props.props.post_content}

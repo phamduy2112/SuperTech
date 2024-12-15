@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
       io.emit("ClickGetAllBlog", kq);
     });
   });
-  // Xử lý sự kiện khi user ngắt kết nối
+
   socket.on("disconnect", () => {
     console.log(`User disconnected: userId = ${userId}`);
     userSocketMap.delete(userId); // Xóa user khỏi map

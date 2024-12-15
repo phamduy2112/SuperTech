@@ -13,7 +13,9 @@ function Sidebar(props) {
         />
         <div className="flex flex-col">
           <h3 className="text-[15px] font-medium text-zinc-800 py-3 ">
-          {props.props.post_title.length > 70 ? `${props.props.post_title.substring(0, 70)}...` : props.props.post_title}
+            {props.props.post_title?.length > 70
+              ? `${props.props.post_title.substring(0, 70)}...`
+              : props.props.post_title}
           </h3>
           <div className="text-[12px] text-neutral-500 line-clamp-2">
             <span>📅 {props.props.post_date}</span> ·{" "}

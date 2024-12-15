@@ -47,7 +47,7 @@ const deleteBlog = async (data) => {
       where: { post_id: data },
       attributes: ["media_url"],
     });
-    
+
     await new Promise((resolve, reject) => {
       cloudinary.uploader.destroy(
         `Blog/${Image_cloudinary?.media_url}`,

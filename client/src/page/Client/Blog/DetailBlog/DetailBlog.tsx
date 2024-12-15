@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { Container } from "../../../../components/Style/Container";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { useParams } from "react-router-dom";
-import { getAllBlogmediaThunk, getAllBlogThunk, getBlogByIdThunk } from "../../../../redux/blogredux/blog.slice";
+import {
+  getAllBlogmediaThunk,
+  getAllBlogThunk,
+  getBlogByIdThunk,
+} from "../../../../redux/blogredux/blog.slice";
 
 // Component Breadcrumbs
 function Breadcrumbs() {
@@ -27,8 +31,8 @@ function Breadcrumbs() {
 }
 
 function DetailBlog() {
-  const ListBlog = useAppSelector((state) => state.listBlogStore.listBlog);
-  const mediaPosts = useAppSelector((state) => state.listBlogStore.mediaPosts);
+  const ListBlog = useAppSelector((state) => state.blog.listBlog);
+  const mediaPosts = useAppSelector((state) => state.blog.mediaPosts);
   const AppDispatch = useAppDispatch();
   const { id } = useParams();
 
@@ -37,15 +41,15 @@ function DetailBlog() {
     AppDispatch(getAllBlogmediaThunk());
   }, [AppDispatch]);
 
-  const mergedPosts = ListBlog.map(post => {
-    const mediaItem = mediaPosts.find(m => m.post_id === post.post_id);
+  const mergedPosts = ListBlog.map((post) => {
+    const mediaItem = mediaPosts.find((m) => m.post_id === post.post_id);
     return {
       ...post,
-      media_url: mediaItem ? mediaItem.media_url : null
+      media_url: mediaItem ? mediaItem.media_url : null,
     };
   });
 
-  const Blog = mergedPosts.find(post => post.post_id === parseInt(id));
+  const Blog = mergedPosts.find((post) => post.post_id === parseInt(id));
 
   useEffect(() => {
     if (id != null) {
@@ -54,10 +58,13 @@ function DetailBlog() {
   }, [AppDispatch, id]);
 
   const getRandomPosts = (posts, excludeId, count) => {
-    const filteredPosts = posts.filter(post => post.post_id !== excludeId);
+    const filteredPosts = posts.filter((post) => post.post_id !== excludeId);
     for (let i = filteredPosts.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [filteredPosts[i], filteredPosts[j]] = [filteredPosts[j], filteredPosts[i]];
+      [filteredPosts[i], filteredPosts[j]] = [
+        filteredPosts[j],
+        filteredPosts[i],
+      ];
     }
     return filteredPosts.slice(0, count);
   };
@@ -114,7 +121,7 @@ function DetailBlog() {
           </div>
         </div>
       </div>
-       {/* Phần bình luận */}
+      {/* Phần bình luận */}
       <div className="space-y-4 py-4 md:py-6">
         <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 px-10">
           Bình Luận
@@ -164,7 +171,6 @@ function DetailBlog() {
           </button>
         </div>
       </div>
-      
     </Container>
   );
 }
