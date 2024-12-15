@@ -6,13 +6,16 @@ import Selected from './Selected';
 import OptionSelected from './OptionSelected';
 import { ObjFilterTypeinterface } from './DataFilter';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../redux/hooks';
-import { setDatafilterSlice } from '../../../redux/product/product.slice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { getProductsThunk, setDatafilterSlice } from '../../../redux/product/product.slice';
+import { getCatelogryDadByIdThunk } from '../../../redux/catelogry/catelogry.slice';
 
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Filter(data: any) {
+
+
 
     const Navigate = useNavigate();
     const [ObjFilter, setObjFilter] = useState<ObjFilterTypeinterface>({
@@ -24,6 +27,10 @@ function Filter(data: any) {
         rom: [],
         frontCamera: [],
         rearCamera: [],
+        system: [],
+        cpu: [],
+        chip_battery: [],
+        more: []
     });
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,14 +42,20 @@ function Filter(data: any) {
 
 
 
-    const handleChangeProduct = (company: string) => {
+    const handleChangeProduct = (company: string, id: number) => {
+        console.log('id', id);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const CategoryId: any = data.data.catelogries.find((item: any) => item.category_name.toLowerCase() === company.toLowerCase());
-        if (CategoryId) {
-            setObjFilter(prevState => ({ ...prevState, company: CategoryId.category_name }));
-            Navigate(`/list-sản-phẩm?category_dad=${CategoryId.category_dad}&category=${CategoryId.category_id}`);
+        const category = data.data.catelogries.find((item: any) =>
+            item.category_name.toLowerCase() === company.toLowerCase() &&
+            item.category_dad == id
+        );
+        console.log('CategoryId', category);
+        if (category) {
+            setObjFilter(prevState => ({ ...prevState, company: category.category_name }));
+            Navigate(`/list-sản-phẩm?category_dad=${category.category_dad}&category=${category.category_id}`);
         }
     };
+
     const handleSelectSize = (size: string) => {
         setObjFilter(prevState => ({ ...prevState, size: prevState?.size.includes(size) ? prevState.size : [...prevState.size, size] }));
     };
@@ -76,6 +89,22 @@ function Filter(data: any) {
     const handleRearCameras = (rear: string) => {
         setObjFilter(prevState => ({ ...prevState, rearCamera: prevState?.rearCamera.includes(rear) ? prevState.rearCamera : [...prevState.rearCamera, rear] }));
     };
+    const handlesystem = (systemChose: string) => {
+        setObjFilter(prevState => ({ ...prevState, system: prevState?.system.includes(systemChose) ? prevState.system : [...prevState.system, systemChose] }));
+    };
+    const handlecpu = (cpuChose: string) => {
+        setObjFilter(prevState => ({ ...prevState, cpu: prevState?.cpu.includes(cpuChose) ? prevState.cpu : [...prevState.cpu, cpuChose] }));
+    };
+    const handlechip_battery = (chip_batteryChose: string) => {
+        setObjFilter(prevState => ({ ...prevState, chip_battery: prevState?.chip_battery.includes(chip_batteryChose) ? prevState.chip_battery : [...prevState.chip_battery, chip_batteryChose] }));
+    };
+    const handlemore = (moreChose: string) => {
+        setObjFilter(prevState => ({ ...prevState, more: prevState?.more.includes(moreChose) ? prevState.more : [...prevState.more, moreChose] }));
+    };
+
+
+
+
 
 
 
@@ -91,7 +120,11 @@ function Filter(data: any) {
                 'frontCamera',
                 'rearCamera',
                 'cpu',
-                'refreshRate'
+                'refreshRate',
+                'system',
+                'cpu',
+                'chip_battery',
+                'more'
             ];
 
             filterKeys.forEach(key => {
@@ -106,10 +139,23 @@ function Filter(data: any) {
     };
 
     const [Datafilter, setDatafilter] = useState([]);
+
     const AppDispatch = useAppDispatch();
+    useEffect(() => {
+        AppDispatch(getCatelogryDadByIdThunk(data.data.dataCate.category_dad));
+    }, [AppDispatch, data.data.dataCate.category_dad])
+
+    useEffect(() => {
+        AppDispatch(getProductsThunk())
+
+    }, [AppDispatch, ObjFilter.company])
+
+
+
 
     const HandClick = (boolean: boolean) => {
         if (boolean == true) {
+
             AppDispatch(setDatafilterSlice(Datafilter))
             handleVisibleChange(false);
         }
@@ -130,6 +176,12 @@ function Filter(data: any) {
             const frontCameraFilter = item.infor_product_infor_product.infor_frontCamera?.toUpperCase();
             const rearCameraFilter = item.infor_product_infor_product.infor_rearCamera?.toUpperCase();
             const romFilter = item.infor_product_infor_product.infor_rom?.toUpperCase();
+            const systemFilter = item.infor_product_infor_product.infor_system?.toUpperCase();
+            const cpuFilter = item.infor_product_infor_product.infor_cpu?.toUpperCase();
+            const chip_batteryFilter = item.infor_product_infor_product.infor_chip_battery?.toUpperCase();
+            const moreFilter = item.infor_product_infor_product.infor_more?.toUpperCase();
+
+
 
             const conditions = [
                 ObjFilter.price.length === 0 || ObjFilter.price.some(priceRange => {
@@ -153,7 +205,13 @@ function Filter(data: any) {
                 ObjFilter.rom.length === 0 || ObjFilter.rom.some(rom => romFilter === rom.toUpperCase()),
                 ObjFilter.refreshRate.length === 0 || ObjFilter.refreshRate.some(refreshRate => rateFilter === refreshRate.toUpperCase()),
                 ObjFilter.frontCamera.length === 0 || ObjFilter.frontCamera.some(frontCamera => frontCameraFilter === frontCamera.toUpperCase()),
-                ObjFilter.rearCamera.length === 0 || ObjFilter.rearCamera.some(rearCamera => rearCameraFilter === rearCamera.toUpperCase())
+                ObjFilter.rearCamera.length === 0 || ObjFilter.rearCamera.some(rearCamera => rearCameraFilter === rearCamera.toUpperCase()),
+                ObjFilter.system.length === 0 || ObjFilter.system.some(system => systemFilter === system.toUpperCase()),
+                ObjFilter.cpu.length === 0 || ObjFilter.cpu.some(cpu => cpuFilter === cpu.toUpperCase()),
+                ObjFilter.chip_battery.length === 0 || ObjFilter.chip_battery.some(chip_battery => chip_batteryFilter === chip_battery.toUpperCase()),
+                ObjFilter.more.length === 0 || ObjFilter.more.some(more => moreFilter === more.toUpperCase())
+
+
             ];
 
             return conditions.every(condition => condition);
@@ -190,6 +248,14 @@ function Filter(data: any) {
                 handleRearCameras={handleRearCameras}
                 HandClick={HandClick}
                 RemoveClick={RemoveClick}
+                ObjFilter={ObjFilter}
+                dataId={data.data.dataCate.category_dad}
+                handlesystem={handlesystem}
+                handlecpu={handlecpu}
+                handlechip_battery={handlechip_battery}
+                handlemore={handlemore}
+
+
 
             />
 
@@ -198,7 +264,7 @@ function Filter(data: any) {
                 <CiFilter />
                 <span>Lọc</span>
             </Button>
-        </Popover>
+        </Popover >
 
 
 

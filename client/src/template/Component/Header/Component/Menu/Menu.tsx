@@ -21,6 +21,8 @@ function Menu() {
   useEffect(() => {
     AppDispatch(getCatelogryThunkAll());
   }, [AppDispatch]);
+
+  console.log('catelogries', catelogries)
   const [isProductHovered, setIsProductHovered] = useState(false);
   const [isProductClicked, setIsProductClicked] = useState(false);
 

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createInforProduct, createProduct, deleteProduct, getProductCateloriesByDad, getProductDetail, getProducts, putProductById } from "../../service/product/product.service";
+import { createInforProduct, createProduct, deleteProduct, getinFor, getProductCateloriesByDad, getProductDetail, getProductsAll, putProductById } from "../../service/product/product.service";
 
 export const getProductByCateloriesDad = createAsyncThunk(
   "getProductByCateloriesDad",
@@ -16,6 +16,17 @@ export const getProductByCateloriesDad = createAsyncThunk(
   },
 );
 
+export const getProductInForThunk = createAsyncThunk(
+  "getProductInForThunk",
+  async () => {
+    try {
+      const resp = await getinFor();
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  })
+
 export const getProductsThunk = createAsyncThunk(
   "getProductsThunk",
   async () => {
@@ -27,6 +38,20 @@ export const getProductsThunk = createAsyncThunk(
     }
   },
 );
+
+
+export const getProductsAllThunk = createAsyncThunk(
+  "getProductsAllThunk",
+  async () => {
+    try {
+      const resp = await getProductsAll();
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
 
 export const getProductsAdminThunk = createAsyncThunk(
   "getProductsAdminThunk",
@@ -120,6 +145,9 @@ const initialState = {
   productColors: [],
   listProductStorage: [],
   Datafilter: null,
+  listProductsAll: [],
+  inforProduct: []
+  
 
 };
 
@@ -141,13 +169,23 @@ const ProductSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
+
+    builder
+      .addCase(getProductInForThunk.fulfilled, (state, { payload }) => {
+        state.inforProduct = payload;
+      })
     builder
       .addCase(getProductByCateloriesDad.fulfilled, (state, { payload }) => {
         state.listProduct = payload;
       })
+
     builder
       .addCase(getProductsThunk.fulfilled, (state, { payload }) => {
         state.listProducts = payload;
+      })
+    builder
+      .addCase(getProductsAllThunk.fulfilled, (state, { payload }) => {
+        state.listProductsAll = payload;
       })
     builder
       .addCase(getProductsAdminThunk.fulfilled, (state, { payload }) => {

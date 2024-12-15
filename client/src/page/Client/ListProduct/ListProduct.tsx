@@ -3,7 +3,7 @@ import ProductItem from '../../../components/product/ProductItem';
 import { Breadcrumb, Checkbox, Form, Select } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getCatelogryThunkAll } from '../../../redux/catelogry/catelogry.slice';
-import { getProductByCateloriesDad } from '../../../redux/product/product.slice';
+import { getProductByCateloriesDad, getProductInForThunk } from '../../../redux/product/product.slice';
 import { useLocation } from 'react-router-dom';
 import Filter from './Filter';
 
@@ -14,17 +14,18 @@ function ListProduct() {
   const Datafilter = useAppSelector((state) => state.product.Datafilter);
   const listProduct = useAppSelector((state) => state.product.listProduct);
 
-  console.log('List Product', Datafilter);
+
 
   const [ShowProduct, setShowProduct] = useState([]);
   useEffect(() => {
     if (Datafilter != null) {
       setShowProduct(Datafilter)
     }
-    else {
-      setShowProduct(listProduct)
-    }
-  }, [listProduct, Datafilter]);
+  }, [Datafilter]);
+
+  useEffect(() => {
+    setShowProduct(listProduct);
+  }, [listProduct])
 
 
 
@@ -50,10 +51,12 @@ function ListProduct() {
       category_dad,
       category,
     });
-  }, [location.search]);
+    AppDispatch(getProductInForThunk());
 
+  }, [AppDispatch, location.search]);
 
   useEffect(() => {
+
     AppDispatch(getProductByCateloriesDad(dataCate));
   }, [AppDispatch, dataCate]);
 
@@ -71,7 +74,7 @@ function ListProduct() {
         ]}
       />
       <div>
-        <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm:</h3>
+        <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm</h3>
         <div className='flex gap-4'>
           <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex w-[9rem]'>
             <Filter data={{ catelogries: catelogries, listProduct: listProduct, dataCate: dataCate }} />
@@ -108,7 +111,7 @@ function ListProduct() {
       <div className='grid grid-cols-6 gap-y-3'>
         {
           ShowProduct.length > 0 ? ShowProduct?.map((item) => (
-            <ProductItem key={item.id} product={item} /> 
+            <ProductItem key={item.id} product={item} />
           )) : <div className='col-span-6 text-[30px] font-bold flex items-center justify-center h-[80vh]'>
             <span>Không tìm thấy sản phẩm mà bạn yêu cầu</span>
           </div>

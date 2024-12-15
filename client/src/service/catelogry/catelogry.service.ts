@@ -2,9 +2,8 @@ import { axiosWithAuth } from "../axios.config";
 import { TPayloadCategory } from "./catelogry.type";
 
 export const getCatelogry = () => {
-    return axiosWithAuth("/categories", {
-      method: "get",
-      
+    return axiosWithAuth("/categories/", {
+      method: "get", 
     }
  
   );

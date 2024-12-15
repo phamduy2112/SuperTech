@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createCategory, getCatelogry } from "../../service/catelogry/catelogry.service";
+import { createCategory, getCatelogry, getCatelogryDad, getCatelogryDadById } from "../../service/catelogry/catelogry.service";
 
 export const getCatelogryThunkAll = createAsyncThunk(
   "getCatelogryThunkAll",
@@ -14,6 +14,20 @@ export const getCatelogryThunkAll = createAsyncThunk(
   }
 )
 
+
+
+export const getCatelogryDadByIdThunk = createAsyncThunk(
+  "getCatelogryDadByIdThunk",
+  async (id: number) => {
+    try {
+      const resp = await getCatelogryDadById(id);
+      return resp.data.content;
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+)
 
 export const getCatelogryThunk = createAsyncThunk(
   "getCatelogryThunk",
@@ -108,6 +122,11 @@ const CatelogrySlice = createSlice({
         state.AlllistCatelories = payload;
       })
     builder
+      .addCase(getCatelogryDadByIdThunk.fulfilled, (state, { payload }) => {
+        state.catelogryDad = payload;
+      })
+    builder
+
       .addCase(getCatelogryThunk.fulfilled, (state, { payload }) => {
         state.listCatelories = payload;
       })

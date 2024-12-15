@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 interface Category {
   category_id: number;
@@ -13,6 +13,7 @@ interface Category {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function TaskProduct(props: any) {
   const [catelogries, setcatelogries] = useState<Category[]>()
+  const Navigate = useNavigate();
   useEffect(() => {
     setcatelogries(props.props)
   }, [props.props])
@@ -20,8 +21,13 @@ function TaskProduct(props: any) {
   const categoryDadNames: { [key: number]: string } = {
     1: "Điện thoại",
     2: "Laptop",
-    3: "Phụ kiện",
-    4: "Tai nghe"
+    3: "Sạc dự phòng",
+    4: "Sạc/Cáp sạc",
+    5: "Ốp Lưng",
+    6: "Tai Nghe",
+    7: "Cáp Chuyển Đổi",
+
+
   };
 
   const groupedCategories = catelogries?.reduce<{ [key: number]: Category[] }>((acc, item) => {
@@ -34,6 +40,20 @@ function TaskProduct(props: any) {
     }
     return acc;
   }, {});
+
+  const SetProduct = (props: any) => {
+    return (
+      < Link
+        to={`list-sản-phẩm?category_dad=${props.props?.category_dad}&category=${props.props?.category_id}`
+        }
+        className="block"
+      >
+        {props.props.category_name}
+      </ Link>
+    )
+
+  }
+
 
   return (
     <div className="absolute z-50 left-0 top-full mt-2 bg-white p-4 shadow-lg rounded-lg">
@@ -52,12 +72,8 @@ function TaskProduct(props: any) {
                   <ul className="grid grid-cols-[repeat(5,150px)] gap-4">
                     {categoryItems.map((item) => (
                       <li key={item.category_id} className="text-[13.5px] font-bold text-gray-700">
-                        <Link
-                          to={`list-sản-phẩm?category_dad=${item?.category_dad}&category=${item?.category_id}`}
-                          className="block"
-                        >
-                          {item.category_name}
-                        </Link>
+                        <SetProduct props={item} />
+
                       </li>
                     ))}
                   </ul>
