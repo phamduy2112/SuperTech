@@ -23,3 +23,14 @@ export const updatesettingId = (id: number, file: File) => {
         },
     });
 };
+export const updatesettingallId = (id:number, value:string) => {
+    return axiosWithAuth(`/settingedit/${id}`, {
+        method: "PUT",
+        data: {
+            value: value
+        },
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+};

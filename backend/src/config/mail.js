@@ -1,26 +1,37 @@
 import nodemailer from 'nodemailer';
+import { responseSend } from "../config/response.js";
+import initModels from "../models/init-models.js";
+const models = initModels(sequelize);
+import sequelize from "../models/connect.js";
+const { setting } = models;
+const getSMTPFromDatabase = async () => {
+  return await setting.findOne({ where: { id: 12 }, where: { id: 13 }, where: { id: 14 } });
 
-export const sendMail = (to, subject, text, html) => {
+};
+export const sendMail = async (to, subject, text, html) => {
+  const setting = await getSMTPFromDatabase();
+        const SMTP_USER = setting.value;
+        const SMTP_PASSWORD = setting.value;
+        const SMTP_MAIL_CONTENT = setting.value;
   return new Promise((resolve, reject) => {
     // Cấu hình email
     let configMail = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "duyp7484@gmail.com", // Địa chỉ email của bạn
-        pass: "yycxoaqywrvhtvsh"   // Mật khẩu ứng dụng
+        user: SMTP_USER, // Địa chỉ email của bạn
+        pass: SMTP_PASSWORD   // Mật khẩu ứng dụng
       },
       tls: {
-        rejectUnauthorized: false // Cho phép sử dụng chứng chỉ tự ký
+        rejectUnauthorized: false 
       }
     });
 
-    // Nội dung email
     let infoMail = {
-      from: "duyp7484@gmail.com", // Email gửi
-      to,                        // Email nhận
-      subject,                   // Tiêu đề
-      text,                      // Nội dung văn bản thuần
-      html                       // Nội dung giao diện HTML
+      from: SMTP_MAIL_CONTENT,  
+      to,                        
+      subject,                   
+      text,                      
+      html                      
     };
 
     console.log("Email info:", infoMail);
@@ -28,7 +39,7 @@ export const sendMail = (to, subject, text, html) => {
     // Gửi email
     configMail.sendMail(infoMail, (err, info) => {
       if (err) {
-        console.error("Error sending email:", err); // Ghi lỗi nếu có
+        console.error("Error sending email:", err);  
         reject(false);
       } else {
         console.log("Email sent successfully:", info.response);
