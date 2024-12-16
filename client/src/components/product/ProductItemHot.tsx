@@ -16,6 +16,7 @@ import { IMG_BACKEND } from "../../constants";
 import { formatCurrencyVND } from "../../utils";
 import { addItemToCart } from "../../redux/cart/cart.slice";
 import toast from "react-hot-toast";
+import { NavLink } from "react-router-dom";
 function ProductItemHot(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
 
@@ -81,62 +82,66 @@ function ProductItemHot(props) {
   {/* Thông tin sản phẩm */}
   <div className="px-4">
     {/* Badge khuyến mãi */}
-    <div className="flex items-center justify-start gap-2 mb-2">
-      <div className="bg-gradient-to-r from-[#DD720B] to-[#EC6D11] text-white rounded-full px-3 py-1 text-base font-medium flex items-center">
-        <img src={oficie} alt="" className="w-5 h-5 mr-1" />
-        <span>TẶNG PHỤ KIỆN</span>
-      </div>
-    </div>
+            <NavLink to={`/san-pham-chi-tiet/${props.product.product_id}`}>
+            <div className="flex items-center justify-start gap-2 mb-2">
 
-    <h3 className="text-[1.5rem] font-bold">{props.product.product_name}</h3>
-    <div className="flex items-center gap-2 my-2">
-      <PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
-      <span className="text-gray-600 text-base">Online giá rẻ quá</span>
-    </div>
+<div className="bg-gradient-to-r from-[#DD720B] to-[#EC6D11] text-white rounded-full px-3 py-1 text-base font-medium flex items-center">
+  <img src={oficie} alt="" className="w-5 h-5 mr-1" />
+  <span>TẶNG PHỤ KIỆN</span>
+</div>
+</div>
 
-    {/* Giá */}
-    <div className="flex items-center gap-2 my-2 ">
-      <span className="bg-gray-100 text-[1.2rem] font-medium py-1 px-2 rounded">Trả góp 0%</span>
-      <span className="line-through text-gray-400 text-[1.3rem]">
-          {props.product?.product_discount > 0 ?
-                      <span className="line-through text-gray-400 ">
-                        {formatCurrencyVND(props?.product.product_price + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price || 0))}
-                      </span>
-                      : null}
-      </span>
-    </div>
+<h3 className="text-[1.5rem] font-bold">{props.product.product_name}</h3>
+<div className="flex items-center gap-2 my-2">
+<PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
+<span className="text-gray-600 text-base">Online giá rẻ quá</span>
+</div>
+
+{/* Giá */}
+<div className="flex items-center gap-2 my-2 ">
+<span className="bg-gray-100 text-[1.2rem] font-medium py-1 px-2 rounded">Trả góp 0%</span>
+<span className="line-through text-gray-400 text-[1.3rem]">
+    {props.product?.product_discount > 0 ?
+                <span className="line-through text-gray-400 ">
+                  {formatCurrencyVND(props?.product.product_price + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price || 0))}
+                </span>
+                : null}
+</span>
+</div>
 <p className="text-red-600 font-semibold text-[1.7rem]">
-            {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price|| 0))* (1 - Number(props?.product.product_discount / 100) ))}
-          </p>
-    {/* Đánh giá và tình trạng */}
-    <div className="flex justify-between items-center mt-2">
-      <div className="flex items-center gap-1 text-orange-500 ">
-        <span className="font-semibold text-[1.4rem]">{averageStars}</span>
-        <IoIosStar className="text-lg" />
-        <span className="text-gray-400 text-[1.4rem]">({props?.product?.comment_products?.length})</span>
-        </div>
-      {props.product?.product_colors[0].product_qualities[0]?.quality_product > 10 ? (
-     
-     <div className="flex text-[1.2rem] items-center text-green-600 font-semibold gap-1">
-     <FaTruck />
-     <span>Còn hàng</span>
-     </div>
-                 ) : (
-                   <div className="flex text-[1.2rem] items-center text-yellow-500 font-semibold gap-1">
-                   <FaTruck />
-                   <span>Sắp hết hàng</span>
-                 </div>
-                 )}
-    </div>
+      {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price|| 0))* (1 - Number(props?.product.product_discount / 100) ))}
+    </p>
+{/* Đánh giá và tình trạng */}
+<div className="flex justify-between items-center mt-2">
+<div className="flex items-center gap-1 text-orange-500 ">
+  <span className="font-semibold text-[1.4rem]">{averageStars}</span>
+  <IoIosStar className="text-lg" />
+  <span className="text-gray-400 text-[1.4rem]">({props?.product?.comment_products?.length})</span>
+  </div>
+{props.product?.product_colors[0].product_qualities[0]?.quality_product > 10 ? (
 
-    {/* Nút thêm giỏ hàng */}
+<div className="flex text-[1.2rem] items-center text-green-600 font-semibold gap-1">
+<FaTruck />
+<span>Còn hàng</span>
+</div>
+           ) : (
+             <div className="flex text-[1.2rem] items-center text-yellow-500 font-semibold gap-1">
+             <FaTruck />
+             <span>Sắp hết hàng</span>
+           </div>
+           )}
+</div>
+
+{/* Nút thêm giỏ hàng */}
+
+    </NavLink>
     <button
-      className="w-full mt-4 h-12 border border-[#7500CF] text-[#7500CF] text-[1.5rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
-      onClick={() => { handleAddItem(props.product) }}
+className="w-full mt-4 h-12 border border-[#7500CF] text-[#7500CF] text-[1.5rem] font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
+onClick={() => { handleAddItem(props.product) }}
 
-    >
-      Thêm giỏ hàng
-    </button>
+>
+Thêm giỏ hàng
+</button>
   </div>
 
   
