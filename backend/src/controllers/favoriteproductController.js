@@ -1,6 +1,7 @@
 import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import initModels from "../models/init-models.js";
+import { Op } from "sequelize";
 
 let models = initModels(sequelize); 
 let favoriteproduct = models.favorite_product; 
@@ -17,38 +18,47 @@ const getfavoriteproduct = async (req, res) => {
                 {
                     model: models.products,
                     as: "product",
-                    include: [
-                        {
-                            model: models.comment_product,
-                            as: 'comment_products',
-                            include: [
-                                {
-                                    model: models.user,
-                                    as: 'user',
-                                    attributes: { exclude: ['user_password', 'user_phone'] }
-                                }
-                            ]
-                        },
-                        {
-                            model: models.infor_product,
-                            as: 'infor_product_infor_product'
-                        },
-                        {
-                            model: models.product_colors,
-                            as: 'product_colors',
-                            include: [
-                                {
-                                    model: models.image_product,
-                                    as: 'image'
-                                },
-                                {
-                                    model: models.product_storage,
-                                    as: 'product_storages',
-                                    required: false
-                                },
-                            ]
-                        },
-                    ]
+                  include: [
+                         {
+                           model: models.comment_product,
+                           as: "comment_products",
+                           include: [
+                             {
+                               model: models.user,
+                               as: "user",
+                               attributes: { exclude: ["user_password", "user_phone"] },
+                             },
+                           ],
+                         },
+                         {
+                           model: models.infor_product,
+                           as: "infor_product_infor_product",
+                         },
+                         {
+                           model: models.product_colors,
+                           as: "product_colors",
+                           include: [
+                             {
+                               model: models.image_product,
+                               as: "image",
+                               required: true,
+                             },
+                             {
+                               model: models.product_storage,
+                               as: "product_storages",
+                             },
+                             {
+                               model: models.product_quality,
+                               as: "product_qualities",
+                               where: {
+                                 quality_product: { [Op.gt]: 0 }, // Điều kiện: quality_product > 0
+                               },
+                               required: true, // Sản phẩm phải có chất lượng hợp lệ
+                             },
+                           ],
+                           required: true, // Sản phẩm phải có màu sắc
+                         },
+                       ],
                 }
             ]
         });

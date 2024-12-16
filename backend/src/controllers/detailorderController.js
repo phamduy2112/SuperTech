@@ -69,18 +69,21 @@ const getDetailOrderById = async (req, res) => {
 const createdetailorder = async (req, res) => {
   try {
       const detailOrders = req.body; // Giả định body chứa một mảng đối tượng
-
       const newOrders = await Promise.all(
           detailOrders.map(async (order) => {
+            await checkInventory(order.product_id,order.color_id,order.id_storage,order.detail_order_quality,res)
+
+          
             
-            // await checkInventory(order.product_id,order.color_id,order.id_storage, 1,res);
-            
-            // // Trừ tồn kho sau khi kiểm tra thành công
-            // await models.product_quality.decrement("quality_product", {
-            //   by: order.detail_order_quality,
-            //   where: { product_id:order.product_id, color_id:order.color_id, storage_id:order.id_storage },
-            // });
-      
+            // // // Trừ tồn kho sau khi kiểm tra thành công
+            await models.product_quality.decrement("quality_product", {
+              by: order.detail_order_quality,
+              where: { product_id:order.product_id, color_id:order.color_id },
+            });
+            await models.products.increment("product_hot",{
+              by:1,
+              where:{product_id:order.product_id}
+            })
 
               // Tạo detailOrder sau khi trừ kho thành công
               const createdOrder = await detailorder.create(order);
@@ -97,7 +100,6 @@ const createdetailorder = async (req, res) => {
       console.error(error);
   }
 };
-
 const updatedetailorder = async (req, res) => {
     try {
         let updated = await detailorder.update(req.body, {

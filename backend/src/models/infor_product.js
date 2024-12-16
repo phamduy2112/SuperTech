@@ -53,6 +53,10 @@ export default class infor_product extends Model {
     infor_more: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    infor_more2: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   }, {
     sequelize,

@@ -5,14 +5,36 @@ const models = initModels(sequelize);
 import sequelize from "../models/connect.js";
 const { setting } = models;
 const getSMTPFromDatabase = async () => {
-  return await setting.findOne({ where: { id: 12 }, where: { id: 13 }, where: { id: 14 } });
+  const settings = await setting.findAll({
+    where: {
+      id: [12, 13, 14]
+    }
+  });
 
+  const smtpSettings = {};
+  settings.forEach(setting => {
+    switch (setting.id) {
+      case 12:
+        smtpSettings.SMTP_USER = setting.value;
+        break;
+      case 13:
+        smtpSettings.SMTP_PASSWORD = setting.value;
+        break;
+      case 14:
+        smtpSettings.SMTP_MAIL_CONTENT = setting.value;
+        break;
+      default:
+        break;
+    }
+  });
+
+  return smtpSettings;
 };
 export const sendMail = async (to, subject, text, html) => {
-  const setting = await getSMTPFromDatabase();
-        const SMTP_USER = setting.value;
-        const SMTP_PASSWORD = setting.value;
-        const SMTP_MAIL_CONTENT = setting.value;
+  const smtpSettings = await getSMTPFromDatabase(); 
+  const SMTP_USER = smtpSettings.SMTP_USER;  
+  const SMTP_PASSWORD = smtpSettings.SMTP_PASSWORD; 
+  const SMTP_MAIL_CONTENT = smtpSettings.SMTP_MAIL_CONTENT;
   return new Promise((resolve, reject) => {
     // Cấu hình email
     let configMail = nodemailer.createTransport({

@@ -27,6 +27,8 @@ import { app, server } from './socker/socker.js';
 import settingRouter from './routers/settingRouter.js';
 import autobankrouter from './routers/bankAutoRouter.js';
 import  transactionsrouter from './routers/transactionRouter.js';
+import exportFiles from './routers/exportFile.js';
+import { authorizeRoles, middleToken } from './config/jwt.js';
 
 app.use(express.json());
 app.use(cookieParser());
@@ -52,10 +54,14 @@ cron.schedule('* * * * *', async () => {
 });
 
 app.use(cors(corsOptions));
-app.get('/', (req, res) => {
-  res.send("Api Created By Team NinjaDev");
-});
-
+ app.get(
+  '/admin/groups',  
+  middleToken, // Middleware kiểm tra token
+  authorizeRoles([0, 1]), // Phân quyền
+  (req, res) => {
+    res.json({ message: 'Chào mừng đến trang admin!' });
+  }
+);
 app.use(settingRouter);
 app.use(transactionsrouter);
 app.use(product_colorsRouter);
@@ -80,6 +86,7 @@ app.use(categoriesRouter);
 app.use(bannerRouter);
 app.use(payRouter);
 app.use(searchRouter);
+app.use(exportFiles);
 app.use (uploadImgUserRouter)
 server.listen(8080, () => {
   console.log('Server running on http://localhost:8080');

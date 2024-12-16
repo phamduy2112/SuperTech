@@ -14,7 +14,9 @@ const getdiscount = async (req, res) => {
 };
 const createUserDiscount = async (req, res) => {
     try {
-        const {user_id,discount_id}=req.body;
+        const user_id=req.id;
+
+       const {discount_id}=req.body;
         const user_at=new Date();
           const newDiscount = await models.user_discounts.create({
             user_id,discount_id,user_at
@@ -82,41 +84,37 @@ const creatediscount = async (req, res) => {
   };
   
 
-const applyDiscount = async (req, res) => {
+const applyDiscount = async (req, res) => 
+    {
+        const     userId     =req.id;
+
+    const {  discountId } = req.body;
+
+    if (!userId || !discountId) {
+      return res.status(400).json({ message: 'User ID and Discount ID are required.' });
+    }
+  
     try {
-        const { user_id, discount_code } = req.body;
-
-        const usedDiscount = await sequelize.models.user_discounts.findOne({
-            where: {
-                user_id,
-                discount_code,
-            },
-        });
-
-        if (usedDiscount) {
-            return res.status(400).json({ message: 'Mã giảm giá chỉ có thể sử dụng một lần.' });
-        }
-
-        // Kiểm tra xem mã giảm giá có hợp lệ không
-        const discount = await sequelize.models.discount.findOne({
-            where: {
-                id: discount_code,
-                discount_date_start: { [sequelize.Op.lte]: new Date() },
-                discount_date_end: { [sequelize.Op.gte]: new Date() },
-            },
-        });
-
-        if (!discount) {
-            return res.status(400).json({ message: 'Mã giảm giá không hợp lệ hoặc đã hết hạn.' });
-        }
-
-      
-
-     
-        res.status(201).json({ message: 'Đơn hàng đã được tạo và mã giảm giá đã được áp dụng.' });
+      // Kiểm tra xem người dùng đã áp dụng mã giảm giá chưa
+      const existingDiscount = await    models. user_discounts.findOne({
+        where: { user_id: userId, discount_id: discountId }
+      });
+  
+      if (existingDiscount) {
+        // Nếu đã áp dụng mã giảm giá, trả về thông báo
+        return res.status(400).json({ message: 'You have already applied this discount.' });
+      }
+  
+    
+  
+      return res.status(200).json({
+        message: 'Discount applied successfully!',
+    
+      });
+  
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Có lỗi xảy ra khi áp dụng mã giảm giá.' });
+      console.error(error);
+      return res.status(500).json({ message: 'An error occurred while applying the discount.' });
     }
 };
 const deletediscount = async (req, res) => {

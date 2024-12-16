@@ -7,9 +7,9 @@ const discountRouter = express.Router();
 
 discountRouter.get('/discount', getdiscount);
 discountRouter.get('/discount/:id', getdiscountById);
-discountRouter.get('/create-discount-user', createUserDiscount);
+discountRouter.post('/create-discount-user' ,middleToken                    ,createUserDiscount);
 discountRouter.post('/discount-create', creatediscount);
-discountRouter.put('/apply-discount/:id',middleToken, applyDiscount);
+discountRouter. post        ('/apply-discount',middleToken, applyDiscount);
 discountRouter.delete('/discount-delete/:id',middleToken, deletediscount);
 
 export default discountRouter;

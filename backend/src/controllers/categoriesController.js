@@ -13,6 +13,8 @@ const getcategories = async (req, res) => {
         let data = await categoriesModel.findAll();
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
+        console.log(error);
+        
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
@@ -295,15 +297,16 @@ const deletecategories = async (req, res) => {
         });
 
         if (deleted) {
-            responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
+            return responseSend(res, deleted, "Đã Xóa Thành Công!", 200);
         } else {
-            responseSend(res, "", "Không tìm thấy danh mục nào!", 404);
+            return responseSend(res, "", "Không tìm thấy danh mục nào để xóa!", 404);
         }
     } catch (error) {
-        console.error('Lỗi xóa danh mục:', error);
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+        console.error(error);
+        return responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
+
 
 export {
     getcategories,

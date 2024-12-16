@@ -30,6 +30,10 @@ export default class products extends Model {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    view: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0, // Giá trị mặc định là 0
+    },
     product_date: {
       type: DataTypes.DATEONLY,
       allowNull: true
