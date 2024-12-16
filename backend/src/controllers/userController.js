@@ -428,12 +428,12 @@ function generateRandomString(length) {
         expirationTime.setMinutes(expirationTime.getMinutes() + 10);
 
         // Hash the code for security
-        const hashedCode = await bcrypt.hash(code, 10);
+        // const hashedCode = await bcrypt.hash(code, 10);
 
         // Save code to database
         await models.code.create({
             user_id: user.user_id,
-            code: hashedCode,
+            code: code,
             create_at: new Date(),
             expired: expirationTime
         });

@@ -3,8 +3,9 @@ import { Button, Modal, Row, Col } from 'antd';
 import { getAutoBank, getOrderAll } from '../../../../service/order/order.service';
 import { CopyOutlined, DownOutlined } from '@ant-design/icons';
 import CountdownTimer from './CountimePay';
+import { getsetting } from '../../../../service/setting/setting.service';
 function ModalPay(props:any) {
-  const [data, setData] = useState(null); // Initialize with null to represent loading state.
+  const [data, setData] = useState(null);  
 useEffect(()=>{
   if(props.isModalOpen){
     props.handleReset();
@@ -15,22 +16,44 @@ useEffect(()=>{
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await getAutoBank(); // Ensure this API returns valid data.
+        const response = await getAutoBank(); 
         if (response?.data?.content) {
-          setData(response.data.content); // Set the data if it's valid.
+          setData(response.data.content); 
         } else {
           console.error("No content found in response.");
         }
       } catch (error) {
-        console.error("Error fetching data:", error); // Handle error if API fails.
+        console.error("Error fetching data:", error);  
       }
     };
 
     fetchApi();
   }, []);
+  const [settings, setSettings] = useState({ rechargeNotice: '' });
+  const fetchSettings = async () => {
+    try {
+        const response = await getsetting();
+        const settingsMap = {};
+        response.data.content.forEach(setting => {
+            settingsMap[setting.id] = setting.value;
+        });
+        setSettings({
+            rechargeNotice: settingsMap[10],
+        });
+        setOriginalSettings({
+            ...settingsMap
+        });
+    } catch (error) {
+        console.error('Lỗi lấy dữ liệu:', error);
+    }
+};
 
-  const totalOrder = props?.data?.order_total;
-  const textOrder = 'supertech' + props?.data?.order_id;
+useEffect(() => {
+    fetchSettings();
+}, []);
+
+const totalOrder = props?.data?.order_total + 30000;
+const textOrder = settings.rechargeNotice + props?.data?.order_id;
 
   // Ensure that data is not null and is an array with at least one element before rendering the image
   const isDataReady = Array.isArray(data) && data.length > 0;

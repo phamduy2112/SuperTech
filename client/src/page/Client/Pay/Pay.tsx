@@ -539,7 +539,7 @@ function Pay() {
               </div>
              
             </div>
-            <div className='border-[#7500CF] border py-[1rem] px-[1.5rem] mt-[1rem] relative'>
+            <div className='border-[var(--custom-color)] border py-[1rem] px-[1.5rem] mt-[1rem] relative'>
               <input
                 type="radio"
                 name="paymentMethod"

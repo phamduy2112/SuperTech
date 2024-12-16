@@ -6,8 +6,8 @@ export default {
   ],
   theme: {
     extend: {
-      colors:{
-        customColor: '#7500CF',
+      colors: {
+        customColor: 'var(--custom-color)',
       }
     },
     screens: {

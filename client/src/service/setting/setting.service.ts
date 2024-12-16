@@ -11,15 +11,26 @@ export const getsettingId = (id:number) => {
         method: "GET",
     });
 };
-export const updatesettingId = (id:number, value:string) => {
+export const updatesettingId = (id: number, file: File) => {
+    const formData = new FormData();
+    formData.append('value', file); // Thêm file vào formData với key là 'value'
+
+    return axiosWithAuth(`/settingedit/${id}`, {
+        method: "PUT",
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+export const updatesettingallId = (id:number, value:string) => {
     return axiosWithAuth(`/settingedit/${id}`, {
         method: "PUT",
         data: {
             value: value
         },
         headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+            'Content-Type': 'application/json'
+        }
     });
-    
 };

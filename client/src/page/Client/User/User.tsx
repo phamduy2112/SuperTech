@@ -45,7 +45,7 @@ function User() {
     <Container className="pt-[1rem]">
       <div className="flex flex-col lg:flex-row justify-between">
         {/* Sidebar */}
-        <div className="w-full lg:w-[25%] p-[2rem] bg-white h-[100%] rounded-xl shadow-md">
+        <div className="w-[25%] p-[2rem] bg-white h-[100%] shadow-md rounded-[10px]">
           <div className="flex gap-[1rem]">
             {/* Ảnh hoặc ký tự đầu của người dùng */}
             <div className="w-[7rem] h-[7rem] rounded-[50%] overflow-hidden">
@@ -75,7 +75,7 @@ function User() {
           </div>
 
           {/* Menu điều hướng */}
-          <ul className="mt-[3rem]">
+          <ul className="mt-[3rem] rounded-[10px] ">
             <div
               onClick={() => handleNavigation(Paths.Profile)}
               className={`flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border rounded-lg ${
@@ -122,7 +122,7 @@ function User() {
             </div>
             <div
               onClick={() => handleNavigation('/thoat')}
-              className="flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border border-customColor rounded-lg"
+              className="rounded-t rounded-[10px] flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border border-customColor"
             >
               <IoMdExit />
               <div>Thoát</div>
@@ -131,7 +131,7 @@ function User() {
         </div>
 
         {/* Nội dung chính */}
-        <div className="w-full lg:w-[73%] p-[1rem] md:p-[2rem] bg-white rounded-xl shadow-md">
+        <div className="w-[70%] p-[2rem] bg-white h-[100%] shadow-md rounded-[10px]">
           <Outlet />
         </div>
       </div>

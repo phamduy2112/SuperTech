@@ -10,7 +10,7 @@ function LaptopItem(props: any) {
     <div className="relative mx-5 p-5 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border overflow-hidden">
       {/* Giảm giá */}
       {props.product?.product_discount > 0 && (
-        <div className="absolute top-4 left-4 bg-[#7500CF] px-3 py-1 rounded-full text-white text-lg font-semibold">
+        <div className="absolute top-4 left-4 bg-[var(--custom-color)] px-3 py-1 rounded-full text-white text-lg font-semibold">
           -{props.product.product_discount}%
         </div>
       )}
@@ -64,7 +64,7 @@ function LaptopItem(props: any) {
 
         {/* Nút thêm giỏ hàng */}
         <button
-          className="w-full mt-4 h-12 border border-[#7500CF] text-[#7500CF] text-lg font-semibold rounded-md hover:bg-[#7500CF] hover:text-white transition-all"
+          className="w-full mt-4 h-12 border border-[var(--custom-color)] text-[var(--custom-color)] text-lg font-semibold rounded-md hover:bg-[var(--custom-color)] hover:text-white transition-all"
         >
           Thêm giỏ hàng
         </button>

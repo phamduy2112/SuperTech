@@ -155,7 +155,7 @@ function Header() {
               <div>
                 <NavLink to={"/san-pham-yeu-thich"}>
                   <Badge count={listProductFavourites?.length || 0} showZero>
-                    <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
+                    <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[var(--custom-color)]" />
                   </Badge>
                 </NavLink>
               </div>
@@ -165,7 +165,7 @@ function Header() {
                   showZero
                   onClick={() => setisvisibleCart(!isvisibleCart)}
                 >
-                  <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
+                  <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[var(--custom-color)]" />
                 </Badge>
                 {isvisibleCart && (
                   <div className="fixed inset-0 z-30">
@@ -182,7 +182,7 @@ function Header() {
                 )}
               </div>
               <div>
-                <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
+                <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[var(--custom-color)]" />
               </div>
             </div>
             <DropdownUser />
@@ -242,7 +242,7 @@ function Header() {
                           count={listProductFavourites?.length || 0}
                           showZero
                         >
-                          <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[#7500CF]" />
+                          <FaRegHeart className="xl:text-[2.4rem]  md:text-[2rem] text-[var(--custom-color)]" />
                         </Badge>
                       </NavLink>
                       <div className="cursor-pointer">
@@ -251,7 +251,7 @@ function Header() {
                           showZero
                           onClick={() => setisvisibleCart(!isvisibleCart)}
                         >
-                          <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[#7500CF]" />
+                          <MdOutlineShoppingBag className="xl:text-[2.6rem]  md:text-[2rem] text-[var(--custom-color)]" />
                         </Badge>
                         {isvisibleCart && (
                           <div className="fixed inset-0 z-30">
@@ -270,7 +270,7 @@ function Header() {
                         )}
                       </div>
                       <div>
-                        <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[#7500CF]" />
+                        <MdLanguage className="xl:text-[2.5rem]  md:text-[2rem] text-[var(--custom-color)]" />
                       </div>
                     </div>
                     <DropdownUser />

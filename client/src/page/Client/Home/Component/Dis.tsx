@@ -8,7 +8,7 @@ function Dis() {
   <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
     {/* Card 1 */}
     <div className='flex flex-col items-center justify-center text-center p-4'>
-      <FaTruckFast className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[#7500CF]' />
+      <FaTruckFast className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[var(--custom-color)]' />
       <h3 className='text-[1.2rem] sm:text-[1.5rem] lg:text-[1.8rem] font-semibold mt-4'>
         Miễn phí vận chuyển
       </h3>
@@ -19,7 +19,7 @@ function Dis() {
 
     {/* Card 2 */}
     <div className='flex flex-col items-center justify-center text-center p-4'>
-      <FaGift className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[#7500CF]' />
+      <FaGift className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[var(--custom-color)]' />
       <h3 className='text-[1.2rem] sm:text-[1.5rem] lg:text-[1.8rem] font-semibold mt-4'>
         Tiết kiệm lớn
       </h3>
@@ -30,7 +30,7 @@ function Dis() {
 
     {/* Card 3 */}
     <div className='flex flex-col items-center justify-center text-center p-4'>
-      <FaHeadphonesSimple className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[#7500CF]' />
+      <FaHeadphonesSimple className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[var(--custom-color)]' />
       <h3 className='text-[1.2rem] sm:text-[1.5rem] lg:text-[1.8rem] font-semibold mt-4'>
         24/07 Có người hỗ trợ
       </h3>
@@ -41,7 +41,7 @@ function Dis() {
 
     {/* Card 4 */}
     <div className='flex flex-col items-center justify-center text-center p-4'>
-      <FaMoneyBill className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[#7500CF]' />
+      <FaMoneyBill className='text-[2.5rem] sm:text-[3.5rem] lg:text-[4rem] text-[var(--custom-color)]' />
       <h3 className='text-[1.2rem] sm:text-[1.5rem] lg:text-[1.8rem] font-semibold mt-4'>
         Thanh toán linh hoạt
       </h3>

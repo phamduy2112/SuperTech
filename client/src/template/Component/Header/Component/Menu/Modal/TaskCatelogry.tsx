@@ -43,7 +43,7 @@ function TaskCatelogry() {
     <div className='relative' ref={dropdownRef}>
       <div
         onClick={toggleDropdown}
-        className="h-[43px] cursor-pointer md:hidden lg:flex bg-[#6308a8] rounded-t-[.5rem] text-white w-[225px] justify-center items-center"
+        className="h-[43px] cursor-pointer md:hidden lg:flex bg-customColor rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center"
       >
         <div className=" px-[1.5rem] text-[1.5rem] xl:font-semibold">
           Danh mục sản phẩm

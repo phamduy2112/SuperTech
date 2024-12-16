@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Popover, Button, Row, Col, Modal, Tabs, Divider, Select,Upload,message } from 'antd';
-import { FaExclamationTriangle, FaPlus,FaBookmark,FaUserAlt,FaBell,FaCubes,FaImage,FaRegCreditCard, FaLock  } from 'react-icons/fa';
+import { FaMailBulk,FaExclamationTriangle, FaPlus,FaBookmark,FaUserAlt,FaBell,FaCubes,FaImage,FaRegCreditCard, FaLock  } from 'react-icons/fa';
 import { SketchPicker } from 'react-color';
 import {IMG_BACKEND_SETTING} from '../../../constants';
-import { getsetting, updatesettingId } from '../../../service/setting/setting.service';
+import { getsetting, updatesettingId, updatesettingallId  } from '../../../service/setting/setting.service';
 import { getbank, updatebank } from '../../../service/bank/bank.service';
 function AdminSetting() {
     const { TabPane } = Tabs; 
@@ -61,10 +61,28 @@ function AdminSetting() {
             onCancel: () => { Modal.destroyAll(); }
         });
     };
+    const showPasswordSMTPModal = () => {
+        let tempPassword;
+        Modal.confirm({
+            title: 'Nhập mật khẩu để xem',
+            content: (
+                <Input
+                    type="password"
+                    onChange={(e) => tempPassword = e.target.value} 
+                    onPressEnter={() => handlePasswordSubmit(tempPassword)}
+                />
+            ),
+            onOk: () => handlePasswordSubmit(tempPassword),
+            onCancel: () => { Modal.destroyAll(); }
+        });
+    };
     const [settings, setSettings] = useState({
         title: '',
         description: '',
         author: '',
+        SMTP_PASSWORD: '',
+        SMTP_USER: '',
+        SMTP_MAIL_CONTENT: '',
         color: '#fff'
     });
     const [originalSettings, setOriginalSettings] = useState({});
@@ -94,7 +112,10 @@ function AdminSetting() {
                 contentAutobank: settingsMap[8],
                 token: settingsMap[9],
                 rechargeNotice: settingsMap[10],
-                tokenpass: settingsMap[11]
+                tokenpass: settingsMap[11],
+                SMTP_USER: settingsMap[12],
+                SMTP_PASSWORD: settingsMap[13],
+                SMTP_MAIL_CONTENT: settingsMap[14],
             });
            setOriginalSettings({
                 ...settingsMap
@@ -155,9 +176,7 @@ function AdminSetting() {
                         case 'logo':
                             id = 5;
                             break;
-                        case 'favicon':
-                            id = 6;
-                            break;
+                        
                         case 'noti_website':
                             id = 7;
                             break;
@@ -170,15 +189,26 @@ function AdminSetting() {
                         case 'rechargeNotice':
                             id = 10;
                             break;
+                        case 'passtoken':
+                             id = 11;
+                            break;
+                         case 'SMTP_USER':
+                             id = 12;
+                             break;
+                             case 'SMTP_PASSWORD':
+                                id = 13;
+                               break;
+                            case 'SMTP_MAIL_CONTENT':
+                                id = 14;
+                                break;
                         default:
                             console.error('Unknown setting key:', key);
                             return;
                     }
-                    updates.push(updatesettingId(id, settings[key]));
+                    updates.push(updatesettingallId(id, settings[key]));
                 }
             });
-    
-          
+
             const bankUpdates = [];
             if (bankDetails.id) {
                 await updatebank(
@@ -190,13 +220,15 @@ function AdminSetting() {
                 );
             }
     
-            await Promise.all([...updates, ...bankUpdates]); 
+            await Promise.all(updates, bankUpdates); 
             alert('Cập nhật cài đặt thành công!');
             window.location.reload();
         } catch (error) {
             console.error('Lỗi cập nhật cài đặt:', error);
+            alert('Có lỗi xảy ra trong quá trình cập nhật cài đặt. Vui lòng thử lại.');
         }
     };
+   
     const fetchBankDetails = async () => {
         try {
             const response = await getbank();
@@ -218,15 +250,15 @@ function AdminSetting() {
             console.error('Failed to fetch bank details:', error);
         }
     };
-    const [bankList, setBankList] = useState([]); // State để lưu danh sách ngân hàng
+    const [bankList, setBankList] = useState([]);
 
     const fetchBankList = async () => {
         try {
-            const response = await fetch('https://api.vietqr.io/v2/banks'); // Gọi API để lấy danh sách ngân hàng
-            const data = await response.json(); // Chuyển đổi phản hồi thành JSON
+            const response = await fetch('https://api.vietqr.io/v2/banks');
+            const data = await response.json();
             if (data.code === "00" && data.data) {
-                const shortNames = data.data.map(bank => bank.short_name); // Lấy trường short_name từ mỗi ngân hàng
-                setBankList(shortNames); // Lưu danh sách shortName vào state
+                const shortNames = data.data.map(bank => bank.short_name);
+                setBankList(shortNames);
             }
         } catch (error) {
             console.error('Lỗi khi lấy danh sách ngân hàng:', error);
@@ -325,29 +357,47 @@ function AdminSetting() {
                                 <div style={{ width: '40px', height: '35px', backgroundColor: settings.color, marginLeft: 10, borderRadius: '20px' }}></div>
                             </div>
                         </Col>
+
                         <Col xs={24} sm={12} md={12} lg={6}>
-                <h4 className='text-[1.6rem] flex items-center'>
-                    <FaImage className='mr-1' /> Favicon Website:
-                    <Popover content={<img src={`${IMG_BACKEND_SETTING}/${settings.favicon}`} alt="Favicon" style={{ width: '100px' }} />} trigger="hover">
-                        <FaExclamationTriangle className='text-red-500 ml-1' />
-                    </Popover>
-                </h4>
-                <Upload
-                    accept="image/*"  
-                    showUploadList={false}  
-                    beforeUpload={(file) => {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            const faviconName = file.name;  
-                            setSettings(prev => ({ ...prev, favicon: faviconName }));  
-                        };
-                        reader.readAsDataURL(file); 
-                        return false; 
-                    }}
-                >
-                    <Button>Chọn Favicon</Button>
-                </Upload>
-            </Col>
+                            <h4 className='text-[1.6rem] flex items-center'>
+                            <FaImage className='mr-1' /> Favicon Website:
+                                <Popover content={"Chức năng này sẽ tự động lưu ảnh favicon của bạn không cần bấm lưu !"} trigger="hover">
+                                    <FaExclamationTriangle className='text-red-500 ml-1' />
+                                </Popover>
+                               
+                            </h4>
+                            <div className='mt-2 shadow-lg rounded p-3 w-64 flex items-center justify-center'> 
+                                <img src={`${IMG_BACKEND_SETTING}${settings.favicon}`} alt="Favicon" style={{ width: '100px' }} />
+                            </div>
+                            <Upload
+                            
+                                accept="image/*"  
+                                showUploadList={false}  
+                                beforeUpload={(file) => {
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => {
+                                        const faviconName = file.name;  
+                                        setSettings(prev => ({ ...prev, favicon: faviconName }));  
+                                    };
+                                    reader.readAsDataURL(file); 
+                                    updatesettingId(6, file) 
+                                        .then(() => {
+                                            
+                                            setTimeout(() => {
+                                                window.location.reload();
+                                            }, 10); 
+                                        })
+                                        .catch(error => {
+                                            console.error('Lỗi khi upload favicon:', error);
+                                        });
+                                       
+                                    return false; 
+                                }}
+                            >
+                                <Button className='flex items-center justify-center' >Chọn Favicon</Button>
+                            </Upload>
+                        </Col>
+
                     </Row>
                 </TabPane>
                 <TabPane tab="Ngân Hàng" key="3">
@@ -447,6 +497,46 @@ function AdminSetting() {
                             </div>
                            
                         </Col>
+                    </Row>
+                </TabPane>
+                <TabPane tab="Cấu Hình SMTP" key="4">
+                    {/* Nội dung cho Ngân hàng */}
+                    <Row gutter={[16, 16]}>
+                        
+                    <Divider orientation="center" > <span className='flex items-center'><FaMailBulk className='mr-1' /> Quản Lí Gửi MAIL SMTP</span></Divider>
+                    
+
+                        <Col xs={24} sm={12} md={12} lg={6}>
+                        <h4 className='text-[1.6rem]'>Tài Khoản SMTP:</h4>
+                        <span className='text-[12px] text-[#646464] flex items-center '>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là nơi lưu tài khoản MAIL Tự động.
+                            </span>
+                        <div className='flex items-center' >
+                            
+                        <Input
+                            value={bankDetails.accountName} 
+                            placeholder="Tên Tài Khoản..."
+                            onChange={(e) => handleValueChange('accountName', e.target.value)} 
+                        />
+                        </div>
+                    </Col>
+                    <Col xs={24} sm={12} md={12} lg={6}>
+                            <h4 className='text-[1.6rem]' >Mật Khẩu SMTP:</h4>
+                            <span className='text-[12px] text-[#646464] flex items-center '>
+                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                                Đây là nơi lưu mật khẩu SMTP MAIL.
+                            </span>
+                            {isTokenVisible ? (
+                                <Input
+                                    value={settings.SMTP_PASSWORD}
+                                    onChange={(e) => handleValueChange('SMTP_PASSWORD', e.target.value)}
+                                    placeholder="Nhập Mật Khẩu..."
+                                />
+                            ) : (
+                                <Button onClick={showPasswordSMTPModal}>Xem/Sửa Mật Khẩu</Button>
+                            )}
+                    </Col>
                     </Row>
                 </TabPane>
                 

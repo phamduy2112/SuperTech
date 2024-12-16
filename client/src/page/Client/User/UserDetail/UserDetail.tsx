@@ -66,8 +66,8 @@ function UserDetail() {
             </p>
           </div>
           <button
-            onClick={() => formikRef.current.submitForm()}
-            className="text-[1.5rem] md:text-[1.7rem] flex gap-[.5rem] bg-customColor h-[3.5rem] justify-center items-center px-[1.3rem] text-white"
+            onClick={() => formikRef.current.submitForm()} // Trigger submit externally
+            className="text-[1.7rem] rounded-[5px] flex gap-[.5rem] bg-customColor h-[3.5rem] justify-center items-center px-[1.3rem] text-white"
           >
             <FaEdit />
             Sửa
