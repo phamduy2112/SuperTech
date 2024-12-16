@@ -68,7 +68,7 @@ function FavoriteProduct() {
       <div className='grid grid-cols-1 min-[426px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 2xl:grid-cols-6'>
         {listProductFavourites.length > 0 ? (
           listProductFavourites.map((item) => {
-            console.log(item);
+           
             return <ProductItem key={item.product_id} product={item.product} />;
           })
         ) : (

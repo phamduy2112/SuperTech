@@ -39,15 +39,9 @@ function ProductItem(props:any) {
   
   // Tính trung bình, kiểm tra để tránh chia cho 0
   const averageStars = totalComments > 0 ? (totalStars / totalComments).toFixed(1) : "0.0";
-  useEffect(() => {
-    if (!listProductFavourites.length) {
-        dispatch(getFavouriteProductThunk());
-    }
-}, [dispatch, listProductFavourites.length]);
-
-useEffect(()=>{
-  dispatch(getFavouriteProductThunk())
-},[dispatch])
+//  useEffect(() => {
+//     dispatch(getFavouriteProductThunk());
+//   }, [dispatch]);
 
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
@@ -61,6 +55,7 @@ useEffect(()=>{
 
     toast.success('Thêm sản phẩm thành công')
   };
+
 
 
   const handleFavouriteProduct = async (id: number) => {
@@ -84,20 +79,20 @@ useEffect(()=>{
       toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
     }
   };
-console.log(props);
+// console.log(props);
 
   return (
     <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col h-full">
       <div className="absolute top-4 right-4 flex flex-col gap-3">
         {/* Icon yêu thích */}
         <div className="bg-black p-2 text-[1.5rem] rounded-full text-white cursor-pointer hover:bg-gray-800">
-          <Tooltip title="Thêm yêu thích">
+          {/* <Tooltip title="Thêm yêu thích">
             {
               Array.isArray(listProductFavourites) && listProductFavourites.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
                 ? <FaHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
                 : <CiHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
             }
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </div>
 

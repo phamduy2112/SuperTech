@@ -69,9 +69,9 @@ function Header() {
   const handleIconClick = () => {
     setInputVisible(!isInputVisible);
   };
-  useEffect(() => {
-    dispatch(getFavouriteProductThunk());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getFavouriteProductThunk());
+  // }, [dispatch]);
   // hieu ung
   const [isvisibleHeaderMB, setisvisibleHeaderMB] = useState(false);
   const [isvisibleCart, setisvisibleCart] = useState(false);

@@ -2,7 +2,7 @@ export const Paths = {
   Home: "/",
   Search: "/tim-kiem",
   FavoriteProducts: "/san-pham-yeu-thich",
-  ListProducts: "/list-san-pham",
+  ListProducts: "/san-pham-yeu-thich",
   ProductDetail: "/san-pham-chi-tiet/:id",
   Blogs: "/bai-viet",
   BlogDetail: "/bai-viet-chi-tiet/:id",

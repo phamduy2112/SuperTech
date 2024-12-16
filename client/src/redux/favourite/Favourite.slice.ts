@@ -15,17 +15,18 @@ export const getFavouriteProductThunk = createAsyncThunk(
 );
 export const createFavouriteProductThunk = createAsyncThunk(
   "createFavouriteProductThunk",
-  async (data,{dispatch}) => {      
+  async (data, { dispatch }) => {
     try {
-      const resp = await createFavouriteProduct(data);
-      const response = await dispatch(getFavouriteProductThunk());
-
-      return response.payload;
+      await createFavouriteProduct(data);
+      dispatch(getFavouriteProductThunk()); // Không cần await
+      return "success";
     } catch (e) {
       console.log(e);
+      throw e;
     }
   },
 );
+
 const initialState = {
   listFavourite: [],
 };
