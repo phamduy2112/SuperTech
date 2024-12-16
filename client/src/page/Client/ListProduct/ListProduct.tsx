@@ -11,8 +11,29 @@ function ListProduct() {
 
   const location = useLocation();
   const AppDispatch = useAppDispatch();
-  const Datafilter = useAppSelector((state) => state.product.Datafilter);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Datafilter: any = useAppSelector((state) => state.product.Datafilter);
   const listProduct = useAppSelector((state) => state.product.listProduct);
+  const categoryDadNames: { [key: number]: string } = {
+    1: "Điện thoại",
+    2: "Laptop",
+    3: "Sạc dự phòng",
+    4: "Sạc/Cáp sạc",
+    5: "Ốp Lưng",
+    6: "Tai Nghe",
+    7: "Cáp Chuyển Đổi",
+
+
+  };
+
+
+  const [StatusSelect, setStatusSelect] = useState("Sắp xếp theo")
+
+  const handleStatusSelect = (value: string) => {
+    setStatusSelect(value);
+  }
+
+
 
 
 
@@ -22,6 +43,16 @@ function ListProduct() {
       setShowProduct(Datafilter)
     }
   }, [Datafilter]);
+
+  useEffect(() => {
+    if (StatusSelect === "desc") {
+      setShowProduct([...ShowProduct]?.sort((a, b) => b.product_price - a.product_price))
+    }
+    else if (StatusSelect === "asc") {
+      setShowProduct([...ShowProduct]?.sort((a, b) => a.product_price - b.product_price))
+    }
+
+  }, [ShowProduct, StatusSelect]);
 
   useEffect(() => {
     setShowProduct(listProduct);
@@ -34,7 +65,8 @@ function ListProduct() {
 
   const dispatch = useAppDispatch();
 
-  const [dataCate, setDataCate] = useState({})
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [dataCate, setDataCate] = useState<any>({})
   useEffect(() => {
     try {
       dispatch(getCatelogryThunkAll());
@@ -74,34 +106,26 @@ function ListProduct() {
         ]}
       />
       <div>
-        <h3 className='text-[2rem] mb-[1rem] font-semibold'>Sản Phẩm</h3>
-        <div className='flex gap-4'>
+        <div className='my-[5px] flex gap-4'>
           <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex w-[9rem]'>
             <Filter data={{ catelogries: catelogries, listProduct: listProduct, dataCate: dataCate }} />
           </div>
-          <div className='cursor-pointer text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-[6rem]'>
-            <span>Giá</span>
-          </div>
         </div>
-        <div className='mt-[.5rem] w-[100%]'>
+        <div className='my-[5px] w-[100%]'>
           <div className='flex justify-between items-center'>
             <div className='flex gap-[1rem]'>
-              <h4 className='text-[1.8rem] mt-[.5rem] font-semibold'>10 Điện thoại iPhone (Apple)</h4>
-              <div className='flex items-center justify-center'>
-                <Form.Item className='name="isDiscounted" ' valuePropName="checked">
-                  {/* <Checkbox onChange={handleCheckboxChangeSale}>
-                    Giảm giá
-                  </Checkbox> */}
-                </Form.Item>
-                <Form.Item valuePropName="checked">
-                  <Checkbox>Mới</Checkbox>
-                </Form.Item>
-              </div>
+              <h4 className='text-[1.8rem] mt-[.5rem] font-semibold'>
+                Danh mục
+                {' ' + categoryDadNames[dataCate.category_dad]}
+                {Datafilter.length !== 0 ? ` có ${Datafilter.length} kết quả sản phẩm` : `Không có kết quả`}
+              </h4>
             </div>
             <div className='w-[200px]'>
-              <Form.Item label="Sắp xếp theo">
-                <Select defaultValue="demo">
-                  <Select.Option value="demo">Demo</Select.Option>
+              <Form.Item>
+                <Select value={StatusSelect} onChange={handleStatusSelect}>
+                  <Select.Option value="asc" >Giá tăng dần</Select.Option>
+                  <Select.Option value="desc">Giá giảm dần</Select.Option>
+
                 </Select>
               </Form.Item>
             </div>

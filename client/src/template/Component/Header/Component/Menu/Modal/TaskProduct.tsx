@@ -13,7 +13,6 @@ interface Category {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function TaskProduct(props: any) {
   const [catelogries, setcatelogries] = useState<Category[]>()
-  const Navigate = useNavigate();
   useEffect(() => {
     setcatelogries(props.props)
   }, [props.props])

@@ -136,12 +136,12 @@ function ProductItem(props: any) {
             <span className="bg-gray-100 text-sm font-medium py-1 px-2 rounded">Trả góp 0%</span>
             {props.product?.product_discount > 0 ?
               <span className="line-through text-gray-400 ">
-                {formatCurrencyVND(props?.product.product_price + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price || 0))}
+                {formatCurrencyVND(props?.product.product_price)}
               </span>
               : null}
           </div>
           <p className="text-red-600 font-semibold text-[1.7rem]">
-            {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price || 0)) * (1 - Number(props?.product.product_discount / 100)))}
+            {formatCurrencyVND(props?.product.product_price * ((100 - props?.product.product_discount) / 100))}
           </p>
           {/* formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.storage_price ||0)) */}
           {/* Đánh giá và tình trạng */}
