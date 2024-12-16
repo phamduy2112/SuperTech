@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ProductItem from '../../../components/product/ProductItem';
-import { Breadcrumb, Checkbox, Form, Select } from 'antd';
+import { Breadcrumb, Form, Select } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getCatelogryThunkAll } from '../../../redux/catelogry/catelogry.slice';
 import { getProductByCateloriesDad, getProductInForThunk } from '../../../redux/product/product.slice';
@@ -115,7 +115,7 @@ function ListProduct() {
               <h4 className='text-[1.8rem] mt-[.5rem] font-semibold'>
                 Danh mục
                 {' ' + categoryDadNames[dataCate.category_dad]}
-                {Datafilter.length !== 0 ? ` có ${ShowProduct.length} kết quả sản phẩm ` : `Không có kết quả`}
+                {Datafilter?.length !== 0 ? ` có ${ShowProduct?.length} kết quả sản phẩm ` : `Không có kết quả`}
               </h4>
             </div>
             <div className='w-[200px]'>
@@ -123,7 +123,6 @@ function ListProduct() {
                 <Select value={StatusSelect} onChange={handleStatusSelect}>
                   <Select.Option value="asc" >Giá tăng dần</Select.Option>
                   <Select.Option value="desc">Giá giảm dần</Select.Option>
-
                 </Select>
               </Form.Item>
             </div>
@@ -132,7 +131,7 @@ function ListProduct() {
       </div>
       <div className='grid grid-cols-6 gap-y-3'>
         {
-          ShowProduct.length > 0 ? ShowProduct?.map((item) => (
+          ShowProduct?.length > 0 ? ShowProduct?.map((item) => (
             <ProductItem key={item.id} product={item} />
           )) : <div className='col-span-6 text-[30px] font-bold flex items-center justify-center h-[80vh]'>
             <span>Không tìm thấy sản phẩm mà bạn yêu cầu</span>

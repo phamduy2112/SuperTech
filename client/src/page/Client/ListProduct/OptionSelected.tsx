@@ -20,7 +20,6 @@ interface OptionSelectedProps {
     handlesystem: (systemchose: string) => void;
     handlecpu: (cpuChose: string) => void;
     handlechip_battery: (chip_batteryChose: string) => void;
-    handlemore: (moreChose: string) => void;
 
 }
 
@@ -42,7 +41,6 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
     handlesystem,
     handlecpu,
     handlechip_battery,
-    handlemore,
 
 
 }) => {
@@ -372,32 +370,7 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
                         }
                     </div>
                 </div>
-                <div className="flex flex-col">
-                    <span className="font-bold mb-1">Thông tin thêm</span>
-                    <div className="grid grid-cols-3 gap-3">
-                        {[
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            ...new Map(filteredProducts.map((item: any) => [item.infor_product_infor_product.infor_more, item])).values()
-                        ]
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            .filter((item: any) =>
-                                item.infor_product_infor_product.infor_more &&
-                                typeof item.infor_product_infor_product.infor_more === 'string' &&
-                                item.infor_product_infor_product.infor_more.trim() !== ''
-                            )                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            .map((item: any) => (
-                                <Button
-                                    key={item.infor_product_infor_product.infor_more}
-                                    className="min-w-[60px] h-[35px] flex justify-center items-center"
-                                    type={isSelected(ObjFilter.more, item.infor_product_infor_product.infor_more) ? 'primary' : 'default'}
-                                    onClick={() => handlemore(item.infor_product_infor_product.infor_more)}
-                                >
-                                    <span>{item.infor_product_infor_product.infor_more.replace(/<p>|<\/p>/g, '')}</span>
-                                </Button>
-                            ))
-                        }
-                    </div>
-                </div>
+
                 <div className="flex border-t-[1px] pt-6 flex-row justify-center items-center gap-[5px] col-span-3 mt-4">
                     <Button color='danger' onClick={() => RemoveClick(false)} className="min-w-[200px] h-[50px] flex justify-center items-center" variant="outlined">
                         <span>Bỏ chọn</span>

@@ -105,7 +105,6 @@ export interface ObjFilterTypeinterface {
     rearCamera: string[];
     cpu: string[];
     chip_battery: string[];
-    more: string[];
 };
 
 

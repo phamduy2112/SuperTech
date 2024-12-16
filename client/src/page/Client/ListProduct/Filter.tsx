@@ -30,7 +30,7 @@ function Filter(data: any) {
         system: [],
         cpu: [],
         chip_battery: [],
-        more: []
+        
     });
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -98,10 +98,7 @@ function Filter(data: any) {
     const handlechip_battery = (chip_batteryChose: string) => {
         setObjFilter(prevState => ({ ...prevState, chip_battery: prevState?.chip_battery.includes(chip_batteryChose) ? prevState.chip_battery : [...prevState.chip_battery, chip_batteryChose] }));
     };
-    const handlemore = (moreChose: string) => {
-        setObjFilter(prevState => ({ ...prevState, more: prevState?.more.includes(moreChose) ? prevState.more : [...prevState.more, moreChose] }));
-    };
-
+   
 
 
 
@@ -124,7 +121,6 @@ function Filter(data: any) {
                 'system',
                 'cpu',
                 'chip_battery',
-                'more'
             ];
 
             filterKeys.forEach(key => {
@@ -179,7 +175,6 @@ function Filter(data: any) {
             const systemFilter = item.infor_product_infor_product.infor_system?.toUpperCase();
             const cpuFilter = item.infor_product_infor_product.infor_cpu?.toUpperCase();
             const chip_batteryFilter = item.infor_product_infor_product.infor_chip_battery?.toUpperCase();
-            const moreFilter = item.infor_product_infor_product.infor_more?.toUpperCase();
 
 
 
@@ -209,7 +204,6 @@ function Filter(data: any) {
                 ObjFilter.system.length === 0 || ObjFilter.system.some(system => systemFilter === system.toUpperCase()),
                 ObjFilter.cpu.length === 0 || ObjFilter.cpu.some(cpu => cpuFilter === cpu.toUpperCase()),
                 ObjFilter.chip_battery.length === 0 || ObjFilter.chip_battery.some(chip_battery => chip_batteryFilter === chip_battery.toUpperCase()),
-                ObjFilter.more.length === 0 || ObjFilter.more.some(more => moreFilter === more.toUpperCase())
 
 
             ];
@@ -253,7 +247,6 @@ function Filter(data: any) {
                 handlesystem={handlesystem}
                 handlecpu={handlecpu}
                 handlechip_battery={handlechip_battery}
-                handlemore={handlemore}
 
 
 
