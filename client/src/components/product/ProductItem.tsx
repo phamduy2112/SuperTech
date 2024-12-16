@@ -8,7 +8,7 @@ import './product.css';
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addItemToCart } from "../../redux/cart/cart.slice";
 
-import { formatCurrencyVND } from "../../utils";
+import { formatCurrencyVND, truncateText } from "../../utils";
 import toast from "react-hot-toast";
 // import { checkFavouriteProducts, createFavouriteProduct, getFavouriteProducts } from "../../service/product/favourite.service";
 
@@ -26,14 +26,19 @@ function ProductItem(props:any) {
   
   // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
   const totalStars = props?.product?.comment_products?.reduce((total: number, item: any) => {
-    // Kiểm tra nếu item.comment_start là một số hợp lệ
+    // Kiểm tra nếu item.comment_star là một số hợp lệ
     const rating = Number(item.comment_star);
     if (!isNaN(rating)) {
       total += rating;
     }
     return total;
   }, 0);
-
+  
+  // Số lượng đánh giá
+  const totalComments = props?.product?.comment_products?.length || 0;
+  
+  // Tính trung bình, kiểm tra để tránh chia cho 0
+  const averageStars = totalComments > 0 ? (totalStars / totalComments).toFixed(1) : "0.0";
 //   useEffect(() => {
 //     if (!listFavourite.length) {
 //         dispatch(getFavouriteProductThunk());
@@ -125,7 +130,10 @@ console.log(props);
             </div>
           </div>
 
-          <h3 className="text-[1.7rem] font-bold text-ellipsis overflow-hidden">{props.product.product_name}</h3>
+          <h3 className="text-[1.7rem] font-bold text-ellipsis overflow-hidden sm: hidden lg:block">{props.product.product_name}</h3>
+          <h3 className="text-[1.7rem] font-bold text-ellipsis overflow-hidden lg:hidden">{
+          truncateText( props.product.product_name,20)
+         }</h3>
 
           <div className="flex items-center gap-2 my-2">
             <PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
@@ -149,7 +157,7 @@ console.log(props);
           <div className="flex justify-between items-center mt-2 text-[1.4rem]">
             <div className="flex items-center gap-1 text-orange-500">
               <span className="font-semibold">{
-                totalStars}</span>
+                averageStars}</span>
               <IoIosStar className="text-xl" />
               <span className="text-gray-400">({props?.product?.comment_products?.length})</span>
             </div>

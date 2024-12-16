@@ -27,11 +27,6 @@ const getProducts = async (req, res) => {
           model: models.infor_product,
           as: "infor_product_infor_product",
         },
-        //   {
-        //     model: models.product_quality,
-        //     as: 'product_qualities',
-        //     required: true, // Sản phẩm phải có ít nhất một chất lượng
-        //   },
         {
           model: models.product_colors,
           as: "product_colors",
@@ -39,6 +34,7 @@ const getProducts = async (req, res) => {
             {
               model: models.image_product,
               as: "image",
+              required: true,
             },
             {
               model: models.product_storage,
@@ -47,18 +43,16 @@ const getProducts = async (req, res) => {
             {
               model: models.product_quality,
               as: "product_qualities",
-              required: true, // Sản phẩm phải có ít nhất một chất lượng
+              where: {
+                quality_product: { [Op.gt]: 0 }, // Điều kiện: quality_product > 0
+              },
+              required: true, // Sản phẩm phải có chất lượng hợp lệ
             },
           ],
           required: true, // Sản phẩm phải có màu sắc
         },
       ],
     });
-
-    // Lọc các sản phẩm có màu sắc, kho chứa và chất lượng
-    //   const filteredData = data.filter(product => {
-    //     return product.product_qualities.quality_product> 0; // Kiểm tra có chất lượng
-    //   });
 
     responseSend(res, data, "Thành công!", 200);
   } catch (error) {
@@ -175,6 +169,10 @@ const getProductsByCategoryId = async (req, res) => {
 
 const getProductById = async (req, res) => {
   try {
+    await models.products.increment("view", {
+      by: 1, // Tăng thêm 1
+      where: { product_id: req.params.id }, // Áp dụng cho sản phẩm có id được truyền vào
+    });
     let data = await Products.findByPk(req.params.id, {
       include: [
         //     {
@@ -198,6 +196,7 @@ const getProductById = async (req, res) => {
             {
               model: models.image_product,
               as: "image",
+
             },
             {
               model: models.product_storage,
@@ -212,10 +211,7 @@ const getProductById = async (req, res) => {
         },
       ],
     });
-    await models.products.decrement("  view ", {
-      by: 1,
-      where: { product_id:     req.params.id                     },
-    });
+
 
     if (data) {
       responseSend(res, data, "Thành công!", 200);
@@ -287,6 +283,37 @@ const getProductByIdCatelogryDad = async (req, res) => {
     responseSend(res, null, "Error retrieving products", 500);
   }
 };
+const getProductHot = async (req, res) => {
+  try {
+    const products = await models.products.findAll({
+      where: { hot: { [Op.gt]: 0 } }, // Lấy các sản phẩm có trường hot > 0
+      order: [["hot", "DESC"]], // Sắp xếp theo trường hot giảm dần
+      limit: 8, // Giới hạn 8 sản phẩm
+      include: [
+        {
+          model: models.product_colors,
+          as: "product_colors",
+          include: [
+            {
+              model: models.image_product,
+              as: "image",
+            },
+          ],
+        },
+      ],
+    });
+
+    if (products.length > 0) {
+      responseSend(res, products, "Thành công!", 200);
+    } else {
+      responseSend(res, [], "Không có sản phẩm hot!", 404);
+    }
+  } catch (error) {
+    console.error(error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
+  }
+};
+
 const createProduct = async (req, res) => {
   try {
     const {
@@ -728,4 +755,5 @@ export {
   deleteProductColor,
   getProductsAdmin,
   updateQualityProduct,
+  getProductHot
 };
