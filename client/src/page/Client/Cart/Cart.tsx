@@ -14,14 +14,17 @@ import { useEffect, useState } from "react";
 import ModalDiscount from "./Component/ModalDiscount";
 import { Modal, Popconfirm } from "antd";
 import toast from "react-hot-toast";
+import LoadingCart from "./Component/Loading/LoadingCart";
+import { timeLoading } from "../../../constants";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
   const listCart = useAppSelector((state) => state.cart.listCart);
   const totalItem = useAppSelector((state) => state.cart.totalItems);
-  const getDiscount=useAppSelector(state=>state.cart.discount);
+  const getDiscount=useAppSelector(state=>state.vourher.discount);
   const getShip=useAppSelector(state=>state.cart.ship);
-   
+  
+
   useEffect(()=>{
     if(listCart.length==0){
       navigate("/"); 
@@ -90,7 +93,16 @@ export default function Cart() {
   const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
   // 10000 - (10000 * 10 / 100); mã khuyết mãi
-  
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), timeLoading)
+  }, []);
+
+  if (isLoading) {
+    return <LoadingCart/>
+  }
+
   return (
     <Container>
   <div className="py-6 text-[1.5rem]">
@@ -273,7 +285,7 @@ export default function Cart() {
 
       {/* Shipping Fee */}
       <div className="flex justify-between pb-3 md:pb-5">
-        <span className="text-[1.4rem] md:text-[1.6rem]">Phí vận chuyển</span>
+        <span className="text-[1.4rem] md:text-[1.6rem]">Phí vận chuyển </span>
         <span className="text-green-600 font-medium text-[1.4rem] md:text-[1.6rem]">
           {formatCurrencyVND(getShip)}
         </span>

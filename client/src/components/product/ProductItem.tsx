@@ -21,8 +21,8 @@ function ProductItem(props:any) {
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
   const token: any = useAppSelector(state => state.user.token);
-  const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
-  const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
+  // const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
+  // const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
   
   // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
   const totalStars = props?.product?.comment_products?.reduce((total: number, item: any) => {
@@ -62,27 +62,27 @@ useEffect(()=>{
   //   opacity: isvisibleProduct ? 1 : 0,
   // });
 
-  const handleFavouriteProduct = async (id: number) => {
-    try {
-      const product = { product_id: id };
+  // const handleFavouriteProduct = async (id: number) => {
+  //   try {
+  //     const product = { product_id: id };
 
-      if (isFavourited) {
-        // Nếu sản phẩm đã được yêu thích, hủy yêu thích
-        await dispatch(createFavouriteProductThunk(product))
-        setIsFavourited(false); // Cập nhật trạng thái yêu thích
-        toast.success('Đã bỏ yêu thích sản phẩm!');
-      } else {
-        // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
-        await dispatch(createFavouriteProductThunk(product))
-        setIsFavourited(true); // Cập nhật trạng thái yêu thích
-        toast.success('Đã thêm vào yêu thích!');
-      }
+  //     if (isFavourited) {
+  //       // Nếu sản phẩm đã được yêu thích, hủy yêu thích
+  //       await dispatch(createFavouriteProductThunk(product))
+  //       setIsFavourited(false); // Cập nhật trạng thái yêu thích
+  //       toast.success('Đã bỏ yêu thích sản phẩm!');
+  //     } else {
+  //       // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
+  //       await dispatch(createFavouriteProductThunk(product))
+  //       setIsFavourited(true); // Cập nhật trạng thái yêu thích
+  //       toast.success('Đã thêm vào yêu thích!');
+  //     }
 
       
-    } catch (error) {
-      toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
-    }
-  };
+  //   } catch (error) {
+  //     toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
+  //   }
+  // };
 console.log(props);
 
   return (
@@ -90,13 +90,13 @@ console.log(props);
       <div className="absolute top-4 right-4 flex flex-col gap-3">
         {/* Icon yêu thích */}
         <div className="bg-black p-2 text-[1.5rem] rounded-full text-white cursor-pointer hover:bg-gray-800">
-          <Tooltip title="Thêm yêu thích">
+          {/* <Tooltip title="Thêm yêu thích">
             {
               Array.isArray(listProductFavourites) && listProductFavourites.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
                 ? <FaHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
                 : <CiHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
             }
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </div>
 

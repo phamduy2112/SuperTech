@@ -75,7 +75,7 @@ const register = async (req, res) => {
             user_name,
             user_email,
             user_password:hashedPassword,
-            user_role:0,
+            user_role:11,
             user_time
         })
         await sendVerificationEmail(newUser.user_email, newUser.user_id);

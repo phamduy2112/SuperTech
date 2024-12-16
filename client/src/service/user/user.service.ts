@@ -66,3 +66,40 @@ export const getNewCustomerThisWeek=()=>{
   })
  
 }
+export const UpdateStaff = async (UpdateStaffSend ) => {
+  console.log(UpdateStaffSend);
+
+  return axiosWithAuth(`update-users-admin/${UpdateStaffSend.userId}`, {
+    method: "put",
+    data: UpdateStaffSend.DataStaff.staffData,
+    headers: {
+      token: UpdateStaffSend.DataStaff.tokenStaff,
+    },
+  });
+};
+
+export const createStaff = async (DataStaff) => {
+  return axiosWithAuth("create-users", {
+    method: "post",
+
+    data: DataStaff.staffData,
+    headers: {
+      token: DataStaff.tokenStaff,
+    },
+  });
+};
+export const DeleteStaffSend = (IdStaff: number) => {
+  console.log(IdStaff);
+  return axiosWithAuth(`/remove-employee/${IdStaff}`, {
+    method: "delete",
+  });
+};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const DeleteImgCloud = async (data: any) => {
+  return axiosWithAuth(`deleteimagecloud/${data.image}`, {
+    method: "delete",
+    headers: {
+      token: data.token,
+    },
+  });
+};

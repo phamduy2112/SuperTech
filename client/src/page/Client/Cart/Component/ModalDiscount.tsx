@@ -1,7 +1,7 @@
 import { message, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { RiCoupon3Fill } from 'react-icons/ri';
-import { getDiscountAll } from '../../../../service/vourcher/voucher.service';
+import { applyUserDiscount, getDiscountAll } from '../../../../service/vourcher/voucher.service';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { setDiscoutCart, setDiscoutId } from '../../../../redux/cart/voucher.slice';
 
@@ -11,8 +11,6 @@ function ModalDiscount() {
   const [discountCode, setDiscountCode] = useState<string>('');
   const [getVoucher, setGetVoucher] = useState<any[]>([]);
 
-
-  
   // Hiển thị modal
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
@@ -26,21 +24,41 @@ function ModalDiscount() {
     getApiVoucher();
   }, []);
 
-const dispatch=useAppDispatch()  
+  const dispatch = useAppDispatch();
+
   // Áp dụng mã giảm giá
-  const handleApplyDiscount = (voucherCode: string, discountPercent: number,id:number) => {
+  const handleApplyDiscount = async (voucherCode: string, discountPercent: number, id: number) => {
     setDiscountCode(voucherCode);  // Lưu mã giảm giá
-    setDiscount(discountPercent);   // Cập nhật phần trăm giảm giá
-    setIsModalOpen(false);   
-    dispatch(setDiscoutId(id))     
-    dispatch(setDiscoutCart(+discountPercent))
-    message.success(`Mã giảm giá ${voucherCode} đã được áp dụng với ${discountPercent}%`);
-  
-};
+    setIsModalOpen(false);
+
+    try {
+      // Gọi API để áp dụng mã giảm giá
+      const response = await applyUserDiscount({
+        discountId: id
+      });
+
+      // Kiểm tra nếu thành công, cập nhật Redux và thông báo
+      if (response.status === 200) {
+        setDiscount(discountPercent);  // Cập nhật phần trăm giảm giá trong state nếu API thành công
+        dispatch(setDiscoutId(id)); // Cập nhật ID mã giảm giá trong Redux
+        dispatch(setDiscoutCart(+discountPercent)); // Cập nhật phần trăm giảm giá trong Redux
+
+        message.success(`Mã giảm giá ${voucherCode} đã được áp dụng với ${discountPercent}%`);
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      setDiscount(0);  // Đặt lại discount nếu có lỗi
+      message.error('Áp dụng mã giảm giá thất bại. Vui lòng thử lại.');
+      console.error(error);
+    }
+  };
 
   return (
     <>
-      <button onClick={showModal} className="justify-between flex items-center shadow-sm rounded-lg my-[1.2rem] px-5 py-2 w-1/2 hover:shadow-md transition-shadow">
+      <button
+        onClick={showModal}
+        className="justify-between flex items-center shadow-sm rounded-lg my-[1.2rem] px-5 py-2 w-1/2 hover:shadow-md transition-shadow"
+      >
         Chọn mã giảm giá
         <span className="text-customColor">
           <RiCoupon3Fill />
@@ -83,7 +101,7 @@ const dispatch=useAppDispatch()
                 <span>mã: {voucher.discount_name}</span>
                 <button
                   className="border border-[#7500CF] px-4 py-2 rounded-md hover:bg-[#7500CF] hover:text-white"
-                  onClick={() => handleApplyDiscount(voucher.discount_name, voucher.discount_percent,voucher.discount_id)}
+                  onClick={() => handleApplyDiscount(voucher.discount_name, voucher.discount_percent, voucher.discount_id)}
                 >
                   Áp dụng
                 </button>

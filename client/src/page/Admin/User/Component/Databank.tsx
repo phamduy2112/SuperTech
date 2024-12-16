@@ -1,884 +1,335 @@
-export const datanganhang = [
-    {
-        "label": "VietinBank",
-        "id": 17,
-        "name": "Ngân hàng TMCP Công thương Việt Nam",
-        "code": "ICB",
-        "bin": "970415",
-        "logo": "https://api.vietqr.io/img/ICB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "VietinBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "ICBVVNVX"
-    },
-    {
-        "label": "Vietcombank",
-        "id": 43,
-        "name": "Ngân hàng TMCP Ngoại Thương Việt Nam",
-        "code": "VCB",
-        "bin": "970436",
-        "logo": "https://api.vietqr.io/img/VCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Vietcombank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "BFTVVNVX"
-    },
-    {
-        "label": "BIDV",
-        "id": 4,
-        "name": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam",
-        "code": "BIDV",
-        "bin": "970418",
-        "logo": "https://api.vietqr.io/img/BIDV.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "BIDV",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "BIDVVNVX"
-    },
-    {
-        "label": "Agribank",
-        "id": 42,
-        "name": "Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam",
-        "code": "VBA",
-        "bin": "970405",
-        "logo": "https://api.vietqr.io/img/VBA.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Agribank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VBAAVNVX"
-    },
-    {
-        "label": "OCB",
-        "id": 26,
-        "name": "Ngân hàng TMCP Phương Đông",
-        "code": "OCB",
-        "bin": "970448",
-        "logo": "https://api.vietqr.io/img/OCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "OCB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "ORCOVNVX"
-    },
-    {
-        "label": "MBBank",
-        "id": 21,
-        "name": "Ngân hàng TMCP Quân đội",
-        "code": "MB",
-        "bin": "970422",
-        "logo": "https://api.vietqr.io/img/MB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "MBBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "MSCBVNVX"
-    },
-    {
-        "label": "Techcombank",
-        "id": 38,
-        "name": "Ngân hàng TMCP Kỹ thương Việt Nam",
-        "code": "TCB",
-        "bin": "970407",
-        "logo": "https://api.vietqr.io/img/TCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Techcombank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VTCBVNVX"
-    },
-    {
-        "label": "ACB",
-        "id": 2,
-        "name": "Ngân hàng TMCP Á Châu",
-        "code": "ACB",
-        "bin": "970416",
-        "logo": "https://api.vietqr.io/img/ACB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "ACB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "ASCBVNVX"
-    },
-    {
-        "label": "VPBank",
-        "id": 47,
-        "name": "Ngân hàng TMCP Việt Nam Thịnh Vượng",
-        "code": "VPB",
-        "bin": "970432",
-        "logo": "https://api.vietqr.io/img/VPB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "VPBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VPBKVNVX"
-    },
-    {
-        "label": "TPBank",
-        "id": 39,
-        "name": "Ngân hàng TMCP Tiên Phong",
-        "code": "TPB",
-        "bin": "970423",
-        "logo": "https://api.vietqr.io/img/TPB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "TPBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "TPBVVNVX"
-    },
-    {
-        "label": "Sacombank",
-        "id": 36,
-        "name": "Ngân hàng TMCP Sài Gòn Thương Tín",
-        "code": "STB",
-        "bin": "970403",
-        "logo": "https://api.vietqr.io/img/STB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Sacombank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "SGTTVNVX"
-    },
-    {
-        "label": "HDBank",
-        "id": 12,
-        "name": "Ngân hàng TMCP Phát triển Thành phố Hồ Chí Minh",
-        "code": "HDB",
-        "bin": "970437",
-        "logo": "https://api.vietqr.io/img/HDB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "HDBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "HDBCVNVX"
-    },
-    {
-        "label": "VietCapitalBank",
-        "id": 44,
-        "name": "Ngân hàng TMCP Bản Việt",
-        "code": "VCCB",
-        "bin": "970454",
-        "logo": "https://api.vietqr.io/img/VCCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "VietCapitalBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VCBCVNVX"
-    },
-    {
-        "label": "SCB",
-        "id": 31,
-        "name": "Ngân hàng TMCP Sài Gòn",
-        "code": "SCB",
-        "bin": "970429",
-        "logo": "https://api.vietqr.io/img/SCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "SCB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "SACLVNVX"
-    },
-    {
-        "label": "VIB",
-        "id": 45,
-        "name": "Ngân hàng TMCP Quốc tế Việt Nam",
-        "code": "VIB",
-        "bin": "970441",
-        "logo": "https://api.vietqr.io/img/VIB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "VIB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VNIBVNVX"
-    },
-    {
-        "label": "SHB",
-        "id": 35,
-        "name": "Ngân hàng TMCP Sài Gòn - Hà Nội",
-        "code": "SHB",
-        "bin": "970443",
-        "logo": "https://api.vietqr.io/img/SHB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "SHB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "SHBAVNVX"
-    },
-    {
-        "label": "Eximbank",
-        "id": 10,
-        "name": "Ngân hàng TMCP Xuất Nhập khẩu Việt Nam",
-        "code": "EIB",
-        "bin": "970431",
-        "logo": "https://api.vietqr.io/img/EIB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Eximbank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "EBVIVNVX"
-    },
-    {
-        "label": "MSB",
-        "id": 22,
-        "name": "Ngân hàng TMCP Hàng Hải",
-        "code": "MSB",
-        "bin": "970426",
-        "logo": "https://api.vietqr.io/img/MSB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "MSB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "MCOBVNVX"
-    },
-    {
-        "label": "CAKE",
-        "id": 53,
-        "name": "TMCP Việt Nam Thịnh Vượng - Ngân hàng số CAKE by VPBank",
-        "code": "CAKE",
-        "bin": "546034",
-        "logo": "https://api.vietqr.io/img/CAKE.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "CAKE",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": null
-    },
-    {
-        "label": "Ubank",
-        "id": 54,
-        "name": "TMCP Việt Nam Thịnh Vượng - Ngân hàng số Ubank by VPBank",
-        "code": "Ubank",
-        "bin": "546035",
-        "logo": "https://api.vietqr.io/img/UBANK.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Ubank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": null
-    },
-    {
-        "label": "Timo",
-        "id": 58,
-        "name": "Ngân hàng số Timo by Ban Viet Bank (Timo by Ban Viet Bank)",
-        "code": "TIMO",
-        "bin": "963388",
-        "logo": "https://vietqr.net/portal-service/resources/icons/TIMO.png",
-        "transferSupported": 1,
-        "lookupSupported": 0,
-        "short_name": "Timo",
-        "support": 0,
-        "isTransfer": 1,
-        "swift_code": null
-    },
-    {
-        "label": "ViettelMoney",
-        "id": 57,
-        "name": "Tổng Công ty Dịch vụ số Viettel - Chi nhánh tập đoàn công nghiệp viễn thông Quân Đội",
-        "code": "VTLMONEY",
-        "bin": "971005",
-        "logo": "https://api.vietqr.io/img/VIETTELMONEY.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "ViettelMoney",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "VNPTMoney",
-        "id": 56,
-        "name": "VNPT Money",
-        "code": "VNPTMONEY",
-        "bin": "971011",
-        "logo": "https://api.vietqr.io/img/VNPTMONEY.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "VNPTMoney",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "SaigonBank",
-        "id": 34,
-        "name": "Ngân hàng TMCP Sài Gòn Công Thương",
-        "code": "SGICB",
-        "bin": "970400",
-        "logo": "https://api.vietqr.io/img/SGICB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "SaigonBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "SBITVNVX"
-    },
-    {
-        "label": "BacABank",
-        "id": 3,
-        "name": "Ngân hàng TMCP Bắc Á",
-        "code": "BAB",
-        "bin": "970409",
-        "logo": "https://api.vietqr.io/img/BAB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "BacABank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "NASCVNVX"
-    },
-    {
-        "label": "PVcomBank",
-        "id": 30,
-        "name": "Ngân hàng TMCP Đại Chúng Việt Nam",
-        "code": "PVCB",
-        "bin": "970412",
-        "logo": "https://api.vietqr.io/img/PVCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "PVcomBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "WBVNVNVX"
-    },
-    {
-        "label": "Oceanbank",
-        "id": 27,
-        "name": "Ngân hàng Thương mại TNHH MTV Đại Dương",
-        "code": "Oceanbank",
-        "bin": "970414",
-        "logo": "https://api.vietqr.io/img/OCEANBANK.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Oceanbank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "OCBKUS3M"
-    },
-    {
-        "label": "NCB",
-        "id": 24,
-        "name": "Ngân hàng TMCP Quốc Dân",
-        "code": "NCB",
-        "bin": "970419",
-        "logo": "https://api.vietqr.io/img/NCB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "NCB",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "NVBAVNVX"
-    },
-    {
-        "label": "ShinhanBank",
-        "id": 37,
-        "name": "Ngân hàng TNHH MTV Shinhan Việt Nam",
-        "code": "SHBVN",
-        "bin": "970424",
-        "logo": "https://api.vietqr.io/img/SHBVN.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "ShinhanBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "SHBKVNVX"
-    },
-    {
-        "label": "ABBANK",
-        "id": 1,
-        "name": "Ngân hàng TMCP An Bình",
-        "code": "ABB",
-        "bin": "970425",
-        "logo": "https://api.vietqr.io/img/ABB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "ABBANK",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "ABBKVNVX"
-    },
-    {
-        "label": "VietABank",
-        "id": 41,
-        "name": "Ngân hàng TMCP Việt Á",
-        "code": "VAB",
-        "bin": "970427",
-        "logo": "https://api.vietqr.io/img/VAB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "VietABank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VNACVNVX"
-    },
-    {
-        "label": "NamABank",
-        "id": 23,
-        "name": "Ngân hàng TMCP Nam Á",
-        "code": "NAB",
-        "bin": "970428",
-        "logo": "https://api.vietqr.io/img/NAB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "NamABank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "NAMAVNVX"
-    },
-    {
-        "label": "PGBank",
-        "id": 29,
-        "name": "Ngân hàng TMCP Xăng dầu Petrolimex",
-        "code": "PGB",
-        "bin": "970430",
-        "logo": "https://api.vietqr.io/img/PGB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "PGBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "PGBLVNVX"
-    },
-    {
-        "label": "VietBank",
-        "id": 46,
-        "name": "Ngân hàng TMCP Việt Nam Thương Tín",
-        "code": "VIETBANK",
-        "bin": "970433",
-        "logo": "https://api.vietqr.io/img/VIETBANK.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "VietBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "VNTTVNVX"
-    },
-    {
-        "label": "BaoVietBank",
-        "id": 5,
-        "name": "Ngân hàng TMCP Bảo Việt",
-        "code": "BVB",
-        "bin": "970438",
-        "logo": "https://api.vietqr.io/img/BVB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "BaoVietBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "BVBVVNVX"
-    },
-    {
-        "label": "SeABank",
-        "id": 33,
-        "name": "Ngân hàng TMCP Đông Nam Á",
-        "code": "SEAB",
-        "bin": "970440",
-        "logo": "https://api.vietqr.io/img/SEAB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "SeABank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "SEAVVNVX"
-    },
-    {
-        "label": "COOPBANK",
-        "id": 52,
-        "name": "Ngân hàng Hợp tác xã Việt Nam",
-        "code": "COOPBANK",
-        "bin": "970446",
-        "logo": "https://api.vietqr.io/img/COOPBANK.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "COOPBANK",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": null
-    },
-    {
-        "label": "LPBank",
-        "id": 20,
-        "name": "Ngân hàng TMCP Lộc Phát Việt Nam",
-        "code": "LPB",
-        "bin": "970449",
-        "logo": "https://api.vietqr.io/img/LPB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "LPBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "LVBKVNVX"
-    },
-    {
-        "label": "KienLongBank",
-        "id": 19,
-        "name": "Ngân hàng TMCP Kiên Long",
-        "code": "KLB",
-        "bin": "970452",
-        "logo": "https://api.vietqr.io/img/KLB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "KienLongBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "KLBKVNVX"
-    },
-    {
-        "label": "KBank",
-        "id": 55,
-        "name": "Ngân hàng Đại chúng TNHH Kasikornbank",
-        "code": "KBank",
-        "bin": "668888",
-        "logo": "https://api.vietqr.io/img/KBANK.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "KBank",
-        "support": 3,
-        "isTransfer": 1,
-        "swift_code": "KASIVNVX"
-    },
-    {
-        "label": "KookminHN",
-        "id": 50,
-        "name": "Ngân hàng Kookmin - Chi nhánh Hà Nội",
-        "code": "KBHN",
-        "bin": "970462",
-        "logo": "https://api.vietqr.io/img/KBHN.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "KookminHN",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "KEBHanaHCM",
-        "id": 60,
-        "name": "Ngân hàng KEB Hana – Chi nhánh Thành phố Hồ Chí Minh",
-        "code": "KEBHANAHCM",
-        "bin": "970466",
-        "logo": "https://api.vietqr.io/img/KEBHANAHCM.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "KEBHanaHCM",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "KEBHANAHN",
-        "id": 61,
-        "name": "Ngân hàng KEB Hana – Chi nhánh Hà Nội",
-        "code": "KEBHANAHN",
-        "bin": "970467",
-        "logo": "https://api.vietqr.io/img/KEBHANAHN.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "KEBHANAHN",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "MAFC",
-        "id": 62,
-        "name": "Công ty Tài chính TNHH MTV Mirae Asset (Việt Nam) ",
-        "code": "MAFC",
-        "bin": "977777",
-        "logo": "https://api.vietqr.io/img/MAFC.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "MAFC",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "Citibank",
-        "id": 59,
-        "name": "Ngân hàng Citibank, N.A. - Chi nhánh Hà Nội",
-        "code": "CITIBANK",
-        "bin": "533948",
-        "logo": "https://api.vietqr.io/img/CITIBANK.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "Citibank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "KookminHCM",
-        "id": 51,
-        "name": "Ngân hàng Kookmin - Chi nhánh Thành phố Hồ Chí Minh",
-        "code": "KBHCM",
-        "bin": "970463",
-        "logo": "https://api.vietqr.io/img/KBHCM.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "KookminHCM",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "VBSP",
-        "id": 63,
-        "name": "Ngân hàng Chính sách Xã hội",
-        "code": "VBSP",
-        "bin": "999888",
-        "logo": "https://api.vietqr.io/img/VBSP.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "VBSP",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "Woori",
-        "id": 49,
-        "name": "Ngân hàng TNHH MTV Woori Việt Nam",
-        "code": "WVN",
-        "bin": "970457",
-        "logo": "https://api.vietqr.io/img/WVN.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "Woori",
-        "support": 0,
-        "isTransfer": 1,
-        "swift_code": null
-    },
-    {
-        "label": "VRB",
-        "id": 48,
-        "name": "Ngân hàng Liên doanh Việt - Nga",
-        "code": "VRB",
-        "bin": "970421",
-        "logo": "https://api.vietqr.io/img/VRB.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "VRB",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "UnitedOverseas",
-        "id": 40,
-        "name": "Ngân hàng United Overseas - Chi nhánh TP. Hồ Chí Minh",
-        "code": "UOB",
-        "bin": "970458",
-        "logo": "https://api.vietqr.io/img/UOB.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "UnitedOverseas",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "StandardChartered",
-        "id": 32,
-        "name": "Ngân hàng TNHH MTV Standard Chartered Bank Việt Nam",
-        "code": "SCVN",
-        "bin": "970410",
-        "logo": "https://api.vietqr.io/img/SCVN.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "StandardChartered",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "SCBLVNVX"
-    },
-    {
-        "label": "PublicBank",
-        "id": 28,
-        "name": "Ngân hàng TNHH MTV Public Việt Nam",
-        "code": "PBVN",
-        "bin": "970439",
-        "logo": "https://api.vietqr.io/img/PBVN.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "PublicBank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "VIDPVNVX"
-    },
-    {
-        "label": "Nonghyup",
-        "id": 25,
-        "name": "Ngân hàng Nonghyup - Chi nhánh Hà Nội",
-        "code": "NHB HN",
-        "bin": "801011",
-        "logo": "https://api.vietqr.io/img/NHB.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "Nonghyup",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "IndovinaBank",
-        "id": 18,
-        "name": "Ngân hàng TNHH Indovina",
-        "code": "IVB",
-        "bin": "970434",
-        "logo": "https://api.vietqr.io/img/IVB.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "IndovinaBank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "IBKHCM",
-        "id": 16,
-        "name": "Ngân hàng Công nghiệp Hàn Quốc - Chi nhánh TP. Hồ Chí Minh",
-        "code": "IBK - HCM",
-        "bin": "970456",
-        "logo": "https://api.vietqr.io/img/IBK.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "IBKHCM",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "IBKHN",
-        "id": 15,
-        "name": "Ngân hàng Công nghiệp Hàn Quốc - Chi nhánh Hà Nội",
-        "code": "IBK - HN",
-        "bin": "970455",
-        "logo": "https://api.vietqr.io/img/IBK.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "IBKHN",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": null
-    },
-    {
-        "label": "HSBC",
-        "id": 14,
-        "name": "Ngân hàng TNHH MTV HSBC (Việt Nam)",
-        "code": "HSBC",
-        "bin": "458761",
-        "logo": "https://api.vietqr.io/img/HSBC.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "HSBC",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "HSBCVNVX"
-    },
-    {
-        "label": "HongLeong",
-        "id": 13,
-        "name": "Ngân hàng TNHH MTV Hong Leong Việt Nam",
-        "code": "HLBVN",
-        "bin": "970442",
-        "logo": "https://api.vietqr.io/img/HLBVN.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "HongLeong",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "HLBBVNVX"
-    },
-    {
-        "label": "GPBank",
-        "id": 11,
-        "name": "Ngân hàng Thương mại TNHH MTV Dầu Khí Toàn Cầu",
-        "code": "GPB",
-        "bin": "970408",
-        "logo": "https://api.vietqr.io/img/GPB.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "GPBank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "GBNKVNVX"
-    },
-    {
-        "label": "DongABank",
-        "id": 9,
-        "name": "Ngân hàng TMCP Đông Á",
-        "code": "DOB",
-        "bin": "970406",
-        "logo": "https://api.vietqr.io/img/DOB.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "DongABank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "EACBVNVX"
-    },
-    {
-        "label": "DBSBank",
-        "id": 8,
-        "name": "DBS Bank Ltd - Chi nhánh Thành phố Hồ Chí Minh",
-        "code": "DBS",
-        "bin": "796500",
-        "logo": "https://api.vietqr.io/img/DBS.png",
-        "transferSupported": 0,
-        "lookupSupported": 0,
-        "short_name": "DBSBank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "DBSSVNVX"
-    },
-    {
-        "label": "CIMB",
-        "id": 7,
-        "name": "Ngân hàng TNHH MTV CIMB Việt Nam",
-        "code": "CIMB",
-        "bin": "422589",
-        "logo": "https://api.vietqr.io/img/CIMB.png",
-        "transferSupported": 1,
-        "lookupSupported": 1,
-        "short_name": "CIMB",
-        "support": 0,
-        "isTransfer": 1,
-        "swift_code": "CIBBVNVN"
-    },
-    {
-        "label": "CBBank",
-        "id": 6,
-        "name": "Ngân hàng Thương mại TNHH MTV Xây dựng Việt Nam",
-        "code": "CBB",
-        "bin": "970444",
-        "logo": "https://api.vietqr.io/img/CBB.png",
-        "transferSupported": 0,
-        "lookupSupported": 1,
-        "short_name": "CBBank",
-        "support": 0,
-        "isTransfer": 0,
-        "swift_code": "GTBAVNVX"
-    }
-]
+import Swal from "sweetalert2";
+
+export const DataRole = [
+  { value: 0, label: 'Chủ cửa hàng' },
+  { value: 1, label: 'Nhân Viên Quản Lí' },
+  { value: 2, label: 'Nhân Viên Bán Hàng' },
+  { value: 3, label: 'Nhân Viên IT' },
+  { value: 4, label: 'Nhân Viên Tiếp Thị' },
+  { value: 5, label: 'Nhân Viên Kế Toán' },
+  { value: 6, label: 'Nhân Viên Pháp Lý' },
+  { value: 7, label: 'Nhân Viên Hỗ Trợ' },
+  { value: 8, label: 'Nhân Viên Kho' },
+  { value: 9, label: 'Nhân Viên Bảo Vệ' },
+  { value: 10, label: 'Nhân Viên Thử Việc' },
+  { value: 11, label: 'Người Dùng' }
+];
+export interface StaffClient {
+  data: {
+    user_id: number;
+    user_role: boolean;
+  };
+}
+
+
+
+export const imageStaffLevel = [
+  { value: 0, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/Boss_pukaxj.png' },
+  { value: 1, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731057050/laolang_jljhqn.png' },
+  { value: 2, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang2_jnucif.png' },
+  { value: 3, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034725/hang3_gtgheu.png' },
+  { value: 4, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang1_uv6dcs.png' },
+  { value: 5, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/5year_flnse0.png' },
+  { value: 6, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/4-5year_whzi45.png' },
+  { value: 7, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/1year_xmnffl.png' },
+  { value: 8, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/2-4year_qdloen.png' },
+  { value: 9, label: 'https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/-1year_x8oqsg.png' }
+];
+
+export const StaffGender = [
+  { value: 0, label: 'Nam' },
+  { value: 1, label: 'Nữ' },
+  { value: 2, label: 'Khác' },
+
+];
+
+
+export interface StaffInterface {
+  user_name?: string,
+  user_email?: string,
+  user_password?: string,
+  user_address?: string,
+  user_phone?: string,
+  user_role?: number | null,
+  level?: number | null,
+  user_gender?: number | null,
+  user_birth?: string,
+  user_time?: string,
+  user_image?: string,
+  [key: string]: string | number | null | undefined;
+
+
+}
+
+
+export interface DataStaffInterface {
+  staffData: StaffInterface,
+  tokenStaff: string
+}
+export interface UpdateStaffInterface {
+  userId: number,
+  DataStaff: DataStaffInterface;
+}
+
+
+
+
+export const Level = (src: number) => {
+  switch (src) {
+    case 0:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/Boss_pukaxj.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 1:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731057050/laolang_jljhqn.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 2:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang2_jnucif.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 3:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034725/hang3_gtgheu.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 4:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034726/hang1_uv6dcs.png" alt="" style={{ width: 50, height: 50 }} />
+
+        </>
+      )
+    case 5:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034720/5year_flnse0.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 6:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/4-5year_whzi45.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 7:
+      return (
+        <>
+
+
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/1year_xmnffl.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 8:
+      return (
+        <>
+
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/2-4year_qdloen.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+    case 9:
+      return (
+        <>
+
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/v1731034719/-1year_x8oqsg.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+
+
+    default:
+      return (
+        <>
+          <img className='rounded-full object-cover' src="https://res.cloudinary.com/dcvkmhlhw/image/upload/c_thumb,w_200,g_face/v1731038485/tapsu_ejr7bo.png" alt="" style={{ width: 50, height: 50 }} />
+        </>
+      )
+  }
+
+}
+
+
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const checkRoleAndShowAlert = (RoleStaff: number, key_role: number) => {
+  const Textrole = DataRole.findIndex(role => role.value == RoleStaff);
+
+
+
+
+  switch (key_role) {
+    case 0:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: `Bạn Không Có Quyền Xóa Chủ, Chỉ Tài Khoản Chủ Mới Được Xóa`,
+      });
+    case 1:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Quản Lí',
+      });
+    case 2:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Bán Hàng',
+      });
+    case 3:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên IT',
+      });
+    case 4:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Tiếp Thị',
+      });
+    case 5:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Kế Toán',
+      });
+    case 6:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Pháp Lý',
+      });
+    case 7:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Hỗ Trợ',
+      });
+    case 8:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Kho',
+      });
+    case 9:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Bảo Vệ',
+      });
+    case 10:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Nhân Viên Thử Việc',
+      });
+    case 11:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Xóa Người Dùng Thường',
+      });
+    default:
+      return Swal.fire({
+        icon: 'error',
+        title: 'Không Xác Định Quyền',
+        text: 'Không có quyền xóa với vai trò này',
+      });
+  }
+}
+
+
+
+export const CheckUpdateUser = (RoleStaff: number, key_role: number) => {
+  const Textrole = DataRole.findIndex(role => role.value == RoleStaff);
+
+
+
+
+  switch (key_role) {
+    case 0:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: `Bạn Không Có Quyền Sửa Chủ, Chỉ Tài Khoản Chủ Mới Được Sửa`,
+      });
+    case 1:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Quản Lí',
+      });
+    case 2:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Bán Hàng',
+      });
+    case 3:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên IT',
+      });
+    case 4:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Tiếp Thị',
+      });
+    case 5:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Kế Toán',
+      });
+    case 6:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Pháp Lý',
+      });
+    case 7:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Hỗ Trợ',
+      });
+    case 8:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Kho',
+      });
+    case 9:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Bảo Vệ',
+      });
+    case 10:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Nhân Viên Thử Việc',
+      });
+    case 11:
+      return Swal.fire({
+        icon: 'error',
+        title: `Bạn là ${DataRole[Textrole].label}`,
+        text: 'Bạn Không Có Quyền Sửa Người Dùng Thường',
+      });
+    default:
+      return Swal.fire({
+        icon: 'error',
+        title: 'Không Xác Định Quyền',
+        text: 'Không có quyền Sửa với vai trò này',
+      });
+  }
+}

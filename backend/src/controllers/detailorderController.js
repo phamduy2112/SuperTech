@@ -80,7 +80,10 @@ const createdetailorder = async (req, res) => {
               by: order.detail_order_quality,
               where: { product_id:order.product_id, color_id:order.color_id },
             });
-      
+            await models.products.decrement("product_hot",{
+              by:1,
+              where:{product_id:order.product_id}
+            })
 
               // Tạo detailOrder sau khi trừ kho thành công
               const createdOrder = await detailorder.create(order);

@@ -31,12 +31,16 @@ const voucherSlice = createSlice({
           setDiscoutId: (state, action) => {
             state.discount_id = action.payload; // setting the discount value
           },
+          setDiscount :( state)=>{
+            state.discount=null;
+            state.discount_id = null
+          }
   }
 
 });
 
 // Export các action
-export const {setDiscoutCart,setDiscoutId } = voucherSlice.actions;
+export const {setDiscoutCart,setDiscoutId, setDiscount  } = voucherSlice.actions;
 
 // Export reducer
 export const voucherReducer = voucherSlice.reducer;

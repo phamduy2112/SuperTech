@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser } from '../../service/user/user.service';
+import { changePassword, getUserDetail, updateUserDetail, uploadImage, verifyPassword, getAllUser, UpdateStaff, DeleteStaffSend, createStaff, DeleteImgCloud } from '../../service/user/user.service';
 import { TpayloadUser } from "../../service/user/user.type";
+import Swal from "sweetalert2";
+import { DataStaffInterface, UpdateStaffInterface } from "../../page/Admin/User/Component/DataStaff";
 interface UserState {
   Alluser: TpayloadUser | object | null;  
   user: TpayloadUser  | null;  
@@ -80,6 +82,83 @@ export const changeUploadImage = createAsyncThunk(
         return response.payload;
     } catch (e) {
       console.log(e);
+    }
+  },
+);
+
+export const createStaffThunk = createAsyncThunk(
+  "createStaffThunk",
+  async (DataStaff: DataStaffInterface) => {
+    try {
+      const resp = await createStaff(DataStaff);
+      if (resp.data.statusCode === 200) {
+        return resp.data.content;
+      } else {
+        Swal.fire({
+          title: `Thất bại lỗi ${resp.data.statusCode}`,
+          text: `${resp.data.message}`,
+          icon: 'error',
+          showCancelButton: true,
+          cancelButtonText: `Thử lại`,
+          cancelButtonColor: "#d33",
+          showConfirmButton: false
+        })
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const DeleteImgCloudThunk = createAsyncThunk(
+  "DeleteImgCloudThunk",
+  async (data:any) => {
+    try {
+      const resp = await DeleteImgCloud(data);
+      return resp.data;
+    } catch (e) {
+      console.log(e);
+
+    }
+  },
+)
+
+export const UpdateStaffThunk = createAsyncThunk(
+  "UpdateStaffThunk", async (UpdateStaffSend: UpdateStaffInterface) => {
+
+    try {
+      const resp = await UpdateStaff(UpdateStaffSend);
+      if (resp.data.statusCode === 200) {
+        return resp.data.content;
+      } else {
+        Swal.fire({
+          title: `Thất bại lỗi ${resp.data.statusCode}`,
+          text: `${resp.data.message}`,
+          icon: 'error',
+          showCancelButton: true,
+          cancelButtonText: `Thử lại`,
+          cancelButtonColor: "#d33",
+          showConfirmButton: false
+        })
+        return;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+
+
+export const deleteStaffThunk = createAsyncThunk(
+  "deleteStaffThunk",
+  async (id: number) => {
+    try {
+      const resp = await DeleteStaffSend(id);
+      return resp.data.content;
+
+    } catch (e) {
+      console.log(e);
+
     }
   },
 );

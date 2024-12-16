@@ -17,6 +17,8 @@ import CountdownTimer from './component/CountimePay';
 import { Paths } from '../../../router/component/RouterValues';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { setDiscount } from '../../../redux/cart/voucher.slice';
+import { createUserDiscount } from '../../../service/vourcher/voucher.service';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object({
@@ -31,7 +33,7 @@ const validationSchema = Yup.object({
   xuathoadon: Yup.string().required('Vui lòng chọn xuất hoá đơn VAT'),
 });
 function Pay() {
-
+  
   const dispatch = useAppDispatch();
   const navigate=useNavigate();
   const user: any = useAppSelector((state) => state.user.user);
@@ -39,6 +41,7 @@ function Pay() {
   const totalItem=useAppSelector((state)=>state.cart.totalItems)
   const socket = useAppSelector((state:any) => state.socket.socket); // Get socket from Redux store
   // const orderList=useAppDispatch((state)=>state)
+  
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
@@ -76,6 +79,7 @@ function Pay() {
   }, 0);
   const getShip=useAppSelector(state=>state.cart.ship);
   const getDiscount=useAppSelector(state=>state.vourher.discount);
+  const getIdDiscount=useAppSelector(state=>state.vourher.discount_id);
 
   const totalPriceWithVoucher = totalPrice * (1 - getDiscount / 100) + getShip;
 
@@ -147,7 +151,7 @@ function Pay() {
   const handleCityChange = (value, option) => {
     setFormData({ ...formData, tinhThanhPho: value });
     setCity(option.key); // Lưu mã tỉnh đã chọn
-
+  
     fetchDistricts(option.key); // Gọi API để lấy quận
    
   };
@@ -202,7 +206,8 @@ function Pay() {
         order_total_quatity: totalItem,
         phone_number:formData.sdt,
         email_user:formData.email,
-        order_pay:0
+        order_pay:0,
+        discount: getIdDiscount
 
       };
       console.log(dataOrder);
@@ -295,6 +300,14 @@ function Pay() {
           dispatch(removeAllCart());
         }
       }
+      const dataDiscount={
+        "discount_id":getIdDiscount
+      }
+      const respDis =await createUserDiscount( 
+        dataDiscount
+        
+       )
+      dispatch(  setDiscount())
     } catch (error) {
       console.error("Lỗi khi tạo đơn hàng:", error);
     }
