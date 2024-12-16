@@ -35,8 +35,6 @@ function ListProduct() {
 
 
 
-
-
   const [ShowProduct, setShowProduct] = useState([]);
   useEffect(() => {
     if (Datafilter != null) {
@@ -117,7 +115,7 @@ function ListProduct() {
               <h4 className='text-[1.8rem] mt-[.5rem] font-semibold'>
                 Danh mục
                 {' ' + categoryDadNames[dataCate.category_dad]}
-                {Datafilter.length !== 0 ? ` có ${Datafilter.length} kết quả sản phẩm` : `Không có kết quả`}
+                {Datafilter.length !== 0 ? ` có ${Datafilter.length} kết quả sản phẩm ` : `Không có kết quả`}
               </h4>
             </div>
             <div className='w-[200px]'>
