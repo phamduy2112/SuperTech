@@ -45,7 +45,7 @@ function User() {
     <Container className="pt-[1rem]">
       <div className="flex flex-col lg:flex-row justify-between">
         {/* Sidebar */}
-        <div className="w-full lg:w-[25%] p-[2rem] bg-white h-[100%] shadow-md">
+        <div className="w-full lg:w-[25%] p-[2rem] bg-white h-[100%] rounded-xl shadow-md">
           <div className="flex gap-[1rem]">
             {/* Ảnh hoặc ký tự đầu của người dùng */}
             <div className="w-[7rem] h-[7rem] rounded-[50%] overflow-hidden">
@@ -131,7 +131,7 @@ function User() {
         </div>
 
         {/* Nội dung chính */}
-        <div className="w-full lg:w-[70%] p-[1rem] md:p-[2rem] bg-white shadow-md">
+        <div className="w-full lg:w-[73%] p-[1rem] md:p-[2rem] bg-white rounded-xl shadow-md">
           <Outlet />
         </div>
       </div>

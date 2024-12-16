@@ -20,6 +20,7 @@ import { IMG_BACKEND_USER } from '../../../../constants';
 import { useAvatar } from '../../../../hooks/UseAvatar.hook';
 import { useNavigate } from 'react-router-dom';
 import ProductModalWithPagination from './ModalListComment';
+import { Paths } from '../../../../router/component/RouterValues';
 
 function Comment(props: any) {
   const user: any = useAppSelector((state) => state.user.user);
@@ -57,7 +58,7 @@ function Comment(props: any) {
   const handleLike = async (id: number, idProduct: number) => {
     if (!login) {
       toast.error("Bạn cần đăng nhập!");
-      navigate("/đăng-nhập");
+      navigate(`${Paths.Login}`);
       return;
     }
     let resp = {
@@ -143,11 +144,13 @@ function Comment(props: any) {
                       <div>
                       <h3 className="font-bold text-[2rem] flex  gap-[1rem] items-center">{review.user?.user_name} 
                             
-                            {review?.isPurchase ?                              <FaCheckCircle className="text-[green]"/>
+                            {review?.isPurchase ?                           
+                               <FaCheckCircle className="text-[green]"/>
 : ""}
                    
                             
-                            </h3>                        <div className="flex items-center text-[1.5rem]">
+                            </h3>                       
+                             <div className="flex items-center text-[1.5rem]">
                           <div className="ml-2 text-[1.5rem] text-gray-500">{formatDate(review.comment_date)}</div>
                           <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
                             {[...Array(5)].map((_, index) => (
@@ -287,7 +290,7 @@ function Comment(props: any) {
                           onSubmit={(values, { resetForm }) => {
                             if (!login) {
                               toast.error("Bạn cần đăng nhập!");
-                              navigate("/đăng-nhập");
+                              navigate(Paths.Login);
                               return;
                             }
                             if (values.commentText.length < 5) {
@@ -344,7 +347,11 @@ function Comment(props: any) {
             );
           })}
         </div>
-       {filteredComments.length == 0 ? '' : <ProductModalWithPagination reviews={props.reviews}/>}
+        <div className='flex justify-center items-center'>
+           {filteredComments.length == 0 ? '' : 
+       <ProductModalWithPagination reviews={filteredComments}/>}
+        </div>
+      
     </div>
         
         {selectedTab === "purchased" && filteredComments.length == 0 && (

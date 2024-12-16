@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { fogetCheckPassword } from '../../../../../service/user/user.service';
 import useSweetAlert from '../../../../../hooks/Notification.hook';
 import { TPayloadRegister } from '../../../../../service/auth/auth.type';
+import { Paths } from '../../../../../router/component/RouterValues';
 
 // Định nghĩa kiểu dữ liệu cho props
 interface ChangePasswordProps {
@@ -46,7 +47,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ email }) => {
         console.log(response);
 
         if (response.data.message === 'Mật khẩu đã được cập nhật') {
-          navigate('/đăng-nhập');
+          navigate(Paths.Login);
           showAlert('success', response.data.message);
         }
       } catch (error) {

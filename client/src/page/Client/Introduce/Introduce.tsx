@@ -1,21 +1,12 @@
 import React from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
-  // import duy from "../../../assets/duy.png";
-  // import thien from "../../../assets/thien.png";
-  // import tri from "../../../assets/tri.png";
-  // import quyen from "../../../assets/quyen.png";
-  // import quang from "../../../assets/quang.png";
-  // import thinh from "../../../assets/thinh.png";
-  // import trangchu from "../../../assets/trangchu.jpg";
-  // import bog from "../../../assets/bog.jpg";
-  // import thanhtuu from "../../../assets/thanhtuu.png";
 import { FaStar } from "react-icons/fa";
 function Introduce() {
   return (
-    <div className="w-full max-w-[80%] m-auto px-4">
+    <div className="w-full leading-10 max-w-[90%] m-auto px-4">
     <div className="flex py-[100px] flex-col gap-[30px] sm:gap-[50px] lg:gap-[70px] justify-center items-center">
       {/* Title */}
-      <div className="w-full max-w-[817px] h-auto text-[36px] sm:text-[48px] lg:text-[64px] font-medium flex justify-center items-center text-center">
+      <div className="w-full max-w-[817px] h-auto text-[36px] sm:text-[48px] lg:text-[64px] leading-[6rem] font-medium flex justify-center items-center text-center">
         <span>
           Đưa Việc Tìm Kiếm Của Bạn Lên Một Tầm Cao Mới
         </span>
@@ -23,7 +14,7 @@ function Introduce() {
       
       {/* Subtitle */}
       <div className="w-full max-w-[849px] h-auto flex justify-center items-center text-center px-4">
-        <span className="text-[14px] sm:text-[16px] lg:text-[18px] text-[#727171]">
+        <span className="text-[14px] sm:text-[16px] lg:text-[18px] leading-10 text-[#727171]">
           SuperTech mặt hàng đồ dùng thiết bị đồ điện tử với các mặt hàng thời
           đại mới, luôn cập nhật và cho ra đời các sản phẩm tốt nhất cho người
           tiêu dùng, giao diện tiện lợi dễ dàng mua hàng hãy đến với chúng
@@ -51,15 +42,10 @@ function Introduce() {
 {/* First Section */}
 <div className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-2xl bg-[#e0d6e71f]">
   <div className="w-full">
-    {/* <img
-      className="w-full lg:w-[641px] h-[250px] lg:h-[525px] object-cover"
-      src={trangchu}
-      alt=""
-    /> */}
   </div>
   <div className="px-4 lg:px-[44px] py-6 lg:py-[31px] gap-[15px] lg:gap-[25px] flex flex-col">
     <span className="text-[#A3A3A3] text-[10px] lg:text-[12px]">Đầu tiên</span>
-    <span className="text-[#000000] text-[20px] lg:text-[32px] font-medium">
+    <span className="text-[#000000] text-[20px] lg:text-[32px] font-medium leading-[4rem]">
       Thiết kế đơn giản nhưng tinh tế, dễ dàng ghi nhớ, phù hợp với thương hiệu chuyên cung cấp đồ công nghệ tiên tiến.
     </span>
     <span className="text-[16px] lg:text-[20px] text-justify">
@@ -86,11 +72,7 @@ function Introduce() {
     </span>
   </div>
   <div className="w-full">
-    {/* <img
-      className="w-full lg:w-[641px] h-[250px] lg:h-[525px] object-cover"
-      src={bog}
-      alt=""
-    /> */}
+
   </div>
 </div>
 </div>
@@ -158,11 +140,7 @@ function Introduce() {
     
     {/* Image Section */}
     <div className="flex justify-center p-4">
-      {/* <img
-        className="w-full max-w-[400px] md:max-w-[500px] lg:max-w-[641px] object-cover"
-        src={thanhtuu}
-        alt="Achievement"
-      /> */}
+
     </div>
 
     {/* Text and Stats Section */}
@@ -202,65 +180,6 @@ function Introduce() {
 </div>
 </div>
 
-{/* 
-      <div>
-        <div className=" flex flex-col justify-center items-center mb-40 gap-5">
-          <h2 className="text-[50px] font-medium">Thành Viên</h2>
-          <span className="text-[17px] font-medium text-[#727171]">
-            Các thành viên tạo phát triển thương hiệu và Website
-          </span>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4  my-[70px]">
-          <div className="translate-y-[-75px] relative overflow-hidden rounded-[10px]">
-            <img className="w-full " src={duy} alt="" />
-            <div className="absolute bottom-0 left-0 w-full p-[20px] bg-zinc-300 text-white text-[20px] text-center">
-              <h2 className="text-[24px]">Phạm Ngọc Duy</h2>
-              <span className="text-[15px] text-[#727171] ">Trưởng nhóm</span>
-            </div>
-          </div>
-          <div className="translate-y-[0] relative overflow-hidden rounded-[10px]">
-            <img className="w-full " src={thien} />
-            <div className="absolute bottom-0 left-0 w-full p-[20px] bg-zinc-300 text-white text-[20px] text-center">
-              <h2 className="text-[24px]">Lê Nguyễn Hoàng Thiện</h2>
-              <span className="text-[15px] text-[#727171]">Phó nhóm</span>
-            </div>
-          </div>
-
-          <div className="translate-y-[75px] relative overflow-hidden rounded-[10px] bg-slate-600">
-            <img className="w-full " src={tri} alt="" />
-            <div className="absolute bottom-0 left-0 w-full p-[20px] bg-zinc-300 text-white text-[20px] text-center ">
-              <h2 className="text-[24px]">Lê Minh Trí</h2>
-              <span className="text-[15px] text-[#727171]">Thành viên</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4  my-[70px] ">
-          <div className="translate-y-[-75px] relative overflow-hidden rounded-[10px] bg-slate-300">
-            <img className="w-full " src={quyen} alt="" />
-            <div className="absolute bottom-0 left-0 w-full p-[20px] bg-zinc-300 text-white text-[20px] text-center">
-              <h2 className="text-[24px]">Phạm Văn Quyến</h2>
-              <span className="text-[15px] text-[#727171]">Thành viên</span>
-            </div>
-          </div>
-          <div className="translate-y-[0] relative overflow-hidden rounded-[10px]">
-            <img className="w-full " src={quang} alt="" />
-            <div className="absolute bottom-0 left-0 w-full p-[20px] bg-zinc-300 text-white text-[20px] text-center">
-              <h2 className="text-[24px]">Nguyến Khánh Việt Quang</h2>
-              <span className="text-[15px] text-[#727171]">Thành viên</span>
-            </div>
-          </div>
-          <div className="translate-y-[75px] relative overflow-hidden rounded-[10px]">
-            <img className="w-full " src={thinh} alt="" />
-            <div className="absolute bottom-0 left-0 w-full p-[20px] bg-zinc-300 text-white text-[20px] text-center">
-              <h2 className="text-[24px]">Nguyễn Tấn Thịnh</h2>
-              <span className="text-[15px] text-[#727171]">Thành viên</span>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
       <div>
 <div className="flex flex-col items-center gap-4 md:gap-10 text-center">
   <span className="text-[32px] md:text-[64px] font-medium">
@@ -271,7 +190,6 @@ function Introduce() {
   </span>
 </div>
 
-{/* Adjust grid columns based on screen size */}
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 my-6">
   {[...Array(5)].map((_, index) => (
     <div
@@ -280,7 +198,6 @@ function Introduce() {
     >
       <img
         className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] rounded-full"
-        // src="https://duan24h.net/wp-content/uploads/2023/05/baby-red-3.webp"
         alt=""
       />
       <span className="text-[18px] md:text-[20px] font-medium">BaBy Black</span>
@@ -331,28 +248,24 @@ function Introduce() {
               <div className="bg-[#fffcfc] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-75"
-                  // src="https://www.cdnlogo.com/logos/s/54/samsung.svg"
                   alt=""
                 />
               </div>
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-75"
-                  // src="https://logoso1.com/wp-content/uploads/2020/09/logo-iphone.jpg"
                   alt=""
                 />
               </div>
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-75"
-                  // src="https://bidesign.vn/uploads/advertise/thiet-ke-logo-sony.jpg"
                   alt=""
                 />
               </div>
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="w-full h-full transition-transform duration-300 hover:scale-75"
-                  // src="https://brandcentral.hp.com/content/dam/sites/brand-central/elem-logo/images/Logo_1_dont.jpeg"
                   alt=""
                 />
               </div>
@@ -365,28 +278,25 @@ function Introduce() {
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-110"
-                  // src="https://inkythuatso.com/uploads/thumbnails/800/2021/11/logo-asus-inkythuatso-2-01-26-09-21-11.jpg"
                   alt=""
                 />
               </div>
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-75"
-                  // src="https://phukienbaominh.com/wp-content/uploads/2018/12/lenovo-mobile-logo-png-4.png"
+
                   alt=""
                 />
               </div>
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-75"
-                  // src="https://thanhnien.mediacdn.vn/Uploaded/minhnguyet/2022_01_30/logo-xiaomi-3035.jpg"
                   alt=""
                 />
               </div>
               <div className="bg-[#ffffff] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="w-full h-full transition-transform duration-300 hover:scale-75"
-                  // src="https://i.pinimg.com/736x/9f/c2/60/9fc2604b5e46b15575f807ffacf7c95c.jpg"
                   alt=""
                 />
               </div>

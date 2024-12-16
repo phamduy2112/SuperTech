@@ -89,11 +89,14 @@ function Search() {
             />
             <h2 className="text-3xl font-semibold text-gray-800">Không có mặt hàng này</h2>
             <p className="text-gray-500 mt-2">
-              Chúng tôi không tìm thấy sản phẩm nào phù hợp với tìm kiếm của bạn.
+              <p className='text-2xl text-gray-800'>
+                Chúng tôi không tìm thấy sản phẩm nào phù hợp với tìm kiếm của bạn.
+
+              </p>
             </p>
             <button
               onClick={() => window.location.href = '/'} // Đổi thành URL bạn muốn
-              className="mt-6 px-10 py-3 font-medium bg-customColor text-white rounded-xl hover:bg-indigo-800"
+              className="text-2xl mt-6 px-10 py-3 font-medium bg-customColor text-white rounded-xl hover:bg-indigo-800"
             >
               Trở về trang chủ
             </button>

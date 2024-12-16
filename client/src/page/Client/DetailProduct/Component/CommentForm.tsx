@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useAvatar } from "../../../../hooks/UseAvatar.hook";
 import { IMG_BACKEND_USER } from "../../../../constants";
 import { getUserThunk } from "../../../../redux/user/user.slice";
+import { Paths } from "../../../../router/component/RouterValues";
 
 const { TextArea } = Input;
 
@@ -54,7 +55,7 @@ const CommentForm = (props: any) => {
 
     if (!login) {
       toast.error("Bạn cần đăng nhập!");
-      navigate("/đăng-nhập");
+      navigate(`${Paths.Login}`);
       return;
     }
 

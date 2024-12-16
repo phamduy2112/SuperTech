@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { createCommentRepliesByIdProductThunk, setCommentReducer } from '../../../../redux/comment/comment.slice';
+import { Paths } from '../../../../router/component/RouterValues';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function AdminCommentProductDetailAdd(PropsDetail: any) {
@@ -48,7 +49,7 @@ function AdminCommentProductDetailAdd(PropsDetail: any) {
 
         if (!login) {
             toast.error("Bạn cần đăng nhập!");
-            Navigate("/đăng-nhập");
+            Navigate(Paths.Login);
             return;
         }
         if (comment.length < 5) {

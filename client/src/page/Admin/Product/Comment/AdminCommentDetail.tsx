@@ -17,6 +17,7 @@ import { deleteCommentRepliesByIdThunk, editCommentRepliesByIdThunk, getCommentB
 import { getProductByIdThunk } from '../../../../redux/product/product.slice'
 import toast from 'react-hot-toast'
 import { BiSolidEdit } from 'react-icons/bi'
+import { Paths } from '../../../../router/component/RouterValues'
 
 interface Comment {
     [key: string]: any;
@@ -137,7 +138,7 @@ function AdminCommentDetail() {
         e.preventDefault();
         if (!login) {
             toast.error("Bạn cần đăng nhập!");
-            Navigate("/đăng-nhập");
+            Navigate(`${Paths.Login}`);
             return;
         }
         if (comment.length < 5) {

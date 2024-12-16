@@ -12,10 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { formatCurrencyVND, truncateText } from "../../../utils";
 import { useEffect, useState } from "react";
 import ModalDiscount from "./Component/ModalDiscount";
-import { Modal, Popconfirm } from "antd";
+import { Modal, Popconfirm, Tooltip } from "antd";
 import toast from "react-hot-toast";
 import LoadingCart from "./Component/Loading/LoadingCart";
-import { timeLoading } from "../../../constants";
+import { IMG_BACKEND, timeLoading } from "../../../constants";
 
 export default function Cart() {
   const dispatch = useAppDispatch();
@@ -25,13 +25,13 @@ export default function Cart() {
   const getShip=useAppSelector(state=>state.cart.ship);
   
 
-  useEffect(()=>{
-    if(listCart.length==0){
-      navigate("/"); 
-      toast.error("Bạn cần phải mua hàng");
+  // useEffect(()=>{
+  //   if(listCart.length==0){
+  //     navigate("/"); 
+  //     toast.error("Bạn cần phải mua hàng");
       
-    }
-  },[listCart.length])
+  //   }
+  // },[listCart.length])
 
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));
@@ -122,7 +122,7 @@ export default function Cart() {
         <div className="flex-1 space-y-4 md:space-y-6">
           {/* Header */}
           <div className="bg-white py-3 md:py-5 rounded-lg shadow">
-            <div className="flex items-center px-3 md:px-5 py-3 md:py-5">
+            <div className="flex  items-center px-3 md:px-5 py-3 md:py-5">
               <div className="w-[45%] md:w-[50%] lg:w-[45%]">
                 <h2 className="text-[1.4rem] md:text-[1.7rem] font-semibold text-center">Sản phẩm</h2>
               </div>
@@ -142,13 +142,23 @@ export default function Cart() {
               <div className="flex items-center px-3 md:px-5 py-3 md:py-5">
                 <div className="flex gap-2 md:gap-4 w-[45%] md:w-[50%] lg:w-[45%] items-center">
                   <img
-                    src="https://th.bing.com/th/id/OIP.hZOYBxk1erwCHpTFUkIHygHaEa?rs=1&pid=ImgDetMain"
+          src={`${IMG_BACKEND}/${item?.selectedColor?.image?.image_one}`}
                     alt="Product"
                     className="w-[6rem] md:w-[8rem] lg:w-[12rem] h-[4rem] md:h-[6rem] lg:h-[7rem] object-cover rounded-lg"
                   />
-                  <div className="flex-1 min-w-0">
-                    <h2 className="text-[1.3rem] md:text-[1.5rem] lg:text-[1.7rem] font-semibold line-clamp-2">
+                  <div className="flex-1 leading-10 min-w-0">
+                    <h2 className="text-[1.3rem] md:text-[1.5rem]
+                    
+                    lg:text-[1.7rem] font-semibold line-clamp-2">
+                        <Tooltip title={`${item?.product_name}`}>
+                        <span className="xmd:block sm:hidden">
                       {truncateText(item?.product_name, 25)}
+                      </span>  
+                    <span className="xmd:hidden ">
+                      {truncateText(item?.product_name, 10)}
+                      </span>  
+</Tooltip>
+                    
                     </h2>
                     <p className="text-gray-500 text-[1.1rem] md:text-[1.3rem]">
                       {item?.selectedStorage ? `${item?.selectedStorage?.storage_price} MB/` : ""}
@@ -176,7 +186,7 @@ export default function Cart() {
 
                 {/* Quantity Controls */}
                 <div className="flex items-center justify-center w-[25%] md:w-[25%] lg:w-[20%]">
-                <Popconfirm
+  <Popconfirm
     title="Bạn có chắc muốn xóa sản phẩm này?"
     onConfirm={() => handleDecrease(item.product_id, item.quantity)}
     okText="Có"
@@ -184,22 +194,27 @@ export default function Cart() {
   >
     <button
       onClick={() => handleDecrease(item.product_id, item.quantity)}
-      className="px-4 py-2 border border-gray-300 rounded-lg"
-    >
+      className="px-[.65rem] py-2 border border-gray-300 rounded-lg text-[1.4rem] md:text-[1.4rem] lg:text-[1.4rem]"
+      >
       -
     </button>
   </Popconfirm>
 
-                  <span className="mx-1 md:mx-2 lg:mx-4 font-semibold text-[1.2rem] md:text-[1.4rem]">{item.quantity}</span>
-                  <button onClick={() => inCreaseItem(item.product_id)} 
-                    className="px-1 md:px-2 lg:px-4 py-1 md:py-2 border border-gray-300 rounded-lg text-[1.2rem] md:text-[1.4rem]">
-                    +
-                  </button>
-                </div>
+  <span className="mx-2 font-semibold text-[1.4rem] md:text-[1.4rem] lg:text-[1.4rem]">{item.quantity}</span>
+
+  <button 
+    onClick={() => inCreaseItem(item.product_id)} 
+    className="px-2 py-2 border border-gray-300 rounded-lg text-[1.4rem] md:text-[1.4rem] lg:text-[1.4rem]">
+    +
+  </button>
+</div>
+
 
                 {/* Total Price */}
                 <div className="w-[25%] md:w-[20%] lg:w-[25%] text-center">
-                  <span className="text-customColor text-[1.3rem] md:text-[1.5rem] lg:text-[1.7rem] font-semibold">
+                  <span className="
+                  
+                  text-customColor text-[1.2rem] md:text-[1.5rem] lg:text-[1.7rem] font-semibold">
                     {formatCurrencyVND(
                       (Number(item?.product_price) + Number(item?.selectedStorage?.storage_price || 0)) *
                       Number(item?.quantity) *
@@ -279,7 +294,7 @@ export default function Cart() {
       <div className="flex justify-between">
         <span className="text-[1.4rem] md:text-[1.6rem]">Giảm giá</span>
         <span className="font-bold text-[1.4rem] md:text-[1.7rem] text-black-500">
-          {getDiscount} %
+          {getDiscount || 0} %
         </span>
       </div>
 

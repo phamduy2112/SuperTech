@@ -10,6 +10,7 @@ import { signup } from "../../../../service/auth/auth.service";
 
 import toast from "react-hot-toast";
 import { TPayloadRegister } from '../../../../service/auth/auth.type';
+import { Paths } from '../../../../router/component/RouterValues';
 
 function Resigter() {
   // Sử dụng hook useFormik để quản lý form
@@ -43,7 +44,7 @@ function Resigter() {
 
       if (res.data.message === "Đăng kí thành công!") {
         toast.success('Đăng kí thành công')
-        navigate("/đăng-nhập")
+        navigate(`${Paths.Login}`)
       } else {
         toast.error(res.data.message) 
       }

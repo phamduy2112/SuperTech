@@ -267,27 +267,6 @@ function Pay() {
           order_total: dataOrder.order_total
         });
 
-        // Điều hướng về trang chủ sau 2 phút
-//         setTimeout(async () => {
-
-//           // Delay the toast notification
-//           navigate("/");  
-//           dispatch(removeAllCart());
-
-//           const cancelOrder = {
-//             order_id: resp.data.content.order_id,
-//             order_status: 6,
-//             order_status_text_cancel: 'Quá thời gian thanh toán',
-//           };
-//           await dispatch(changeStatusOrderThunk(cancelOrder)).unwrap();
-// setTimeout(() => {
- 
-//   toast.error("Đơn hàng của bạn đã bị hủy");
-
-// }, 1000); // Delay navigation for 1 second after the toast
-        
-//       },3000); // 120000 milliseconds = 2 minutes
-
       } else {
         // Gọi API tạo chi tiết đơn hàng cho phương thức thanh toán khác
         const response = await createDetailOrder(detailOrders);
@@ -319,128 +298,32 @@ function Pay() {
     <Container>
     
     <div className=' py-6 text-[1.5rem]'>
-          <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
-            <a href="/" className="text-customColor hover:underline">
-              Trang chủ
-            </a>
-            <span className="mx-2">/</span>
-            <span>Giỏ hàng</span>
-          </div>
 
-    <div className='xll:w-[40%] lg:w-[60%] mx-auto my-[2rem] p-[2rem]'>
-    <Steps
-    current={0}
-    percent={60}
-    items={[
-      {
-        title: 'Đơn hàng',
-  
-      },
-      {
-        title: 'Thanh toán',
-      
-     
-      },
-      {
-        title: 'Xuất hoá đơn',
-      
-      },
-    ]}
-  />
+    <div className='sm:hidden xmd:block xll:w-[40%] lg:w-[60%] mx-auto my-[2rem] p-[2rem]'>
+          <Steps
+          current={0}
+          percent={60}
+          items={[
+            {
+              title: 'Đơn hàng',
+        
+            },
+            {
+              title: 'Thanh toán',
+            
+          
+            },
+            {
+              title: 'Xuất hoá đơn',
+            
+            },
+          ]}
+        />
     </div>
-    <div className='xll:w-[100%] md:w-[100%] justify-between md:flex flex-wrap m-auto leading-10'>
-    <div className='lg:w-[50%] md:w-[53%] md:hidden '>
-      <h3 className='sm:text-[1.8rem] sm:font-semibold lg:text-[2.5rem] md:text-[2.2rem] py-[1rem]'>Đơn đặt hàng</h3>
-      <div>
-          <div className='flex justify-between text-[1.5rem] py-[1rem] font-semibold border border-b-[#969696] border-transparent'>
-            <p className='sm:w-[70%] xsm:w-[80%]'>Sản phẩm</p>
-            <p className='xsm:w-[20%]'>Tạm tính</p>
-          </div>      
-          <div className='flex  sm:text-[1.3rem] sxm:text-[1.4rem] py-[1rem] border border-b-[#969696] border-transparent'>
-            <div className='w-[80%] flex'>
-              <div className='xsm:w-[70px] sm:w-[60px]'>
-              <img
-                className="w-[100%]"
-                src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
-              </div>
-              <div>
-            
-              <h5 className='font-semibold sm:text-[1.3rem] sxm:text-[1.4rem] lg:hidden'>
-                 IPhone 13 Pro max...  <span className='text-customColor'>(x1)</span>
-              </h5>
-              <p className='my-[.2rem]'>Màu sắc: Xanh</p>
-              <p>Số lượng: <span className='text-[#7500CF] font-semibold '>1</span></p>
-              <p className='text-red-600 font-semibold mt-[.2rem]'>
-              30.000.000đ
-              <span className="text-[1.4rem] text-[#969696] ml-[.5rem] font-medium" style={{textDecoration:"line-through"}}>31.990.000đ</span>
-              </p>
-              
-              </div>
-           
-            </div>
-            <div className='w-[20%] text-customColor font-semibold sm:text-[1.2rem] sxm:text-[1.4rem] ssm:text-[1.5rem]'>30.000.000đ</div>
-          </div>
-          <div className=' sm:text-[1.4rem] sxm:text-[1.5rem] py-[1rem] border border-b-[#969696]'>
-            <div className='flex w-[100%] mb-[.5rem]'>
-            <p className='w-[80%]'>Tạm tính</p>
-            <p className='w-[20%] font-semibold sm:text-[1.2rem] sxm:text-[1.4rem] ssm:text-[1.5rem]'>52.000.000đ</p>
-            </div>
-            <div className='flex w-[100%] justify-between'>
-            <p className='w-[80%]'>Giao hàng</p>
-            <p className='w-[20%] font-semibold sm:text-[1.2rem]  sxm:text-[1.4rem] ssm:text-[1.5rem]'>0</p>
-            </div>
-            
-          </div>
-          <div className=' text-[1.6rem] py-[1rem] font-semibold border border-b-[#969696]'>
-            <div className='flex w-[100%]'>
-            <p className='w-[80%]'>Tổng tiền</p>
-            <p className='w-[20%] text-red-600 sm:text-[1.2rem]  sxm:text-[1.4rem] ssm:text-[1.5rem]'>52.000.000đ</p>
-            </div>
-           
-            
-          </div>
-          <div>
-            <h3 className='lg:text-[2rem] text-[1.7rem] py-[1rem] font-semibold'>Phương thức thanh toán</h3>
-            <div className='border-customColor border py-[1rem] px-[1.5rem] relative'>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="bank"
-                onChange={handlePaymentChange}
-                className="absolute top-5"
-              />
-              <div className='ml-[2rem]'>
-                 <h4 className='text-[1.7rem] font-semibold'>Chuyển hướng qua ngân hàng</h4>
-              <p className='text-[1.6rem] text-[#969696] mt-[.5rem]'>
-                Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần phương thức thanh toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.
-              </p>
-              </div>
-             
-            </div>
-            <div className='border-[#7500CF] border py-[1rem] px-[1.5rem] mt-[1rem] relative'>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="cash"
-                onChange={handlePaymentChange}
-                className="absolute top-5"
+    <div className="flex flex-col lg:flex-row gap-5 justify-between leading-10 px-4 lg:px-0">
+    {/* Cart Section */}
 
-              />
-              <div className='ml-[2rem]'>
-                <h4  className='text-[1.7rem] font-semibold'>Trả tiền mặt</h4>
-                <p className='text-[1.6rem] text-[#969696] mt-[.5rem]'>
-                  Trả tiền mặt sau khi giao hàng
-                </p>
-              </div>
-             
-            </div>
-          </div>
-          <div className='mt-[1.5rem] fixed bottom-0 left-0 w-[100%]  text-white bg-customColor z-20'>
-          <button onClick={handleFormSubmit} className=' text-[1.8rem] w-[100%] py-[1rem]'>Đặt hàng</button>
-          </div>
-      </div>
-      </div>
-      <div className=' md:w-[50%] px-10 py-5 bg-white rounded-lg shadow-xl space-y-1'>
+      <div className=' lg:w-[50%] px-10 py-5 bg-white rounded-lg shadow-xl space-y-1'>
         <h3 className='lg:text-[2.5rem] md:text-[2.2rem] py-[1rem] sm:text-[1.8rem] sm:font-semibold'>Thông tin thanh toán</h3>
         <div>
         <Form
@@ -596,7 +479,7 @@ function Pay() {
           )}
                   </div>
                 </div>
-                <div className="text-[1.8rem] font-semibold text-customColor">      
+                <div className="text-[1.8rem] font-semibold text-customColor sm:hidden xmd:block">      
                 {formatCurrencyVND(
                                ( Number(item?.product_price) + Number(item?.selectedStorage?.storage_price || 0)) *Number(item?.quantity)*
                                   (1 - Number(item?.product_discount / 100))

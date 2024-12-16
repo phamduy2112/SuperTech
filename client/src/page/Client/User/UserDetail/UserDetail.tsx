@@ -90,7 +90,7 @@ function UserDetail() {
            
             </div>
 
-            <div className="p-[2rem] w-[100%] ">
+            <div className="md:p-[2rem] w-[100%] ">
               <Formik
                 innerRef={formikRef} // Assign the ref here
                 initialValues={{
@@ -116,15 +116,15 @@ function UserDetail() {
                         ) : null}
                       </AntForm.Item>
                     </div>
-                    <div className="flex w-[100%] justify-between">
-                      <AntForm.Item className="w-[49%]" label="Số điện thoại">
+                    <div className="md:flex w-[100%] justify-between">
+                      <AntForm.Item className="md:w-[49%]" label="Số điện thoại">
                         <Field name="user_phone" as={Input} />
                         {errors.user_phone && touched.user_phone ? (
                           <div className="error">{errors.user_phone}</div>
                         ) : null}
                       </AntForm.Item>
 
-                      <AntForm.Item className="w-[49%]" label="Email">
+                      <AntForm.Item className="md:w-[49%]" label="Email">
                         <Field name="email" as={Input} />
                         {errors.email && touched.email ? (
                           <div className="error">{errors.email}</div>

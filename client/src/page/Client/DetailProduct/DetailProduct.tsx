@@ -171,6 +171,26 @@ useEffect(() => {
                   />
                 </div>
 
+                {/* Giá tiền và tên sản phẩm rps */}
+                <div className="block md:hidden mt-4">
+                  <h3 className="text-[2.5rem] font-semibold">{productDetail?.product_name}</h3>
+                  {productDetail?.product_discount > 0 ? (
+                    <div className="flex items-center  gap-4 py-4">
+                      <p className="text-red-500 font-semibold text-[2rem]">
+                        {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
+                      </p>
+                      <p className="text-xl text-gray-500 line-through">              
+                        {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                      </p>
+                      <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
+                    </div>
+                  ) : (
+                    <p className="text-red-500 font-semibold text-[2rem] py-6">
+                      {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
+                    </p>
+                  )}
+                </div>
+
                 {/* Thumbnail Images */}
             <div>
             <div className="flex items-center justify-center my-8 space-x-4">
@@ -178,7 +198,7 @@ useEffect(() => {
          {/* Image 1 */}
          {objectColor?.image?.image_one && (
           <div 
-            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_one ? 'border-2 border-blue-500' : ''}`}
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_one ? 'border-2 border-blue-500' : ''}`}
             onClick={() => setActiveImage(objectColor.image.image_one)}
           >
             <img src={`${IMG_BACKEND}/${objectColor.image.image_one}`} alt="Image 1" />
@@ -188,7 +208,7 @@ useEffect(() => {
         {/* Image 2 */}
         {objectColor?.image?.image_two && (
           <div 
-            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_two ? 'border-2 border-blue-500' : ''}`}
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_two ? 'border-2 border-blue-500' : ''}`}
             onClick={() => setActiveImage(objectColor.image.image_two)}
           >
             <img src={`${IMG_BACKEND}/${objectColor.image.image_two}`} alt="Image 2" />
@@ -198,7 +218,7 @@ useEffect(() => {
         {/* Image 3 */}
         {objectColor?.image?.image_three && (
           <div 
-            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_three ? 'border-2 border-blue-500' : ''}`}
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_three ? 'border-2 border-blue-500' : ''}`}
             onClick={() => setActiveImage(objectColor.image.image_three)}
           >
             <img src={`${IMG_BACKEND}/${objectColor.image.image_three}`} alt="Image 3" />
@@ -208,7 +228,7 @@ useEffect(() => {
         {/* Image 4 */}
         {objectColor?.image?.image_four && (
           <div 
-            className={`w-[10%] cursor-pointer ${activeImage === objectColor.image.image_four ? 'border-2 border-blue-500' : ''}`}
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_four ? 'border-2 border-blue-500' : ''}`}
             onClick={() => setActiveImage(objectColor.image.image_four)}
           >
             <img src={`${IMG_BACKEND}/${objectColor.image.image_four}`} alt="Image 4" />
@@ -218,7 +238,49 @@ useEffect(() => {
                 </div>
 
             </div>
+           
+            <div className="py-6 md:hidden">
+              {objectColor?.product_storages?.length>0  ? <div>
 
+                <h4 className="text-[1.6rem]">Chọn <span className="text-customColor font-semibold">dung lượng</span> để xem <span className="text-customColor font-semibold">giá</span></h4>
+            <div className="flex gap-4 mb-6">
+
+{objectColor?.product_storages?.map((variant, index) => (
+<button key={index}                
+onClick={()=>{handleStorageChange(variant)}}
+className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
+>
+
+{variant?.storage} MB
+</button>
+))}
+</div>
+              </div>:''}
+           
+    <h4 className="text-[1.6rem]">Chọn <span className="text-customColor font-semibold">màu</span> để xem <span className="text-customColor font-semibold">giá</span> và tình trạng hàng</h4>
+    <div className="flex flex-wrap gap-4 mt-4">
+        {productDetail?.product_colors?.map((item) => (
+            <div
+                key={item.color}
+                onClick={() => handleColorChange(item.color)}
+                className={`
+                  flex items-center gap-3 border py-4 px-9 rounded-md cursor-pointer
+                   hover:shadow-md ${selectedColor === item.color ? 'bg-slate-50' : ''}`}
+            >
+              
+                <img 
+                    src={`${IMG_BACKEND}/${item?.image?.image_one}`} 
+                    alt={item.color} 
+                    className="w-12 rounded-md"
+                />
+                <div>
+                    <h4 className="font-semibold text-[1.4rem]">{item.color}</h4>
+                    {/* <p className="text-red-500 font-semibold">{item.storage_price}đ</p> */}
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
                 {/* Product Info */}
                 <div>
                   <h4 className="text-[1.9rem] font-semibold">Thông tin sản phẩm</h4>
@@ -250,42 +312,45 @@ useEffect(() => {
 
               {/* Right Column */}
               <div className="w-full md:w-[45%] mx-auto text-xl ">
-                <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
-                {/* Price Section */}
-                {productDetail?.product_discount > 0 ?
-                <div className="flex items-center gap-4 py-4">
-            
-                <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}</p>
-                <p className="text-xl text-gray-500 line-through">              
-                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
-                </p>
-                <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
-              </div>
-                : 
-                <p className="text-red-500 font-semibold text-[2rem] py-6">
-                    {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
+                {/* Giá tiền với tên sp khi ở PC */}
+                <h3 className="hidden md:block font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
+                {productDetail?.product_discount > 0 ? (
+                  <div className="hidden md:flex items-center gap-4 py-4">
+                    <p className="text-red-500 font-semibold text-[2rem]">
+                      {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
                     </p>
-
-                    // Hehe
-                }
+                    <p className="text-xl text-gray-500 line-through">              
+                      {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                    </p>
+                    <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
+                  </div>
+                ) : (
+                  <p className="hidden md:block text-red-500 font-semibold text-[2rem] py-6">
+                    {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
+                  </p>
+                )}
                 
 
                 {/* Storage Variant Buttons */}
-                <div className="flex gap-4 mb-6">
-              
-                {objectColor?.product_storages?.map((variant, index) => (
-  <button key={index}                
-  onClick={()=>{handleStorageChange(variant)}}
-  className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
+                {objectColor?.product_storages?.length>0  ? <div>
+
+<h4 className="text-[1.6rem]">Chọn <span className="text-customColor font-semibold">dung lượng</span> để xem <span className="text-customColor font-semibold">giá</span></h4>
+<div className="flex gap-4 mt-[1rem]">
+
+{objectColor?.product_storages?.map((variant, index) => (
+<button key={index}                
+onClick={()=>{handleStorageChange(variant)}}
+className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
 >
 
-    {variant?.storage} MB
-  </button>
+{variant?.storage} MB
+</button>
 ))}
-                </div>
+</div>
+</div>:''}
 
                 {/* Color Selection */}
-                <div className="py-6">
+                <div className="py-[1rem] sm:hidden md:block">
     <h4 className="text-2xl">Chọn màu để xem giá và tình trạng hàng</h4>
     <div className="flex flex-wrap gap-4 mt-4">
         {productDetail?.product_colors?.map((item) => (
@@ -360,27 +425,9 @@ useEffect(() => {
                   </ul>
                 </div>
 
-                {/* Technical Specifications */}
-                <div className="flex justify-between">
-                  <div className="w-[100%] mt-10">
-                    <h3 className="text-red-500 font-semibold text-3xl mb-4">Thông số kĩ thuật</h3>
-                    <div className="border rounded-lg p-6">
-                      <table className="w-full border-collapse text-2xl leading-[3rem]">
-                        <tbody>
-                          <tr className="border-b">
-                            <td className="font-semibold py-5 w-1/2">Công nghệ màn hình</td>
-                            <td className="py-2 w-1/2">OLED</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="font-semibold py-5 w-1/2">Độ phân giải</td>
-                            <td className="py-2 w-1/2">2532 × 1170 pixels</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <button className="w-full text-xl font-semibold py-4 border mt-4">Xem chi tiết cấu hình</button>
-                  </div>
-                </div>
+              
+             
+
 
                 {/* Cart and Buy Now Buttons */}
                 <div className="flex gap-4 mt-4">

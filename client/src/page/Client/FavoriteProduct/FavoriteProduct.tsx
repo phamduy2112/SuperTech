@@ -14,7 +14,7 @@ function FavoriteProduct() {
     dispatch(getFavouriteProductThunk())
   },[dispatch])
   return (
-    <div className='w-[95%] md:w-[90%] lg:w-[80%] m-auto'>
+    <div className='w-[95%] leading-10 md:w-[90%] lg:w-[80%] m-auto'>
       <Breadcrumb
         items={[
           {
@@ -78,14 +78,15 @@ function FavoriteProduct() {
             alt="Không tìm thấy sản phẩm"
             className="w-[15rem] h-[15rem] mb-4"
           />
-          <h2 className="text-3xl font-semibold text-gray-800">          <p>Không có sản phẩm yêu thích</p>
+          <h2 className="text-3xl font-semibold text-gray-800">         
+            <p>Không có sản phẩm yêu thích</p>
           </h2>
           <p className="text-gray-500 mt-2">
-          <p>Không có sản phẩm yêu thích</p>
+          <p className='text-2xl text-gray-800'>Tất cả các sản phẩm yêu thích của bạn sẽ hiện ở đây</p>
           </p>
           <button
             onClick={() => window.location.href = '/'} // Đổi thành URL bạn muốn
-            className="mt-6 px-10 py-3 font-medium bg-customColor text-white rounded-xl hover:bg-indigo-800"
+            className="text-2xl mt-6 px-10 py-3 font-medium bg-customColor text-white rounded-xl hover:bg-indigo-800"
           >
             Trở về trang chủ
           </button>

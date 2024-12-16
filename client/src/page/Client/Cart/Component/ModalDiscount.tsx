@@ -57,7 +57,13 @@ function ModalDiscount() {
     <>
       <button
         onClick={showModal}
-        className="justify-between flex items-center shadow-sm rounded-lg my-[1.2rem] px-5 py-2 w-1/2 hover:shadow-md transition-shadow"
+        className="
+        
+        justify-between flex items-center shadow-sm rounded-lg my-[1.2rem]
+        
+        px-5 py-2 sm:w-[100%] ssm:w-1/2 hover:shadow-md transition-shadow
+        
+        "
       >
         Chọn mã giảm giá
         <span className="text-customColor">

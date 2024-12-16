@@ -1,15 +1,17 @@
-import { Steps, Table } from 'antd';
+import { Steps, Table, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { getOrderDetail } from '../../../../redux/order/Order.slice';
 import { getDetailOrder } from '../../../../service/order/order.service';
-import { formatCurrencyVND } from '../../../../utils';
+import { formatCurrencyVND, truncateText } from '../../../../utils';
 import { Container } from '../../../../components/Style/Container';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import StepOrderDetai from './component/StepOrderDetai';
 import { colorText } from '../../../../constants';
-
+import { Paths } from '../../../../router/component/RouterValues';
+import CancelOrderModal from '../Order/component/ModalCancer';
+import './component/css/editTable.css'
 function OrderDetail() {
   const { id } = useParams(); // Lấy id từ URL
   const idOrder=Number(id)
@@ -26,9 +28,9 @@ function OrderDetail() {
             <img src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
           </div>
           <div>
-           <div className='text-[1.5rem] font-semibold mb-[.2rem]'>{record.name}</div> 
-           <div>256GB/Titan xanh</div>
-           <div>Mã sản phẩm: ipmax-1s</div>
+           <div className='text-[1.5rem] sm:hidden lg:block  font-semibold mb-[.2rem]'>{record.name}</div> 
+           <div className='text-[1.3rem] lg:hidden  font-semibold mb-[.2rem]'>{truncateText(record.name,20)}</div> 
+           <div>{record.storage}GB/{record.product_color}</div>
           </div>
           
         </div>
@@ -134,6 +136,8 @@ useEffect(() => {
         product_hot: detail.product.product_hot,
         image_id: detail.product.image_id,
         category_id: detail.product.category_id,
+        product_color: detail.product_color,
+        storage: detail.product_storage,
       }));
 
       setListProduct(products);
@@ -155,29 +159,53 @@ const statusText = currentStatus
 // )?.order_status_text_cancel;
 
 // console.log(cancelReason);
-
+const navigate=useNavigate();
+const handleClickNavigate=()=>{
+  navigate(`${Paths.Profile}`)
+}
 
   
 return (
     <Container>
-      <div className='w-[100%] shadow-lg py-[1.5rem] sm:py-[4rem] px-[1rem] sm:px-[3rem] bg-white'>
+      <div className='w-[100%] shadow-lg py-[1.5rem] sm:py-[4rem] leading-10 px-[1rem] sm:px-[3rem] bg-white'>
         <div className='flex flex-col sm:flex-row justify-between items-center border-b pb-[1rem] gap-[.8rem]'>
-          <div className='text-[1.3rem] sm:text-[2rem] flex justify-center items-center gap-[.8rem]'>
+          <div 
+          
+          className='text-[1.3rem] cursor-pointer sm:text-[2rem] flex justify-center items-center gap-[.8rem]'
+          onClick={()=>{handleClickNavigate()}}
+          >
             <MdArrowBackIosNew />
-            <div className='text-[1.2rem] sm:text-[1.7rem]'>Trở lại</div>
+            <div className='text-[1.2rem] sm:text-[1.7rem] sm:hidden md:block'>Trở lại</div>
           </div>
-          <div className='flex flex-col sm:flex-row gap-[.8rem] justify-center items-center'>
-            <h3 className='text-[1.3rem] sm:text-[1.7rem] font-semibold sm:border-r sm:px-1'>
+          <div className='flex  flex-col sm:flex-row gap-[.8rem] justify-center items-center'>
+            <h3 className='text-[1.3rem] sm:hidden md:block sm:text-[1.7rem] font-semibold sm:border-r sm:px-1'>
               Mã đơn hàng <span className='text-[#0084FF]'>#{detailOrder[0]?.order?.order_id}</span>
+
             </h3>
-            <p className='text-[1.2rem] sm:text-[1.7rem] font-semibold text-center sm:text-left'>
+            <h3 className='text-[1.3rem] md:text-[1.7rem] md:hidden font-semibold sm:border-r sm:px-1'>
+              Mã <span className='text-[#0084FF]'>#{detailOrder[0]?.order?.order_id}</span>
+
+            </h3>
+            <p className='text-[1.2rem] sm:hidden md:block sm:text-[1.7rem] font-semibold text-center sm:text-left'>
               Trạng thái vận chuyển: <span className={`text-[${statusText?.color}]`}>{statusText?.text}</span>
+            </p>
+            <p className='text-[1.2rem] flex justify-center items-center gap-[1rem] md:hidden md:text-[1.7rem] font-semibold text-center sm:text-left'>
+              Trạng thái: 
+              <Tooltip title={statusText?.text}>
+              <div
+                style={{ backgroundColor: statusText?.color }}
+                className="w-[1.5rem] h-[1.5rem] rounded-[50%]"
+              ></div>
+            </Tooltip>
+
+
+             
             </p>
           </div>
         </div>
         <div className='flex flex-col sm:flex-row gap-[.8rem] py-[.8rem] text-center sm:text-left'>
           <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold'>Khuyến mãi: <span>0</span></p>
-          <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold'>Phí vận chuyển: <span>0</span></p>
+          <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold sm:hidden md:block'>Phí vận chuyển: <span>0</span></p>
           <p className='text-[1.1rem] sm:text-[1.4rem] font-semibold'>
             Tổng tiền: <span className='text-[red]'>{formatCurrencyVND(detailOrder[0]?.order?.order_total+30000)}</span>
           </p>
@@ -195,7 +223,7 @@ return (
             </div>
             <div>
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
-            <div className='h-[8rem] shadow-md p-[2rem]'>
+            <div className='h-[10rem] shadow-md p-[2rem]'>
             <p className='text-[1.6rem] font-semibold'>Địa chỉ: <span>{detailOrder[0]?.order?.address}</span></p>
             <p className='text-[1.6rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0334491141</span></p>
             </div>
@@ -242,17 +270,22 @@ return (
             )}
           </div>
         </div>
-        <div className='mt-[3rem] table-detail-order'>
+        <div className='mt-[3rem] table-detail-order '>
         
         </div>
-        <Table 
+        <div className='editTable'>
+          <Table 
           columns={columns} 
           dataSource={listProduct} 
           pagination={false} 
+          scroll={{ x: 1000 }} // Đặt chiều rộng tối thiểu (min-width) cho bảng
+
           rowKey="name" // hoặc một thuộc tính duy nhất khác
         />
+        </div>
+        
         {order?.order_status < 2 ?   <div className='rounded-lg mt-[1rem]'>
-          <button className='bg-yellow-400 text-[1.5rem] p-[1rem] rounded-lg'>Huỷ đơn hàng</button>
+          <CancelOrderModal >Huỷ đơn hàng</CancelOrderModal>
         </div>: "" }
       
       </div>

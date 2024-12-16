@@ -19,6 +19,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/vi';
 import toast from "react-hot-toast";
 import { BiSolidEdit } from "react-icons/bi";
+import { Paths } from "../../../../router/component/RouterValues";
 interface Comment {
   [key: string]: any;
 }
@@ -368,7 +369,7 @@ function AdminCommentProduct() {
     e.preventDefault();
     if (!login) {
       toast.error("Bạn cần đăng nhập!");
-      Navigate("/đăng-nhập");
+      Navigate(`${Paths.Login}`);
       return;
     }
     if (comment.length < 5) {

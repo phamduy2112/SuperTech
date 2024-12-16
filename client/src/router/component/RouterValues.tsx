@@ -47,6 +47,6 @@ export const Paths = {
         Chart: "quan-li-bieu-do",
     Settings: "quan-li-trang-web",
   },
-};
+};  
 
 export const PathAdmin = Paths.Admin
