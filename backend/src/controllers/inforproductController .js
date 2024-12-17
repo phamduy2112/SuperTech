@@ -13,7 +13,16 @@ const getinforproduct = async (req, res) => {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }
 };
-
+const getinFor = async (req, res) => {
+    try {
+      let data = await inforproduct.findAll();
+      responseSend(res, data, "Thành công!", 200);
+    } catch (error) {
+      responseSend(res, "", "Có lỗi xảy ra!");
+      console.log(error);
+    }
+  };
+  
 const getinforproductById = async (req, res) => {
     try {
         let data = await inforproduct.findByPk(req.params.id);
@@ -95,5 +104,6 @@ export {
     getinforproductById,
     createinforproduct,
     updateinforproduct,
-    deleteinforproduct
+    deleteinforproduct,
+    getinFor
 };

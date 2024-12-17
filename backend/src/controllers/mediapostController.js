@@ -258,6 +258,7 @@ const deletemediapost = async (req, res) => {
 export {
     getmediapost,
     getmediapostById,
+    
     createmediapost,
     updatemediapost,
     deletemediapost

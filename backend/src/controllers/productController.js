@@ -241,18 +241,13 @@ const getProductByIdCatelogryDad = async (req, res) => {
     const products = await Products.findAll({
       include: [
         {
-          model: models.categories,
-          as: "category",
-          where: whereClause,
-          attributes: [],
-        },
-        {
           model: models.comment_product,
           as: "comment_products",
           include: [
             {
               model: models.user,
               as: "user",
+              attributes: { exclude: ["user_password", "user_phone"] },
             },
           ],
         },
@@ -267,13 +262,22 @@ const getProductByIdCatelogryDad = async (req, res) => {
             {
               model: models.image_product,
               as: "image",
+              required: true,
             },
             {
               model: models.product_storage,
               as: "product_storages",
-              required: false,
+            },
+            {
+              model: models.product_quality,
+              as: "product_qualities",
+              where: {
+                quality_product: { [Op.gt]: 0 }, // Điều kiện: quality_product > 0
+              },
+              required: true, // Sản phẩm phải có chất lượng hợp lệ
             },
           ],
+          required: true, // Sản phẩm phải có màu sắc
         },
       ],
     });

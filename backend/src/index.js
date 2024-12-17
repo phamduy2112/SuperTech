@@ -35,7 +35,9 @@ app.use(cookieParser());
 
 app.use(urlencoded({extended:true}))
 app.use(express.static("."))
-
+app.get('/', (req, res) => {
+  res.send("Api Created By Team NinjaDev");
+});
 const corsOptions = {
   origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
