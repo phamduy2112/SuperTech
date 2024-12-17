@@ -65,7 +65,7 @@ function HeaderMobile(props) {
               {/* Show input when isInputVisible is true */}
               {isInputVisible && (
                 <div className="absolute top-full right-0 bg-white shadow-lg p-2 rounded-md">
-                  <form className="w-[300px]] h-[38px]">
+                  <form className="w-[300px] h-[38px]">
                     <Input.Search
                       placeholder="Tìm kiếm sản phẩm"
                       onSearch={onSearch}

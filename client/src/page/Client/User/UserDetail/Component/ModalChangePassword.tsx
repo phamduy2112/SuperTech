@@ -68,7 +68,9 @@ function ModalChangePassword() {
 
   return (
     <>
-      <button onClick={showModal} className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]">
+      <button onClick={showModal} 
+                        className="p-[1rem] border text-[1.6rem] border-customColor text-customColor"
+                        >
         Đổi mật khẩu
       </button>
       

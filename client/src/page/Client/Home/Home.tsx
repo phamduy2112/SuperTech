@@ -33,7 +33,7 @@ function Home() {
           </div>
         </div>
 
-        <LaptopComponent />
+        {/* <LaptopComponent /> */}
 
         <Catelory2 />
 

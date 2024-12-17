@@ -251,7 +251,7 @@ onClick={()=>{handleStorageChange(variant)}}
 className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
 >
 
-{variant?.storage} MB
+{variant?.storage} GB
 </button>
 ))}
 </div>
@@ -313,8 +313,9 @@ className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer h
               {/* Right Column */}
               <div className="w-full md:w-[45%] mx-auto text-xl ">
                 {/* Giá tiền với tên sp khi ở PC */}
-                <h3 className="hidden md:block font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
-                {productDetail?.product_discount > 0 ? (
+                <h3 className="hidden md:block text-[2.5rem] font-semibold pt-[1.3rem] leading-[1.5]">
+  {productDetail?.product_name}
+</h3>                {productDetail?.product_discount > 0 ? (
                   <div className="hidden md:flex items-center gap-4 py-4">
                     <p className="text-red-500 font-semibold text-[2rem]">
                       {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
@@ -343,7 +344,7 @@ onClick={()=>{handleStorageChange(variant)}}
 className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
 >
 
-{variant?.storage} MB
+{variant?.storage} GB
 </button>
 ))}
 </div>

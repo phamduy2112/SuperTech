@@ -2,10 +2,12 @@
 
     text-align: start;
     font-weight: 600;
+
 }
 .formEdit .ant-row{
     display: block;
 }
+.formEdit .ant-picker-outlined,
 .formEdit .ant-input-outlined,
 .formEdit .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector,
 .formEdit .ant-input-number-outlined
@@ -15,7 +17,7 @@
 }
 /*  */
 
-.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-select .ant-select-arrow{
+.formEdit .ant-select .ant-select-arrow{
 
     color: #7500CF;
     width: 15px;
@@ -25,7 +27,7 @@
     justify-content: center;
     padding-top: 5px;
 }
-.formEdit :where(.css-dev-only-do-not-override-5wsri9).ant-form-item{
+.formEdit .ant-form-item{
     margin-bottom: 1rem;
 }
 .formEdit .ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
@@ -51,3 +53,4 @@
     background: var(--custom-color);
     
 }
+

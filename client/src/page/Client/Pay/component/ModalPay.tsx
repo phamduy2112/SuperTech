@@ -4,15 +4,10 @@ import { getAutoBank, getOrderAll } from '../../../../service/order/order.servic
 import { CopyOutlined, DownOutlined } from '@ant-design/icons';
 import CountdownTimer from './CountimePay';
 import { getsetting } from '../../../../service/setting/setting.service';
+
 function ModalPay(props:any) {
   const [data, setData] = useState(null);  
-useEffect(()=>{
-  if(props.isModalOpen){
-    props.handleReset();
-  }else{
-    props.handleResetTrue()
-  }
-},[props.isModalOpen])  
+
   useEffect(() => {
     const fetchApi = async () => {
       try {
@@ -29,6 +24,18 @@ useEffect(()=>{
 
     fetchApi();
   }, []);
+  const handleReset = () => {
+    setResetTimer(true); // Kích hoạt reset
+    setTimeout(() => setResetTimer(false), 100); // Tắt reset sau khi kích hoạt
+  };
+  const handleCancel=() => {
+    props.handleCancel();
+    setResetTimer(false); // Tắt reset sau khi đóng modal
+  }
+  const [resetTimer, setResetTimer] = useState<boolean>(false);
+
+  // Hàm gọi để reset đồng hồ
+
   const [settings, setSettings] = useState({ rechargeNotice: '' });
   const fetchSettings = async () => {
     try {
@@ -66,7 +73,9 @@ const textOrder = settings.rechargeNotice + props?.data?.order_id;
       title={props.order_total}
       
       open={props.isModalOpen} 
-      onOk={props.handleOk} onCancel={props.handleCancel}>
+      onOk={props.handleOk} 
+      onCancel={handleCancel}
+      >
         <div>
           {isDataReady ? (
             <div>
@@ -108,7 +117,7 @@ const textOrder = settings.rechargeNotice + props?.data?.order_id;
                 src={`https://img.vietqr.io/image/${data[0]?.short_name}-${data[0]?.accountNumber}-compact.jpg?amount=${totalOrder}&addInfo=${textOrder}&accountName=${data[0]?.accountName}`}
                 alt="QR Code"
               />
-              <CountdownTimer reset={props.reset} /> {/* Truyền thuộc tính reset vào CountdownTimer */}
+<CountdownTimer reset={resetTimer} />
             
               {props.order_total}
               

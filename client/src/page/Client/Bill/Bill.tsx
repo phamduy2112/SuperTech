@@ -7,9 +7,9 @@ import { getOrderDetail } from "../../../redux/order/Order.slice";
 import { getDetailOrder } from "../../../service/order/order.service";
 import StepOrderDetail from "../User/OrderDetail/component/StepOrderDetai";
 import { formatCurrencyVND, formatDate, truncateText } from "../../../utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { colorText } from "../../../constants";
+import { colorText, IMG_BACKEND } from "../../../constants";
 
 function Bill(props) {
   const orderId:any=useAppSelector((state)=>state.listOrder.orderId)
@@ -39,7 +39,9 @@ function Bill(props) {
             product_price: detail.detail_order_price,
             product_discount: detail.discount_product,
             product_hot: detail.product.product_hot,
-            image_id: detail.product.image_id,
+            image: detail.img_name,
+            product_color: detail.product_color,
+            storage: detail.product_storage,
             category_id: 2,
           }));
   
@@ -61,12 +63,17 @@ function Bill(props) {
         return ( 
         <div className='flex gap-[.2rem]'>
           <div className='w-[80px]'>
-            <img src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
+            <img 
+            
+                      src={`${IMG_BACKEND}/${record.image}`}
+            
+            
+            alt="" />
           </div>
           <div>
            <div className='text-[1.5rem] sm:hidden lg:inline-block  font-semibold mb-[.2rem]'>{truncateText(record.name,25)}</div> 
-           <div className='text-[1.3rem] lg:hidden  font-semibold mb-[.2rem]'>{truncateText(record.name,20)}</div> 
-           <div>{record.storage}GB/{record.product_color}</div>
+           <div className='text-[1.3rem] lg:hidden   font-semibold mb-[.2rem]'>{truncateText(record.name,20)}</div> 
+           <div className="">{record.storage}GB/{record.product_color}</div>
           </div>
           
         </div>
@@ -145,7 +152,7 @@ function Bill(props) {
   }, 0);
   const getDiscount=Number(order?.discount_discount?.discount_percent) || 0
   const totalPriceWithVoucher =Number(totalPrice) * (1 -  Number(getDiscount) / 100) + 30000;
-
+  const navigate=useNavigate();
   return (
     <Container>
          <div className=' leading-10 py-6 text-[1.5rem]'>
@@ -203,8 +210,9 @@ function Bill(props) {
     className="
       flex justify-center items-center 
       bg-purple-700 hover:bg-purple-800 text-white font-semibold px-6 py-4 rounded-full text-[1.4rem]"
+  onClick={()=>{navigate("/")}}
   >
-    Tiếp tục <span className="sm:hidden md:block">mua sắm</span>
+    Tiếp tục <span className="sm:hidden md:block ml-[.5rem]"> mua sắm</span>
   </button>
 </div>
           </div>

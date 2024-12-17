@@ -5,16 +5,18 @@ import { FaEdit } from "react-icons/fa";
 import { CiHeart, CiUser } from "react-icons/ci";
 import { IoMdExit } from "react-icons/io";
 import { FiMessageSquare } from "react-icons/fi";
-import { useAppSelector } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { IMG_BACKEND_USER } from '../../../constants';
 import { Paths } from '../../../router/component/RouterValues';
 import { TpayloadUser } from '../../../service/user/user.type';
+import { setLogin, setToken } from '../../../redux/user/user.slice';
+import toast from 'react-hot-toast';
 
 function User() {
   const navigate = useNavigate();
   const location = useLocation();
   const user: TpayloadUser  | null = useAppSelector((state) => state.user.user);
-
+  
   // Điều hướng mặc định về trang Tài khoản
   useEffect(() => {
     const defaultPath = Paths.Profile; // Đường dẫn mặc định
@@ -40,12 +42,19 @@ function User() {
   const handleNavigation = (path: string) => {
     navigate(path);
   };
+  const dispatch=useAppDispatch()
+  const logout=()=>{
+    dispatch(setToken(null))
+    toast.success('Đăng xuất thành công!');
+    navigate(`${Paths.Login}`)
+    dispatch(setLogin(false))
 
+  }
   return (
     <Container className="pt-[1rem]">
-      <div className="flex flex-col lg:flex-row justify-between">
+      <div className="flex flex-col lg:flex-row justify-between flex-wrap">
         {/* Sidebar */}
-        <div className="w-[25%] p-[2rem] bg-white h-[100%] shadow-md rounded-[10px]">
+        <div className="w-full lg:w-[25%] p-[2rem] bg-white h-[100%] rounded-xl shadow-md">
           <div className="flex gap-[1rem]">
             {/* Ảnh hoặc ký tự đầu của người dùng */}
             <div className="w-[7rem] h-[7rem] rounded-[50%] overflow-hidden">
@@ -110,7 +119,7 @@ function User() {
               <div>Tin nhắn</div>
             </div>
             <div
-              onClick={() => handleNavigation('/yeu-thich')}
+              onClick={() => handleNavigation('/san-pham-yeu-thich')}
               className={`flex gap-[.5rem] text-[1.6rem] md:text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border rounded-lg ${
                 isActive('/yeu-thich')
                   ? 'border-customColor bg-customColor text-white'
@@ -121,17 +130,17 @@ function User() {
               <div>Yêu thích</div>
             </div>
             <div
-              onClick={() => handleNavigation('/thoat')}
+              onClick={() =>logout()}
               className="rounded-t rounded-[10px] flex gap-[.5rem] text-[1.9rem] px-[1rem] py-[.9rem] cursor-pointer border border-customColor"
             >
               <IoMdExit />
-              <div>Thoát</div>
+              <div>Đăng xuất</div>
             </div>
           </ul>
         </div>
 
         {/* Nội dung chính */}
-        <div className="w-[70%] p-[2rem] bg-white h-[100%] shadow-md rounded-[10px]">
+        <div className="w-full lg:w-[73%] p-[1rem] md:p-[2rem] bg-white rounded-xl shadow-md">
           <Outlet />
         </div>
       </div>

@@ -1,6 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createCategory, deleteCategory, getCatelogry, getCatelogryDad, putCategory } from "../../service/catelogry/catelogry.service";
+import { createCategory, deleteCategory, getCatelogry, getCatelogryDad, getCatelogryDadById, putCategory } from "../../service/catelogry/catelogry.service";
 import toast from "react-hot-toast";
+
+export const getCatelogryThunkAll = createAsyncThunk(
+  "getCatelogryThunkAll",
+  async () => {
+    try {
+      const resp = await getCatelogry();
+      return resp.data.content;
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+)
 
 export const getCatelogryThunk = createAsyncThunk(
   "getCatelogryThunk",
@@ -78,10 +91,24 @@ export const getCatelogryDadThunk = createAsyncThunk(
   },
 );
 
+export const getCatelogryDadByIdThunk = createAsyncThunk(
+  "getCatelogryDadByIdThunk",
+  async (id: number) => {
+    try {
+      const resp = await getCatelogryDadById(id);
+      return resp.data.content;
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+)
 
 
 const initialState = {
   catelogryDad: [],
+  AlllistCatelories: [],
+
   listCatelories:[],
 };
 
@@ -92,8 +119,17 @@ const CatelogrySlice = createSlice({
     setCatelogry: (state, { payload }) => {
       state.catelogryDad = payload;
     },
+    
   },
   extraReducers: (builder) => {
+    builder
+    .addCase(getCatelogryThunkAll.fulfilled, (state, { payload }) => {
+      state.AlllistCatelories = payload;
+    })
+    builder
+    .addCase(getCatelogryDadByIdThunk.fulfilled, (state, { payload }) => {
+      state.catelogryDad = payload;
+    })
     builder
       .addCase(getCatelogryThunk.fulfilled, (state, { payload }) => {
         state.listCatelories = payload;

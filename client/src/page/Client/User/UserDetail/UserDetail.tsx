@@ -11,7 +11,7 @@ import {
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ImageUploader from "./Component/ChangeImage";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import moment from "dayjs";
 import toast from "react-hot-toast";
@@ -21,7 +21,9 @@ import { formatDate } from "../../../../utils";
 // Yup schema validation
 const validationSchema = Yup.object().shape({
   user_name: Yup.string().required("Vui lòng nhập họ và tên"),
-  user_phone: Yup.string().required("Vui lòng nhập số điện thoại"),
+  user_phone: Yup.number()
+    .typeError("Số điện thoại phải là một số")
+    .required("Vui lòng nhập số điện thoại"),
   email: Yup.string()
     .email("Email không hợp lệ")
     .required("Vui lòng nhp email"),
@@ -42,19 +44,39 @@ function UserDetail() {
     dispatch(getUserThunk());
   }, [dispatch]);
 
-  const handleSubmit = (values: any) => {
-
-
-    dispatch(updateUserDetailThunk(values));
-    toast.success("Sửa thành công")
-    dispatch(getUserThunk());
-  };
+ 
 
   // Add a ref to the Formik component
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formikRef = useRef<any>(null);
 
+  const handleClickSubmit = () => {
+    // Kiểm tra xem form có hợp lệ và không có lỗi nào
+    if (formikRef.current && formikRef.current.isValid && Object.keys(formikRef.current.errors).length === 0) {
+     
+      formikRef.current.submitForm(); // Nếu hợp lệ, gửi dữ liệu
+      toast.success("Cập nhận thành công."); // Hiển thị thông báo nếu form không hợp lệ
 
+    } else {
+      toast.error("Vui lòng nhập đầy đủ thông tin."); // Hiển thị thông báo nếu form không hợp lệ
+    }
+    // if(formikRef.current.values.user_address=='chưa cập nhật'){
+    //   toast.error("Vui lòng nhập địa chỉ cập nhật."); // Hiển thị thông báo nếu form không h��p lệ
+    // }
+  };
+  const handleSubmit = (values: any) => {
+
+if(formikRef.current.values){
+  //  dispatch(updateUserDetailThunk(values));
+  //   dispatch(getUserThunk());
+  console.log(formikRef.current.values);
+ 
+}
+    
+   
+  };
+
+  
   return (
     <div className="pt-[1rem] px-[1rem] md:px-[2rem]">
       <div>
@@ -66,7 +88,7 @@ function UserDetail() {
             </p>
           </div>
           <button
-            onClick={() => formikRef.current.submitForm()} // Trigger submit externally
+            onClick={() => handleClickSubmit()} // Trigger submit externally
             className="text-[1.7rem] rounded-[5px] flex gap-[.5rem] bg-customColor h-[3.5rem] justify-center items-center px-[1.3rem] text-white"
           >
             <FaEdit />
@@ -95,9 +117,9 @@ function UserDetail() {
                 innerRef={formikRef} // Assign the ref here
                 initialValues={{
                   user_name: user?.user_name || "",
-                  user_phone: user?.user_phone || "Chưa cập nhận",
+                  user_phone: user?.user_phone || "Chưa cập nhật",
                   email: user?.user_email || "",
-                  user_address: user?.user_address || "Chưa cập nhận",
+                  user_address: user?.user_address || "Chưa cập nhật",
                   gender: String(user?.user_gender) || "1",
                   date: user?.user_birth || "", // Ensure date is part of the initial values
                 }}
@@ -112,7 +134,7 @@ function UserDetail() {
                       <AntForm.Item label="Họ và tên">
                         <Field name="user_name" as={Input} />
                         {errors.user_name && touched.user_name ? (
-                          <div className="error">{errors.user_name}</div>
+                          <div className="error text-red-600">{errors.user_name}</div>
                         ) : null}
                       </AntForm.Item>
                     </div>
@@ -120,14 +142,14 @@ function UserDetail() {
                       <AntForm.Item className="md:w-[49%]" label="Số điện thoại">
                         <Field name="user_phone" as={Input} />
                         {errors.user_phone && touched.user_phone ? (
-                          <div className="error">{errors.user_phone}</div>
+                          <div className="error text-red-600">{errors.user_phone}</div>
                         ) : null}
                       </AntForm.Item>
 
                       <AntForm.Item className="md:w-[49%]" label="Email">
                         <Field name="email" as={Input} />
                         {errors.email && touched.email ? (
-                          <div className="error">{errors.email}</div>
+                          <div className="error text-red-600">{errors.email}</div>
                         ) : null}
                       </AntForm.Item>
                     </div>
@@ -135,7 +157,7 @@ function UserDetail() {
                     <AntForm.Item label="Địa chỉ">
                       <Field name="user_address" as={Input} />
                       {errors.user_address && touched.user_address ? (
-                        <div className="error">{errors.user_address}</div>
+                        <div className="error text-red-600">{errors.user_address}</div>
                       ) : null}
                     </AntForm.Item>
 
@@ -154,7 +176,7 @@ function UserDetail() {
     )}
   </Field>
   {errors.gender && touched.gender ? (
-    <div className="error">{errors.gender}</div>
+    <div className="error text-red-600">{errors.gender}</div>
   ) : null}
 </AntForm.Item>
                       <div className="flex">
@@ -181,27 +203,30 @@ function UserDetail() {
   }}
 />
                     </AntForm.Item> 
-                    {/* <div className="flex flex-col">
-                <h1 className="text-2xl font-bold mb-4">Tiến độ mua hàng</h1>
-                <ProgressBar currentAmount={currentAmount} targetAmount={targetAmount} />
-              </div> */}
+              
                       </div>
                  
 
-                    <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
-                      {/* <NavLink to="/người-dùng/doi-mat-khau">Đổi mật khẩu</NavLink> */}
+                   
+                  </Form>
+                )}
+              </Formik>
+              <div className="flex justify-end gap-[1rem] mt-[1.5rem]">
                       <ModalChangePassword/>
                       <button
                         type="button"
-                        onClick={() => formikRef.current.submitForm()} // Submit manually
+                        onClick={() => handleClickSubmit()} // Submit manually
                         className="p-[1rem] border text-[1.6rem] border-customColor text-customColor"
                       >
                         Cập nhật
                       </button>
+                      {
+                        user?.user_role !==11  ? <Link
+                        className="p-[1rem] border text-[1.6rem] border-customColor text-customColor"
+
+                        to="/admin">Admin</Link>: null
+                      }
                     </div>
-                  </Form>
-                )}
-              </Formik>
             </div>
           </div>
         </div>

@@ -267,13 +267,22 @@ const getProductByIdCatelogryDad = async (req, res) => {
             {
               model: models.image_product,
               as: "image",
+              required: true,
             },
             {
               model: models.product_storage,
               as: "product_storages",
-              required: false,
+            },
+            {
+              model: models.product_quality,
+              as: "product_qualities",
+              where: {
+                quality_product: { [Op.gt]: 0 }, // Điều kiện: quality_product > 0
+              },
+              required: true, // Sản phẩm phải có chất lượng hợp lệ
             },
           ],
+          required: true, // Sản phẩm phải có màu sắc
         },
       ],
     });

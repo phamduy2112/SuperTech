@@ -45,7 +45,7 @@ import ListProduct from "../page/Client/ListProduct/ListProduct";
 import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
 import CouponSection from "../page/Client/Voucher/Voucher";
-import { AuthRoute, PrivateRoute } from "./component/RouterPrivate";
+import { AdminRoute, AuthRoute, PrivateRoute } from "./component/RouterPrivate";
 // import  RouterLogin from "./component/RouterValues";
 import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
 
@@ -53,6 +53,7 @@ import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangeP
 import { Paths } from "./component/RouterValues";
 import AdminCommentDetail from "../page/Admin/Product/Comment/AdminCommentDetail";
 import AdminData from "../page/Admin/Data/AdminData";
+import FeatureUnderConstructionPage from "../page/Client/PagesMore/PageAll";
 // import PrivateRoute from "./component/RouterPrivate";
 const Home = lazy(
   () => import("../page/Client/Home/Home"),
@@ -191,7 +192,9 @@ export const router = createBrowserRouter([
   },
   {
     path: Paths.Admin.PathsAdmin,
-    element: <AdminTemplate />,
+    element: 
+    <AdminRoute element={  <AdminTemplate />}/>
+  ,
     children: [
       {
         path: Paths.Admin.Dashboard,
@@ -299,5 +302,7 @@ export const router = createBrowserRouter([
         element: <AdminSetting />
       }
     ]
-  }
+  },
+  {path:'*', element:<FeatureUnderConstructionPage/>}
+  
 ]);

@@ -49,7 +49,7 @@ function ModalChangePassword() {
     setIsModalOpen(false);
     setPage(1);
   };
-
+  
   return (
     <div className="">
       <button onClick={showModal} className="p-[1rem] border text-[1.6rem] border-[#7500CF] text-[#7500CF]">

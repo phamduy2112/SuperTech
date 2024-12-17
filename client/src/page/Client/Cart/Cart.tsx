@@ -141,11 +141,13 @@ export default function Cart() {
             <div key={item.product_id} className="bg-white py-3 md:py-5 rounded-lg shadow">
               <div className="flex items-center px-3 md:px-5 py-3 md:py-5">
                 <div className="flex gap-2 md:gap-4 w-[45%] md:w-[50%] lg:w-[45%] items-center">
-                  <img
+            <div className="w-[6rem] md:w-[8rem] ">
+            <img
           src={`${IMG_BACKEND}/${item?.selectedColor?.image?.image_one}`}
                     alt="Product"
-                    className="w-[6rem] md:w-[8rem] lg:w-[12rem] h-[4rem] md:h-[6rem] lg:h-[7rem] object-cover rounded-lg"
+                    className="w-[100%] h-[100%] object-cover rounded-lg"
                   />
+            </div>
                   <div className="flex-1 leading-10 min-w-0">
                     <h2 className="text-[1.3rem] md:text-[1.5rem]
                     

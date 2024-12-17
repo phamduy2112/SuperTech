@@ -57,6 +57,7 @@ function ProductItem(props:any) {
   };
 
 
+// console.log(props.product?.product_colors[0].product_qualities[0]?.quality_product);
 
   const handleFavouriteProduct = async (id: number) => {
     try {
@@ -152,7 +153,7 @@ function ProductItem(props:any) {
               <IoIosStar className="text-xl" />
               <span className="text-gray-400">({props?.product?.comment_products?.length})</span>
             </div>
-            {props.product?.product_colors[0].product_qualities[0]?.quality_product > 10 ? (
+            {props.product?.product_colors[0].product_qualities?.quality_product > 10 ? (
 
 <div className="flex items-center text-green-600 font-semibold gap-1">
 <FaTruck />

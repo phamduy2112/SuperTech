@@ -8,6 +8,12 @@ export const getProductCateloriesByDad = (name:string,category:number) => {
   });
 
   };
+  export const getinFor = () => {
+  return axiosWithAuth(`/getinFor`, {
+    method: "get",
+  });
+};
+
 export const getProducts = () => {
     return axiosWithAuth(`/products`, {
       method: "get",

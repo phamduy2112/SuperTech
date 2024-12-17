@@ -8,7 +8,7 @@ import { formatCurrencyVND, truncateText } from '../../../../utils';
 import { Container } from '../../../../components/Style/Container';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import StepOrderDetai from './component/StepOrderDetai';
-import { colorText } from '../../../../constants';
+import { colorText, IMG_BACKEND } from '../../../../constants';
 import { Paths } from '../../../../router/component/RouterValues';
 import CancelOrderModal from '../Order/component/ModalCancer';
 import './component/css/editTable.css'
@@ -25,7 +25,10 @@ function OrderDetail() {
         return ( 
         <div className='flex gap-[.2rem]'>
           <div className='w-[80px]'>
-            <img src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg" alt="" />
+            <img
+                                  src={`${IMG_BACKEND}/${record.image}`}
+            
+            alt="" />
           </div>
           <div>
            <div className='text-[1.5rem] sm:hidden lg:block  font-semibold mb-[.2rem]'>{record.name}</div> 
@@ -134,10 +137,11 @@ useEffect(() => {
         product_price: detail.detail_order_price,
         product_discount: detail.discount_product,
         product_hot: detail.product.product_hot,
-        image_id: detail.product.image_id,
         category_id: detail.product.category_id,
         product_color: detail.product_color,
         storage: detail.product_storage,
+        image: detail.img_name,
+
       }));
 
       setListProduct(products);

@@ -41,9 +41,9 @@ function Login() {
        
         const token = res.data.content.token; 
         dispatch(setLogin(true))
-        saveLocalStorage("token",token)
+  
         dispatch(setToken(token))
-        navigate("/")
+        window.history.back()
        
       } else {
   toast.error(res.data.message)      }

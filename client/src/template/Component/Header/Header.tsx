@@ -95,7 +95,6 @@ function Header() {
 
   const listCart = useAppSelector((state) => state.cart.listCart);
   const token = getLocalStorage("token");
-  console.log(token);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -105,7 +104,9 @@ function Header() {
   if (isLoading) {
     return <LoadingHeader/> 
   }
-  
+  const closeCart = () => {
+    setisvisibleCart(false);
+  };
  
   return (
     <div className="bg-white">
@@ -257,7 +258,7 @@ function Header() {
                           <div className="fixed inset-0 z-30">
                             <div
                               className="w-full h-full bg-[rgba(0,0,0,0.5)]"
-                              onClick={() => setisvisibleCart(false)}
+                              onClick={() => setisvisibleCart(true)}
                             >
                               {" "}
                               <animated.div style={slideInAnimationCart}>

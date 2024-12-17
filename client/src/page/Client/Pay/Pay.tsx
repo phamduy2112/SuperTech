@@ -19,6 +19,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { setDiscount } from '../../../redux/cart/voucher.slice';
 import { createUserDiscount } from '../../../service/vourcher/voucher.service';
+import { IMG_BACKEND } from '../../../constants';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object({
@@ -96,7 +97,6 @@ function Pay() {
     totalItem
 
   });
-  const [reset, setReset] = useState(false); // Thêm state để quản lý reset
   const [city,setCity]=useState([])
   const [districts,setDistricts]=useState([]);
   const [districtsCity,setDistrictsCity]=useState([])
@@ -176,6 +176,8 @@ function Pay() {
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [reset, setReset] = useState(false); // State for reset
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -186,22 +188,23 @@ function Pay() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setReset(true);
-
-   
+    setReset(true); // Trigger reset when modal is closed
   };
-  const handleReset=() => {
-    setReset(false);
-  }
-  const handleResetTrue=() => {
-    setReset(true);
-  }
+
+  const handleReset = () => {
+    setReset(false); // Reset countdown timer
+  };
+
+  const handleResetTrue = () => {
+    setReset(true); // Start the reset process
+  };
+
   const handleFormSubmit = async () => {
     try {
       // Chuẩn bị dữ liệu đơn hàng
       const dataOrder = {
         ...formData,
-        address:formData.diaChi,
+        address:`${formData.district} ${formData.tinhThanhPho} ${formData.tinhThanhPho} ${formData.diaChi} `,
         order_total: totalPrice,
         order_total_quatity: totalItem,
         phone_number:formData.sdt,
@@ -232,6 +235,7 @@ function Pay() {
           discount_product: item.product_discount,
           color_id: item?.selectedColor?.color_id,  // Check if color_id is properly populated
           storage_id: item?.selectedStorage?.id_storage,  // Check if id_storage is properly populated
+          img_name:item?.selectedColor?.image?.image_one
         };
       });
       const dataEmail = {
@@ -240,7 +244,8 @@ function Pay() {
       };     
       console.log(detailOrders)
       // Nếu phương thức thanh toán là "bank"
-      if (formData.paymentMethod === 'bank') {
+      if(formData.paymentMethod !=='' && formData.sdt!=='' && formData.diaChi!==''){
+         if (formData.paymentMethod === 'bank') {
         const response = await createDetailOrder(detailOrders);
 
         socket.on('orderStatusUpdated', async (updatedOrder:any) => {
@@ -266,7 +271,26 @@ function Pay() {
           user_id: user.user_id,
           order_total: dataOrder.order_total
         });
+ // Điều hướng về trang chủ sau 2 phút
+//         setTimeout(async () => {
 
+//           // Delay the toast notification
+//           navigate("/");  
+//           dispatch(removeAllCart());
+
+//           const cancelOrder = {
+//             order_id: resp.data.content.order_id,
+//             order_status: 6,
+//             order_status_text_cancel: 'Quá thời gian thanh toán',
+//           };
+//           await dispatch(changeStatusOrderThunk(cancelOrder)).unwrap();
+// setTimeout(() => {
+ 
+//   toast.error("Đơn hàng của bạn đã bị hủy");
+
+// }, 1000); // Delay navigation for 1 second after the toast
+        
+//       },3000); 
       } else {
         // Gọi API tạo chi tiết đơn hàng cho phương thức thanh toán khác
         const response = await createDetailOrder(detailOrders);
@@ -287,6 +311,12 @@ function Pay() {
         
        )
       dispatch(  setDiscount())
+      } else{
+        toast.error("Vui lòng chọn phương thức thanh toán");
+        toast.error("Vui lòng chọn nhập số điện thoại");
+        toast.error("Vui lòng chọn địa chỉ");
+      }
+     
     } catch (error) {
       console.error("Lỗi khi tạo đơn hàng:", error);
     }
@@ -447,7 +477,7 @@ function Pay() {
                 <div className="flex items-center space-x-4 py-[1rem]">
                   <img
                     className="w-[8rem] h-[8rem] object-cover"
-                    src="https://cdn.tgdd.vn/Products/Images/42/303825/iphone-15-plus-512gb-xanh-thumb-600x600.jpg"
+          src={`${IMG_BACKEND}/${item?.selectedColor?.image?.image_one}`}
                     alt="Iphone"
                   />
                   <div>
@@ -558,16 +588,14 @@ function Pay() {
             </div>
               </div>
               {formData.paymentMethod === 'bank' && (
-      <ModalPay 
-      isModalOpen={isModalOpen}
-      open={showModal} // Gọi hàm để lấy giá trị boolean
-       handleOk={handleOk} 
-       handleCancel={handleCancel}
-       data={dataOrder}
-       reset={reset}
-       handleReset={handleReset}
-                handleResetTrue={handleResetTrue}
-        />
+  <ModalPay 
+  isModalOpen={isModalOpen} 
+  handleOk={handleOk} 
+  handleCancel={handleCancel} 
+  reset={reset} 
+  handleReset={handleReset} 
+  handleResetTrue={handleResetTrue}
+/>
     )}
     
 

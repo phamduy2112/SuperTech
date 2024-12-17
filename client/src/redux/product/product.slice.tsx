@@ -125,7 +125,17 @@ export const getProductByIdThunk = createAsyncThunk(
     }
   },
 );
-
+export const getProductInForThunk = createAsyncThunk(
+  "getProductInForThunk",
+  async () => {
+    try {
+      const resp = await getinFor();
+      return resp.data.content;
+    } catch (e) {
+      console.log(e);
+    }
+  })
+  
 const initialState = {
   listProduct: [],
   listProducts:[],
@@ -134,7 +144,9 @@ const initialState = {
   productColors:[],
   listProductStorage:[],
   listProductsColors:[],
-
+  Datafilter: null,
+  listProductsAll: [],
+  inforProduct: []
 
 };
 
@@ -142,9 +154,13 @@ const ProductSlice = createSlice({
   name: "ProductSlice",
   initialState,
   reducers: {
+    setDatafilterSlice: (state, { payload }) => {
+      state.Datafilter = payload;
+    },
     setProduct: (state, { payload }) => {
       state.listProduct = payload;
     },
+    
     setProductColors:(state,{payload})=>{
       state.productColors.push(payload);
     
@@ -203,6 +219,6 @@ const ProductSlice = createSlice({
   },
 });
 
-export const { setProduct,setProductColors,setListProductColors,removeAllProductColors,setProductStorage,removeProductsFromColors } = ProductSlice.actions;
+export const { setProduct,setProductColors,setDatafilterSlice,setListProductColors,removeAllProductColors,setProductStorage,removeProductsFromColors } = ProductSlice.actions;
 
 export const productReducer = ProductSlice.reducer;
