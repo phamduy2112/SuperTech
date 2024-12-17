@@ -11,10 +11,9 @@ import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterf
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import Swal from 'sweetalert2';
 import { useParams } from 'react-router-dom';
-
+// import { IMG_USER_BACKEND } from '../../../../constants';
 import { IoMdCloudUpload } from 'react-icons/io';
 import { DeleteImgCloudThunk, getUserThunk, UpdateStaffThunk } from '../../../../redux/user/user.slice';
-import { IMG_BACKEND_USER } from '../../../../constants';
 
 
 
@@ -341,13 +340,10 @@ function AdminCustomerEdit() {
                             <div
                                 className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}
                             >
-                                {
+                                {/* {
                                     staff.user_image != null ? (
                                         <img
-                                            src={       
-                                                IMG_BACKEND_USER         
-                                                
-                                                + staff.user_image}
+                                            src={IMG_USER_BACKEND + staff.user_image}
                                             alt="Uploaded"
                                             className="rounded-lg w-[70rem] h-[35rem] object-cover shadow-lg"
                                         />
@@ -359,7 +355,7 @@ function AdminCustomerEdit() {
                                             <p className="mt-2 text-lg text-center">Ảnh chưa có vui lòng bấm kéo thả ảnh vào đây</p>
                                         </>
                                     )
-                                }
+                                } */}
                             </div>
 
                             <div className={`flex w-[70rem] h-[40rem] items-center  justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'block' : 'hidden'}`}>

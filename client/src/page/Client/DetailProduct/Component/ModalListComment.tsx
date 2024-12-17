@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, List, Pagination } from "antd";
 import ReplyComment from "./RelyComment";
 import toast from "react-hot-toast";
@@ -20,19 +20,30 @@ import { Paths } from "../../../../router/component/RouterValues";
 const ProductModalWithPagination = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6); // Số sản phẩm mỗi trang
+  const [pageSize, setPageSize] = useState(6); // Số sản phẩm mặc định mỗi trangyy
 
-  // Dữ liệu mẫu
-  const products = Array.from({ length: 50 }, (_, i) => ({
-    id: i + 1,
-    name: `Product ${i + 1}`,
-    description: `Description of product ${i + 1}`,
-  }));
+  // Theo dõi kích thước cửa sổ
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) { // Nếu kích thước màn hình nhỏ hơn 768px
+        setPageSize(4); // Đặt pageSize thành 4
+      } else {
+        setPageSize(6); // Đặt pageSize thành 6
+      }
+    };
 
-  // Lấy danh sách sản phẩm cho trang hiện tại
+    handleResize(); // Gọi hàm ngay khi component được mount
+    window.addEventListener('resize', handleResize); // Thêm event listener
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // Dọn dẹp event listener
+    };
+  }, []);
+
+  // Lấy danh sách bình luận cho trang hiện tại
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentProducts = products.slice(startIndex, endIndex);
+  const currentReviews = props.reviews?.slice(startIndex, endIndex);
 
   // Mở Modal
   const handleOpenModal = () => setIsModalVisible(true);
@@ -45,7 +56,6 @@ const ProductModalWithPagination = (props) => {
     setCurrentPage(page);
     setPageSize(pageSize);
   };
-  const currentReviews = props.reviews?.slice(startIndex, endIndex);
 
   const user: any = useAppSelector((state) => state.user.user);
   const login:any=useAppSelector((state)=>state.user.login)
@@ -132,10 +142,10 @@ const handleLike=async(id:number,idProduct:number)=>{
         {/* Danh sách sản phẩm */}
     
        
-        <div className="flex justify-between flex-wrap h-[450px] ">
+        <div className="flex justify-between flex-wrap h-auto">
           {currentReviews?.map((review, index) => {
               return (
-                <div className="flex items-start space-x-4 mt-[1rem] w-full md:w-[48%]" key={index}>
+                <div className="flex items-start space-x-4 mt-[1rem] w-full md:w-[48%] sm:w-[100%]" key={index}>
   
                   <div
                     className={`flex text-[2.5rem] w-[5rem] h-[5rem] items-center justify-center rounded-full ${review?.user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
@@ -357,16 +367,18 @@ const handleLike=async(id:number,idProduct:number)=>{
         </div>
 
         {/* Phân trang */}
-        <Pagination
-                current={currentPage}
-                pageSize={pageSize}
-                total={totalReviews}
-                onChange={(page) => setCurrentPage(page)}
-                pageSizeOptions={[6]} // Giới hạn số lượng bình luận mỗi trang
-                showSizeChanger={false} // Ẩn tùy chọn thay đổi số trang
-                showQuickJumper={false} // Ẩn tùy chọn nhảy nhanh giữa các trang
-                disabled={totalReviews <= pageSize} // Tắt phân trang khi không đủ bình luận
-            />
+        <div className="flex justify-center mt-4">
+          <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={totalReviews}
+              onChange={(page) => setCurrentPage(page)}
+              pageSizeOptions={[4]} // Giới hạn số lượng bình luận mỗi trang
+              showSizeChanger={false} // Ẩn tùy chọn thay đổi số trang
+              showQuickJumper={false} // Ẩn tùy chọn nhảy nhanh giữa các trang
+              disabled={totalReviews <= pageSize} // Tắt phân trang khi không đủ bình luận
+          />
+        </div>
       </Modal>
     </div>
   );

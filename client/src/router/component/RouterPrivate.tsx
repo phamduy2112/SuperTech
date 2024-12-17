@@ -10,8 +10,6 @@ type PrivateRouteProps = {
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
   const login = useAppSelector((state) => state.user.login);
-  const user = useAppSelector((state) => state.user.user);
-  console.log(user?.user_role);
   
   if (login) {
     return <>{element}</>;
@@ -30,33 +28,20 @@ const AuthRoute: React.FC<PrivateRouteProps> = ({ element }) => {
   return <>{element}</>; // Nếu chưa đăng nhập, hiển thị trang đăng nhập
 };
 const AdminRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-  const { login } = useAppSelector((state) => state.user);
-  const user = useAppSelector((state) => state.user.user);
-
-  useEffect(() => {
-    if (login && user) {
-      if (user.user_role !== 11) {
-        // Nếu user_role không phải là Admin (không phải 11), chuyển hướng về trang Client
-        return <Navigate to="/admin" replace />;
-      }
-    }
-  }, [login, user]);
+  const { login, user } = useAppSelector((state) => state.user);
 
   // Nếu chưa đăng nhập, chuyển hướng về trang đăng nhập
   if (!login) {
     return <Navigate to="/dang-nhap" replace />;
   }
 
-  // Nếu là Admin (user_role === 11), chuyển hướng đến trang Admin
+  // Nếu đã đăng nhập nhưng không phải Admin, chuyển hướng về trang Client
   if (user?.user_role == 11) {
     return <Navigate to="/" replace />;
   }
 
   // Nếu là Admin, hiển thị nội dung của trang Admin
-  return <>{element}</>;
-
-
-
+  return element;
 };
 
 export { PrivateRoute, AuthRoute,AdminRoute };

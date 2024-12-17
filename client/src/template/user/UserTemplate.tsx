@@ -5,6 +5,7 @@ import Footer from '../Component/Footer/Footer'
 
 import { Suspense } from 'react'
 import useScrollToTop from '../../hooks/UseSrollTop'
+import BackToTopButton from '../../components/backToTop/BackToTop'
 
 
 
@@ -22,6 +23,7 @@ function UserTemplate() {
         <Header/>
         <Suspense >
   <Outlet />
+  <BackToTopButton/>
 </Suspense>
 
       <Footer />

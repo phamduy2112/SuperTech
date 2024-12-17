@@ -40,30 +40,11 @@ const createRepliesComment = async (req, res) => {
         repiles_date: new Date()
       });
   
-      // Lấy dữ liệu chi tiết của comment (nếu cần thiết)
-      const fullComment = await repliesCommentProduct.findOne({
-        where: { id: newComment.id }, // Hoặc khóa chính phù hợp
-        include: [
-          {
-            model: models.user, // Liên kết bảng User (nếu có)
-            attributes: ['id', 'username', 'avatar'], // Thuộc tính cần thiết
-          },
-          {
-            model: models.comment_product, // Liên kết bảng gốc Comment (nếu có)
-            attributes: ['id', 'content', 'comment_date']
-          }
-        ]
-      });
-  
-      // Emit sự kiện mới qua socket.io
-      if (io) {
-        io.emit('new_replies', fullComment); // Phát dữ liệu đầy đủ của reply
-      }
-  
+
       // Phản hồi về client
       responseSend(res, newComment, "Thêm thành công!", 201);
     } catch (error) {
-      console.error("Error creating reply comment:", error); // Log chi tiết lỗi
+      console.log("Error creating reply comment:", error); // Log chi tiết lỗi
       responseSend(res, null, "Có lỗi xảy ra!", 500);
     }
   };

@@ -25,13 +25,6 @@ export default function Cart() {
   const getShip=useAppSelector(state=>state.cart.ship);
   
 
-  // useEffect(()=>{
-  //   if(listCart.length==0){
-  //     navigate("/"); 
-  //     toast.error("Bạn cần phải mua hàng");
-      
-  //   }
-  // },[listCart.length])
 
   const handleRemoveItem = (product_id: any) => {
     dispatch(removeItemFromCart({ product_id }));

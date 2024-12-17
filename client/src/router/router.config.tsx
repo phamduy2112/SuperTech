@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Paths.FavoriteProducts,
-        element: <FavoriteProduct />,
+        element:  <PrivateRoute element={<FavoriteProduct />} />,
       },
 
       {
@@ -136,8 +136,8 @@ export const router = createBrowserRouter([
       {
         path: Paths.Checkout,
         element: (
-          // <PrivateRoute element={  <Pay />}/>
-          <Pay />
+          <PrivateRoute element={  <Pay />}/>
+        
 
         ),
       },
@@ -145,8 +145,8 @@ export const router = createBrowserRouter([
       {
         path: Paths.Bill,
         element: (
-          // <PrivateRoute element={  <Bill />}/>
-          <Bill />
+          <PrivateRoute element={  <Bill />}/>
+          
 
         ),
 
@@ -262,7 +262,8 @@ export const router = createBrowserRouter([
       {
         path: Paths.Admin.Staff,
         element: <AdminStaff />
-      }, {
+      }
+      , {
         path: Paths.Admin.AddStaff,
         element: <AdminCreateAccount />
       },

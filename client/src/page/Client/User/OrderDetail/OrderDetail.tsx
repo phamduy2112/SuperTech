@@ -49,7 +49,7 @@ function OrderDetail() {
         return (
           <div className='text-customColor font-semibold text-center'>
             
-            {formatCurrencyVND(text * (1 - Number(value?.product_discount / 100 ||0)))}
+            {formatCurrencyVND(text)}
 
             
             </div>
@@ -92,7 +92,7 @@ function OrderDetail() {
        
         return (
           <div className='text-[#FF0000] font-semibold text-center'>
-            {formatCurrencyVND(tongTien + 30000)}
+            {formatCurrencyVND(tongTien )}
           </div>
         );
       }
@@ -221,7 +221,7 @@ return (
               <h4 className='font-semibold text-[1.5rem] sm:text-[1.7rem] mb-[1rem]'>Phương thức thanh toán</h4>
               <div className='shadow-md p-[1.5rem] sm:p-[2rem]'>
                 <p className='text-[1.4rem] sm:text-[1.6rem] font-semibold'>
-                  Thanh toán: <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span>
+                  Thanh toán: <span>{order?.order_pay==0 ? "Thanh toán tại nhà" : "Đã thanh toán"}</span>
                 </p>
               </div>
             </div>
@@ -229,7 +229,7 @@ return (
             <h4 className='font-semibold text-[1.7rem] mb-[1rem]'>Địa chỉ giao hàng</h4>
             <div className='h-[10rem] shadow-md p-[2rem]'>
             <p className='text-[1.6rem] font-semibold'>Địa chỉ: <span>{detailOrder[0]?.order?.address}</span></p>
-            <p className='text-[1.6rem] mt-[1rem] font-semibold'>Số điện thoại: <span>0334491141</span></p>
+            <p className='text-[1.6rem] mt-[1rem] font-semibold'>Số điện thoại: <span>{detailOrder[0]?.order?.phone_number}</span></p>
             </div>
             </div>
             

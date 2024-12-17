@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slice';
 import { checkRoleAndShowAlert, CheckUpdateUser, Level } from './Component/DataStaff';
 import { jwtDecode } from "jwt-decode";
-import { IMG_BACKEND_USER } from '../../../constants';
+import { Paths } from '../../../router/component/RouterValues';
 
 interface tokenDataClient {
     user_id: number,
@@ -104,25 +104,25 @@ function AdminStaff() {
                         key: staff,
                     };
 
-                case 'user_image':
-                    return {
-                        title: 'Hình',
-                        dataIndex: staff,
-                        key: staff,
-                        render: (src: any) => (
+                // case 'user_image':
+                //     return {
+                //         title: 'Hình',
+                //         dataIndex: staff,
+                //         key: staff,
+                //         render: (src: any) => (
 
-                            <>
-                                {
-                                    src == '' || src == null || src == undefined ?
-                                        <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
-                                        : <img className='rounded-full object-cover' src={  IMG_BACKEND_USER             + src} alt="" style={{ width: 50, height: 50 }} />
-                                }
+                //             <>
+                //                 {
+                //                     src == '' || src == null || src == undefined ?
+                //                         <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
+                //                         : <img className='rounded-full object-cover' src={IMG_USER_BACKEND + src} alt="" style={{ width: 50, height: 50 }} />
+                //                 }
 
-                            </>
-                        ),
+                //             </>
+                //         ),
 
 
-                    };
+                //     };
                 case 'user_name':
                     return {
                         title: 'Tên',
@@ -319,7 +319,7 @@ function AdminStaff() {
                     confirmButtonText: 'OK',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+                        navigate(`${Paths.Admin.PathsAdmin}/${Paths.Admin.EditStaff.replace(':id',key )}`);
                     }
                 });
             }
@@ -337,7 +337,7 @@ function AdminStaff() {
                     confirmButtonText: 'OK',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+                        navigate(`${Paths.Admin.PathsAdmin}/${Paths.Admin.EditStaff.replace(':id',key )}`);
                     }
                 });
             }
@@ -535,7 +535,7 @@ function AdminStaff() {
                     <div className='flex gap-3'>
 
 
-                        <Link to={`/admin/quản-lí-nhân-viên/tạo-nhân-viên-mới`}>
+                        <Link to={`/admin/quan-li-nhan-vien/tao-nhan-vien-moi`}>
 
                             <Button className='p-10' type="primary">
                                 <AiOutlineUserAdd className='text-[18px]' />

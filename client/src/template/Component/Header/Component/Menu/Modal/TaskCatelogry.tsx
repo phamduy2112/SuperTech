@@ -11,6 +11,13 @@ function TaskCatelogry() {
   const [cateloriesDad, setCatelories] = useState([]);
 
 
+  useEffect(() => {
+    const getCategoriesDad = async () => {
+      const resp = await getCatelogry();
+      setCatelories(resp.data.content);
+    };
+    getCategoriesDad();
+  }, []);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -43,7 +50,7 @@ function TaskCatelogry() {
     <div className='relative' ref={dropdownRef}>
       <div
         onClick={toggleDropdown}
-        className="h-[43px] cursor-pointer md:hidden lg:flex bg-customColor rounded-t-[.5rem] text-white xl:w-[225px] justify-center items-center"
+        className="h-[43px] cursor-pointer md:hidden lg:flex bg-[var(--custom-color)] rounded-t-[.5rem] text-white w-[225px] justify-center items-center"
       >
         <div className=" px-[1.5rem] text-[1.5rem] xl:font-semibold">
           Danh mục sản phẩm
@@ -59,13 +66,13 @@ function TaskCatelogry() {
           <div className='w-[100%]'>
             <ul>
               {/* Category "Điện thoại" */}
-              <li className='w-[100%] border border-b-[#7500CF] py-[1.2rem] px-[1.5rem]'>
+              <li className='w-[100%] border border-b-[var(--custom-color)] py-[1.2rem] px-[1.5rem]'>
                 <button
                   className="text-[1.8rem] flex justify-between items-center w-[100%] relative"
                   onClick={() => toggleSubMenu(0)} // Mở submenu Điện thoại
                 >
                   Điện thoại
-                  <MdKeyboardArrowRight className="text-[#7500CF]" />
+                  <MdKeyboardArrowRight className="text-[var(--custom-color)]" />
                 </button>
                 <ul
                   className={`absolute lg:left-[22.5rem] top-[0rem] bg-[white] shadow-lg rounded-b-[.5rem] transition-all duration-300 ease-in-out ${
@@ -75,10 +82,10 @@ function TaskCatelogry() {
                   {cateloriesDad
                     .filter((item) => item.category_dad === 1)
                     .map((item) => (
-                      <li key={item.id} className='w-[100%] border border-b-[#7500CF] py-[1.2rem] px-[3.5rem]'>
+                      <li key={item.id} className='w-[100%] border border-b-[var(--custom-color)] py-[1.2rem] px-[3.5rem]'>
                         <NavLink
                           to={`/list-san-pham?category_dad=${item.category_dad}&category=${item.category_id}`}
-                          className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
+                          className="text-[1.6rem] text-gray-800 hover:text-[var(--custom-color)] transition-all duration-300"
                         >
                           {item.category_name}
                         </NavLink>
@@ -87,13 +94,13 @@ function TaskCatelogry() {
                 </ul>
               </li>
               {/* Category "Laptop" */}
-              <li className='w-[100%] relative border border-b-[#7500CF] py-[1.2rem] px-[1.5rem]'>
+              <li className='w-[100%] relative border border-b-[var(--custom-color)] py-[1.2rem] px-[1.5rem]'>
                 <button
                   className="text-[1.8rem] flex justify-between items-center w-[100%] relative"
                   onClick={() => toggleSubMenu(1)} // Mở submenu Laptop
                 >
                   Laptop
-                  <MdKeyboardArrowRight className="text-[#7500CF]" />
+                  <MdKeyboardArrowRight className="text-[var(--custom-color)]" />
                 </button>
                 {/* Submenu Laptop */}
                 <ul
@@ -104,10 +111,10 @@ function TaskCatelogry() {
                   {cateloriesDad
                     .filter((item) => item.category_dad === 2)
                     .map((item) => (
-                      <li key={item.id} className='w-[100%] border border-b-[#7500CF] py-[1.2rem] px-[3.5rem]'>
+                      <li key={item.id} className='w-[100%] border border-b-[var(--custom-color)] py-[1.2rem] px-[3.5rem]'>
                         <NavLink
                           to={`/list-san-pham?category_dad=${item.category_dad}&category=${item.category_id}`}
-                          className="text-[1.6rem] text-gray-800 hover:text-[#7500CF] transition-all duration-300"
+                          className="text-[1.6rem] text-gray-800 hover:text-[var(--custom-color)] transition-all duration-300"
                         >
                           {item.category_name}
                         </NavLink>
@@ -116,7 +123,7 @@ function TaskCatelogry() {
                 </ul>
               </li>
               {/* Other Menu Item */}
-              <li className='w-[100%] border border-b-[#7500CF] py-[1.2rem] px-[1.5rem]'>
+              <li className='w-[100%] border border-b-[var(--custom-color)] py-[1.2rem] px-[1.5rem]'>
                 <NavLink to="" className="text-[1.8rem]">Sản phẩm yêu thích</NavLink>
               </li>
             </ul>

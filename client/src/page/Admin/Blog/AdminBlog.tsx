@@ -1,7 +1,5 @@
-
-
-import { Button, Checkbox, Popover, Table } from 'antd';
-import React, { useState } from 'react';
+import { Button, Checkbox, List, Popover, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { FiFilter } from 'react-icons/fi';
 import { GoSearch } from 'react-icons/go';
@@ -10,246 +8,138 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { TbPlaylistAdd } from 'react-icons/tb';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../../redux/hooks';
 
 function AdminBlog() {
   const navigate = useNavigate();
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEdit = (key: any) => {
-    Swal.fire({
-      icon: 'info',
-      text: `Đã mở trang sửa cho bài viết có ID: ${key}`,
-      confirmButtonText: 'OK',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`/admin/quản-lí-bài-viết/sửa-bài-viết/${key}`);
-      }
-    });;
-  };
+  const ListBlog: any = useAppSelector((state) => state.blog.listBlog);
+  const socket = useAppSelector((state) => state.socket.socket);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDelete = (key: any) => {
-    Swal.fire({
-      icon: 'warning',
-      showDenyButton: true,
-      title: `Bạn Chọn Bài Viết Có ID ${key}`,
-      text: `Bạn có chắc muốn xóa ?`,
-      confirmButtonText: 'Xóa',
-      denyButtonText: 'Hủy',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Đã Xóa',
-          text: `Bạn đã Xóa ${key}`,
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Đã Hủy',
-          text: 'Bạn đã hủy thao tác xóa.',
-        });
-      }
-    });
-  };
+
+
+
+
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'key',
-      key: 'key',
+      title: "ID",
+      dataIndex: "post_id",
+      key: "post_id",
     },
     {
-      title: 'Tiêu Đê Bài Viết',
-      dataIndex: 'titlepost',
+      title: "Tiêu đề",
+      dataIndex: "post_title",
+      key: "post_title",
     },
     {
-      title: 'Nội Dung Bài Viết',
-      dataIndex: 'post',
+      title: "Nội dung",
+      dataIndex: "post_content",
+      key: "post_content",
     },
     {
-      title: 'Url',
-      dataIndex: 'url',
+      title: "URL Hình ảnh",
+      dataIndex: "media_url",
+      key: "media_url",
+      render: (text) => (
+        <a href={text} target="_blank" rel="noopener noreferrer">
+          {text}
+        </a>
+      ),
     },
-
     {
-      title: 'Ngày đăng bài',
-      dataIndex: 'uploadpost',
+      title: "Ngày đăng",
+      dataIndex: "post_date",
+      key: "post_date",
     },
-
     {
-      title: 'Tác Vụ',
-      key: 'key',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      title: "Tác Vụ",
+      key: "actions",
       render: (record: any) => (
-        <div className='flex text-[24px] box-border gap-1 items-center'>
-          <BiSolidEdit className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
-            onClick={() => handleEdit(record.key)}
-          />
+        <div className="flex text-[24px] box-border gap-1 items-center">
+          <BiSolidEdit className="cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]" />
           <CiBookmarkRemove
-            className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDelete(record.key)}
+            onClick={() => hanldClickDelete(record.post_id)}
+            className="cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]"
           />
         </div>
       ),
     },
   ];
-  const data = [
-    {
-      key: 1,
-      titlepost: 'Khám Phá AI',
-      post: 'Trí tuệ nhân tạo đang thay đổi thế giới.',
-      url: 'https://example.com/ai-exploration',
-      status: 'Đã trả lời',
-      uploadpost: '2024-10-11',
-    },
-    {
-      key: 2,
-      titlepost: 'An Ninh Mạng Cơ Bản',
-      post: 'Các nguyên tắc cơ bản về an ninh mạng bạn cần biết.',
-      url: 'https://example.com/cybersecurity-basics',
-      status: 'Chưa trả lời',
-      uploadpost: '2024-10-12',
-    },
-    {
-      key: 3,
-      titlepost: 'Học Máy',
-      post: 'Khái niệm và ứng dụng của học máy trong thực tế.',
-      url: 'https://example.com/machine-learning',
-      status: 'Đã trả lời',
-      uploadpost: '2024-10-13',
-    },
-    {
-      key: 4,
-      titlepost: 'Phát Triển Ứng Dụng Di Động',
-      post: 'Hướng dẫn phát triển ứng dụng cho Android và iOS.',
-      url: 'https://example.com/mobile-development',
-      status: 'Chưa trả lời',
-      uploadpost: '2024-10-14',
-    },
-    {
-      key: 5,
-      titlepost: 'Thiết Kế UX/UI',
-      post: 'Các nguyên tắc thiết kế UX/UI cho website.',
-      url: 'https://example.com/ux-ui-design',
-      status: 'Đã trả lời',
-      uploadpost: '2024-10-15',
-    },
-    {
-      key: 6,
-      titlepost: 'Cloud Computing',
-      post: 'Khái niệm và lợi ích của điện toán đám mây.',
-      url: 'https://example.com/cloud-computing',
-      status: 'Chưa trả lời',
-      uploadpost: '2024-10-16',
-    },
-    {
-      key: 7,
-      titlepost: 'Python cho Người Mới Bắt Đầu',
-      post: 'Lập trình Python dành cho người mới.',
-      url: 'https://example.com/python-beginners',
-      status: 'Đã trả lời',
-      uploadpost: '2024-10-17',
-    },
-    {
-      key: 8,
-      titlepost: 'Chạy Thử Phần Mềm',
-      post: 'Tại sao kiểm thử phần mềm là cần thiết?',
-      url: 'https://example.com/software-testing',
-      status: 'Chưa trả lời',
-      uploadpost: '2024-10-18',
-    },
-    {
-      key: 9,
-      titlepost: 'Blockchain và Tiền Điện Tử',
-      post: 'Khái niệm về blockchain và ứng dụng của nó.',
-      url: 'https://example.com/blockchain-cryptocurrency',
-      status: 'Đã trả lời',
-      uploadpost: '2024-10-19',
-    },
-    {
-      key: 10,
-      titlepost: 'Marketing Kỹ Thuật Số',
-      post: 'Chiến lược marketing trong thời đại số.',
-      url: 'https://example.com/digital-marketing',
-      status: 'Chưa trả lời',
-      uploadpost: '2024-10-20',
-    },
-  ];
 
-
-
-
-
-
-
-
-
-
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectedCheckbox, setSelectedCheckbox] = useState('');
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSelectChange = (selectedRowKeys: any) => {
-    setSelectedCheckbox(selectedRowKeys);
-    if (selectedRowKeys.length > 0) {
-      showModal(selectedRowKeys.length);
-    }
-  };
-  const rowSelection = {
-    onChange: onSelectChange,
-  };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const showModal = (count: any) => {
+  const hanldClickDelete = (post_id: number) => {
     Swal.fire({
-      icon: "info",
-      title: `Bạn Vừa Chọn ${count} Bài Viết`,
-      text: 'Bạn có muốn tiếp tục?',
-      showDenyButton: true,
-      denyButtonText: 'Xóa',
-      confirmButtonText: 'Sửa',
-      customClass: {
-        confirmButton: 'bg-green-700 text-white',
-        denyButton: 'bg-red-500 text-white',
-      },
-      backdrop: true,
-      allowOutsideClick: false,
+      title: "Xác nhận xóa",
+      text: "Bạn có chắc muốn xóa bài viết này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
     }).then((result) => {
-      if (result.isDenied) {
-        Swal.fire({
-          icon: "warning",
-          title: `Bạn có chắc chắn muốn xóa ${count} Bài Viết này?`,
-          showCancelButton: true,
-          confirmButtonText: 'Xóa',
-          cancelButtonText: 'Hủy',
-          customClass: {
-            confirmButton: 'bg-red-500 text-white',
-            cancelButton: 'bg-gray-500 text-white',
-          },
-        }).then((kq) => {
-          if (kq.isConfirmed) {
-            Swal.fire('Đã xóa!', '', 'success');
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Đã Hủy',
-              text: 'Bạn đã hủy thao tác xóa.',
-            });
-          }
-        });
-      } else if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'info',
-          text: `Đã mở trang sửa cho ${count} Bài Viết`,
-          confirmButtonText: 'OK',
-        });
+      if (result.isConfirmed) {
+        if (socket) {
+          socket.emit("deleteBlog", post_id);
+          Swal.fire("Đã Xóa!", "Bài viết đã được xóa.", "success");
+        }
       }
     });
-  };
+
+  }
 
 
 
+
+
+
+
+
+
+  const [valueInputSearch, setvalueInputSearch] = useState(``);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [DataBlog, setDataBlog] = useState<any[]>([]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setvalueInputSearch(e.target.value);
+  }
+
+  const [selectedCheckbox, setSelectedCheckbox] = useState('');
+
+  useEffect(() => {
+    const sortedList = [...ListBlog];
+    if (selectedCheckbox.toLowerCase() === 'new') {
+      sortedList.sort((a, b) => new Date(b?.post_date).getTime() - new Date(a?.post_date).getTime());
+
+    } else {
+      sortedList.sort((a, b) => new Date(a?.post_date).getTime() - new Date(b?.post_date).getTime());
+
+    }
+    setDataBlog(sortedList);
+  }, [ListBlog, selectedCheckbox]);
+
+  useEffect(() => {
+    setDataBlog(ListBlog)
+  }, [ListBlog])
+
+  useEffect(() => {
+    if (valueInputSearch.trim() === "") {
+      setDataBlog(ListBlog);
+    } else {
+      const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
+
+      const filteredData = ListBlog.filter((item: any) => {
+        const post_title = item?.post_title;
+
+        // Kiểm tra kiểu dữ liệu và xử lý khi post_title là null hoặc undefined
+        const post_titleString = typeof post_title === 'string' ? post_title : String(post_title || '');
+
+        // Loại bỏ khoảng trắng và chuyển về chữ thường
+        return post_titleString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm);
+      });
+
+      setDataBlog(filteredData);
+    }
+  }, [valueInputSearch, ListBlog]);
 
 
   return (
@@ -267,7 +157,7 @@ function AdminBlog() {
                 Xem Bình Luận Bài Viết
               </Button>
             </Link>
-            <Link to={'/admin/quản-lí-bài-viết/thêm-bài-viết-mới'}>
+            <Link to={'/admin/quan-li-bai-viet/them-bai-viet-moi'}>
               <Button className='p-10' type="primary">
                 <TbPlaylistAdd className='text-[18px]' />
                 Bài Viết Mới
@@ -278,7 +168,7 @@ function AdminBlog() {
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
           <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' placeholder='Tìm kiếm bài viết...' />
+            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' onChange={handleSearch} placeholder='Tìm kiếm bài viết' />
             <GoSearch className='text-[18px]' />
           </div>
 
@@ -312,12 +202,9 @@ function AdminBlog() {
         <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
           <Table
             className='flex-1'
-            rowSelection={{
-              type: 'checkbox',
-              ...rowSelection,
-            }}
+
             columns={columns}
-            dataSource={data}
+            dataSource={DataBlog}
             size='large'
             pagination={{ pageSize: 10 }}
           />
