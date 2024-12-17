@@ -113,6 +113,8 @@ function ProductItem(props:any) {
         />
       </NavLink>
 
+
+
       {/* Thông tin sản phẩm */}
       <div className="px-4 flex flex-col justify-between h-full">
         <NavLink to={`/san-pham-chi-tiet/${props.product.product_id}`}>
