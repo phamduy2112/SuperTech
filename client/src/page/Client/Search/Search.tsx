@@ -27,6 +27,7 @@ function Search() {
 
   // Hàm lấy dữ liệu cho trang hiện tại
   const getCurrentPageData = () => {
+    if (!listSearch) return [];  // Trả về mảng rỗng nếu listSearch chưa được tải
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return listSearch.slice(startIndex, endIndex);  // Trả về sản phẩm của trang hiện tại
@@ -39,10 +40,7 @@ function Search() {
   return (
     <div className='w-[95%] md:w-[90%] lg:w-[80%] m-auto'>
       <Breadcrumb
-        items={[
-          { title: <a href=''>Trang chủ</a> },
-          { title: "Tìm kiếm sản phẩm" }
-        ]}
+        items={[{ title: <a href=''>Trang chủ</a> }, { title: "Tìm kiếm sản phẩm" }]}
       />
       <div>
         <h3 className='text-[2rem] mb-[1rem] font-semibold py-4'>
@@ -79,17 +77,20 @@ function Search() {
 
         {/* Thêm phân trang */}
         <div className="flex justify-center mt-6">
-          <Pagination
+          {listSearch?.length >0 ?
+            <Pagination
             current={currentPage}
-            total={listSearch.length}  // Tổng số sản phẩm
+            total={listSearch?.length}  // Tổng số sản phẩm
             pageSize={pageSize}
             onChange={handlePageChange}
             showSizeChanger={false}  // Tắt thay đổi số lượng sản phẩm mỗi trang
           />
+          : ""}
+        
         </div>
       </div>
     </div>
   );
 }
 
-export default Search;
+export default Search

@@ -13,6 +13,7 @@ import { deleteStaffThunk, getAllUserThunk } from '../../../redux/user/user.slic
 import { checkRoleAndShowAlert, CheckUpdateUser, Level } from './Component/DataStaff';
 import { jwtDecode } from "jwt-decode";
 import { Paths } from '../../../router/component/RouterValues';
+import { IMG_BACKEND_USER } from '../../../constants';
 
 interface tokenDataClient {
     user_id: number,
@@ -104,25 +105,40 @@ function AdminStaff() {
                         key: staff,
                     };
 
-                // case 'user_image':
-                //     return {
-                //         title: 'Hình',
-                //         dataIndex: staff,
-                //         key: staff,
-                //         render: (src: any) => (
-
-                //             <>
-                //                 {
-                //                     src == '' || src == null || src == undefined ?
-                //                         <img className='rounded-full object-cover' src='https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg' alt="" style={{ width: 50, height: 50 }} />
-                //                         : <img className='rounded-full object-cover' src={IMG_USER_BACKEND + src} alt="" style={{ width: 50, height: 50 }} />
-                //                 }
-
-                //             </>
-                //         ),
-
-
-                //     };
+               case "user_image":
+                         return {
+                           title: "Hình",
+                           dataIndex: staff,
+                           key: staff,
+                           // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                           render: (src: any, record: any) => (
+                             <>
+                               {src ? (
+                                 <img
+                                   className="rounded-full object-cover"
+                                   src={`${IMG_BACKEND_USER}/${src}`}
+                                   alt={record.user_name} // Đảm bảo rằng alt chỉ là một chuỗi (tên người dùng)
+                                   style={{ width: 50, height: 50 }}
+                                 />
+                               ) : (
+                                 <div
+                                   className="rounded-full flex items-center justify-center"
+                                   style={{
+                                     width: 50,
+                                     height: 50,
+                                     backgroundColor: 'rgb(37 99 235 / var(--tw-bg-opacity))',
+                                     color: 'white',
+                                     fontSize: '20px',
+                                   }}
+                                 >
+                                   {record.user_name ? record.user_name.charAt(0).toUpperCase() : '?'} {/* Hiển thị chữ cái đầu tiên từ tên người dùng */}
+                                 </div>
+                               )}
+                             </>
+                           ),
+                           
+                           
+                         };
                 case 'user_name':
                     return {
                         title: 'Tên',

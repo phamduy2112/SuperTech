@@ -1,4 +1,4 @@
-import {  Table } from 'antd'
+import {  Button, Table } from 'antd'
 import  { useEffect, useState } from 'react'
 
 import './OrderDetail.css';
@@ -176,7 +176,7 @@ const orderId = id; // The order ID from the URL params
     {/* Payment Information */}
     <section className="mt-6 grid grid-cols-3 gap-4">
       <div className="col-span-2 bg-purple-100 p-4 rounded-lg">
-        <h2 className="font-bold text-purple-800">Phương thức thanh toán</h2>
+        <h2 className="font-bold text-purple-800">Phương thức thanh toán </h2>
         <p>
 
         {order?.order_pay == 0 ? "Thanh toán tại nhà" : 
@@ -206,8 +206,10 @@ const orderId = id; // The order ID from the URL params
         <Table columns={columns} dataSource={listProduct} onChange={onChange} className='' />
 
       </div>
-      <div className='mt-[2rem] '>
+      <div className='mt-[2rem] flex'>
       <ButtonOrder orderStatuses={detailOrder[0]?.order?.order_statuses} orderId={detailOrder[0]?.order?.order_id} />
+      <Button type="primary" size="large" onClick={() => window.print()}>In hóa đơn</Button>
+
       </div>
      
       

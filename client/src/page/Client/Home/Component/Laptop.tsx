@@ -10,8 +10,8 @@ import "slick-carousel/slick/slick-theme.css";
 function LaptopComponent() {
   const [catelogryLaptop, setCatelogryLaptop] = useState([]);
   const [productLaptop, setProductLaptop] = useState([]);
-  const [idCatelogry, setIdCatelogry] = useState(2);
-  const [activeTab, setActiveTab] = useState('Asus');
+  const [idCatelogry, setIdCatelogry] = useState(1);
+  const [activeTab, setActiveTab] = useState();
   const [displayCount, setDisplayCount] = useState(6);
 
   useEffect(() => {
@@ -19,12 +19,14 @@ function LaptopComponent() {
       try {
         const data = await getCatelogryDadById(idCatelogry);
         setCatelogryLaptop(data.data.content.slice(0, 3));
+        setActiveTab(data.data.content[0].category_name)
       } catch (e) {
         console.error(e);
       }
     };
     fetchCatelogry();
   }, []);
+console.log(catelogryLaptop);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,7 +46,10 @@ function LaptopComponent() {
   };
 
   const getTabClass = (tabName) =>
-    `sm:px-[1rem] md:px-[2rem] py-[1rem] cursor-pointer ${
+    `sm:px-[1rem] md:px-[2rem] py-[1rem] 
+  
+  
+  cursor-pointer ${
       activeTab === tabName ? 'text-[var(--custom-color)] border-b-2 border-[var(--custom-color)]' : ''
     }`;
 
@@ -99,7 +104,7 @@ function LaptopComponent() {
             <div className="flex flex-col  sm:justify-center sm:items-center  xmd:flex-row xmd:justify-between xmd:items-start md:items-center gap-4">
               <h4 className="text-[2rem] sm:text-[2.5rem] font-semibold
            
-              ">Laptop</h4>
+              ">Điện thoại</h4>
               <div className="flex gap-4">
                 {catelogryLaptop.map((tab) => (
                   <div
