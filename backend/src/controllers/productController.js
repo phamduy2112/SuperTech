@@ -239,7 +239,14 @@ const getProductByIdCatelogryDad = async (req, res) => {
     }
 
     const products = await Products.findAll({
+   
       include: [
+        {
+          model: models.categories,
+          as: "category",
+          where: whereClause,
+          attributes: [],
+        },
         {
           model: models.comment_product,
           as: "comment_products",

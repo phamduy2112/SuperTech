@@ -289,7 +289,7 @@ return (
         </div>
         
         {order?.order_status < 2 ?   <div className='rounded-lg mt-[1rem]'>
-          <CancelOrderModal >Huỷ đơn hàng</CancelOrderModal>
+          <CancelOrderModal orderId={order.order_id}>Huỷ đơn hàng</CancelOrderModal>
         </div>: "" }
       
       </div>

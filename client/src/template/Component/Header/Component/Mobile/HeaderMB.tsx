@@ -92,7 +92,7 @@ function HeaderMobile(props) {
 
       {/* Sidebar Menu */}
       {isvisibleHeaderMB && (
-        <div className={`absolute top-0 w-[100%] z-30`} onClick={handleClickOutside}>
+        <div className={`fixed top-0 w-[100%] z-30`} onClick={handleClickOutside}>
           <div
             ref={backdropRef}
             className="w-full h-full bg-[rgba(0,0,0,0.5)]"

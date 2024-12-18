@@ -18,6 +18,8 @@ import { IMG_BACKEND, timeLoading, URL_BACKEND } from "../../../constants";
 import { addItemToCart, addItemToOrder } from "../../../redux/cart/cart.slice";
 import { formatCurrencyVND } from "../../../utils";
 import LoadingDetailProduct from "./Component/Loading/ProductDetailLoading";
+import parse from "html-react-parser";
+import toast from "react-hot-toast";
 
 
 
@@ -28,21 +30,25 @@ function DetailProduct() {
   
   const dispatch=useAppDispatch();
   const handleAddItem = (product: any) => {
+
     const productToCart = {
       ...product,
       selectedColor: objectColor,
-      selectedStorage:objectStorage
+      selectedStorage: objectStorage,
+      selectedQuantity: objectColor?.product_qualities[0]?.quality_product
     };
-    console.log(productToCart);
-    
-    
+    dispatch(addItemToCart(productToCart));
+
+    toast.success('Thêm sản phẩm thành công')
+      
   };
 
   const handleAddOrder=(product:any)=>{
     const productToCart = {
       ...product,
       selectedColor: objectColor,
-      selectedStorage:objectStorage
+      selectedStorage: objectStorage,
+      selectedQuantity: objectColor?.product_qualities[0]?.quality_product
     };
     dispatch(addItemToOrder(productToCart))
     navigate("/thanh-toan")
@@ -86,10 +92,10 @@ const [arrayImage,setArrayImage]=useState<any>({})
       }
     }
   }, [productDetail]);
-console.log(objectStorage);
+console.log(productDetail?.infor_product_infor_product?.infor_more);
 
 const handleColorChange = (color: string) => {
-  const newColor = productDetail.product_colors.find((item) => item.color === color);
+  const newColor = productDetail?.product_colors.find((item) => item.color === color);
   
   if (newColor) {
     setSelectedColor(newColor.color);
@@ -148,7 +154,11 @@ useEffect(() => {
   if (isLoading) {
     return <LoadingDetailProduct/>
   }
-  
+  const inforMore = productDetail?.infor_product_infor_product?.infor_more;
+
+  // Đảm bảo `inforMore` là chuỗi
+  const safeInforMore = typeof inforMore === "string" ? inforMore : "<p>No information available</p>";
+
   return (
         <Container>
           <div className="py-6 text-[1.5rem] leading-10">
@@ -201,7 +211,9 @@ useEffect(() => {
             className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_one ? 'border-2 border-blue-500' : ''}`}
             onClick={() => setActiveImage(objectColor.image.image_one)}
           >
-            <img src={`${IMG_BACKEND}/${objectColor.image.image_one}`} alt="Image 1" />
+            <img 
+            src={`${IMG_BACKEND}/${objectColor.image.image_one}`} 
+            alt="Image 1" />
           </div>
         )}
 
@@ -287,19 +299,11 @@ className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer h
                   <div className="pb-5">
                     <h5 className="text-[1.7rem] font-semibold py-5">Mô tả sản phẩm</h5>
                     <p className="text-[1.6rem]">
-                      Sau nhiều thế hệ điện thoại của Apple thì cái tên “Plus”
-                      cũng đã chính thức trở lại vào năm 2022 và xuất hiện trên
-                      chiếc iPhone 15 Plus 256GB, nổi trội với ngoại hình bắt
-                      trend cùng màn hình kích thước lớn để đem đến không gian
-                      hiển thị tốt hơn cùng cấu hình mạnh mẽ không đổi so với bản
-                      tiêu chuẩn. Thân hình thanh mảnh cùng ngoại hình góc cạnh
+                      {parse(safeInforMore)}
                     </p>
                   </div>
                   <div>
-                  <img
-                    src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                    alt=""
-                  />
+               
                 </div>
                 <div className="flex justify-center items-center mt-[1rem]">
                   <button className="p-[1rem] border text-[1.7rem]">

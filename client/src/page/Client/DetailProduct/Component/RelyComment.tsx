@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { deleteCommentRepliesByIdThunk, editCommentRepliesByIdThunk } from '../../../../redux/comment/comment.slice';
 import { formatDate } from '../../../../utils';
 import toast from 'react-hot-toast';
+import { IMG_BACKEND_USER } from '../../../../constants';
 
 const CommentSchema = Yup.object().shape({
   commentText: Yup.string().required('Nội dung không được để trống.'),
@@ -14,6 +15,7 @@ const CommentSchema = Yup.object().shape({
 
 const ReplyComment = ({ replies, productId }) => {
 
+  console.log(replies);
   
   const dispatch = useAppDispatch();
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
@@ -67,13 +69,16 @@ const ReplyComment = ({ replies, productId }) => {
           className="comment-item ml-12 mt-4 border-l-2 border-purple-300 pl-4 space-y-3"
         >
           <div className="flex items-start gap-[1rem]">
-            <img
-              src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-              alt="Avatar"
-              className="w-[5rem] h-[5rem] rounded-full"
-            />
+           <div
+                          className={`flex text-[2.5rem] w-[5rem] h-[5rem] items-center justify-center rounded-full ${review?.user?.user_image ? "bg-cover bg-center bg-no-repeat" : "bg-[#F62682] text-[16px] text-white "} `}
+                          style={{
+                            backgroundImage: review?.user?.user_image ? `url(${IMG_BACKEND_USER}/${review.user.user_image})` : "none",
+                          }}
+                        >
+                          {!review?.user?.user_image && review?.user?.user_name ? review.user.user_name[0].toUpperCase() : null}
+                        </div>
             <div className="flex-1">
-              <h3 className="font-bold text-[2rem]">Phạm Ngọc Duy</h3>
+              <h3 className="font-bold text-[2rem]">{review?.user?.user_name}</h3>
               <div className="text-[1.5rem] text-gray-500">{formatDate(review?.repiles_date)}</div>
 
               {/* Bình luận hoặc form chỉnh sửa */}
@@ -128,18 +133,20 @@ const ReplyComment = ({ replies, productId }) => {
                             }
               
               {activeDropdown === index && (
-    <div className="w-[120px] text-[1.5rem] bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
+    <div className="w-[120px] text-[1.5rem]
+   
+    bg-white rounded-lg shadow-lg absolute right-0 mt-2 p-2">
                         {review.user_id === user.user_id ? (
                         <div>
                            <button
                     onClick={() => handleEditToggle(index)}
-                    className="w-full text-left text-blue-500 hover:text-blue-700 transition-colors mb-2"
+                    className="w-full text-blue-500 hover:text-blue-700 transition-colors mb-2"
                   >
                     Chỉnh sửa
                   </button>
                   <button
                     onClick={() => handleDeleteComment(review.id)}
-                    className="w-full text-left text-red-500 hover:text-red-700 transition-colors"
+                    className="w-full text-red-500 hover:text-red-700 transition-colors"
                   >
                     Xoá
                   </button>
