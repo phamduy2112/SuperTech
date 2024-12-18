@@ -4,7 +4,7 @@ import { middleToken } from '../config/jwt.js';
 
 const uploadImgUserRouter = express.Router();
 
-uploadImgUserRouter.post('/uploadimguser', uploadimagesUser);
-uploadImgUserRouter.delete('/deleteuser/:id', deleteUser);
-uploadImgUserRouter.delete('/deleteimagecloud/:imageId', deleteImageCloud);
+uploadImgUserRouter.post('/uploadimguser', middleToken, uploadimagesUser);
+uploadImgUserRouter.delete('/deleteuser/:id', middleToken, deleteUser);
+uploadImgUserRouter.delete('/deleteimagecloud/:imageId',middleToken, deleteImageCloud);
 export default uploadImgUserRouter;
