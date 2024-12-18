@@ -23,12 +23,15 @@ import { searchReducer } from './search/Search.slice';
 import { FavouriteReducer } from './favourite/Favourite.slice';
 import { voucherReducer } from './cart/voucher.slice';
 import { blogReducer } from './blog/blogSlice';
+import { bannerReducer } from './banner/banner.slice';
+
+
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['user','cart','listOrder','socket','nofi'], // Chỉ persist `user` và `cart`
+  whitelist: ['user', 'cart', 'listOrder', 'socket', 'nofi'], // Chỉ persist `user` và `cart`
 };
 
 const rootReducer = combineReducers({
@@ -39,20 +42,21 @@ const rootReducer = combineReducers({
   product: productReducer,
   cart: cartReducer,
   listComment: commentReducer,
-  listOrder:orderReducer,
-  city:cityReducer,
-  nofi:nofiReducer,
-  search:searchReducer,
-  vourher:voucherReducer,
+  listOrder: orderReducer,
+  city: cityReducer,
+  nofi: nofiReducer,
+  search: searchReducer,
+  vourher: voucherReducer,
   blog: blogReducer,
-  img:blogReducer,
-  listProductFavorites:FavouriteReducer,
+  img: blogReducer,
+  listProductFavorites: FavouriteReducer,
+  Banner: bannerReducer
 
 },
 
 )
 
-;
+  ;
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -64,7 +68,7 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-    devTools: process.env.NODE_ENV !== 'production', // Enable dev tools in non-production environments
+  devTools: process.env.NODE_ENV !== 'production', // Enable dev tools in non-production environments
 
 });
 

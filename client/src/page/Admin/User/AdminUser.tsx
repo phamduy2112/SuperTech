@@ -26,14 +26,14 @@ function AdminUser() {
 
   useEffect(() => {
     AppDispatch(getAllUserThunk());
-   
-  }, [ AppDispatch]);
+
+  }, [AppDispatch]);
   useEffect(() => {
     // Cập nhật `DataAlluser` khi `Alluser` thay đổi
     setDataAlluser(Alluser);
   }, [Alluser]); // Theo dõi `Alluser` và chỉ cập nhật khi nó thay đổi.
   console.log(DataAlluser);
-  
+
   useEffect(() => {
     if (Alluser && Alluser.length > 0) {
       const keys = Alluser.map((staff: string) => Object.keys(staff));
@@ -43,17 +43,17 @@ function AdminUser() {
     }
   }, [Alluser]);
 
-  
+
   useEffect(() => {
     const ColumnStaffs = userKeys
       .map((user) => {
         switch (user) {
           case "stt": // Thêm cột số thứ tự
-          return {
-            title: "STT",
-            key: "stt",
-            render: (_: any, __: any, index: number) => index + 1, // Hiển thị số thứ tự
-          };
+            return {
+              title: "STT",
+              key: "stt",
+              render: (_: any, __: any, index: number) => index + 1, // Hiển thị số thứ tự
+            };
           case "user_image":
             return {
               title: "Hình",
@@ -85,8 +85,8 @@ function AdminUser() {
                   )}
                 </>
               ),
-              
-              
+
+
             };
           case "user_name":
             return {
@@ -116,7 +116,7 @@ function AdminUser() {
               title: "Ngày tham gia",
               dataIndex: user,
               key: user,
-              render: (_,record) => (
+              render: (_, record) => (
                 <div className="flex-1 flex items-center gap-3">
                   {new Date(record.user_time).toLocaleDateString('vi-VN')}
                 </div>
@@ -168,11 +168,9 @@ function AdminUser() {
               render: (text: any) => (
                 <div className="flex-1 flex items-center gap-3">
                   <div
-                    className={`w-[10px] rounded-full h-[10px] ${
-                      text == 11 ? "bg-[#2af52a]" : ""
-                    } ${text == 1 ? "bg-[#ffd000]" : ""} ${
-                      text == 0 ? "bg-[red]" : ""
-                    }`}
+                    className={`w-[10px] rounded-full h-[10px] ${text == 11 ? "bg-[#2af52a]" : ""
+                      } ${text == 1 ? "bg-[#ffd000]" : ""} ${text == 0 ? "bg-[red]" : ""
+                      }`}
                   ></div>
                 </div>
               ),
@@ -214,14 +212,14 @@ function AdminUser() {
         }
       })
       .filter((col) => col !== null);
-      setColumns([
-        {
-          title: "STT",
-          key: "stt",
-          render: (_: any, __: any, index: number) => index + 1,
-        },
-        ...ColumnStaffs,
-      ]);
+    setColumns([
+      {
+        title: "STT",
+        key: "stt",
+        render: (_: any, __: any, index: number) => index + 1,
+      },
+      ...ColumnStaffs,
+    ]);
   }, [userKeys]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -308,7 +306,7 @@ function AdminUser() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 
-  const sortedData = [...DataAlluser].sort((a, b) => {
+  const sortedData = [...DataAlluser]?.sort((a, b) => {
     if (selectedCheckbox === 'new') {
       return new Date(b.user_time).getTime() - new Date(a.user_time).getTime();
     }
@@ -382,7 +380,7 @@ function AdminUser() {
         <div className="p-[24px] relative overflow-x-auto h-[1000px] flex flex-col">
           <Table
             className="flex-1"
-         
+
             columns={columns || []}
             dataSource={
               Array.isArray(sortedData)

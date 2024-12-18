@@ -11,8 +11,8 @@ import UseSocket from './socket/useSocket';
 function App() {
   UseSocket()
   return (
- 
-          <RouterProvider router={router} />
+
+    <RouterProvider router={router} />
   )
 }
 

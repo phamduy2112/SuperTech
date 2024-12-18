@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
 import './css/Carousel.css'
 import { DataSlideShow } from './DataSlideShow';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { getAllBannerThunk } from '../../../../redux/banner/banner.slice';
 
 function Carousel() {
+
+
   const handleNextClick = () => {
     const items = document.querySelectorAll<HTMLDivElement>('.item');
     const numbers = document.querySelectorAll<HTMLDivElement>('.number');

@@ -51,6 +51,7 @@ const OptionSelected: React.FC<OptionSelectedProps> = ({
     const ListProduct = useAppSelector((state: any) => state.product.listProduct);
 
 
+
     const isSelected = (array: string[], value: string) => array.includes(value);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
