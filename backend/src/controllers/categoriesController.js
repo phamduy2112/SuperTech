@@ -70,66 +70,20 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('category_image');
 
 const createcategories = async (req, res) => {
-    upload(req, res, async (err) => {
-        // Xử lý lỗi upload
-        if (err) {
-            console.error("Upload error:", err);
-            return responseSend(res, "", err.message || "Lỗi tải file!", 400);
-        }
-
-        // Kiểm tra file
-        if (!req.file) {
-            return responseSend(res, "", "Không có file được tải lên!", 400);
-        }
-
-        // Validate dữ liệu
-        const { category_name, category_dad, category_task } = req.body;
+    const { category_name, category_dad } = req.body;
         if (!category_name) {
             return responseSend(res, "", "Tên danh mục là bắt buộc!", 400);
         }
+        const date_task = new Date();
+        // Tạo danh mục mới
+        let newCategory = await categoriesModel.create({
+            category_name,
+            category_dad: category_dad || null,
+            category_date_task: date_task || null,
+        });
 
-        try {
-            const file = req.file;
-            const originalName = path.parse(file.originalname).name;
-            
-            // Upload ảnh lên Cloudinary
-            const result = await new Promise((resolve, reject) => {
-                cloudinary.uploader.upload_stream(
-                    {
-                        folder: 'Category',
-                        resource_type: 'image',
-                        public_id: originalName
-                    },
-                    (error, result) => {
-                        if (error) reject(error);
-                        else resolve(result);
-                    }
-                ).end(file.buffer);
-            });
-
-            const imageName = result.public_id.split('/').pop();
-            const date_task = new Date();
-            // Tạo danh mục mới
-            let newCategory = await categoriesModel.create({
-                category_name,
-                category_dad: category_dad || null,
-                category_task: category_task || null,
-                category_date_task: date_task || null,
-                category_image: imageName,
-            });
-
-            responseSend(res, newCategory, "Thêm danh mục thành công!", 201);
-        } catch (error) {
-            console.error('Lỗi tạo danh mục:', error);
-            
-            // Xử lý các loại lỗi cụ thể
-            if (error.name === 'SequelizeValidationError') {
-                return responseSend(res, "", "Dữ liệu không hợp lệ!", 400);
-            }
-            
-            responseSend(res, "", "Có lỗi xảy ra khi tạo danh mục!", 500);
-        }
-    });
+        responseSend(res, newCategory, "Thêm danh mục thành công!", 201)
+   
 };
 
 
@@ -258,7 +212,7 @@ const deletecategories = async (req, res) => {
         });
 
         if (relatedProducts.length > 0) {
-            return responseSend(res, "", "Bạn cần xóa sản phẩm trước khi xóa loại!", 400);
+            return responseSend(res, "", "Bạn cần xóa sản phẩm trước khi xóa loại!", 200);
         }
  
         const categoriesToDelete = await categoriesModel.findAll({
