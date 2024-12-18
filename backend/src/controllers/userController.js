@@ -509,7 +509,7 @@ const sendVerificationEmail = async (userEmail, userId) => {
     const token = jwt.sign({ userId }, "BI_MAT", { expiresIn: "1h" }); // Token có thời hạn 1 giờ
 
     // Tạo URL xác thực
-    const verificationUrl = `https://supertechh.shop/verify-email?token=${token}`;
+    const verificationUrl = `https://dichvumang86.cloud/verify-email?token=${token}`;
 
     const htmlContent = `
       <h1>Xác thực tài khoản của bạn</h1>
