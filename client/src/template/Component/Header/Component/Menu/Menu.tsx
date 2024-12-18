@@ -49,7 +49,7 @@ function Menu() {
         </li>
         <li className="relative md:mr-6">
           <NavLink
-            to={Paths.Introduce}
+            to={Paths.Blogs}
             className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
           >
            Bài viết

@@ -179,7 +179,7 @@ const AdminProduct: React.FC = () => {
           <Tooltip placement="top" title="Xóa sản phẩm">
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDeteleProduct(selectedRowKeys)}
+            onClick={() => handleDeteleProduct(+record.product_id)}
           />
           </Tooltip>
           <Tooltip placement="top" title="Chỉnh sửa sản phẩm">
@@ -235,27 +235,11 @@ const AdminProduct: React.FC = () => {
  // Sắp xếp lại danh mục theo "Ngày Mới Nhất" hoặc "Cũ Nhất"
  const [showInStock, setShowInStock] = useState(true);
 
-const handleDelete = (key: any) => {
-  // dispatch(deleteCategoryThunk(key));
-  toast.success("Xóa loại thành công");
-};
+
 console.log(updatedDataProducts[0]);
 
   const userRef = useRef<any>(null);
-  const filteredProducts = listProducts.filter((product) => {
-    if (showInStock) {
-      // Sản phẩm có hàng: ít nhất một color có `quality > 0`
-      return product?.product_colors?.some(color => color.quality > 0);
-    } else {
-      // Sản phẩm hết hàng: tất cả các color có `quality === 0` hoặc không có
-      return (
-        !product.product_colors ||
-        product?.product_colors.every(color => !color.quality || color.quality === 0)
-      );
-    }
-  });
 
-  console.log()
 
 
 

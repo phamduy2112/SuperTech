@@ -1,13 +1,14 @@
 import { Server } from "socket.io";
 import express from "express";
 import http from "http";
+import { deleteBlog, getBlog } from "../controllers/mediapostController.js";
 
 const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: '*', // Cần chắc chắn rằng URL chính xác
+    origin: "*", // Cần chắc chắn rằng URL chính xác
     methods: ["GET", "POST"],
   },
 });
@@ -16,7 +17,8 @@ const io = new Server(server, {
 const userSocketMap = new Map(); // Sử dụng Map để quản lý socket hiệu quả hơn
 
 // Function to get the socket ID for a given userId
-export const getReceiverSocketId = (receiverId) => userSocketMap.get(receiverId);
+export const getReceiverSocketId = (receiverId) =>
+  userSocketMap.get(receiverId);
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.user_id; // Lấy user_id từ query params
@@ -38,7 +40,6 @@ io.on("connection", (socket) => {
 
   // Emit số lượng người dùng online tới frontend
   io.emit("getOnlineUsersCount", userSocketMap.size);
-  
   getBlog().then((kq) => {
     io.emit("GetAllBlog", kq);
   });
@@ -47,13 +48,15 @@ io.on("connection", (socket) => {
       io.emit("ClickGetAllBlog", kq);
     });
   });
-  // Xử lý sự kiện khi user ngắt kết nối
   socket.on("disconnect", () => {
     console.log(`User disconnected: userId = ${userId}`);
     userSocketMap.delete(userId); // Xóa user khỏi map
 
     // Log danh sách sau khi user ngắt kết nối
-    console.log("Online Users after disconnect:", Array.from(userSocketMap.keys()));
+    console.log(
+      "Online Users after disconnect:",
+      Array.from(userSocketMap.keys())
+    );
 
     // Cập nhật danh sách userId online và số lượng người dùng online
     io.emit("getOnlineUsers", Array.from(userSocketMap.keys()));

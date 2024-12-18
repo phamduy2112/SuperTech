@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Container } from '../../../../components/Style/Container';
-import { IMG_BACKEND } from '../../../../constants';
+import { IMG_BACKEND, timeLoading } from '../../../../constants';
 import { getProductByIdThunk } from '../../../../redux/product/product.slice';
 import { getCommentByIdProductThunk } from '../../../../redux/comment/comment.slice';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import Comment from '../../../Client/DetailProduct/Component/Comment';
 import { formatCurrencyVND } from '../../../../utils';
+import { Spin } from 'antd';
+import parse from "html-react-parser";
 
 function AdminProductDetail() {
   const { id } = useParams(); // Lấy id từ URL
@@ -15,7 +17,6 @@ function AdminProductDetail() {
   
   const dispatch=useAppDispatch();
 
-  
   const productDetail=useAppSelector((state)=>state.product.productDetail)
   const socket=useAppSelector((state)=>state.socket.socket)
   const getCommentById=useAppSelector((state)=>state.listComment.listComment)
@@ -26,7 +27,7 @@ function AdminProductDetail() {
  const [objectColor,setOjectColor]=useState<any>(null)
 const [objectStorage,setObjectStorage]=useState<any>(null)
 console.log(objectColor);
-
+const [arrayImage,setArrayImage]=useState<any>({})
 
   
   useEffect(()=>{
@@ -53,10 +54,10 @@ console.log(objectColor);
       }
     }
   }, [productDetail]);
-console.log(objectStorage);
+console.log(productDetail?.infor_product_infor_product?.infor_more);
 
 const handleColorChange = (color: string) => {
-  const newColor = productDetail.product_colors.find((item) => item.color === color);
+  const newColor = productDetail?.product_colors.find((item) => item.color === color);
   
   if (newColor) {
     setSelectedColor(newColor.color);
@@ -87,13 +88,44 @@ const handleStorageChange = (storage: string) => {
     setSelectedStorage(null);
   }
 };
-console.log(objectStorage);
 
+useEffect(() => {
+  // Làm gì đó với objectColor.image, ví dụ chỉ hiển thị nó
+  if (objectColor?.image) {
+    console.log("Image:", objectColor.image);
+  setArrayImage(objectColor.image);
+    // Bạn có thể thực hiện các tác vụ khác với objectColor.image
+  }
+}, [objectColor]);
+ console.log(arrayImage);
  
+ const [activeImage, setActiveImage] = useState(objectColor?.image?.image_one);
 
+ useEffect(() => {
+   // Set the default image to be the first one
+   if (objectColor?.image?.image_one) {
+     setActiveImage(objectColor?.image?.image_one);
+   }
+ }, [objectColor]);
+ const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), timeLoading)
+  }, []);
+
+  if (isLoading) {
+    return <div className="w-full h-full flex py-[60px] justify-center items-center">
+    <Spin size="large" /> {/* Hiển thị loading của Ant Design */}
+  </div>
+  }
+  const inforMore = productDetail?.infor_product_infor_product?.infor_more;
+
+  // Đảm bảo `inforMore` là chuỗi
+  const safeInforMore = typeof inforMore === "string" ? inforMore : "<p>No information available</p>";
 
   return (
         <Container>
+        
           <div className="py-6 text-[1.5rem] leading-10">
             {/* Breadcrumb */}
             <div className="my-[1.5rem] text-[1.5rem] text-gray-600">
@@ -109,43 +141,134 @@ console.log(objectStorage);
                 <div className="w-[80%] mx-auto">
                   <img 
                     className="w-full my-8 max-w-[300px] mx-auto" 
-                    src={`${IMG_BACKEND}/${objectColor?.image?.image_one}`} 
+                    src={`${IMG_BACKEND}/${activeImage}`} 
                     alt="product image" 
                   />
                 </div>
 
-                {/* Thumbnail Images */}
-                <div className="flex items-center justify-center my-8 space-x-4">
-                  {[...Array(4)].map((_, index) => (
-                    <div key={index} className="w-[10%]">
-                      <img 
-                        className="w-full" 
-                        src="https://cdn2.fptshop.com.vn/unsafe/384x0/filters:quality(100)/2023_9_13_638302298834482205_apw-s9-gps-41-dayvai-vang-1.jpg" 
-                        alt={`thumbnail ${index + 1}`} 
-                      />
+                {/* Giá tiền và tên sản phẩm rps */}
+                <div className="block md:hidden mt-4">
+                  <h3 className="text-[2.5rem] font-semibold">{productDetail?.product_name}</h3>
+                  {productDetail?.product_discount > 0 ? (
+                    <div className="flex items-center  gap-4 py-4">
+                      <p className="text-red-500 font-semibold text-[2rem]">
+                        {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
+                      </p>
+                      <p className="text-xl text-gray-500 line-through">              
+                     {formatCurrencyVND(productDetail?.product_price + Number(productDetail?.product_colors[0]?.product_storages[0]?.storage_price || 0))}
+                      </p>
+                      <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
                     </div>
-                  ))}
+                  ) : (
+                    <p className="text-red-500 font-semibold text-[2rem] py-6">
+                      {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
+                    </p>
+                  )}
                 </div>
 
+                {/* Thumbnail Images */}
+            <div>
+            <div className="flex items-center justify-center my-8 space-x-4">
+           
+         {/* Image 1 */}
+         {objectColor?.image?.image_one && (
+          <div 
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_one ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_one)}
+          >
+            <img 
+            src={`${IMG_BACKEND}/${objectColor.image.image_one}`} 
+            alt="Image 1" />
+          </div>
+        )}
+
+        {/* Image 2 */}
+        {objectColor?.image?.image_two && (
+          <div 
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_two ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_two)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_two}`} alt="Image 2" />
+          </div>
+        )}
+
+        {/* Image 3 */}
+        {objectColor?.image?.image_three && (
+          <div 
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_three ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_three)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_three}`} alt="Image 3" />
+          </div>
+        )}
+
+        {/* Image 4 */}
+        {objectColor?.image?.image_four && (
+          <div 
+            className={`sm:w-[70px] cursor-pointer ${activeImage === objectColor.image.image_four ? 'border-2 border-blue-500' : ''}`}
+            onClick={() => setActiveImage(objectColor.image.image_four)}
+          >
+            <img src={`${IMG_BACKEND}/${objectColor.image.image_four}`} alt="Image 4" />
+          </div>
+        )}
+        
+                </div>
+
+            </div>
+           
+            <div className="py-6 md:hidden">
+              {objectColor?.product_storages?.length>0  ? <div>
+
+                <h4 className="text-[1.6rem]">Chọn <span className="text-customColor font-semibold">dung lượng</span> để xem <span className="text-customColor font-semibold">giá</span></h4>
+            <div className="flex gap-4 mb-6">
+
+{objectColor?.product_storages?.map((variant, index) => (
+<button key={index}                
+onClick={()=>{handleStorageChange(variant)}}
+className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
+>
+
+{variant?.storage} GB
+</button>
+))}
+</div>
+              </div>:''}
+           
+    <h4 className="text-[1.6rem]">Chọn <span className="text-customColor font-semibold">màu</span> để xem <span className="text-customColor font-semibold">giá</span> và tình trạng hàng</h4>
+    <div className="flex flex-wrap gap-4 mt-4">
+        {productDetail?.product_colors?.map((item) => (
+            <div
+                key={item.color}
+                onClick={() => handleColorChange(item.color)}
+                className={`
+                  flex items-center gap-3 border py-4 px-9 rounded-md cursor-pointer
+                   hover:shadow-md ${selectedColor === item.color ? 'bg-slate-50' : ''}`}
+            >
+              
+                <img 
+                    src={`${IMG_BACKEND}/${item?.image?.image_one}`} 
+                    alt={item.color} 
+                    className="w-12 rounded-md"
+                />
+                <div>
+                    <h4 className="font-semibold text-[1.4rem]">{item.color}</h4>
+                    {/* <p className="text-red-500 font-semibold">{item.storage_price}đ</p> */}
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
                 {/* Product Info */}
                 <div>
                   <h4 className="text-[1.9rem] font-semibold">Thông tin sản phẩm</h4>
                   <div className="pb-5">
                     <h5 className="text-[1.7rem] font-semibold py-5">Mô tả sản phẩm</h5>
                     <p className="text-[1.6rem]">
-                      Sau nhiều thế hệ điện thoại của Apple thì cái tên “Plus”
-                      cũng đã chính thức trở lại vào năm 2022 và xuất hiện trên
-                      chiếc iPhone 15 Plus 256GB, nổi trội với ngoại hình bắt
-                      trend cùng màn hình kích thước lớn để đem đến không gian
-                      hiển thị tốt hơn cùng cấu hình mạnh mẽ không đổi so với bản
-                      tiêu chuẩn. Thân hình thanh mảnh cùng ngoại hình góc cạnh
+                      {parse(safeInforMore)}
                     </p>
                   </div>
                   <div>
-                  <img
-                    src="https://cdn2.fptshop.com.vn/unsafe/800x0/tai_nghe_airpods_max_2024_6_ef5e1b2728.jpg"
-                    alt=""
-                  />
+               
                 </div>
                 <div className="flex justify-center items-center mt-[1rem]">
                   <button className="p-[1rem] border text-[1.7rem]">
@@ -158,40 +281,46 @@ console.log(objectStorage);
 
               {/* Right Column */}
               <div className="w-full md:w-[45%] mx-auto text-xl ">
-                <h3 className="text-[2.5rem] font-semibold pt-[1.3rem]">{productDetail?.product_name}</h3>
-                {/* Price Section */}
-                {productDetail?.product_discount > 0 ?
-                <div className="flex items-center gap-4 py-4">
-            
-                <p className="text-red-500 font-semibold text-[2rem]">{formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}</p>
-                <p className="text-xl text-gray-500 line-through">              
-                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
-                </p>
-                <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
-              </div>
-                : 
-                <p className="text-red-500 font-semibold text-[2rem]  py-6">
-                    {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                {/* Giá tiền với tên sp khi ở PC */}
+                <h3 className="hidden md:block text-[2.5rem] font-semibold pt-[1.3rem] leading-[1.5]">
+  {productDetail?.product_name}
+</h3>                {productDetail?.product_discount > 0 ? (
+                  <div className="hidden md:flex items-center gap-4 py-4">
+                    <p className="text-red-500 font-semibold text-[2rem]">
+                      {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
                     </p>
-                }
+                    <p className="text-xl text-gray-500 line-through">              
+                      {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                    </p>
+                    <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
+                  </div>
+                ) : (
+                  <p className="hidden md:block text-red-500 font-semibold text-[2rem] py-6">
+                    {formatCurrencyVND(productDetail?.product_price +  Number(objectStorage?.storage_price ||0))}
+                  </p>
+                )}
                 
 
                 {/* Storage Variant Buttons */}
-                <div className="flex gap-4 mb-6">
-              
-                {objectColor?.product_storages?.map((variant, index) => (
-  <button key={index}                
-  onClick={()=>{handleStorageChange(variant)}}
-  className={`flex items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
+                {objectColor?.product_storages?.length>0  ? <div>
+
+<h4 className="text-[1.6rem]">Chọn <span className="text-customColor font-semibold">dung lượng</span> để xem <span className="text-customColor font-semibold">giá</span></h4>
+<div className="flex gap-4 mt-[1rem]">
+
+{objectColor?.product_storages?.map((variant, index) => (
+<button key={index}                
+onClick={()=>{handleStorageChange(variant)}}
+className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer hover:shadow-md ${selectetStorage.storage == variant.storage ? 'bg-slate-50' : ''}`}
 >
 
-    {variant?.storage} MB
-  </button>
+{variant?.storage} GB
+</button>
 ))}
-                </div>
+</div>
+</div>:''}
 
                 {/* Color Selection */}
-                <div className="py-6">
+                <div className="py-[1rem] sm:hidden md:block">
     <h4 className="text-2xl">Chọn màu để xem giá và tình trạng hàng</h4>
     <div className="flex flex-wrap gap-4 mt-4">
         {productDetail?.product_colors?.map((item) => (
@@ -266,27 +395,9 @@ console.log(objectStorage);
                   </ul>
                 </div>
 
-                {/* Technical Specifications */}
-                <div className="flex justify-between">
-                  <div className="w-[100%] mt-10">
-                    <h3 className="text-red-500 font-semibold text-3xl mb-4">Thông số kĩ thuật</h3>
-                    <div className="border rounded-lg p-6">
-                      <table className="w-full border-collapse text-2xl leading-[3rem]">
-                        <tbody>
-                          <tr className="border-b">
-                            <td className="font-semibold py-5 w-1/2">Công nghệ màn hình</td>
-                            <td className="py-2 w-1/2">OLED</td>
-                          </tr>
-                          <tr className="border-b">
-                            <td className="font-semibold py-5 w-1/2">Độ phân giải</td>
-                            <td className="py-2 w-1/2">2532 × 1170 pixels</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <button className="w-full text-xl font-semibold py-4 border mt-4">Xem chi tiết cấu hình</button>
-                  </div>
-                </div>
+              
+             
+
 
                 {/* Cart and Buy Now Buttons */}
                 <div className="flex gap-4 mt-4">
@@ -308,7 +419,6 @@ console.log(objectStorage);
                 {/* Ý kiến */}
       
                 <Comment reviews={getCommentById}/>
-           
           </div>
         </Container>
 

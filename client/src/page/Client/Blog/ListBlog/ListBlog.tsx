@@ -1,67 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-
-import { GoSearch } from "react-icons/go";
-import "../reponsive/Blog.css"
-
-import Sidebar from "./SideBar";
+import {
+  getAllBlogmediaThunk,
+  getAllBlogThunk,
+} from "../../../../redux/blogredux/blog.slice";
 import BlogCard from "./BlogCard";
-import { getAllBlogmediaThunk, getAllBlogThunk } from "../../../../redux/blog/blogSlice";
-
-
-
+import Sidebar from "./Sidebar";
+import { GoSearch } from "react-icons/go";
+import "../responsive/Blog.css";
 
 function ListBlog() {
-  const ListBlog = useAppSelector((state) => state.blog.listBlog);
-  const mediaPosts = useAppSelector((state) => state.blog.mediaPosts); // Sử dụng mediaPosts từ Redux store
-  const AppDispatch = useAppDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ListBlogRedux: any = useAppSelector((state) => state.blog.listBlog);
+
+
+
+  const [mergedPosts, setMergedPosts] = useState([]);
 
   useEffect(() => {
-    AppDispatch(getAllBlogThunk());
-    AppDispatch(getAllBlogmediaThunk());
-  }, [AppDispatch]);
-
-  // const mergedPosts = ListBlog && mediaPosts ? mergeArrays(ListBlog, mediaPosts) : [];
-
-  const mergedPosts = ListBlog.map(post => {
-    const mediaItem = mediaPosts.find(m => m.post_id === post.post_id);
-    return {
-      ...post,
-      media_url: mediaItem ? mediaItem.media_url : null // Thêm trường media_url
-    };
-  });
-
-  // Tạo trạng thái cho phân trang và tìm kiếm
+    setMergedPosts(ListBlogRedux);
+    
+  }, [ListBlogRedux]);
+  console.log(mergedPosts)
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState(""); // Trạng thái tìm kiếm
-  const pageSize = 6; // Số bài viết hiển thị trên mỗi trang
-  const totalPages = Math.ceil(mergedPosts.length / pageSize); // Số trang phụ thuộc vào tổng số bài viết
-
-  // Lọc các bài viết theo từ khóa tìm kiếm
-  const filteredPosts = mergedPosts.filter(
-    (item: any) =>
-      item.post_title?.toLowerCase().includes(searchQuery?.toLowerCase()) // Lọc theo từ khóa tìm kiếm
-  ).sort((a: any, b: any) => {
-    const dateA = new Date(a.post_date);
-    const dateB = new Date(b.post_date);
-    return dateB - dateA;
-  });
-  console.log(mergedPosts);
+  const pageSize = 6;
+  const totalPages = Math.ceil(mergedPosts?.length / pageSize);
 
 
-  // Hàm lấy 5 bài viết mới nhất
-const getLatestPosts = (posts, count) => {
-  return posts
-    .slice() // Tạo bản sao của mảng để tránh thay đổi mảng gốc
-    .sort((a, b) => new Date(b.post_date) - new Date(a.post_date)) // Sắp xếp bài viết theo ngày (mới nhất lên đầu)
-    .slice(0, count); // Lấy 5 bài viết đầu tiên
-};
-
-const latestPosts = getLatestPosts(mergedPosts, 5);
-
-
-  // Tính toán bài viết trên trang hiện tại
-  const currentPosts = filteredPosts.slice(
+  const currentPosts = mergedPosts?.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
@@ -82,10 +48,9 @@ const latestPosts = getLatestPosts(mergedPosts, 5);
           </div>
         </div>
         <div>
-          
           <h2 className="text-2xl font-bold text-slate-800">Bài viết mới</h2>
           <div className="h-px bg-purple-700 my-4" />
-          {currentPosts.map((post, index) => (
+          {currentPosts?.map((post, index) => (
             <Sidebar key={index} props={post} />
           ))}
         </div>
@@ -100,7 +65,7 @@ const latestPosts = getLatestPosts(mergedPosts, 5);
           Chào mừng quý khách hàng
         </p>
         <div className="flex flex-wrap gap-5">
-          {currentPosts.map((post, index) => (
+          {currentPosts?.map((post, index) => (
             <BlogCard key={index} props={post} />
           ))}
         </div>

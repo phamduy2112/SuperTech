@@ -15,7 +15,7 @@ productRouter.post('/create-products',middleToken, createProduct);
 productRouter.put('/products-edit/:id',middleToken, updateProduct);
 productRouter.get('/get-products-admin', getProductsAdmin);
 productRouter.put('/update-quality-product/:id',  middleToken,updateQualityProduct);
-productRouter.delete('/products-delete/:id',middleToken ,deleteProduct);
+productRouter.delete('/products-delete/:id',middleToken, deleteProduct);
 productRouter.delete('/product-color-delete/:id',middleToken,deleteProductColor);
 
 export default productRouter;

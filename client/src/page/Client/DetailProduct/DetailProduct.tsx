@@ -193,7 +193,7 @@ useEffect(() => {
                         {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
                       </p>
                       <p className="text-xl text-gray-500 line-through">              
-                        {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                {formatCurrencyVND(productDetail?.product_price + Number(productDetail?.product_colors[0]?.product_storages[0]?.storage_price || 0))}
                       </p>
                       <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
                     </div>
@@ -328,7 +328,7 @@ className={`flex items-center gap-3 border py-4 px-8 rounded-md cursor-pointer h
                       {formatCurrencyVND(((productDetail?.product_price + Number(objectStorage?.storage_price ||0)) *(1 - Number(productDetail?.product_discount / 100) )))}
                     </p>
                     <p className="text-xl text-gray-500 line-through">              
-                      {formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.product_storages?.storage_price || 0))}
+                     {formatCurrencyVND(productDetail?.product_price + Number(productDetail?.product_colors[0]?.product_storages[0]?.storage_price || 0))}
                     </p>
                     <p className="text-xl px-4 py-2 border border-gray-300">{productDetail?.product_discount}%</p>
                   </div>

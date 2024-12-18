@@ -9,6 +9,8 @@ import { CiBookmarkRemove } from 'react-icons/ci';
 import { TbPlaylistAdd } from 'react-icons/tb';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../redux/hooks';
+import DOMPurify from 'dompurify';
+import { truncateText } from '../../../utils';
 
 function AdminBlog() {
   const navigate = useNavigate();
@@ -37,19 +39,19 @@ function AdminBlog() {
       dataIndex: "post_content",
       key: "post_content",
       width: 700,
-      // render: (text) => (
-      //   <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }} />
-      // ),
+      render: (text) => (
+        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(truncateText(text,60)) }} />
+      ),
     },
     {
       title: "URL Hình ảnh",
       dataIndex: "media_url",
       key: "media_url",
-      // render: (text) => (
-      //   <a href={text} target="_blank" rel="noopener noreferrer">
-      //     {text}
-      //   </a>
-      // ),
+      render: (text) => (
+        <a href={text} target="_blank" rel="noopener noreferrer">
+          {text}
+        </a>
+      ),
     },
     {
       title: "Ngày đăng",

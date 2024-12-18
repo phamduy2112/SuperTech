@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { Container } from "../../../../components/Style/Container";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { useParams } from "react-router-dom";
-import { getAllBlogmediaThunk, getAllBlogThunk, getBlogByIdThunk } from "../../../../redux/blog/blogSlice";
-
-
+import {
+  getAllBlogmediaThunk,
+  getAllBlogThunk,
+  getBlogByIdThunk,
+} from "../../../../redux/blogredux/blog.slice";
+import DOMPurify from 'dompurify';
 // Component Breadcrumbs
 function Breadcrumbs() {
   return (
@@ -84,16 +87,16 @@ function DetailBlog() {
                 src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${Blog.media_url}`}
                 alt="Hình ảnh minh họa bài viết"
                 className="w-full lg:w-3/4 rounded-md"
-              />
+/>
             ) : (
               <div className="w-full lg:w-3/4 h-64 bg-gray-300 rounded-md animate-pulse" />
             )}
           </div>
           <div className="flex text-gray-500 text-sm">
-            <span className="text-lg md:text-xl px-10">{Blog?.post_date}</span>
-            <span className="text-lg md:text-xl ">Sản phẩm tốt</span>
+            <span className="text-lg md:text-xl px-5">{Blog?.post_date}</span>
+            <span className="text-lg md:text-xl "> <span>💬</span>Sản phẩm tốt</span>
           </div>
-          <p className="text-2xl text-gray-700 px-10">{Blog?.post_content}</p>
+          <div className="text-2xl text-gray-700 px-10" style={{ width: '95%' }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Blog?.post_content, { WHOLE_DOCUMENT: true }) }} />
         </div>
 
         <div className="lg:w-[30%] space-y-4">
@@ -154,7 +157,7 @@ function DetailBlog() {
         <div className="flex space-x-4 items-start px-10">
           <img
             src="https://i.pinimg.com/originals/ea/1b/b8/ea1bb8dbc5b7eadf836b3a617377b7ff.png"
-            alt="User Avatar"
+alt="User Avatar"
             className="w-10 h-10 md:w-[3%] md:h-[3%] rounded-full object-cover"
           />
           <textarea
