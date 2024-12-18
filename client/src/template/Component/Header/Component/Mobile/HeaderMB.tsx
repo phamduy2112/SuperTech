@@ -6,11 +6,14 @@ import { Input, Badge } from "antd";
 import { useSpring, animated } from "react-spring";
 import TaskHeaderMb from "../Menu/Modal/TasKHeaderMb";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../../../redux/hooks";
+import { Paths } from "../../../../../router/component/RouterValues";
 
 function HeaderMobile(props) {
   const [isInputVisible, setInputVisible] = useState(false);
   const [isvisibleHeaderMB, setisvisibleHeaderMB] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const listCart = useAppSelector((state) => state.cart.listCart);
 
   const navigate = useNavigate();
   const sidebarRef = useRef<HTMLDivElement | null>(null); // Reference for sidebar
@@ -46,14 +49,16 @@ function HeaderMobile(props) {
           <div className="flex items-center justify-between bg-white py-[1rem]">
             {/* Hamburger Menu */}
             <div
-              className="text-[2rem]"
+              className="text-[2rem] cursor-pointer"
               onClick={() => setisvisibleHeaderMB(!isvisibleHeaderMB)}
             >
               <FaBars />
             </div>
 
             {/* Logo */}
-            <h3 className="text-[2.5rem]">SuperTech</h3>
+            <h3 className="text-[2.5rem] cursor-pointer"
+            onClick={()=>{navigate("/")}}
+            >SuperTech</h3>
 
             {/* Search and Cart */}
             <div className="text-[2.5rem] flex items-center gap-2 relative">
@@ -79,10 +84,16 @@ function HeaderMobile(props) {
               )}
 
               {/* Shopping Cart */}
-              <Badge count={0} showZero>
+              
+              <Badge
+                                        count={listCart?.length || 0}
+
+              showZero>
                 <MdOutlineShoppingBag
-                  className="text-[2.5rem] text-[#7500CF]"
-                  onClick={() => {}}
+                  className="text-[2.5rem] cursor-pointer text-[#7500CF]"
+                  onClick={() => {
+                    navigate(`${Paths.Cart}`)
+                  }}
                 />
               </Badge>
             </div>

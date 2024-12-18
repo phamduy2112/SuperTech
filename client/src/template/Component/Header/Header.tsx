@@ -138,7 +138,10 @@ function Header() {
         </div>
         <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto sm:hidden md:block">
           <div className="flex justify-between items-center w-[100%] md:h-[5rem] lg:h-[75px]">
-            <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold">
+            <div className="md:text-[2.5rem] xl:text-[3.2rem] font-semibold"
+                        onClick={()=>{navigate("/")}}
+
+            >
               SuperTech
             </div>
             <div className="2xl:w-[70%] lg:w-[60%] md:w-[50%]">

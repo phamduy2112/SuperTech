@@ -67,8 +67,8 @@ function UserDetail() {
   const handleSubmit = (values: any) => {
 
 if(formikRef.current.values){
-  //  dispatch(updateUserDetailThunk(values));
-  //   dispatch(getUserThunk());
+   dispatch(updateUserDetailThunk(values));
+    dispatch(getUserThunk());
   console.log(formikRef.current.values);
  
 }
