@@ -8,43 +8,23 @@ import { useAppDispatch } from '../../../../redux/hooks';
 import { putCategoryThunk } from '../../../../redux/catelogry/catelogry.slice';
 import toast from 'react-hot-toast';
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 function AdminEditCatelogry(props: any) {
 
-  const uploadRef = useRef<HTMLDivElement>(null);
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    const updatedFileList = newFileList.map(file => {
-      if (file.originFileObj) {
-        file.url = URL.createObjectURL(file.originFileObj);
-      }
-      return file;
-    });
-    setFileList(updatedFileList);
-  };
-
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as FileType);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(`<img src="${src}" alt="Preview" />`);
-  };
 
   const DataCategory = [
     { label: 'Điện thoại', value: 1 },
     { label: 'Laptop', value: 2 },
+    { label: 'Sạc dự phòng ', value: 3 },
+    { label: 'Sạc cáp hub cáp chuyển đổi', value: 4 },
+    { label: 'Ốp lưng', value: 5 },
+    { label: 'Tai nghe dây bluetooth', value: 6 },
+    
+    // Add more categories as needed
   ];
-
   const ShowModal = () => {
     setIsModalOpen(true);
   };
@@ -123,30 +103,7 @@ const dispatch=useAppDispatch();
                 </div>
               </div>
 
-              <div className="bg-white shadow-lg rounded-xl p-[12px] gap-8 flex flex-col mt-4">
-                <span className="text-[20px] font-semibold">Tải ảnh</span>
-                <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={onChange}
-                  onPreview={onPreview}
-                  beforeUpload={() => false}
-                >
-                  {fileList.length < 6 && '+ Upload'}
-                </Upload>
-                <div className="text-[14px] text-[#9696968e] font-medium">
-                  Định dạng hình ảnh: .jpg, .jpeg, .png, kích thước tối đa 500kb.
-                </div>
-              </div>
-
-              <div className="mt-4">
-        <label htmlFor="category_task" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Hoạt động</label>
-        <Switch
-          checked={values.category_task} // This is now a boolean value (true or false)
-          onChange={(checked) => setFieldValue("category_task", checked)} // Directly update with the boolean value
-        />
-        {/* {props?.category?.category_task} */}
-      </div>
+       
 
 
               <Button type="primary" htmlType="submit" className="mt-4">Lưu sản phẩm</Button>

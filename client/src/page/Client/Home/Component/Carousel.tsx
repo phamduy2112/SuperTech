@@ -1,8 +1,16 @@
-import React, { useEffect } from 'react';
-import './css/Carousel.css'
+import React, { useEffect, useState } from 'react';
+import './css/Carousel.css';
 import { DataSlideShow } from './DataSlideShow';
+import { Spin } from 'antd'; // Import Spin từ Ant Design
+import { timeLoading } from '../../../../constants';
 
 function Carousel() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), timeLoading);
+  }, []);
+
   const handleNextClick = () => {
     const items = document.querySelectorAll<HTMLDivElement>('.item');
     const numbers = document.querySelectorAll<HTMLDivElement>('.number');
@@ -24,34 +32,34 @@ function Carousel() {
     return () => clearInterval(intervalId);
   }, []);
 
-
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex py-[60px] justify-center items-center">
+        <Spin size="large" /> {/* Hiển thị loading của Ant Design */}
+      </div>
+    );
+  }
 
   return (
     <div className='w-full flex items-center py-[60px] justify-center'>
       <div className="carousel">
         <div className="frameSlide">
-          {
-            DataSlideShow.map((item, index) => (
-              <div key={index} className="item" style={{ backgroundImage: `url(${item.image})` }}>
-
-                <div className="content">
-                  <div className="author">{item.author}</div>
-                  <div className="title">{item.title}</div>
-                  <div className="category">{item.category}</div>
-                  <div className="info">
-                    {item.info}
-                  </div>
-                  <div className="button">
-                    <button>XEM THÊM</button>
-                    <button>MUA NGAY</button>
-                  </div>
+          {DataSlideShow.map((item, index) => (
+            <div key={index} className="item" style={{ backgroundImage: `url(${item.image})` }}>
+              <div className="content">
+                <div className="author">{item.author}</div>
+                <div className="title">{item.title}</div>
+                <div className="category">{item.category}</div>
+                <div className="info">
+                  {item.info}
+                </div>
+                <div className="button">
+                  <button>XEM THÊM</button>
+                  <button>MUA NGAY</button>
                 </div>
               </div>
-            ))
-          }
-
-
-
+            </div>
+          ))}
         </div>
 
         <div className="arrows">
@@ -59,18 +67,14 @@ function Carousel() {
           <div className="lines"></div>
           <div className="numberSilder">
             <div className="listnumber">
-              {
-                DataSlideShow.map((item, index) => (
-                  <div key={index} className="number">{item.id}</div>
-                ))
-
-              }
+              {DataSlideShow.map((item, index) => (
+                <div key={index} className="number">{item.id}</div>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </div>
-
   );
 }
 

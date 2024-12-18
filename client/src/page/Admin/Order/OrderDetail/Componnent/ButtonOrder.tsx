@@ -70,7 +70,9 @@ function ButtonOrder({ orderStatuses, orderId }: ButtonOrderProps) {
         // Hiển thị nút khi trạng thái hiện tại là "Đang giao hàng" (3)
         <div className="flex space-x-2">
           <button
-            className={`px-4 py-2 text-white rounded ${loading ? "opacity-50" : ""}`}
+            className={`px-4 py-2
+               rounded-2xl
+              text-white ${loading ? "opacity-50" : ""}`}
             style={{ backgroundColor: "#800080" }}
             onClick={() => handleClickChangeOrder(4, orderId)}
             disabled={loading}

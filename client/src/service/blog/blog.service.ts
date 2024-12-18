@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosWithAuth } from "../axios.config";
 
 export const getBlogAll = () => {

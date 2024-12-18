@@ -35,9 +35,13 @@ const AdminCatelogry: React.FC = () => {
   const DataCategory = [
     { label: 'Điện thoại', value: 1 },
     { label: 'Laptop', value: 2 },
-    { label: 'Table', value: 3 },
+    { label: 'Sạc dự phòng ', value: 3 },
+    { label: 'Sạc cáp hub cáp chuyển đổi', value: 4 },
+    { label: 'Ốp lưng', value: 5 },
+    { label: 'Tai nghe dây bluetooth', value: 6 },
+    
+    // Add more categories as needed
   ];
-
 
   const [selectedCheckbox, setSelectedCheckbox] = useState(''); // Lọc theo ngày
 
@@ -68,11 +72,7 @@ const AdminCatelogry: React.FC = () => {
         return category ? category.label : 'Không xác định';
       },
     },
-    {
-      title: 'Vai Trò',
-      dataIndex: 'category_task',
-      render: (value) => (value === 1 ? 'true' : 'false'),
-    },
+ 
     {
       title: 'Tác Vụ',
       key: 'key',
@@ -172,6 +172,7 @@ const handleDelete = (key: any) => {
               if (userRef.current) {
                 clearTimeout(userRef.current);
               }
+          
               userRef.current = setTimeout(() => {
                 dispatch(getCatelogryThunk(value));
               }, 400);
@@ -212,12 +213,8 @@ const handleDelete = (key: any) => {
           
       <div className="p-[24px] relative overflow-x-auto h-[1000px] flex flex-col">
       <div className="text-[1.5rem] flex gap-[1rem]">
-            <button className="py-[1rem] text-[#205cff]" onClick={()=>{
-              handleDelete(selectedRowKeys)
-            }}>Thêm</button>
-            <button className="py-[1rem] text-[#205cff]" onClick={()=>{
-              handleDelete(selectedRowKeys)
-            }}>Sửa</button>
+           
+           
             <button className="py-[1rem] text-[#205cff]" onClick={()=>{
               handleDelete(selectedRowKeys)
             }}>Xóa</button>

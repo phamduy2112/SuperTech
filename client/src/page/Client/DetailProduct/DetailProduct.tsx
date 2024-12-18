@@ -4,7 +4,7 @@ import { FaStar } from "react-icons/fa";
 import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { IoIosReturnRight } from "react-icons/io";
-import { Rate } from "antd";
+import { Rate, Spin } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { data } from "./data";
 import Comment from "./Component/Comment";
@@ -152,7 +152,9 @@ useEffect(() => {
   }, []);
 
   if (isLoading) {
-    return <LoadingDetailProduct/>
+    return <div className="w-full h-full flex py-[60px] justify-center items-center">
+    <Spin size="large" /> {/* Hiển thị loading của Ant Design */}
+  </div>
   }
   const inforMore = productDetail?.infor_product_infor_product?.infor_more;
 
@@ -161,6 +163,7 @@ useEffect(() => {
 
   return (
         <Container>
+        
           <div className="py-6 text-[1.5rem] leading-10">
             {/* Breadcrumb */}
             <div className="my-[1.5rem] text-[1.5rem] text-gray-600">

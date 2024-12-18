@@ -1,4 +1,4 @@
-import { Button, Checkbox, Popover } from "antd";
+import { Button, Checkbox, Popover, Tooltip } from "antd";
 import { Table } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
@@ -165,22 +165,33 @@ const AdminProduct: React.FC = () => {
             console.log(record);
             
           }}>Xem</div> */}
-          <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
+           <Tooltip placement="top" title="Xem chi tiết">
+           <IoEyeSharp  className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             // onClick={() => handleEdit(record.key)}
             onClick={() => { handleEye(+record.product_id) }}
           />
+          </Tooltip>
+          <Tooltip placement="top" title="Xem bình luận chi tiết">
           <GoCommentDiscussion className='cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]'
             onClick={() => handleViewCommentProduct(+record.product_id)}
           />
+          </Tooltip>
+          <Tooltip placement="top" title="Xóa sản phẩm">
           <CiBookmarkRemove
             className='cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]'
-            onClick={() => handleDeteleProduct(+record.product_id)}
+            onClick={() => handleDeteleProduct(selectedRowKeys)}
           />
-          <AdminModalUpdateQualityProduct product={record}/>
+          </Tooltip>
+          <Tooltip placement="top" title="Chỉnh sửa sản phẩm">
           <BiSolidEdit
             className='cursor-pointer text-[#4078f2] transition-all duration-700 hover:text-[#4078f2]'
             onClick={() => navigate(`/admin/quan-li-san-pham/sua-san-pham/${record.product_id}`)}
           />
+          </Tooltip>
+         
+       
+          <AdminModalUpdateQualityProduct product={record}/>
+         
         </div>
       ),
     },
@@ -225,7 +236,7 @@ const AdminProduct: React.FC = () => {
  const [showInStock, setShowInStock] = useState(true);
 
 const handleDelete = (key: any) => {
-  dispatch(deleteCategoryThunk(key));
+  // dispatch(deleteCategoryThunk(key));
   toast.success("Xóa loại thành công");
 };
 console.log(updatedDataProducts[0]);
@@ -256,10 +267,7 @@ console.log(updatedDataProducts[0]);
       <div className='flex items-center justify-between box-border p-[24px]'>
         <span className='text-[30px] font-medium text-[#ffd700]'>Sản Phẩm</span>
         <div className='flex gap-3'>
-          <Button className='p-10'>
-            <IoCloudDownloadOutline className='text-[18px]' />
-            Tải về PDF
-          </Button>
+         
    
           <AdminAddProduct/>
    
@@ -268,6 +276,7 @@ console.log(updatedDataProducts[0]);
         </div>
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
+      
           <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
             <input type="text"
               onChange={async (e) => {
@@ -288,6 +297,11 @@ console.log(updatedDataProducts[0]);
         </div>
 
         <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+        <div className="text-[1.5rem] flex gap-[1rem]">
+           
+           
+        
+         </div>
           <Table
             className='flex-1'
             rowSelection={rowSelection}

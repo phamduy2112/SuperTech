@@ -458,13 +458,13 @@ navigate("/admin/quan-li-san-pham")
         </div>
    )}
 
-<ModalAdminProduct/>
+<ModalAdminProduct font={1.6}/>
 <div className='flex gap-[1rem]'>
 {productColors?.map((item) => (
               <div
                   key={item.color}
               
-                  className={`relative flex w-[200px] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
+                  className={`relative flex w-[250px] items-center gap-3 border py-4 px-6 rounded-md cursor-pointer hover:shadow-md }`}
               >
                 <div className='absolute right-0 top-0 text-[1.5rem] cursor-pointer'
                 onClick={(()=>{
@@ -476,10 +476,10 @@ navigate("/admin/quan-li-san-pham")
                   <img 
                       src={`${IMG_BACKEND}/${item.image_one}`}
                       alt={item?.color} 
-                      className="w-20 rounded-md"
+                      className="w-28 rounded-md"
                   />
                   <div>
-                      <h4 className="font-semibold text-[1.5rem]">Màu sắc: {item?.color}</h4>
+                      <h4 className="font-semibold text-[1.7rem]">Màu sắc: {item?.color}</h4>
                       {/* <p className="text-red-500 my-2 font-semibold text-[1.2rem]">Dung lượng: {item.productStorage?.map((item)=>{
                         return item.storage
                       })}</p> */}
@@ -504,19 +504,38 @@ navigate("/admin/quan-li-san-pham")
 </div>
 
       {/* Submit Button */}
-      <div>
-      <Button type="primary" htmlType="submit" className="mt-4">Lưu sản phẩm</Button>
+      <div className='flex gap-[2rem]'>
+      <Button 
+  type="primary" 
+  htmlType="submit" 
+  className="mt-4"
+  style={{
+    height: "48px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    padding: "0 16px",
+  }}
+>
+  Lưu sản phẩm
+</Button>
 
-      <Button
-                  type="dashed"
-                  onClick={() => {
-                    dispatch(removeAllProductColors())
-                    resetForm(); // Reset form
-                  }}
-                  className="h-[48px]  text-blac rounded-lg"
-                >
-                  Cancel
-                </Button>
+<Button
+  type="dashed"
+  onClick={() => {
+    dispatch(removeAllProductColors());
+    resetForm();
+    navigate("/admin/quan-li-san-pham");
+  }}
+  style={{
+    height: "48px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    padding: "0 16px",
+  }}
+  className="mt-4"
+>
+  Cancel
+</Button>
       </div>
 
       

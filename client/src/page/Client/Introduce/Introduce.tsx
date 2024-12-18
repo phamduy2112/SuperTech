@@ -41,7 +41,17 @@ function Introduce() {
       <div className="w-full max-w-[90%] m-auto px-4 space-y-8">
 {/* First Section */}
 <div className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-2xl bg-[#e0d6e71f]">
-  <div className="w-full">
+<div className="px-4 lg:px-[44px] py-6 lg:py-[31px] gap-[15px] lg:gap-[25px] flex flex-col">
+    <span className="text-[#A3A3A3] text-[10px] lg:text-[12px]">Thứ hai</span>
+    <span className="text-[#000000] text-[20px] lg:text-[32px] font-medium">
+      Lịch sử và sứ mệnh của chúng tôi
+    </span>
+    <span className="text-[16px] lg:text-[20px] text-justify">
+      <span className="text-black text-lg lg:text-2xl mr-2">•</span> Lịch sử của <span className="text-[#7500CF]">SuperTech</span> bắt đầu từ một nhóm đam mê công nghệ, với mục tiêu mang đến sản phẩm tiên tiến và chất lượng cho người tiêu dùng. Qua nhiều năm phát triển, Supertech đã xây dựng được uy tín trong lĩnh vực cung cấp thiết bị công nghệ hiện đại.
+    </span>
+    <span className="text-[16px] lg:text-[20px] text-justify">
+      <span className="text-black text-lg lg:text-2xl mr-2">•</span> Sứ mệnh của chúng tôi là cung cấp các giải pháp công nghệ tối ưu, đáp ứng nhu cầu đa dạng của khách hàng. Chúng tôi cam kết không ngừng đổi mới và cải tiến, mang đến sản phẩm chất lượng cao, đồng thời tạo ra giá trị bền vững cho cộng đồng và môi trường.
+    </span>
   </div>
   <div className="px-4 lg:px-[44px] py-6 lg:py-[31px] gap-[15px] lg:gap-[25px] flex flex-col">
     <span className="text-[#A3A3A3] text-[10px] lg:text-[12px]">Đầu tiên</span>
@@ -58,23 +68,7 @@ function Introduce() {
 </div>
 
 {/* Second Section */}
-<div className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-2xl bg-[#e0d6e71f]">
-  <div className="px-4 lg:px-[44px] py-6 lg:py-[31px] gap-[15px] lg:gap-[25px] flex flex-col">
-    <span className="text-[#A3A3A3] text-[10px] lg:text-[12px]">Thứ hai</span>
-    <span className="text-[#000000] text-[20px] lg:text-[32px] font-medium">
-      Lịch sử và sứ mệnh của chúng tôi
-    </span>
-    <span className="text-[16px] lg:text-[20px] text-justify">
-      <span className="text-black text-lg lg:text-2xl mr-2">•</span> Lịch sử của <span className="text-[#7500CF]">SuperTech</span> bắt đầu từ một nhóm đam mê công nghệ, với mục tiêu mang đến sản phẩm tiên tiến và chất lượng cho người tiêu dùng. Qua nhiều năm phát triển, Supertech đã xây dựng được uy tín trong lĩnh vực cung cấp thiết bị công nghệ hiện đại.
-    </span>
-    <span className="text-[16px] lg:text-[20px] text-justify">
-      <span className="text-black text-lg lg:text-2xl mr-2">•</span> Sứ mệnh của chúng tôi là cung cấp các giải pháp công nghệ tối ưu, đáp ứng nhu cầu đa dạng của khách hàng. Chúng tôi cam kết không ngừng đổi mới và cải tiến, mang đến sản phẩm chất lượng cao, đồng thời tạo ra giá trị bền vững cho cộng đồng và môi trường.
-    </span>
-  </div>
-  <div className="w-full">
 
-  </div>
-</div>
 </div>
      
      
@@ -92,7 +86,7 @@ function Introduce() {
     <div className="bg-[#e6e6e650] hover:bg-[#e6e6e6] transition-all duration-700 rounded-xl row-span-3 flex justify-center items-center">
       <img
         className="object-cover transition-transform duration-300 hover:scale-110"
-        // src="https://gtctelecom.vn/uploads/images/san-pham/tainghe/Jabra-Pro-920-duo.png"
+        src="https://gtctelecom.vn/uploads/images/san-pham/tainghe/Jabra-Pro-920-duo.png"
         alt="Product 1"
       />
     </div>
@@ -101,7 +95,7 @@ function Introduce() {
     <div className="bg-[#e6e6e650] hover:bg-[#e6e6e6] transition-all duration-700 rounded-xl row-span-5 flex justify-center items-center">
       <img
         className="object-cover transition-transform duration-300 hover:scale-110"
-        // src="https://i0.wp.com/vuatao.vn/wp-content/uploads/2021/12/iphone-11-pro-ctmobile-png.png?fit=600%2C600&ssl=1"
+        src="https://i0.wp.com/vuatao.vn/wp-content/uploads/2021/12/iphone-11-pro-ctmobile-png.png?fit=600%2C600&ssl=1"
         alt="Product 2"
       />
     </div>
@@ -110,7 +104,7 @@ function Introduce() {
     <div className="bg-[#e6e6e650] hover:bg-[#e6e6e6] transition-all duration-700 rounded-xl row-span-5 flex justify-center items-center">
       <img
         className="object-cover transition-transform duration-300 hover:scale-110"
-        // src="https://cdn.tgdd.vn/Products/Images/42/329137/iphone-16-pink-600x600.png"
+        src="https://cdn.tgdd.vn/Products/Images/42/329137/iphone-16-pink-600x600.png"
         alt="Product 3"
       />
     </div>
@@ -119,7 +113,7 @@ function Introduce() {
     <div className="bg-[#e6e6e650] hover:bg-[#e6e6e6] transition-all duration-700 rounded-xl row-span-3 flex justify-center items-center">
       <img
         className="w-full h-full transition-transform duration-300 hover:scale-110"
-        // src="https://dareu.com.vn/wp-content/uploads/2021/04/tai-nghe-gaming-dareu-eh925s-queen-01-400x400.png"
+        src="https://dareu.com.vn/wp-content/uploads/2021/04/tai-nghe-gaming-dareu-eh925s-queen-01-400x400.png"
         alt="Product 4"
       />
     </div>
@@ -190,34 +184,7 @@ function Introduce() {
   </span>
 </div>
 
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 my-6">
-  {[...Array(5)].map((_, index) => (
-    <div
-      key={index}
-      className="border text-black rounded-2xl flex flex-col items-center gap-4 p-4"
-    >
-      <img
-        className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] rounded-full"
-        alt=""
-      />
-      <span className="text-[18px] md:text-[20px] font-medium">BaBy Black</span>
-      <span className="text-[10px] md:text-[12px] font-medium text-[#8F8F8F]">
-        2h trước
-      </span>
-      <div>
-        <span className="flex text-[#FC6E2E] text-[12px] md:text-[15px]">
-          <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStar />
-        </span>
-      </div>
-      <span className="text-[10px] md:text-[12px] font-medium text-[#8F8F8F]">
-        4/05/2025
-      </span>
-      <span className="text-[14px] md:text-[16px] font-thin">
-        Sản phẩm tốt đấy...
-      </span>
-    </div>
-  ))}
-</div>
+
 </div>
 
 
@@ -248,6 +215,7 @@ function Introduce() {
               <div className="bg-[#fffcfc] hover:bg-[white] transition-all duration-700 rounded-xl col-span-1 row-span-2 flex justify-center items-center">
                 <img
                   className="object-cover transition-transform duration-300 hover:scale-75"
+                  src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/344545748_790878529303490_7633109599983804039_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=5XF0FYrgvkMQ7kNvgEBq1CL&_nc_oc=AdjT7x0pQYTeHSR5uv8N8zteiTkHyIM80QgMkSv4WGfXjhwbc47uY6K1Q0mFbdB7crwCehH4rief0Ah7QoCdMJ5q&_nc_zt=23&_nc_ht=scontent.fsgn8-4.fna&_nc_gid=AGCuax2C4TV835XcONiQhFh&oh=00_AYDzYhzFodJtWcC_iHjtwtFi15a98TxQ5-mUuXng3NRXnw&oe=67688F34"
                   alt=""
                 />
               </div>

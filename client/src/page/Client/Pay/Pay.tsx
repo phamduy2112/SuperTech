@@ -62,6 +62,7 @@ function Pay() {
       console.log(values);
     },
   });
+  
   const totalPrice = listCart.reduce((total: number, item) => {
     // Tính giá sản phẩm ban đầu cộng thêm giá storage
     const basePriceWithStorage = item.product_price + Number(item?.selectedStorage?.storage_price || 0);
@@ -249,7 +250,14 @@ function Pay() {
         const response = await createDetailOrder(detailOrders);
 
         socket.on('orderStatusUpdated', async (updatedOrder:any) => {
-       
+          const dataDiscount={
+            "discount_id":getIdDiscount
+          }
+          const respDis =await createUserDiscount( 
+            dataDiscount
+            
+           )
+          dispatch(  setDiscount())
         
           // Kiểm tra xem thanh toán có thành công không
           if (user.user_id == updatedOrder.user) {
@@ -269,7 +277,7 @@ function Pay() {
         setDataOrder({
           order_id: resp.data.content.order_id,
           user_id: user.user_id,
-          order_total: dataOrder.order_total
+          order_total: totalPriceWithVoucher
         });
  // Điều hướng về trang chủ sau 2 phút
 //         setTimeout(async () => {
@@ -294,7 +302,14 @@ function Pay() {
       } else {
         // Gọi API tạo chi tiết đơn hàng cho phương thức thanh toán khác
         const response = await createDetailOrder(detailOrders);
-      
+        const dataDiscount={
+          "discount_id":getIdDiscount
+        }
+        const respDis =await createUserDiscount( 
+          dataDiscount
+          
+         )
+        dispatch(  setDiscount())
         
         if (response) {
           await getSuccessEmailOrder(dataEmail);
@@ -303,14 +318,7 @@ function Pay() {
           dispatch(removeAllCart());
         }
       }
-      const dataDiscount={
-        "discount_id":getIdDiscount
-      }
-      const respDis =await createUserDiscount( 
-        dataDiscount
-        
-       )
-      dispatch(  setDiscount())
+   
       } else{
         toast.error("Vui lòng chọn phương thức thanh toán");
         toast.error("Vui lòng chọn nhập số điện thoại");
@@ -322,6 +330,7 @@ function Pay() {
     }
   };
 
+  console.log(dataOrder);
   
   return (
 
@@ -484,7 +493,6 @@ function Pay() {
                     <h5 className="font-semibold tex
                     t-[1.7rem]">{truncateText(item?.product_name,25)}</h5>
                     <p className="text-[1.6rem]">    
-                      {item?.selectedStorage !=undefined? `${item?.selectedStorage?.storage} MB/` :''}
                     {item?.selectedColor !=undefined? `${item?.selectedColor?.color}` :''}
                     {` (x${item.quantity})`}
                     </p>
@@ -588,14 +596,16 @@ function Pay() {
             </div>
               </div>
               {formData.paymentMethod === 'bank' && (
-  <ModalPay 
-  isModalOpen={isModalOpen} 
-  handleOk={handleOk} 
-  handleCancel={handleCancel} 
-  reset={reset} 
-  handleReset={handleReset} 
-  handleResetTrue={handleResetTrue}
-/>
+   <ModalPay 
+   isModalOpen={isModalOpen}
+   open={showModal} // Gọi hàm để lấy giá trị boolean
+    handleOk={handleOk} 
+    handleCancel={handleCancel}
+    data={dataOrder}
+    reset={reset}
+    handleReset={handleReset}
+             handleResetTrue={handleResetTrue}
+     />
     )}
     
 

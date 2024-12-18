@@ -105,14 +105,10 @@ const [listProduct,setListProduct]=useState([]);
       try {
         const resp = await getDetailOrder(Number(id));
         const details = resp.data.content;
-  
         setDetailOrder(details);
-  
         if (details.length > 0) {
-          setOrder(details[0]?.order); 
+          setOrder(details[0]?.order);
         }
-        console.log(details);
-        
         const products = details.map(detail => ({
           quanlity: detail.detail_order_quality,
           name: detail.product.product_name,
@@ -124,26 +120,33 @@ const [listProduct,setListProduct]=useState([]);
           color: detail.product_color,
           storage: detail.product_storage,
         }));
-  
         setListProduct(products);
       } catch (e) {
         console.log(e);
       }
     };
-  
     fetchApi();
   }, [id]);
+
 
  
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };
-const orderId = id; // The order ID from the URL params
 
+  const printHeader = () => {
+    const header = document.querySelector('.inhoadon');
+    if (header) {
+      header.classList.add('printable');
+      window.print();
+      header.classList.remove('printable');
+    }
+  };
 
   return (
     <div >
     {/* Header */}
+    <div className='inhoadon' >
     <header className="flex justify-between items-center bg-purple-600 text-white p-4 rounded-lg">
       <div>
         <h1 className="font-bold pt-4 text-[1.7rem] ">Đơn hàng: {id}</h1>
@@ -181,7 +184,7 @@ const orderId = id; // The order ID from the URL params
 
         {order?.order_pay == 0 ? "Thanh toán tại nhà" : 
                order?.order_pay == 1 ? "Đã thanh toán" : 
-               ""}    <span>{order?.order_pay==1 ? "Thanh toán tại nhà" : ""}</span>
+               ""}    <span>{order?.order_pay==null ? "Thanh toán tại nhà" : ""}</span>
 
         </p>
   
@@ -206,15 +209,26 @@ const orderId = id; // The order ID from the URL params
         <Table columns={columns} dataSource={listProduct} onChange={onChange} className='' />
 
       </div>
-      <div className='mt-[2rem] flex'>
-      <ButtonOrder orderStatuses={detailOrder[0]?.order?.order_statuses} orderId={detailOrder[0]?.order?.order_id} />
-      <Button type="primary" size="large" onClick={() => window.print()}>In hóa đơn</Button>
 
-      </div>
      
       
     </section>
+    </div>
+          
+    <div className='mt-[2rem] flex gap-3'>
+      <ButtonOrder orderStatuses={detailOrder[0]?.order?.order_statuses} orderId={detailOrder[0]?.order?.order_id} />
 
+      <Button type="primary"
+      
+      style={{
+        height:"3.2rem",
+        fontSize: "16px",
+        borderRadius: ".3rem",
+        padding: "1rem",
+      }}
+      size="small" onClick={printHeader} className="float-right">In Hóa Đơn</Button>
+
+      </div>
   </div>
   );
 }

@@ -36,16 +36,20 @@ function AdminBlog() {
       title: "Nội dung",
       dataIndex: "post_content",
       key: "post_content",
+      width: 700,
+      // render: (text) => (
+      //   <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }} />
+      // ),
     },
     {
       title: "URL Hình ảnh",
       dataIndex: "media_url",
       key: "media_url",
-      render: (text) => (
-        <a href={text} target="_blank" rel="noopener noreferrer">
-          {text}
-        </a>
-      ),
+      // render: (text) => (
+      //   <a href={text} target="_blank" rel="noopener noreferrer">
+      //     {text}
+      //   </a>
+      // ),
     },
     {
       title: "Ngày đăng",
@@ -55,6 +59,7 @@ function AdminBlog() {
     {
       title: "Tác Vụ",
       key: "actions",
+      
       render: (record: any) => (
         <div className="flex text-[24px] box-border gap-1 items-center">
           <BiSolidEdit className="cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]" />
@@ -96,14 +101,12 @@ function AdminBlog() {
 
 
   const [valueInputSearch, setvalueInputSearch] = useState(``);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [DataBlog, setDataBlog] = useState<any[]>([]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setvalueInputSearch(e.target.value);
   }
-
-  const [selectedCheckbox, setSelectedCheckbox] = useState('');
+const [selectedCheckbox, setSelectedCheckbox] = useState('');
 
   useEffect(() => {
     const sortedList = [...ListBlog];
@@ -178,7 +181,7 @@ function AdminBlog() {
 
               <div className='flex justify-between p-[12px] w-[200px] gap-2'>
                 <label className='text-[14px]'>Mới nhất</label>
-                <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
+<Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
               </div>
               <div className='flex gap-2 justify-between p-[12px]'>
                 <label className='text-[14px]'>Cũ nhất</label>

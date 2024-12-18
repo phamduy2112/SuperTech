@@ -63,7 +63,7 @@ export const DataSideBar: SidebarItem[] = [
           {
             id_child: 1,
             title_child: 'Danh Mục Sản Phẩm',
-            url_child: '${PathAdmin.PathsAdmin}/quản-lí-loại/danh-mục-sản-phẩm',
+            url_child:`${PathAdmin.PathsAdmin}/${PathAdmin.Categories}`,
             icon_child: <FaRegEye />,
 
           },
@@ -85,15 +85,10 @@ export const DataSideBar: SidebarItem[] = [
           {
             id_child: 1,
             title_child: 'Xem Sản Phẩm',
-            url_child: `${PathAdmin.PathsAdmin}/${PathAdmin.ProductComments}`,
-            icon_child: <FaRegEye />,
-          },
-          {
-            id_child: 2,
-            title_child: 'Quản Lí Bình Luận',
             url_child: `${PathAdmin.PathsAdmin}/${PathAdmin.Products}`,
-            icon_child: <HiMiniPencilSquare />,
+            icon_child: <FaRegEye />,
           }
+     
         ]
       }
     ]
@@ -183,10 +178,10 @@ export const DataSideBar: SidebarItem[] = [
       },
       {
         box_id: 2,
-        box_title: 'Đăng Xuất',
+        box_title: 'Quay về trang chủ',
         icon: <CiLogout />,
         iconChevronRight: null,
-        url: '',
+        url: `/`,
         child: [],
       },
     ]

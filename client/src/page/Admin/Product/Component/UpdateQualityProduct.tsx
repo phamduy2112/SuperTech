@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { message, Select, Button, Modal } from 'antd';
+import { message, Select, Button, Modal, Tooltip } from 'antd';
 import { AiOutlineNumber } from 'react-icons/ai';
 import { Formik, Form, Field } from 'formik';
 import { useAppDispatch } from '../../../../redux/hooks';
@@ -32,10 +32,15 @@ function AdminModalUpdateQualityProduct(props) {
 
   return (
     <>
-      <AiOutlineNumber
+
+<Tooltip placement="top" title="Nhập kho">
+<AiOutlineNumber
+className='cursor-pointer flex justify-center items-center'
         onClick={showModal}
         style={{ marginRight: '5px', color: 'blue', fontSize: '18px' }}
       />
+          </Tooltip>
+
 
       <Modal
         title="Cập nhật số lượng"

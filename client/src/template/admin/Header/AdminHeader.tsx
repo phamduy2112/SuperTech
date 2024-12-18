@@ -12,11 +12,13 @@ import { IoSettingsOutline } from 'react-icons/io5';
 import type { RootState } from '../../../redux/store';
 import { useAppSelector } from '../../../redux/hooks';
 import { setNofiReducer } from '../../../redux/admin/component/Nofi';
+import { IMG_BACKEND_USER } from '../../../constants';
 
 function AdminHeader() {
   const dispatch = useDispatch();
   const nofiList = useAppSelector((state) => state.nofi.isNofi);
   const socket = useAppSelector((state) => state.socket.socket);
+  const user=useAppSelector((state) => state.user.user);
 
   useEffect(() => {
     if (socket) {
@@ -65,7 +67,10 @@ function AdminHeader() {
     <div className="text-[#000000] text-[20px] grid grid-cols-2 auto-rows-[75px]">
       <div className="px-[30px] text-[25px] flex items-center opacity-[25%]">
         <div onClick={() => dispatch(toggle())}>
-          {isOpen ? <HiMenuAlt1 /> : <RiAddLargeLine className="rotate-45 text-red-600 font-bold" />}
+          {isOpen ? 
+          <HiMenuAlt1 /> 
+          : 
+          <RiAddLargeLine className="rotate-45 text-red-600 font-bold" />}
         </div>
       </div>
       <div className="flex gap-[40px] justify-end px-[38px] items-center">
@@ -86,16 +91,32 @@ function AdminHeader() {
           <div className="w-[55px] h-[55px] relative flex justify-center items-center">
             <span className="w-[8px] h-[8px] absolute bg-green-400 rounded-full mt-12 ml-14"></span>
             <div className="w-[45px] h-[45px] rounded-full overflow-hidden">
-              <img
-                className="object-cover"
-                src="https://vuatocgia.com/medias/2022/11/kieu-toc-mr-dam-3-1.jpg"
-                alt=""
-              />
+               {user?.user_image ? (
+                                 <img
+                                   className="rounded-full object-cover"
+                                   src={`${IMG_BACKEND_USER}/${user?.user_image}`}
+                                   alt={user?.user_name} // Đảm bảo rằng alt chỉ là một chuỗi (tên người dùng)
+                                   style={{ width: 40, height: 40 }}
+                                 />
+                               ) : (
+                                 <div
+                                   className="rounded-full flex items-center justify-center"
+                                   style={{
+                                     width: 50,
+                                     height: 50,
+                                     backgroundColor: 'black',
+                                     color: 'white',
+                                     fontSize: '18px',
+                                   }}
+                                 >
+                                   {user?.user_name ? user?.user_name.charAt(0).toUpperCase() : '?'} {/* Hiển thị chữ cái đầu tiên từ tên người dùng */}
+                                 </div>
+                               )}
             </div>
           </div>
           <div className="grid grid-cols-1 gap-2 text-[10px] font-semibold">
-            <span className="text-[8px] text-[#e6cb33]">Admin</span>
-            <span className="font-medium text-[#ae00ffdf]">Đàm Vĩnh Hưng</span>
+            <span className="text-[1rem] text-[#e6cb33]">Admin</span>
+            <span className="font-medium text-[1.2rem] text-[#ae00ffdf]">{user?.user_name}</span>
           </div>
         </div>
         <Popover placement="bottomRight" content={<div>Cài đặt tài khoản</div>}>

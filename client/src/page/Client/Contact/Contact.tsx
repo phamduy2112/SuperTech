@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Row, Col, message } from 'antd';
-import Skeleton from 'react-loading-skeleton';
+import { Form, Input, Button, Row, Col, message, Skeleton } from 'antd';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import './css/ContactPage.css';
 
@@ -19,57 +18,31 @@ function Contact() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   }, []);
 
   return (
     <div className="contact-page">
       <div className="contact-header">
         {loading ? (
-          <Skeleton width={300} height={40} />
+          <Skeleton active title={{ width: '60%' }} paragraph={{ rows: 2, width: ['80%', '90%'] }} />
         ) : (
           <>
-            <h2 className="text-center text-3xl font-semibold">Liên Hệ Với Chúng Tôi</h2>
-            <p className="text-center">Nếu bạn có bất kỳ câu hỏi nào, vui lòng điền vào biểu mẫu dưới đây.</p>
+            <h2 className="text-center text-[2rem] font-semibold">Liên Hệ Với Chúng Tôi</h2>
+            <p className="text-center text-[1.5rem] py-[1.4rem]">
+              Nếu bạn có bất kỳ câu hỏi nào, vui lòng điền vào biểu mẫu dưới đây hoặc xem bản đồ của chúng tôi.
+            </p>
           </>
         )}
       </div>
 
-      {/* Bố cục 2 cột cho thông tin liên hệ và form */}
-      <Row gutter={32} justify="center">
-        {/* Thông tin liên hệ */}
-        <Col xs={24} sm={24} md={12} lg={8}>
-          <div className="contact-info">
-            {loading ? (
-              <>
-                <Skeleton height={30} width={150} />
-                <Skeleton height={30} width={150} />
-                <Skeleton height={30} width={150} />
-              </>
-            ) : (
-              <>
-                <div className="contact-info-item">
-                  <FaMapMarkerAlt size={24} className="contact-icon" />
-                  <p>123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</p>
-                </div>
-                <div className="contact-info-item">
-                  <FaPhoneAlt size={24} className="contact-icon" />
-                  <p>+84 123 456 789</p>
-                </div>
-                <div className="contact-info-item">
-                  <FaEnvelope size={24} className="contact-icon" />
-                  <p>contact@yourcompany.com</p>
-                </div>
-              </>
-            )}
-          </div>
-        </Col>
-
+      {/* Bố cục 2 cột: Form bên trái và Google Map bên phải */}
+      <Row gutter={[32, 32]} justify="center">
         {/* Form liên hệ */}
-        <Col xs={24} sm={24} md={12} lg={8}>
-          <div className="contact-form">
+        <Col xs={24} sm={24} md={12} lg={10}>
+          <div className="contact-form formEdit">
             {loading ? (
-              <Skeleton height={40} count={4} />
+              <Skeleton active paragraph={{ rows: 4, width: '100%' }} />
             ) : (
               <Form
                 name="contact"
@@ -101,26 +74,45 @@ function Contact() {
                   <Input.TextArea rows={4} placeholder="Nhập tin nhắn của bạn" />
                 </Form.Item>
 
-                <Form.Item>
+<div className='button-one'>
+<Form.Item >
                   <Button
                     type="primary"
                     htmlType="submit"
                     block
+                    className='button-one py-4'
                     loading={formLoading}
                   >
                     Gửi Tin Nhắn
                   </Button>
                 </Form.Item>
+
+</div>
+                
               </Form>
             )}
           </div>
         </Col>
-      </Row>
 
-      {/* Bản đồ Google Maps (tuỳ chọn) */}
-      <div className="google-map">
-        <Skeleton height={400} />
-      </div>
+        {/* Google Maps */}
+        <Col xs={24} sm={24} md={12} lg={10}>
+          <div className="google-map">
+            {loading ? (
+              <Skeleton active paragraph={{ rows: 1, width: '100%' }} />
+            ) : (
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.508141509213!2d106.7017552749702!3d10.774888960464716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752eeafa2e4db5%3A0x915fa7128afbe1d6!2zMTIzIMSQLiBBQkMgUXXhuq1uIFhZWiwgVGjhu4sgVMOibiwgVMOibiBCw6xuaCBIIE7Eg!5e0!3m2!1sen!2s!4v1700012356789!5m2!1sen!2s"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            )}
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }

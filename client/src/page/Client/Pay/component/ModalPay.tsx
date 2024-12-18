@@ -4,10 +4,15 @@ import { getAutoBank, getOrderAll } from '../../../../service/order/order.servic
 import { CopyOutlined, DownOutlined } from '@ant-design/icons';
 import CountdownTimer from './CountimePay';
 import { getsetting } from '../../../../service/setting/setting.service';
-
 function ModalPay(props:any) {
   const [data, setData] = useState(null);  
-
+useEffect(()=>{
+  if(props.isModalOpen){
+    props.handleReset();
+  }else{
+    props.handleResetTrue()
+  }
+},[props.isModalOpen])  
   useEffect(() => {
     const fetchApi = async () => {
       try {
@@ -58,8 +63,8 @@ function ModalPay(props:any) {
 useEffect(() => {
     fetchSettings();
 }, []);
-
-const totalOrder = props?.data?.order_total + 30000;
+console.log(props)
+const totalOrder = props?.data?.order_total;
 const textOrder = settings.rechargeNotice + props?.data?.order_id;
 
   // Ensure that data is not null and is an array with at least one element before rendering the image

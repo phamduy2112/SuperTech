@@ -127,7 +127,7 @@ function AdminAddProduct() {
   return (
     <>
       <Button onClick={showModal} className="p-10" type="primary">
-        <TbPlaylistAdd className="text-[18px]" /> Danh Mục Sản Phẩm Mới
+        <TbPlaylistAdd className="text-[18px]" />Thêm sản phẩm mới
       </Button>
        
       <Modal
@@ -439,20 +439,38 @@ function AdminAddProduct() {
 </div>
 
       {/* Submit Button */}
-      <div>
-      <Button type="primary" htmlType="submit" className="mt-4">Lưu sản phẩm</Button>
+      <div className='flex gap-[2rem]'>
+      <Button 
+  type="primary" 
+  htmlType="submit" 
+  className="mt-4"
+  style={{
+    height: "48px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    padding: "0 16px",
+  }}
+>
+  Lưu sản phẩm
+</Button>
 
-      <Button
-                  type="dashed"
-                  onClick={() => {
-                    dispatch(removeAllProductColors())
-                    resetForm(); // Reset form
-                    handleCancel(); // Đóng modal
-                  }}
-                  className="h-[48px]  text-blac rounded-lg"
-                >
-                  Cancel
-                </Button>
+<Button
+  type="dashed"
+  onClick={() => {
+    dispatch(removeAllProductColors());
+    resetForm();
+    handleCancel();
+  }}
+  style={{
+    height: "48px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    padding: "0 16px",
+  }}
+  className="mt-4"
+>
+  Cancel
+</Button>
       </div>
 
       

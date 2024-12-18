@@ -12,7 +12,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ImageUploader from "./Component/ChangeImage";
 import { Link, NavLink } from "react-router-dom";
-
+import './css/ModalEdit.css'
 import moment from "dayjs";
 import toast from "react-hot-toast";
 import ModalChangePassword from "./Component/ModalChangePassword";

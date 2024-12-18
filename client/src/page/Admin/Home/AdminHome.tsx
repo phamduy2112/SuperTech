@@ -88,53 +88,10 @@ useEffect(()=>{
         compare: (a: any, b: any) => a.order - b.order,
       },
     },
-    {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      key: 'address',
-    },
+ 
   ];
 
-  const data = [
-    {
-      key: '1',
-      name: 'John Doe',
-      money: 32000,
-      address: '10 Downing Street',
-      order: 100
-    },
-    {
-      key: '2',
-      name: 'Jane Smith',
-      money: 28000,
-      address: '20 Queen Street',
-      order: 10
 
-    },
-    {
-      key: '3',
-      name: 'Jane Smith',
-      money: 280000,
-      address: '20 Queen Street',
-      order: 10
-
-    },
-    {
-      key: '4',
-      name: 'Jane Smith',
-      money: 20008,
-      address: '20 Queen Street',
-      order: 200
-
-    },
-    {
-      key: '5',
-      name: 'Jane Smith',
-      money: 100000,
-      address: '20 Queen Street',
-      order: 120
-    },
-  ]
 
 
   return (
@@ -183,29 +140,6 @@ useEffect(()=>{
           <div className='flex items-center justify-between'>
             <div className='flex items-center text-[white] linear-gradient1 rounded-lg p-[15px] gap-[7px]'>
               <span><MdCalendarMonth /></span>
-              <span>Tình Trang Mua Bán Tuần Này</span>
-            </div>
-          </div>
-          <div className='flex-1'>
-            <Table
-              columns={columns}
-              dataSource={data}
-              pagination={{ pageSize: 5 }}
-              size="large"
-              onChange={onChange}
-            />
-          </div>
-        </div>
-
-
-      </div>
-      <div className=' grid grid-cols-1 lg:flex gap-3 w-full'>
-
-
-        <div className='bg-[white] w-full lg:w-[70%] p-12 box-border shadow-lg rounded-xl text-[13px] font-medium flex flex-col gap-7'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center text-[white] linear-gradient1 rounded-lg p-[15px] gap-[7px]'>
-              <span><MdCalendarMonth /></span>
               <span>Bảng Xếp Hạng Người Chi Tiêu</span>
             </div>
           </div>
@@ -213,24 +147,10 @@ useEffect(()=>{
        <TableChiTieu/>
           </div>
         </div>
-        <div className='w-full lg:w-[40%] bg-white p-12 box-border shadow-lg rounded-xl text-[13px] font-medium flex flex-col gap-7'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center text-[white] linear-gradient1 rounded-lg p-[15px] gap-[7px]'>
-              <span><MdCalendarMonth /></span>
-              <span>Ngày Hôm Nay</span>
-            </div>
-          </div>
-          <div className='flex-1 justify-center items-center'>
-            <ConfigProvider locale={viVN}>
-              <Calendar
-                fullscreen={false}
-              // Nếu cần có thể thêm các props khác như onChange, value, etc.
-              />
-            </ConfigProvider>          </div>
-        </div>
 
 
       </div>
+   
 
 
 

@@ -73,7 +73,7 @@ function Bill(props) {
           <div>
            <div className='text-[1.5rem] sm:hidden lg:inline-block  font-semibold mb-[.2rem]'>{truncateText(record.name,25)}</div> 
            <div className='text-[1.3rem] lg:hidden   font-semibold mb-[.2rem]'>{truncateText(record.name,20)}</div> 
-           <div className="">{record.storage}GB/{record.product_color}</div>
+           <div className="">{record.product_color}</div>
           </div>
           
         </div>

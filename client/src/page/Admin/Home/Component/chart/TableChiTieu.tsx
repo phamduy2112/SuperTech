@@ -25,7 +25,7 @@ function TableChiTieu(props) {
             user_name: item.user?.user_name || 'Không rõ',
             money: parseInt(item.totalSpent, 10) || 0,
             total_orders: item.totalOrders || 0,
-            address: "N/A",
+          
           }));
           setDataTable(transformedData);
         }
@@ -57,11 +57,7 @@ function TableChiTieu(props) {
       dataIndex: 'total_orders',
       key: 'total_orders',
     },
-    {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      key: 'address',
-    },
+
   ];
 
   const onChange = (pagination, filters, sorter) => {

@@ -79,11 +79,7 @@ function TaskHeaderMb({ onClose }: TaskHeaderMbProps) {
                 Trang chủ
               </NavLink>
             </div>
-            <div className="border-b border-gray-500 py-[1rem]">
-              <NavLink to="/gioi-thieu" className="text-[2rem] text-black">
-                Giới thiệu
-              </NavLink>
-            </div>
+          
 
             {/* Products Menu */}
             <div

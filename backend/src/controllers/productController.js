@@ -661,23 +661,23 @@ const deleteProductColor = async (req, res) => {
   });
 
   // Xóa hình ảnh từ Cloudinary (nếu có)
-  //   const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
-  //   for (const productColor of product.product_colors) {
-  //       for (const field of imageFields) {
-  //           const imageId = productColor[field];
-  //           if (imageId) {
-  //               // Xóa hình ảnh từ Cloudinary
-  //               await cloudinary.uploader.destroy(imageId);
-  //           }
-  //       }
+    // const imageFields = ['image_one', 'image_two', 'image_three', 'image_four'];
+    // for (const productColor of product.product_colors) {
+    //     for (const field of imageFields) {
+    //         const imageId = productColor[field];
+    //         if (imageId) {
+    //             // Xóa hình ảnh từ Cloudinary
+    //             await cloudinary.uploader.destroy(imageId);
+    //         }
+    //     }
 
-  //       // Xóa bản ghi hình ảnh (image_id) từ cơ sở dữ liệu nếu có
-  //       if (productColor.image_id) {
-  //           await models.image_product.destroy({
-  //               where: { image_id: productColor.image_id }
-  //           });
-  //       }
-  //   }
+    //     // Xóa bản ghi hình ảnh (image_id) từ cơ sở dữ liệu nếu có
+    //     if (productColor.image_id) {
+    //         await models.image_product.destroy({
+    //             where: { image_id: productColor.image_id }
+    //         });
+    //     }
+    // }
   responseSend(res, "", "Xóa sản phẩm thành công!", 200);
 };
 const updateQualityProduct = async (req, res) => {

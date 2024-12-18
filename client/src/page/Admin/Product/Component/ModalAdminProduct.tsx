@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 
 });
 
-function ModalAdminProduct() {
+function ModalAdminProduct(props:any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [showDetails, setShowDetails] = useState(false);
@@ -128,7 +128,7 @@ function ModalAdminProduct() {
 
   return (
     <>
-      <div className='cursor-pointer text-customColor' onClick={showModal} style={{ whiteSpace: 'normal' }}>
+      <div className={`cursor-pointer text-customColor text-[${props.font || 1.5}rem]`} onClick={showModal} style={{ whiteSpace: 'normal' }}>
   Thêm màu sắc
 </div>
       <Modal

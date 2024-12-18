@@ -30,14 +30,7 @@ function Menu() {
             Trang chủ
           </NavLink>
         </li>
-        <li className="relative md:mr-6">
-          <NavLink
-            to={Paths.Introduce}
-            className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
-          >
-            Giới thiệu
-          </NavLink>
-        </li>
+     
         <li
           className="relative md:mr-6"
           onMouseEnter={handleMouseEnter}
@@ -54,13 +47,20 @@ function Menu() {
             </div>
           )}
         </li>
-
+        <li className="relative md:mr-6">
+          <NavLink
+            to={Paths.Introduce}
+            className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
+          >
+           Bài viết
+          </NavLink>
+        </li>
         <li className="relative md:mr-6">
           <NavLink
             to={Paths.Contact}
             className="text-[1.8rem] md:mr-[2rem] lg:mr-[2rem] xl:mr-[6rem] text-black font-bold hover:text-purple-600 relative"
           >
-           Lien he
+           Liên hệ
           </NavLink>
         </li>
       </ul>

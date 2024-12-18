@@ -275,20 +275,17 @@ function AdminSetting() {
     
 
     return (
-        <div className="min-h-screen p-6 bg-gray-100">
-            <h2 className="text-[2.2rem] pb-[20px] ">Cài Đặt Website: <b className='text-[#184eff]' >{settings.title}</b></h2>
-            <Tabs defaultActiveKey="1">
+        <div className="min-h-screen flex flex-col p-12 gap-5 bg-[#f2edf3]" >
+            <div className="flex-1 bg-white flex flex-col rounded-xl shadow-lg px-[24px] py-[35px]">
+                <h2 className="pb-[24px] text-[30px] font-medium text-[#ffd700]">Cài Đặt Website: <b className="text-blue-500">{settings.title}</b></h2>
+                <Tabs defaultActiveKey="1">
                 <TabPane tab="Cài Đặt Chung" key="1">
-                    {/* Nội dung cho General Settings */}
-                    <Row gutter={[16, 16]}>
-                    <Divider orientation="center">Thông Tin Chung</Divider>
-                        <Col span={24}>
-                            
-                        </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem] flex items-center'> <FaPlus className='mr-1'  /> Title Website: </h4>
-                            <span className='text-[12px] text-[#646464] flex items-center'>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                    <Row gutter={[16, 24]}>
+                        <Divider orientation="center" className="text-3xl font-medium">Thông Tin Chung</Divider>
+                        <Col xs={24} sm={12} md={6}>
+                            <h4 className="text-3xl font-medium flex items-center mb-2"> <FaPlus className="mr-2" /> Title Website: </h4>
+                            <span className="text-xl text-gray-500 flex items-center mb-2">
+                                <FaExclamationTriangle className="text-red-500 mr-2" />
                                 Đây là input nhập tên website !
                             </span>
                             <Input
@@ -297,10 +294,10 @@ function AdminSetting() {
                                 onChange={(e) => handleValueChange('title', e.target.value)}
                             />
                         </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem] flex items-center'> <FaBookmark className='mr-1' /> Description Website:</h4>
-                            <span className='text-[12px] text-[#646464] flex items-center '>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                        <Col xs={24} sm={12} md={6}>
+                            <h4 className="text-3xl font-medium flex items-center mb-2"> <FaBookmark className="mr-2" /> Description Website:</h4>
+                            <span className="text-xl text-gray-500 flex items-center mb-2">
+                                <FaExclamationTriangle className="text-red-500 mr-2" />
                                 Đây là input nhập giới thiệu ngắn ở chân website !
                             </span>
                             <Input
@@ -309,10 +306,10 @@ function AdminSetting() {
                                 onChange={(e) => handleValueChange('description', e.target.value)}
                             />
                         </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem] flex items-center'> <FaUserAlt className='mr-1' /> Chủ Quản Website:</h4>
-                            <span className='text-[12px] text-[#646464] flex items-center  '>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                        <Col xs={24} sm={12} md={6}>
+                            <h4 className="text-3xl font-medium flex items-center mb-2"> <FaUserAlt className="mr-2" /> Chủ Quản Website:</h4>
+                            <span className="text-xl text-gray-500 flex items-center mb-2">
+                                <FaExclamationTriangle className="text-red-500 mr-2" />
                                 Đây là input nhập chủ của website !
                             </span>
                             <Input
@@ -321,10 +318,10 @@ function AdminSetting() {
                                 onChange={(e) => handleValueChange('author', e.target.value)}
                             />
                         </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem] flex items-center'><FaBell className='mr-1' /> Thông Báo Website:</h4>
-                            <span className='text-[12px] text-[#646464] flex items-center '>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
+                        <Col xs={24} sm={12} md={6}>
+                            <h4 className="text-3xl font-medium flex items-center mb-2"><FaBell className="mr-2" /> Thông Báo Website:</h4>
+                            <span className="text-xl text-gray-500 flex items-center mb-2">
+                                <FaExclamationTriangle className="text-red-500 mr-2" />
                                 Đây là input thông báo ở đầu trang website !
                             </span>
                             <Input
@@ -335,219 +332,195 @@ function AdminSetting() {
                         </Col>
                     </Row>
                 </TabPane>
-                <TabPane tab="Cài Đặt Giao Diện" key="2">
-                    {/* Nội dung cho UI Settings */}
-                    <Row gutter={[16, 16]}>
-                        
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem] flex items-center'><FaCubes className='mr-1' /> Color Website:</h4>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Popover
-                                    content={colorPicker}
-                                    trigger="click"
-                                    open={visible}
-                                    onOpenChange={setVisible}
+                    <TabPane tab="Cài Đặt Giao Diện" key="2">
+                        <Row gutter={[16, 24]}>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium flex items-center mb-2"><FaCubes className="mr-2" /> Color Website:</h4>
+                                <div className="flex items-center">
+                                    <Popover
+                                        content={colorPicker}
+                                        trigger="click"
+                                        open={visible}
+                                        onOpenChange={setVisible}
                                     >
-                                    <Input
-                                        value={settings.color}
-                                        placeholder="Click to select color..."
-                                        readOnly
-                                    />
-                                </Popover>
-                                <div style={{ width: '40px', height: '35px', backgroundColor: settings.color, marginLeft: 10, borderRadius: '20px' }}></div>
-                            </div>
-                        </Col>
-
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem] flex items-center'>
-                            <FaImage className='mr-1' /> Favicon Website:
-                                <Popover content={"Chức năng này sẽ tự động lưu ảnh favicon của bạn không cần bấm lưu !"} trigger="hover">
-                                    <FaExclamationTriangle className='text-red-500 ml-1' />
-                                </Popover>
-                               
-                            </h4>
-                            <div className='mt-2 shadow-lg rounded p-3 w-64 flex items-center justify-center'> 
-                                <img src={`${IMG_BACKEND_SETTING}${settings.favicon}`} alt="Favicon" style={{ width: '100px' }} />
-                            </div>
-                            <Upload
-                            
-                                accept="image/*"  
-                                showUploadList={false}  
-                                beforeUpload={(file) => {
-                                    const reader = new FileReader();
-                                    reader.onload = (e) => {
-                                        const faviconName = file.name;  
-                                        setSettings(prev => ({ ...prev, favicon: faviconName }));  
-                                    };
-                                    reader.readAsDataURL(file); 
-                                    updatesettingId(6, file) 
-                                        .then(() => {
-                                            
-                                            setTimeout(() => {
-                                                window.location.reload();
-                                            }, 10); 
-                                        })
-                                        .catch(error => {
-                                            console.error('Lỗi khi upload favicon:', error);
-                                        });
-                                       
-                                    return false; 
-                                }}
-                            >
-                                <Button className='flex items-center justify-center' >Chọn Favicon</Button>
-                            </Upload>
-                        </Col>
-
-                    </Row>
-                </TabPane>
-                <TabPane tab="Ngân Hàng" key="3">
-                    {/* Nội dung cho Ngân hàng */}
-                    <Row gutter={[16, 16]}>
-                    <Divider orientation="center" > <span className='flex items-center'><FaLock className='mr-1' /> Token Ngân Hàng</span></Divider>
-                    <Col span={24}>
-                            <h4>Token Autobank:</h4>
-                            <span className='text-[12px] text-[#646464] flex items-center '>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
-                                Đây là nơi lưu token api phía ngân hàng.
-                            </span>
-                            {isTokenVisible ? (
-                                <Input
-                                    value={settings.token}
-                                    onChange={(e) => handleValueChange('token', e.target.value)}
-                                    placeholder="Enter token..."
-                                />
-                            ) : (
-                                <Button onClick={showPasswordModal}>Xem Token</Button>
-                            )}
-                        </Col>
-                        <Divider orientation="center "> <span className='flex items-center'><FaRegCreditCard className='mr-1' /> Thông Tin Ngân Hàng</span></Divider>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Ngân Hàng:</h4>
-                            <div className='flex items-center' >
-                            <Select
-                                value={bankDetails.short_name}
-                                placeholder="Chọn ngân hàng..."
-                                onChange={(value) => handleValueChange('short_name', value)} 
-                                style={{ width: '100%' }}
-                            >
-                                {bankList.map((shortName, index) => (
-                                    <Select.Option key={index} value={shortName}>
-                                        {shortName}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                            <Popover content="Đây là nơi chọn ngân hàng." trigger="hover">
-                                <FaExclamationTriangle className='text-red-500 ml-1' />
-                            </Popover>
-                            </div>
-                        </Col>
-                        {/* <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Logo Ngân Hàng:</h4>
-                            <Input
-                                value={settings.contentAutobank}
-                                placeholder="Content Autobank..."
-                                onChange={(e) => handleValueChange('contentAutobank', e.target.value)}
-                            />
-                        </Col> */}
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                        <h4 className='text-[1.6rem]'>Tên Tài Khoản:</h4>
-                        <div className='flex items-center' >
-                        <Input
-                            value={bankDetails.accountName} 
-                            placeholder="Tên Tài Khoản..."
-                            onChange={(e) => handleValueChange('accountName', e.target.value)} 
-                        />
-                         <Popover content="Đây là nơi nhập tên tài khoản." trigger="hover">
-                                <FaExclamationTriangle className='text-red-500 ml-1' />
-                            </Popover>
-                        </div>
-                    </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Số Tài Khoản:</h4>
-                            <div className='flex items-center' >
-                            <Input
-                            value={bankDetails.accountNumber}
-                            placeholder="Số Tài Khoản..."
-                            onChange={(e) => handleValueChange('accountNumber', e.target.value)}
-                        />
-                         <Popover content="Đây là nơi nhập số tài khoản." trigger="hover">
-                                <FaExclamationTriangle className='text-red-500 ml-1' />
-                            </Popover>
-                            </div>
-                        </Col>
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]'>Nội Dung Nạp Tiền:</h4>
-                            <div className='flex items-center' > 
-
-                            <Input
-                                value={settings.rechargeNotice}
-                                placeholder="Nội Dung Nạp Tiền..."
-                                onChange={(e) => handleValueChange('rechargeNotice', e.target.value)}
-                            />
-                             <Popover content={
-                                <div style={{ maxWidth: '200px' }}> {/* Điều chỉnh chiều rộng tối đa */}
-                                    Đây là nơi nhập nội dung chuyển tiền, khi khách hàng thanh toán
-                                    thì nội dung này sẽ nằm ở đầu.   <br /> Ví Dụ: supertech1156.
+                                        <Input
+                                            value={settings.color}
+                                            placeholder="Click to select color..."
+                                            readOnly
+                                        />
+                                    </Popover>
+                                    <div className="ml-4 w-10 h-10 rounded-full" style={{ backgroundColor: settings.color }}></div>
                                 </div>
-                                }  
-                            trigger="hover">
-                                <FaExclamationTriangle className='text-red-500 ml-1' />
-                            </Popover>
-
-                            </div>
-                           
+                            </Col>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium flex items-center mb-2">
+                                    <FaImage className="mr-2" /> Favicon Website:
+                                    <Popover content="Chức năng này sẽ tự động lưu ảnh favicon của bạn không cần bấm lưu !" trigger="hover">
+                                        <FaExclamationTriangle className="text-red-500 ml-2" />
+                                    </Popover>
+                                </h4>
+                                <div className="mt-2 p-4 shadow rounded-md bg-white flex justify-center">
+                                    <img src={`${IMG_BACKEND_SETTING}${settings.favicon}`} alt="Favicon" className="w-20" />
+                                </div>
+                                <Upload
+                                    accept="image/*"
+                                    showUploadList={false}
+                                    beforeUpload={(file) => {
+                                        const reader = new FileReader();
+                                        reader.onload = () => {
+                                            const faviconName = file.name;
+                                            setSettings(prev => ({ ...prev, favicon: faviconName }));
+                                        };
+                                        reader.readAsDataURL(file);
+                                        updatesettingId(6, file)
+                                            .then(() => {
+                                                setTimeout(() => {
+                                                    window.location.reload();
+                                                }, 10);
+                                            })
+                                            .catch(error => {
+                                                console.error('Lỗi khi upload favicon:', error);
+                                            });
+                                        return false;
+                                    }}
+                                >
+                                    <Button className="mt-2 w-full">Chọn Favicon</Button>
+                                </Upload>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tab="Ngân Hàng" key="3">
+                        <Row gutter={[16, 24]}>
+                            <Divider orientation="center" className="text-3xl font-medium"> <span className="flex items-center"><FaLock className="mr-2" /> Token Ngân Hàng</span></Divider>
+                            <Col span={24}>
+                                <h4 className="text-3xl font-medium mb-2">Token Autobank:</h4>
+                                <span className="text-xl text-gray-500 flex items-center mb-2">
+                                    <FaExclamationTriangle className="text-red-500 mr-2" />
+                                    Đây là nơi lưu token api phía ngân hàng.
+                                </span>
+                                {isTokenVisible ? (
+                                    <Input
+                                        value={settings.token}
+                                        onChange={(e) => handleValueChange('token', e.target.value)}
+                                        placeholder="Enter token..."
+                                    />
+                                ) : (
+                                    <Button onClick={showPasswordModal}>Xem Token</Button>
+                                )}
+                            </Col>
+                            <Divider orientation="center" className="text-3xl font-medium"> <span className="flex items-center"><FaRegCreditCard className="mr-2" /> Thông Tin Ngân Hàng</span></Divider>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium mb-2">Ngân Hàng:</h4>
+                                <div className="flex items-center">
+                                    <Select
+                                        value={bankDetails.short_name}
+                                        placeholder="Chọn ngân hàng..."
+                                        onChange={(value) => handleValueChange('short_name', value)}
+                                        className="w-full"
+                                    >
+                                        {bankList.map((shortName, index) => (
+                                            <Select.Option key={index} value={shortName}>
+                                                {shortName}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                    <Popover content="Đây là nơi chọn ngân hàng." trigger="hover">
+                                        <FaExclamationTriangle className="text-red-500 ml-2" />
+                                    </Popover>
+                                </div>
+                            </Col>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium mb-2">Tên Tài Khoản:</h4>
+                                <div className="flex items-center">
+                                    <Input
+                                        value={bankDetails.accountName}
+                                        placeholder="Tên Tài Khoản..."
+                                        onChange={(e) => handleValueChange('accountName', e.target.value)}
+                                    />
+                                    <Popover content="Đây là nơi nhập tên tài khoản." trigger="hover">
+                                        <FaExclamationTriangle className="text-red-500 ml-2" />
+                                    </Popover>
+                                </div>
+                            </Col>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium mb-2">Số Tài Khoản:</h4>
+                                <div className="flex items-center">
+                                    <Input
+                                        value={bankDetails.accountNumber}
+                                        placeholder="Số Tài Khoản..."
+                                        onChange={(e) => handleValueChange('accountNumber', e.target.value)}
+                                    />
+                                    <Popover content="Đây là nơi nhập số tài khoản." trigger="hover">
+                                        <FaExclamationTriangle className="text-red-500 ml-2" />
+                                    </Popover>
+                                </div>
+                            </Col>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium mb-2">Nội Dung Nạp Tiền:</h4>
+                                <div className="flex items-center">
+                                    <Input
+                                        value={settings.rechargeNotice}
+                                        placeholder="Nội Dung Nạp Tiền..."
+                                        onChange={(e) => handleValueChange('rechargeNotice', e.target.value)}
+                                    />
+                                    <Popover
+                                        content={<div style={{ maxWidth: '200px' }}>
+                                            Đây là nơi nhập nội dung chuyển tiền, khi khách hàng thanh toán
+                                            thì nội dung này sẽ nằm ở đầu. <br /> Ví Dụ: supertech1156.
+                                        </div>}
+                                        trigger="hover"
+                                    >
+                                        <FaExclamationTriangle className="text-red-500 ml-2" />
+                                    </Popover>
+                                </div>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tab="Cấu Hình SMTP" key="4">
+                        <Row gutter={[16, 24]}>
+                            <Divider orientation="center" className="text-3xl font-medium"> <span className="flex items-center"><FaMailBulk className="mr-2" /> Quản Lý Gửi MAIL SMTP</span></Divider>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium mb-2">Tài Khoản SMTP:</h4>
+                                <span className="text-xl text-gray-500 flex items-center mb-2">
+                                    <FaExclamationTriangle className="text-red-500 mr-2" />
+                                    Đây là nơi lưu tài khoản MAIL Tự động.
+                                </span>
+                                <div className="flex items-center">
+                                    <Input
+                                        value={settings.SMTP_USER}
+                                        placeholder="Tên Tài Khoản..."
+                                        onChange={(e) => handleValueChange('SMTP_USER', e.target.value)}
+                                    />
+                                </div>
+                            </Col>
+                            <Col xs={24} sm={12} md={6}>
+                                <h4 className="text-3xl font-medium mb-2">Mật Khẩu SMTP:</h4>
+                                <span className="text-xl text-gray-500 flex items-center mb-2">
+                                    <FaExclamationTriangle className="text-red-500 mr-2" />
+                                    Đây là nơi lưu mật khẩu SMTP MAIL.
+                                </span>
+                                {isTokenVisible ? (
+                                    <Input
+                                        value={settings.SMTP_PASSWORD}
+                                        onChange={(e) => handleValueChange('SMTP_PASSWORD', e.target.value)}
+                                        placeholder="Nhập Mật Khẩu..."
+                                    />
+                                ) : (
+                                    <Button onClick={showPasswordSMTPModal}>Xem/Sửa Mật Khẩu</Button>
+                                )}
                         </Col>
-                    </Row>
-                </TabPane>
-                <TabPane tab="Cấu Hình SMTP" key="4">
-                    {/* Nội dung cho Ngân hàng */}
-                    <Row gutter={[16, 16]}>
-                        
-                    <Divider orientation="center" > <span className='flex items-center'><FaMailBulk className='mr-1' /> Quản Lí Gửi MAIL SMTP</span></Divider>
+                        </Row>
+                    </TabPane>
                     
-
-                        <Col xs={24} sm={12} md={12} lg={6}>
-                        <h4 className='text-[1.6rem]'>Tài Khoản SMTP:</h4>
-                        <span className='text-[12px] text-[#646464] flex items-center '>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
-                                Đây là nơi lưu tài khoản MAIL Tự động.
-                            </span>
-                        <div className='flex items-center' >
-                            
-                        <Input
-                            value={bankDetails.accountName} 
-                            placeholder="Tên Tài Khoản..."
-                            onChange={(e) => handleValueChange('accountName', e.target.value)} 
-                        />
-                        </div>
+                </Tabs>
+                <Row>
+                    <Col span={24} style={{ marginTop: '40px' }}>
+                        <Button type="primary" onClick={handleSubmit} size="middle">
+                            Lưu Cài Đặt
+                        </Button>
                     </Col>
-                    <Col xs={24} sm={12} md={12} lg={6}>
-                            <h4 className='text-[1.6rem]' >Mật Khẩu SMTP:</h4>
-                            <span className='text-[12px] text-[#646464] flex items-center '>
-                                <FaExclamationTriangle className='text-red-500 mr-1' />
-                                Đây là nơi lưu mật khẩu SMTP MAIL.
-                            </span>
-                            {isTokenVisible ? (
-                                <Input
-                                    value={settings.SMTP_PASSWORD}
-                                    onChange={(e) => handleValueChange('SMTP_PASSWORD', e.target.value)}
-                                    placeholder="Nhập Mật Khẩu..."
-                                />
-                            ) : (
-                                <Button onClick={showPasswordSMTPModal}>Xem/Sửa Mật Khẩu</Button>
-                            )}
-                    </Col>
-                    </Row>
-                </TabPane>
-                
-            </Tabs>
-            <Row>
-                <Col span={24} style={{ marginTop: '40px' }}>
-                    <Button type="primary" onClick={handleSubmit} size="middle">
-                        Lưu Cài Đặt
-                    </Button>
-                </Col>
-            </Row>
+                </Row>
+            </div>
         </div>
     );
 }

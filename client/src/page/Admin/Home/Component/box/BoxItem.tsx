@@ -51,7 +51,7 @@ useEffect(() => {
 />
     <Box
   id_box_page_home={2}
-  title_box_page_home="Khách hàng và admin Online"
+  title_box_page_home="Khách hàng mới đăng kí"
   total_box_page_home={getNewCustomer}
   icon_box_page_home={<TbChartBubbleFilled />}
   symbol=""
@@ -70,34 +70,7 @@ useEffect(() => {
   icon_box_page_home={<TbChartBubbleFilled />}
   symbol=""
 />
-    <Box
-  id_box_page_home={1}
-  title_box_page_home="Tổng khách hàng"
-  total_box_page_home={listUserAll?.length}
-  icon_box_page_home={<TbChartBubbleFilled />}
-  symbol=""
-/>
-    <Box
-  id_box_page_home={2}
-  title_box_page_home="Tổng doanh thu một ngày"
-  total_box_page_home={getNewCustomer}
-  icon_box_page_home={<TbChartBubbleFilled />}
-  symbol=""
-/>
-    <Box
-  id_box_page_home={2}
-  title_box_page_home="Tông nhân viên"
-  total_box_page_home={listProductAll?.length}
-  icon_box_page_home={<TbChartBubbleFilled />}
-  symbol=""
-/>
-    <Box
-  id_box_page_home={2}
-  title_box_page_home="Tông Loại"
-  total_box_page_home={listOrdertAll?.length}
-  icon_box_page_home={<TbChartBubbleFilled />}
-  symbol=""
-/>
+ 
 </div>
   )
 }

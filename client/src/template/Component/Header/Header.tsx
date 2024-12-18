@@ -1,28 +1,21 @@
 import Search from "antd/es/input/Search";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import "./Header.css";
-import { Badge, Button, Dropdown } from "antd";
-import { FaBars, FaRegHeart, FaUserCircle } from "react-icons/fa";
+import { Badge } from "antd";
+import {  FaRegHeart } from "react-icons/fa";
 import { MdLanguage, MdOutlineShoppingBag } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
 import Menu from "./Component/Menu/Menu";
 import { CiLocationOn } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
-import { IoIosSearch } from "react-icons/io";
-import TaskCart from "./Component/Menu/Modal/TaskCart";
 import TaskCatelogry from "./Component/Menu/Modal/TaskCatelogry";
-import TaskHeaderMb from "./Component/Menu/Modal/TasKHeaderMb";
 import { useSpring, animated } from "react-spring";
-import { getLocalStorage } from "../../../utils";
 import DropdownUser from "./Component/DropdownUser";
 import { useAppSelector } from "../../../redux/hooks";
-import { getFavouriteProductThunk } from "../../../redux/favourite/Favourite.slice";
-import { useDispatch } from "react-redux";
 import "./modalUserCustom.css";
-import { Input } from "../Input/Input";
 import HeaderMobile from "./Component/Mobile/HeaderMB";
-import LoadingFooter from "../Footer/Component/Loading/LoadingFooter";
 import LoadingHeader from "./Component/Loading/LoadingHeader";
+import TaskCart from "./Component/Menu/Modal/TaskCart";
 import { timeLoading } from "../../../constants";
 function Header() {
   const navigate = useNavigate();
@@ -32,16 +25,7 @@ function Header() {
       navigate(`/tim-kiem?tukhoa=${value}`);
     }
   };
-  const items = [
-    {
-      key: "1",
-      label: <NavLink to={"auth/signin"}>Đăng Nhập</NavLink>,
-    },
-    {
-      key: "2",
-      label: <NavLink to={"auth/signin"}>Đăng Kí</NavLink>,
-    },
-  ];
+ 
   // cuộn xuống
   const [scrollY, setScrollY] = useState(true);
 
@@ -60,7 +44,6 @@ function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  const dispatch = useDispatch();
   const listProductFavourites = useAppSelector(
     (state) => state.listProductFavorites.listFavourite
   );
@@ -94,7 +77,6 @@ function Header() {
 
 
   const listCart = useAppSelector((state) => state.cart.listCart);
-  const token = getLocalStorage("token");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

@@ -49,6 +49,7 @@ export const createInforProduct=(dataCreate:any)=>{
   })
 }
 export const deleteProduct=(id:number)=>{
+  
   return axiosWithAuth(`/products-delete/${id}`,{
     method:"delete",
   

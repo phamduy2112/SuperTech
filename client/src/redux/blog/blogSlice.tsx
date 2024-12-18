@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  createBlog,
-  deleteBlog,
-  getBlog,
-  getBlogAll,
-  getmedia_postAll,
-} from "../../service/Blog/blog.service";
+import { createBlog, deleteBlog, getBlog, getBlogAll, getmedia_postAll } from "../../service/Blog/blog.service";
+
 
 export const getAllBlogThunk = createAsyncThunk("getAllBlogThunk", async () => {
   try {
@@ -53,18 +48,30 @@ export const deleteBlogThunk = createAsyncThunk(
 );
 // Thunk để thêm bài viết
 export const createBlogThunk = createAsyncThunk(
-  "blogs/create",
-  async (newBlog: any, { rejectWithValue }) => {
+  "createBlogThunk",
+  async (newBlog: any) => {
     try {
       const resp = await createBlog(newBlog);
       return resp.data.content;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.log(error);
+    }
+  }
+);
+
+export const createMediaThunk = createAsyncThunk(
+  "createBlogThunk",
+  async (newBlog: any) => {
+    try {
+      const resp = await createBlog(newBlog);
+      return resp.data.content;
+    } catch (error) {
+      console.log(error);
     }
   }
 );
 const initialState = {
-  listBlog: [],
+  listBlog: null,
   mediaPosts: [],
   loading: false,
   error: null,
@@ -78,9 +85,14 @@ const BlogSlice = createSlice({
       state.listBlog = payload;
     },
   },
+
   extraReducers: (builder) => {
-    builder.addCase(getAllBlogThunk.fulfilled, (state, { payload }) => {
-      state.listBlog = payload;
+    builder.addCase(createBlogThunk.fulfilled, (state, { payload }) => {
+      if (Array.isArray(payload.content)) {
+        state.listBlog = [...state.listBlog, ...payload.content];
+      } else {
+        console.error("Payload content is not an array:", payload.content);
+      }
     });
     builder.addCase(getBlogByIdThunk.fulfilled, (state, { payload }) => {
       state.BlogOne = payload;
