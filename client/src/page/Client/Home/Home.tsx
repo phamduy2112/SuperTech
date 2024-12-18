@@ -5,6 +5,8 @@ import Catelory2 from './Component/Catelory2';
 import banner1 from "../../../assets/banner7.png";
 import banner3 from "../../../assets/banner3.png";
 import banner4 from "../../../assets/banner4.png";
+import banner5 from "../../../assets/banner5.png";
+import banner6 from "../../../assets/banner6.png";
 import Dis from './Component/Dis';
 import LaptopComponent from './Component/Laptop';
 import { Container } from '../../../components/Style/Container';
@@ -49,15 +51,15 @@ function Home() {
         </div>
 
         {/* Second Responsive Image Section */}
-        <div className="mx-auto py-5">
-          <div className="flex flex-col md:flex-row gap-4">
+        <div className="mx-auto py-5 ">
+          <div className="flex flex-col justify-between md:flex-row gap-4">
             <img
-              src={banner3}
+              src={banner5}
               alt="Banner 3"
               className="w-full md:w-[48%] rounded-3xl"
             />
             <img
-              src={banner4}
+              src={banner6}
               alt="Banner 4"
               className="w-full md:w-[48%] rounded-3xl"
             />

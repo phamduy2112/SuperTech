@@ -4,8 +4,12 @@ import { DataSlideShow } from './DataSlideShow';
 import { Spin } from 'antd'; // Import Spin từ Ant Design
 import { timeLoading } from '../../../../constants';
 
+
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { getAllBannerThunk } from '../../../../redux/banner/banner.slice';
+
 function Carousel() {
-  const [isLoading, setIsLoading] = useState(true);
+ const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => setIsLoading(false), timeLoading);

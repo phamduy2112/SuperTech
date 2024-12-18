@@ -13,7 +13,7 @@ function TaskProduct() {
     };
     getCategoriesDad();
   }, []);
-  
+
   return (
     <div className="absolute z-50 left-[-320px] top-full mt-2 bg-white p-4 shadow-lg rounded-lg">
       <div className="w-[550px] py-[1.5rem] px-[1.5rem]">

@@ -2,34 +2,37 @@ import sequelize from "../models/connect.js";
 import { responseSend } from "../config/response.js";
 import { sendMail } from "../config/mail.js";
 import initModels from "../models/init-models.js";
-import bcrypt from "bcryptjs"
-import { createToken, createTokenRef, decodeToken, verifyToken } from "../config/jwt.js";
+import bcrypt from "bcryptjs";
+import {
+  createToken,
+  createTokenRef,
+  decodeToken,
+  verifyToken,
+} from "../config/jwt.js";
 import { deleteFile, upload } from "../config/upload.js";
-import path from"path"
-import nodemailer from 'nodemailer';
+import path from "path";
+import nodemailer from "nodemailer";
 import { Op } from "sequelize";
-import { startOfWeek,endOfWeek } from "date-fns";
-import jwt from 'jsonwebtoken'
+import { startOfWeek, endOfWeek } from "date-fns";
+import jwt from "jsonwebtoken";
 
-
-
-let models = initModels(sequelize); 
-let User = models.user; 
+let models = initModels(sequelize);
+let User = models.user;
 const refreshTokens = [];
 
 const getUser = async (req, res) => {
   try {
-      let data = await User.findAll();
-      responseSend(res, data, "Thành công!", 200);
+    let data = await User.findAll();
+    responseSend(res, data, "Thành công!", 200);
   } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu:", error);
-      res.status(500).json({
-          message: "Lỗi",
-          success: false,
-      });
+    console.error("Lỗi khi lấy dữ liệu:", error);
+    res.status(500).json({
+      message: "Lỗi",
+      success: false,
+    });
   }
 };
-const getNewCustomersThisWeek = async  (req, res) => {
+const getNewCustomersThisWeek = async (req, res) => {
   try {
     const today = new Date();
 
@@ -52,44 +55,46 @@ const getNewCustomersThisWeek = async  (req, res) => {
       data: newCustomers,
     });
   } catch (error) {
-    console.error('Error fetching new customers:', error);
+    console.error("Error fetching new customers:", error);
     console.log(e);
-    
+
     return res.status(500).json({
       success: false,
-      message: 'Có lỗi xảy ra khi lấy danh sách khách hàng mới.',
+      message: "Có lỗi xảy ra khi lấy danh sách khách hàng mới.",
     });
   }
-}
+};
 const register = async (req, res) => {
-    try{
-        const {user_name,user_email,user_password}=req.body
-        let user_time=new Date();
+  try {
+    const { user_name, user_email, user_password } = req.body;
+    let user_time = new Date();
 
-        const user = await User.findOne({ where: { user_email } });
-        if(user){
-            return responseSend(res,{success:false},"Email đã tồn tại",200)
-        }
-        const hashedPassword=await bcrypt.hash(user_password,10)
-       const newUser= await User.create({
-            user_name,
-            user_email,
-            user_password:hashedPassword,
-            user_role:11,
-            user_time
-        })
-        await sendVerificationEmail(newUser.user_email, newUser.user_id);
+    const user = await User.findOne({ where: { user_email } });
+    if (user) {
+      return responseSend(res, { success: false }, "Email đã tồn tại", 200);
+    }
+    const hashedPassword = await bcrypt.hash(user_password, 10);
+    const newUser = await User.create({
+      user_name,
+      user_email,
+      user_password: hashedPassword,
+      user_role: 11,
+      user_time,
+    });
+    await sendVerificationEmail(newUser.user_email, newUser.user_id);
 
-        responseSend(res,{
-            success: true
-        },"Đăng kí thành công!",201)
-        
-        }catch(e){
-            console.log(e);
-            
-        }
-    
-}
+    responseSend(
+      res,
+      {
+        success: true,
+      },
+      "Đăng kí thành công!",
+      201
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -118,7 +123,6 @@ const login = async (req, res) => {
     const isPasswordMatch = await bcrypt.compare(password, user.user_password);
 
     if (!isPasswordMatch) {
-      
       return res.status(200).json({
         message: "Sai email hoặc mật khẩu",
         success: false,
@@ -128,16 +132,21 @@ const login = async (req, res) => {
     // Tạo thông tin người dùng và token
     const userDetail = {
       user_id: user.user_id,
-      user_role: user.user_role
+      user_role: user.user_role,
     };
     const token = createToken(userDetail);
     const tokenRef = createTokenRef(userDetail);
 
-    return responseSend(res, {
-      token: token,
-      refreshToken: tokenRef,
-      success: true,
-    }, "Thành công!", 200);
+    return responseSend(
+      res,
+      {
+        token: token,
+        refreshToken: tokenRef,
+        success: true,
+      },
+      "Thành công!",
+      200
+    );
   } catch (e) {
     console.error("Error in login:", e);
     return res.status(500).json({
@@ -147,137 +156,125 @@ const login = async (req, res) => {
   }
 };
 const resetToken = async (req, res) => {
-    try {
-        let {token}=req.body;
-        console.log("token",token);
-        let errorToken=verifyToken(token);
-        // console.log(token);
-        if(errorToken!=null && errorToken.name!="TokenExpiredError"){
-            responseSend(res,"","Not Authorize !",200);
-            return
-    
-        }
-        // check refesh token con2 hang k
-        //UserId: lay tu token
-        let {data}=decodeToken(token);
-        // console.log(data);
-        let getUser=await User.findByPk(data.user_id)
-        console.log(data);
-        
-        // console.log(getUser.dataValues.refresh_token);
-        // if(checkTokenRef(getUser.dataValues.refresh_token)!=null){
-        //     responseSend(res,"","Not Authorize !",200);
-        //     return
-        // }else{
-        //     console.log("thanh cong");
-        // }
-         //create token
-          let tokenNew=createToken({
-            user_id:getUser.dataValues.user_id,
-        });
-        // // login thành công
-        console.log(tokenNew);
-        responseSend(res,tokenNew,"Thành công !",200);
-    } catch (e) {
-
-        console.log(e);
-        
-        console.error("Error in resetToken:", e);
-        return res.status(500).json({
-            message: "Internal Server Error",
-            success: false,
-        });
+  try {
+    let { token } = req.body;
+    console.log("token", token);
+    let errorToken = verifyToken(token);
+    // console.log(token);
+    if (errorToken != null && errorToken.name != "TokenExpiredError") {
+      responseSend(res, "", "Not Authorize !", 200);
+      return;
     }
-    
+    // check refesh token con2 hang k
+    //UserId: lay tu token
+    let { data } = decodeToken(token);
+    // console.log(data);
+    let getUser = await User.findByPk(data.user_id);
+    console.log(data);
+
+    // console.log(getUser.dataValues.refresh_token);
+    // if(checkTokenRef(getUser.dataValues.refresh_token)!=null){
+    //     responseSend(res,"","Not Authorize !",200);
+    //     return
+    // }else{
+    //     console.log("thanh cong");
+    // }
+    //create token
+    let tokenNew = createToken({
+      user_id: getUser.dataValues.user_id,
+    });
+    // // login thành công
+    console.log(tokenNew);
+    responseSend(res, tokenNew, "Thành công !", 200);
+  } catch (e) {
+    console.log(e);
+
+    console.error("Error in resetToken:", e);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
 };
-
-
-
 
 const loginFacebook = async (req, res) => {
-    try {
-        const { face_app_id, name, email, id } = req.body; // Lấy id từ req.body
+  try {
+    const { face_app_id, name, email, id } = req.body; // Lấy id từ req.body
 
-        // Kiểm tra xem người dùng đã tồn tại chưa
-        let checkUser = await User.findOne({
-            where: {
-                email // Kiểm tra dựa trên email thay vì id
-            }
-        });
-
-        // Nếu người dùng chưa tồn tại, tạo một người dùng mới
-        if (!checkUser) {
-            const newUser = {
-                email,
-                pass_word: "", // Mật khẩu có thể để trống cho người dùng đăng nhập bằng Facebook
-                user_name: name,
-                avatar: "", // Có thể cập nhật thêm sau này nếu có URL của avatar
-                user_role: 1, // Có thể điều chỉnh dựa trên quyền hạn của người dùng
-            };
-            checkUser = await User.create(newUser); // Tạo người dùng mới
-        }
-
-        // Tạo token cho người dùng
-        const token = createToken({
-            userId: checkUser.user_id, // Sử dụng user_id từ checkUser
-            role: checkUser.user_role // Sử dụng user_role từ checkUser
-        });
-
-        // Đăng nhập thành công
-        return responseSend(res, token, "Thành công!", 200);
-    } catch (error) {
-        console.error("Login Facebook error:", error);
-        return res.status(500).json({ message: "Internal server error", success: false });
-    }
-};
-const userDetail=async(req,res)=>{
-    try{
-
-       const user_id=req.id;
-        
-    
-       const user=await User.findByPk(user_id, {
-        attributes: { exclude: ['user_password'] }
+    // Kiểm tra xem người dùng đã tồn tại chưa
+    let checkUser = await User.findOne({
+      where: {
+        email, // Kiểm tra dựa trên email thay vì id
+      },
     });
 
-       responseSend(res, user, "Thành công!", 200);
-
-
-    }catch(e){
-        console.log(e);
-        
+    // Nếu người dùng chưa tồn tại, tạo một người dùng mới
+    if (!checkUser) {
+      const newUser = {
+        email,
+        pass_word: "", // Mật khẩu có thể để trống cho người dùng đăng nhập bằng Facebook
+        user_name: name,
+        avatar: "", // Có thể cập nhật thêm sau này nếu có URL của avatar
+        user_role: 1, // Có thể điều chỉnh dựa trên quyền hạn của người dùng
+      };
+      checkUser = await User.create(newUser); // Tạo người dùng mới
     }
-}
+
+    // Tạo token cho người dùng
+    const token = createToken({
+      userId: checkUser.user_id, // Sử dụng user_id từ checkUser
+      role: checkUser.user_role, // Sử dụng user_role từ checkUser
+    });
+
+    // Đăng nhập thành công
+    return responseSend(res, token, "Thành công!", 200);
+  } catch (error) {
+    console.error("Login Facebook error:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", success: false });
+  }
+};
+const userDetail = async (req, res) => {
+  try {
+    const user_id = req.id;
+
+    const user = await User.findByPk(user_id, {
+      attributes: { exclude: ["user_password"] },
+    });
+
+    responseSend(res, user, "Thành công!", 200);
+  } catch (e) {
+    console.log(e);
+  }
+};
 const updateUser = async (req, res) => {
-    try {
-        const user_id=req.id;
-        const {user_name, user_address, user_phone,gender,date}=req.body
-        const user = await User.findByPk(user_id);
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found",
-                success: false
-            });
-        }
-
-        // Cập nhật các thuộc tính của user
-        user.user_name =user_name;
-        user.user_address =user_address;
-        user.user_phone =user_phone;
-        user.user_gender =gender;
-        user.user_birth =date;
-        
-   
-        // Lưu thay đổi vào database
-        await user.save();
-
-        responseSend(res, user, "Cập nhận thành công!", 200);
-
-        
-    } catch (error) {
-        console.error("Error updating user:", error);
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+  try {
+    const user_id = req.id;
+    const { user_name, user_address, user_phone, gender, date } = req.body;
+    const user = await User.findByPk(user_id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
     }
+
+    // Cập nhật các thuộc tính của user
+    user.user_name = user_name;
+    user.user_address = user_address;
+    user.user_phone = user_phone;
+    user.user_gender = gender;
+    user.user_birth = date;
+
+    // Lưu thay đổi vào database
+    await user.save();
+
+    responseSend(res, user, "Cập nhận thành công!", 200);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
+  }
 };
 const deleteEmployee = async (req, res) => {
   console.log(req.params.id);
@@ -297,231 +294,219 @@ const deleteEmployee = async (req, res) => {
     responseSend(res, "", "Có loii xảy ra!", 500);
   }
 };
-const updateImage=async(req,res)=>{
-    try{
-        const user_id=req.id;
-        console.log("user_id",user_id);
-        
-        const user = await User.findByPk(user_id);
+const updateImage = async (req, res) => {
+  try {
+    const user_id = req.id;
+    console.log("user_id", user_id);
 
-        upload.single('image')(req, res, async (err) => {
-            if (err) {
-              return res.status(400).json({ message: 'Lỗi khi upload file hình ảnh' });
-            }
-    
-            
-            
-            if (user.user_image) {
-                const filePath = path.join( 'public', 'img', user.user_image); // Đường dẫn đầy đủ của file cần xóa
-                deleteFile(filePath);
-            }
-    const image = req.file ? `${req.file.filename}` : '';
-    user.user_image=image
-    const result=await user.save();
+    const user = await User.findByPk(user_id);
 
+    upload.single("image")(req, res, async (err) => {
+      if (err) {
+        return res
+          .status(400)
+          .json({ message: "Lỗi khi upload file hình ảnh" });
+      }
 
-            if(result){
-                responseSend(res, user, "Cập nhật thành công!", 200);
-    
-            } else {
-                responseSend(res, null, "Thêm thất bại!", 500);
-            }
-    
-        })
-    
-    }catch(e){
+      if (user.user_image) {
+        const filePath = path.join("public", "img", user.user_image); // Đường dẫn đầy đủ của file cần xóa
+        deleteFile(filePath);
+      }
+      const image = req.file ? `${req.file.filename}` : "";
+      user.user_image = image;
+      const result = await user.save();
 
-    }
-}
-// Logout 
- const logout=async(_,res)=>{
-    try{
-        return res.cookie("token","",{maxAge:0}).json({
-            message:"Logged out successfully",
-            success:true
-        })
-    }catch(e){
-        console.log(e);
-        
-    }
-}
-
+      if (result) {
+        responseSend(res, user, "Cập nhật thành công!", 200);
+      } else {
+        responseSend(res, null, "Thêm thất bại!", 500);
+      }
+    });
+  } catch (e) {}
+};
+// Logout
+const logout = async (_, res) => {
+  try {
+    return res.cookie("token", "", { maxAge: 0 }).json({
+      message: "Logged out successfully",
+      success: true,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 // Bước 1: Xác thực mật khẩu cũ
 const verifyOldPassword = async (req, res) => {
-    try {
-        const user_id = req.id; // ID của user được lấy từ token xác thực (JWT)
-        const { oldPassword } = req.body; // Mật khẩu cũ người dùng nhập
+  try {
+    const user_id = req.id; // ID của user được lấy từ token xác thực (JWT)
+    const { oldPassword } = req.body; // Mật khẩu cũ người dùng nhập
 
-        
-        const user = await User.findByPk(user_id);
-        if (!user) {
-            return res.status(404).json({ message: "User không tồn tại" });
-        }
-
-
-       
-        const isPasswordMatch = await bcrypt.compare(oldPassword, user.user_password);
-        if (!isPasswordMatch) {
-            return responseSend(res, null, "Mật khẩu cũ không chính xác", 200);
-
-        }
-
-
-       
-        responseSend(res, null, "Thành công!", 200);
-    } catch (error) {
-        console.error(error);
-        responseSend(res, "", "Có lỗi xảy ra!", 500);
+    const user = await User.findByPk(user_id);
+    if (!user) {
+      return res.status(404).json({ message: "User không tồn tại" });
     }
+
+    const isPasswordMatch = await bcrypt.compare(
+      oldPassword,
+      user.user_password
+    );
+    if (!isPasswordMatch) {
+      return responseSend(res, null, "Mật khẩu cũ không chính xác", 200);
+    }
+
+    responseSend(res, null, "Thành công!", 200);
+  } catch (error) {
+    console.error(error);
+    responseSend(res, "", "Có lỗi xảy ra!", 500);
+  }
 };
 const changePassword = async (req, res) => {
-    try {
-        const user_id = req.id; 
-        const { newPassword, confirmNewPassword } = req.body; 
+  try {
+    const user_id = req.id;
+    const { newPassword, confirmNewPassword } = req.body;
 
-
-        if (newPassword !== confirmNewPassword) {
-            return res.status(400).json({ message: "Mật khẩu mới và xác nhận mật khẩu không khớp" });
-        }
-
-     
-        const user = await User.findByPk(user_id);
-        if (!user) {
-            return res.status(404).json({ message: "User không tồn tại" });
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        
-        user.user_password = hashedPassword;
-        await user.save();
-
-        return res.status(200).json({ message: "Đổi mật khẩu thành công" });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    if (newPassword !== confirmNewPassword) {
+      return res
+        .status(400)
+        .json({ message: "Mật khẩu mới và xác nhận mật khẩu không khớp" });
     }
+
+    const user = await User.findByPk(user_id);
+    if (!user) {
+      return res.status(404).json({ message: "User không tồn tại" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.user_password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Đổi mật khẩu thành công" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Đã xảy ra lỗi" });
+  }
 };
 function generateRandomString(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    
-    return result;
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
 
-  const forgetCheckMail = async (req, res) => {
-    try {
-        let { email } = req.body;
+  return result;
+}
 
-        // Check if email exists
-        let user = await User.findOne({ where: { user_email: email } });
-        if (!user) return responseSend(res, "", "Email không tồn tại", 404);
+const forgetCheckMail = async (req, res) => {
+  try {
+    let { email } = req.body;
 
-        let code = generateRandomString(6); // Generate OTP
-        let expirationTime = new Date();
-        expirationTime.setMinutes(expirationTime.getMinutes() + 10);
+    // Check if email exists
+    let user = await User.findOne({ where: { user_email: email } });
+    if (!user) return responseSend(res, "", "Email không tồn tại", 404);
 
-        // Hash the code for security
-        // const hashedCode = await bcrypt.hash(code, 10);
+    let code = generateRandomString(6); // Generate OTP
+    let expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 10);
 
-        // Save code to database
-        await models.code.create({
-            user_id: user.user_id,
-            code: code,
-            create_at: new Date(),
-            expired: expirationTime
-        });
+    // Hash the code for security
+    // const hashedCode = await bcrypt.hash(code, 10);
 
-        // Send email
-        await sendMail(email, "Lấy lại mật khẩu", code);
+    // Save code to database
+    await models.code.create({
+      user_id: user.user_id,
+      code: code,
+      create_at: new Date(),
+      expired: expirationTime,
+    });
 
-        // Send success response
-        return responseSend(res, true, "Code sent successfully", 200);
-    } catch (error) {
-        console.error("Error in forgetCheckMail:", error);
-        return responseSend(res, "", "Internal server error", 500);
-    }
+    // Send email
+    await sendMail(email, "Lấy lại mật khẩu", code);
+
+    // Send success response
+    return responseSend(res, true, "Code sent successfully", 200);
+  } catch (error) {
+    console.error("Error in forgetCheckMail:", error);
+    return responseSend(res, "", "Internal server error", 500);
+  }
 };
 
-  const forgetCheckCode = async (req, res) => {
-    try {
-      // Lấy mã từ yêu cầu
-      let { code } = req.body;
-        console.log(code);
-        
-      // Kiểm tra mã trong cơ sở dữ liệu
-      let checkCode = await models.code.findOne({
-        where: { code: code }
-      });
-  
-      if (!checkCode) {
-        return responseSend(res, false, "Code không đúng", 200);
-      }
-  
-      // Kiểm tra xem mã có hết hạn hay không
-      const currentTime = new Date();
-      if (currentTime > checkCode.dataValues.create_at) {
-        // Nếu mã đã hết hạn, xóa nó và trả về thông báo
-        await models.code.destroy({
-          where: { code_id: checkCode.dataValues.code_id }
-        });
-        return responseSend(res, false, "Code đã hết hạn", 200);
-      }
-  
-      // Nếu mã hợp lệ, xóa mã khỏi cơ sở dữ liệu
-      await models.code.destroy({
-        where: { code_id: checkCode.dataValues.code_id }
-      });
-  
-      // Trả về phản hồi thành công
-      return responseSend(res, true, "Code hợp lệ", 200);
-    } catch (error) {
-      // Bắt lỗi và gửi phản hồi lỗi
-      console.error("Error in forgetCheckCode:", error);
-      return responseSend(res, false, "Internal server error", 500);
-    }
-  };
-  const resetPasswordNoToken = async (req, res) => {
-    try {
-      let { email, newPassword } = req.body;
-  
-      // Check if the email exists
-      let checkEmail = await User.findOne({
-        where: { user_email: email }
-      });
-  
-      if (!checkEmail) {
-        return responseSend(res, "", "Email không tồn tại", 404);
-      }
-  
-      // Hash the new password using bcrypt
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-  
-      // Update the user's password in the database
-      checkEmail.user_password = hashedPassword;
-      await checkEmail.save();
-  
-      // Return success response
-      return responseSend(res, true, "Mật khẩu đã được cập nhật", 200);
-  
-    } catch (error) {
-      console.error("Error in resetPasswordNoToken:", error);
-      return responseSend(res, "", "Internal server error", 500);
-    }
-  };
+const forgetCheckCode = async (req, res) => {
+  try {
+    // Lấy mã từ yêu cầu
+    let { code } = req.body;
+    console.log(code);
 
-  // 
+    // Kiểm tra mã trong cơ sở dữ liệu
+    let checkCode = await models.code.findOne({
+      where: { code: code },
+    });
+
+    if (!checkCode) {
+      return responseSend(res, false, "Code không đúng", 200);
+    }
+
+    // Kiểm tra xem mã có hết hạn hay không
+    const currentTime = new Date();
+    if (currentTime > checkCode.dataValues.create_at) {
+      // Nếu mã đã hết hạn, xóa nó và trả về thông báo
+      await models.code.destroy({
+        where: { code_id: checkCode.dataValues.code_id },
+      });
+      return responseSend(res, false, "Code đã hết hạn", 200);
+    }
+
+    // Nếu mã hợp lệ, xóa mã khỏi cơ sở dữ liệu
+    await models.code.destroy({
+      where: { code_id: checkCode.dataValues.code_id },
+    });
+
+    // Trả về phản hồi thành công
+    return responseSend(res, true, "Code hợp lệ", 200);
+  } catch (error) {
+    // Bắt lỗi và gửi phản hồi lỗi
+    console.error("Error in forgetCheckCode:", error);
+    return responseSend(res, false, "Internal server error", 500);
+  }
+};
+const resetPasswordNoToken = async (req, res) => {
+  try {
+    let { email, newPassword } = req.body;
+
+    // Check if the email exists
+    let checkEmail = await User.findOne({
+      where: { user_email: email },
+    });
+
+    if (!checkEmail) {
+      return responseSend(res, "", "Email không tồn tại", 404);
+    }
+
+    // Hash the new password using bcrypt
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    checkEmail.user_password = hashedPassword;
+    await checkEmail.save();
+
+    // Return success response
+    return responseSend(res, true, "Mật khẩu đã được cập nhật", 200);
+  } catch (error) {
+    console.error("Error in resetPasswordNoToken:", error);
+    return responseSend(res, "", "Internal server error", 500);
+  }
+};
+
+//
 
 const sendVerificationEmail = async (userEmail, userId) => {
   try {
     // Tạo token xác thực với userId
-    const token = jwt.sign({ userId }, "BI_MAT", { expiresIn: '1h' }); // Token có thời hạn 1 giờ
+    const token = jwt.sign({ userId }, "BI_MAT", { expiresIn: "1h" }); // Token có thời hạn 1 giờ
 
     // Tạo URL xác thực
     const verificationUrl = `http://localhost:8080/verify-email?token=${token}`;
@@ -535,10 +520,15 @@ const sendVerificationEmail = async (userEmail, userId) => {
     `;
 
     // Gửi email
-    const emailResult = await sendMail(userEmail, "Xác thực tài khoản", "Vui lòng xác thực tài khoản của bạn", htmlContent);
-    
+    const emailResult = await sendMail(
+      userEmail,
+      "Xác thực tài khoản",
+      "Vui lòng xác thực tài khoản của bạn",
+      htmlContent
+    );
+
     if (emailResult) {
-      console.log('Email xác thực đã được gửi');
+      console.log("Email xác thực đã được gửi");
     }
   } catch (error) {
     console.error("Lỗi khi gửi email xác thực:", error);
@@ -551,15 +541,20 @@ const verifyEmail = async (req, res) => {
     // Xác minh token
     jwt.verify(token, "BI_MAT", async (err, decoded) => {
       if (err) {
-        return res.status(400).send("Token xác thực không hợp lệ hoặc đã hết hạn.");
+        return res
+          .status(400)
+          .send("Token xác thực không hợp lệ hoặc đã hết hạn.");
       }
 
       // Nếu token hợp lệ, bạn có thể cập nhật trạng thái xác thực của người dùng trong DB
       const { userId } = decoded;
       console.log(userId);
-      
+
       // Ví dụ: cập nhật userIsVerified thành true
-      await models.user.update({ is_verified: true }, { where: { user_id: userId } });
+      await models.user.update(
+        { is_verified: true },
+        { where: { user_id: userId } }
+      );
 
       res.status(200).send("Xác thực thành công! Bạn có thể đăng nhập.");
     });
@@ -637,29 +632,36 @@ const Checkuserdetailadmin = async (req, res) => {
     200
   );
 };
+
 const UpdateUsersAdmin = async (req, res) => {
   try {
     const user_id = req.params.id;
 
+    // Tìm người dùng theo ID
     const user = await User.findByPk(user_id);
-    req.body;
     if (!user) {
       return res.status(404).json({
         message: "User not found",
         success: false,
       });
     }
-    Object.entries(req.body).forEach(([key, value]) => {
-      user[key] = value;
-    });
-    console.log(user);
+
+    for (const [key, value] of Object.entries(req.body)) {
+      if (key === "user_password") {
+        const hashedPassword = await bcrypt.hash(value, 10);
+        user[key] = hashedPassword;
+      } else {
+        user[key] = value;
+      }
+    }
 
     await user.save();
+
     const userDB = await User.findByPk(user_id);
-    console.log(userDB);
 
     const token = createToken(userDB);
     const tokenRef = createTokenRef(userDB);
+
     return responseSend(
       res,
       {
@@ -675,26 +677,26 @@ const UpdateUsersAdmin = async (req, res) => {
     responseSend(res, "", "Có lỗi xảy ra!", 500);
   }
 };
-export {
-    getUser,
-    register,
-    updateUser,
-    login,
-    userDetail,
-    updateImage,
-    changePassword,
-    verifyOldPassword,
-    logout,
-    resetToken,
-    loginFacebook,
-    forgetCheckMail,
-    forgetCheckCode,
-    resetPasswordNoToken,
-    deleteEmployee,
-    getNewCustomersThisWeek,
-    verifyEmail,
-    createUser,
-    Checkuserdetailadmin,
-    UpdateUsersAdmin
-};
 
+export {
+  getUser,
+  register,
+  updateUser,
+  login,
+  userDetail,
+  updateImage,
+  changePassword,
+  verifyOldPassword,
+  logout,
+  resetToken,
+  loginFacebook,
+  forgetCheckMail,
+  forgetCheckCode,
+  resetPasswordNoToken,
+  deleteEmployee,
+  getNewCustomersThisWeek,
+  verifyEmail,
+  createUser,
+  Checkuserdetailadmin,
+  UpdateUsersAdmin,
+};

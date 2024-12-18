@@ -93,7 +93,7 @@ function AdminStaff() {
     useEffect(() => {
 
 
-        console.log(staffKeys);
+
 
         const ColumnStaffs = staffKeys.map((staff) => {
 
@@ -105,40 +105,40 @@ function AdminStaff() {
                         key: staff,
                     };
 
-               case "user_image":
-                         return {
-                           title: "Hình",
-                           dataIndex: staff,
-                           key: staff,
-                           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                           render: (src: any, record: any) => (
-                             <>
-                               {src ? (
-                                 <img
-                                   className="rounded-full object-cover"
-                                   src={`${IMG_BACKEND_USER}/${src}`}
-                                   alt={record.user_name} // Đảm bảo rằng alt chỉ là một chuỗi (tên người dùng)
-                                   style={{ width: 50, height: 50 }}
-                                 />
-                               ) : (
-                                 <div
-                                   className="rounded-full flex items-center justify-center"
-                                   style={{
-                                     width: 50,
-                                     height: 50,
-                                     backgroundColor: 'rgb(37 99 235 / var(--tw-bg-opacity))',
-                                     color: 'white',
-                                     fontSize: '20px',
-                                   }}
-                                 >
-                                   {record.user_name ? record.user_name.charAt(0).toUpperCase() : '?'} {/* Hiển thị chữ cái đầu tiên từ tên người dùng */}
-                                 </div>
-                               )}
-                             </>
-                           ),
-                           
-                           
-                         };
+                case "user_image":
+                    return {
+                        title: "Hình",
+                        dataIndex: staff,
+                        key: staff,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        render: (src: any, record: any) => (
+                            <>
+                                {src ? (
+                                    <img
+                                        className="rounded-full object-cover"
+                                        src={`${IMG_BACKEND_USER}/${src}`}
+                                        alt={record.user_name} // Đảm bảo rằng alt chỉ là một chuỗi (tên người dùng)
+                                        style={{ width: 50, height: 50 }}
+                                    />
+                                ) : (
+                                    <div
+                                        className="rounded-full flex items-center justify-center"
+                                        style={{
+                                            width: 50,
+                                            height: 50,
+                                            backgroundColor: 'rgb(37 99 235 / var(--tw-bg-opacity))',
+                                            color: 'white',
+                                            fontSize: '20px',
+                                        }}
+                                    >
+                                        {record.user_name ? record.user_name.charAt(0).toUpperCase() : '?'} {/* Hiển thị chữ cái đầu tiên từ tên người dùng */}
+                                    </div>
+                                )}
+                            </>
+                        ),
+
+
+                    };
                 case 'user_name':
                     return {
                         title: 'Tên',
@@ -208,7 +208,7 @@ function AdminStaff() {
                         render: (text: any) => (
                             <>
                                 {
-                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text
+                                    text == "" || text == null ? "Cần Cập Nhật Dữ Liệu" : text.replace(/<p>|<\/p>/g, "")
                                 }
                             </>
                         ),
@@ -316,7 +316,7 @@ function AdminStaff() {
                     confirmButtonText: 'OK',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate(`/admin/quản-lí-nhân-viên/sửa-nhân-viên/${key}`);
+                        navigate(`/admin/quan-li-nhan-vien/sua-nhan-vien/${key}`);
                     }
                 });
 
@@ -335,7 +335,7 @@ function AdminStaff() {
                     confirmButtonText: 'OK',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate(`${Paths.Admin.PathsAdmin}/${Paths.Admin.EditStaff.replace(':id',key )}`);
+                        navigate(`${Paths.Admin.PathsAdmin}/${Paths.Admin.EditStaff.replace(':id', key)}`);
                     }
                 });
             }
@@ -353,7 +353,7 @@ function AdminStaff() {
                     confirmButtonText: 'OK',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        navigate(`${Paths.Admin.PathsAdmin}/${Paths.Admin.EditStaff.replace(':id',key )}`);
+                        navigate(`${Paths.Admin.PathsAdmin}/${Paths.Admin.EditStaff.replace(':id', key)}`);
                     }
                 });
             }
@@ -383,7 +383,7 @@ function AdminStaff() {
                 try {
                     await AppDispatch(deleteStaffThunk(key));
                     Swal.fire('Đã Xóa!', 'Người dùng đã được xóa thành công.', 'success');
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    
                 } catch (error: any) {
                     Swal.fire('Lỗi!', 'Đã có lỗi xảy ra khi xóa người dùng.', error);
                 }
@@ -444,65 +444,63 @@ function AdminStaff() {
 
         }
     };
-    const onSelectChange = (selectedRowKeys: any) => {
-        setSelectedCheckbox(selectedRowKeys);
-        if (selectedRowKeys.length > 0) {
-            showModal(selectedRowKeys.length);
-        }
-    };
-    const showModal = (count: any) => {
-        Swal.fire({
-            icon: "info",
-            title: `Bạn Vừa Chọn ${count} tài khoản`,
-            text: 'Bạn có muốn tiếp tục?',
-            showDenyButton: true,
-            denyButtonText: 'Xóa',
-            confirmButtonText: 'Sửa',
-            customClass: {
-                confirmButton: 'bg-green-700 text-white',
-                denyButton: 'bg-red-500 text-white',
-            },
-            backdrop: true,
-            allowOutsideClick: false,
-        }).then((result) => {
-            if (result.isDenied) {
-                Swal.fire({
-                    icon: "warning",
-                    title: `Bạn có chắc chắn muốn xóa ${count} người này?`,
-                    showCancelButton: true,
-                    confirmButtonText: 'Xóa',
-                    cancelButtonText: 'Hủy',
-                    customClass: {
-                        confirmButton: 'bg-red-500 text-white',
-                        cancelButton: 'bg-gray-500 text-white',
-                    },
-                }).then((kq) => {
-                    if (kq.isConfirmed) {
-                        Swal.fire('Đã xóa!', '', 'success');
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Đã Hủy',
-                            text: 'Bạn đã hủy thao tác xóa.',
-                        });
-                    }
-                });
-            } else if (result.isConfirmed) {
-                Swal.fire({
-                    icon: 'info',
-                    text: `Đã mở trang sửa cho ${count} tài khoản`,
-                    confirmButtonText: 'OK',
-                });
-            }
-        });
-    };
+    // const onSelectChange = (selectedRowKeys: any) => {
+    //     setSelectedCheckbox(selectedRowKeys);
+    //     if (selectedRowKeys.length > 0) {
+    //         showModal(selectedRowKeys.length);
+    //     }
+    // };
+    // const showModal = (count: any) => {
+    //     Swal.fire({
+    //         icon: "info",
+    //         title: `Bạn Vừa Chọn ${count} tài khoản`,
+    //         text: 'Bạn có muốn tiếp tục?',
+    //         showDenyButton: true,
+    //         denyButtonText: 'Xóa',
+    //         confirmButtonText: 'Sửa',
+    //         customClass: {
+    //             confirmButton: 'bg-green-700 text-white',
+    //             denyButton: 'bg-red-500 text-white',
+    //         },
+    //         backdrop: true,
+    //         allowOutsideClick: false,
+    //     }).then((result) => {
+    //         if (result.isDenied) {
+    //             Swal.fire({
+    //                 icon: "warning",
+    //                 title: `Bạn có chắc chắn muốn xóa ${count} người này?`,
+    //                 showCancelButton: true,
+    //                 confirmButtonText: 'Xóa',
+    //                 cancelButtonText: 'Hủy',
+    //                 customClass: {
+    //                     confirmButton: 'bg-red-500 text-white',
+    //                     cancelButton: 'bg-gray-500 text-white',
+    //                 },
+    //             }).then((kq) => {
+    //                 if (kq.isConfirmed) {
+    //                     Swal.fire('Đã xóa!', '', 'success');
+    //                 } else {
+    //                     Swal.fire({
+    //                         icon: 'error',
+    //                         title: 'Đã Hủy',
+    //                         text: 'Bạn đã hủy thao tác xóa.',
+    //                     });
+    //                 }
+    //             });
+    //         } else if (result.isConfirmed) {
+    //             Swal.fire({
+    //                 icon: 'info',
+    //                 text: `Đã mở trang sửa cho ${count} tài khoản`,
+    //                 confirmButtonText: 'OK',
+    //             });
+    //         }
+    //     });
+    // };
 
 
 
 
-    const rowSelection = {
-        onChange: onSelectChange,
-    };
+ 
 
     useEffect(() => {
         console.log('selectedCheckbox', selectedCheckbox)
@@ -608,10 +606,7 @@ function AdminStaff() {
                     <Table
 
                         className='flex-1'
-                        rowSelection={{
-                            type: 'checkbox',
-                            ...rowSelection,
-                        }}
+
                         columns={columns || []}
                         dataSource={Array.isArray(DataAllstaffs) ? DataAllstaffs.filter((staff: any) => staff.user_role != 11).reverse() : []}
                         size='large'

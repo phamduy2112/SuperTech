@@ -10,14 +10,15 @@ import './AdminCreateAccout.css'
 import { IoMdCloudUpload } from 'react-icons/io';
 import { DataRole, DataStaffInterface, imageStaffLevel, StaffGender, StaffInterface } from './DataStaff';
 import { createStaffThunk, DeleteImgCloudThunk } from '../../../../redux/user/user.slice';
-import { useAppDispatch } from '../../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
 
 
 
 function AdminCreateAccount() {
     const AppDispatch = useAppDispatch();
-    const token = localStorage.getItem('token');
+    const token = useAppSelector((state) => state.user.token)
 
 
 
@@ -26,8 +27,7 @@ function AdminCreateAccount() {
 
     useEffect(() => {
         if (token) {
-            const cleanedToken = token.replace(/"/g, '');
-            setTokenStaff(cleanedToken);
+            setTokenStaff(token);
         }
     }, [token]);
 
@@ -64,33 +64,59 @@ function AdminCreateAccount() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let CheckValue = true;
+
         Object.keys(staffData).forEach((key) => {
             const value = staffData[key as keyof StaffInterface];
             if (value === '' || value === null || value === undefined) {
                 CheckValue = false;
                 Swal.fire({
-                    title: ` ${key}`,
+                    title: `${key}`,
                     icon: 'error',
                     text: `Dữ liệu này chưa có`,
                     showCancelButton: true,
                     cancelButtonText: `Thoát ra nhập thêm ${key}`,
                     cancelButtonColor: "#d33",
                     showConfirmButton: false
+                });
+                return;
+            }
+        });
+        if (staffData.user_password != "") {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const password: any = staffData.user_password;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            if (!hasUppercase) {
 
-                })
-                return
+                toast.error(`Mật khẩu của bạn không chứa kí tự hoa`)
+                return;
+            }
+            if (!hasNumber) {
+                toast.error(`Mật khẩu của bạn không chứa kí tự số`)
+
+                return;
+            }
+            if (!hasSpecialChar) {
+                toast.error(`Mật khẩu của bạn không chứa kí tự đặc biệt`)
+                return;
+            }
+            if (CheckValue) {
+                const DataStaff: DataStaffInterface = {
+                    staffData: staffData,  // Sử dụng staffData gốc nếu tất cả trường hợp hợp lệ
+                    tokenStaff: tokenStaff,
+                };
+                SendDataStaffThunk(DataStaff);
             }
 
-        });
-        if (CheckValue == true) {
-            const DataStaff: DataStaffInterface = {
-                staffData: staffData,
-                tokenStaff: tokenStaff,
-            };
-            SendDataStaffThunk(DataStaff)
         }
 
+
+
+
+
     };
+
 
     const SendDataStaffThunk = async (DataStaff: DataStaffInterface) => {
         try {
@@ -104,7 +130,7 @@ function AdminCreateAccount() {
                     confirmButtonColor: '#008000',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '/admin/quản-lí-nhân-viên';
+                        window.location.href = '/admin/quan-li-nhan-vien';
                     }
                 })
             };
@@ -351,7 +377,7 @@ function AdminCreateAccount() {
                             name="user_name"  // Đảm bảo tên đúng với key trong state
                             value={staffData.user_name} // Dùng value thay vì placeholder
                             type="text"
-                            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
+                            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
                         />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
@@ -369,7 +395,7 @@ function AdminCreateAccount() {
                             onChange={handleInputChange}
                             name="user_password"
                             value={staffData.user_password}
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
@@ -395,7 +421,7 @@ function AdminCreateAccount() {
                             onChange={handleInputChange}
                             name="user_phone"
                             value={staffData.user_phone}
-                            type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính</label>
@@ -436,7 +462,7 @@ function AdminCreateAccount() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={birthdate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            <input type='text' placeholder={birthdate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
                     </div>
                     <div className='flex h-auto flex-col gap-4 '>
@@ -452,7 +478,7 @@ function AdminCreateAccount() {
                                 </ConfigProvider>
                             </div>
                         }>
-                            <input type='text' placeholder={Joindate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            <input type='text' placeholder={Joindate} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
 
                     </div>
@@ -465,7 +491,7 @@ function AdminCreateAccount() {
                                 value={staffData.user_address}
                                 onChange={handleInputChangeWord}
                                 modules={{ toolbar: toolbarOptions }}
-                                className=" bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
+                                className=" bg-[#81818113] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
                             />
                         </div>
                     </div>

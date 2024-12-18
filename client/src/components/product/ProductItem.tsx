@@ -17,13 +17,15 @@ import { NavLink } from "react-router-dom";
 import { Tooltip } from "antd";
 import { CiHeart } from "react-icons/ci";
 import { createFavouriteProductThunk, getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
-function ProductItem(props:any) {
+function ProductItem(props: any) {
   const dispatch = useAppDispatch();
   const user: any = useAppSelector((state) => state.user.user);
   const token: any = useAppSelector(state => state.user.token);
   const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
-  const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
-  
+  const listProductFavourites = useAppSelector((state) => state.listProductFavorites.listFavourite)
+
+  console.log("sssssss", props?.product.product_price, props.product?.product_colors[0]?.product_storages[0]?.storage_price, props?.product.product_discount)
+
   // Kiểm tra nếu sản phẩm đã yêu thích khi load trang
   const totalStars = props?.product?.comment_products?.reduce((total: number, item: any) => {
     // Kiểm tra nếu item.comment_star là một số hợp lệ
@@ -33,15 +35,15 @@ function ProductItem(props:any) {
     }
     return total;
   }, 0);
-  
+
   // Số lượng đánh giá
   const totalComments = props?.product?.comment_products?.length || 0;
-  
+
   // Tính trung bình, kiểm tra để tránh chia cho 0
   const averageStars = totalComments > 0 ? (totalStars / totalComments).toFixed(1) : "0.0";
-//  useEffect(() => {
-//     dispatch(getFavouriteProductThunk());
-//   }, [dispatch]);
+  //  useEffect(() => {
+  //     dispatch(getFavouriteProductThunk());
+  //   }, [dispatch]);
 
   // Thêm sản phẩm vào giỏ hàng
   const handleAddItem = (product: any) => {
@@ -57,7 +59,7 @@ function ProductItem(props:any) {
   };
 
 
-// console.log(props.product?.product_colors[0].product_qualities[0]?.quality_product);
+  // console.log(props.product?.product_colors[0].product_qualities[0]?.quality_product);
 
   const handleFavouriteProduct = async (id: number) => {
     try {
@@ -75,12 +77,12 @@ function ProductItem(props:any) {
         toast.success('Đã thêm vào yêu thích!');
       }
 
-      
+
     } catch (error) {
       toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
     }
   };
-// console.log(props);
+  // console.log(props);
 
   return (
     <div className="relative py-5 px-2 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col h-full">
@@ -126,8 +128,8 @@ function ProductItem(props:any) {
 
           <h3 className="text-[1.7rem] font-bold text-ellipsis overflow-hidden sm: hidden lg:block">{props.product.product_name}</h3>
           <h3 className="text-[1.7rem] font-bold text-ellipsis overflow-hidden lg:hidden">{
-          truncateText( props.product.product_name,20)
-         }</h3>
+            truncateText(props.product.product_name, 20)
+          }</h3>
 
           <div className="flex items-center gap-2 my-2">
             <PiCurrencyDollarSimpleFill className="text-gray-500 text-2xl" />
@@ -144,7 +146,7 @@ function ProductItem(props:any) {
               : null}
           </div>
           <p className="text-red-600 font-semibold text-[1.7rem]">
-            {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price|| 0))* (1 - Number(props?.product.product_discount / 100) ))}
+            {formatCurrencyVND((Number(props?.product.product_price) + Number(props.product?.product_colors[0]?.product_storages[0]?.storage_price || 0)) * (1 - Number(props?.product.product_discount / 100)))}
           </p>
           {/* formatCurrencyVND(productDetail?.product_price + Number(objectStorage?.storage_price ||0)) */}
           {/* Đánh giá và tình trạng */}
@@ -157,17 +159,17 @@ function ProductItem(props:any) {
             </div>
             {props.product?.product_colors[0]?.product_qualities[0]?.quality_product > 10 ? (
 
-<div className="flex items-center text-green-600 font-semibold gap-1">
-<FaTruck />
-<span>Còn hàng</span>
-</div>
+              <div className="flex items-center text-green-600 font-semibold gap-1">
+                <FaTruck />
+                <span>Còn hàng</span>
+              </div>
             ) : (
               <div className="flex items-center text-yellow-500 font-semibold gap-1">
-              <FaTruck />
-              <span>Sắp hết hàng</span>
-            </div>
+                <FaTruck />
+                <span>Sắp hết hàng</span>
+              </div>
             )}
-         
+
           </div>
         </NavLink>
 

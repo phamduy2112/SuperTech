@@ -89,7 +89,6 @@ export const createStaff = async (DataStaff) => {
   });
 };
 export const DeleteStaffSend = (IdStaff: number) => {
-  console.log(IdStaff);
   return axiosWithAuth(`/remove-employee/${IdStaff}`, {
     method: "delete",
   });

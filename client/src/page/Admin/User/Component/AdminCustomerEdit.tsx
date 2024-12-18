@@ -14,6 +14,8 @@ import { useParams } from 'react-router-dom';
 // import { IMG_USER_BACKEND } from '../../../../constants';
 import { IoMdCloudUpload } from 'react-icons/io';
 import { DeleteImgCloudThunk, getUserThunk, UpdateStaffThunk } from '../../../../redux/user/user.slice';
+import { IMG_BACKEND_USER } from '../../../../constants';
+import toast from 'react-hot-toast';
 
 
 
@@ -30,6 +32,7 @@ function AdminCustomerEdit() {
     const [staff, setStaff] = useState<StaffInterface>({});
     const { id } = useParams();
     const userId = Number(id);
+    console.log("UserDetail", UserDetail);
 
     useEffect(() => {
         AppDispatch(getUserThunk())
@@ -41,11 +44,13 @@ function AdminCustomerEdit() {
 
 
 
+
+
     useEffect(() => {
         if (userId) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const newObj_staff = staffsData.find((staff: any) => staff.user_id == userId);
-
+            const newObj_staff = { ...staffsData?.find((staff: any) => staff.user_id == userId) };
+            newObj_staff.user_password = "";
             setStaff(newObj_staff);
         }
     }, [staffsData, userId]);
@@ -89,10 +94,12 @@ function AdminCustomerEdit() {
                 user_image: staff.user_image || '',
             });
         }
+
     }, [staff]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        console.log(name, value)
         setstaffData(prevState => ({
             ...prevState,
             [name]: value,
@@ -114,11 +121,45 @@ function AdminCustomerEdit() {
                 filteredData[key] = staffData[key];
             }
         });
+
+        if (filteredData["user_password"]) {
+            if (filteredData["user_password"] != "") {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const password: any = filteredData["user_password"];
+                const hasUppercase = /[A-Z]/.test(password);
+                const hasNumber = /\d/.test(password);
+                const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+                if (!hasUppercase) {
+
+                    toast.error(`Mật khẩu của bạn không chứa kí tự hoa`)
+                    return;
+                }
+                if (!hasNumber) {
+                    toast.error(`Mật khẩu của bạn không chứa kí tự số`)
+
+                    return;
+                }
+                if (!hasSpecialChar) {
+                    toast.error(`Mật khẩu của bạn không chứa kí tự đặc biệt`)
+                    return;
+                }
+                const DataStaff: DataStaffInterface = {
+                    staffData: filteredData,
+                    tokenStaff: tokenStaff,
+                };
+                SendDataStaffThunk(DataStaff);
+
+
+            }
+        }
+
         const DataStaff: DataStaffInterface = {
             staffData: filteredData,
             tokenStaff: tokenStaff,
         };
         SendDataStaffThunk(DataStaff);
+
+
 
     };
 
@@ -143,7 +184,7 @@ function AdminCustomerEdit() {
                 })
                     .then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '/admin/quản-lí-nhân-viên';
+                            window.location.href = '/admin/quan-li-nhan-vien';
                         }
                     })
             };
@@ -158,6 +199,7 @@ function AdminCustomerEdit() {
 
 
     const [fileList, setFileList] = useState<UploadFile[]>([]);
+    console.log("fileList", fileList)
 
 
     const onChange: UploadProps['onChange'] = async (info) => {
@@ -340,10 +382,10 @@ function AdminCustomerEdit() {
                             <div
                                 className={`flex flex-col w-[70rem] h-[40rem] items-center text-gray-300 hover:text-[#8b1da7] hover:font-semibold cursor-pointer transition-all duration-300 justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'hidden' : 'block'}`}
                             >
-                                {/* {
+                                {
                                     staff.user_image != null ? (
                                         <img
-                                            src={IMG_USER_BACKEND + staff.user_image}
+                                            src={IMG_BACKEND_USER + "/" + staff.user_image}
                                             alt="Uploaded"
                                             className="rounded-lg w-[70rem] h-[35rem] object-cover shadow-lg"
                                         />
@@ -355,7 +397,7 @@ function AdminCustomerEdit() {
                                             <p className="mt-2 text-lg text-center">Ảnh chưa có vui lòng bấm kéo thả ảnh vào đây</p>
                                         </>
                                     )
-                                } */}
+                                }
                             </div>
 
                             <div className={`flex w-[70rem] h-[40rem] items-center  justify-center p-6 border-2 border-dashed rounded-lg ${fileList.length > 0 ? 'block' : 'hidden'}`}>
@@ -385,7 +427,7 @@ function AdminCustomerEdit() {
                             name="user_name"
                             placeholder='Không có dữ liệu tên tài khoản'
                             type="text"
-                            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
+                            className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none"
                         />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
@@ -396,20 +438,32 @@ function AdminCustomerEdit() {
 
                             name="user_email"
                             placeholder='Không có dữ liệu email'
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
                     </div>
-                    <div className='flex h-auto flex-col gap-4'>
-                        <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
-                        <input type='text'
-                            onChange={handleInputChange}
-                            name="user_password"
-                            value={staffData.user_password}
+                    {
+                        staff.user_id == UserDetail.user_id ? <div className='flex h-auto flex-col gap-4'>
+                            <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
+                            <input type='text'
+                                onChange={handleInputChange}
+                                name="user_password"
+                                placeholder='Mật Khẩu Được ẨN'
+                                value={staffData.user_password}
+                                className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
-                            placeholder='Không có dữ liệu mật khẩu'
-                            className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                        </div> : <div className='flex h-auto flex-col gap-4'>
+                            <label htmlFor='' className='text-[13px] text-[#81818177] font-medium'>Mật khẩu</label>
+                            <input type='text'
+                                disabled
+                                onChange={handleInputChange}
+                                name="user_password"
+                                placeholder='Mật Khẩu Được ẨN'
+                                value={staffData.user_password}
+                                className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
 
-                    </div>
+                        </div>
+                    }
+
 
                     {
                         UserDetail.user_role === 0 ? <div className='flex h-auto flex-col gap-4'>
@@ -453,7 +507,7 @@ function AdminCustomerEdit() {
                             value={staffData.user_phone}
 
                             placeholder='Không có dữ liệu số điện thoại'
-                            type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                            type='text' min={0} max={100} className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                     </div>
                     <div className='flex h-auto flex-col gap-4'>
                         <label htmlFor='ten_sp' className='text-[13px] text-[#81818177] font-medium'>Giới tính {staffData.user_gender}</label>
@@ -520,7 +574,7 @@ function AdminCustomerEdit() {
                         }>
                             <input type='text'
                                 placeholder={staffData.user_birth == null || staffData.user_birth == "" ? 'Chưa có dữ liệu ngày sinh' : ''}
-                                value={staffData.user_birth} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                                value={staffData.user_birth} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
                     </div>
                     <div className='flex h-auto flex-col gap-4 '>
@@ -537,7 +591,7 @@ function AdminCustomerEdit() {
                             </div>
                         }>
                             <input type='text' placeholder={staffData.user_time == null || staffData.user_time == "" ? 'Chưa có dữ liệu ngày tham gia' : ''}
-                                value={staffData.user_time} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
+                                value={staffData.user_time} autoComplete='off' className='h-[48px]  bg-[#81818113] focus:text-[white] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none  ' />
                         </Popover>
 
                     </div>
@@ -551,7 +605,7 @@ function AdminCustomerEdit() {
                                 modules={{ toolbar: toolbarOptions }}
                                 value={staffData.user_address}
 
-                                className=" bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
+                                className=" bg-[#81818113] focus:bg-[#8b1da7c2] transition-all ease-in-out duration-500 rounded-lg text-sm p-2"
                             />
                         </div>
                     </div>
