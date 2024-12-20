@@ -38,14 +38,15 @@
     </div>
 
     <script>
-        const fetchSystemInfo = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/system-info');
-                const data = await response.json();
-                displaySystemInfo(data);
-            } catch (error) {
-                console.error('Lỗi khi lấy thông tin hệ thống:', error);
-            }
+        const socket = new WebSocket('wss://dichvumang86.cloud/system-info');
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            displaySystemInfo(data);
+        };
+
+        socket.onerror = (error) => {
+            console.error('Lỗi WebSocket:', error);
         };
 
         const displaySystemInfo = (data) => {
@@ -61,8 +62,8 @@
             `;
         };
 
-        // Gọi hàm để lấy thông tin hệ thống khi trang được tải
-        fetchSystemInfo();
+        // Bỏ hàm fetchSystemInfo vì không cần thiết nữa
+        // fetchSystemInfo();
     </script>
 </body>
 

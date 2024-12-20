@@ -30,6 +30,7 @@ import  transactionsrouter from './routers/transactionRouter.js';
 import exportFiles from './routers/exportFile.js';
 import { authorizeRoles, middleToken } from './config/jwt.js';
 import routersystem from './routers/systemRouter.js';
+import { setupWebSocketServer } from './controllers/websocketController.js';
 app.use(express.json());
 app.use(cookieParser());
 
@@ -60,6 +61,7 @@ cron.schedule('* * * * *', async () => {
 
 app.use(cors(corsOptions));
 app.use( routersystem);
+setupWebSocketServer(server);
  app.get(
   '/admin/groups',  
   middleToken, // Middleware kiểm tra token
