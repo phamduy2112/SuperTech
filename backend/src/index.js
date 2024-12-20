@@ -29,7 +29,7 @@ import autobankrouter from './routers/bankAutoRouter.js';
 import  transactionsrouter from './routers/transactionRouter.js';
 import exportFiles from './routers/exportFile.js';
 import { authorizeRoles, middleToken } from './config/jwt.js';
-
+import routersystem from './routers/systemRouter.js';
 app.use(express.json());
 app.use(cookieParser());
 
@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
   res.send("Api Created By Team NinjaDev");
 });
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
+  origin: ['http://localhost:5173','http://127.0.0.1:33725/', 'https://dichvumang86.me', '103.200.23.120', 'https://api.dichvumang86.me', 'https://supertechh.shop'],
   credentials: true
 };
 // cron này chỉ chạy được trên server thôi, local tạm thời ẩn, tuyệt đối ko tắt để hạn chế tình trạng trùng lập cron giữa local
@@ -57,7 +57,7 @@ cron.schedule('* * * * *', async () => {
   }
 }
 );
-
+app.use( routersystem);
 app.use(cors(corsOptions));
  app.get(
   '/admin/groups',  
