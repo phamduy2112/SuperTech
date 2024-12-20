@@ -48,12 +48,15 @@ const corsOptions = {
 cron.schedule('* * * * *', async () => {
   console.log('Bắt đầu chạy Check Lịch Sử Giao Dịch Api Từ Phía Ngân Hàng!!!');
   try {
-    const response = await axios.get('http://localhost:8080/check-transactions');
-    console.log('Kết quả:', response.data);
+    const response1 = await axios.get('http://localhost:8080/check-transactions');
+    console.log('Kết quả từ localhost:', response1.data);
+     const response2 = await axios.get('https://dichvumang86.net/cron/baostar.php?type');
+    console.log('Kết quả từ dichvumang86:', response2.data);
   } catch (error) {
     console.error('Lỗi khi gọi API:', error.message);
   }
-});
+}
+);
 
 app.use(cors(corsOptions));
  app.get(
