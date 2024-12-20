@@ -57,8 +57,9 @@ cron.schedule('* * * * *', async () => {
   }
 }
 );
-app.use( routersystem);
+
 app.use(cors(corsOptions));
+app.use( 'api', routersystem);
  app.get(
   '/admin/groups',  
   middleToken, // Middleware kiểm tra token
