@@ -51,8 +51,10 @@ cron.schedule('* * * * *', async () => {
   try {
     const response1 = await axios.get('http://localhost:8080/check-transactions');
     console.log('Kết quả từ localhost:', response1.data);
-     const response2 = await axios.get('https://dichvumang86.net/cron/baostar.php?type');
+    const response2 = await axios.get('https://dichvumang86.net/cron/baostar.php?type');
     console.log('Kết quả từ dichvumang86:', response2.data);
+    const response3 = await axios.get('https://dichvumang86.net/cron/muaspin.php');
+    console.log('Kết quả từ Cron Mua Spin:', response3.data);
   } catch (error) {
     console.error('Lỗi khi gọi API:', error.message);
   }
