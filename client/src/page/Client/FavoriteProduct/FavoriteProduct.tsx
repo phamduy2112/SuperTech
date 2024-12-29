@@ -6,6 +6,7 @@ import ProductItem from '../../../components/product/ProductItem';
 import { useDispatch } from 'react-redux';
 import { getFavouriteProductThunk } from '../../../redux/favourite/Favourite.slice';
 
+
 function FavoriteProduct() {
 
   const listProductFavourites=useAppSelector((state)=>state.listProductFavorites.listFavourite)
@@ -27,7 +28,7 @@ function FavoriteProduct() {
       />
       <div>
         <h3 className='text-[2rem] mb-[1rem] font-semibold'>
-          Sản Phẩm Yêu Thích <span className='text-[#7500CF]'>7</span>
+          Sản Phẩm Yêu Thích <span className='text-[#7500CF]'>{listProductFavourites.length}</span>
         </h3>
         <div className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
           <div className='cursor-pointer text-[1.6rem] sm:text-[1.8rem] justify-center items-center gap-[.3rem] h-[3.5rem] flex border border-gray-600 w-full sm:w-[9rem]'>

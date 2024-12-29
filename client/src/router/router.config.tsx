@@ -193,7 +193,8 @@ export const router = createBrowserRouter([
   {
     path: Paths.Admin.PathsAdmin,
     element: 
-    <AdminRoute element={  <AdminTemplate />}/>
+    // <AdminRoute element={  <AdminTemplate />}/>
+    <AdminTemplate/>
   ,
     children: [
       {

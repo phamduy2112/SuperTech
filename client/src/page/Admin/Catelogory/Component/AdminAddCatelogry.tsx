@@ -3,15 +3,27 @@ import React, { useState } from 'react';
 import { TbPlaylistAdd } from 'react-icons/tb';
 import { UploadProps } from 'antd/lib';
 import ImgCrop from 'antd-img-crop';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useAppDispatch } from '../../../../redux/hooks';
 import { createCategoryThunk } from '../../../../redux/catelogry/catelogry.slice';
 import toast from 'react-hot-toast';
+import * as Yup from "yup";
 
 
 function AdminAddCategory() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const CategorySchema = Yup.object().shape({
+    category_name: Yup.string()
+      .required('Tên loại không được để trống')
+      .min(2, 'Tên loại phải có ít nhất 2 ký tự')
+      .max(50, 'Tên loại không được vượt quá 50 ký tự'),
+    category_dad: Yup.number()
+      .required('Vui lòng chọn danh mục cha')
+      .oneOf([0, 1, 2, 3], 'Danh mục cha không hợp lệ'), // Thay thế bằng giá trị hợp lệ
+    category_task: Yup.number()
+      .required('Trạng thái không được để trống')
+      .oneOf([0, 1], 'Trạng thái chỉ có thể là 0 hoặc 1'), // 0 = false, 1 = true
+  });
   const DataCategory = [
     { label: 'Điện thoại', value: 1 },
     { label: 'Laptop', value: 2 },
@@ -46,6 +58,7 @@ const dispatch=useAppDispatch()
             category_dad: 0,
             category_task: 1, // Default value for Switch, set as 1 (true)
           }}
+          validationSchema={CategorySchema}
           onSubmit={(values) => {
             const  category_date_task=new Date()
             const data={
@@ -56,6 +69,7 @@ const dispatch=useAppDispatch()
             dispatch(createCategoryThunk(data))
             toast.success("Thêm loại thành công")
           }}
+          
         >
           {({ values, setFieldValue }) => (
             <Form>
@@ -72,6 +86,8 @@ const dispatch=useAppDispatch()
                     name="category_name"
                     className="h-[48px] bg-[#f7f7f7] border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
                   />
+                              <ErrorMessage name="category_name" component="div" className="text-red-500" />
+
                 </div>
               </div>
 
@@ -85,6 +101,8 @@ const dispatch=useAppDispatch()
                     options={DataCategory}
                     className="h-[48px] bg-[#81818113] rounded-lg text-[13px] outline-none"
                   />
+                              <ErrorMessage name="category_dad" component="div" className="text-red-500" />
+
                 </div>
               </div>
 
