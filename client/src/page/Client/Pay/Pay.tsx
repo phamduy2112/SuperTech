@@ -203,50 +203,51 @@ function Pay() {
   const handleFormSubmit = async () => {
     try {
       // Chuẩn bị dữ liệu đơn hàng
-      const dataOrder = {
-        ...formData,
-        address:`${formData.district} ${formData.tinhThanhPho} ${formData.tinhThanhPho} ${formData.diaChi} `,
-        order_total: totalPrice,
-        order_total_quatity: totalItem,
-        phone_number:formData.sdt,
-        email_user:formData.email,
-        order_pay:0,
-        discount: getIdDiscount
-
-      };
-      console.log(dataOrder);
       
-      // Gọi API tạo đơn hàng
-      const resp = await createOrder(dataOrder);
-  
-      // Chuẩn bị danh sách chi tiết đơn hàng
-      const detailOrders = listCart.map(item => {
-        // Add console log to check the data
-        console.log('Selected Color:', item.selectedColor);
-        console.log('Selected Storage:', item.selectedStorage);
-      
-        return {
-          product_name: item.product_name,
-          product_id: item.product_id,
-          order_id: resp.data.content.order_id,
-          detail_order_quality: item?.quantity,
-          product_color: item?.selectedColor?.color,
-          product_storage: item?.selectedStorage?.storage,
-          detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
-          discount_product: item.product_discount,
-          color_id: item?.selectedColor?.color_id,  // Check if color_id is properly populated
-          storage_id: item?.selectedStorage?.id_storage,  // Check if id_storage is properly populated
-          img_name:item?.selectedColor?.image?.image_one
-        };
-      });
-      const dataEmail = {
-        email: formData.email,
-        orderDetails: detailOrders,
-      };     
-      console.log(detailOrders)
       // Nếu phương thức thanh toán là "bank"
       if(formData.paymentMethod !=='' && formData.sdt!=='' && formData.diaChi!==''){
-         if (formData.paymentMethod === 'bank') {
+        const dataOrder = {
+          ...formData,
+          address:`${formData.district} ${formData.tinhThanhPho} ${formData.tinhThanhPho} ${formData.diaChi} `,
+          order_total: totalPrice,
+          order_total_quatity: totalItem,
+          phone_number:formData.sdt,
+          email_user:formData.email,
+          order_pay:0,
+          discount: getIdDiscount
+  
+        };
+        console.log(dataOrder);
+        
+        // Gọi API tạo đơn hàng
+        const resp = await createOrder(dataOrder);
+    
+        // Chuẩn bị danh sách chi tiết đơn hàng
+        const detailOrders = listCart.map(item => {
+          // Add console log to check the data
+          console.log('Selected Color:', item.selectedColor);
+          console.log('Selected Storage:', item.selectedStorage);
+        
+          return {
+            product_name: item.product_name,
+            product_id: item.product_id,
+            order_id: resp.data.content.order_id,
+            detail_order_quality: item?.quantity,
+            product_color: item?.selectedColor?.color,
+            product_storage: item?.selectedStorage?.storage,
+            detail_order_price: item.product_price + Number(item?.selectedStorage?.storage_price || 0),
+            discount_product: item.product_discount,
+            color_id: item?.selectedColor?.color_id,  // Check if color_id is properly populated
+            storage_id: item?.selectedStorage?.id_storage,  // Check if id_storage is properly populated
+            img_name:item?.selectedColor?.image?.image_one
+          };
+        });
+        const dataEmail = {
+          email: formData.email,
+          orderDetails: detailOrders,
+        };     
+        console.log(detailOrders)
+        if (formData.paymentMethod === 'bank') {
         const response = await createDetailOrder(detailOrders);
 
         socket.on('orderStatusUpdated', async (updatedOrder:any) => {
@@ -323,6 +324,7 @@ function Pay() {
         toast.error("Vui lòng chọn phương thức thanh toán");
         toast.error("Vui lòng chọn nhập số điện thoại");
         toast.error("Vui lòng chọn địa chỉ");
+        return 
       }
      
     } catch (error) {

@@ -1,63 +1,117 @@
-import React, { useState } from 'react'
-import ReactQuill from 'react-quill'
+import React, { useEffect } from 'react';
+import ReactQuill from 'react-quill';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { editBlogThunk, getBlogByIdThunk } from '../../../../redux/blogredux/blog.slice';
+import { Formik, Field, ErrorMessage, Form } from 'formik';
+import { Button, message } from 'antd';
 
 function AdminEditBlog() {
-  const [value, setValue] = useState('')
-  const { id } = useParams();
+  const { id } = useParams(); // Blog ID from URL
+  const AppDispatch = useAppDispatch();
+  const blogDetail = useAppSelector((state) => state.blog.detailBlog);
+
   const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['bold', 'italic', 'underline', 'strike'],
     ['blockquote', 'code-block'],
     ['link', 'image', 'video', 'formula'],
-
-    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-    [{ 'direction': 'rtl' }],                         // text direction
-
-    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-    [{ 'font': [] }],
-    [{ 'align': [] }],
-
-    ['clean']
+    [{ header: 1 }, { header: 2 }],
+    [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+    [{ script: 'sub' }, { script: 'super' }],
+    [{ indent: '-1' }, { indent: '+1' }],
+    [{ direction: 'rtl' }],
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    [{ color: [] }, { background: [] }],
+    [{ font: [] }],
+    [{ align: [] }],
+    ['clean'],
   ];
 
+  // Fetch blog details on component load
+  useEffect(() => {
+    if (id != null) {
+      AppDispatch(getBlogByIdThunk(parseInt(id)));
+    }
+  }, [AppDispatch, id]);
+
   return (
-    <div className=' flex-1 grid grid-cols-1 p-[24px] bg-[#f2edf3]'>
+    <div className="flex-1 grid grid-cols-1 p-[24px] bg-[#f2edf3]">
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          moTa: blogDetail?.post_content || '',
+          title: blogDetail?.post_title || '',
+        }}
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            const newBlog = {
+              post_title:values.moTa,
+              post_content: values.title,
+              post_id: id,
+            };
+            console.log(newBlog);
+            
+            await AppDispatch(editBlogThunk(newBlog));
+            message.success('Cập nhật bài viết thành công!');
+          } catch (error) {
+            message.error('Đã xảy ra lỗi khi cập nhật bài viết.');
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+      >
+        {({ setFieldValue, values, isSubmitting }) => (
+          <Form className="flex flex-col gap-6">
+            {/* Blog Title */}
+            <div className="flex w-[100%] flex-col gap-1">
+              <label htmlFor="title" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">
+                Tên bài viết
+              </label>
+              <Field
+                type="text"
+                name="title"
+                className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                placeholder="Nhập tên bài viết"
+              />
+              <ErrorMessage name="title" component="div" className="text-red-500 text-sm" />
+            </div>
 
-      <div className='bg-white min-h-[1500px] shadow-lg rounded-xl row-span-2 leading-[2] box-border p-[24px] gap-6 flex flex-col'>
-        <span className='text-[30px] font-medium text-[#ffd700]'>Sửa Bài Viết {id}</span>
+            {/* Blog Content */}
+            <div className="bg-white shadow-lg rounded-xl p-[12px]">
+              <label htmlFor="moTa" className="text-[13px] text-[#81818177] font-medium">
+                Mô tả
+              </label>
+              <ReactQuill
+                theme="snow"
+                value={values.moTa}
+                onChange={(value) => setFieldValue('moTa', value)}
+                modules={{ toolbar: toolbarOptions }}
+                className="bg-[#81818113] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-sm p-2 h-[500px] overflow-y-auto"
+              />
+            </div>
 
-        <div className='flex h-auto flex-col gap-4'>
-          <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Tiêu đề bài viết</label>
-          <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
-        </div>
-        <div className='flex h-auto flex-col gap-4'>
-          <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Url</label>
-          <input type='text' className='h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] p-[12px] outline-none' id='quantity' name='quantity' required />
-        </div>
-
-        <div className='flex flex-col h-full w-full gap-4'>
-          <label htmlFor='quantity' className='text-[13px] text-[#81818177] font-medium'>Nội dung bài viết</label>
-          <ReactQuill
-            theme='snow'
-            value={value}
-            onChange={setValue}
-            modules={{
-              toolbar: toolbarOptions,
-            }}
-            className='bg-white flex-1 shadow-lg rounded-xl row-span-2  gap-3 flex flex-col'
-          />
-        </div>
-
-      </div>
-
+            {/* Submit Button */}
+            <div className="flex justify-end gap-4">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={isSubmitting}
+                style={{
+                  height: '48px',
+                  fontSize: '16px',
+                  borderRadius: '8px',
+                  padding: '0 16px',
+                }}
+              >
+                Lưu bài viết
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
-  )
+  );
 }
 
-export default AdminEditBlog
+export default AdminEditBlog;

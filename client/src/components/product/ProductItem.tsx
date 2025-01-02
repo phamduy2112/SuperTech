@@ -84,6 +84,7 @@ function ProductItem(props: any) {
     } catch (error) {
       toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
     }
+    
   };
   // console.log(props);
 

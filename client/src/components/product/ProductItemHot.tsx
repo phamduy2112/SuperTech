@@ -3,7 +3,7 @@ import image from '../../assets/new.png';
 import oficie from '../../assets/oficie.png';
 import { PiCurrencyDollarSimpleFill } from "react-icons/pi";
 import { IoIosStar } from "react-icons/io";
-import { FaTruck } from "react-icons/fa";
+import { FaHeart, FaTruck } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { Tooltip } from "antd";
 import { IoEyeOutline } from "react-icons/io5";
@@ -11,7 +11,7 @@ import { useSpring,animated } from "react-spring";
 import './product.css'
 import TaskEyes from "../../template/Component/Header/Component/Menu/Modal/TaskEyes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
+import { createFavouriteProductThunk, getFavouriteProductThunk } from "../../redux/favourite/Favourite.slice";
 import { IMG_BACKEND } from "../../constants";
 import { formatCurrencyVND } from "../../utils";
 import { addItemToCart } from "../../redux/cart/cart.slice";
@@ -21,6 +21,7 @@ function ProductItemHot(props) {
   const [isvisibleProduct, setisvisibleProduct] = useState(false);
 
   const dispatch = useAppDispatch();
+  const user: any = useAppSelector((state) => state.user.user);
 
   const totalStars = props?.product?.comment_products?.reduce((total: number, item: any) => {
     // Kiểm tra nếu item.comment_star là một số hợp lệ
@@ -46,14 +47,48 @@ function ProductItemHot(props) {
   
   // Tính trung bình, kiểm tra để tránh chia cho 0
   const averageStars = totalComments > 0 ? (totalStars / totalComments).toFixed(1) : "0.0";
+  const [isFavourited, setIsFavourited] = useState(false); // Theo dõi trạng thái yêu thích của sản phẩm
+  const listProductFavourites = useAppSelector((state) => state.listProductFavorites.listFavourite)
+
+  const handleFavouriteProduct = async (id: number) => {
+    try {
+      const product = { product_id: id };
+
+      if (isFavourited) {
+        // Nếu sản phẩm đã được yêu thích, hủy yêu thích
+        await dispatch(createFavouriteProductThunk(product))
+      
+        setIsFavourited(false); // Cập nhật trạng thái yêu thích
+        // toast.success('Đã bỏ yêu thích sản phẩm!');
+      
+      } else {
+        // Nếu sản phẩm chưa yêu thích, thêm vào yêu thích
+        await dispatch(createFavouriteProductThunk(product))
+
+        setIsFavourited(true); // Cập nhật trạng thái yêu thích
+        // toast.success('Đã thêm vào yêu thích!');
+      }
+
+
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi thực hiện thao tác yêu thích!');
+    }
+    
+  };
   return (
+
+
 <div className="mx-5 relative px-3 py-5 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border overflow-hidden">
   <div className="absolute top-4 right-4 flex flex-col gap-3">
     {/* Icon yêu thích */}
     <div className="bg-black p-2 rounded-full text-white cursor-pointer hover:bg-gray-800">
       <Tooltip title="Thêm yêu thích">
-        <CiHeart className="text-3xl" />
-      </Tooltip>
+                  {
+                    Array.isArray(listProductFavourites) && listProductFavourites.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)
+                      ? <FaHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
+                      : <CiHeart onClick={() => handleFavouriteProduct(props.product.product_id)} />
+                  }
+                </Tooltip>
     </div>
     {/* Icon xem sản phẩm */}
     <div className="bg-black p-2 rounded-full text-white cursor-pointer hover:bg-gray-800">

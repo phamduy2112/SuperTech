@@ -45,10 +45,11 @@ function AdminAddBlog() {
   const obj = async () => {
     if (title && url && content) {
       const data = {
-        post_title: title,
-        media_url: url,
-        post_content: content,
-      };
+        post_title: title,         // Title of the post
+        media_url: url,            // Media URL (ensure it's valid and sanitized)
+        post_content: content,     // Content of the post
+        post_date: new Date(),     // Current date and time
+    };
 
       const payload = await AppDispatch(createBlogThunk(data));
       console.log("Payload", payload.payload.post_id);

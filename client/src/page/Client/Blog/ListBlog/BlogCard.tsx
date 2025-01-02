@@ -6,13 +6,15 @@ import DOMPurify from 'dompurify';
 
 function BlogCard(props) {
   const sanitizedContent = DOMPurify.sanitize(props.props.post_content);
+  console.log(props.props.media_posts);
+  
   return (
     <div className="flex flex-col w-[32%] max-md:w-full">
       <Link to={`/bai-viet-chi-tiet/${props.props.post_id}`}>
         <div className="flex flex-col pt-10 pb-8 w-full border-4 border-slate-200 text-neutral-500 rounded-lg max-md:px-5 text-[18px] min-h-[400px]">
           <img
             loading="lazy"
-            src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${props.props.media_url}`}
+            src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${props.props.media_posts[0].media_url}`}
             alt={""}
             className="object-contain w-full aspect-[2.11] rounded-lg"
           />

@@ -3,6 +3,7 @@ import { data } from "../../page/Client/DetailProduct/data";
 import {
   createBlog,
   deleteBlog,
+  editBlog,
   getBlog,
   getBlogAll,
   getmedia_postAll,
@@ -20,12 +21,12 @@ export const getAllBlogThunk = createAsyncThunk("getAllBlogThunk", async () => {
 export const getAllBlogmediaThunk = createAsyncThunk(
   "getAllBlogmediaThunk",
   async () => {
-    try {
-      const resp = await getmedia_postAll();
-      return resp.data.content.reverse();
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   const resp = await ();
+    //   return resp.data.content.reverse();
+    // } catch (e) {
+    //   console.log(e);
+    // }
   }
 );
 
@@ -43,22 +44,27 @@ export const getBlogByIdThunk = createAsyncThunk(
 // Thunk để xóa bài viết
 export const deleteBlogThunk = createAsyncThunk(
   "blogs/delete",
-  async (id: number, { rejectWithValue }) => {
+  async (id: number, {dispatch}) => {
     try {
       await deleteBlog(id);
-      return id;
+      const response = await dispatch(getAllBlogThunk());
+     
+      return response.payload;
+  
     } catch (error) {
-      return rejectWithValue(error.message);
+      return error;
     }
   }
 );
 // Thunk để thêm bài viết
 export const createBlogThunk = createAsyncThunk(
   "createBlogThunk",
-  async (newBlog: any) => {
+  async (newBlog: any,{dispatch}) => {
     try {
       const resp = await createBlog(newBlog);
-      return resp.data.content;
+        const response = await dispatch(getAllBlogThunk());
+     
+           return response.payload;
     } catch (error) {
       console.log(error);
     }
@@ -76,9 +82,25 @@ export const createMediaThunk = createAsyncThunk(
     }
   }
 );
+export const editBlogThunk = createAsyncThunk(
+  "editBlogThunk",
+  async (updatedBlog: any, { dispatch }) => {
+    try {
+      await editBlog(updatedBlog);
+      console.log(updatedBlog);
+      
+      const response = await dispatch(getAllBlogThunk());
+      return response.payload;
+    } catch (error) {
+      throw new Error("Failed to edit blog");
+    }
+  }
+);
 const initialState = {
-  listBlog: null,
+  listBlog: [],
   mediaPosts: [],
+  detailBlog:{},
+
   loading: false,
   error: null,
 };
@@ -93,28 +115,20 @@ const BlogSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    builder.addCase(createBlogThunk.fulfilled, (state, { payload }) => {
-      if (Array.isArray(payload.content)) {
-        state.listBlog = [...state.listBlog, ...payload.content];
-      } else {
-        console.error("Payload content is not an array:", payload.content);
-      }
-    });
-    builder.addCase(getBlogByIdThunk.fulfilled, (state, { payload }) => {
-      state.BlogOne = payload;
-    });
-    builder.addCase(getAllBlogmediaThunk.fulfilled, (state, { payload }) => {
-      state.mediaPosts = payload;
-    });
-    // builder.addCase(deleteBlogThunk.rejected, (state, action) => {
-    //   console.error('Failed to delete blog:', action.payload);
-    // });
-    builder.addCase(createBlogThunk.rejected, (state, action) => {
-      console.error("Failed to create blog:", action.payload);
-    });
-    builder.addCase(deleteBlogThunk.rejected, (state, action) => {
-      console.error("Failed to delete blog:", action.payload);
-    });
+   
+   
+  builder
+        .addCase(getAllBlogThunk.fulfilled, (state, { payload }) => {
+          state.listBlog = payload;
+        })
+  builder
+        .addCase(getBlogByIdThunk.fulfilled, (state, { payload }) => {
+          state.detailBlog = payload;
+        })
+        .addCase(editBlogThunk.fulfilled, (state, { payload }) => {
+          state.listBlog = payload;
+        })
+   
   },
 });
 export const { setListBlog } = BlogSlice.actions;

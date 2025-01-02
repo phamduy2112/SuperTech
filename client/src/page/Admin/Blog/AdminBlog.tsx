@@ -8,18 +8,22 @@ import { BiSolidEdit } from 'react-icons/bi';
 import { CiBookmarkRemove } from 'react-icons/ci';
 import { TbPlaylistAdd } from 'react-icons/tb';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import DOMPurify from 'dompurify';
 import { truncateText } from '../../../utils';
+import { deleteBlogThunk, getAllBlogThunk } from '../../../redux/blogredux/blog.slice';
 
 function AdminBlog() {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ListBlog: any = useAppSelector((state) => state.blog.listBlog);
-  const socket = useAppSelector((state) => state.socket.socket);
 
 
-
+  const dispatch=useAppDispatch();
+  useEffect(() => {
+    dispatch(getAllBlogThunk());
+  }, [dispatch]);
+console.log(ListBlog);
 
 
 
@@ -47,11 +51,18 @@ function AdminBlog() {
       title: "URL Hình ảnh",
       dataIndex: "media_url",
       key: "media_url",
-      render: (text) => (
-        <a href={text} target="_blank" rel="noopener noreferrer">
-          {text}
-        </a>
-      ),
+      render: (text, recoil) => {
+        const mediaUrl =
+            recoil?.media_posts?.[0]?.media_url || "https://via.placeholder.com/100";
+    
+        return (
+            <img
+                src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${mediaUrl}`}
+                alt="Hình ảnh"
+                className="w-[100px] h-[100px] object-cover"
+            />
+        );
+    }
     },
     {
       title: "Ngày đăng",
@@ -75,23 +86,8 @@ function AdminBlog() {
   ];
 
   const hanldClickDelete = (post_id: number) => {
-    Swal.fire({
-      title: "Xác nhận xóa",
-      text: "Bạn có chắc muốn xóa bài viết này?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (socket) {
-          socket.emit("deleteBlog", post_id);
-          Swal.fire("Đã Xóa!", "Bài viết đã được xóa.", "success");
-        }
-      }
-    });
 
+    dispatch(deleteBlogThunk(post_id));
   }
 
 
@@ -172,23 +168,23 @@ const [selectedCheckbox, setSelectedCheckbox] = useState('');
         </div>
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
-          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+          {/* <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
             <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' onChange={handleSearch} placeholder='Tìm kiếm bài viết' />
             <GoSearch className='text-[18px]' />
-          </div>
+          </div> */}
 
           <Popover
             content={<div className='flex flex-col'>
 
 
-              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
+              {/* <div className='flex justify-between p-[12px] w-[200px] gap-2'>
                 <label className='text-[14px]'>Mới nhất</label>
 <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
               </div>
               <div className='flex gap-2 justify-between p-[12px]'>
                 <label className='text-[14px]'>Cũ nhất</label>
                 <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
-              </div>
+              </div> */}
 
 
 
@@ -205,14 +201,14 @@ const [selectedCheckbox, setSelectedCheckbox] = useState('');
         </div>
 
         <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
-          <Table
+           <Table
             className='flex-1'
 
             columns={columns}
-            dataSource={DataBlog}
+            dataSource={ListBlog}
             size='large'
             pagination={{ pageSize: 10 }}
-          />
+          /> 
         </div>
       </div>
     </div >

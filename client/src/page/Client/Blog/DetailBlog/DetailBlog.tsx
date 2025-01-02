@@ -70,6 +70,7 @@ function DetailBlog() {
   };
 
   const relatedPosts = getRandomPosts(mergedPosts, parseInt(id), 5);
+console.log(Blog);
 
   return (
     <Container className="bg-white">
@@ -82,10 +83,10 @@ function DetailBlog() {
             {Blog?.post_title}
           </h1>
           <div className="my-6 px-10">
-            {Blog?.media_url ? (
+            {Blog?.media_posts?.media_url ? (
               <img
-                src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${Blog.media_url}`}
-                alt="Hình ảnh minh họa bài viết"
+              src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${Blog.media_posts[0].media_url}`}
+              alt="Hình ảnh minh họa bài viết"
                 className="w-full lg:w-3/4 rounded-md"
 />
             ) : (

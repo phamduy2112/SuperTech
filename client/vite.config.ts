@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   esbuild: {
     // Khi build thành product thì sẽ xoá đi các câu lệnh consle và debugger
-    drop: ['console','debugger']
+    // drop: ['console','debugger']
   },
 })

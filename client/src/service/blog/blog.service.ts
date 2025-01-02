@@ -31,8 +31,8 @@ export const deleteBlog = async (id: number) => {
 // Hàm để thêm bài viết
 export const createBlog = async (newBlog: any) => {
   try {
-    const { post_title, post_content, media_url } = newBlog;
-    const data = { post_title, post_content };
+    const { post_title, post_content, media_url,post_date } = newBlog;
+    const data = { post_title, post_content,post_date };
 
     const kq = await axiosWithAuth("/posts-create", {
       method: "post",
@@ -59,3 +59,21 @@ export const createBlog = async (newBlog: any) => {
     throw error; // Rethrow or handle further
   }
 };
+
+export const editBlog = async (newBlog: any) => {
+  try {
+    const { post_id, post_title, post_content } = newBlog;
+    const data = { post_title, post_content };
+    console.log(data);
+    
+    await axiosWithAuth(`/posts-edit/${post_id}`, {
+      method: "put",
+      data: data,
+    });
+
+   
+  } catch (error) {
+    console.error("Error updating blog or media post", error);
+    throw error; // Rethrow or handle further
+  }
+}
