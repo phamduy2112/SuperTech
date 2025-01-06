@@ -101,7 +101,7 @@ function AdminAddBlog() {
             htmlFor="file"
             className="text-[13px] text-[#81818177] font-medium"
           >
-            Url
+            Ảnh
           </label>
           <input
             type="file"

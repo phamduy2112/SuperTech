@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 
 function Sidebar(props) {
   return (
-    <Link to={`/bài-viết-chi-tiết/${props.props.post_id}`}>
+    <Link to={`/bai-viet-chi-tiet/${props.props.post_id}`}>
       <div className="flex gap-4 items-start pt-2 pb-4">
         <img
           loading="lazy"
-          src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${props.props.media_url}`}
-          alt={""}
+          src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${props.props.media_posts?.length > 0 ? props.props.media_posts[0].media_url : ''}`}
+          alt={props.props.post_title}
           className="object-cover w-20 h-20 rounded"
         />
         <div className="flex flex-col">

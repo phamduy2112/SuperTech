@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactQuill from 'react-quill';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { editBlogThunk, getBlogByIdThunk } from '../../../../redux/blogredux/blog.slice';
 import { Formik, Field, ErrorMessage, Form } from 'formik';
@@ -10,6 +10,7 @@ function AdminEditBlog() {
   const { id } = useParams(); // Blog ID from URL
   const AppDispatch = useAppDispatch();
   const blogDetail = useAppSelector((state) => state.blog.detailBlog);
+  const navigate = useNavigate(); // Khởi tạo useNavigate
 
   const toolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'],
@@ -46,14 +47,15 @@ function AdminEditBlog() {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const newBlog = {
-              post_title:values.moTa,
-              post_content: values.title,
+              post_title: values.title,
+              post_content: values.moTa,
               post_id: id,
             };
             console.log(newBlog);
             
             await AppDispatch(editBlogThunk(newBlog));
             message.success('Cập nhật bài viết thành công!');
+            navigate('/admin/quan-li-bai-viet'); // Chuyển hướng về AdminBlog
           } catch (error) {
             message.error('Đã xảy ra lỗi khi cập nhật bài viết.');
           } finally {
@@ -71,7 +73,7 @@ function AdminEditBlog() {
               <Field
                 type="text"
                 name="title"
-                className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
+                className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none focus:border-[#4A90E2]"
                 placeholder="Nhập tên bài viết"
               />
               <ErrorMessage name="title" component="div" className="text-red-500 text-sm" />

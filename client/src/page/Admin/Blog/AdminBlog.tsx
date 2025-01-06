@@ -15,17 +15,60 @@ import { deleteBlogThunk, getAllBlogThunk } from '../../../redux/blogredux/blog.
 
 function AdminBlog() {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ListBlog: any = useAppSelector((state) => state.blog.listBlog);
-
-
-  const dispatch=useAppDispatch();
+  const dispatch = useAppDispatch();
+  
   useEffect(() => {
     dispatch(getAllBlogThunk());
   }, [dispatch]);
-console.log(ListBlog);
 
+  const [valueInputSearch, setValueInputSearch] = useState('');
+  const [DataBlog, setDataBlog] = useState<any[]>([]);
+  const [selectedCheckbox, setSelectedCheckbox] = useState('');
+  const [searchMessage, setSearchMessage] = useState('');
 
+  useEffect(() => {
+    setDataBlog(ListBlog);
+  }, [ListBlog]);
+
+  useEffect(() => {
+    const sortedList = [...ListBlog];
+    if (selectedCheckbox === 'new') {
+      sortedList.sort((a, b) => new Date(b?.post_date).getTime() - new Date(a?.post_date).getTime());
+    } else if (selectedCheckbox === 'old') {
+      sortedList.sort((a, b) => new Date(a?.post_date).getTime() - new Date(b?.post_date).getTime());
+    }
+    setDataBlog(sortedList);
+  }, [ListBlog, selectedCheckbox]);
+
+  useEffect(() => {
+    if (valueInputSearch.trim() === "") {
+      setDataBlog(ListBlog);
+      setSearchMessage('');
+    } else {
+      const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
+      const filteredData = ListBlog.filter((item: any) => {
+        const post_title = item?.post_title;
+        const post_titleString = typeof post_title === 'string' ? post_title : String(post_title || '');
+        return post_titleString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm);
+      });
+
+      if (filteredData.length === 0) {
+        setSearchMessage('Không tìm thấy sản phẩm');
+      } else {
+        setSearchMessage('');
+      }
+      setDataBlog(filteredData);
+    }
+  }, [valueInputSearch, ListBlog]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValueInputSearch(e.target.value);
+  };
+
+  const handleEditClick = (post_id: number) => {
+    navigate(`/admin/quan-li-bai-viet/sua-bai-viet/${post_id}`);
+  };
 
   const columns = [
     {
@@ -75,7 +118,10 @@ console.log(ListBlog);
       
       render: (record: any) => (
         <div className="flex text-[24px] box-border gap-1 items-center">
-          <BiSolidEdit className="cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]" />
+          <BiSolidEdit 
+            onClick={() => handleEditClick(record.post_id)} 
+            className="cursor-pointer text-[#9000ff67] transition-all duration-700 hover:text-[#9000ffcb]" 
+          />
           <CiBookmarkRemove
             onClick={() => hanldClickDelete(record.post_id)}
             className="cursor-pointer text-red-300 transition-all duration-700 hover:text-[red]"
@@ -86,65 +132,29 @@ console.log(ListBlog);
   ];
 
   const hanldClickDelete = (post_id: number) => {
-
-    dispatch(deleteBlogThunk(post_id));
-  }
-
-
-
-
-
-
-
-
-
-  const [valueInputSearch, setvalueInputSearch] = useState(``);
-  const [DataBlog, setDataBlog] = useState<any[]>([]);
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setvalueInputSearch(e.target.value);
-  }
-const [selectedCheckbox, setSelectedCheckbox] = useState('');
-
-  useEffect(() => {
-    const sortedList = [...ListBlog];
-    if (selectedCheckbox.toLowerCase() === 'new') {
-      sortedList.sort((a, b) => new Date(b?.post_date).getTime() - new Date(a?.post_date).getTime());
-
-    } else {
-      sortedList.sort((a, b) => new Date(a?.post_date).getTime() - new Date(b?.post_date).getTime());
-
-    }
-    setDataBlog(sortedList);
-  }, [ListBlog, selectedCheckbox]);
-
-  useEffect(() => {
-    setDataBlog(ListBlog)
-  }, [ListBlog])
-
-  useEffect(() => {
-    if (valueInputSearch.trim() === "") {
-      setDataBlog(ListBlog);
-    } else {
-      const sanitizedSearchTerm = valueInputSearch.replace(/\s+/g, '').toLowerCase();
-
-      const filteredData = ListBlog.filter((item: any) => {
-        const post_title = item?.post_title;
-
-        // Kiểm tra kiểu dữ liệu và xử lý khi post_title là null hoặc undefined
-        const post_titleString = typeof post_title === 'string' ? post_title : String(post_title || '');
-
-        // Loại bỏ khoảng trắng và chuyển về chữ thường
-        return post_titleString.replace(/\s+/g, '').toLowerCase().includes(sanitizedSearchTerm);
-      });
-
-      setDataBlog(filteredData);
-    }
-  }, [valueInputSearch, ListBlog]);
-
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa bài viết này?',
+      text: "Hành động này không thể hoàn tác!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Có, xóa!',
+      cancelButtonText: 'Không, hủy!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteBlogThunk(post_id));
+        Swal.fire(
+          'Đã xóa!',
+          'Bài viết đã được xóa.',
+          'success'
+        );
+      }
+    });
+  };
 
   return (
-    <div className='flex  flex-col p-12 gap-5 bg-[#f2edf3]'>
+    <div className='flex flex-col p-12 gap-5 bg-[#f2edf3]'>
       <div className='flex-1 gap-3 bg-white flex flex-col rounded-xl shadow-lg'>
         <div className='flex items-center justify-between box-border p-[24px]'>
           <span className='text-[30px] font-medium text-[#ffd700]'>Bài Viết</span>
@@ -153,7 +163,7 @@ const [selectedCheckbox, setSelectedCheckbox] = useState('');
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Link to={'/admin/quản-lí-bài-viết/quản-lí-bình-luận-bài-viết'}>
+            <Link to={'/admin/quan-li-bai-viet/quan-li-binh-luan-bai-viet'}>
               <Button className='p-10' color="danger" variant="solid">
                 Xem Bình Luận Bài Viết
               </Button>
@@ -164,30 +174,34 @@ const [selectedCheckbox, setSelectedCheckbox] = useState('');
                 Bài Viết Mới
               </Button>
             </Link>
+            <Link to={'/bai-viet'}>
+              <Button className='p-10' type="default">
+                Xem Tất Cả Bài Viết
+              </Button>
+            </Link>
           </div>
         </div>
 
         <div className='flex p-[24px] items-center justify-between gap-3'>
-          {/* <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
-            <input type="text" className='flex-1 text-[15px] outline-none bg-transparent' onChange={handleSearch} placeholder='Tìm kiếm bài viết' />
+          <div className='flex-1 flex bg-[#00000008] focus:outline-dotted rounded-lg p-[16px]'>
+            <input
+              type="text"
+              className='flex-1 text-[15px] outline-none bg-transparent'
+              onChange={handleSearch}
+              placeholder='Tìm kiếm bài viết...'
+            />
             <GoSearch className='text-[18px]' />
-          </div> */}
-
+          </div>
           <Popover
             content={<div className='flex flex-col'>
-
-
-              {/* <div className='flex justify-between p-[12px] w-[200px] gap-2'>
+              <div className='flex justify-between p-[12px] w-[200px] gap-2'>
                 <label className='text-[14px]'>Mới nhất</label>
-<Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
+                <Checkbox checked={selectedCheckbox === 'new'} onChange={() => setSelectedCheckbox('new')}></Checkbox>
               </div>
               <div className='flex gap-2 justify-between p-[12px]'>
                 <label className='text-[14px]'>Cũ nhất</label>
                 <Checkbox checked={selectedCheckbox === 'old'} onChange={() => setSelectedCheckbox('old')}></Checkbox>
-              </div> */}
-
-
-
+              </div>
             </div>}
             title="Lọc"
             trigger="click"
@@ -200,18 +214,19 @@ const [selectedCheckbox, setSelectedCheckbox] = useState('');
           </Popover>
         </div>
 
-        <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
-           <Table
-            className='flex-1'
+        {searchMessage && <div className="text-red-500 text-center">{searchMessage}</div>}
 
+        <div className='p-[24px] relative overflow-x-auto h-[1000px] flex flex-col'>
+          <Table
+            className='flex-1'
             columns={columns}
-            dataSource={ListBlog}
+            dataSource={DataBlog}
             size='large'
-            pagination={{ pageSize: 10 }}
-          /> 
+            pagination={{ pageSize: 6 }}
+          />
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 

@@ -8,6 +8,7 @@ import {
   getBlogByIdThunk,
 } from "../../../../redux/blogredux/blog.slice";
 import DOMPurify from 'dompurify';
+import { Link } from "react-router-dom";
 // Component Breadcrumbs
 function Breadcrumbs() {
   return (
@@ -83,12 +84,12 @@ console.log(Blog);
             {Blog?.post_title}
           </h1>
           <div className="my-6 px-10">
-            {Blog?.media_posts?.media_url ? (
+            {Blog?.media_posts?.length > 0 && Blog.media_posts[0].media_url ? (
               <img
-              src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${Blog.media_posts[0].media_url}`}
-              alt="Hình ảnh minh họa bài viết"
+                src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${Blog.media_posts[0].media_url}`}
+                alt="Hình ảnh minh họa bài viết"
                 className="w-full lg:w-3/4 rounded-md"
-/>
+              />
             ) : (
               <div className="w-full lg:w-3/4 h-64 bg-gray-300 rounded-md animate-pulse" />
             )}
@@ -101,26 +102,29 @@ console.log(Blog);
         </div>
 
         <div className="lg:w-[30%] space-y-4">
-          <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 px-20">
-            Bài viết liên quan
-          </h3>
-          <div className="grid grid-cols-1 gap-4 px-10">
-            {relatedPosts.map((post) => (
-              <div key={post.post_id} className="my-6 px-10">
-                {post.media_url ? (
-                  <img
-                    src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${post.media_url}`}
-                    alt={post.post_title}
-                    className="w-full lg:w-3/4 rounded-md"
-                  />
-                ) : (
-                  <div className="w-full lg:w-3/4 h-64 bg-gray-300 rounded-md animate-pulse" />
-                )}
-                <h4 className="text-xl font-medium mt-2">{post.post_title}</h4>
-              </div>
-            ))}
-          </div>
-        </div>
+          
+  <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 px-20">
+    Bài viết liên quan
+  </h3>
+  <div className="grid grid-cols-1 gap-4 px-10">
+    {relatedPosts.map((post) => (
+      <div key={post.post_id} className="my-6 px-10">
+        <Link to={`/bai-viet-chi-tiet/${post.post_id}`}>
+          {post.media_posts?.length > 0 && post.media_posts[0].media_url ? (
+            <img
+              src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${post.media_posts[0].media_url}`}
+              alt={post.post_title}
+              className="w-full lg:w-3/4 rounded-md"
+            />
+          ) : (
+            <div className="w-full lg:w-3/4 h-64 bg-gray-300 rounded-md animate-pulse" />
+          )}
+          <h4 className="text-xl font-medium mt-2">{post.post_title}</h4>
+        </Link>
+      </div>
+    ))}
+  </div>
+</div>
       </div>
       {/* Phần bình luận */}
       <div className="space-y-4 py-4 md:py-6">

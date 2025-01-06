@@ -12,7 +12,7 @@ function BlogCard(props) {
     <div className="flex flex-col w-[32%] max-md:w-full">
       <Link to={`/bai-viet-chi-tiet/${props.props.post_id}`}>
         <div className="flex flex-col pt-10 pb-8 w-full border-4 border-slate-200 text-neutral-500 rounded-lg max-md:px-5 text-[18px] min-h-[400px]">
-          <img
+          <img  
             loading="lazy"
             src={`https://res.cloudinary.com/dcvkmhlhw/image/upload/v1732821311/Blog/${props.props.media_posts[0].media_url}`}
             alt={""}
