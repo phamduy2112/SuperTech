@@ -208,7 +208,7 @@ function Pay() {
       if(formData.paymentMethod !=='' && formData.sdt!=='' && formData.diaChi!==''){
         const dataOrder = {
           ...formData,
-          address:`${formData.district} ${formData.tinhThanhPho} ${formData.tinhThanhPho} ${formData.diaChi} `,
+          address:`${formData.diaChi} `,
           order_total: totalPrice,
           order_total_quatity: totalItem,
           phone_number:formData.sdt,
@@ -409,55 +409,7 @@ function Pay() {
            placeholder="Nhập email của bạn" // Placeholder hiển thị trong ô input
           />
         </Form.Item>
-        <Form.Item label='Tỉnh thành phố'>
-                <Select 
-                defaultValue="Mời bạn chọn thành phố"
-                onChange={handleCityChange}
-                
-               >
-         {Array.isArray(listAllCity) && listAllCity.length > 0 && (
-      listAllCity.map((item) => (
-        <Select.Option key={item.code} value={item.name}
-        
-        >
-          {item.name}
-        </Select.Option>
-      ))
-    ) }
-               
-             
-                </Select>
-              </Form.Item>
-              <Form.Item label='Quận'>
-              <Select 
-                  defaultValue="Mời bạn chọn thành phố"
-              onChange={handleDistrictsChange}>
-              {Array.isArray(listDataCity) && listDataCity.length > 0 ? (
-      listDataCity.map((item) => (
-        <Select.Option key={item.code} value={item.name}>
-          {item.name}
-        </Select.Option>
-      ))
-    ) : (
-      <Select.Option disabled>Không có dữ liệu</Select.Option>
-    )}
-                </Select>
-              </Form.Item>
-              <Form.Item label='Huyện'>
-              <Select
-                  defaultValue="Mời bạn chọn thành phố"
-              onChange={(e) => setFormData({ ...formData, huyen: e})}>
-              {Array.isArray(districtsCity) && districtsCity.length > 0 ? (
-      districtsCity.map((item) => (
-        <Select.Option key={item.code} value={item.name}>
-          {item.name}
-        </Select.Option>
-      ))
-    ) : (
-      <Select.Option disabled>Không có dữ liệu</Select.Option>
-    )}
-                </Select>
-              </Form.Item>
+      
         <Form.Item name="diaChi" label="Địa chỉ" 
         
         rules={[{ required: true, message: 'Vui lòng nhập địa chỉ'}]}
