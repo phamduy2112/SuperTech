@@ -16,6 +16,7 @@ import { IoMdClose } from 'react-icons/io';
 import { deleteColorsProduct, getImageProductById, putProductById } from '../../../../service/product/product.service';
 import { BiSolidEdit } from 'react-icons/bi';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -30,6 +31,23 @@ function AdminEditProduct() {
   const [productColors,setProductColor] = useState([]);
   
   const dispatch=useAppDispatch()
+
+  const validationSchema = Yup.object({
+    product_name: Yup.string().required('Tên sản phẩm là bắt buộc'),
+    price: Yup.number().required('Giá sản phẩm là bắt buộc').positive('Giá sản phẩm phải là số dương'),
+    category: Yup.string().required('Loại sản phẩm là bắt buộc'),
+    discount: Yup.number().required('Giảm giá là bắt buộc').min(0, 'Giảm giá không thể nhỏ hơn 0').max(100, 'Giảm giá không thể lớn hơn 100'),
+    hot: Yup.number().required('Trạng thái Hot là bắt buộc').min(0, 'Trạng thái Hot không hợp lệ').max(1, 'Trạng thái Hot không hợp lệ'),
+    // infor_screen: Yup.string().required('Thông tin màn hình là bắt buộc'),
+    // infor_system: Yup.string().required('Hệ điều hành là bắt buộc'),
+    // infor_cpu: Yup.string().required('Thông tin CPU là bắt buộc'),
+    // infor_ram: Yup.number().required('Số RAM là bắt buộc').positive('Số RAM phải là số dương'),
+    // infor_rom: Yup.number().required('Bộ nhớ trong là bắt buộc').positive('Bộ nhớ trong phải là số dương'),
+    // infor_frontCamera: Yup.string().required('Thông tin camera trước là bắt buộc'),
+    // infor_rearCamera: Yup.string().required('Thông tin camera sau là bắt buộc'),
+    // infor_scanning_frequency: Yup.string().required('Thông tin tần số quét là bắt buộc'),
+    // infor_chip_battery: Yup.string().required('Thông tin chip và pin là bắt buộc')
+  });
   // console.log(props);
   useEffect(()=>{
     if (!isNaN(numericId)) {
@@ -220,50 +238,49 @@ console.log(productColors);
         infor_scanning_frequency: productDetail?.infor_product_infor_product?.infor_scanning_frequency || "",
         infor_chip_battery: productDetail?.infor_product_infor_product?.infor_chip_battery || "",
       }}
+
+      validationSchema={validationSchema} 
       
-          onSubmit={(values, { resetForm }) => {
-            const dataInforProduct = {
-              infor_screen: values.infor_screen,
-              infor_system: values.infor_system,
-              infor_cpu: values.infor_cpu,
-              infor_ram: values.infor_ram,
-              infor_more: values.moTa,
-              product_name: values.product_name,
-              product_price: values.price,
-              product_hot: values.hot,
-           
-              product_discount: values.discount,
-              category_id: values.category,
-              listProductColor: listProductColor,
-              product_id:productDetail.product_id
-            };
-        dispatch(putInforProductAdminThunk(dataInforProduct))
+      onSubmit={(values, { resetForm }) => {
+        const dataInforProduct = {
+          infor_screen: values.infor_screen,
+          infor_system: values.infor_system,
+          infor_cpu: values.infor_cpu,
+          infor_ram: values.infor_ram,
+          infor_more: values.moTa,
+          product_name: values.product_name,
+          product_price: values.price,
+          product_hot: values.hot,
+          product_discount: values.discount,
+          category_id: values.category,
+          listProductColor: listProductColor,
+          product_id: productDetail.product_id,
+        };
+        dispatch(putInforProductAdminThunk(dataInforProduct));
         resetForm();
-            toast.success('Sửa sản phẩm thành công!');
-
-        dispatch(removeAllProductColors())
-navigate("/admin/quan-li-san-pham")
-
-          }}
-        >
-
-             {({ setFieldValue, values,handleChange,handleBlur,resetForm }) => (
-    <Form className="flex flex-col gap-1">
-      {/* Chọn loại sản phẩm */}
-      <div className="flex gap-[1%] py-4">
-      <div className="flex w-[49%] h-auto flex-col gap-1">
-  <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
-  <Select
-    value={values.category || null}  // Set initial value to null or undefined
-    onChange={(value, category_dad) => {
-      setFieldValue('category', value);
-      handleCategoryChange(category_dad.category_dad);
-    }}  // Update Formik state when changed
-    options={formattedCategories}
-    placeholder="Mời bạn chọn"  // Set the placeholder text
-    className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
-  />
-</div>
+        toast.success('Sửa sản phẩm thành công!');
+        dispatch(removeAllProductColors());
+        navigate("/admin/quan-li-san-pham");
+      }}
+    >
+      {({ setFieldValue, values, handleChange, handleBlur, resetForm, errors, touched }) => (
+        <Form className="flex flex-col gap-1">
+          {/* Chọn loại sản phẩm */}
+          <div className="flex gap-[1%] py-4">
+            <div className="flex w-[49%] h-auto flex-col gap-1">
+              <label htmlFor="category" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Loại sản phẩm</label>
+              <Select
+                value={values.category || null}
+                onChange={(value, category_dad) => {
+                  setFieldValue('category', value);
+                  handleCategoryChange(category_dad.category_dad);
+                }}
+                options={formattedCategories}
+                placeholder="Mời bạn chọn"
+                className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
+              />
+              {touched.category && errors.category && <div className="text-red-500">{errors.category}</div>}
+            </div>
         {/* Nhập giá sản phẩm */}
         <div className="flex w-[49%] h-auto flex-col gap-1">
           <label htmlFor="price" className="text-[14px] font-medium text-[#4A4A4A] tracking-wide">Giá sản phẩm</label>
@@ -273,7 +290,7 @@ navigate("/admin/quan-li-san-pham")
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập giá sản phẩm"
           />
-          {/* <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" /> */}
+        {touched.price && errors.price && <div className="text-red-500 text-2xl">{errors.price}</div>}  
         </div>
      
       </div>
@@ -285,7 +302,7 @@ navigate("/admin/quan-li-san-pham")
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập tên sản phẩm"
           />
-          {/* <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" /> */}
+          {touched.product_name && errors.product_name && <div className="text-red-500 text-2xl">{errors.product_name}</div>}
         </div>
         <div className='flex gap-[1%] py-4'>
         <div className="flex w-[49%] h-auto flex-col gap-1">
@@ -296,7 +313,7 @@ navigate("/admin/quan-li-san-pham")
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập tên sản phẩm"
           />
-          {/* <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" /> */}
+          {touched.hot && errors.hot && <div className="text-red-500 text-2xl">{errors.hot}</div>}
         </div>
           {/* Chọn mức giảm giá */}
           <div className="flex w-[49%] h-auto flex-col gap-1">
@@ -307,6 +324,7 @@ navigate("/admin/quan-li-san-pham")
             options={Datagiamgia}
             className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
           />
+          {touched.discount && errors.discount && <div className="text-red-500 text-2xl">{errors.discount}</div>}
         </div>
         </div>
 

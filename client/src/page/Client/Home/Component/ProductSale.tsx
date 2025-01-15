@@ -90,8 +90,8 @@ function ProductSale() {
     </div>
   ) : (
     // Hiển thị tiêu đề khi đã tải xong
-    <h1 className="text-[5rem] sm:text-[3rem] md:text-[2rem] lg:text-[3rem] text-brown-300 font-medium p-4 sm:p-6 md:p-8 lg:p-[2.5rem] text-center">
-      Sản Phẩm nổi bật
+    <h1 className="text-[5rem] sm:text-[3rem] md:text-[2rem] lg:text-[3rem] text-brown-300 font-medium p-4 sm:p-6 md:p-8 lg:p-[2.5rem] font-bold text-center">
+      SẢN PHẨM NỔI BẬC
     </h1>
   )}
         {isLoading ? (

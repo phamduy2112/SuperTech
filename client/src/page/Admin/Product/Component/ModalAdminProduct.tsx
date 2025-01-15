@@ -4,7 +4,7 @@ import { GetProp, UploadProps } from 'antd/lib';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { setProductColors } from '../../../../redux/product/product.slice';
 import { createImage } from '../../../../service/product/product.service';
@@ -14,11 +14,25 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const validationSchema = Yup.object().shape({
   color: Yup.string().required('Màu sắc không được để trống'),
-  quantity: Yup.number().min(0, 'Số lượng không hợp lệ').required('Số lượng không được để trống'),
-
+  quantity: Yup.number()
+    .min(1, 'Số lượng phải lớn hơn hoặc bằng 1')  // Chỉnh sửa điều kiện validation
+    .required('Số lượng không được để trống'),
+  capacity: Yup.string().when('showDetails', {
+    is: true,
+    then: Yup.string().required('Dung lượng không được để trống')
+  }),
+  additionalPrice: Yup.number().when('showDetails', {
+    is: true,
+    then: Yup.number().min(0, 'Giá cộng thêm không hợp lệ').required('Giá cộng thêm không được để trống')
+  }),
+  files: Yup.array().test('fileSize', 'Kích thước tệp quá lớn', (files) =>
+    files?.every(file => file.size <= 500 * 1024) // 500KB
+  ).test('fileType', 'Định dạng tệp không hợp lệ', (files) =>
+    files?.every(file => ['image/jpeg', 'image/png'].includes(file.type))
+  ),
 });
 
-function ModalAdminProduct(props:any) {
+function ModalAdminProduct(props: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [showDetails, setShowDetails] = useState(false);
@@ -45,21 +59,10 @@ function ModalAdminProduct(props:any) {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const handleImageUpload = async (formData: FormData) => {
-    try {
-      const response = await createImage(formData);
-      console.log(response);
-      
-      console.log('Image uploaded successfully:', response.data);
-      // Handle success response, such as showing a success message or updating state
-    } catch (error) {
-      console.error('Image upload failed:', error);
-      // Handle error, such as showing an error message to the user
-    }
-  };
+
   const handleSubmit = async (values: any) => {
     const formData = new FormData();
-  
+
     // Append each file to FormData
     fileList.forEach((file, index) => {
       if (file.originFileObj) {
@@ -67,7 +70,7 @@ function ModalAdminProduct(props:any) {
         formData.append(imageKey, file.originFileObj); // Ensure file is appended
       }
     });
-  
+
     // Append form values to FormData
     formData.append('color', values.color);
     formData.append('quantity', values.quantity.toString());
@@ -75,12 +78,11 @@ function ModalAdminProduct(props:any) {
       formData.append('capacity', values.capacity);
       formData.append('additionalPrice', values.additionalPrice.toString());
     }
-  
+
     try {
       // Upload image and log the response to confirm `image_id` structure
       const response = await createImage(formData);
- 
-  
+
       // Verify response path to `image_id`
       const image_id = response.data?.data?.image_id; // Adjust if necessary
       toast.success('Thêm hình sản phẩm thành công!');
@@ -90,7 +92,7 @@ function ModalAdminProduct(props:any) {
         console.error('Image ID not found in the response:', response);
         return;
       }
-  
+
       // Dispatch action with the obtained `image_id`
       dispatch(setProductColors({
         color: values.color,
@@ -102,13 +104,12 @@ function ModalAdminProduct(props:any) {
             storage_price: values.additionalPrice,
           }
         ]
-      })
-    );
-  
+      }));
+
       console.log('Product color saved successfully:', {
         color: values.color,
         quantity: values.quantity,
-        image_id:image_id,
+        image_id: image_id,
         productStorage: [
           {
             storage: values.capacity,
@@ -116,12 +117,12 @@ function ModalAdminProduct(props:any) {
           }
         ]
       });
-  
+
     } catch (error) {
       console.error('Upload failed', error);
     }
   };
-  
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setShowDetails(e.target.checked);
   };
@@ -129,8 +130,8 @@ function ModalAdminProduct(props:any) {
   return (
     <>
       <div className={`cursor-pointer text-customColor text-[${props.font || 1.5}rem]`} onClick={showModal} style={{ whiteSpace: 'normal' }}>
-  Thêm màu sắc
-</div>
+        Thêm màu sắc
+      </div>
       <Modal
         title="Thêm màu sắc và hình ảnh"
         open={isModalOpen}
@@ -144,6 +145,7 @@ function ModalAdminProduct(props:any) {
             capacity: '',
             additionalPrice: 0,
             showDetails: false,
+            files: [], // Add this to handle file uploads
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -163,7 +165,7 @@ function ModalAdminProduct(props:any) {
                     name="color"
                     className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
                   />
-                  {errors.color && touched.color && <div>{errors.color}</div>}
+                <ErrorMessage name="color" component="div" className="text-red-500 text-2xl" />
                 </div>
 
                 <div className="flex w-[49%] h-auto flex-col gap-4">
@@ -176,10 +178,10 @@ function ModalAdminProduct(props:any) {
                   <Field
                     type="number"
                     name="quantity"
-                    min={0}
+                    min={1}  // Yêu cầu số lượng phải >= 1
                     className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
                   />
-                  {errors.quantity && touched.quantity && <div>{errors.quantity}</div>}
+                  <ErrorMessage name="quantity" component="div" className="text-red-500 text-2xl" /> 
                 </div>
               </div>
 
@@ -202,7 +204,7 @@ function ModalAdminProduct(props:any) {
                       name="capacity"
                       className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
                     />
-                    {errors.capacity && touched.capacity && <div>{errors.capacity}</div>}
+                    <ErrorMessage name="capacity" component="div" className="text-red-500 text-lg" />
                   </div>
                   <div className="flex w-[49%] h-auto flex-col gap-4">
                     <label
@@ -217,7 +219,7 @@ function ModalAdminProduct(props:any) {
                       min={0}
                       className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
                     />
-                    {errors.additionalPrice && touched.additionalPrice && <div>{errors.additionalPrice}</div>}
+                    <ErrorMessage name="additionalPrice" component="div" className="text-red-500 text-lg" />
                   </div>
                 </div>
               )}
@@ -235,6 +237,7 @@ function ModalAdminProduct(props:any) {
                       onChange={onChange}
                       onPreview={onPreview}
                       beforeUpload={() => false}
+                      onRemove={(file) => setFieldValue('files', fileList.filter(f => f.uid !== file.uid))}
                     >
                       {fileList.length < 7 && '+ Upload'}
                     </Upload>
