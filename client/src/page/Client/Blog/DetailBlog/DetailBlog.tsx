@@ -9,7 +9,9 @@ import {
 } from "../../../../redux/blogredux/blog.slice";
 import DOMPurify from 'dompurify';
 import { Link } from "react-router-dom";
-// Component Breadcrumbs
+// Component Breadcrumbs im
+import CommentForm from './Component/CommentForm';
+import Comment from './Component/Comment';
 function Breadcrumbs() {
   return (
     <div className="md:text-[1.5rem] md:py-6 px-10">
@@ -36,6 +38,8 @@ function DetailBlog() {
   const mediaPosts = useAppSelector((state) => state.blog.mediaPosts);
   const AppDispatch = useAppDispatch();
   const { id } = useParams();
+  const numericId = Number(id);
+  const getCommentById = useAppSelector((state) => state.listComment.listComment);
 
   useEffect(() => {
     AppDispatch(getAllBlogThunk());
@@ -126,58 +130,11 @@ console.log(Blog);
   </div>
 </div>
       </div>
-      {/* Phần bình luận */}
-      <div className="space-y-4 py-4 md:py-6">
-        <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 px-10">
-          Bình Luận
-        </h3>
-        <div className="space-y-4">
-          <div className="flex space-x-4 items-center my-6 md:my-10 px-10">
-            <img
-              src="https://i.pinimg.com/originals/ea/1b/b8/ea1bb8dbc5b7eadf836b3a617377b7ff.png"
-              alt="User Avatar"
-              className="w-10 h-10 md:w-[3%] md:h-[3%] rounded-full object-cover"
-            />
-            <div>
-              <strong className="block text-gray-800 text-xl md:text-2xl ">
-                Phạm Ngọc Duy
-              </strong>
-              <p className="text-lg md:text-xl text-gray-500">4/5/2025</p>
-              <p className="text-gray-800 text-xl md:text-2xl"> cmt đầu</p>
-              <a
-                href="#"
-                className="text-blue-500 hover:underline text-lg md:text-xl"
-              >
-                ↻ 6 trả lời
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Form bình luận */}
-      <div className="space-y-4">
-        <h3 className="text-2xl md:text-3xl font-semibold text-gray-800 px-10">
-          Ý Kiến
-        </h3>
-        <div className="flex space-x-4 items-start px-10">
-          <img
-            src="https://i.pinimg.com/originals/ea/1b/b8/ea1bb8dbc5b7eadf836b3a617377b7ff.png"
-alt="User Avatar"
-            className="w-10 h-10 md:w-[3%] md:h-[3%] rounded-full object-cover"
-          />
-          <textarea
-            className="w-full h-32 p-2 border border-gray-300 rounded-md placeholder:text-lg md:placeholder:text-2xl placeholder:p-3"
-            placeholder="Chia sẻ ý kiến của bạn"
-          ></textarea>
-        </div>
-        <div className="flex justify-end px-10 ">
-          <button className="w-40 h-12 bg-customColor font-medium text-white rounded-md hover:bg-yellow-600 text-lg md:text-2xl">
-            Hoàn tất
-          </button>
-        </div>
-      </div>
+      <Comment reviews={getCommentById.filter(comment => comment.product_id === numericId)} />
+       <CommentForm id={numericId}/>
     </Container>
   );
 }
 
 export default DetailBlog;
+  
