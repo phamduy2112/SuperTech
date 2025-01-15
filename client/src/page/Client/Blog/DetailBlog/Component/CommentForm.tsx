@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useAvatar } from "../../../../../hooks/UseAvatar.hook";
 import { IMG_BACKEND_USER } from "../../../../../constants";
 import { getUserThunk } from "../../../../../redux/user/user.slice";
+import { createCommentByIdBlogThunk } from "../../../../../redux/blogredux/blog.slice";
 
 const { TextArea } = Input;
 
@@ -37,14 +38,13 @@ const CommentForm = (props: any) => {
     }
 
     const newComment = {
-      product_id: Number(props.id),
+      post_id: Number(props.id),
       comment_content: comment,
-      comment_star: rating,
     };
 
     try {
-      const resultAction = await dispatch(createCommentByIdProductThunk(newComment));
-      if (createCommentByIdProductThunk.fulfilled.match(resultAction)) {
+      const resultAction = await dispatch(createCommentByIdBlogThunk(newComment));
+      if (createCommentByIdBlogThunk.fulfilled.match(resultAction)) {
         toast.success("Bình luận thành công!");
         setComment("");
         setRating(0);
@@ -73,7 +73,6 @@ const CommentForm = (props: any) => {
               <span className="text-[1.6rem] md:text-[2rem] text-[#555] font-bold">User</span>
             </div>
           )}
-          
         </div>
         <div className="w-full md:w-[90%] md:ml-4">
           <TextArea

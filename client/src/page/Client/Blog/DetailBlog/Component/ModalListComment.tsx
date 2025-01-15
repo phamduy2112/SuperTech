@@ -170,11 +170,7 @@ const handleLike=async(id:number,idProduct:number)=>{
                               </h3>                       
                                <div className="flex items-center text-[1.5rem]">
                             <div className="ml-2 text-[1.5rem] text-gray-500">{formatDate(review.comment_date)}</div>
-                            <div className="ml-2 flex text-[1.3rem] items-center text-orange-500">
-                              {[...Array(5)].map((_, index) => (
-                                index < Number(review?.comment_star) ? <FaStar key={index} className="text-yellow-500" /> : <FaRegStar key={index} className="text-gray-300" />
-                              ))}
-                            </div>
+                        
                           </div>
                           {activeAction.index === index && activeAction.action === 'edit' ? (
                             <Formik
@@ -290,13 +286,7 @@ const handleLike=async(id:number,idProduct:number)=>{
                           </div>
                         </div>
                       </div>
-                      <button
-                        className="mt-2 text-purple-600 text-[1.8rem] flex gap-[.5rem]"
-                        onClick={() => handleCommentClick(index)}
-                      >
-                        <IoIosReturnRight />
-                        {expandedComments[index] ? "Ẩn phản hồi" : "Xem phản hồi"}
-                      </button>
+                              
   
                       <div className="flex items-center justify-between">
   

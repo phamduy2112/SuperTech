@@ -16,6 +16,7 @@ import { useAvatar } from '../../../../../hooks/UseAvatar.hook';
 import { useNavigate } from 'react-router-dom';
 import ProductModalWithPagination from './ModalListComment';
 import { Paths } from '../../../../../router/component/RouterValues';
+import { createLikeCommentThunkBlog, deleteCommentByIdBlogThunk, putCommentByIdBlogThunk } from '../../../../../redux/blogredux/blog.slice';
 
 function Comment(props: any) {
   const user: any = useAppSelector((state) => state.user.user);
@@ -24,10 +25,33 @@ function Comment(props: any) {
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [activeAction, setActiveAction] = useState<{ action: 'edit' | 'reply' | null, index: number | null }>({ action: null, index: null });
   const [filteredComments, setFilteredComments] = useState<any[]>([]);
+
   const { avatarStyle, avatarText } = useAvatar({
     userImage: user?.user_image ? `${IMG_BACKEND_USER}/${user.user_image}` : null,
     userName: user?.user_name,
   });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  console.log(props.reviews);
+  const handleLike = async (id: number, idProduct: number) => {
+    if (!login) {
+      toast.error("Bạn cần đăng nhập!");
+      navigate(`${Paths.Login}`);
+      return;
+    }
+    let resp = {
+      comment_post_id: id,
+      post_id: idProduct
+    };
+    dispatch(createLikeCommentThunkBlog(resp))
+
+
+  }
+  useEffect(() => {
+    setFilteredComments(props.reviews && Array.isArray(props.reviews) ? props.reviews : []);
+  }, [props.reviews]);
 
   const handleActionToggle = (index: number, action: 'edit' | 'reply') => {
     setActiveAction((prevState) => prevState.index === index && prevState.action === action
@@ -35,11 +59,11 @@ function Comment(props: any) {
       : { action, index });
   };
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const handleDelete = (data: any) => {
     setActiveDropdown(null);
-    dispatch(deleteCommentByIdThunk(data));
+    // console.log(data);
+    
+    dispatch(deleteCommentByIdBlogThunk(data));
   };
 
   const handleCommentClick = (index: number) => {
@@ -52,26 +76,11 @@ function Comment(props: any) {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
-  const handleLike = async (id: number, idProduct: number) => {
-    if (!login) {
-      toast.error("Bạn cần đăng nhập!");
-      navigate(`${Paths.Login}`);
-      return;
-    }
-    let resp = {
-      id: id,
-      product_id: idProduct
-    };
-    dispatch(createLikeCommentThunk(resp));
-  };
+ 
 
   const CommentSchema = Yup.object().shape({
     commentText: Yup.string().required('Nội dung bình luận không được để trống').min(5, 'Nội dung phải có ít nhất 5 ký tự'),
   });
-
-  useEffect(() => {
-    setFilteredComments(props.reviews && Array.isArray(props.reviews) ? props.reviews : []);
-  }, [props.reviews]);
 
   return (
     <div>
@@ -92,9 +101,12 @@ function Comment(props: any) {
                   <div className="w-[100%]">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-bold text-[2rem] flex gap-[1rem] items-center">{review.user?.user_name}
-                          {review?.isPurchase ? <FaCheckCircle className="text-[green]" /> : ""}
-                        </h3>
+                            <h3 className="font-bold text-[2rem] flex  gap-[1rem] items-center">{review.user?.user_name} 
+                                                   
+                                               
+                                          
+                                                   
+                                                   </h3> 
                         
                         {activeAction.index === index && activeAction.action === 'edit' ? (
                           <Formik
@@ -102,13 +114,12 @@ function Comment(props: any) {
                             validationSchema={CommentSchema}
                             onSubmit={(values, { resetForm }) => {
                               const updatedComment = {
-                                comment_id: review.comment_id,
-                                product_id: review.product_id,
+                                comment_post_id: review.comment_post_id,
+                                post_id: review.post_id,
                                 comment_content: values.commentText,
                               };
 
-                              dispatch(editCommentByIdThunk(updatedComment));
-
+                              dispatch(putCommentByIdBlogThunk(updatedComment));
                               resetForm();
                               setActiveAction({ action: null, index: null });
                             }}
@@ -176,8 +187,8 @@ function Comment(props: any) {
                         <div className="flex items-center gap-[.5rem]">
                           <button className="flex items-center text-purple-600">
                             {review?.likes?.some(item => item?.user_id === user?.user_id)
-                              ? <BiSolidLike onClick={() => handleLike(review.comment_id, review.product_id)} />
-                              : <AiOutlineLike onClick={() => handleLike(review.comment_id, review.product_id)} />
+                              ? <BiSolidLike onClick={() => handleLike(review.comment_post_id, review.post_id)} />
+                              : <AiOutlineLike onClick={() => handleLike(review.comment_post_id, review.post_id)} />
                             }
                             <span>{review.likes?.length}</span>
                           </button>
@@ -190,18 +201,12 @@ function Comment(props: any) {
                         </div>
                       </div>
                     </div>
-                    <button
-                      className="mt-2 text-purple-600 text-[1.8rem] flex gap-[.5rem]"
-                      onClick={() => handleCommentClick(index)}
-                    >
-                      <IoIosReturnRight />
-                      {expandedComments[index] ? "Ẩn phản hồi" : "Xem phản hồi"}
-                    </button>
+                    
 
                     <div className="flex items-center justify-between">
                       {expandedComments[index] && (
                         <div className="pl-8">
-                          <ReplyComment replies={review?.replies_comment_products} productId={review?.product_id} />
+                          <ReplyComment replies={review?.replies_comment_products} productId={review?.post_id} />
                         </div>
                       )}
                     </div>
@@ -212,9 +217,9 @@ function Comment(props: any) {
           })}
         </div>
         <div className='flex justify-center items-center'>
-          {filteredComments.length == 0 ? '' : <ProductModalWithPagination reviews={filteredComments} />}
+          {filteredComments.length === 0 ? '' : <ProductModalWithPagination reviews={filteredComments} />}
         </div>
-        {filteredComments.length == 0 && (
+        {filteredComments.length === 0 && (
           <div className="text-center text-[1.5rem] text-gray-500 mt-4">
             Chưa có người dùng bình luận
           </div>

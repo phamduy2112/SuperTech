@@ -2,11 +2,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { data } from "../../page/Client/DetailProduct/data";
 import {
   createBlog,
+  createCommentByIdBlog,
+  createLikeBlog,
   deleteBlog,
+  deleteCommentByIdBlog,
   editBlog,
   getBlog,
   getBlogAll,
+  getCommentByIdBlog,
   getmedia_postAll,
+  putCommentByIdBlog,
 } from "../../service/Blog/blog.service";
 
 export const getAllBlogThunk = createAsyncThunk("getAllBlogThunk", async () => {
@@ -96,10 +101,93 @@ export const editBlogThunk = createAsyncThunk(
     }
   }
 );
+export const getCommentByIBlogThunk = createAsyncThunk(
+  "getCommentByIBlogThunk",
+  async (id: number) => {
+    try {
+      const resp = await getCommentByIdBlog(id);
+      
+      // Lấy dữ liệu bình luận
+      const comments = resp.data.content;
+      
+      // Kiểm tra xem có phải là mảng không và sắp xếp theo `comment_date`
+      if (Array.isArray(comments)) {
+        // Giả sử comment_date là chuỗi kiểu ISO 8601 hoặc timestamp
+        comments.sort((a: any, b: any) => {
+          const dateA = new Date(a.post_date); // Chuyển thành đối tượng Date
+          const dateB = new Date(b.post_date); // Chuyển thành đối tượng Date
+          
+          // Sắp xếp từ mới nhất đến cũ nhất
+          return dateB.getTime() - dateA.getTime();
+        });
+      }
+
+      // Trả về danh sách bình luận đã sắp xếp
+      return comments;
+    } catch (e) {
+      console.log(e);
+      return []; // Trả về mảng trống nếu có lỗi
+    }
+  }
+);
+export const deleteCommentByIdBlogThunk = createAsyncThunk(
+  "deleteCommentByIdBlogThunk",
+  async (data,{dispatch}) => {      
+    try {
+      const resp = await deleteCommentByIdBlog(data.comment_post_id);
+      const response = await dispatch(getCommentByIBlogThunk(data.post_id));
+
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const createCommentByIdBlogThunk = createAsyncThunk(
+  "createCommentByIdBlogThunk",
+  async (data,{dispatch}) => {      
+    try {
+      const resp = await createCommentByIdBlog(data);
+      const response = await dispatch(getCommentByIBlogThunk(data.post_id));
+
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const putCommentByIdBlogThunk = createAsyncThunk(
+  "putCommentByIdBlogThunk",
+  async (data,{dispatch}) => {      
+    try {
+      const resp = await putCommentByIdBlog(data,data.comment_post_id);
+      const response = await dispatch(getCommentByIBlogThunk(data.post_id));
+
+      return response.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
+export const createLikeCommentThunkBlog = createAsyncThunk(
+  "createLikeCommentThunkBlog",
+  async (data:any,{dispatch}) => {      
+
+      const resp = await createLikeBlog(data.comment_post_id);
+   
+      
+      const response = await dispatch(getCommentByIBlogThunk(data.post_id));
+
+      return response.payload;
+
+    
+  },
+);
 const initialState = {
   listBlog: [],
   mediaPosts: [],
   detailBlog:{},
+  listComment: [],
 
   loading: false,
   error: null,
@@ -128,6 +216,10 @@ const BlogSlice = createSlice({
         .addCase(editBlogThunk.fulfilled, (state, { payload }) => {
           state.listBlog = payload;
         })
+        builder
+        .addCase(getCommentByIBlogThunk.fulfilled, (state, { payload }) => {
+          state.listComment = payload;
+        });
    
   },
 });

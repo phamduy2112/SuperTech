@@ -77,3 +77,45 @@ export const editBlog = async (newBlog: any) => {
     throw error; // Rethrow or handle further
   }
 }
+
+
+// Bình luận
+export const getCommentByIdBlog = (id:number) => {
+  return axiosWithAuth(`/comment-post-id/${id}`, {
+    method: "get",
+
+  });
+};
+export const createCommentByIdBlog = (payload:any) => {
+  return axiosWithAuth(`/commentpost-create`, {
+    method: "post",
+    data:payload
+
+  });
+};
+export const  putCommentByIdBlog = (payload:any,id:number) => {
+  return axiosWithAuth(`/commentpost-edit/${id}`, {
+    method: "put",
+    data:payload
+
+  });
+};
+export const deleteCommentByIdBlog = (id:number) => {
+  return axiosWithAuth(`/commentpost-delete/${id}`, {
+    method: "delete",
+  
+
+  });
+};
+
+// like 
+
+
+
+export const createLikeBlog = (id:number) => {
+  return axiosWithAuth(`/create-like-blog/${id}`, {
+    method: "post",
+  
+
+  });
+};

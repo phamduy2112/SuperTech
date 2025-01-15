@@ -12,11 +12,14 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import DOMPurify from 'dompurify';
 import { truncateText } from '../../../utils';
 import { deleteBlogThunk, getAllBlogThunk } from '../../../redux/blogredux/blog.slice';
+import dayjs from 'dayjs';
 
 function AdminBlog() {
   const navigate = useNavigate();
   const ListBlog: any = useAppSelector((state) => state.blog.listBlog);
   const dispatch = useAppDispatch();
+  console.log(ListBlog);
+  
   
   useEffect(() => {
     dispatch(getAllBlogThunk());
@@ -111,6 +114,9 @@ function AdminBlog() {
       title: "Ngày đăng",
       dataIndex: "post_date",
       key: "post_date",
+      render: (date: string) => {
+        return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+      },
     },
     {
       title: "Tác Vụ",

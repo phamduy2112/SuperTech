@@ -6,6 +6,7 @@ import {
   getAllBlogmediaThunk,
   getAllBlogThunk,
   getBlogByIdThunk,
+  getCommentByIBlogThunk,
 } from "../../../../redux/blogredux/blog.slice";
 import DOMPurify from 'dompurify';
 import { Link } from "react-router-dom";
@@ -39,8 +40,10 @@ function DetailBlog() {
   const AppDispatch = useAppDispatch();
   const { id } = useParams();
   const numericId = Number(id);
-  const getCommentById = useAppSelector((state) => state.listComment.listComment);
 
+  const getCommentById = useAppSelector((state) => state.blog.listComment);
+  
+    
   useEffect(() => {
     AppDispatch(getAllBlogThunk());
     AppDispatch(getAllBlogmediaThunk());
@@ -55,10 +58,11 @@ function DetailBlog() {
   });
 
   const Blog = mergedPosts.find((post) => post.post_id === parseInt(id));
+console.log(getCommentById);
 
   useEffect(() => {
     if (id != null) {
-      AppDispatch(getBlogByIdThunk(parseInt(id)));
+      AppDispatch(getCommentByIBlogThunk(parseInt(id)));
     }
   }, [AppDispatch, id]);
 
@@ -76,6 +80,19 @@ function DetailBlog() {
 
   const relatedPosts = getRandomPosts(mergedPosts, parseInt(id), 5);
 console.log(Blog);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+         await (getCommentByIBlogThunk(numericId));
+      
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    fetchComments();
+  }, [numericId]);
 
   return (
     <Container className="bg-white">
@@ -130,8 +147,8 @@ console.log(Blog);
   </div>
 </div>
       </div>
-      <Comment reviews={getCommentById.filter(comment => comment.product_id === numericId)} />
-       <CommentForm id={numericId}/>
+      <Comment reviews={getCommentById}/>
+      <CommentForm id={numericId}/>
     </Container>
   );
 }

@@ -12,16 +12,22 @@ import "../responsive/Blog.css";
 function ListBlog() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ListBlogRedux: any = useAppSelector((state) => state.blog.listBlog);
+  const AppDispatch = useAppDispatch();
 
-
+  
 
   const [mergedPosts, setMergedPosts] = useState([]);
 
-  useEffect(() => {
-    setMergedPosts(ListBlogRedux);
-    
-  }, [ListBlogRedux]);
-  console.log(mergedPosts)
+ 
+   useEffect(() => {
+      AppDispatch(getAllBlogThunk());
+      AppDispatch(getAllBlogmediaThunk());
+    }, [AppDispatch]);
+    useEffect(() => {
+      setMergedPosts(ListBlogRedux);
+      
+    }, [ListBlogRedux]);
+    console.log(mergedPosts)
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const pageSize = 6;
@@ -29,7 +35,7 @@ function ListBlog() {
 
 
   const currentPosts = mergedPosts
-    ?.filter((post) => post.post_title.toLowerCase().includes(searchQuery.toLowerCase()))
+    ?.filter((post) => post.post_title?.toLowerCase().includes(searchQuery.toLowerCase()))
     .slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
