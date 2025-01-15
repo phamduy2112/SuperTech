@@ -163,11 +163,7 @@ function AdminBlog() {
               <IoCloudDownloadOutline className='text-[18px]' />
               Tải về PDF
             </Button>
-            <Link to={'/admin/quan-li-bai-viet/quan-li-binh-luan-bai-viet'}>
-              <Button className='p-10' color="danger" variant="solid">
-                Xem Bình Luận Bài Viết
-              </Button>
-            </Link>
+          
             <Link to={'/admin/quan-li-bai-viet/them-bai-viet-moi'}>
               <Button className='p-10' type="primary">
                 <TbPlaylistAdd className='text-[18px]' />

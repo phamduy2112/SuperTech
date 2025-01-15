@@ -23,14 +23,14 @@ function ListBlog() {
   }, [ListBlogRedux]);
   console.log(mergedPosts)
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const pageSize = 6;
   const totalPages = Math.ceil(mergedPosts?.length / pageSize);
 
 
-  const currentPosts = mergedPosts?.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const currentPosts = mergedPosts
+    ?.filter((post) => post.post_title.toLowerCase().includes(searchQuery.toLowerCase()))
+    .slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="container mx-auto flex flex-col lg:flex-row-reverse bg-white pt-14 pb-48 px-8">
@@ -41,7 +41,7 @@ function ListBlog() {
             <input
               type="text"
               className="flex-1 text-[15px] outline-none bg-transparent"
-              onChange={(e) => setSearchQuery(e.target.value)} // Cập nhật từ khóa tìm kiếm
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Tìm kiếm bài viết..."
             />
             <GoSearch className="text-[18px]" />
