@@ -117,9 +117,6 @@ function Order() {
         ))}
       </div>
 
-      <h4 className="text-[1.4rem] md:text-[1.7rem] font-semibold">
-        Nếu không nhận hàng hoặc hủy hàng quá 5 lần sẽ vô hiệu hóa tài khoản!
-      </h4>
 
       <div className="w-full h-[38px] py-[1rem] inputSearch">
         <Input.Search

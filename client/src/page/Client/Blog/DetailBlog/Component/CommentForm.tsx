@@ -33,7 +33,7 @@ const CommentForm = (props: any) => {
   const handleSubmit = async () => {
     if (!login) {
       toast.error("Bạn cần đăng nhập!");
-      navigate(`/login`);
+      navigate(`/dang-nhap`);
       return;
     }
 

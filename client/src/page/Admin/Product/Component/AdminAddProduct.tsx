@@ -2,8 +2,9 @@ import { message, Select, Upload, UploadFile, Button, Modal, Switch, GetProp } f
 import React, { useEffect, useRef, useState } from 'react';
 import { TbPlaylistAdd } from 'react-icons/tb';
 import { UploadProps } from 'antd/lib';
+import * as Yup from 'yup';
 import ImgCrop from 'antd-img-crop';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { createCategoryThunk, getCatelogryThunk } from '../../../../redux/catelogry/catelogry.slice';
 import toast from 'react-hot-toast';
@@ -29,6 +30,32 @@ function AdminAddProduct() {
   ];
   const dispatch=useAppDispatch()
 
+  const validationSchema = Yup.object().shape({
+    category: Yup.string().required('Loại sản phẩm là bắt buộc'),
+    price: Yup.number()
+      .required('Giá sản phẩm là bắt buộc')
+      .positive('Giá sản phẩm phải là số dương')
+      .integer('Giá sản phẩm phải là số nguyên'),
+    product_name: Yup.string().required('Tên sản phẩm là bắt buộc'),
+    // hot: Yup.number()
+    //   .required('Trường hot là bắt buộc')
+    //   .integer('Trường hot phải là số nguyên'),
+    // infor_screen: Yup.string().required('Thông tin màn hình là bắt buộc'),
+    // infor_system: Yup.string().required('Hệ điều hành là bắt buộc'),
+    // infor_cpu: Yup.string().required('Thông tin CPU là bắt buộc'),
+    // infor_ram: Yup.number()
+    //   .required('Số RAM là bắt buộc')
+    //   .positive('Số RAM phải là số dương')
+    //   .integer('Số RAM phải là số nguyên'),
+    // infor_rom: Yup.number()
+    //   .required('Bộ nhớ trong là bắt buộc')
+    //   .positive('Bộ nhớ trong phải là số dương')
+    //   .integer('Bộ nhớ trong phải là số nguyên'),
+    // infor_frontCamera: Yup.string().required('Thông tin camera trước là bắt buộc'),
+    // infor_rearCamera: Yup.string().required('Thông tin camera sau là bắt buộc'),
+    // infor_scanning_frequency: Yup.string().required('Thông tin chip và pin là bắt buộc'),
+    // infor_chip_battery: Yup.string().required('Thông tin chip và pin là bắt buộc'),
+  });
   const showModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
   const prevIdsRef = useRef(); // Khai báo useRef để lưu giá trị ids trước đó
@@ -145,7 +172,6 @@ function AdminAddProduct() {
             product_name: "",
             hot: 0,
             quantity: 0,
-          
             moTa: "",
             infor_screen: '',
                 infor_system: '',
@@ -158,6 +184,7 @@ function AdminAddProduct() {
                 infor_scanning_frequency: '',
                 infor_chip_battery: '',
           }}
+          validationSchema={validationSchema}
           onSubmit={(values, { resetForm }) => {
             const dataInforProduct = {
               infor_screen: values.infor_screen,
@@ -199,6 +226,7 @@ function AdminAddProduct() {
     placeholder="Mời bạn chọn"  // Set the placeholder text
     className="h-[48px] bg-[#81818113] focus:text-[white] focus:bg-[#81818149] transition-all ease-in-out duration-500 rounded-lg text-[13px] outline-none"
   />
+  <ErrorMessage name="category" component="div" className="text-[1.5rem] text-red-500" />
 </div>
         {/* Nhập giá sản phẩm */}
         <div className="flex w-[49%] h-auto flex-col gap-1">
@@ -209,7 +237,7 @@ function AdminAddProduct() {
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập giá sản phẩm"
           />
-          {/* <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" /> */}
+          <ErrorMessage name="price" component="div" className="text-[1.5rem] text-red-500" />
         </div>
      
       </div>
@@ -221,7 +249,7 @@ function AdminAddProduct() {
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập tên sản phẩm"
           />
-          {/* <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" /> */}
+          <ErrorMessage name="product_name" component="div" className="text-[1.5rem] text-red-500" />
         </div>
         <div className='flex gap-[1%] py-4'>
         <div className="flex w-[49%] h-auto flex-col gap-1">
@@ -232,7 +260,7 @@ function AdminAddProduct() {
             className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:scale-105 focus:border-[#4A90E2]"
             placeholder="Nhập tên sản phẩm"
           />
-          {/* <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" /> */}
+          <ErrorMessage name="hot" component="div" className="text-[1.5rem] text-red-500" />
         </div>
           {/* Chọn mức giảm giá */}
           <div className="flex w-[49%] h-auto flex-col gap-1">
@@ -262,7 +290,7 @@ function AdminAddProduct() {
               placeholder="Kích thước màn hình"
               className="h-[48px] bg-[#f7f7f7] focus:bg-white focus:shadow-md border border-[#ddd] rounded-lg text-[14px] p-3 outline-none transition duration-300 ease-in-out transform focus:z-30 focus:scale-105 focus:border-[#4A90E2]"
               />
-                        {/* <ErrorMessage name="infor_screen" component="div" className="text-[1.5rem] text-red-500" /> */}
+                        <ErrorMessage name="infor_screen" component="div" className="text-[1.5rem] text-red-500" />
 
               </div>
              

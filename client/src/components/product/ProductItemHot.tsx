@@ -81,7 +81,7 @@ function ProductItemHot(props) {
 <div className="mx-5 relative px-3 py-5 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border overflow-hidden">
   <div className="absolute top-4 right-4 flex flex-col gap-3">
     {/* Icon yêu thích */}
-    <div className="bg-black p-2 rounded-full text-white cursor-pointer hover:bg-gray-800">
+    <div className="bg-black p-3 text-[1.5rem] rounded-full text-white cursor-pointer hover:bg-gray-800">
       <Tooltip title="Thêm yêu thích">
                   {
                     Array.isArray(listProductFavourites) && listProductFavourites.some(item => item?.user_id == user?.user_id && item.product_id === props.product.product_id)

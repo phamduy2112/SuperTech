@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -18,7 +19,7 @@ function Sidebar(props) {
               : props.props.post_title}
           </h3>
           <div className="text-[12px] text-neutral-500 line-clamp-2">
-            <span>📅 {props.props.post_date}</span> ·{" "}
+            <span>📅 {dayjs(props.props.post_date).format('YYYY-MM-DD HH:mm:ss')}</span>
             {/* <span>✆ {props.props.post_content}</span> */}
           </div>
         </div>

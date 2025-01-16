@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 // Component Breadcrumbs im
 import CommentForm from './Component/CommentForm';
 import Comment from './Component/Comment';
+import dayjs from "dayjs";
 function Breadcrumbs() {
   return (
     <div className="md:text-[1.5rem] md:py-6 px-10">
@@ -39,6 +40,7 @@ function DetailBlog() {
   const mediaPosts = useAppSelector((state) => state.blog.mediaPosts);
   const AppDispatch = useAppDispatch();
   const { id } = useParams();
+   
   const numericId = Number(id);
 
   const getCommentById = useAppSelector((state) => state.blog.listComment);
@@ -116,7 +118,7 @@ console.log(Blog);
             )}
           </div>
           <div className="flex text-gray-500 text-sm">
-            <span className="text-lg md:text-xl px-5">{Blog?.post_date}</span>
+            <span className="text-lg md:text-xl px-5">{ dayjs(Blog?.post_date).format('YYYY-MM-DD HH:mm:ss')}</span>
             <span className="text-lg md:text-xl "> <span>💬</span>Sản phẩm tốt</span>
           </div>
           <div className="text-2xl text-gray-700 px-10" style={{ width: '95%' }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Blog?.post_content, { WHOLE_DOCUMENT: true }) }} />

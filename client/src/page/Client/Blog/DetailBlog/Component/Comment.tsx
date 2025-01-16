@@ -184,21 +184,7 @@ function Comment(props: any) {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-[.5rem]">
-                          <button className="flex items-center text-purple-600">
-                            {review?.likes?.some(item => item?.user_id === user?.user_id)
-                              ? <BiSolidLike onClick={() => handleLike(review.comment_post_id, review.post_id)} />
-                              : <AiOutlineLike onClick={() => handleLike(review.comment_post_id, review.post_id)} />
-                            }
-                            <span>{review.likes?.length}</span>
-                          </button>
-                          <button
-                            onClick={() => handleActionToggle(index, 'reply')}
-                            className="flex items-center text-purple-600 ml-4"
-                          >
-                            Phản hồi
-                          </button>
-                        </div>
+                 
                       </div>
                     </div>
                     

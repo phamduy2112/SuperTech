@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getMedia_post } from "../../../../service/Blog/blog.service";
 import { FaArrowRightLong } from "react-icons/fa6";
 import DOMPurify from 'dompurify';
+import dayjs from "dayjs";
 
 function BlogCard(props) {
   const sanitizedContent = DOMPurify.sanitize(props.props.post_content);
@@ -25,7 +26,7 @@ function BlogCard(props) {
             </div>
             <div className="flex items-center gap-2 text-[12px] font-medium">
               <span>🕒</span>
-              <span>{props.props.post_date}</span>
+              <span> {dayjs(props.props.post_date).format('YYYY-MM-DD HH:mm:ss')}</span>
             </div>
           </div>
           <div className="mt-3 text-[18px] font-bold text-neutral-900 px-10 leading-[1.2]">
