@@ -7,7 +7,15 @@ let Posts = models.posts;
 
 const getPosts = async (req, res) => {
     try {
-        let data = await Posts.findAll();
+        let data = await Posts.findAll({
+            include:[
+                {
+                    model: models.media_post,
+                    as: 'media_posts',
+                },
+                
+            ]
+        });
         responseSend(res, data, "Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
@@ -16,7 +24,14 @@ const getPosts = async (req, res) => {
 
 const getPostsById = async (req, res) => {
     try {
-        let data = await Posts.findByPk(req.params.id);
+        const data = await Posts.findByPk(req.params.id, {
+            include: [
+                {
+                    model: models.media_post,
+                    as: 'media_posts', // Alias must match your association definition
+                },
+            ],
+        });
         if (data) {
             responseSend(res, data, "Thành công!", 200);
         } else {
@@ -38,14 +53,12 @@ const createPosts = async (req, res) => {
 
 const updatePosts = async (req, res) => {
     try {
+        console.log(req.body);
+        
         let updated = await Posts.update(req.body, {
             where: { post_id: req.params.id }
         });
-        if (updated[0] > 0) {
-            responseSend(res, updated, "Đã Cập Nhật Thành Công!", 200);
-        } else {
-            responseSend(res, "", "không tồn tại !", 404);
-        }
+      responseSend(res, updated, "Cập nhật Thành công!", 200);
     } catch (error) {
         responseSend(res, "", "Có lỗi xảy ra!", 500);
     }

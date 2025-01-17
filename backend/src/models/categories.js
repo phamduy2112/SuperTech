@@ -25,7 +25,8 @@ export default class categories extends Model {
     category_task: {
       type: DataTypes.BOOLEAN,
       allowNull: true
-    }
+    },
+
   }, {
     sequelize,
     tableName: 'categories',

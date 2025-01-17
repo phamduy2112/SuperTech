@@ -40,14 +40,7 @@ io.on("connection", (socket) => {
 
   // Emit số lượng người dùng online tới frontend
   io.emit("getOnlineUsersCount", userSocketMap.size);
-  getBlog().then((kq) => {
-    io.emit("GetAllBlog", kq);
-  });
-  socket.on("deleteBlog", (data) => {
-    deleteBlog(data).then((kq) => {
-      io.emit("ClickGetAllBlog", kq);
-    });
-  });
+ 
   socket.on("disconnect", () => {
     console.log(`User disconnected: userId = ${userId}`);
     userSocketMap.delete(userId); // Xóa user khỏi map
