@@ -105,7 +105,7 @@ if(formikRef.current.values){
               <div className="text-[1.5rem] md:text-[1.7rem] text-center mt-[2rem] md:mt-0">
                 Tham gia vào ngày:
                 <p className="mt-[.3rem] font-semibold">
-      {formatDate(user.user_time)}
+      {formatDate(user?.user_time)}
 
                 </p>
               </div>
