@@ -1,8 +1,8 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class order extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     order_id: {
       autoIncrement: true,
@@ -12,19 +12,23 @@ export default class order extends Model {
     },
     order_date: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     order_total: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
+    },
+    order_total_quatity: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     order_status: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     pay_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'pay',
         key: 'pay_id'
@@ -32,7 +36,7 @@ export default class order extends Model {
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'user',
         key: 'user_id'
@@ -40,11 +44,27 @@ export default class order extends Model {
     },
     discount: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'discount',
         key: 'discount_id'
       }
+    },
+    address: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    phone_number: {
+      type: DataTypes.STRING(15),
+      allowNull: true
+    },
+    email_user: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    order_pay: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
     sequelize,
@@ -67,7 +87,7 @@ export default class order extends Model {
         ]
       },
       {
-        name: "fk_userid_user",
+        name: "fk_userid_userrr",
         using: "BTREE",
         fields: [
           { name: "user_id" },
@@ -77,7 +97,7 @@ export default class order extends Model {
         name: "fk_discountid_discount",
         using: "BTREE",
         fields: [
-          { name: "discount_id" },
+          { name: "discount" },
         ]
       },
     ]

@@ -1,128 +1,121 @@
-import React, { useRef } from "react";
-import sale from "../../../../assets/sansale.png";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import ProductItemHot from "../../../../components/product/ProductItemHot";
 import Slider from "react-slick";
+import ProductItemHot from "../../../../components/product/ProductItemHot";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { getProductsThunk } from "../../../../redux/product/product.slice";
+import { Skeleton } from "antd";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import './css/customSlick.css'
+import "./css/customSlick.css";
+
 function ProductSale() {
- 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 1,
-    prevArrow:  <div className="absolute top-[45%] left-[0] transform translate-x-[50%] z-10 translate-y-[50%]">
-    <div className="w-[3.2rem] h-[3.2rem] rounded-[50%] bg-black  flex justify-center items-center opacity-40 hover:opacity-100 cursor-pointer">
-      <IoIosArrowBack className="text-[2rem] text-white" />
-    </div>
-    </div>,
-    nextArrow: (
-      <div className="absolute top-[45%] right-[10%] transform translate-x-[50%] z-10 translate-y-[50%]">
-      <div className="w-[3.5rem] h-[3.5rem] rounded-[50%] bg-black  flex justify-center opacity-40 hover:opacity-100 items-center cursor-pointer">
-        <IoIosArrowForward  className="text-[2rem] text-white" />
+    prevArrow: (
+      <div className="absolute top-[45%] left-[0] transform translate-x-[50%] z-10 translate-y-[-50%]">
+        <div className="w-[3.2rem] h-[3.2rem] rounded-full bg-black flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer">
+          <IoIosArrowBack className="text-[2rem] text-white" />
+        </div>
       </div>
-    </div> 
+    ),
+    nextArrow: (
+      <div className="absolute top-[45%] right-[0] transform translate-x-[-50%] z-10 translate-y-[-50%]">
+        <div className="w-[3.2rem] h-[3.2rem] rounded-full bg-black flex justify-center items-center opacity-60 hover:opacity-100 cursor-pointer">
+          <IoIosArrowForward className="text-[2rem] text-white" />
+        </div>
+      </div>
     ),
     responsive: [
-    {
-      breakpoint: 1600, // For screens larger than 1200px
-      settings: {
-        slidesToShow: 4,
-        slidesToScroll: 1,
-      }
-    },
-    
-    {
-      breakpoint: 1200, // For screens larger than 1200px
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 1,
-      }
-    },
-    {
-      breakpoint: 992, // For screens larger than 992px
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-      }
-    },
-    {
-      breakpoint: 768, // For screens larger than 768px
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-      }
-    },
-    {
-      breakpoint: 576, // For screens larger than 576px
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      }
-    }
-  ]
-    
-
+      {
+        breakpoint: 1600,
+        settings: { slidesToShow: 4, slidesToScroll: 1 },
+      },
+      {
+        breakpoint: 1200,
+        settings: { slidesToShow: 3, slidesToScroll: 1 },
+      },
+      {
+        breakpoint: 992,
+        settings: { slidesToShow: 2, slidesToScroll: 1 },
+      },
+      {
+        breakpoint: 600,
+        settings: { slidesToShow: 1, slidesToScroll: 1 },
+      },
+    ],
   };
 
+  const listProducts = useAppSelector((state) => state.product.listProducts);
+  const dispatch = useAppDispatch();
+  const [listProductHot, setListProductHot] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      await dispatch(getProductsThunk());
+      // Mô phỏng thời gian tải 2 giây
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // 2 giây
+    };
+    fetchProducts();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (listProducts?.length > 0) {
+      const shuffledProducts = [...listProducts]
+        .sort((a, b) => b.product_hot - a.product_hot)
+        .slice(0, 10);
+      setListProductHot(shuffledProducts);
+    }
+  }, [listProducts]);
+
   return (
-    <div className="xl:w-[80%] xmd:w-[90%] sm:w-[95%] m-auto">
-      <div className="w-[100%]">
-        <img src={sale} alt="" className="w-[100%]" />
+    <div className="w-full my-10 xl:w-[100%] xmd:w-[100%] sm:w-[95%] mx-auto">
+      <div className="bg-gradient-to-b from-[#fffccb] to-[#332600] pb-8 md:pb-12 lg:pb-16 px-3 sm:px-4 md:px-5 lg:px-6">
+      {isLoading ? (
+    // Hiển thị Skeleton cho tiêu đề
+    <div className="text-center">
+      <Skeleton.Input
+        active
+        className="w-[50%] sm:w-[70%] md:w-[80%] lg:w-[60%] mx-auto"
+        style={{ height: "3rem" }} // Chỉnh chiều cao cho Skeleton ở đây
+      />
+    </div>
+  ) : (
+    // Hiển thị tiêu đề khi đã tải xong
+    <h1 className="text-[5rem] sm:text-[3rem] md:text-[2rem] lg:text-[3rem] text-brown-300 font-medium p-4 sm:p-6 md:p-8 lg:p-[2.5rem] font-bold text-center">
+      SẢN PHẨM NỔI BẬC
+    </h1>
+  )}
+        {isLoading ? (
+          // Hiển thị Skeleton khi đang tải
+          <Slider className="mx-10" {...settings}>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="p-2">
+                  <Skeleton.Input
+        active
+        className="w-[100%] sm:w-[100%] md:w-[100%] lg:w-[100%] mx-auto"
+        style={{ height: "40rem" }} // Chỉnh chiều cao cho Skeleton ở đây
+      />
+              </div>
+            ))}
+          </Slider>
+        ) : (
+          // Hiển thị sản phẩm khi đã tải xong
+          <Slider className="mx-10" {...settings}>
+            {listProductHot.map((item, index) => (
+              <ProductItemHot key={index} product={item}></ProductItemHot>
+            ))}
+          </Slider>
+        )}
       </div>
-      <div className="bg-gradient-to-b from-[#261414] to-[#B2A0A0] relative w-[100%] pt-[3rem] pb-[4rem]">
-        <div className="flex justify-between">
-            {/* <div className="absolute top-[45%] left-[0] transform translate-x-[50%] z-10 translate-y-[50%]">
-          <div className="w-[3.2rem] h-[3.2rem] rounded-[50%] bg-black  flex justify-center items-center opacity-40 hover:opacity-100 cursor-pointer">
-            <IoIosArrowBack className="text-[2rem] text-white" />
-          </div>
-        </div>
-        <div className="absolute top-[45%] right-[2%] transform translate-x-[50%] z-10 translate-y-[50%]">
-          <div className="w-[3.5rem] h-[3.5rem] rounded-[50%] bg-black  flex justify-center opacity-40 hover:opacity-100 items-center cursor-pointer">
-            <IoIosArrowForward  className="text-[2rem] text-white" />
-          </div>
-        </div>  */}
-        
-        <div className="flex w-[100%] gap-2 px-[3rem]  justify-between">
-       
-    <Slider {...settings}  className="flex w-[100%] gap-2 justify-between slideShow" >
-   <div>
-
-        <ProductItemHot/>
-   </div>
-   <div>
-
-        <ProductItemHot/>
-   </div>
-   <div>
-
-        <ProductItemHot/>
-   </div>
-   <div>
-
-        <ProductItemHot/>
-   </div>
-   <div>
-
-        <ProductItemHot/>
-   </div>
-   <div>
-
-        <ProductItemHot/>
-   </div>
-    
-
-        </Slider>
-          
-        </div>
-        </div>
-     
-     
-      </div>
-      
     </div>
   );
 }

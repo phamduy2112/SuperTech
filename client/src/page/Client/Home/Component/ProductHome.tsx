@@ -1,92 +1,54 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductItem from '../../../../components/product/ProductItem';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import Slider from 'react-slick';
+import { Skeleton } from 'antd'; // Import Skeleton từ Ant Design
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { getProductsThunk } from '../../../../redux/product/product.slice';
 
 function ProductHome() {
-  const sliderRef:any = useRef(null);
+  const listProducts = useAppSelector((state) => state.product.listProducts);
+  const dispatch = useAppDispatch();
+  const [randomProducts, setRandomProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // Trạng thái loading
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 6, // Đảm bảo slidesToShow lớn hơn hoặc bằng 1
-    slidesToScroll: 1,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1600, // For screens larger than 1200px
-        settings: {
-          slidesToShow: 5,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 1500, // For screens larger than 1200px
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 1200, // For screens larger than 1200px
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 992, // For screens larger than 992px
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 768, // For screens larger than 768px
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        }
-      },
-      {
-        breakpoint: 576, // For screens larger than 576px
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        }
-      }
-    ]
-  };
+  useEffect(() => {
+    dispatch(getProductsThunk());
+  }, [dispatch]);
+
+  // Xáo trộn và chọn ngẫu nhiên 12 sản phẩm sau 2 giây
+  useEffect(() => {
+    if (listProducts?.length > 0) {
+      setTimeout(() => {
+        const shuffledProducts = [...listProducts]
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 12);
+
+        setRandomProducts(shuffledProducts);
+        setLoading(false); // Đặt trạng thái loading thành false sau khi lấy xong dữ liệu
+      }, 2000); // Đặt độ trễ 2 giây
+    }
+  }, [listProducts]);
 
   return (
-    <div className='w-[80%] m-auto pt-[2rem] pb-[1rem]'>
-      <div className="flex justify-between items-center pb-5">
-        <h3 className='text-[2.2rem] font-semibold text-[#FF0000]'>Ngày hội siêu sale</h3>
-        <div className='flex gap-[0.5rem]'>
-          <div
-            onClick={() => sliderRef.current.slickPrev()}
-            className='w-[3rem] h-[3rem] cursor-pointer rounded-[50%] bg-[#7500CF] flex justify-center items-center'
-          >
-            <IoIosArrowBack className="text-[2rem] text-white" />
-          </div>
-          <div
-            onClick={() => sliderRef.current.slickNext()}
-            className='w-[3rem] h-[3rem] cursor-pointer rounded-[50%] bg-[#7500CF] flex justify-center items-center'
-          >
-            <IoIosArrowForward className="text-[2rem] text-white" />
-          </div>
-        </div>
+    <div className="pt-8 pb-4">
+      <div className="flex sm:justify-center md:justify-between items-center pb-5">
+        <h3 className="text-[1.5rem] sm:text-center sm:text-[1.8rem] md:text-[2rem] lg:text-[2.2rem] font-semibold text-[#FF0000] text-center">
+          Những sản phẩm dành cho bạn
+        </h3>
       </div>
-      <div className='flex'>
-        <Slider {...settings} ref={sliderRef} className="flex w-[100%] gap-2 justify-between slideProductHome">
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
-        </Slider>
+
+      <div className="grid sm:w-[300px] grid-cols-1 ssm:w-[100%] min-[395px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 md:gap-4 justify-center mx-auto">
+        {/* Hiển thị Skeleton khi đang tải */}
+        {loading ? (
+          Array.from({ length: 12 }).map((_, index) => (
+            <div key={index} className="flex justify-center items-center">
+     
+            </div>
+          ))
+        ) : (
+          randomProducts.map((item) => (
+            <ProductItem key={item.id} product={item} />
+          ))
+        )}
       </div>
     </div>
   );

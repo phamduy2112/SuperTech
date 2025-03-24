@@ -1,41 +1,62 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class infor_product extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     infor_product: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     infor_screen: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     infor_system: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     infor_cpu: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     infor_ram: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
-    infor_storage: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+    infor_compan: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_rom: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_frontCamera: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_rearCamera: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_scanning_frequency: {
+      type: DataTypes.STRING(255),
+      allowNull: true
+    },
+    infor_chip_battery: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     infor_more: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: true
     },
-    image_product: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+    infor_more2: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   }, {
     sequelize,

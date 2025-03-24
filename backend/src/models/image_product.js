@@ -1,29 +1,30 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
 export default class image_product extends Model {
-  static init(sequelize) {
+  static init(sequelize, DataTypes) {
   return super.init({
     image_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     image_one: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_two: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_three: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     image_four: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../page/Client/Home/Home";
+import { lazy } from "react";
 import UserTemplate from "../template/user/UserTemplate";
 import Search from "../page/Client/Search/Search";
 import ListBlog from "../page/Client/Blog/ListBlog/ListBlog";
@@ -7,7 +7,6 @@ import Login from "../page/Client/Auth/Login/Login";
 import Resigter from "../page/Client/Auth/Resigter/Resigter";
 import ForgetPassword from "../page/Client/Auth/Forget/ForgetPassword";
 import DetailBlog from "../page/Client/Blog/DetailBlog/DetailBlog";
-import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
 import Cart from "../page/Client/Cart/Cart";
 import Pay from "../page/Client/Pay/Pay";
 import Bill from "../page/Client/Bill/Bill";
@@ -25,7 +24,40 @@ import AdminUser from "../page/Admin/User/AdminUser";
 import AdminCommentProduct from "../page/Admin/Product/Comment/AdminCommentProduct";
 import AdminOrderDetail from "../page/Admin/Order/OrderDetail/AdminOrderDetail";
 import AdminOrder from "../page/Admin/Order/AdminOrder";
+import UserDetail from "../page/Client/User/UserDetail/UserDetail";
+import Order from "../page/Client/User/Order/Order";
+import User from "../page/Client/User/User";
+import OrderDetail from "../page/Client/User/OrderDetail/OrderDetail";
 
+import ChatAdmin from "../page/Admin/Chat/ChatAdmin";
+import AdminStaff from "../page/Admin/User/AdminStaff";
+import AdminSetting from "../page/Admin/Setting/AdminSetting";
+import AdminAddProduct from "../page/Admin/Product/Component/AdminAddProduct";
+import AdminEditProduct from "../page/Admin/Product/Component/AdminEditProduct";
+import AdminCreateAccount from "../page/Admin/User/Component/AdminCreateAccount";
+import AdminCustomerEdit from "../page/Admin/User/Component/AdminCustomerEdit";
+
+import AdminCommentPost from "../page/Admin/Blog/Comment/AdminComment";
+import AdminBlog from "../page/Admin/Blog/AdminBlog";
+import AdminAddBlog from "../page/Admin/Blog/Component/AdminAddBlog";
+import AdminEditBlog from "../page/Admin/Blog/Component/AdminEditBlog";
+import ListProduct from "../page/Client/ListProduct/ListProduct";
+import DetailProduct from "../page/Client/DetailProduct/DetailProduct";
+import AdminProductDetail from "../page/Admin/Product/Component/AdminProductDetail";
+import CouponSection from "../page/Client/Voucher/Voucher";
+import { AdminRoute, AuthRoute, PrivateRoute } from "./component/RouterPrivate";
+// import  RouterLogin from "./component/RouterValues";
+import ListOrder from "../page/Admin/Order/ListOrder/ListOrder";
+
+import ChangePasswordUser from "../page/Client/User/UserDetail/Component/ChangePasswordUser";
+import { Paths } from "./component/RouterValues";
+import AdminCommentDetail from "../page/Admin/Product/Comment/AdminCommentDetail";
+import AdminData from "../page/Admin/Data/AdminData";
+import FeatureUnderConstructionPage from "../page/Client/PagesMore/PageAll";
+// import PrivateRoute from "./component/RouterPrivate";
+const Home = lazy(
+  () => import("../page/Client/Home/Home"),
+);
 export const router = createBrowserRouter([
   {
     element: <UserTemplate />,
@@ -35,123 +67,244 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "tìm-kiếm",
+        path: Paths.Search,
         element: <Search />,
       },
       {
-        path: "sản-phẩm-yêu-thích",
-        element: <FavoriteProduct />,
+        path: Paths.FavoriteProducts,
+        element:  <PrivateRoute element={<FavoriteProduct />} />,
+      },
+
+      {
+        path: Paths.ListProducts,
+        element: <ListProduct />,
       },
       {
-        path: "/sản-phẩm-chi-tiết",
+        path: Paths.ProductDetail,
         element: <DetailProduct />,
       },
-      
       // Blog
       {
-        path: "/bài-viết",
+        path: Paths.Blogs,
         element: <ListBlog />,
       },
       {
-        path: "/bài-viết-chi-tiết",
+        path: Paths.BlogDetail,
         element: <DetailBlog />,
+      },
+      // user
+      {
+        path: Paths.UserOrderDetail,
+        element: (
+          <PrivateRoute element={<OrderDetail />} />
+
+        ),
+
+      },
+
+      {
+
+        element: <User />,
+        children: [
+          {
+            path: Paths.Profile,
+
+            element: <PrivateRoute element={<UserDetail />} />,
+          },
+          {
+            path: Paths.ChangePassword,
+
+            element: <PrivateRoute element={<ChangePasswordUser />} />,
+          },
+          {
+            path: Paths.UserOrders,
+            element: <PrivateRoute element={<Order />} />,
+          },
+
+        ]
+      },
+      {
+        path: Paths.Voucher,
+        element: <CouponSection />
       },
       // Mua hàng
       {
-        path: "/giỏ-hàng",
+        path: Paths.Cart,
         element: <Cart />,
       },
+
       {
-        path: "/thanh-toán",
-        element: <Pay />,
+        path: Paths.Checkout,
+        element: (
+          <PrivateRoute element={  <Pay />}/>
+        
+
+        ),
       },
+
       {
-        path: "/xuất-hóa-đơn",
-        element: <Bill />,
+        path: Paths.Bill,
+        element: (
+          <PrivateRoute element={  <Bill />}/>
+          
+
+        ),
+
       },
       // các trang khác
       {
-        path: "/giới-thiệu",
+        path: Paths.Introduce,
         element: <Introduce />,
       },
       {
-        path: "/liên-hệ",
+        path: Paths.Contact,
         element: <Contact />,
       },
       {
-        path: "chăm-sóc-khách-hàng",
+        path: Paths.CustomerCare,
         element: <CustomerCare />,
       },
 
       {
-        path: "/hỏi-đáp",
+        path: Paths.QuestionAnswer,
         element: <QuestionAnswer />,
       },
     ],
   },
   {
 
-    element: <AuthTemplate/>,
-    children:[
-       {
-        path: "/đăng-nhập",
-        element: <Login />,
+    element: <AuthTemplate />,
+    children: [
+      {
+        path: Paths.Login,
+        element: <AuthRoute element={<Login />} />,
       },
       {
-        path: "/đăng-kí",
-        element: <Resigter />,
+        path: Paths.Register,
+        element: <AuthRoute element={<Resigter />} />,
       },
       {
-        path: "/quên-mật-khẩu",
-        element: <ForgetPassword />,
-      }, 
+        path: Paths.ForgetPassword,
+        element: <AuthRoute element={<ForgetPassword />} />,
+      },
     ]
-  
+
   },
   {
-    path: '/admin',
-    element: <AdminTemplate/>,
-    children:[
+    path: Paths.Admin.PathsAdmin,
+    element: 
+    <AdminRoute element={  <AdminTemplate />}/>
+    // <AdminTemplate/>
+  ,
+    children: [
       {
-        path: 'trang-chủ',
-        element: <AdminHome/>
+        path: Paths.Admin.Dashboard,
+        element: <AdminHome />
       },
       // Loại sản phẩm
       {
-        path: 'quản-lí-loại',
-        element: <AdminCatelogry/>
+        path: Paths.Admin.Categories,
+        element: <AdminCatelogry />
       },
       // sản phẩm
       {
-        path: 'quản-lí-sản-phẩm',
-        element: <AdminProduct/>
+        path: Paths.Admin.Products,
+        element: <AdminProduct />
       },
       {
-        path:"quản-lí-bình-luận",
-        element:<AdminCommentProduct/>
+        path: Paths.Admin.ProductDetail,
+        element: <AdminProductDetail />
+      },
+      {
+        path: Paths.Admin.AddProduct,
+        element: <AdminAddProduct />
+      }, {
+        path: Paths.Admin.EditProduct,
+        element: <AdminEditProduct />
+      },
+
+
+      {
+        path: Paths.Admin.ProductComments,
+        element: <AdminCommentProduct />
+      },
+      {
+        path: Paths.Admin.ProductCommentsDetail,
+        element: <AdminCommentDetail />
       },
       // Blog
       {
-        path: 'quản-lí-sản-phẩm',
-        element: <AdminProduct/>
+        path: Paths.Admin.Blogs,
+        element: <AdminBlog />
       },
+      {
+        path: Paths.Admin.AddBlog,
+        element: <AdminAddBlog />
+      },
+      {
+        path: Paths.Admin.Chart,
+        element: <AdminData />
+      },
+      {
+
+        path: Paths.Admin.EditBlog,
+        element: <AdminEditBlog />
+      },
+      {
+        path: Paths.Admin.BlogComments,
+        element: <AdminCommentPost />
+      },
+
       // Khách hàng
       {
-        path: 'quản-lí-khách-hàng',
-        element: <AdminUser/>
+        path: Paths.Admin.Customers,
+        element: <AdminUser />
       },
+      {
+        path: Paths.Admin.Staff,
+        element: <AdminStaff />
+      }
+      , {
+        path: Paths.Admin.AddStaff,
+        element: <AdminCreateAccount />
+      },
+
+
+      {
+        path: Paths.Admin.EditStaff,
+        element: <AdminCustomerEdit />
+      },
+
+
       // đơn hàng
       {
-        path: 'quản-lí-đơn-hàng',
-        element: <AdminOrder />
+        path: Paths.Admin.Orders, // Không có dấu "/"
+        element: <AdminOrder />,
+        children: [
+          {
+            path: '', // Đường dẫn mặc định, tương ứng với "/admin/quản-lí-đơn-hàng"
+            element: <PrivateRoute element={<ListOrder />} />,
+          },
+          {
+            path: Paths.Admin.OrderDetail, // Đường dẫn tương đối
+            element: <PrivateRoute element={<AdminOrderDetail />} />,
+          },
+        ],
       },
-      // Đơn hàng chi tiết
+
+
+
+
       {
-        path: 'quản-lí-đơn-hàng-chi-tiết',
-        element: <AdminOrderDetail/>
+        path: Paths.Admin.Chat,
+        element: <ChatAdmin />
       },
-      // Thống kê
-      
+      {
+        path: Paths.Admin.Settings,
+        element: <AdminSetting />
+      }
     ]
-  }
+  },
+  {path:'*', element:<FeatureUnderConstructionPage/>}
+  
 ]);

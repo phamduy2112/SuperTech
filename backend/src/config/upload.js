@@ -1,20 +1,21 @@
 
 import multer from 'multer';
-import { diskStorage } from 'multer'
 
-export const upload=multer({
-    storage:diskStorage({
-        destination:process.cwd() + "/public/img",
-        filename:(res,file,callback)=>{
-            // đổi tên file
-            let date=new Date();
+// Cấu hình Multer
+export const upload = multer({
+  storage: multer.memoryStorage(),  // Sử dụng memoryStorage thay vì diskStorage
+  fileFilter: (req, file, callback) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(file.originalname.toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
 
-            callback(null,date.getTime()+"_"+file.originalname); // 179898989_dog.jpg
-        }
-    })
-})
-// const upload=multer({dest:process.cwd() + "/public/img"})
-
+    if (extname && mimetype) {
+      return callback(null, true); // Cho phép file loại hình ảnh
+    } else {
+      callback(new Error('Chỉ chấp nhận tệp hình ảnh!'));
+    }
+  }
+});
 // xóa hình folter
 export const deleteFile = (filePath) => {
     fs.unlink(filePath, (err) => {

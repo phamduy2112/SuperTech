@@ -2,24 +2,10 @@ import jwt from 'jsonwebtoken'
 
 // create token
 export const createToken=(data)=>{
- // payload,signature,header
- // 2 tham số =>string.object,buffer
- // 3 tham so: (data)=>object
 
- return jwt.sign({data},"BI_MAT",{expiresIn:'1m'})
+
+ return jwt.sign({data},"BI_MAT",{expiresIn:'1d'})
 }
-// verifi token: kiem tra token  
- // check lỗi
-    // 1/token k hợp lệ;
-    // 2/token hết hạn
-    // 3/token sai khóa bí mật
-  
-        // k lỗi là null
-
-        // có lỗi là khác null
-        
-        
-// tao createTokenRef
 
 export const createTokenRef=(data)=>{
 
@@ -37,8 +23,32 @@ export const decodeToken=(token)=>{
 }
 export const middleToken=(req,res,next)=>{
     let {token}=req.headers;
-    let error=verifyToken(token)
-    if(error) res.status(401).send(error.name)
-    else next();
+    const decode=decodeToken(token);
+    console.log(token);
     
+    if (!decode) {
+        return res.status(401).send('Token không hợp lệ hoặc đã hết hạn');
+    }
+
+    req.id=decode.data.user_id;
+    req.role    =decode.data.user_role
+    let error=verifyToken(token);
+    if(error) res.status(401).send(error.name);
+    else next();
 }
+export const authorizeRoles = (allowedRoles) => (req, res, next) => {
+    const userRole = req.role;
+    console.log('User role:', userRole);  // Kiểm tra giá trị role từ request
+    console.log('Allowed roles:', allowedRoles); // Kiểm tra danh sách allowedRoles
+
+    if (userRole === undefined || userRole === null) {
+        return res.status(401).json({ message: 'Không xác định được quyền người dùng.' });
+    }
+
+    // Kiểm tra nếu role có trong danh sách allowedRoles không
+    if (!allowedRoles.includes(userRole)) {
+        return res.status(403).json({ message: 'Bạn không có quyền truy cập!' });
+    }
+
+    next(); // Nếu role hợp lệ, tiếp tục xử lý
+};

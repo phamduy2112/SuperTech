@@ -6,7 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      
+      colors: {
+        customColor: 'var(--custom-color)',
+      }
     },
     screens: {
 
@@ -22,6 +24,7 @@ export default {
       xl: '1280px',
       '2xl': '1536px',
       'xll':"1600px"
+      
     },
   },
   plugins: [],

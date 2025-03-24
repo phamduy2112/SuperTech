@@ -1,53 +1,46 @@
 import _sequelize from 'sequelize';
-const { Model, DataTypes } = _sequelize;
+const { Model, Sequelize } = _sequelize;
 
-export default class Products extends Model {
-  static init(sequelize) {
+export default class products extends Model {
+  static init(sequelize, DataTypes) {
   return super.init({
     product_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     product_name: {
       type: DataTypes.STRING(50),
-      allowNull: false
+      allowNull: true
     },
     product_price: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true
     },
     product_star: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     product_discount: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     product_hot: {
       type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    product_date: {
-      type: DataTypes.DATE,
       allowNull: true
     },
-    product_quantity: {
+    view: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      defaultValue: 0, // Giá trị mặc định là 0
     },
-    image_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'image_product',
-        key: 'image_id'
-      }
+    product_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
     },
     infor_product: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'infor_product',
         key: 'infor_product'
@@ -55,7 +48,7 @@ export default class Products extends Model {
     },
     category_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'categories',
         key: 'category_id'
@@ -72,13 +65,6 @@ export default class Products extends Model {
         using: "BTREE",
         fields: [
           { name: "product_id" },
-        ]
-      },
-      {
-        name: "fk_image_imageproduct",
-        using: "BTREE",
-        fields: [
-          { name: "image_id" },
         ]
       },
       {
